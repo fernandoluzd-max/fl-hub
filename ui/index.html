@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FL Hub</title>
+<style>
+/* ===== Marca: troque só estas variáveis ===== */
+:root{
+  --bg:#0c0c0e; --bg2:#141418; --card:#18181d; --line:#26262d; --ink:#f3f3f5; --mute:#8d8d98;
+  --accent:#FDFD00; --accent-ink:#0c0c0e; --ok:#3ddc84; --warn:#ffb020; --err:#ff5a5f;
+  --radius:18px; --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:radial-gradient(1200px 600px at 80% -10%,#1d1d10 0%,transparent 60%),var(--bg);color:var(--ink);font:14px/1.5 var(--font);overflow:hidden;-webkit-user-select:none;user-select:none}
+.app{display:grid;grid-template-rows:auto 1fr auto;height:100%}
+header{display:flex;align-items:center;gap:14px;padding:22px 28px 10px}
+.logo{width:38px;height:38px;border-radius:11px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:900;letter-spacing:-.04em}
+header h1{font-size:18px;letter-spacing:-.01em}
+header .sub{color:var(--mute);font-size:12px}
+.status{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.pill{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--bg2);border-radius:99px;padding:6px 12px;font-size:12px;color:var(--mute)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--mute)}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+main{display:grid;grid-template-columns:1fr 340px;gap:22px;padding:14px 28px 18px;min-height:0}
+@media (max-width:900px){main{grid-template-columns:1fr}.side{display:none}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;align-content:start;overflow:auto;padding:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:12px;transition:transform .15s,border-color .15s}
+.card:hover{transform:translateY(-2px);border-color:#34343d}
+.icon{width:62px;height:62px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(145deg,#26262c,#131316);border:1px solid #2f2f37}
+.icon svg{width:30px;height:30px}
+.card.on .icon{background:linear-gradient(145deg,var(--accent),#c9c900);border:none}
+.card.on .icon svg{stroke:var(--accent-ink)}
+.card h3{font-size:15px}
+.card p{color:var(--mute);font-size:12.5px;min-height:38px}
+.meta{font-size:11.5px;color:var(--mute);display:flex;align-items:center;gap:6px}
+.btns{display:flex;gap:8px;margin-top:auto}
+button{font:inherit;border:0;border-radius:11px;padding:10px 14px;cursor:pointer;font-weight:650}
+.primary{background:var(--accent);color:var(--accent-ink);flex:1}
+.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button:disabled{opacity:.4;cursor:default}
+.soon{font-size:11px;color:var(--mute);border:1px dashed var(--line);border-radius:10px;padding:9px;text-align:center}
+.side{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);display:flex;flex-direction:column;min-height:0}
+.side h4{padding:16px 18px 8px;font-size:13px;color:var(--mute);font-weight:600;letter-spacing:.02em;text-transform:uppercase}
+.log{padding:0 18px 16px;overflow:auto;display:flex;flex-direction:column;gap:8px;font-size:12.5px}
+.step{display:flex;gap:9px;align-items:flex-start;animation:in .25s ease both}
+.step i{flex:none;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:11px;background:#23232a;color:var(--mute)}
+.step.ok i{background:rgba(61,220,132,.15);color:var(--ok)} .step.err i{background:rgba(255,90,95,.15);color:var(--err)} .step.warn i{background:rgba(255,176,32,.15);color:var(--warn)}
+@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.empty{color:var(--mute);font-size:12.5px;padding:4px 0}
+footer{display:flex;gap:14px;align-items:center;padding:0 28px 18px;color:var(--mute);font-size:12px}
+footer a{color:var(--mute);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;place-items:center;padding:20px}
+.modal.show{display:grid}
+.box{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);width:min(620px,100%);padding:20px;display:flex;flex-direction:column;gap:12px}
+.box pre{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;max-height:340px;overflow:auto;font-size:12px;white-space:pre-wrap;-webkit-user-select:text;user-select:text}
+.banner{grid-column:1/-1;background:linear-gradient(90deg,rgba(253,253,0,.12),transparent);border:1px solid rgba(253,253,0,.25);border-radius:14px;padding:12px 16px;font-size:13px;display:none}
+.banner.show{display:block}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo">FL</div>
+    <div><h1>FL Hub</h1><div class="sub">Seus packs instalados direto no CapCut</div></div>
+    <div class="status">
+      <div class="pill"><span class="dot" id="d-found"></span><span id="t-found">Procurando o CapCut…</span></div>
+      <div class="pill"><span class="dot" id="d-run"></span><span id="t-run">…</span></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="grid" id="grid">
+      <div class="banner" id="banner"></div>
+    </div>
+    <aside class="side">
+      <h4>Atividade</h4>
+      <div class="log" id="log"><div class="empty">Escolha um pack e clique em Instalar.</div></div>
+    </aside>
+  </main>
+
+  <footer>
+    <span id="ver">FL Hub</span>
+    <a id="diag">Diagnóstico para suporte</a>
+  </footer>
+</div>
+
+<div class="modal" id="modal"><div class="box">
+  <h3 id="m-title">Diagnóstico</h3>
+  <pre id="m-body"></pre>
+  <div class="btns"><button class="primary" id="m-copy">Copiar</button><button class="ghost" id="m-close">Fechar</button></div>
+</div></div>
+
+<script>
+const T = window.__TAURI__;
+const invoke = (c, a) => T.core.invoke(c, a);
+
+const ICONS = {
+  legendas:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 13h4M13 13h4M7 16h6"/></svg>',
+  sons:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/></svg>',
+  musicas:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>',
+  broll:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg>',
+  luts:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="9" cy="10" r="5"/><circle cx="15" cy="10" r="5"/><circle cx="12" cy="15" r="5"/></svg>'
+};
+// catálogo: packId = id do manifest do .flpack
+const PRODUCTS = [
+  {key:'legendas', packId:'fl-legendas', name:'Legendas', desc:'Títulos e legendas dinâmicas, organizados em pastas no CapCut.', live:true},
+  {key:'sons', packId:'fl-sons', name:'Efeitos Sonoros', desc:'Sons prontos para arrastar na timeline.', live:false},
+  {key:'musicas', packId:'fl-musicas', name:'Músicas', desc:'Trilhas selecionadas para Reels.', live:false},
+  {key:'broll', packId:'fl-broll', name:'B-Rolls & Transições', desc:'Cortes e transições com um clique.', live:false},
+  {key:'luts', packId:'fl-luts', name:'LUTs', desc:'Cores de cinema como ajustes prontos.', live:false},
+];
+
+let state = null, busy = false;
+const $ = s => document.querySelector(s);
+
+function step(txt, kind='ok'){
+  const log = $('#log'); const e = log.querySelector('.empty'); if (e) e.remove();
+  const d = document.createElement('div'); d.className = 'step ' + kind;
+  d.innerHTML = `<i>${kind==='ok'?'✓':kind==='err'?'!':kind==='warn'?'!':'•'}</i><span></span>`;
+  d.querySelector('span').textContent = txt; log.appendChild(d); log.scrollTop = log.scrollHeight;
+}
+
+function render(){
+  const grid = $('#grid'); grid.querySelectorAll('.card').forEach(c=>c.remove());
+  for (const p of PRODUCTS){
+    const inst = state?.installed?.find(i=>i.id===p.packId);
+    const c = document.createElement('div'); c.className = 'card' + (p.live ? ' on' : '');
+    c.innerHTML = `<div class="icon">${ICONS[p.key]}</div><h3>${p.name}</h3><p>${p.desc}</p>
+      <div class="meta">${inst ? `<span class="dot ok"></span>Instalado · v${inst.version}` : p.live ? '<span class="dot"></span>Não instalado' : ''}</div>`;
+    const b = document.createElement('div'); b.className = 'btns';
+    if (!p.live){ b.innerHTML = '<div class="soon" style="flex:1">Em breve</div>'; }
+    else {
+      const bi = document.createElement('button'); bi.className='primary'; bi.textContent = inst ? 'Reparar / Atualizar' : 'Instalar';
+      bi.disabled = busy; bi.onclick = () => doInstall(p); b.appendChild(bi);
+      if (inst){ const br = document.createElement('button'); br.className='ghost'; br.textContent='Remover'; br.disabled=busy; br.onclick=()=>doRemove(p,inst); b.appendChild(br); }
+    }
+    c.appendChild(b); grid.appendChild(c);
+  }
+}
+
+async function refresh(){
+  state = await invoke('status');
+  $('#d-found').className = 'dot ' + (state.capcut_found ? 'ok' : 'err');
+  $('#t-found').textContent = state.capcut_found ? 'CapCut encontrado' : 'CapCut não encontrado';
+  $('#d-run').className = 'dot ' + (state.capcut_running ? 'warn' : 'ok');
+  $('#t-run').textContent = state.capcut_running ? 'CapCut aberto — feche para instalar' : 'CapCut fechado';
+  $('#ver').textContent = `FL Hub v${state.version} · ${state.system === 'Mac' ? 'macOS' : state.system}`;
+  const bn = $('#banner');
+  if (!state.capcut_found){ bn.textContent = 'Abra o CapCut uma vez, crie um projeto qualquer e feche. Depois volte aqui.'; bn.classList.add('show'); }
+  else if (state.capcut_running){ bn.textContent = 'Feche o CapCut (no Mac: ⌘Q) para instalar. O FL Hub detecta sozinho quando ele fechar.'; bn.classList.add('show'); }
+  else bn.classList.remove('show');
+  render();
+}
+
+async function doInstall(p){
+  if (state.capcut_running){ step('Feche o CapCut antes de instalar.', 'warn'); return; }
+  // v0.1: o pacote vem de um arquivo .flpack. Na versão com painel, o download é automático.
+  const file = await T.dialog.open({ title:'Escolha o pacote ' + p.name, multiple:false, filters:[{ name:'Pacote FL', extensions:['flpack'] }] });
+  if (!file) return;
+  busy = true; render(); step('Instalando ' + p.name + '…', 'run');
+  try {
+    const r = await invoke('install_pack', { path: file });
+    if (r.missing_fonts?.length) step('Fonte não incluída: ' + r.missing_fonts.join(', '), 'warn');
+    step('Pronto! Abra o CapCut: está tudo nas predefinições.', 'ok');
+  } catch(e){ step(String(e), 'err'); }
+  busy = false; await refresh();
+}
+
+async function doRemove(p, inst){
+  busy = true; render(); step('Removendo ' + p.name + '…', 'run');
+  try { await invoke('uninstall_pack', { id: inst.id }); step(p.name + ' removido.', 'ok'); }
+  catch(e){ step(String(e), 'err'); }
+  busy = false; await refresh();
+}
+
+$('#diag').onclick = async () => {
+  const d = await invoke('diagnose'); const l = await invoke('log_text');
+  $('#m-body').textContent = d + '\n--- registro ---\n' + (l.split('\n').slice(-60).join('\n') || '(vazio)');
+  $('#modal').classList.add('show');
+};
+$('#m-close').onclick = () => $('#modal').classList.remove('show');
+$('#m-copy').onclick = async () => { await navigator.clipboard.writeText($('#m-body').textContent); $('#m-copy').textContent = 'Copiado ✓'; setTimeout(()=>$('#m-copy').textContent='Copiar',1500); };
+
+T.event.listen('progress', e => step(String(e.payload), 'ok'));
+refresh(); setInterval(() => { if (!busy) refresh(); }, 3000);
+</script>
+</body>
+</html>
