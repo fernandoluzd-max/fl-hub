@@ -303,7 +303,7 @@ pub fn uninstall(env: &Env, id: &str, progress: &mut dyn FnMut(&str)) -> Result<
 /// Texto de diagnóstico para suporte.
 pub fn diagnose(env: &Env) -> String {
     let mut s = String::new();
-    s += &format!("FL Hub {}\nSistema: {:?}\nData: {}\n", env!("CARGO_PKG_VERSION"), env.target, now());
+    s += &format!("Pluga & Edita {}\nSistema: {:?}\nData: {}\n", env!("CARGO_PKG_VERSION"), env.target, now());
     s += &format!("CapCut aberto: {}\n", if capcut_running() { "SIM" } else { "não" });
     let uds = env.capcut_user_data();
     s += &format!("Pastas do CapCut: {}\n", if uds.is_empty() { "NÃO ENCONTRADAS".into() } else { uds.iter().map(|u| fwd(u)).collect::<Vec<_>>().join(" | ") });

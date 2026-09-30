@@ -1,4 +1,4 @@
-# FL Hub
+# Pluga & Edita (repositório fl-hub)
 
 Aplicativo (Mac e Windows) que instala os packs FL direto no CapCut: fontes, predefinições,
 pastas organizadas e correção de caminhos — sem o aluno abrir nenhuma pasta.

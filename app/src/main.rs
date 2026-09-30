@@ -35,7 +35,7 @@ fn status() -> Status {
 async fn install_pack(app: tauri::AppHandle, path: String) -> Result<flcore::Report, String> {
     tauri::async_runtime::spawn_blocking(move || {
         let env = Env::detect();
-        let tmp = std::env::temp_dir().join(format!("flhub-{}", std::process::id()));
+        let tmp = std::env::temp_dir().join(format!("plugaedita-{}", std::process::id()));
         let _ = app.emit("progress", "Preparando o pacote…");
         let pack = Pack::open(&PathBuf::from(&path), &tmp).map_err(|e| format!("Pacote inválido: {e}"))?;
         let r = flcore::install(&env, &pack, &mut |m| {
@@ -76,10 +76,10 @@ fn main() {
         .invoke_handler(tauri::generate_handler![status, install_pack, uninstall_pack, diagnose, log_text])
         .setup(|app| {
             if let Some(w) = app.get_webview_window("main") {
-                let _ = w.set_title("FL Hub");
+                let _ = w.set_title("Pluga & Edita");
             }
             Ok(())
         })
         .run(tauri::generate_context!())
-        .expect("erro ao iniciar o FL Hub");
+        .expect("erro ao iniciar o Pluga & Edita");
 }

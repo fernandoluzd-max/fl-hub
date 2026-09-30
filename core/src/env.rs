@@ -31,7 +31,7 @@ pub struct Env {
     pub local_appdata: Option<PathBuf>,
     /// %WINDIR% no Windows (fontes do sistema)
     pub windir: Option<PathBuf>,
-    /// onde o FL Hub guarda estado, backups e log
+    /// onde o app guarda estado, backups e log
     pub data_dir: PathBuf,
     /// se false, não mexe em registro/serviços do sistema (testes)
     pub system_integration: bool,
@@ -44,9 +44,9 @@ impl Env {
         let local_appdata = std::env::var_os("LOCALAPPDATA").map(PathBuf::from);
         let windir = std::env::var_os("WINDIR").map(PathBuf::from);
         let data_dir = match target {
-            Target::Mac => home.join("Library/Application Support/FL Hub"),
-            Target::Windows => local_appdata.clone().unwrap_or_else(|| home.clone()).join("FL Hub"),
-            Target::Linux => home.join(".local/share/fl-hub"),
+            Target::Mac => home.join("Library/Application Support/Pluga Edita"),
+            Target::Windows => local_appdata.clone().unwrap_or_else(|| home.clone()).join("Pluga Edita"),
+            Target::Linux => home.join(".local/share/pluga-edita"),
         };
         Env { target, home, local_appdata, windir, data_dir, system_integration: true }
     }
@@ -91,7 +91,7 @@ impl Env {
         self.data_dir.join("installed")
     }
     pub fn log_path(&self) -> PathBuf {
-        self.data_dir.join("fl-hub-log.txt")
+        self.data_dir.join("pluga-edita-log.txt")
     }
 }
 
