@@ -1,9 +1,12 @@
-name: Gerar instaladores do FL Hub
+name: Gerar instaladores do Pluga & Edita
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -37,11 +40,49 @@ jobs:
       - name: Gerar o instalador
         run: npx tauri build ${{ matrix.args }}
 
+      - name: Dar nome fixo ao instalador
+        shell: bash
+        run: |
+          mkdir -p saida
+          if [ "${{ matrix.nome }}" = "mac" ]; then
+            cp "$(find target -path '*bundle/dmg/*.dmg' | head -1)" saida/Pluga-Edita-Mac.dmg
+          else
+            cp "$(find target -path '*bundle/nsis/*.exe' | head -1)" saida/Pluga-Edita-Windows.exe
+          fi
+          ls -la saida
+
       - name: Guardar o instalador
         uses: actions/upload-artifact@v4
         with:
-          name: FL-Hub-${{ matrix.nome }}
-          path: |
-            target/**/release/bundle/dmg/*.dmg
-            target/**/release/bundle/nsis/*.exe
+          name: Pluga-Edita-${{ matrix.nome }}
+          path: saida/*
           if-no-files-found: error
+
+  publicar:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ler a versão do app
+        id: versao
+        run: echo "v=$(node -p "require('./app/tauri.conf.json').version")" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: saida
+          merge-multiple: true
+
+      - name: Publicar no GitHub Releases (links fixos)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.versao.outputs.v }}
+          name: Pluga & Edita ${{ steps.versao.outputs.v }}
+          make_latest: true
+          overwrite_files: true
+          body: |
+            Instaladores do app Pluga & Edita.
+            Mac: Pluga-Edita-Mac.dmg · Windows: Pluga-Edita-Windows.exe
+          files: |
+            saida/Pluga-Edita-Mac.dmg
+            saida/Pluga-Edita-Windows.exe
