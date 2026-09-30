@@ -237,6 +237,13 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
     if is_media(pack) {
         return install_media(env, pack, progress);
     }
+    // se uma versão anterior deste pacote foi instalada como pasta de mídia, limpa antes
+    if let Some(ant) = read_json(&state_path(env, &pack.manifest.id)).and_then(|j| serde_json::from_value::<Installed>(j).ok()) {
+        if ant.kind == "media" {
+            uninstall_media(env, &ant, progress);
+            let _ = fs::remove_file(state_path(env, &pack.manifest.id));
+        }
+    }
     let m = &pack.manifest;
     let mut rep = Report { pack: m.name.clone(), version: m.version.clone(), ..Default::default() };
     let mut say = |rep: &mut Report, s: String| {

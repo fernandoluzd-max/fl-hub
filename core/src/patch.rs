@@ -35,6 +35,9 @@ impl Patcher {
                 (Regex::new(win_origin).unwrap(), format!("\"{home_fwd}/Movies/CapCut/User Data")),
             ],
         };
+        let mut rules = rules;
+        // marcador usado pelos pacotes gerados (ex.: sons): vira a pasta User Data deste computador
+        rules.push((Regex::new(r#""__PLUGA_UD__"#).unwrap(), format!("\"{ud_fwd}")));
         Patcher { re_font, rules, map }
     }
 
