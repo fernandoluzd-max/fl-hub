@@ -93,6 +93,22 @@ impl Env {
         }
     }
 
+    /// Caminho da User Data como o próprio CapCut escreve nos arquivos dele.
+    /// No Mac (versão da App Store) o CapCut usa o caminho do "container", mesmo quando ~/Movies/CapCut aponta para lá.
+    pub fn capcut_app_path(&self, ud: &Path) -> PathBuf {
+        if self.target == Target::Mac {
+            let cont = self.mac_container().join("Data/Movies/CapCut/User Data");
+            if cont.is_dir() {
+                let a = std::fs::canonicalize(&cont).unwrap_or(cont.clone());
+                let b = std::fs::canonicalize(ud).unwrap_or(ud.to_path_buf());
+                if a == b {
+                    return cont;
+                }
+            }
+        }
+        ud.to_path_buf()
+    }
+
     pub fn backups_dir(&self) -> PathBuf {
         self.data_dir.join("backups")
     }

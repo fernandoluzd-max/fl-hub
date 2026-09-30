@@ -135,7 +135,7 @@ const PRODUCTS = [
   {key:'sons', packId:'fl-sons', name:'Efeitos Sonoros', desc:'65 whooshes, impactos, risers e foleys direto nas suas predefinições do CapCut, organizados por categoria.'},
   {key:'musicas', packId:'fl-musicas', name:'Músicas', desc:'Trilhas selecionadas para Reels.', media:true},
   {key:'broll', packId:'fl-broll', name:'B-Rolls & Transições', desc:'Cortes e transições com um clique.', live:false},
-  {key:'luts', packId:'fl-luts', name:'LUTs', desc:'Cores de cinema como ajustes prontos.', live:false},
+  {key:'luts', packId:'fl-luts', name:'LUTs', desc:'3 LUTs de conversão (Apple Log e ZV-E10) + 20 looks de finalização, direto em Ajuste › LUT.', lut:true},
 ];
 
 // ===== Servidor (chave pública: pode ficar no app) =====
@@ -253,7 +253,7 @@ function render(){
     const novo = inst && srv && inst.version !== srv.version;
     const c = document.createElement('div'); c.className = 'card' + (srv && owned ? ' on' : '') + (srv && !owned ? ' locked' : '');
     let meta = '';
-    if (inst) meta = `<span class="dot ok"></span>Instalado · v${inst.version}` + (p.media && inst.media_files ? ` · ${inst.media_files.length} sons` : '') + (novo ? ' <span class="tag">nova versão</span>' : '');
+    if (inst) meta = `<span class="dot ok"></span>Instalado · v${inst.version}` + (p.media && inst.media_files ? ` · ${inst.media_files.length} sons` : '') + (p.lut && inst.lut_names ? ` · ${inst.lut_names.length} LUTs` : '') + (novo ? ' <span class="tag">nova versão</span>' : '');
     else if (srv && owned) meta = '<span class="dot"></span>Liberado · não instalado';
     else if (srv) meta = '<span class="dot"></span>Bloqueado · não incluso na sua compra';
     const cad = (srv && !owned) ? '<span class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>' : '';
@@ -298,6 +298,7 @@ async function doInstall(p, srv){
     const link = SUPA.url + '/storage/v1' + (s.signedURL || s.signedUrl);
     const r = await invoke('install_remote', { url: link, packId: p.packId });
     if (p.media) step(`Pronto! Os sons estão em ${state.system === 'Windows' ? 'Vídeos' : 'Filmes'} › Pluga & Edita › ${p.name}. Clique em "Abrir pasta" e arraste para o CapCut.`, 'ok');
+    else if (p.lut) step('Pronto! Abra o CapCut: os LUTs estão em Ajuste › Seus › LUT.', 'ok');
     else step('Pronto! Abra o CapCut: está tudo nas predefinições.', 'ok');
   } catch(e){
     const m = String(e.message || e);

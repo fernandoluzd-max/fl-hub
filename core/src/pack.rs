@@ -56,6 +56,12 @@ pub struct Manifest {
     /// nome da pasta criada em Filmes/Vídeos › Pluga & Edita (kind = media)
     #[serde(default)]
     pub media_target: Option<String>,
+    /// pasta com os LUTs (kind = lut): <lut_dir>/<nome>/<nome>.cube + .jpeg + config.json + algorithmConfig.json
+    #[serde(default)]
+    pub lut_dir: Option<String>,
+    /// nomes na ordem em que devem aparecer no CapCut
+    #[serde(default)]
+    pub luts: Vec<String>,
 }
 fn d_presets() -> String {
     "presets".into()

@@ -36,6 +36,11 @@ pub struct Installed {
     pub media_path: String,
     #[serde(default)]
     pub media_files: Vec<String>,
+    /// LUTs instalados (kind = "lut") e as pastas User Data onde entraram
+    #[serde(default)]
+    pub lut_names: Vec<String>,
+    #[serde(default)]
+    pub lut_targets: Vec<String>,
 }
 
 #[derive(Serialize, Clone, Debug, Default)]
@@ -233,7 +238,122 @@ fn uninstall_media(env: &Env, st: &Installed, progress: &mut dyn FnMut(&str)) {
     progress(&msg);
 }
 
+const LUT_CFG: &str = "LutImportCfg.json";
+
+fn lut_titulo(nome: &str) -> String {
+    format!("{nome}.cube")
+}
+
+/// Pacote de LUTs: copia para User Data/Resources/Lut/<nome>/ e registra em LutImportCfg.json
+/// (a lista da aba Ajuste › Seus › LUT). LUTs importados pelo aluno não são tocados.
+pub fn install_luts(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result<Report, String> {
+    let m = &pack.manifest;
+    let mut rep = Report { pack: m.name.clone(), version: m.version.clone(), ..Default::default() };
+    let mut say = |rep: &mut Report, s: String| {
+        log_line(env, &s);
+        progress(&s);
+        rep.log.push(s);
+    };
+    if env.system_integration && capcut_running() {
+        return Err("O CapCut está aberto. Feche o CapCut (no Mac: ⌘Q) e tente de novo.".into());
+    }
+    let uds = env.capcut_user_data();
+    if uds.is_empty() {
+        return Err("CapCut não encontrado. Abra o CapCut uma vez, crie um projeto qualquer, feche e tente de novo.".into());
+    }
+    let src = pack.root.join(m.lut_dir.as_deref().unwrap_or("luts"));
+    let nomes: Vec<String> = if m.luts.is_empty() {
+        let mut v: Vec<String> = fs::read_dir(&src).map_err(|e| e.to_string())?.flatten().filter(|e| e.path().is_dir()).map(|e| e.file_name().to_string_lossy().to_string()).collect();
+        v.sort();
+        v
+    } else {
+        m.luts.clone()
+    };
+    say(&mut rep, format!("Instalando {} {}", m.name, m.version));
+    // versão anterior: remove o que saiu do pacote
+    let anterior: Option<Installed> = read_json(&state_path(env, &m.id)).and_then(|j| serde_json::from_value(j).ok());
+    let mut alvos = Vec::new();
+    for ud in &uds {
+        let dir = ud.join("Resources").join("Lut");
+        fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+        let cfg_path = dir.join(LUT_CFG);
+        let original = fs::read_to_string(&cfg_path).ok();
+        // backup da lista
+        let bdir = env.backups_dir().join(format!("{}-{}", m.id, stamp()));
+        let _ = fs::create_dir_all(&bdir);
+        if let Some(t) = &original {
+            let _ = fs::write(bdir.join(LUT_CFG), t);
+        }
+        let mut lista: Vec<Value> = original.as_deref().and_then(|t| serde_json::from_str(t.trim_start_matches('\u{feff}')).ok()).unwrap_or_default();
+        let remover: Vec<String> = anterior.as_ref().map(|a| a.lut_names.clone()).unwrap_or_default();
+        for n in remover.iter().filter(|n| !nomes.contains(n)) {
+            let _ = fs::remove_dir_all(dir.join(n));
+        }
+        let meus: Vec<String> = nomes.iter().chain(remover.iter()).map(|n| lut_titulo(n)).collect();
+        lista.retain(|e| !e.get("title").and_then(|t| t.as_str()).map(|t| meus.iter().any(|x| x == t)).unwrap_or(false));
+        let app = fwd(&env.capcut_app_path(ud));
+        // o CapCut mostra os mais recentes primeiro: entram na ordem inversa para aparecerem na ordem do pacote
+        for n in nomes.iter().rev() {
+            let de = src.join(n);
+            let para = dir.join(n);
+            let _ = fs::remove_dir_all(&para);
+            if let Err(e) = copy_dir(&de, &para) {
+                if let Some(t) = &original {
+                    let _ = fs::write(&cfg_path, t);
+                }
+                return Err(format!("Erro ao copiar o LUT {n}: {e}"));
+            }
+            let base = format!("{app}/Resources/Lut/{n}/{n}");
+            lista.push(serde_json::json!({
+                "imagePath": format!("{base}.jpeg"),
+                "originPath": format!("{base}.cube"),
+                "path": format!("{base}.cube"),
+                "title": lut_titulo(n),
+            }));
+        }
+        fs::write(&cfg_path, serde_json::to_string(&lista).unwrap()).map_err(|e| e.to_string())?;
+        say(&mut rep, format!("{} LUTs na aba Ajuste › LUT ({})", nomes.len(), fwd(ud)));
+        alvos.push(ud.to_string_lossy().to_string());
+    }
+    rep.presets = nomes.len();
+    rep.user_data = alvos.clone();
+    let st = Installed {
+        id: m.id.clone(),
+        name: m.name.clone(),
+        version: m.version.clone(),
+        installed_at: now(),
+        kind: "lut".into(),
+        lut_names: nomes,
+        lut_targets: alvos,
+        ..Default::default()
+    };
+    let _ = fs::create_dir_all(env.state_dir());
+    fs::write(state_path(env, &m.id), serde_json::to_string_pretty(&st).unwrap()).map_err(|e| e.to_string())?;
+    Ok(rep)
+}
+
+fn uninstall_luts(env: &Env, st: &Installed, progress: &mut dyn FnMut(&str)) {
+    let meus: Vec<String> = st.lut_names.iter().map(|n| lut_titulo(n)).collect();
+    for ud in &st.lut_targets {
+        let dir = PathBuf::from(ud).join("Resources").join("Lut");
+        for n in &st.lut_names {
+            let _ = fs::remove_dir_all(dir.join(n));
+        }
+        let cfg_path = dir.join(LUT_CFG);
+        if let Some(mut lista) = read_json(&cfg_path).and_then(|v| v.as_array().cloned()) {
+            lista.retain(|e| !e.get("title").and_then(|t| t.as_str()).map(|t| meus.iter().any(|x| x == t)).unwrap_or(false));
+            let _ = fs::write(&cfg_path, serde_json::to_string(&lista).unwrap());
+        }
+        let msg = format!("{} LUTs removidos de {}", st.lut_names.len(), ud);
+        log_line(env, &msg);
+        progress(&msg);
+    }
+}
+
 pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result<Report, String> {
+    if pack.manifest.kind.as_deref() == Some("lut") {
+        return install_luts(env, pack, progress);
+    }
     if is_media(pack) {
         return install_media(env, pack, progress);
     }
@@ -385,6 +505,15 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
 pub fn uninstall(env: &Env, id: &str, progress: &mut dyn FnMut(&str)) -> Result<(), String> {
     let sp = state_path(env, id);
     let st: Installed = read_json(&sp).and_then(|j| serde_json::from_value(j).ok()).ok_or("Pacote não está instalado.")?;
+    if st.kind == "lut" {
+        if env.system_integration && capcut_running() {
+            return Err("O CapCut está aberto. Feche o CapCut e tente de novo.".into());
+        }
+        uninstall_luts(env, &st, progress);
+        let _ = fs::remove_file(sp);
+        progress("LUTs removidos. Os LUTs que você importou por conta própria continuam lá.");
+        return Ok(());
+    }
     if st.kind == "media" {
         uninstall_media(env, &st, progress);
         let _ = fs::remove_file(sp);
