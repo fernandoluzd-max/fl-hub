@@ -105,6 +105,24 @@ async fn install_pack(_path: String) -> Result<flcore::Report, String> {
     Err("Indisponível nesta versão.".into())
 }
 
+/// Abre no Finder/Explorer a pasta de um pacote de sons instalado.
+#[tauri::command]
+fn open_media(id: String) -> Result<(), String> {
+    let env = Env::detect();
+    let st = flcore::installed(&env).into_iter().find(|i| i.id == id).ok_or("Pacote não instalado.")?;
+    let p = PathBuf::from(&st.media_path);
+    if !p.exists() {
+        return Err("Pasta não encontrada. Clique em Remover e depois em Instalar.".into());
+    }
+    #[cfg(target_os = "macos")]
+    let r = std::process::Command::new("open").arg(&p).spawn();
+    #[cfg(windows)]
+    let r = std::process::Command::new("explorer").arg(&p).spawn();
+    #[cfg(not(any(target_os = "macos", windows)))]
+    let r = std::process::Command::new("xdg-open").arg(&p).spawn();
+    r.map(|_| ()).map_err(|e| e.to_string())
+}
+
 /// Sessão de login guardada só neste computador.
 #[tauri::command]
 fn session_get() -> String {
@@ -147,7 +165,7 @@ fn log_text() -> String {
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![status, install_pack, install_remote, uninstall_pack, diagnose, log_text, session_get, session_set])
+        .invoke_handler(tauri::generate_handler![status, install_pack, install_remote, uninstall_pack, diagnose, log_text, session_get, session_set, open_media])
         .setup(|app| {
             if let Some(w) = app.get_webview_window("main") {
                 let _ = w.set_title("Pluga & Edita");

@@ -10,7 +10,8 @@
 //!   "index": "index.json",               // opcional: pastas de predefinição (CombinationPresetVirtualStore)
 //!   "aliases": { "nome-procurado.otf": "arquivo-no-pacote.ttf" },
 //!   "substitutes_windows": { "MarkerFelt.ttc": "Marker Felt.ttf", "Georgia Bold.ttf": "SISTEMA:georgiab.ttf" },
-//!   "required_fonts": [ { "file": "X.otf", "kind": "local" | "mac-system" } ]
+//!   "required_fonts": [ { "file": "X.otf", "kind": "local" | "mac-system" } ],
+//!   "kind": "media", "media_dir": "media", "media_target": "Efeitos Sonoros"   // pacotes de sons
 //! }
 
 use serde::{Deserialize, Serialize};
@@ -46,6 +47,15 @@ pub struct Manifest {
     pub substitutes_windows: BTreeMap<String, String>,
     #[serde(default)]
     pub required_fonts: Vec<RequiredFont>,
+    /// "presets" (padrão: predefinições do CapCut) ou "media" (sons/músicas copiados para uma pasta)
+    #[serde(default)]
+    pub kind: Option<String>,
+    /// pasta dentro do pacote com os arquivos de mídia (kind = media)
+    #[serde(default)]
+    pub media_dir: Option<String>,
+    /// nome da pasta criada em Filmes/Vídeos › Pluga & Edita (kind = media)
+    #[serde(default)]
+    pub media_target: Option<String>,
 }
 fn d_presets() -> String {
     "presets".into()

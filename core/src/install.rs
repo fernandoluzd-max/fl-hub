@@ -29,6 +29,13 @@ pub struct Installed {
     pub targets: Vec<UdState>,
     pub fonts_created: Vec<String>,
     pub backup_dir: String,
+    /// "media" para pacotes de sons/músicas
+    #[serde(default)]
+    pub kind: String,
+    #[serde(default)]
+    pub media_path: String,
+    #[serde(default)]
+    pub media_files: Vec<String>,
 }
 
 #[derive(Serialize, Clone, Debug, Default)]
@@ -41,6 +48,7 @@ pub struct Report {
     pub missing_fonts: Vec<String>,
     pub files_patched: usize,
     pub log: Vec<String>,
+    pub media_path: String,
 }
 
 fn now() -> String {
@@ -131,7 +139,104 @@ fn desfazer(acoes: Vec<Acao>) {
     }
 }
 
+fn is_media(pack: &Pack) -> bool {
+    pack.manifest.kind.as_deref() == Some("media")
+}
+
+/// Pacote de sons/músicas: copia os arquivos para Filmes/Vídeos › Pluga & Edita › <pasta>.
+/// Não mexe no CapCut (pode ficar aberto). Guarda a lista do que foi copiado para remover depois.
+pub fn install_media(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result<Report, String> {
+    let m = &pack.manifest;
+    let src = pack.root.join(m.media_dir.as_deref().unwrap_or("media"));
+    if !src.is_dir() {
+        return Err("Pacote inválido: pasta de mídia não encontrada.".into());
+    }
+    let pasta = m.media_target.clone().unwrap_or_else(|| m.name.clone());
+    let dest = env.media_root().join(&pasta);
+    let mut rep = Report { pack: m.name.clone(), version: m.version.clone(), media_path: dest.to_string_lossy().to_string(), ..Default::default() };
+    let mut say = |rep: &mut Report, s: String| {
+        log_line(env, &s);
+        progress(&s);
+        rep.log.push(s);
+    };
+    say(&mut rep, format!("Instalando {} {}", m.name, m.version));
+    // atualização: remove arquivos da versão anterior que não existem mais
+    let anterior: Option<Installed> = read_json(&state_path(env, &m.id)).and_then(|j| serde_json::from_value(j).ok());
+    let mut novos: Vec<String> = Vec::new();
+    for e in WalkDir::new(&src).into_iter().flatten() {
+        if e.file_type().is_file() {
+            let rel = e.path().strip_prefix(&src).unwrap();
+            let nome = rel.file_name().map(|n| n.to_string_lossy().to_string()).unwrap_or_default();
+            if nome.starts_with('.') {
+                continue;
+            }
+            novos.push(fwd(rel));
+        }
+    }
+    if let Some(a) = &anterior {
+        let base = PathBuf::from(&a.media_path);
+        for f in &a.media_files {
+            if !novos.contains(f) || base != dest {
+                let _ = fs::remove_file(base.join(f));
+            }
+        }
+    }
+    fs::create_dir_all(&dest).map_err(|e| format!("Não foi possível criar a pasta {}: {e}", dest.display()))?;
+    let mut feitos: Vec<PathBuf> = Vec::new();
+    for rel in &novos {
+        let de = src.join(rel);
+        let para = dest.join(rel);
+        if let Some(p) = para.parent() {
+            let _ = fs::create_dir_all(p);
+        }
+        if let Err(e) = fs::copy(&de, &para) {
+            for f in &feitos {
+                let _ = fs::remove_file(f);
+            }
+            return Err(format!("Erro ao copiar {rel}: {e}"));
+        }
+        feitos.push(para);
+    }
+    rep.presets = novos.len();
+    let cats = fs::read_dir(&dest).map(|r| r.flatten().filter(|e| e.path().is_dir()).count()).unwrap_or(0);
+    say(&mut rep, format!("{} arquivos em {} categorias", novos.len(), cats));
+    let st = Installed {
+        id: m.id.clone(),
+        name: m.name.clone(),
+        version: m.version.clone(),
+        installed_at: now(),
+        kind: "media".into(),
+        media_path: dest.to_string_lossy().to_string(),
+        media_files: novos,
+        ..Default::default()
+    };
+    let _ = fs::create_dir_all(env.state_dir());
+    fs::write(state_path(env, &m.id), serde_json::to_string_pretty(&st).unwrap()).map_err(|e| e.to_string())?;
+    Ok(rep)
+}
+
+fn uninstall_media(env: &Env, st: &Installed, progress: &mut dyn FnMut(&str)) {
+    let base = PathBuf::from(&st.media_path);
+    for f in &st.media_files {
+        let _ = fs::remove_file(base.join(f));
+    }
+    // apaga só pastas que ficaram vazias (nunca arquivos do aluno)
+    let mut dirs: Vec<PathBuf> = WalkDir::new(&base).into_iter().flatten().filter(|e| e.file_type().is_dir()).map(|e| e.path().to_path_buf()).collect();
+    dirs.sort_by_key(|d| std::cmp::Reverse(d.components().count()));
+    for d in dirs {
+        let _ = fs::remove_file(d.join(".DS_Store"));
+        let _ = fs::remove_dir(&d);
+    }
+    let _ = fs::remove_dir(env.media_root());
+    let msg = format!("{} arquivos removidos de {}", st.media_files.len(), st.media_path);
+    log_line(env, &msg);
+    progress(&msg);
+}
+
 pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result<Report, String> {
+    if is_media(pack) {
+        return install_media(env, pack, progress);
+    }
     let m = &pack.manifest;
     let mut rep = Report { pack: m.name.clone(), version: m.version.clone(), ..Default::default() };
     let mut say = |rep: &mut Report, s: String| {
@@ -259,6 +364,7 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
         targets,
         fonts_created,
         backup_dir: backup_root.to_string_lossy().to_string(),
+        ..Default::default()
     };
     let _ = fs::create_dir_all(env.state_dir());
     fs::write(state_path(env, &m.id), serde_json::to_string_pretty(&st).unwrap()).map_err(|e| e.to_string())?;
@@ -270,11 +376,17 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
 }
 
 pub fn uninstall(env: &Env, id: &str, progress: &mut dyn FnMut(&str)) -> Result<(), String> {
+    let sp = state_path(env, id);
+    let st: Installed = read_json(&sp).and_then(|j| serde_json::from_value(j).ok()).ok_or("Pacote não está instalado.")?;
+    if st.kind == "media" {
+        uninstall_media(env, &st, progress);
+        let _ = fs::remove_file(sp);
+        progress("Pacote removido.");
+        return Ok(());
+    }
     if env.system_integration && capcut_running() {
         return Err("O CapCut está aberto. Feche o CapCut e tente de novo.".into());
     }
-    let sp = state_path(env, id);
-    let st: Installed = read_json(&sp).and_then(|j| serde_json::from_value(j).ok()).ok_or("Pacote não está instalado.")?;
     for t in &st.targets {
         let presets = PathBuf::from(&t.user_data).join("Presets").join("Combination").join("Presets");
         for n in &t.presets {

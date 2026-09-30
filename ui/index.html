@@ -35,7 +35,8 @@ main{display:grid;grid-template-columns:1fr 340px;gap:22px;padding:14px 28px 18p
 .card h3{font-size:15px}
 .card p{color:var(--mute);font-size:12.5px;min-height:38px}
 .meta{font-size:11.5px;color:var(--mute);display:flex;align-items:center;gap:6px}
-.btns{display:flex;gap:8px;margin-top:auto}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
+.btns button{padding:10px 12px}
 button{font:inherit;border:0;border-radius:11px;padding:10px 14px;cursor:pointer;font-weight:650;white-space:nowrap}
 .primary{background:var(--accent);color:var(--accent-ink);flex:1}
 .ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
@@ -131,8 +132,8 @@ const ICONS = {
 // catálogo: packId = id do manifest do .flpack
 const PRODUCTS = [
   {key:'legendas', packId:'fl-legendas', name:'Legendas', desc:'Títulos e legendas dinâmicas, organizados em pastas no CapCut.'},
-  {key:'sons', packId:'fl-sons', name:'Efeitos Sonoros', desc:'Sons prontos para arrastar na timeline.', live:false},
-  {key:'musicas', packId:'fl-musicas', name:'Músicas', desc:'Trilhas selecionadas para Reels.', live:false},
+  {key:'sons', packId:'fl-sons', name:'Efeitos Sonoros', desc:'Whooshes, impactos, risers e foleys leves, organizados por categoria. É só arrastar para a timeline.', media:true},
+  {key:'musicas', packId:'fl-musicas', name:'Músicas', desc:'Trilhas selecionadas para Reels.', media:true},
   {key:'broll', packId:'fl-broll', name:'B-Rolls & Transições', desc:'Cortes e transições com um clique.', live:false},
   {key:'luts', packId:'fl-luts', name:'LUTs', desc:'Cores de cinema como ajustes prontos.', live:false},
 ];
@@ -252,7 +253,7 @@ function render(){
     const novo = inst && srv && inst.version !== srv.version;
     const c = document.createElement('div'); c.className = 'card' + (srv && owned ? ' on' : '') + (srv && !owned ? ' locked' : '');
     let meta = '';
-    if (inst) meta = `<span class="dot ok"></span>Instalado · v${inst.version}` + (novo ? ' <span class="tag">nova versão</span>' : '');
+    if (inst) meta = `<span class="dot ok"></span>Instalado · v${inst.version}` + (p.media && inst.media_files ? ` · ${inst.media_files.length} sons` : '') + (novo ? ' <span class="tag">nova versão</span>' : '');
     else if (srv && owned) meta = '<span class="dot"></span>Liberado · não instalado';
     else if (srv) meta = '<span class="dot"></span>Bloqueado · não incluso na sua compra';
     const cad = (srv && !owned) ? '<span class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>' : '';
@@ -260,7 +261,8 @@ function render(){
     const b = document.createElement('div'); b.className = 'btns';
     if (!srv && !inst){ b.innerHTML = '<div class="soon" style="flex:1">' + (catErr ? 'Sem conexão' : 'Em breve') + '</div>'; }
     else {
-      if (srv && owned) b.appendChild(btn(inst ? 'Atualizar' : 'Instalar', 'primary', () => doInstall(p, srv)));
+      if (srv && owned && p.media && inst && !novo) b.appendChild(btn('Abrir pasta', 'primary', () => invoke('open_media', { id: p.packId }).catch(e => step(String(e), 'err'))));
+      else if (srv && owned) b.appendChild(btn(inst ? 'Atualizar' : 'Instalar', 'primary', () => doInstall(p, srv)));
       else if (srv && srv.buy_url) b.appendChild(btn('Desbloquear', 'primary', () => T.opener.openUrl(srv.buy_url)));
       else if (srv) b.innerHTML = '<div class="soon" style="flex:1">Disponível para compra</div>';
       if (inst) b.appendChild(btn('Remover', 'ghost', () => doRemove(p, inst)));
@@ -287,15 +289,16 @@ async function refresh(){
 }
 
 async function doInstall(p, srv){
-  if (state.capcut_running){ step('Feche o CapCut antes de instalar.', 'warn'); return; }
+  if (!p.media && state.capcut_running){ step('Feche o CapCut antes de instalar.', 'warn'); return; }
   busy = true; render(); step('Instalando ' + p.name + '…', 'run');
   try {
     if (!(await validSess())) throw new Error('Sua sessão expirou. Entre de novo.');
     const caminho = srv.file_path.split('/').map(encodeURIComponent).join('/');
     const s = await api('/storage/v1/object/sign/packs/' + caminho, { method:'POST', body:{ expiresIn: 120 } });
     const link = SUPA.url + '/storage/v1' + (s.signedURL || s.signedUrl);
-    await invoke('install_remote', { url: link, packId: p.packId });
-    step('Pronto! Abra o CapCut: está tudo nas predefinições.', 'ok');
+    const r = await invoke('install_remote', { url: link, packId: p.packId });
+    if (p.media) step(`Pronto! Os sons estão em ${state.system === 'Windows' ? 'Vídeos' : 'Filmes'} › Pluga & Edita › ${p.name}. Clique em "Abrir pasta" e arraste para o CapCut.`, 'ok');
+    else step('Pronto! Abra o CapCut: está tudo nas predefinições.', 'ok');
   } catch(e){
     const m = String(e.message || e);
     step(/not found|object not found|400|403/i.test(m) ? 'Este pack não está liberado para ' + (sess?.email||'este e-mail') + '.' : traduz(m), 'err');

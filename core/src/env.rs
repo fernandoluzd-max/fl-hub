@@ -84,6 +84,15 @@ impl Env {
         out
     }
 
+    /// Pasta onde ficam sons/músicas: Filmes (Mac) ou Vídeos (Windows) › Pluga & Edita
+    pub fn media_root(&self) -> PathBuf {
+        match self.target {
+            Target::Mac => self.home.join("Movies").join("Pluga & Edita"),
+            Target::Windows => self.home.join("Videos").join("Pluga & Edita"),
+            Target::Linux => self.home.join("Pluga & Edita"),
+        }
+    }
+
     pub fn backups_dir(&self) -> PathBuf {
         self.data_dir.join("backups")
     }
