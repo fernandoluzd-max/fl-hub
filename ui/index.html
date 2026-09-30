@@ -36,7 +36,7 @@ main{display:grid;grid-template-columns:1fr 340px;gap:22px;padding:14px 28px 18p
 .card p{color:var(--mute);font-size:12.5px;min-height:38px}
 .meta{font-size:11.5px;color:var(--mute);display:flex;align-items:center;gap:6px}
 .btns{display:flex;gap:8px;margin-top:auto}
-button{font:inherit;border:0;border-radius:11px;padding:10px 14px;cursor:pointer;font-weight:650}
+button{font:inherit;border:0;border-radius:11px;padding:10px 14px;cursor:pointer;font-weight:650;white-space:nowrap}
 .primary{background:var(--accent);color:var(--accent-ink);flex:1}
 .ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 button:disabled{opacity:.4;cursor:default}
@@ -57,6 +57,16 @@ footer a{color:var(--mute);cursor:pointer;text-decoration:underline;text-underli
 .box pre{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;max-height:340px;overflow:auto;font-size:12px;white-space:pre-wrap;-webkit-user-select:text;user-select:text}
 .banner{grid-column:1/-1;background:linear-gradient(90deg,rgba(242,165,65,.14),transparent);border:1px solid rgba(242,165,65,.3);border-radius:14px;padding:12px 16px;font-size:13px;display:none}
 .banner.show{display:block}
+.login{grid-column:1/-1;align-self:center;justify-self:center;width:min(420px,100%);background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:none;flex-direction:column;gap:14px;margin-top:40px}
+.login.show{display:flex}
+.login h2{font-size:18px}
+.login p{color:var(--mute);font-size:13px}
+.login input{font:inherit;font-size:15px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:11px;padding:12px 14px;outline:none;-webkit-user-select:text;user-select:text}
+.login input:focus{border-color:var(--accent)}
+.login input.code{letter-spacing:.5em;text-align:center;font-size:22px;font-weight:700}
+.login .erro{color:var(--err);font-size:12.5px;min-height:18px}
+.login a{color:var(--mute);font-size:12.5px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.tag{font-size:10.5px;font-weight:700;color:var(--accent-ink);background:var(--accent);border-radius:6px;padding:1px 6px}
 </style>
 </head>
 <body>
@@ -73,16 +83,27 @@ footer a{color:var(--mute);cursor:pointer;text-decoration:underline;text-underli
   <main>
     <div class="grid" id="grid">
       <div class="banner" id="banner"></div>
+    <div class="login" id="login">
+      <h2 id="l-title">Entre com o e-mail da compra</h2>
+      <p id="l-sub">Use o mesmo e-mail que você usou para comprar. Vamos enviar um código de acesso.</p>
+      <input id="l-email" type="email" placeholder="seuemail@exemplo.com" autocomplete="email">
+      <input id="l-code" class="code" inputmode="numeric" maxlength="8" placeholder="••••••" style="display:none">
+      <div class="erro" id="l-err"></div>
+      <button class="primary" id="l-go">Enviar código</button>
+      <a id="l-back" style="display:none">Usar outro e-mail</a>
+    </div>
     </div>
     <aside class="side">
       <h4>Atividade</h4>
-      <div class="log" id="log"><div class="empty">Escolha um pack e clique em Instalar.</div></div>
+      <div class="log" id="log"><div class="empty">O que o app fizer aparece aqui.</div></div>
     </aside>
   </main>
 
   <footer>
     <span id="ver">Pluga &amp; Edita</span>
     <a id="diag">Diagnóstico para suporte</a>
+    <span style="margin-left:auto" id="who"></span>
+    <a id="logout" style="display:none">Sair</a>
   </footer>
 </div>
 
@@ -105,36 +126,138 @@ const ICONS = {
 };
 // catálogo: packId = id do manifest do .flpack
 const PRODUCTS = [
-  {key:'legendas', packId:'fl-legendas', name:'Legendas', desc:'Títulos e legendas dinâmicas, organizados em pastas no CapCut.', live:true},
+  {key:'legendas', packId:'fl-legendas', name:'Legendas', desc:'Títulos e legendas dinâmicas, organizados em pastas no CapCut.'},
   {key:'sons', packId:'fl-sons', name:'Efeitos Sonoros', desc:'Sons prontos para arrastar na timeline.', live:false},
   {key:'musicas', packId:'fl-musicas', name:'Músicas', desc:'Trilhas selecionadas para Reels.', live:false},
   {key:'broll', packId:'fl-broll', name:'B-Rolls & Transições', desc:'Cortes e transições com um clique.', live:false},
   {key:'luts', packId:'fl-luts', name:'LUTs', desc:'Cores de cinema como ajustes prontos.', live:false},
 ];
 
-let state = null, busy = false;
+// ===== Servidor (chave pública: pode ficar no app) =====
+const SUPA = { url: 'https://otlaexuqyavpzxwzcsfo.supabase.co', key: 'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
+
+let state = null, busy = false, sess = null, cat = null, catErr = '';
 const $ = s => document.querySelector(s);
 
+function traduz(m){
+  m = String(m||'');
+  if (/only request this after (\d+)/i.test(m)) return 'Aguarde ' + m.match(/after (\d+)/i)[1] + ' segundos para pedir outro código.';
+  if (/expired|invalid/i.test(m) && /token|otp/i.test(m)) return 'Código inválido ou expirado. Confira ou peça outro.';
+  if (/rate limit/i.test(m)) return 'Muitas tentativas. Aguarde alguns minutos e tente de novo.';
+  if (/not authorized/i.test(m)) return 'O envio de e-mails ainda não está liberado para este endereço. Fale com o suporte.';
+  if (/failed to fetch|network|load failed/i.test(m)) return 'Sem conexão com a internet.';
+  return m;
+}
+
+async function api(path, { method='GET', body, auth=true } = {}){
+  const h = { apikey: SUPA.key, 'Content-Type': 'application/json' };
+  if (auth && sess) h.Authorization = 'Bearer ' + sess.access_token;
+  const r = await fetch(SUPA.url + path, { method, headers: h, body: body ? JSON.stringify(body) : undefined });
+  const t = await r.text(); let j; try { j = t ? JSON.parse(t) : {}; } catch { j = t; }
+  if (!r.ok){ const e = new Error(traduz(j?.msg || j?.message || j?.error_description || j?.error || ('Erro ' + r.status))); e.status = r.status; throw e; }
+  return j;
+}
+
+// ----- sessão -----
+async function saveSess(s){ sess = s; await invoke('session_set', { data: s ? JSON.stringify(s) : '' }); }
+async function loadSess(){ try { const t = await invoke('session_get'); sess = t ? JSON.parse(t) : null; } catch { sess = null; } }
+function fromAuth(r){ return { access_token: r.access_token, refresh_token: r.refresh_token, expires_at: r.expires_at || (Math.floor(Date.now()/1000) + (r.expires_in||3600)), email: r.user?.email }; }
+async function validSess(){
+  if (!sess) return false;
+  if (sess.expires_at - Date.now()/1000 > 90) return true;
+  try {
+    const r = await api('/auth/v1/token?grant_type=refresh_token', { method:'POST', body:{ refresh_token: sess.refresh_token }, auth:false });
+    await saveSess({ ...fromAuth(r), email: r.user?.email || sess.email }); return true;
+  } catch(e){
+    if (e.status >= 400 && e.status < 500){ await saveSess(null); return false; }
+    return true; // sem internet: mantém a sessão
+  }
+}
+
+// ----- login -----
+let loginEmail = '';
+function showLogin(on){
+  $('#login').classList.toggle('show', on);
+  document.querySelectorAll('#grid .card').forEach(c => c.style.display = on ? 'none' : '');
+  $('#logout').style.display = on ? 'none' : '';
+  $('#who').textContent = on ? '' : (sess?.email || '');
+}
+function loginStage(codigo){
+  $('#l-code').style.display = codigo ? '' : 'none';
+  $('#l-email').style.display = codigo ? 'none' : '';
+  $('#l-back').style.display = codigo ? '' : 'none';
+  $('#l-title').textContent = codigo ? 'Digite o código' : 'Entre com o e-mail da compra';
+  $('#l-sub').textContent = codigo ? `Enviamos um código para ${loginEmail}. Confira também o spam.` : 'Use o mesmo e-mail que você usou para comprar. Vamos enviar um código de acesso.';
+  $('#l-go').textContent = codigo ? 'Entrar' : 'Enviar código';
+  $('#l-err').textContent = '';
+  (codigo ? $('#l-code') : $('#l-email')).focus();
+}
+$('#l-go').onclick = async () => {
+  const b = $('#l-go'); b.disabled = true; $('#l-err').textContent = '';
+  try {
+    if ($('#l-code').style.display === 'none'){
+      loginEmail = $('#l-email').value.trim().toLowerCase();
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(loginEmail)) throw new Error('Digite um e-mail válido.');
+      await api('/auth/v1/otp', { method:'POST', body:{ email: loginEmail, create_user: true }, auth:false });
+      $('#l-code').value = ''; loginStage(true);
+    } else {
+      const token = $('#l-code').value.replace(/\D/g,'');
+      if (token.length < 6) throw new Error('Digite o código que chegou no e-mail.');
+      const r = await api('/auth/v1/verify', { method:'POST', body:{ type:'email', email: loginEmail, token }, auth:false });
+      await saveSess(fromAuth(r)); showLogin(false); await loadCatalog(); render();
+      step('Conectado como ' + sess.email, 'ok');
+    }
+  } catch(e){ $('#l-err').textContent = traduz(e.message); }
+  b.disabled = false;
+};
+$('#l-back').onclick = () => loginStage(false);
+['#l-email','#l-code'].forEach(s => $(s).addEventListener('keydown', e => { if (e.key === 'Enter') $('#l-go').click(); }));
+$('#logout').onclick = async () => { await saveSess(null); cat = null; loginStage(false); showLogin(true); };
+
+// ----- catálogo do aluno -----
+async function loadCatalog(){
+  catErr = '';
+  try {
+    if (!(await validSess())){ cat = null; showLogin(true); return; }
+    const [packs, lic] = await Promise.all([
+      api('/rest/v1/packs?select=id,name,version,file_path,buy_url'),
+      api('/rest/v1/licenses?select=pack_id,status'),
+    ]);
+    cat = { packs, owned: new Set(lic.filter(l => l.status === 'active').map(l => l.pack_id)) };
+  } catch(e){ catErr = traduz(e.message); if (e.status === 401){ await saveSess(null); showLogin(true); } }
+}
+
+function done(){ document.querySelectorAll('#log .step.run').forEach(d=>{ d.className='step ok'; d.querySelector('i').textContent='✓'; }); }
 function step(txt, kind='ok'){
+  if (kind!=='run') done();
   const log = $('#log'); const e = log.querySelector('.empty'); if (e) e.remove();
   const d = document.createElement('div'); d.className = 'step ' + kind;
   d.innerHTML = `<i>${kind==='ok'?'✓':kind==='err'?'!':kind==='warn'?'!':'•'}</i><span></span>`;
   d.querySelector('span').textContent = txt; log.appendChild(d); log.scrollTop = log.scrollHeight;
 }
 
+function btn(txt, cls, fn){ const b = document.createElement('button'); b.className = cls; b.textContent = txt; b.disabled = busy; b.onclick = fn; return b; }
+
 function render(){
   const grid = $('#grid'); grid.querySelectorAll('.card').forEach(c=>c.remove());
+  if (!sess) return;
   for (const p of PRODUCTS){
+    const srv = cat?.packs?.find(x => x.id === p.packId);
+    const owned = !!cat?.owned?.has(p.packId);
     const inst = state?.installed?.find(i=>i.id===p.packId);
-    const c = document.createElement('div'); c.className = 'card' + (p.live ? ' on' : '');
-    c.innerHTML = `<div class="icon">${ICONS[p.key]}</div><h3>${p.name}</h3><p>${p.desc}</p>
-      <div class="meta">${inst ? `<span class="dot ok"></span>Instalado · v${inst.version}` : p.live ? '<span class="dot"></span>Não instalado' : ''}</div>`;
+    const novo = inst && srv && inst.version !== srv.version;
+    const c = document.createElement('div'); c.className = 'card' + (srv && owned ? ' on' : '');
+    let meta = '';
+    if (inst) meta = `<span class="dot ok"></span>Instalado · v${inst.version}` + (novo ? ' <span class="tag">nova versão</span>' : '');
+    else if (srv && owned) meta = '<span class="dot"></span>Liberado · não instalado';
+    else if (srv) meta = '<span class="dot"></span>Não incluso na sua compra';
+    c.innerHTML = `<div class="icon">${ICONS[p.key]}</div><h3>${p.name}</h3><p>${p.desc}</p><div class="meta">${meta}</div>`;
     const b = document.createElement('div'); b.className = 'btns';
-    if (!p.live){ b.innerHTML = '<div class="soon" style="flex:1">Em breve</div>'; }
+    if (!srv && !inst){ b.innerHTML = '<div class="soon" style="flex:1">' + (catErr ? 'Sem conexão' : 'Em breve') + '</div>'; }
     else {
-      const bi = document.createElement('button'); bi.className='primary'; bi.textContent = inst ? 'Reparar / Atualizar' : 'Instalar';
-      bi.disabled = busy; bi.onclick = () => doInstall(p); b.appendChild(bi);
-      if (inst){ const br = document.createElement('button'); br.className='ghost'; br.textContent='Remover'; br.disabled=busy; br.onclick=()=>doRemove(p,inst); b.appendChild(br); }
+      if (srv && owned) b.appendChild(btn(inst ? 'Atualizar' : 'Instalar', 'primary', () => doInstall(p, srv)));
+      else if (srv && srv.buy_url) b.appendChild(btn('Quero este pack', 'primary', () => T.opener.openUrl(srv.buy_url)));
+      if (inst) b.appendChild(btn('Remover', 'ghost', () => doRemove(p, inst)));
     }
     c.appendChild(b); grid.appendChild(c);
   }
@@ -148,22 +271,29 @@ async function refresh(){
   $('#t-run').textContent = state.capcut_running ? 'CapCut aberto — feche para instalar' : 'CapCut fechado';
   $('#ver').textContent = `Pluga & Edita v${state.version} · ${state.system === 'Mac' ? 'macOS' : state.system}`;
   const bn = $('#banner');
-  if (!state.capcut_found){ bn.textContent = 'Abra o CapCut uma vez, crie um projeto qualquer e feche. Depois volte aqui.'; bn.classList.add('show'); }
+  if (!sess) bn.classList.remove('show');
+  else if (catErr){ bn.textContent = catErr + ' Verifique a internet: a lista de packs será atualizada sozinha.'; bn.classList.add('show'); }
+  else if (!state.capcut_found){ bn.textContent = 'Abra o CapCut uma vez, crie um projeto qualquer e feche. Depois volte aqui.'; bn.classList.add('show'); }
   else if (state.capcut_running){ bn.textContent = 'Feche o CapCut (no Mac: ⌘Q) para instalar. O app detecta sozinho quando ele fechar.'; bn.classList.add('show'); }
+  else if (cat && cat.owned.size === 0){ bn.textContent = 'Nenhuma compra encontrada para ' + sess.email + '. Se você comprou com outro e-mail, clique em Sair (lá embaixo) e entre com ele.'; bn.classList.add('show'); }
   else bn.classList.remove('show');
   render();
 }
 
-async function doInstall(p){
+async function doInstall(p, srv){
   if (state.capcut_running){ step('Feche o CapCut antes de instalar.', 'warn'); return; }
-  // v0.1: o pacote vem de um arquivo .flpack. Com o painel, o download será automático.
-  const file = await T.dialog.open({ title:'Escolha o pacote ' + p.name, multiple:false, filters:[{ name:'Pacote FL', extensions:['flpack'] }] });
-  if (!file) return;
   busy = true; render(); step('Instalando ' + p.name + '…', 'run');
   try {
-    const r = await invoke('install_pack', { path: file });
+    if (!(await validSess())) throw new Error('Sua sessão expirou. Entre de novo.');
+    const caminho = srv.file_path.split('/').map(encodeURIComponent).join('/');
+    const s = await api('/storage/v1/object/sign/packs/' + caminho, { method:'POST', body:{ expiresIn: 120 } });
+    const link = SUPA.url + '/storage/v1' + (s.signedURL || s.signedUrl);
+    await invoke('install_remote', { url: link, packId: p.packId });
     step('Pronto! Abra o CapCut: está tudo nas predefinições.', 'ok');
-  } catch(e){ step(String(e), 'err'); }
+  } catch(e){
+    const m = String(e.message || e);
+    step(/not found|object not found|400|403/i.test(m) ? 'Este pack não está liberado para ' + (sess?.email||'este e-mail') + '.' : traduz(m), 'err');
+  }
   busy = false; await refresh();
 }
 
@@ -176,14 +306,22 @@ async function doRemove(p, inst){
 
 $('#diag').onclick = async () => {
   const d = await invoke('diagnose'); const l = await invoke('log_text');
-  $('#m-body').textContent = d + '\n--- registro ---\n' + (l.split('\n').slice(-60).join('\n') || '(vazio)');
+  $('#m-body').textContent = d + '\nconta: ' + (sess?.email || '(não conectado)') + '\n--- registro ---\n' + (l.split('\n').slice(-60).join('\n') || '(vazio)');
   $('#modal').classList.add('show');
 };
 $('#m-close').onclick = () => $('#modal').classList.remove('show');
 $('#m-copy').onclick = async () => { await navigator.clipboard.writeText($('#m-body').textContent); $('#m-copy').textContent = 'Copiado ✓'; setTimeout(()=>$('#m-copy').textContent='Copiar',1500); };
 
-T.event.listen('progress', e => step(String(e.payload), 'ok'));
-refresh(); setInterval(() => { if (!busy) refresh(); }, 3000);
+T.event.listen('progress', e => { const t = String(e.payload); step(t, /^aviso/i.test(t) ? 'warn' : 'ok'); });
+
+(async () => {
+  await loadSess();
+  if (sess && await validSess()){ showLogin(false); await loadCatalog(); }
+  else { showLogin(true); loginStage(false); }
+  await refresh();
+  setInterval(() => { if (!busy) refresh(); }, 3000);
+  setInterval(() => { if (!busy && sess) loadCatalog(); }, 60000);
+})();
 </script>
 </body>
 </html>

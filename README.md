@@ -10,6 +10,7 @@ pastas organizadas e correção de caminhos — sem o aluno abrir nenhuma pasta.
 | `core/` | Toda a lógica de instalação (Rust), com testes que simulam Mac e Windows |
 | `app/` | O aplicativo (Tauri): janela, ícones e configuração do instalador |
 | `ui/` | A interface (HTML/CSS/JS). Cores da marca em `:root` no topo do `index.html` |
+| `supabase/` | Banco (SQL), função que recebe os avisos da Greenn e modelo do e-mail com código |
 | `tools/build_pack.py` | Gera os pacotes `.flpack` a partir das predefinições |
 | `.github/workflows/` | Gera os instaladores de Mac e Windows automaticamente |
 
@@ -38,6 +39,10 @@ python3 tools/build_pack.py --id fl-legendas --name "Legendas FL" --version 1.0.
 cargo test -p flcore --release     # precisa de packs/legendas.flpack
 ```
 
+## Como funciona (v0.2)
+- O aluno entra no app com o e-mail da compra (código por e-mail).
+- O app lista os packs liberados para ele e baixa direto do armazenamento privado (link de 2 minutos).
+- A Greenn avisa vendas/reembolsos em `functions/v1/greenn-webhook?token=...`, que libera ou bloqueia.
+
 ## Próximas versões
-- v0.2: painel web + login pelo e-mail de compra (Greenn) + download automático (sem arquivo para o aluno).
 - v0.3: marca d'água por comprador, atualizações automáticas do app, demais packs (sons, músicas, B-roll, LUTs).
