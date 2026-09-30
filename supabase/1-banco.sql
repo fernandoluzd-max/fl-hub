@@ -65,6 +65,11 @@ create policy "minhas licencas" on public.licenses
 grant select on public.packs, public.licenses to authenticated;
 revoke all on public.products, public.webhook_events from anon, authenticated;
 
+-- A função da Greenn (service_role) precisa ler/gravar as tabelas
+grant usage on schema public to service_role;
+grant select, insert, update, delete on all tables in schema public to service_role;
+grant usage, select on all sequences in schema public to service_role;
+
 -- E-mails sempre em minúsculas
 create or replace function public.lower_email() returns trigger language plpgsql as $$
 begin new.email := lower(trim(new.email)); new.updated_at := now(); return new; end $$;
