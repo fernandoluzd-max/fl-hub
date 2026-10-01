@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Copia Cor — Base FL</title>
+<meta name="description" content="Copie a cor de qualquer vídeo de referência e baixe a sua LUT pronta para o CapCut.">
+<link rel="icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0B0C0C">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0C0C; --panel:#141716; --panel2:#1A1E1C; --line:#262B28; --ink:#F4F0E4; --mute:#A3A396; --dim:#63625a;
+  --a:#FF6FAE; --a2:#B45CFF; --ai:#16070f; --ok:#7fce8f;
+  --grad:linear-gradient(120deg,#FFB347,#FF6FAE 45%,#B45CFF 75%,#5AB8FF);
+  --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --f:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:16px/1.5 var(--f);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(800px 460px at 85% -10%,rgba(255,111,174,.13),transparent 70%),radial-gradient(700px 420px at -5% 5%,rgba(90,184,255,.08),transparent 70%)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--a);outline-offset:3px;border-radius:10px}
+.wrap{position:relative;max-width:1180px;margin:0 auto;padding:16px 18px 48px}
+header{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+header img{width:34px;height:34px;border-radius:9px}
+header .nm{font-family:var(--d);font-weight:800;font-size:16px;line-height:1.1}
+header .nm small{display:block;font-family:var(--f);font-weight:500;color:var(--mute);font-size:12px}
+header .sp{flex:1}
+.link{background:none;border:0;color:var(--mute);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+/* passos */
+.passos{display:flex;gap:6px;margin-bottom:22px}
+.passos div{flex:1;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--dim);padding:9px 12px;border-radius:12px;background:var(--panel);border:1px solid var(--line);white-space:nowrap;overflow:hidden}
+.passos i{flex:none;font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;background:var(--panel2);border:1px solid var(--line)}
+.passos .at{color:var(--ink);border-color:rgba(255,111,174,.5)}
+.passos .at i{background:var(--grad);color:#111;border:0}
+.passos .ok{color:var(--mute)}
+.passos .ok i{background:var(--ok);color:#0b1a10;border:0}
+@media (max-width:640px){.passos span{display:none}.passos div{justify-content:center}}
+
+h1{font-family:var(--d);font-weight:850;font-stretch:112%;font-size:clamp(26px,5vw,40px);line-height:1.04;letter-spacing:-.03em;margin-bottom:8px;text-wrap:balance}
+h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mute);font-size:15.5px;max-width:60ch;margin-bottom:22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;font-weight:750;font-size:16px;border-radius:15px;padding:15px 22px;border:0;background:var(--grad);color:#14070e;transition:transform .12s,filter .15s,box-shadow .2s;box-shadow:0 12px 34px -14px rgba(255,111,174,.8)}
+.btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn.full{width:100%}
+.hide{display:none!important}
+
+/* passo 1: as duas imagens */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;min-height:300px;border-radius:22px;border:1.5px dashed #3a403c;background:var(--panel);cursor:pointer;overflow:hidden;transition:border-color .2s,background .2s,transform .15s}
+.drop:hover,.drop.sobre{border-color:var(--a);background:var(--panel2)}
+.drop.sobre{transform:scale(1.01)}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.drop .n{font-family:var(--d);font-weight:900;font-size:13px;letter-spacing:.12em;color:var(--a)}
+.drop b{font-family:var(--d);font-weight:800;font-size:21px}
+.drop p{color:var(--mute);font-size:14px;max-width:26ch}
+.drop .up{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--line);margin-bottom:4px}
+.drop .up svg{width:24px;height:24px;stroke:var(--ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.drop canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.drop.tem{border-style:solid;border-color:var(--line)}
+.drop.tem .txt{display:none}
+.drop .tag{position:absolute;left:12px;top:12px;z-index:2;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:99px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px)}
+.drop .troca{position:absolute;right:12px;top:12px;z-index:2;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:99px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);display:none}
+.drop.tem .troca{display:block}
+.acoes{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:20px}
+.dica{color:var(--dim);font-size:13px}
+@media (max-width:720px){.duo{grid-template-columns:1fr}.drop{min-height:210px}}
+
+/* analisando */
+.scan{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--line);max-width:760px;margin:0 auto;aspect-ratio:16/9;background:#111}
+.scan canvas{width:100%;height:100%;object-fit:cover;display:block}
+.scan::after{content:"";position:absolute;top:0;bottom:0;width:26%;left:-30%;background:linear-gradient(90deg,transparent,rgba(255,111,174,.35),rgba(180,92,255,.5),transparent);animation:varre 1.3s ease-in-out infinite}
+@keyframes varre{to{left:110%}}
+.scan-t{text-align:center;margin-top:18px;color:var(--mute);font-weight:600}
+
+/* passo 3: ajuste */
+.ed{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;align-items:start}
+.pv{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:#0e0f0f;touch-action:none;user-select:none;-webkit-user-select:none}
+.pv canvas{display:block;width:100%;height:auto}
+.pv .dep{position:absolute;inset:0;width:100%;height:100%}
+.pv .corte{position:absolute;top:0;bottom:0;width:2px;background:#fff;box-shadow:0 0 14px rgba(255,255,255,.7);z-index:2;cursor:ew-resize}
+.pv .corte span{position:absolute;top:50%;left:50%;width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.45);display:grid;place-items:center;color:#111;font-weight:900;font-size:13px;letter-spacing:2px}
+.pv .tg{position:absolute;top:12px;z-index:3;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:99px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);pointer-events:none}
+.pv .tg.l{left:12px}.pv .tg.r{right:12px;background:var(--grad);color:#111}
+.sob{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+.refm{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px 12px 8px 8px}
+.refm canvas{width:64px;height:40px;border-radius:8px;object-fit:cover}
+.refm small{display:block;color:var(--mute);font-size:11.5px}
+.pal{display:flex;gap:0;border-radius:10px;overflow:hidden;border:1px solid var(--line);height:40px;flex:1;min-width:160px}
+.pal i{flex:1}
+.cenas{margin-top:16px}
+.cenas h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.cenas p{color:var(--mute);font-size:13px;margin-bottom:10px}
+.cg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cn{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;border:1.5px dashed #3a403c;background:var(--panel);display:grid;place-items:center;cursor:pointer;color:var(--mute);font-size:13px;font-weight:600;text-align:center}
+.cn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.cn canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cn.tem{border-style:solid;border-color:var(--line)}
+.cn .x{position:absolute;right:6px;top:6px;z-index:3;width:24px;height:24px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:13px;cursor:pointer;display:none}
+.cn.tem .x{display:block}
+
+.painel{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:18px}
+.painel h2{font-family:var(--d);font-weight:800;font-size:15px;letter-spacing:.02em;margin-bottom:12px}
+.ctl{margin-bottom:14px}
+.ctl .l{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;font-weight:600;margin-bottom:6px}
+.ctl .l small{font-weight:500;color:var(--mute);font-size:12px}
+.ctl .l output{font-variant-numeric:tabular-nums;color:var(--mute);font-size:13px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;background:var(--trk,#2c322e);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:0;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:0}
+.grande input[type=range]{height:8px;--trk:linear-gradient(90deg,#2c322e,var(--a))}
+.sw{display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px;margin:4px 0 16px;cursor:pointer}
+.sw b{display:block;font-size:14px}.sw small{display:block;color:var(--mute);font-size:12.5px;line-height:1.3}
+.sw .tog{flex:none;width:44px;height:26px;border-radius:26px;background:#2c322e;position:relative;transition:background .2s}
+.sw .tog::after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
+.sw.on .tog{background:var(--ok)}.sw.on .tog::after{transform:translateX(18px)}
+details.fino{border-top:1px solid var(--line);padding-top:12px;margin-bottom:6px}
+details.fino summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;font-weight:700;font-size:14px;margin-bottom:12px}
+details.fino summary::-webkit-details-marker{display:none}
+details.fino summary::after{content:"+";color:var(--a);font-size:18px}
+details.fino[open] summary::after{content:"–"}
+.rst{display:block;margin:2px 0 14px auto}
+@media (max-width:960px){.ed{grid-template-columns:1fr}}
+
+/* pronto */
+.fim{max-width:640px;margin:0 auto;text-align:center}
+.arq{display:flex;align-items:center;gap:14px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:16px;margin:22px 0 16px}
+.arq .ic{flex:none;width:56px;height:56px;border-radius:16px;background:var(--grad);display:grid;place-items:center;font-family:var(--d);font-weight:900;font-size:13px;color:#111}
+.arq b{display:block;font-family:var(--d);font-weight:800;font-size:19px}
+.arq small{display:block;color:var(--mute);font-size:13px}
+.como{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px 20px;margin-top:18px}
+.como h3{font-size:15px;margin-bottom:10px}
+.como ol{padding-left:20px;display:flex;flex-direction:column;gap:7px;color:var(--mute);font-size:14.5px}
+.como b{color:var(--ink)}
+.capcut{display:flex;align-items:center;gap:12px;text-align:left;background:linear-gradient(90deg,rgba(255,111,174,.10),transparent);border:1px dashed rgba(255,111,174,.45);border-radius:18px;padding:14px 16px;margin-top:14px}
+.capcut b{display:block;font-size:15px}.capcut small{display:block;color:var(--mute);font-size:13px}
+.capcut .breve{margin-left:auto;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--a);border:1px solid rgba(255,111,174,.5);border-radius:99px;padding:4px 9px;white-space:nowrap}
+.progs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.pg{cursor:pointer;font-weight:700;font-size:13px;color:var(--mute);background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:7px 13px}
+.pg.on{background:var(--ink);color:#111;border-color:var(--ink)}
+.lock{border-top:1px dashed var(--line);margin-top:16px;padding-top:16px}
+.lock p{font-weight:700;margin-bottom:4px}.lock .sm{color:var(--mute);font-size:14px;margin-bottom:12px}
+.inp{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font:inherit;font-size:16px;outline:none;margin-bottom:12px}
+.inp:focus{border-color:var(--a)}
+.err{color:#ff8f7a;font-size:14px;min-height:20px;margin-top:8px}
+.toast{pointer-events:none;position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#111;font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;transition:all .25s;z-index:30;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.entra>*{animation:entra .35s cubic-bezier(.2,.8,.2,1) both}
+@keyframes entra{from{opacity:0;transform:translateY(10px)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="/logo.png" alt="">
+    <div class="nm">Copia Cor<small>Base FL</small></div>
+    <div class="sp"></div>
+    <button class="link" id="conta"></button>
+  </header>
+  <div class="passos" id="passos"></div>
+  <main id="tela"></main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===================== CONFIG =====================
+const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
+const PACK = 'fl-lut';
+const BUY_URL = '';                 // página de vendas (colocar quando existir)
+const NOME_LUT = 'LUT Base FL';     // nome fixo das LUTs: a pessoa não escolhe nem edita
+const N = 33;                       // tamanho padrão do .cube
+
+// ===================== utilidades =====================
+const $ = s => document.querySelector(s);
+const store = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k,v){ try { v==null ? localStorage.removeItem(k) : localStorage.setItem(k,v); } catch {} } };
+const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const espera = ms => new Promise(r => setTimeout(r, calmo ? Math.min(ms, 80) : ms));
+function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2400); }
+function tela(html){ const m = $('#tela'); m.className = 'entra'; m.innerHTML = html; window.scrollTo({ top:0 }); }
+function passos(at){
+  const P = ['Seu vídeo e a referência','Ajuste','Pronto'];
+  $('#passos').innerHTML = P.map((p, i) => `<div class="${i < at ? 'ok' : i === at ? 'at' : ''}"><i>${i < at ? '✓' : i + 1}</i><span>${p}</span></div>`).join('');
+}
+
+// ===================== cor: sRGB <-> Lab =====================
+const lin = c => c <= .04045 ? c / 12.92 : Math.pow((c + .055) / 1.055, 2.4);
+const gam = c => c <= .0031308 ? c * 12.92 : 1.055 * Math.pow(c, 1 / 2.4) - .055;
+const fL = t => t > .008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116;
+const fI = t => t > .206893 ? t * t * t : (t - 16 / 116) / 7.787;
+function lab(r, g, b){   // r,g,b em 0..1
+  r = lin(r); g = lin(g); b = lin(b);
+  const x = (.4124564*r + .3575761*g + .1804375*b) / .95047, y = .2126729*r + .7151522*g + .072175*b, z = (.0193339*r + .119192*g + .9503041*b) / 1.08883;
+  const fx = fL(x), fy = fL(y), fz = fL(z);
+  return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
+}
+function rgb(L, a, b){
+  const fy = (L + 16) / 116, fx = fy + a / 500, fz = fy - b / 200;
+  const x = fI(fx) * .95047, y = fI(fy), z = fI(fz) * 1.08883;
+  const r = 3.2404542*x - 1.5371385*y - .4985314*z, g = -.969266*x + 1.8760108*y + .041556*z, bb = .0556434*x - .2040259*y + 1.0572252*z;
+  return [gam(Math.min(1, Math.max(0, r))), gam(Math.min(1, Math.max(0, g))), gam(Math.min(1, Math.max(0, bb)))];
+}
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const suave = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
+
+// ===================== imagens =====================
+function carrega(file){
+  return new Promise((ok, erro) => {
+    if (!file || !/^image\//.test(file.type)) return erro(new Error('Envie uma imagem (print em PNG ou JPG).'));
+    const u = URL.createObjectURL(file), im = new Image();
+    im.onload = () => { URL.revokeObjectURL(u); ok(im); }; im.onerror = () => erro(new Error('Não consegui abrir essa imagem.')); im.src = u;
+  });
+}
+function paraCanvas(im, max){
+  const k = Math.min(1, max / Math.max(im.width, im.height)), c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(im.width * k)); c.height = Math.max(1, Math.round(im.height * k));
+  c.getContext('2d', { willReadFrequently:true }).drawImage(im, 0, 0, c.width, c.height); return c;
+}
+function medidas(cv){   // média e desvio em Lab
+  const s = paraCanvas(cv, 220), d = s.getContext('2d').getImageData(0, 0, s.width, s.height).data;
+  let n = 0, m = [0,0,0], q = [0,0,0];
+  for (let i = 0; i < d.length; i += 4){ const v = lab(d[i]/255, d[i+1]/255, d[i+2]/255); n++; for (let k = 0; k < 3; k++){ m[k] += v[k]; q[k] += v[k]*v[k]; } }
+  const med = m.map(x => x / n), dp = q.map((x, k) => Math.sqrt(Math.max(1e-6, x / n - med[k]*med[k])));
+  return { med, dp };
+}
+function paleta(cv, k = 5){   // k-means simples: as cores principais da referência
+  const s = paraCanvas(cv, 90), d = s.getContext('2d').getImageData(0, 0, s.width, s.height).data, px = [];
+  for (let i = 0; i < d.length; i += 4) px.push([d[i], d[i+1], d[i+2]]);
+  let c = Array.from({ length:k }, (_, i) => px[Math.floor((i + .5) * px.length / k)].slice());
+  for (let it = 0; it < 8; it++){
+    const sm = c.map(() => [0,0,0,0]);
+    for (const p of px){ let b = 0, bd = 1e9; for (let j = 0; j < k; j++){ const dd = (p[0]-c[j][0])**2 + (p[1]-c[j][1])**2 + (p[2]-c[j][2])**2; if (dd < bd){ bd = dd; b = j; } } sm[b][0] += p[0]; sm[b][1] += p[1]; sm[b][2] += p[2]; sm[b][3]++; }
+    c = sm.map((s2, j) => s2[3] ? [s2[0]/s2[3], s2[1]/s2[3], s2[2]/s2[3]] : c[j]);
+  }
+  return c.sort((a, b) => (a[0]*.3 + a[1]*.59 + a[2]*.11) - (b[0]*.3 + b[1]*.59 + b[2]*.11)).map(v => `rgb(${v.map(Math.round).join(',')})`);
+}
+
+// ===================== o coração: a transformação de cor =====================
+let S = null, R = null;     // medidas do seu vídeo e da referência
+const PADRAO = { cor:100, luz:70, pele:true, expo:0, contr:0, sat:0, temp:0, tint:0, fade:0 };
+let A = { ...PADRAO };
+function transforma(r, g, b){
+  const [L, a, bb] = lab(r, g, b);
+  const kL = clamp(R.dp[0] / S.dp[0], .6, 1.7), ka = clamp(R.dp[1] / S.dp[1], .5, 2.2), kb = clamp(R.dp[2] / S.dp[2], .5, 2.2);
+  const cor = A.cor / 100, luz = A.luz / 100;
+  let L2 = L + ((R.med[0] + (L - S.med[0]) * kL) - L) * luz;
+  let a2 = a + ((R.med[1] + (a - S.med[1]) * ka) - a) * cor;
+  let b2 = bb + ((R.med[2] + (bb - S.med[2]) * kb) - bb) * cor;
+  if (A.pele){   // tons de pele: segura a mudança de cor para a pele continuar natural
+    const h = Math.atan2(bb, a) * 180 / Math.PI, C = Math.hypot(a, bb);
+    const w = suave(8, 28, h) * (1 - suave(62, 82, h)) * suave(8, 18, C) * (1 - suave(55, 75, C)) * suave(22, 38, L) * (1 - suave(88, 96, L));
+    a2 += (a + (a2 - a) * .3 - a2) * w; b2 += (bb + (b2 - bb) * .3 - b2) * w;
+  }
+  // ajuste fino
+  L2 += A.expo * .22;
+  L2 = 50 + (L2 - 50) * (1 + A.contr * .006);
+  const s = 1 + A.sat / 100; a2 *= s; b2 *= s;
+  b2 += A.temp * .2; a2 += A.tint * .16;
+  if (A.fade) L2 += A.fade * .16 * Math.pow(1 - clamp(L2, 0, 100) / 100, 2);
+  return rgb(clamp(L2, 0, 100), a2, b2);
+}
+let LUT = null;
+function montaLUT(){
+  const t = new Float32Array(N * N * N * 3); let i = 0;
+  for (let b = 0; b < N; b++) for (let g = 0; g < N; g++) for (let r = 0; r < N; r++){ const v = transforma(r / (N-1), g / (N-1), b / (N-1)); t[i++] = v[0]; t[i++] = v[1]; t[i++] = v[2]; }
+  LUT = t;
+}
+function aplica(origem, destino){   // aplica a LUT (igual ao arquivo final) num canvas
+  const w = origem.width, h = origem.height; destino.width = w; destino.height = h;
+  const src = origem.getContext('2d').getImageData(0, 0, w, h), d = src.data, out = destino.getContext('2d').createImageData(w, h), o = out.data, M = N - 1, NN = N * N;
+  for (let i = 0; i < d.length; i += 4){
+    const fr = d[i] / 255 * M, fg = d[i+1] / 255 * M, fb = d[i+2] / 255 * M;
+    const r0 = fr | 0, g0 = fg | 0, b0 = fb | 0, r1 = r0 < M ? r0 + 1 : M, g1 = g0 < M ? g0 + 1 : M, b1 = b0 < M ? b0 + 1 : M, dr = fr - r0, dg = fg - g0, db = fb - b0;
+    for (let k = 0; k < 3; k++){
+      const c000 = LUT[(b0*NN + g0*N + r0)*3 + k], c100 = LUT[(b0*NN + g0*N + r1)*3 + k], c010 = LUT[(b0*NN + g1*N + r0)*3 + k], c110 = LUT[(b0*NN + g1*N + r1)*3 + k];
+      const c001 = LUT[(b1*NN + g0*N + r0)*3 + k], c101 = LUT[(b1*NN + g0*N + r1)*3 + k], c011 = LUT[(b1*NN + g1*N + r0)*3 + k], c111 = LUT[(b1*NN + g1*N + r1)*3 + k];
+      const c00 = c000 + (c100 - c000) * dr, c10 = c010 + (c110 - c010) * dr, c01 = c001 + (c101 - c001) * dr, c11 = c011 + (c111 - c011) * dr;
+      const c0 = c00 + (c10 - c00) * dg, c1 = c01 + (c11 - c01) * dg;
+      o[i + k] = (c0 + (c1 - c0) * db) * 255 + .5;
+    }
+    o[i + 3] = 255;
+  }
+  destino.getContext('2d').putImageData(out, 0, 0);
+}
+function arquivoCube(titulo){
+  const L = ['# Criado no Copia Cor · Base FL (basefl.com)', `TITLE "${titulo}"`, `LUT_3D_SIZE ${N}`, 'DOMAIN_MIN 0.0 0.0 0.0', 'DOMAIN_MAX 1.0 1.0 1.0', ''];
+  for (let i = 0; i < LUT.length; i += 3) L.push(LUT[i].toFixed(6) + ' ' + LUT[i+1].toFixed(6) + ' ' + LUT[i+2].toFixed(6));
+  return L.join('\n') + '\n';
+}
+
+// ===================== estado =====================
+let VID = null, REF = null, CENAS = [null, null, null];   // canvases (prévia)
+let acesso = false, vencido = false, sess = null;
+try { sess = JSON.parse(store.get('fl_sess') || 'null'); } catch { sess = null; }
+
+// ===================== PASSO 1 =====================
+function passo1(){
+  passos(0);
+  tela(`<h1>Copie a cor de <em>qualquer vídeo</em>.</h1>
+    <p class="sub">Coloque um print do seu vídeo e um print do vídeo que tem a cor que você quer. A gente monta a LUT e você ajusta do seu jeito.</p>
+    <div class="duo">
+      <label class="drop" id="dV"><span class="tag hide">Seu vídeo</span><span class="troca">Trocar</span><canvas class="hide"></canvas>
+        <span class="txt"><span class="up"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg></span></span><span class="txt n">01 · SEU VÍDEO</span><b class="txt">Print do seu vídeo</b><p class="txt">Arraste, clique ou cole com Ctrl/Cmd + V</p><input type="file" accept="image/*"></label>
+      <label class="drop" id="dR"><span class="tag hide">Referência</span><span class="troca">Trocar</span><canvas class="hide"></canvas>
+        <span class="txt"><span class="up"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg></span></span><span class="txt n">02 · REFERÊNCIA</span><b class="txt">Print da cor que você quer</b><p class="txt">Um frame de um filme, clipe ou vídeo que você gosta</p><input type="file" accept="image/*"></label>
+    </div>
+    <div class="acoes"><button class="btn" id="ir" disabled>Copiar a cor</button><button class="link" id="ex">Não tenho prints agora · usar um exemplo</button><span class="dica">Suas imagens não saem do seu aparelho.</span></div>`);
+  const poe = (el, cv) => { const c = el.querySelector('canvas'); c.width = cv.width; c.height = cv.height; c.getContext('2d').drawImage(cv, 0, 0); c.classList.remove('hide'); el.querySelector('.tag').classList.remove('hide'); el.classList.add('tem'); $('#ir').disabled = !(VID && REF); };
+  const recebe = async (qual, file) => { try { const cv = paraCanvas(await carrega(file), 900); if (qual === 'V'){ VID = cv; poe($('#dV'), cv); } else { REF = cv; poe($('#dR'), cv); } } catch(e){ toast(e.message); } };
+  for (const [id, q] of [['#dV','V'],['#dR','R']]){
+    const el = $(id); el.querySelector('input').onchange = e => recebe(q, e.target.files[0]);
+    el.ondragover = e => { e.preventDefault(); el.classList.add('sobre'); }; el.ondragleave = () => el.classList.remove('sobre');
+    el.ondrop = e => { e.preventDefault(); el.classList.remove('sobre'); recebe(q, e.dataTransfer.files[0]); };
+  }
+  document.onpaste = e => { const f = [...(e.clipboardData?.files || [])].find(x => /^image\//.test(x.type)); if (f) recebe(!VID ? 'V' : 'R', f); };
+  if (VID) poe($('#dV'), VID); if (REF) poe($('#dR'), REF);
+  $('#ex').onclick = () => { VID = exemplo('v'); REF = exemplo('r'); poe($('#dV'), VID); poe($('#dR'), REF); toast('Exemplo carregado'); };
+  $('#ir').onclick = analisa;
+}
+function exemplo(q){   // imagens de demonstração desenhadas aqui mesmo (sem arquivo externo)
+  const c = document.createElement('canvas'); c.width = 900; c.height = 506; const x = c.getContext('2d');
+  const g = x.createLinearGradient(0, 0, 0, 506);
+  if (q === 'v'){ g.addColorStop(0, '#9aa7b0'); g.addColorStop(.55, '#b9b6ad'); g.addColorStop(1, '#8a8478'); } else { g.addColorStop(0, '#0d3b4a'); g.addColorStop(.5, '#e08a3c'); g.addColorStop(1, '#2a1410'); }
+  x.fillStyle = g; x.fillRect(0, 0, 900, 506);
+  x.fillStyle = q === 'v' ? '#7f8a80' : '#123039'; x.beginPath(); x.moveTo(0, 330); x.lineTo(180, 210); x.lineTo(330, 300); x.lineTo(520, 180); x.lineTo(720, 310); x.lineTo(900, 240); x.lineTo(900, 506); x.lineTo(0, 506); x.fill();
+  x.fillStyle = q === 'v' ? '#6f7466' : '#0b1d22'; x.fillRect(0, 380, 900, 126);
+  x.fillStyle = q === 'v' ? '#c9a58c' : '#f0a868'; x.beginPath(); x.arc(450, 250, 62, 0, 7); x.fill();           // rosto
+  x.fillStyle = q === 'v' ? '#59616b' : '#12303a'; x.beginPath(); x.moveTo(340, 506); x.quadraticCurveTo(450, 300, 560, 506); x.fill(); // corpo
+  x.fillStyle = q === 'v' ? '#e7e2d5' : '#ffd9a0'; x.beginPath(); x.arc(720, 110, 44, 0, 7); x.fill();           // sol
+  return c;
+}
+async function analisa(){
+  passos(0);
+  tela(`<div class="scan"><canvas id="sc"></canvas></div><p class="scan-t" id="st">Lendo as cores da referência…</p>`);
+  const c = $('#sc'); c.width = VID.width; c.height = VID.height; c.getContext('2d').drawImage(VID, 0, 0);
+  await espera(700); S = medidas(VID); $('#st').textContent = 'Comparando com o seu vídeo…';
+  await espera(600); R = medidas(REF); R.pal = paleta(REF); $('#st').textContent = 'Montando a sua LUT…';
+  A = { ...PADRAO }; montaLUT(); await espera(500);
+  passo2();
+}
+
+// ===================== PASSO 2: ajuste =====================
+const FINO = [['expo','Exposição',-100,100],['contr','Contraste',-100,100],['sat','Saturação',-100,100],['temp','Temperatura',-100,100,'linear-gradient(90deg,#5AA9F0,#2c322e,#F2A541)'],['tint','Tonalidade',-100,100,'linear-gradient(90deg,#7BC67E,#2c322e,#E06FC0)'],['fade','Fade (pretos lavados)',0,100]];
+let corteX = 50;
+function passo2(){
+  passos(1);
+  tela(`<div class="ed">
+    <div>
+      <div class="pv" id="pv"><canvas id="cA"></canvas><canvas class="dep" id="cD"></canvas><div class="corte" id="ct"><span>‹ ›</span></div><span class="tg l">Antes</span><span class="tg r">Com a sua LUT</span></div>
+      <div class="sob"><div class="refm"><canvas id="rf"></canvas><span><b style="font-size:13px">Referência</b><small>cores principais →</small></span></div><div class="pal" id="pal"></div></div>
+      <div class="cenas"><h3>Teste em outras cenas</h3><p>Uma LUT pode ficar ótima num print e estranha em outro. Coloque até 3 cenas do mesmo vídeo para conferir antes de baixar.</p><div class="cg" id="cg"></div></div>
+    </div>
+    <div class="painel">
+      <h2>QUANTO COPIAR</h2>
+      <div class="ctl grande"><div class="l"><span>Cor <small>os tons da referência</small></span><output id="o-cor"></output></div><input type="range" id="i-cor" min="0" max="100"></div>
+      <div class="ctl grande"><div class="l"><span>Luz <small>claridade e contraste</small></span><output id="o-luz"></output></div><input type="range" id="i-luz" min="0" max="100"></div>
+      <div class="sw" id="pele" role="switch" tabindex="0"><span class="tog"></span><span><b>Manter a pele natural</b><small>Segura os tons de pele para ninguém ficar laranja ou verde.</small></span></div>
+      <details class="fino"><summary>Ajuste fino</summary>
+        ${FINO.map(([k, t, mn, mx, trk]) => `<div class="ctl"><div class="l"><span>${t}</span><output id="o-${k}"></output></div><input type="range" id="i-${k}" min="${mn}" max="${mx}"${trk ? ` style="--trk:${trk}"` : ''}></div>`).join('')}
+        <button class="link rst" id="rst">Zerar o ajuste fino</button>
+      </details>
+      <button class="btn full" id="pronto">Está bom, quero a LUT</button>
+      <button class="link" id="volta" style="display:block;margin:12px auto 0">← Trocar as imagens</button>
+    </div></div>`);
+  const cA = $('#cA'), cD = $('#cD'); cA.width = VID.width; cA.height = VID.height; cA.getContext('2d').drawImage(VID, 0, 0);
+  const rf = $('#rf'); rf.width = REF.width; rf.height = REF.height; rf.getContext('2d').drawImage(REF, 0, 0);
+  $('#pal').innerHTML = R.pal.map(c => `<i style="background:${c}"></i>`).join('');
+  let pend = false;
+  const pinta = () => { if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; montaLUT(); aplica(VID, cD); cortar(corteX); CENAS.forEach((c, i) => { if (c) aplica(c, document.querySelector(`#cn${i} canvas`)); }); }); };
+  const cortar = v => { corteX = clamp(v, 0, 100); cD.style.clipPath = `inset(0 0 0 ${corteX}%)`; $('#ct').style.left = corteX + '%'; };
+  const liga = k => { const i = $('#i-' + k), o = $('#o-' + k); i.value = A[k]; o.textContent = (k === 'cor' || k === 'luz') ? A[k] + '%' : (A[k] > 0 ? '+' : '') + A[k]; i.oninput = () => { A[k] = +i.value; o.textContent = (k === 'cor' || k === 'luz') ? A[k] + '%' : (A[k] > 0 ? '+' : '') + A[k]; pinta(); }; };
+  ['cor','luz', ...FINO.map(f => f[0])].forEach(liga);
+  const pele = $('#pele'); const pp = () => { pele.classList.toggle('on', A.pele); pele.setAttribute('aria-checked', A.pele); }; pp();
+  pele.onclick = () => { A.pele = !A.pele; pp(); pinta(); }; pele.onkeydown = e => { if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); pele.click(); } };
+  $('#rst').onclick = () => { FINO.forEach(([k]) => A[k] = 0); FINO.forEach(([k]) => liga(k)); pinta(); };
+  // divisor arrastável
+  const pv = $('#pv'); let arr = false;
+  const mov = e => { const r = pv.getBoundingClientRect(); cortar(((e.touches ? e.touches[0].clientX : e.clientX) - r.left) / r.width * 100); };
+  pv.onpointerdown = e => { arr = true; pv.setPointerCapture(e.pointerId); mov(e); }; pv.onpointermove = e => { if (arr) mov(e); }; pv.onpointerup = pv.onpointercancel = () => arr = false;
+  // outras cenas
+  const cg = $('#cg');
+  cg.innerHTML = [0,1,2].map(i => `<label class="cn" id="cn${i}"><canvas class="hide"></canvas><span class="t">＋ Cena ${i + 1}</span><button class="x" type="button" data-i="${i}">✕</button><input type="file" accept="image/*" data-i="${i}"></label>`).join('');
+  const mostra = i => { const el = $('#cn' + i), c = el.querySelector('canvas'); if (CENAS[i]){ aplica(CENAS[i], c); c.classList.remove('hide'); el.classList.add('tem'); el.querySelector('.t').classList.add('hide'); } else { c.classList.add('hide'); el.classList.remove('tem'); el.querySelector('.t').classList.remove('hide'); } };
+  cg.querySelectorAll('input').forEach(inp => inp.onchange = async e => { const i = +inp.dataset.i; try { CENAS[i] = paraCanvas(await carrega(e.target.files[0]), 480); mostra(i); } catch(er){ toast(er.message); } inp.value = ''; });
+  cg.querySelectorAll('.x').forEach(b => b.onclick = e => { e.preventDefault(); CENAS[+b.dataset.i] = null; mostra(+b.dataset.i); });
+  aplica(VID, cD); cortar(corteX); [0,1,2].forEach(mostra);
+  if (!calmo) (async () => { for (const v of [20, 80, 50]){ await espera(380); if (!arr) { cD.style.transition = 'clip-path .5s ease'; $('#ct').style.transition = 'left .5s ease'; cortar(v); } } await espera(520); cD.style.transition = ''; $('#ct').style.transition = ''; })();
+  $('#volta').onclick = passo1;
+  $('#pronto').onclick = passo3;
+}
+
+// ===================== PASSO 3: pronto =====================
+// o mesmo arquivo .cube serve para todos; muda só onde importar
+const PROGS = {
+  'CapCut': ['Selecione o clipe na timeline.', 'Abra <b>Ajuste › LUT</b> e clique em <b>Importar</b>.', 'Escolha o arquivo {arq}.', 'Regule a <b>intensidade</b> no próprio CapCut, se quiser.'],
+  'Premiere': ['Selecione o clipe e abra o painel <b>Lumetri Color</b>.', 'Em <b>Criativo › Look</b>, escolha <b>Procurar…</b>.', 'Selecione o arquivo {arq}.', 'Ajuste a <b>intensidade</b> no controle logo abaixo.'],
+  'DaVinci Resolve': ['Abra <b>Configurações do projeto › Gerenciamento de cor</b> e clique em <b>Abrir pasta de LUTs</b>.', 'Copie o arquivo {arq} para essa pasta e clique em <b>Atualizar listas</b>.', 'Na página <b>Color</b>, clique com o botão direito no nó e escolha a LUT.'],
+  'Final Cut': ['Selecione o clipe e adicione o efeito <b>LUT Personalizada</b> (Custom LUT).', 'No inspetor, em <b>LUT</b>, escolha <b>Escolher LUT personalizada…</b>.', 'Selecione o arquivo {arq}.', 'Ajuste a <b>mistura</b> (Mix) para regular a intensidade.'],
+};
+function proximoNome(){ const n = (+store.get('fl_lut_n') || 0) + 1; return { n, nome: NOME_LUT + ' ' + String(n).padStart(3, '0') }; }
+function passo3(){
+  passos(2);
+  montaLUT();
+  const { nome } = proximoNome();
+  const trava = acesso ? '' : `<div class="lock"><p>${vencido ? 'Seu acesso de 1 ano terminou' : 'Desbloqueie para baixar a sua LUT'}</p><div class="sm">${vencido ? 'Renove para continuar criando LUTs.' : 'Crie quantas LUTs quiser, por 1 ano, no celular e no computador.'}</div>
+      <button class="btn full" id="comprar">${vencido ? 'Renovar meu acesso' : 'Desbloquear o Copia Cor'}</button><button class="link" id="entrar" style="display:block;margin:12px auto 0">Já comprei · entrar</button></div>`;
+  tela(`<div class="fim"><h1>Sua LUT está <em>pronta</em>.</h1><p class="sub" style="margin:0 auto">Ela leva a cor da referência para o seu vídeo, com os ajustes que você fez.</p>
+    <div class="arq"><span class="ic">.cube</span><span><b>${nome}</b><small>Arquivo ${nome}.cube · padrão ${N}×${N}×${N} · funciona no CapCut, Premiere, DaVinci e Final Cut</small></span></div>
+    ${acesso ? `<button class="btn full" id="baixar">Baixar ${nome}</button>` : trava}
+    <div class="capcut"><span><b>Instalar direto no CapCut</b><small>Um clique no app Base FL e a LUT aparece em Ajuste › LUT. Em breve.</small></span><span class="breve">Em breve</span></div>
+    <div class="como"><h3>Como usar no seu programa</h3>
+      <div class="progs" id="progs">${Object.keys(PROGS).map((k, i) => `<button class="pg${i ? '' : ' on'}" data-k="${k}">${k}</button>`).join('')}</div>
+      <ol id="progOl"></ol></div>
+    <div class="acoes" style="justify-content:center"><button class="btn ghost" id="aj">← Voltar ao ajuste</button><button class="btn ghost" id="nova">Criar outra LUT</button></div></div>`);
+  const prog = k => { $('#progOl').innerHTML = PROGS[k].map(t => `<li>${t.replace('{arq}', `<b>${nome}.cube</b>`)}</li>`).join(''); document.querySelectorAll('.pg').forEach(b => b.classList.toggle('on', b.dataset.k === k)); };
+  document.querySelectorAll('.pg').forEach(b => b.onclick = () => prog(b.dataset.k)); prog('CapCut');
+  $('#aj').onclick = passo2;
+  $('#nova').onclick = () => { VID = REF = null; CENAS = [null, null, null]; passo1(); };
+  if ($('#baixar')) $('#baixar').onclick = () => {
+    const { n, nome: nm } = proximoNome();
+    const blob = new Blob([arquivoCube(nm)], { type:'text/plain' }), a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = nm + '.cube'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    store.set('fl_lut_n', String(n)); toast(nm + ' baixada'); $('#baixar').textContent = 'Baixar de novo';
+  };
+  if ($('#comprar')) $('#comprar').onclick = () => BUY_URL ? (location.href = BUY_URL) : toast('Link de compra em breve.');
+  if ($('#entrar')) $('#entrar').onclick = () => login(passo3);
+}
+
+// ===================== login e licença (igual às outras ferramentas) =====================
+async function api(path, { method='GET', body, auth=true } = {}){
+  const h = { apikey:SUPA.key, 'Content-Type':'application/json' };
+  if (auth && sess) h.Authorization = 'Bearer ' + sess.access_token;
+  const r = await fetch(SUPA.url + path, { method, headers:h, body: body ? JSON.stringify(body) : undefined });
+  const t = await r.text(); let j; try { j = t ? JSON.parse(t) : {}; } catch { j = t; }
+  if (!r.ok){ const e = new Error(traduz(j?.msg || j?.message || j?.error_description || j?.error || ('Erro ' + r.status))); e.status = r.status; throw e; }
+  return j;
+}
+function traduz(m){
+  m = String(m||'');
+  if (/only request this after (\d+)/i.test(m)) return 'Aguarde ' + m.match(/after (\d+)/i)[1] + ' segundos para pedir outro código.';
+  if (/expired|invalid/i.test(m) && /token|otp/i.test(m)) return 'Código inválido ou expirado. Confira ou peça outro.';
+  if (/rate limit/i.test(m)) return 'Muitas tentativas. Aguarde alguns minutos.';
+  if (/failed to fetch|network|load failed/i.test(m)) return 'Sem conexão com a internet.';
+  return m;
+}
+const fromAuth = r => ({ access_token:r.access_token, refresh_token:r.refresh_token, expires_at:r.expires_at || Math.floor(Date.now()/1000) + (r.expires_in||3600), email:r.user?.email });
+function salva(s){ sess = s; store.set('fl_sess', s ? JSON.stringify(s) : null); botaoConta(); }
+async function sessaoValida(){
+  if (!sess) return false;
+  if (sess.expires_at - Date.now()/1000 > 90) return true;
+  try { const r = await api('/auth/v1/token?grant_type=refresh_token', { method:'POST', body:{ refresh_token:sess.refresh_token }, auth:false }); salva({ ...fromAuth(r), email:r.user?.email || sess.email }); return true; }
+  catch(e){ if (e.status >= 400 && e.status < 500){ salva(null); return false; } return true; }
+}
+async function checaAcesso(){
+  acesso = false; vencido = false;
+  try {
+    if (!(await sessaoValida())) return;
+    const lic = await api(`/rest/v1/licenses?select=*&pack_id=eq.${PACK}`);
+    const agora = Date.now(), ativa = lic.find(l => l.status === 'active'), venc = ativa?.expires_at ? new Date(ativa.expires_at).getTime() : null;
+    acesso = !!ativa && (!venc || venc > agora); vencido = !!ativa && !!venc && venc <= agora;
+  } catch {}
+}
+function botaoConta(){ const b = $('#conta'); b.textContent = sess ? 'Sair' : 'Entrar'; b.onclick = () => { if (sess){ salva(null); acesso = false; toast('Você saiu.'); } else login(() => (VID && REF && LUT) ? passo3() : passo1()); }; }
+function login(depois){
+  let email = '';
+  const etapa = codigo => {
+    tela(`<div style="max-width:440px"><button class="link" id="voltar" style="margin-bottom:14px">← Voltar</button>
+      <h1>${codigo ? 'Digite o código' : 'Entre com o e-mail da compra'}</h1>
+      <p class="sub">${codigo ? 'Enviamos um código para ' + email + '. Confira também o spam.' : 'O mesmo e-mail que você usou para comprar. Vamos mandar um código de acesso.'}</p>
+      <input class="inp" id="campo" ${codigo ? 'inputmode="numeric" autocomplete="one-time-code" placeholder="Código"' : 'type="email" autocomplete="email" placeholder="seu@email.com"'}>
+      <button class="btn full" id="vai">${codigo ? 'Entrar' : 'Enviar código'}</button><div class="err" id="erro"></div></div>`);
+    $('#campo').focus(); $('#campo').onkeydown = e => { if (e.key === 'Enter') $('#vai').click(); };
+    $('#voltar').onclick = () => codigo ? etapa(false) : depois();
+    $('#vai').onclick = async () => {
+      const b = $('#vai'); b.disabled = true; $('#erro').textContent = '';
+      try {
+        if (!codigo){
+          email = $('#campo').value.trim().toLowerCase();
+          if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new Error('Digite um e-mail válido.');
+          await api('/auth/v1/otp', { method:'POST', body:{ email, create_user:true }, auth:false }); etapa(true);
+        } else {
+          const token = $('#campo').value.replace(/\D/g,'');
+          if (token.length < 6) throw new Error('Digite o código que chegou no e-mail.');
+          const r = await api('/auth/v1/verify', { method:'POST', body:{ type:'email', email, token }, auth:false });
+          salva(fromAuth(r)); await checaAcesso();
+          toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas o Copia Cor não está nas compras deste e-mail'); depois();
+        }
+      } catch(e){ $('#erro').textContent = traduz(e.message); b.disabled = false; }
+    };
+  };
+  etapa(false);
+}
+
+// ===================== início =====================
+botaoConta(); passo1();
+checaAcesso().then(() => { if ($('.fim')) passo3(); });
+</script>
+</body>
+</html>
