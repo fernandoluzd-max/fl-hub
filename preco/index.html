@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quanto Cobrar? — Pluga &amp; Edita</title>
+<meta name="description" content="Descubra quanto cobrar por uma edição ou gravação em 1 minuto e mande o orçamento pronto pro cliente.">
+<link rel="icon" href="/favicon.png">
+<meta name="theme-color" content="#0D0F0E">
+<style>
+:root{
+  --bg:#0D0F0E; --bg2:#141615; --card:#171A18; --line:#262d28; --ink:#F4F0E4; --mute:#9d998c;
+  --accent:#F2A541; --accent-ink:#141615; --ok:#7fce8f; --err:#ff8f7a;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(900px 500px at 10% -10%,#27352C 0%,#171A18 45%,transparent 75%),var(--bg);color:var(--ink);font:16px/1.5 var(--font);min-height:100vh}
+.wrap{max-width:520px;margin:0 auto;padding:18px 16px 40px;min-height:100vh;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+header img{width:34px;height:34px;border-radius:9px}
+header b{font-size:15px;line-height:1.2}
+header span{display:block;color:var(--mute);font-size:12px;font-weight:400}
+header .sp{flex:1}
+.link{background:none;border:0;color:var(--mute);font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:22px}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .25s}
+.back{background:none;border:0;color:var(--mute);font:inherit;font-size:14px;cursor:pointer;margin-bottom:10px;padding:4px 0}
+h1{font-size:28px;line-height:1.15;letter-spacing:-.02em;margin-bottom:6px}
+h1 em{font-style:normal;color:var(--accent)}
+.sub{color:var(--mute);font-size:15px;margin-bottom:20px}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:center;gap:14px;text-align:left;width:100%;cursor:pointer;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;transition:border-color .15s,transform .1s}
+.opt:active{transform:scale(.99)}
+.opt:hover{border-color:#3a443c}
+.opt .ic{font-size:22px;width:28px;text-align:center;flex:none}
+.opt b{display:block;font-size:16px}
+.opt small{display:block;color:var(--mute);font-size:13px;line-height:1.35}
+.opt.big{padding:20px 18px}
+.field{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 6px 6px 18px}
+.field span{color:var(--mute);font-weight:700}
+.field input{flex:1;min-width:0;background:none;border:0;color:var(--ink);font:inherit;font-size:22px;font-weight:700;padding:10px 0;outline:none}
+.btn{display:block;width:100%;cursor:pointer;font:inherit;font-weight:750;font-size:16px;border-radius:14px;padding:15px 18px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn:disabled{opacity:.5}
+.row{display:flex;gap:10px;margin-top:12px}
+.row .btn{flex:1}
+/* resultado */
+.res{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;position:relative;overflow:hidden}
+.res .lb{color:var(--mute);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.res .faixa{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin:4px 0 16px}
+.res .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.res .grid div{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.res .grid b{display:block;font-size:20px}
+.res .grid .ref b{color:var(--accent)}
+.res .pq{color:var(--mute);font-size:14px}
+.blur .val{filter:blur(9px);user-select:none}
+.lockbox{display:none;position:absolute;inset:0;background:rgba(13,15,14,.55);backdrop-filter:blur(2px);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:12px}
+.blur .lockbox{display:flex}
+.lockbox p{font-weight:700;font-size:17px}
+.lockbox small{color:var(--mute)}
+.lockbox .btn{width:auto;padding:12px 22px}
+h2{font-size:15px;margin:22px 0 10px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{cursor:pointer;font:inherit;font-weight:700;font-size:15px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:9px 16px}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pac{margin-top:10px;color:var(--mute);font-size:14px;min-height:20px}
+.pac b{color:var(--ink)}
+textarea{width:100%;min-height:250px;resize:vertical;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:16px;font:14px/1.5 var(--font)}
+.inp{width:100%;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font:inherit;font-size:16px;outline:none;margin-bottom:12px}
+.inp:focus,.field:focus-within,textarea:focus{border-color:var(--accent);outline:none}
+.err{color:var(--err);font-size:14px;min-height:20px;margin-top:8px}
+.ok{color:var(--ok);font-size:14px;min-height:20px;margin-top:8px;text-align:center}
+.foot{margin-top:auto;padding-top:28px;color:#5e5b53;font-size:12px;text-align:center}
+.nivel{margin-top:16px;color:var(--mute);font-size:13px;text-align:center}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="/logo.png" alt="">
+    <div><b>Quanto Cobrar?</b><span>Pluga &amp; Edita</span></div>
+    <div class="sp"></div>
+    <button class="link" id="conta"></button>
+  </header>
+  <div class="bar" id="bar"><i></i></div>
+  <main id="tela"></main>
+  <div class="foot">Valores de referência para te ajudar a decidir. Quem bate o martelo é você.</div>
+</div>
+
+<script>
+// ===================== CONFIG =====================
+const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
+const PACK = 'fl-preco';
+let BUY_URL = '';   // link de compra da Greenn (também vem do banco, campo buy_url)
+
+// ===================== REGRAS DE PREÇO (ajuste aqui) =====================
+const NIVEL = {                     // valor por hora usado nos bastidores
+  comeco:{ t:'Começando',  s:'Menos de 1 ano editando para clientes', h:40 },
+  medio: { t:'1 a 3 anos', s:'Já tenho alguns clientes e portfólio',   h:70 },
+  pro:   { t:'3+ anos',    s:'Experiente, portfólio forte',            h:120 },
+};
+const TIPO = {
+  reels:    { t:'Reels / Shorts / TikTok', s:'Vídeo curto vertical', ic:'📱', mult:1,   piso:50,  teto:1500,  nome:'Reels' },
+  youtube:  { t:'YouTube / vídeo longo',   s:'Vlog, aula, podcast, tutorial', ic:'▶️', mult:1, piso:80, teto:6000, nome:'vídeo para YouTube' },
+  comercial:{ t:'Comercial / Institucional', s:'Para empresa ou marca anunciar', ic:'🏢', mult:1.3, piso:200, teto:15000, nome:'vídeo comercial' },
+  evento:   { t:'Evento / Casamento',      s:'Muito material gravado', ic:'💍', mult:1.4, piso:300, teto:12000, nome:'vídeo de evento' },
+};
+const DUR = {                        // horas de edição simples pela duração final
+  d1:{ t:'Até 1 minuto', h:1.5, nome:'até 1 min' }, d3:{ t:'1 a 3 minutos', h:3, nome:'de 1 a 3 min' },
+  d10:{ t:'3 a 10 minutos', h:5, nome:'de 3 a 10 min' }, d30:{ t:'10 a 30 minutos', h:9, nome:'de 10 a 30 min' },
+  d60:{ t:'Mais de 30 minutos', h:14, nome:'com mais de 30 min' },
+};
+const EDICAO = {
+  simples:  { t:'Simples',    s:'Cortes, limpeza e legenda',                ic:'✂️', mult:1,   nome:'edição simples' },
+  caprichada:{ t:'Caprichada', s:'Ritmo, B-roll, efeitos sonoros e zooms',   ic:'⚡', mult:1.8, nome:'edição caprichada' },
+  avancada: { t:'Avançada',   s:'Motion, animações, color e efeitos',       ic:'🚀', mult:3,   nome:'edição avançada' },
+};
+const PRAZO = { normal:{ t:'Normal', s:'Prazo combinado sem pressa', ic:'🗓️', mult:1 }, urgente:{ t:'Urgente', s:'Precisa em até 48 horas', ic:'🔥', mult:1.4 } };
+const GHORAS = { g2:{ t:'Até 2 horas', s:'Uma gravação rápida', h:2 }, g4:{ t:'Meio período', s:'Cerca de 4 horas', h:4 }, g8:{ t:'Dia inteiro', s:'Cerca de 8 horas', h:8 } };
+const GESTR = {
+  basica:{ t:'Básica', s:'Celular ou câmera simples', ic:'📷', mult:1 },
+  pro:   { t:'Profissional', s:'Câmera, luz e áudio', ic:'🎥', mult:1.5 },
+  full:  { t:'Completa', s:'Várias câmeras, ajudante, estrutura grande', ic:'🎬', mult:2.2 },
+};
+const PREP = 1;                                  // hora extra de preparação/backup na gravação
+const PACOTE = { 1:0, 4:.05, 8:.10, 12:.12, 20:.15 };   // desconto máximo 15%
+
+// ===================== utilidades =====================
+const $ = s => document.querySelector(s);
+const brl = v => 'R$ ' + Math.round(v).toLocaleString('pt-BR');
+const arred = v => v < 100 ? Math.round(v/5)*5 : v < 1000 ? Math.round(v/10)*10 : Math.round(v/50)*50;
+const meiaHora = h => Math.max(.5, Math.round(h*2)/2);
+const horasTxt = h => (h % 1 ? h.toLocaleString('pt-BR') : h) + (h === 1 ? ' hora' : ' horas');
+const store = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k,v){ try { v==null ? localStorage.removeItem(k) : localStorage.setItem(k,v); } catch {} } };
+
+// ===================== estado =====================
+let R = {};                 // respostas
+let fila = [], pos = 0;     // perguntas do fluxo
+let qtd = 1;
+let acesso = false, sess = null;
+try { sess = JSON.parse(store.get('fl_sess') || 'null'); } catch { sess = null; }
+
+// ===================== perguntas =====================
+const Q = {
+  modo:   () => ({ h:'O que você vai <em>fazer</em>?', s:'Escolha e responda poucas perguntas. Leva 1 minuto.', big:true,
+            o:[['editar','Editar','Só a edição do vídeo','✂️'],['gravar','Gravar','Só a captação','🎥'],['ambos','Gravar + Editar','O pacote completo','🎬']] }),
+  nivel:  () => ({ h:'Há quanto tempo você <em>edita</em>?', s:'Pergunto só uma vez. Isso define o seu valor base.', o:Object.entries(NIVEL).map(([k,v])=>[k,v.t,v.s,'']) }),
+  tipo:   () => ({ h:'Que tipo de <em>vídeo</em>?', o:Object.entries(TIPO).map(([k,v])=>[k,v.t,v.s,v.ic]) }),
+  dur:    () => ({ h:'Quanto tempo vai ter o vídeo <em>pronto</em>?', s:'A duração final, depois de editado.', o:Object.entries(DUR).map(([k,v])=>[k,v.t,'','']) }),
+  edicao: () => ({ h:'Como é essa <em>edição</em>?', o:Object.entries(EDICAO).map(([k,v])=>[k,v.t,v.s,v.ic]) }),
+  prazo:  () => ({ h:'Qual o <em>prazo</em>?', o:Object.entries(PRAZO).map(([k,v])=>[k,v.t,v.s,v.ic]) }),
+  gHoras: () => ({ h:'Quanto tempo de <em>gravação</em>?', o:Object.entries(GHORAS).map(([k,v])=>[k,v.t,v.s,'⏱️']) }),
+  gEstr:  () => ({ h:'Qual <em>estrutura</em> você vai levar?', o:Object.entries(GESTR).map(([k,v])=>[k,v.t,v.s,v.ic]) }),
+  gExtra: () => ({ h:'Algum <em>custo extra</em>?', s:'Transporte, aluguel de equipamento, ajudante… Some tudo. Se não tiver, é só pular.', input:true }),
+};
+
+function montaFila(){
+  const f = ['modo'];
+  if (!store.get('fl_nivel')) f.push('nivel');
+  if (R.modo === 'gravar' || R.modo === 'ambos') f.push('gHoras','gEstr','gExtra');
+  if (R.modo === 'editar' || R.modo === 'ambos'){ f.push('tipo'); if (R.tipo !== 'reels') f.push('dur'); f.push('edicao','prazo'); }
+  return f;
+}
+
+function tela(html){ $('#tela').innerHTML = html; window.scrollTo(0,0); }
+
+function pergunta(){
+  fila = montaFila();
+  if (pos >= fila.length) return resultado();
+  const id = fila[pos], q = Q[id]();
+  $('#bar').classList.remove('hide');
+  $('#bar i').style.width = Math.round(pos / (fila.length) * 100) + '%';
+  let h = (pos > 0 ? '<button class="back" id="voltar">← Voltar</button>' : '') + `<h1>${q.h}</h1>` + (q.s ? `<p class="sub">${q.s}</p>` : '<div style="height:14px"></div>');
+  if (q.input){
+    h += `<div class="field"><span>R$</span><input id="extra" inputmode="numeric" placeholder="0" value="${R.gExtra||''}"></div>
+          <div class="row"><button class="btn ghost" id="pular">Não tenho</button><button class="btn" id="seguir">Continuar</button></div>`;
+  } else {
+    h += '<div class="opts">' + q.o.map(([v,t,s,ic]) => `<button class="opt${q.big?' big':''}" data-v="${v}">${ic?`<span class="ic">${ic}</span>`:''}<span><b>${t}</b>${s?`<small>${s}</small>`:''}</span></button>`).join('') + '</div>';
+  }
+  if (id === 'modo' && store.get('fl_nivel')) h += `<p class="nivel">Seu nível: <b>${NIVEL[store.get('fl_nivel')].t}</b> · <button class="link" id="trocaNivel">mudar</button></p>`;
+  tela(h);
+  document.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+    if (id === 'nivel') store.set('fl_nivel', b.dataset.v); else R[id] = b.dataset.v;
+    if (id === 'modo'){ R = { modo:b.dataset.v }; }
+    if (id !== 'nivel') pos++;          // nível sai da fila depois de salvo: a próxima pergunta já ocupa esta posição
+    pergunta();
+  });
+  if ($('#voltar')) $('#voltar').onclick = () => { pos = Math.max(0, pos-1); if (fila[pos] === 'nivel') store.set('fl_nivel', null); pergunta(); };
+  if ($('#trocaNivel')) $('#trocaNivel').onclick = () => { store.set('fl_nivel', null); pergunta(); };
+  if (q.input){
+    const go = v => { R.gExtra = v; pos++; pergunta(); };
+    $('#extra').focus();
+    $('#extra').onkeydown = e => { if (e.key === 'Enter') $('#seguir').click(); };
+    $('#pular').onclick = () => go(0);
+    $('#seguir').onclick = () => go(Math.max(0, parseFloat(($('#extra').value||'0').replace(/\./g,'').replace(',','.')) || 0));
+  }
+}
+
+// ===================== cálculo =====================
+function calcula(){
+  const vh = NIVEL[store.get('fl_nivel') || 'medio'].h;
+  const out = { ed:null, gr:null };
+  if (R.modo !== 'gravar'){
+    const t = TIPO[R.tipo], d = DUR[R.tipo === 'reels' ? 'd1' : R.dur], e = EDICAO[R.edicao], p = PRAZO[R.prazo];
+    const horas = d.h * e.mult * (R.tipo === 'evento' ? 1.4 : 1);
+    let ref = horas * vh * (R.tipo === 'evento' ? 1 : t.mult) * p.mult;
+    ref = Math.min(t.teto, Math.max(t.piso, ref));
+    out.ed = { horas, ref, t, d, e, p };
+  }
+  if (R.modo !== 'editar'){
+    const g = GHORAS[R.gHoras], s = GESTR[R.gEstr];
+    const horas = Math.max(2, g.h) + PREP;
+    const ref = horas * vh * s.mult + (R.gExtra || 0);
+    out.gr = { horas, ref, g, s, extra:R.gExtra || 0 };
+  }
+  return out;
+}
+
+function totais(c, n){
+  const desc = PACOTE[n] || 0;
+  const ed = c.ed ? c.ed.ref * n * (1 - desc) : 0;
+  const gr = c.gr ? c.gr.ref : 0;
+  const ref = arred(ed + gr);
+  return { ref, min:arred(ref * .85), max:arred(ref * 1.25), cada: c.ed ? arred(ed / n) : 0, desc,
+           horas: meiaHora((c.ed ? c.ed.horas * n * (1 - desc*1.5) : 0) + (c.gr ? c.gr.horas : 0)) };
+}
+
+function porque(c){
+  const nv = NIVEL[store.get('fl_nivel') || 'medio'].t.toLowerCase();
+  if (c.ed && c.gr) return `Gravação de ${c.gr.g.t.toLowerCase()} com estrutura ${c.gr.s.t.toLowerCase()}, mais ${c.ed.e.nome} de um ${c.ed.t.nome}. Calculado pelo tempo de trabalho no seu nível (${nv})${c.gr.extra ? ', somando os custos extras' : ''}.`;
+  if (c.gr) return `Gravação de ${c.gr.g.t.toLowerCase()} com estrutura ${c.gr.s.t.toLowerCase()}, já contando 1 hora de preparação e backup${c.gr.extra ? ' e os custos extras' : ''}. Calculado para o seu nível (${nv}).`;
+  const e = c.ed;
+  return `Um ${e.t.nome} ${e.t.nome === 'Reels' ? '' : e.d.nome + ' '}com ${e.e.nome} leva por volta de ${horasTxt(meiaHora(e.horas))} de trabalho. No seu nível (${nv}), isso dá esse valor${e.p.mult > 1 ? ', com acréscimo de urgência' : ''}${e.t.mult > 1 && R.tipo === 'comercial' ? ' e adicional por ser para marca' : ''}.`;
+}
+
+// ===================== resultado =====================
+function resultado(){
+  $('#bar i').style.width = '100%';
+  const c = calcula(); const temPac = R.modo !== 'gravar';
+  tela(`
+    <button class="back" id="voltar">← Voltar</button>
+    <h1>Quanto <em>cobrar</em></h1><div style="height:14px"></div>
+    <div class="res ${acesso ? '' : 'blur'}" id="res">
+      <div class="lb">Faixa sugerida</div>
+      <div class="faixa val" id="faixa"></div>
+      <div class="grid">
+        <div class="ref"><span class="lb">Referência</span><b class="val" id="ref"></b></div>
+        <div><span class="lb">Tempo estimado</span><b id="horas"></b></div>
+      </div>
+      <p class="pq">${porque(c)}</p>
+      <div class="lockbox"><p>Seu preço está pronto 🔒</p><small>Desbloqueie a calculadora para ver os valores e gerar orçamentos ilimitados.</small>
+        <button class="btn" id="comprar">Desbloquear</button><button class="link" id="entrar2">Já comprei · entrar</button></div>
+    </div>
+    ${temPac ? `<h2>${R.modo === 'ambos' ? 'Quantos vídeos saem dessa gravação?' : 'Quantos vídeos?'}</h2>
+    <div class="chips">${Object.keys(PACOTE).map(n => `<button class="chip${+n===qtd?' on':''}" data-n="${n}">${n}</button>`).join('')}</div>
+    <div class="pac" id="pac"></div>` : ''}
+    <div style="height:20px"></div>
+    <button class="btn" id="orc" ${acesso ? '' : 'disabled'}>Gerar orçamento</button>
+    <div class="row"><button class="btn ghost" id="novo">Novo cálculo</button></div>`);
+  const pinta = () => {
+    const t = totais(c, qtd);
+    $('#faixa').textContent = `${brl(t.min)} a ${brl(t.max)}`;
+    $('#ref').textContent = brl(t.ref);
+    $('#horas').textContent = '~' + horasTxt(t.horas);
+    if ($('#pac')) $('#pac').innerHTML = qtd > 1 ? `<span class="val">${qtd} vídeos: <b>${brl(t.ref)}</b> (${brl(t.cada)} cada)</span> · ${Math.round(t.desc*100)}% de desconto pelo volume` : 'Escolha uma quantidade para ver o valor do pacote.';
+    if ($('#pac')) $('#pac').classList.toggle('blur', !acesso);
+  };
+  pinta();
+  document.querySelectorAll('.chip').forEach(b => b.onclick = () => { qtd = +b.dataset.n; document.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b)); pinta(); });
+  $('#voltar').onclick = () => { pos = fila.length - 1; pergunta(); };
+  $('#novo').onclick = () => { R = {}; pos = 0; qtd = 1; pergunta(); };
+  $('#orc').onclick = () => orcamento(c);
+  $('#comprar').onclick = () => { if (BUY_URL) location.href = BUY_URL; else alertaInline('O link de compra ainda não foi configurado.'); };
+  $('#entrar2').onclick = () => login(() => resultado());
+}
+function alertaInline(m){ const p = document.createElement('p'); p.className = 'err'; p.textContent = m; $('#res').after(p); }
+
+// ===================== orçamento =====================
+function orcamento(c){
+  const t = totais(c, qtd);
+  tela(`<button class="back" id="voltar">← Voltar</button>
+    <h1>Seu <em>orçamento</em></h1><p class="sub">Coloque o nome do cliente, ajuste o que quiser e mande.</p>
+    <input class="inp" id="cli" placeholder="Nome do cliente (opcional)" autocomplete="off">
+    <textarea id="txt"></textarea>
+    <div class="row"><button class="btn ghost" id="copiar">Copiar</button><button class="btn" id="zap">Enviar no WhatsApp</button></div>
+    <div class="ok" id="msg"></div>`);
+  const monta = () => {
+    const nome = $('#cli').value.trim();
+    const val = new Date(Date.now() + 7*864e5).toLocaleDateString('pt-BR');
+    const L = [];
+    L.push(nome ? `Olá, ${nome}! Tudo bem? Segue o orçamento:` : 'Olá! Tudo bem? Segue o orçamento:', '');
+    let serv = [], ent = [];
+    if (c.gr){ serv.push(`Gravação (${c.gr.g.t.toLowerCase()}, estrutura ${c.gr.s.t.toLowerCase()})`); }
+    if (c.ed){
+      serv.push(`Edição de ${c.ed.t.nome} — ${c.ed.e.nome}`);
+      const dur = R.tipo === 'reels' ? 'até 1 min' : c.ed.d.nome;
+      ent.push(`${qtd} ${qtd > 1 ? 'vídeos' : 'vídeo'} editado${qtd > 1 ? 's' : ''} (${dur})`);
+    } else ent.push('Material bruto gravado, organizado e entregue');
+    L.push('🎬 Serviço: ' + serv.join(' + '));
+    L.push('📦 Entrega: ' + ent.join(' + '));
+    const hEd = c.ed ? c.ed.horas * qtd : 0;
+    const dias = c.ed && R.prazo === 'urgente' ? 'em até 48 horas' : `em até ${Math.max(2, Math.ceil(hEd / 6) + 1)} dias úteis após receber o material`;
+    L.push('⏱ Prazo: ' + (c.ed ? dias : 'material entregue em até 2 dias úteis após a gravação'));
+    if (c.ed) L.push('🔁 Revisões: 2 rodadas de ajustes incluídas' + (qtd > 1 ? ' por vídeo' : ''));
+    L.push('💰 Investimento: ' + brl(t.ref) + (qtd > 1 && c.ed ? ` (${qtd} vídeos)` : ''));
+    L.push('📅 Válido até: ' + val, '');
+    L.push('Qualquer dúvida, fico à disposição!');
+    $('#txt').value = L.join('\n');
+  };
+  monta(); $('#cli').oninput = monta;
+  $('#voltar').onclick = () => resultado();
+  $('#copiar').onclick = async () => { try { await navigator.clipboard.writeText($('#txt').value); } catch { $('#txt').select(); document.execCommand('copy'); } $('#msg').textContent = '✓ Copiado! É só colar na conversa com o cliente.'; };
+  $('#zap').onclick = () => window.open('https://wa.me/?text=' + encodeURIComponent($('#txt').value), '_blank');
+}
+
+// ===================== login e licença =====================
+async function api(path, { method='GET', body, auth=true } = {}){
+  const h = { apikey: SUPA.key, 'Content-Type':'application/json' };
+  if (auth && sess) h.Authorization = 'Bearer ' + sess.access_token;
+  const r = await fetch(SUPA.url + path, { method, headers:h, body: body ? JSON.stringify(body) : undefined });
+  const t = await r.text(); let j; try { j = t ? JSON.parse(t) : {}; } catch { j = t; }
+  if (!r.ok){ const e = new Error(traduz(j?.msg || j?.message || j?.error_description || j?.error || ('Erro ' + r.status))); e.status = r.status; throw e; }
+  return j;
+}
+function traduz(m){
+  m = String(m||'');
+  if (/only request this after (\d+)/i.test(m)) return 'Aguarde ' + m.match(/after (\d+)/i)[1] + ' segundos para pedir outro código.';
+  if (/expired|invalid/i.test(m) && /token|otp/i.test(m)) return 'Código inválido ou expirado. Confira ou peça outro.';
+  if (/rate limit/i.test(m)) return 'Muitas tentativas. Aguarde alguns minutos.';
+  if (/failed to fetch|network|load failed/i.test(m)) return 'Sem conexão com a internet.';
+  return m;
+}
+const fromAuth = r => ({ access_token:r.access_token, refresh_token:r.refresh_token, expires_at:r.expires_at || Math.floor(Date.now()/1000) + (r.expires_in||3600), email:r.user?.email });
+function salva(s){ sess = s; store.set('fl_sess', s ? JSON.stringify(s) : null); }
+async function sessaoValida(){
+  if (!sess) return false;
+  if (sess.expires_at - Date.now()/1000 > 90) return true;
+  try { const r = await api('/auth/v1/token?grant_type=refresh_token', { method:'POST', body:{ refresh_token:sess.refresh_token }, auth:false }); salva({ ...fromAuth(r), email:r.user?.email || sess.email }); return true; }
+  catch(e){ if (e.status >= 400 && e.status < 500){ salva(null); return false; } return true; }
+}
+async function checaAcesso(){
+  acesso = false;
+  try {
+    if (!(await sessaoValida())) return;
+    const [lic, pk] = await Promise.all([
+      api(`/rest/v1/licenses?select=status&pack_id=eq.${PACK}`),
+      api(`/rest/v1/packs?select=buy_url&id=eq.${PACK}`),
+    ]);
+    acesso = lic.some(l => l.status === 'active');
+    if (pk[0]?.buy_url) BUY_URL = pk[0].buy_url;
+  } catch {}
+  conta();
+}
+function conta(){
+  const b = $('#conta');
+  b.textContent = sess ? 'Sair' : 'Entrar';
+  b.onclick = () => { if (sess){ salva(null); acesso = false; conta(); R = {}; pos = 0; pergunta(); } else login(() => { R = {}; pos = 0; pergunta(); }); };
+}
+function login(depois){
+  $('#bar').classList.add('hide');
+  let email = '';
+  const etapa = codigo => {
+    tela(`<button class="back" id="voltar">← Voltar</button>
+      <h1>${codigo ? 'Digite o <em>código</em>' : 'Entre com o <em>e-mail da compra</em>'}</h1>
+      <p class="sub">${codigo ? 'Enviamos um código para ' + email + '. Confira também o spam.' : 'O mesmo e-mail que você usou para comprar. Vamos mandar um código de acesso.'}</p>
+      <input class="inp" id="campo" ${codigo ? 'inputmode="numeric" autocomplete="one-time-code" placeholder="Código"' : 'type="email" autocomplete="email" placeholder="seu@email.com"'}>
+      <button class="btn" id="ir">${codigo ? 'Entrar' : 'Enviar código'}</button><div class="err" id="erro"></div>`);
+    $('#campo').focus();
+    $('#campo').onkeydown = e => { if (e.key === 'Enter') $('#ir').click(); };
+    $('#voltar').onclick = () => codigo ? etapa(false) : depois();
+    $('#ir').onclick = async () => {
+      const b = $('#ir'); b.disabled = true; $('#erro').textContent = '';
+      try {
+        if (!codigo){
+          email = $('#campo').value.trim().toLowerCase();
+          if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new Error('Digite um e-mail válido.');
+          await api('/auth/v1/otp', { method:'POST', body:{ email, create_user:true }, auth:false });
+          etapa(true);
+        } else {
+          const token = $('#campo').value.replace(/\D/g,'');
+          if (token.length < 6) throw new Error('Digite o código que chegou no e-mail.');
+          const r = await api('/auth/v1/verify', { method:'POST', body:{ type:'email', email, token }, auth:false });
+          salva(fromAuth(r)); await checaAcesso();
+          if (!acesso){ tela(`<h1>Quase lá</h1><p class="sub">Não encontramos a calculadora nas compras de <b>${email}</b>. Se comprou com outro e-mail, saia e entre com ele.</p>
+            <button class="btn" id="comprar">Desbloquear agora</button><div class="row"><button class="btn ghost" id="seguir">Continuar sem desbloquear</button></div>`);
+            $('#comprar').onclick = () => { if (BUY_URL) location.href = BUY_URL; };
+            $('#seguir').onclick = depois; return; }
+          depois();
+        }
+      } catch(e){ $('#erro').textContent = traduz(e.message); b.disabled = false; }
+    };
+  };
+  etapa(false);
+}
+
+// ===================== início =====================
+conta(); pergunta(); checaAcesso().then(() => { if (fila[pos] === undefined || pos >= fila.length) resultado(); });
+</script>
+</body>
+</html>

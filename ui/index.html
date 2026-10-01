@@ -125,12 +125,14 @@ const invoke = (c, a) => T.core.invoke(c, a);
 const ICONS = {
   legendas:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 13h4M13 13h4M7 16h6"/></svg>',
   sons:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/></svg>',
+  preco:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8.5 7h7M8.5 11h1.5M12 11h1.5M15.5 11h0M8.5 14.5h1.5M12 14.5h1.5M8.5 18h1.5M12 18h1.5M15.5 14.5V18"/></svg>',
   luts:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="9" cy="10" r="5"/><circle cx="15" cy="10" r="5"/><circle cx="12" cy="15" r="5"/></svg>'
 };
 // catálogo: packId = id do manifest do .flpack
 const PRODUCTS = [
   {key:'legendas', packId:'fl-legendas', name:'Legendas', desc:'Títulos e legendas dinâmicas, organizados em pastas no CapCut.'},
   {key:'sons', packId:'fl-sons', name:'Efeitos Sonoros', desc:'65 whooshes, impactos, risers e foleys direto nas suas predefinições do CapCut, organizados por categoria.'},
+  {key:'preco', packId:'fl-preco', name:'Quanto Cobrar?', desc:'Descubra quanto cobrar por uma edição ou gravação em 1 minuto e mande o orçamento pronto no WhatsApp. Abre também no celular.', web:'https://comece.ofernandoluz.com/preco/'},
   {key:'luts', packId:'fl-luts', name:'LUTs', desc:'3 LUTs de conversão (Apple Log e ZV-E10) + 20 looks de finalização, direto em Ajuste › LUT.', lut:true},
 ];
 
@@ -249,13 +251,21 @@ function render(){
     const novo = inst && srv && inst.version !== srv.version;
     const c = document.createElement('div'); c.className = 'card' + (srv && owned ? ' on' : '') + (srv && !owned ? ' locked' : '');
     let meta = '';
-    if (inst) meta = `<span class="dot ok"></span>Instalado · v${inst.version}` + (p.media && inst.media_files ? ` · ${inst.media_files.length} sons` : '') + (p.lut && inst.lut_names ? ` · ${inst.lut_names.length} LUTs` : '') + (novo ? ' <span class="tag">nova versão</span>' : '');
+    if (p.web && srv && owned) meta = '<span class="dot ok"></span>Liberado · abre no navegador e no celular';
+    else if (inst) meta = `<span class="dot ok"></span>Instalado · v${inst.version}` + (p.media && inst.media_files ? ` · ${inst.media_files.length} sons` : '') + (p.lut && inst.lut_names ? ` · ${inst.lut_names.length} LUTs` : '') + (novo ? ' <span class="tag">nova versão</span>' : '');
     else if (srv && owned) meta = '<span class="dot"></span>Liberado · não instalado';
     else if (srv) meta = '<span class="dot"></span>Bloqueado · não incluso na sua compra';
     const cad = (srv && !owned) ? '<span class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>' : '';
     c.innerHTML = `<div class="icon">${ICONS[p.key]}${cad}</div><h3>${p.name}</h3><p>${p.desc}</p><div class="meta">${meta}</div>`;
     const b = document.createElement('div'); b.className = 'btns';
-    if (!srv && !inst){ b.innerHTML = '<div class="soon" style="flex:1">' + (catErr ? 'Sem conexão' : 'Em breve') + '</div>'; }
+    if (p.web && srv){
+      if (owned) b.appendChild(btn('Abrir', 'primary', () => T.opener.openUrl(p.web)));
+      else {
+        if (srv.buy_url) b.appendChild(btn('Desbloquear', 'primary', () => T.opener.openUrl(srv.buy_url)));
+        b.appendChild(btn('Experimentar', 'ghost', () => T.opener.openUrl(p.web)));
+      }
+    }
+    else if (!srv && !inst){ b.innerHTML = '<div class="soon" style="flex:1">' + (catErr ? 'Sem conexão' : 'Em breve') + '</div>'; }
     else {
       if (srv && owned && p.media && inst && !novo) b.appendChild(btn('Abrir pasta', 'primary', () => invoke('open_media', { id: p.packId }).catch(e => step(String(e), 'err'))));
       else if (srv && owned) b.appendChild(btn(inst ? 'Atualizar' : 'Instalar', 'primary', () => doInstall(p, srv)));
