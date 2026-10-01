@@ -175,6 +175,31 @@ async function compartilha(t){ if (navigator.share && /Android|iPhone|iPad/i.tes
 const dinheiro = v => { const n = parseFloat(String(v).replace(/[^\d,.-]/g,'').replace(/\.(?=\d{3}(\D|$))/g,'').replace(',','.')); return isFinite(n) && n > 0 ? 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits:2 }) : ''; };
 const so = s => String(s || '').trim();
 
+// ===================== capricho nos dados =====================
+const MINUSC = new Set(['da','de','do','das','dos','e','di','du','del']);
+function nomeBonito(t){
+  t = so(t).replace(/\s+/g,' '); if (!t) return t;
+  const tudoMaiusc = t === t.toUpperCase() && /[A-ZÀ-Ú]{4}/.test(t);
+  return t.split(' ').map((w, i) => {
+    if (!tudoMaiusc && w.length > 1 && w === w.toUpperCase() && /[A-ZÀ-Ú]/.test(w)) return w;      // siglas: LTDA, ME, SA
+    const l = w.toLowerCase();
+    if (i > 0 && MINUSC.has(l)) return l;
+    return l.replace(/(^|[-'’])(\p{L})/gu, (m, a, b) => a + b.toUpperCase());
+  }).join(' ');
+}
+function cidadeBonita(t){
+  t = so(t).replace(/\s*[\/,-]\s*/g,' ').replace(/\s+/g,' '); if (!t) return t;
+  const w = t.split(' '); let uf = '';
+  if (w.length > 1 && /^[a-z]{2}$/i.test(w[w.length-1])) uf = w.pop().toUpperCase();
+  return nomeBonito(w.join(' ')) + (uf ? '/' + uf : '');
+}
+function docBonito(t){
+  const d = so(t).replace(/\D/g,'');
+  if (d.length === 11) return d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  if (d.length === 14) return d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+  return so(t);
+}
+
 // ===================== dados =====================
 const eu = lerJ('fl_contratado'), orc = lerJ('fl_ultimo_orc');
 let D = {
@@ -243,7 +268,12 @@ function mostra(){
        ${campo('cli','Nome do cliente ou empresa','Ex.: Studio Ana')}
        ${doc ? campo('cliDoc','CPF ou CNPJ do cliente <i>(opcional)</i>','','inputmode="numeric"') : ''}
        <button class="btn" id="seguir">Continuar</button>`);
-    $('#seguir').onclick = () => { le(['eu','euDoc','cidade','cli','cliDoc']); if (exige(['eu','cli'])) avanca(); };
+    $('#seguir').onclick = () => {
+      le(['eu','euDoc','cidade','cli','cliDoc']);
+      if (!exige(['eu','cli'])) return;
+      D.eu = nomeBonito(D.eu); D.cli = nomeBonito(D.cli); D.cidade = cidadeBonita(D.cidade); D.euDoc = docBonito(D.euDoc); D.cliDoc = docBonito(D.cliDoc);
+      avanca();
+    };
   }
   if (p === 'trabalho'){
     tela(cab('O que você vai entregar?', 'Escreva do jeito que você falaria para o cliente.') +
@@ -333,6 +363,7 @@ const zapHtml = t => esc(t).replace(/\*(.+?)\*/g, '<b>$1</b>');
 // ===================== montagem final =====================
 function monta(animar = true){
   dock(); vibra([10, 40, 18]);
+  if (D.formato === 'completo') carregaJsPDF().catch(() => {});
   const hoje = new Date().toLocaleDateString('pt-BR', { day:'numeric', month:'long', year:'numeric' });
   const trava = !acesso;
   const cad = `<div class="cadeado"><p>Seu ${D.formato === 'rapido' ? 'termo' : 'contrato'} está pronto 🔒</p><small>Desbloqueie para enviar, copiar e salvar em PDF. Use quantas vezes quiser.</small>
@@ -346,7 +377,9 @@ function monta(animar = true){
       <div class="noprint">${trava ? '' : `<div class="row"><button class="btn ghost" id="copiar">Copiar</button><button class="btn" id="enviar">Enviar no WhatsApp</button></div>
         <button class="btn ghost" id="trocar">Gerar o contrato completo em PDF</button>`}</div>`;
   } else {
-    corpo = `<article class="papel">
+    corpo = `<div class="noprint" style="margin-bottom:18px">${trava ? '' : `<button class="btn" id="pdfEnviar">📎 Enviar PDF pro cliente</button>
+        <div class="row"><button class="btn ghost" id="pdf">Baixar PDF</button><button class="btn ghost" id="copiar">Copiar texto</button></div>`}</div>
+      <article class="papel">
         <div class="carimbo">PRONTO</div>
         <h2 class="cl">Contrato de prestação de serviços de edição de vídeo</h2>
         <div class="sb cl">Entre ${esc(so(D.eu))} e ${esc(so(D.cli))}</div>
@@ -357,8 +390,7 @@ function monta(animar = true){
         <div class="ass cl"><div>${esc(so(D.eu))}<br>Contratado</div><div>${esc(so(D.cli))}<br>Contratante</div></div>
         ${cad}
       </article>
-      <div class="noprint">${trava ? '' : `<button class="btn" id="pdf">Salvar em PDF</button>
-        <div class="row"><button class="btn ghost" id="copiar">Copiar texto</button><button class="btn ghost" id="enviar">Enviar</button></div>
+      <div class="noprint">${trava ? '' : `
         <h2 style="font-size:17px;font-weight:800;margin:26px 0 4px">Como assinar online</h2>
         <p class="sub" style="margin-bottom:6px">Salve o PDF e escolha um caminho. Os dois têm validade jurídica.</p>
         <div class="dica"><span>🏛️</span><span><b>Grátis, pelo gov.br:</b> você e o cliente assinam o mesmo PDF pelo celular, um depois do outro, com a conta gov.br. <a href="https://www.gov.br/governodigital/pt-br/identidade/assinatura-eletronica" target="_blank" rel="noopener">Abrir o assinador</a></span></div>
@@ -377,8 +409,139 @@ function monta(animar = true){
   const texto = () => D.formato === 'rapido' ? textoRapido() : textoCompleto();
   if ($('#copiar')) $('#copiar').onclick = async () => { await copia(texto()); vibra(10); toast('Copiado. É só colar na conversa.'); };
   if ($('#enviar')) $('#enviar').onclick = async () => { if (!(await compartilha(texto()))) window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(texto()), '_blank'); };
-  if ($('#pdf')) $('#pdf').onclick = () => { const t = document.title; document.title = 'Contrato - ' + so(D.cli); print(); setTimeout(() => document.title = t, 500); };
+  if ($('#pdf')) $('#pdf').onclick = async e => { const b = e.currentTarget; b.disabled = true; try { baixa(await gerarPDF()); toast('PDF baixado'); } catch(err){ toast('Não foi possível gerar o PDF. Tente de novo.'); } b.disabled = false; };
+  if ($('#pdfEnviar')) $('#pdfEnviar').onclick = async e => {
+    const b = e.currentTarget, txt = b.textContent; b.disabled = true; b.textContent = 'Gerando PDF…';
+    try {
+      const f = await gerarPDF();
+      let foi = false;
+      if (navigator.canShare && navigator.canShare({ files:[f] })){
+        try { await navigator.share({ files:[f], title:f.name, text:`Olá, ${so(D.cli).split(' ')[0]}! Segue o contrato do nosso trabalho para você ler. Estando tudo certo, me avisa que a gente assina.` }); foi = true; }
+        catch(err){ if (err.name === 'AbortError') foi = true; }
+      }
+      if (!foi){ baixa(f); toast('PDF baixado. Anexe na conversa do cliente.'); }
+    } catch(err){ toast('Não foi possível gerar o PDF. Tente de novo.'); }
+    b.disabled = false; b.textContent = txt;
+  };
   if ($('#trocar')) $('#trocar').onclick = () => { D.formato = 'completo'; passo = 1; mostra(); toast('Complete os dados do contrato completo'); };
+}
+
+// ===================== PDF de verdade (jsPDF, texto selecionável) =====================
+let jspdfPronto = null;
+function carregaJsPDF(){
+  if (window.jspdf) return Promise.resolve();
+  if (!jspdfPronto) jspdfPronto = new Promise((ok, falha) => { const s = document.createElement('script'); s.src = '/contrato/jspdf.umd.min.js'; s.onload = ok; s.onerror = () => { jspdfPronto = null; falha(); }; document.head.appendChild(s); });
+  return jspdfPronto;
+}
+function baixa(f){ const u = URL.createObjectURL(f); const a = document.createElement('a'); a.href = u; a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); }
+async function gerarPDF(){
+  await carregaJsPDF();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit:'mm', format:'a4' });
+  const W = 210, H = 297, M = 20, CW = W - 2*M, FIM = H - 24;
+  const TINTA = [29,27,22], CINZA = [107,102,90], OURO = [176,125,43], FUNDO = [246,242,234], LINHA = [222,215,200];
+  const cor = c => doc.setTextColor(...c);
+  const fonte = (peso, tam) => { doc.setFont('helvetica', peso); doc.setFontSize(tam); };
+  let y = M;
+  const quebra = h => { if (y + h > FIM){ doc.addPage(); y = M + 4; } };
+  const hoje = new Date();
+  const dataExt = hoje.toLocaleDateString('pt-BR', { day:'numeric', month:'long', year:'numeric' });
+  const numero = 'ED-' + hoje.toISOString().slice(0,10).replace(/-/g,'') + '-' + String(Math.floor(Math.random()*900)+100);
+
+  // cabeçalho
+  doc.setFillColor(...OURO); doc.rect(M, y, 14, 1.4, 'F');
+  y += 7; fonte('bold', 8.5); cor(OURO); doc.text('CONTRATO DE PRESTAÇÃO DE SERVIÇOS', M, y, { charSpace:0.4 });
+  fonte('normal', 8.5); cor(CINZA); doc.text(numero, W - M, y, { align:'right' });
+  y += 9; fonte('bold', 24); cor(TINTA); doc.text('Edição de vídeo', M, y);
+  fonte('normal', 9); cor(CINZA); doc.text(dataExt, W - M, y, { align:'right' });
+  y += 6; doc.setDrawColor(...LINHA); doc.setLineWidth(0.3); doc.line(M, y, W - M, y);
+
+  // resumo do acordo (caixa)
+  y += 8;
+  const ped = (rot, val) => ({ rot, val: so(val) || '—' });
+  const pares = [
+    [ped('Contratado', D.eu + (so(D.euDoc) ? ' · ' + D.euDoc : '')), ped('Contratante', D.cli + (so(D.cliDoc) ? ' · ' + D.cliDoc : ''))],
+    [ped('Serviço', so(D.serv).replace(/\.$/,''))],
+    [ped('Entrega', so(D.ent).replace(/\.$/,''))],
+    [ped('Prazo', so(D.prazo).replace(/\.$/,'')), ped('Revisões', D.rev === '1' ? '1 rodada de ajustes' : D.rev + ' rodadas de ajustes')],
+    [ped('Valor total', dinheiro(D.valor)), ped('Pagamento', PAG[D.pag].txt())],
+  ];
+  const pad = 6, colW = (CW - 2*pad - 8) / 2;
+  const medidas = pares.map(lin => {
+    const w = lin.length === 1 ? CW - 2*pad : colW;
+    const linhas = lin.map(c => { fonte(c.rot === 'Valor total' ? 'bold' : 'normal', c.rot === 'Valor total' ? 13 : 10); return doc.splitTextToSize(c.val, w); });
+    const h = 4.5 + Math.max(...linhas.map((l, i) => l.length * (lin[i].rot === 'Valor total' ? 5.6 : 4.6))) + 3;
+    return { lin, linhas, h };
+  });
+  const caixaH = medidas.reduce((a, m) => a + m.h, 0) + 2*pad - 3;
+  quebra(caixaH + 4);
+  doc.setFillColor(...FUNDO); doc.roundedRect(M, y, CW, caixaH, 2.5, 2.5, 'F');
+  doc.setFillColor(...OURO); doc.rect(M, y + 4, 1.2, caixaH - 8, 'F');
+  let yy = y + pad + 1;
+  for (const m of medidas){
+    m.lin.forEach((c, i) => {
+      const x = M + pad + i * (colW + 8);
+      fonte('bold', 7.5); cor(CINZA); doc.text(c.rot.toUpperCase(), x, yy, { charSpace:0.3 });
+      const grande = c.rot === 'Valor total';
+      fonte(grande ? 'bold' : 'normal', grande ? 13 : 10); cor(TINTA);
+      doc.text(m.linhas[i], x, yy + (grande ? 5.6 : 4.8), { lineHeightFactor: grande ? 1.2 : 1.32 });
+    });
+    yy += m.h;
+  }
+  y += caixaH + 10;
+
+  // partes
+  fonte('normal', 10); cor(TINTA);
+  const partes = `Pelo presente instrumento, de um lado ${D.eu}${so(D.euDoc) ? ', inscrito(a) no CPF/CNPJ ' + D.euDoc : ''}${so(D.cidade) ? ', com endereço em ' + D.cidade : ''}, doravante CONTRATADO, e de outro lado ${D.cli}${so(D.cliDoc) ? ', inscrito(a) no CPF/CNPJ ' + D.cliDoc : ''}, doravante CONTRATANTE, têm entre si justo e acordado o seguinte:`;
+  const lp = doc.splitTextToSize(partes, CW);
+  quebra(lp.length * 4.9); doc.text(lp, M, y, { align:'justify', maxWidth:CW, lineHeightFactor:1.4 }); y += lp.length * 4.9 + 6;
+
+  // cláusulas
+  clausulas().forEach(([t, p]) => {
+    const num = t.split('.')[0].padStart(2,'0'), tit = t.replace(/^\d+\.\s*/,'');
+    fonte('normal', 10);
+    const linhas = doc.splitTextToSize(p, CW - 12);
+    quebra(10 + Math.min(linhas.length, 3) * 4.9);
+    fonte('bold', 10.5); cor(OURO); doc.text(num, M, y);
+    cor(TINTA); doc.text(tit, M + 12, y);
+    y += 5.6; fonte('normal', 10); cor(TINTA);
+    let i = 0;
+    while (i < linhas.length){
+      const cabem = Math.max(1, Math.floor((FIM - y) / 4.9));
+      const bloco = linhas.slice(i, i + cabem);
+      const ultimoBloco = i + cabem >= linhas.length;
+      doc.text(bloco, M + 12, y, { align: ultimoBloco ? 'justify' : 'justify', maxWidth: CW - 12, lineHeightFactor:1.4 });
+      y += bloco.length * 4.9; i += cabem;
+      if (i < linhas.length){ doc.addPage(); y = M + 4; }
+    }
+    y += 5;
+  });
+
+  // local, data e assinaturas
+  quebra(52);
+  y += 2; fonte('normal', 10); cor(TINTA);
+  doc.text(`${so(D.cidade) ? D.cidade + ', ' : ''}${dataExt}.`, W - M, y, { align:'right' });
+  y += 26;
+  const aw = (CW - 16) / 2;
+  [[D.eu, 'Contratado', D.euDoc], [D.cli, 'Contratante', D.cliDoc]].forEach(([n, papel, d], i) => {
+    const x = M + i * (aw + 16);
+    doc.setDrawColor(...TINTA); doc.setLineWidth(0.3); doc.line(x, y, x + aw, y);
+    fonte('bold', 9.5); cor(TINTA); doc.text(doc.splitTextToSize(n, aw), x + aw/2, y + 5, { align:'center' });
+    fonte('normal', 8.5); cor(CINZA); doc.text(papel + (so(d) ? ' · ' + d : ''), x + aw/2, y + (doc.splitTextToSize(n, aw).length * 4.4) + 5, { align:'center' });
+  });
+
+  // rodapé em todas as páginas
+  const n = doc.getNumberOfPages();
+  for (let pg = 1; pg <= n; pg++){
+    doc.setPage(pg);
+    doc.setDrawColor(...LINHA); doc.setLineWidth(0.3); doc.line(M, H - 15, W - M, H - 15);
+    fonte('normal', 8); cor(CINZA);
+    doc.text(doc.splitTextToSize(`Contrato ${numero} · ${D.eu} e ${D.cli}`, CW - 30)[0], M, H - 10);
+    doc.text(`Página ${pg} de ${n}`, W - M, H - 10, { align:'right' });
+  }
+  doc.setProperties({ title:`Contrato de edição de vídeo - ${D.cli}`, author:D.eu, subject:'Contrato de prestação de serviços de edição de vídeo' });
+  const nomeArq = `Contrato - ${so(D.cli).replace(/[\\/:*?"<>|]/g,'').slice(0,60)}.pdf`;
+  return new File([doc.output('blob')], nomeArq, { type:'application/pdf' });
 }
 
 // ===================== login e licença =====================
