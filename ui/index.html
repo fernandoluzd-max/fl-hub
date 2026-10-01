@@ -14,7 +14,7 @@
   --radius:18px; --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
   --sub:#B3B4A2; --hover:#3a403b; --icon-bg:linear-gradient(145deg,#26262c,#131316); --icon-line:#2f2f37; --icon-ink:#fff; --step:#23232a;
   --glow:radial-gradient(1100px 620px at 12% -12%,#27352C 0%,#171A18 45%,transparent 75%);
-  --thumb:rgba(244,240,228,.14); --thumb-h:rgba(244,240,228,.28);
+  --thumb:rgba(244,240,228,.12); --thumb-h:rgba(244,240,228,.26);
 }
 :root[data-tema="claro"]{
   --bg:#F4F0E4; --bg2:#EBE6D8; --card:#FFFDF7; --line:#DDD6C5; --ink:#141615; --mute:#6B675C;
@@ -39,14 +39,15 @@ main{display:grid;grid-template-columns:280px 1fr;gap:22px;padding:14px 28px 18p
 main.recolhido{grid-template-columns:52px 1fr}
 @media (max-width:900px){main,main.recolhido{grid-template-columns:1fr}.side{display:none}}
 .grid{display:flex;flex-direction:column;gap:26px;overflow:auto;padding:2px 10px 8px 2px}
-/* barra de rolagem discreta: fina, sem trilho, aparece mais forte só ao passar o mouse */
-.grid,.log{scrollbar-width:thin;scrollbar-color:transparent transparent}
-.grid:hover,.log:hover{scrollbar-color:var(--thumb) transparent}
-.grid::-webkit-scrollbar,.log::-webkit-scrollbar{width:6px;background:transparent}
-.grid::-webkit-scrollbar-track,.log::-webkit-scrollbar-track{background:transparent}
-.grid::-webkit-scrollbar-thumb,.log::-webkit-scrollbar-thumb{background:transparent;border-radius:6px}
-.grid:hover::-webkit-scrollbar-thumb,.log:hover::-webkit-scrollbar-thumb{background:var(--thumb)}
-.grid::-webkit-scrollbar-thumb:hover,.log::-webkit-scrollbar-thumb:hover{background:var(--thumb-h)}
+/* barra de rolagem discreta.
+   No Mac (WebKit), se "scrollbar-width" estiver definido, o estilo ::-webkit-scrollbar é ignorado e volta a barra branca grossa.
+   Por isso as propriedades padrão ficam só para navegadores que não têm ::-webkit-scrollbar. */
+.grid::-webkit-scrollbar,.log::-webkit-scrollbar{width:10px;height:10px;background:transparent}
+.grid::-webkit-scrollbar-track,.log::-webkit-scrollbar-track{background:transparent;border:0}
+.grid::-webkit-scrollbar-corner,.log::-webkit-scrollbar-corner{background:transparent}
+.grid::-webkit-scrollbar-thumb,.log::-webkit-scrollbar-thumb{background-color:var(--thumb);border-radius:10px;border:3px solid transparent;background-clip:padding-box;min-height:40px}
+.grid::-webkit-scrollbar-thumb:hover,.log::-webkit-scrollbar-thumb:hover{background-color:var(--thumb-h)}
+@supports not selector(::-webkit-scrollbar){ .grid,.log{scrollbar-width:thin;scrollbar-color:var(--thumb) transparent} }
 .sec-h{display:flex;align-items:flex-end;gap:12px;margin-bottom:12px;flex-wrap:wrap}
 .sec-h h2{font-family:"Archivo",var(--font);font-weight:800;font-size:19px;letter-spacing:-.01em;line-height:1.15}
 .sec-h p{font-family:"Figtree",var(--font);color:var(--sub);font-size:13px;margin-top:2px}
