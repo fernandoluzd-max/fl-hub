@@ -491,9 +491,9 @@ function ligaChips(){ document.querySelectorAll('#frev .chip').forEach(b => b.on
 
 function folhaNova(pre = {}){
   if (modo === 'leitura') return toast('Renove o acesso para criar demandas.');
-  const d = { cliente:pre.cliente || '', titulo:pre.titulo || '', valor:pre.valor || '', prazo:pre.prazo || '', rev_total:pre.rev_total || 2, whatsapp:'', notas:'' };
+  const d = { cliente:pre.cliente || '', titulo:pre.titulo || '', valor:pre.valor || '', prazo:pre.prazo || '', rev_total:pre.rev_total || 2, whatsapp:pre.whatsapp || '', notas:pre.notas || '' };
   let col = pre.coluna || 'fechado';
-  abreFolha(`<h2>Nova demanda</h2><p class="sub">${pre.cliente ? 'Trouxe os dados do seu orçamento. Confira e salve.' : 'Leva 20 segundos.'}</p>
+  abreFolha(`<h2>Nova demanda</h2><p class="sub">${pre.briefing ? 'Trouxe as respostas do briefing. Coloque o valor e salve.' : pre.cliente ? 'Trouxe os dados do seu orçamento. Confira e salve.' : 'Leva 20 segundos.'}</p>
     ${form(d)}
     <label>Onde ela entra</label><div class="chips" id="fcol">${COLS.slice(0,3).map(c => `<button class="chip${c.id === col ? ' on' : ''}" data-v="${c.id}" style="--cor:${c.c}"><span class="dt"></span>${c.t}</button>`).join('')}</div>
     <button class="btn" id="salvar">Adicionar às demandas</button>`);

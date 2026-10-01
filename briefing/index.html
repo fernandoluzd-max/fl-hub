@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gerador de Briefing — Base FL</title>
+<meta name="description" content="Mande um link, o cliente responde em 1 minuto e as respostas chegam no seu WhatsApp, prontas para calcular o preço.">
+<link rel="icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0D0F0E">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0D0F0E; --panel:#151816; --panel2:#1B1F1C; --line:#272D29; --ink:#F4F0E4; --mute:#9A968A; --dim:#5f5c55;
+  --accent:#F2A541; --accent-ink:#17130B;
+  --c-video:#3FB8AF; --c-edit:#9B7BF7; --c-prazo:#F2A541; --c-grav:#5AA9F0; --c-verba:#7BC67E;
+  --zap:#005C4B;
+  --f:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:16px/1.5 var(--f);font-stretch:100%;min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(700px 420px at 85% -8%,rgba(242,165,65,.10),transparent 70%),radial-gradient(600px 400px at -10% 10%,rgba(155,123,247,.07),transparent 70%)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:10px}
+
+.wrap{position:relative;max-width:520px;margin:0 auto;padding:16px 18px 40px}
+header{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+header img,.av{width:32px;height:32px;border-radius:9px;flex:none}
+.av{display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--accent-ink);font-weight:850;font-stretch:115%;font-size:15px}
+header .nm{font-weight:800;font-stretch:112%;font-size:15px;letter-spacing:-.01em;line-height:1.1}
+header .nm small{display:block;font-weight:500;font-stretch:100%;color:var(--mute);font-size:12px;letter-spacing:0}
+header .sp{flex:1}
+.link{background:none;border:0;color:var(--mute);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+/* progresso (segmentos) */
+.prog{display:flex;gap:4px;margin-bottom:18px}
+.prog i{flex:1;height:5px;border-radius:5px;background:var(--line);overflow:hidden;position:relative}
+.prog i.ok{background:var(--cor,var(--accent))}
+.prog i.at::after{content:"";position:absolute;inset:0;width:45%;border-radius:5px;background:var(--cor,var(--accent));animation:pisca 1.4s ease-in-out infinite}
+@keyframes pisca{50%{opacity:.35}}
+.tc{font-variant-numeric:tabular-nums;font-stretch:80%;font-weight:700;color:var(--accent);font-size:13px;letter-spacing:.02em;display:flex;align-items:center;gap:10px;margin-bottom:10px;min-height:22px}
+.tc .back{background:none;border:0;color:var(--mute);font-stretch:100%;font-weight:500;cursor:pointer;padding:2px 0}
+.tc .sp{flex:1}
+
+h1{font-weight:850;font-stretch:118%;font-size:clamp(27px,7.6vw,34px);line-height:1.04;letter-spacing:-.025em;margin-bottom:8px;text-wrap:balance}
+.sub{color:var(--mute);font-size:15px;margin-bottom:22px;max-width:44ch}
+h2{font-size:16px;font-weight:750;margin:24px 0 10px}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{position:relative;display:flex;align-items:center;gap:14px;text-align:left;width:100%;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px 16px 16px 14px;overflow:hidden;transition:transform .12s,border-color .15s,background .15s}
+.opt::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:4px;border-radius:0 4px 4px 0;background:var(--cor,var(--accent));opacity:.9}
+.opt:hover{border-color:#3a443c;background:var(--panel2)}
+.opt:active{transform:scale(.985)}
+.opt .ic{font-size:22px;width:30px;text-align:center;flex:none;margin-left:4px}
+.opt b{display:block;font-size:16.5px;font-weight:700}
+.opt small{display:block;color:var(--mute);font-size:13.5px;line-height:1.35}
+.opt.picked{border-color:var(--cor);background:var(--panel2)}
+.opt.picked::after{content:"✓";position:absolute;right:16px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:var(--cor);color:var(--bg);font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;animation:pop .25s cubic-bezier(.3,1.6,.5,1)}
+.opt.ns{background:transparent;border-style:dashed}
+@keyframes pop{from{transform:translateY(-50%) scale(0)}}
+.entra>*{animation:entra .32s cubic-bezier(.2,.8,.2,1) both}
+.entra .opt{animation:entra .32s cubic-bezier(.2,.8,.2,1) both}
+.entra .opt:nth-child(2){animation-delay:.04s}.entra .opt:nth-child(3){animation-delay:.08s}.entra .opt:nth-child(4){animation-delay:.12s}.entra .opt:nth-child(5){animation-delay:.16s}.entra .opt:nth-child(6){animation-delay:.2s}
+@keyframes entra{from{opacity:0;transform:translateY(10px)}}
+
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;cursor:pointer;font-weight:750;font-size:16px;border-radius:16px;padding:16px 18px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);transition:transform .12s,filter .15s;text-decoration:none}
+.btn:active{transform:scale(.98)}
+.btn:hover{filter:brightness(1.06)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.zap{background:#25D366;border-color:#25D366;color:#06210f}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;margin-top:12px}
+.row .btn{flex:1}
+.inp{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font:inherit;font-size:16px;outline:none;margin-bottom:12px}
+.inp.big{font-size:22px;font-weight:750;font-stretch:108%;padding:16px 18px}
+.inp:focus{border-color:var(--accent)}
+.inp.erro{border-color:#ff8f7a;animation:treme .3s}
+@keyframes treme{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+textarea.inp{min-height:96px;resize:vertical;line-height:1.45}
+label{display:block;font-size:13.5px;font-weight:650;color:var(--mute);margin:0 0 6px 2px}
+.err{color:#ff8f7a;font-size:14px;min-height:20px;margin-top:8px}
+.foot{color:var(--dim);font-size:12px;margin-top:30px;text-align:center}
+.foot a{color:var(--dim)}
+.hide{display:none!important}
+
+/* cartões / listas */
+.card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px;overflow:hidden}
+.resumo{display:flex;flex-direction:column;gap:2px}
+.it{position:relative;display:grid;grid-template-columns:118px 1fr;gap:10px;padding:11px 0 11px 14px;border-bottom:1px solid var(--line);font-size:15px}
+.it:last-child{border-bottom:0}
+.it::before{content:"";position:absolute;left:0;top:13px;bottom:13px;width:3px;border-radius:3px;background:var(--cor,var(--accent))}
+.it span{color:var(--mute);font-size:13.5px;padding-top:1px}
+.it b{font-weight:650;word-break:break-word}
+.it b a{color:var(--accent)}
+.sinais{list-style:none;display:flex;flex-direction:column;gap:8px}
+.sinais li{display:flex;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:14.5px;line-height:1.4}
+.sinais li i{font-style:normal;font-size:18px;line-height:1.1}
+.sinais li b{font-weight:700}
+
+/* link do editor */
+.linkbox{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px dashed rgba(242,165,65,.5);border-radius:14px;padding:12px 14px;margin:14px 0 4px;font-size:14px;color:var(--mute);overflow:hidden}
+.linkbox code{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:13px/1.4 ui-monospace,Menlo,monospace;color:var(--ink)}
+.passos{list-style:none;counter-reset:p;display:flex;flex-direction:column;gap:10px}
+.passos li{counter-increment:p;display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--mute)}
+.passos li::before{content:counter(p);flex:none;width:26px;height:26px;border-radius:50%;background:var(--panel2);border:1px solid var(--line);color:var(--accent);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.passos b{color:var(--ink)}
+
+/* mock do celular (tela de venda) */
+.mock{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:16px;margin-bottom:18px;overflow:hidden}
+.mock .prog{margin-bottom:12px}
+.mock p{font-weight:800;font-stretch:112%;font-size:19px;line-height:1.15;margin-bottom:10px}
+.mock .o{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:6px;position:relative;padding-left:16px}
+.mock .o::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--c-video)}
+.mock .o.on{border-color:var(--c-video)}
+.lock{margin-top:16px;border-top:1px dashed var(--line);padding-top:16px}
+.lock ul{list-style:none;margin:0 0 16px;display:flex;flex-direction:column;gap:6px;font-size:14.5px}
+.lock li{display:flex;gap:9px}
+.lock li::before{content:"";flex:none;width:16px;height:16px;margin-top:2px;border-radius:5px;background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%2317130B' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat}
+.lock .btn{animation:pulsa 2.4s ease-in-out infinite}
+@keyframes pulsa{50%{box-shadow:0 0 0 6px rgba(242,165,65,.14)}}
+.ja{display:block;margin:12px auto 0}
+
+/* fim */
+.fim{text-align:center;padding-top:8vh}
+.fim .selo{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:900;animation:selo .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes selo{from{transform:scale(0) rotate(-30deg)}}
+.fim .sub{margin:0 auto 22px}
+.conf{position:fixed;top:-12px;width:8px;height:14px;border-radius:2px;z-index:40;pointer-events:none;animation:cai linear forwards}
+@keyframes cai{to{transform:translateY(105vh) rotate(720deg)}}
+
+.toast{pointer-events:none;position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;transition:all .25s;z-index:30;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header id="topo"></header>
+  <main id="tela"></main>
+  <p class="foot" id="foot"></p>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===================== CONFIG =====================
+const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
+const PACK = 'fl-briefing';
+let BUY_URL = '';   // vem do banco (packs.buy_url)
+
+// ===================== PERGUNTAS DO CLIENTE (os códigos batem com o Quanto Cobrar?) =====================
+const SERV = { editar:['Só a edição','Eu já tenho os vídeos gravados','✂️'], ambos:['Gravação + edição','Preciso que gravem e editem','🎬'], gravar:['Só a gravação','Eu mesmo edito depois','🎥'] };
+const TIPO = { reels:['Reels / TikTok / Shorts','Vídeo curto vertical','📱'], youtube:['YouTube / vídeo longo','Vlog, aula, podcast, tutorial','▶️'], comercial:['Para empresa ou anúncio','Comercial, institucional, tráfego pago','🏢'], evento:['Evento / Casamento','Festa, palestra, cerimônia','💍'], outro:['Outro','Eu explico no final','✳️'] };
+const QTD = { 1:['1 vídeo',''], 4:['2 a 4 vídeos',''], 8:['5 a 8 vídeos',''], 12:['Mais de 8','Um pacote mensal, por exemplo'] };
+const DUR = { d1:['Até 1 minuto',''], d3:['1 a 3 minutos',''], d10:['3 a 10 minutos',''], d30:['10 a 30 minutos',''], d60:['Mais de 30 minutos',''], ns:['Ainda não sei',''] };
+const EDIC = { simples:['Simples e direta','Cortes, limpeza e legenda','✂️'], caprichada:['Dinâmica','Ritmo rápido, zooms, efeitos sonoros e imagens de apoio','⚡'], avancada:['Nível cinema','Animações, motion e cor de filme','🚀'], ns:['Não sei, quero uma sugestão','','💭'] };
+const GRAV = { g2:['Até 2 horas','Uma gravação rápida','⏱️'], g4:['Meio período','Cerca de 4 horas','⏱️'], g8:['Dia inteiro','Cerca de 8 horas','⏱️'], ns:['Ainda não sei','','💭'] };
+const PRAZO = { urgente:['Urgente','Em até 2 dias','🔥'], semana:['Em até 1 semana','','🗓️'], normal:['Sem pressa','Mais de 1 semana está ótimo','🌿'] };
+const VERBA = { a:['Até R$ 300',''], b:['R$ 300 a R$ 800',''], c:['R$ 800 a R$ 2.000',''], d:['Acima de R$ 2.000',''], x:['Prefiro não dizer',''] };
+const COR = { nome:'--accent', s:'--c-grav', t:'--c-video', q:'--c-video', d:'--c-video', e:'--c-edit', g:'--c-grav', p:'--c-prazo', v:'--c-verba', obs:'--accent' };
+const rot = { s:SERV, t:TIPO, q:QTD, d:DUR, e:EDIC, g:GRAV, p:PRAZO, v:VERBA };
+const NOMES = { s:'Serviço', t:'Tipo de vídeo', q:'Quantidade', d:'Duração', e:'Estilo de edição', g:'Gravação', p:'Prazo', v:'Valor em mente' };
+const edita = r => r.s !== 'gravar', grava = r => r.s === 'gravar' || r.s === 'ambos';
+function etapas(r){
+  const f = ['nome','s','t'];
+  if (edita(r)) f.push('q');
+  if (edita(r) && r.t !== 'reels') f.push('d');
+  if (edita(r)) f.push('e');
+  if (grava(r)) f.push('g');
+  f.push('p','v','obs');
+  return f;
+}
+
+// ===================== utilidades =====================
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const store = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k,v){ try { v==null ? localStorage.removeItem(k) : localStorage.setItem(k,v); } catch {} } };
+const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const espera = ms => new Promise(r => setTimeout(r, calmo ? 0 : ms));
+const vibra = p => { try { navigator.vibrate && navigator.vibrate(p); } catch {} };
+const enc = o => btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const dec = s => { try { return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/'))))); } catch { return null; } };
+const primeiro = n => String(n || '').trim().split(/\s+/)[0] || '';
+const celular = /Android|iPhone|iPad/i.test(navigator.userAgent);
+function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2400); }
+function tela(html, cls='entra'){ const m = $('#tela'); m.className = cls; m.innerHTML = html; window.scrollTo({ top:0 }); }
+async function copia(t){ try { await navigator.clipboard.writeText(t); } catch { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); } vibra(10); }
+function confete(){
+  if (calmo) return;
+  const cores = ['#F2A541','#3FB8AF','#9B7BF7','#5AA9F0','#F4F0E4'];
+  for (let i = 0; i < 60; i++){
+    const c = document.createElement('i'); c.className = 'conf';
+    c.style.cssText = `left:${Math.random()*100}vw;background:${cores[i % cores.length]};animation-duration:${1.6 + Math.random()*1.4}s;animation-delay:${Math.random()*.4}s;transform:rotate(${Math.random()*180}deg)`;
+    document.body.appendChild(c); setTimeout(() => c.remove(), 3600);
+  }
+}
+const BASE = location.origin + location.pathname;
+const valor = (k, v) => k === 'nome' || k === 'obs' ? v : (rot[k]?.[v]?.[0] || '');
+
+// =====================================================================
+// 1) CLIENTE: abre o link do editor (#p=...) e responde
+// =====================================================================
+let ED = null, R = {}, pos = 0, ocupado = false;
+function cabecalhoCliente(){
+  $('#topo').innerHTML = `<div class="av">${esc(primeiro(ED.n)[0]?.toUpperCase() || 'B')}</div><div class="nm">${esc(ED.n)}<small>Briefing rápido · 1 minuto</small></div>`;
+  $('#foot').innerHTML = 'Suas respostas vão direto para o WhatsApp de ' + esc(primeiro(ED.n)) + '.<br>Feito com Base FL';
+}
+function barra(f){
+  return `<div class="prog">${f.map((k, i) => `<i class="${i < pos ? 'ok' : i === pos ? 'at' : ''}" style="--cor:var(${COR[k]})"></i>`).join('')}</div>`;
+}
+function perguntaCliente(){
+  const f = etapas(R);
+  if (pos >= f.length) return revisao();
+  const k = f[pos], ed = primeiro(ED.n);
+  let h = barra(f) + `<div class="tc">${pos > 0 ? '<button class="back" id="voltar">← Voltar</button>' : ''}<span class="sp"></span><span>${String(pos+1).padStart(2,'0')} / ${String(f.length).padStart(2,'0')}</span></div>`;
+  if (k === 'nome'){
+    h += `<h1>Oi! Vamos montar o seu orçamento?</h1><p class="sub">São perguntas rápidas, só de tocar. ${esc(ed)} recebe tudo e te responde com o valor.</p>
+      <label for="nm">Seu nome ou da sua empresa</label><input class="inp big" id="nm" autocomplete="name" placeholder="Ex.: Ana, Studio Ana" value="${esc(R.nome || '')}" maxlength="60">
+      <button class="btn" id="seguir">Começar</button>`;
+  } else if (k === 'obs'){
+    h += `<h1>Quase lá! Mais algum detalhe?</h1><p class="sub">Os dois são opcionais. Uma referência ajuda muito a acertar o estilo.</p>
+      <label for="ref">Link de um vídeo que você gosta</label><input class="inp" id="ref" inputmode="url" placeholder="Cole aqui um link do Instagram, YouTube…" value="${esc(R.ref || '')}" maxlength="300">
+      <label for="obs">Algo mais que ${esc(ed)} precisa saber?</label><textarea class="inp" id="obs" placeholder="Ex.: é para o lançamento de um produto, quero legenda grande…" maxlength="500">${esc(R.obs || '')}</textarea>
+      <button class="btn" id="seguir">Revisar respostas</button>`;
+  } else {
+    const Q = {
+      s:['O que você precisa?', ''],
+      t:['Que tipo de vídeo?', ''],
+      q:['Quantos vídeos?', 'Mais ou menos. Pacotes costumam sair mais em conta.'],
+      d:['Cada vídeo pronto vai ter quanto tempo?', 'A duração final, depois de editado.'],
+      e:['Que estilo de edição você imagina?', ''],
+      g:['Quanto tempo de gravação?', 'Só uma ideia. Ajuda a reservar a agenda.'],
+      p:['Para quando você precisa?', ''],
+      v:['Você já tem um valor em mente?', 'Opcional. Ajuda a montar uma proposta que caiba no seu bolso.'],
+    }[k];
+    h += `<h1>${Q[0]}</h1>` + (Q[1] ? `<p class="sub">${Q[1]}</p>` : '<div style="height:14px"></div>');
+    h += '<div class="opts">' + Object.entries(rot[k]).map(([v, [t, s, ic]]) => `<button class="opt${v === 'ns' || v === 'x' ? ' ns' : ''}${R[k] === v ? ' picked' : ''}" style="--cor:var(${COR[k]})" data-v="${v}">${ic ? `<span class="ic">${ic}</span>` : ''}<span><b>${t}</b>${s ? `<small>${s}</small>` : ''}</span></button>`).join('') + '</div>';
+  }
+  tela(h);
+  if ($('#voltar')) $('#voltar').onclick = () => { pos = Math.max(0, pos - 1); perguntaCliente(); };
+  document.querySelectorAll('.opt').forEach(b => b.onclick = async () => {
+    if (ocupado) return; ocupado = true;
+    document.querySelectorAll('.opt').forEach(x => x.classList.toggle('picked', x === b));
+    R[k] = b.dataset.v; vibra(8);
+    if (k === 's' || k === 't'){ const f2 = etapas(R); for (const c of ['q','d','e','g']) if (!f2.includes(c)) delete R[c]; }
+    await espera(260); pos++; ocupado = false; perguntaCliente();
+  });
+  if (k === 'nome'){
+    const i = $('#nm'); setTimeout(() => i.focus(), 60);
+    i.onkeydown = e => { if (e.key === 'Enter') $('#seguir').click(); };
+    $('#seguir').onclick = () => { const v = i.value.trim(); if (!v){ i.classList.remove('erro'); void i.offsetWidth; i.classList.add('erro'); vibra(30); return; } R.nome = v; pos++; perguntaCliente(); };
+  }
+  if (k === 'obs') $('#seguir').onclick = () => { R.ref = $('#ref').value.trim(); R.obs = $('#obs').value.trim(); pos++; perguntaCliente(); };
+}
+function linhasResumo(r){
+  const L = [];
+  for (const k of ['s','t','q','d','e','g','p','v']) if (r[k]) L.push([k, NOMES[k], valor(k, r[k])]);
+  return L;
+}
+function revisao(){
+  const f = etapas(R), ed = primeiro(ED.n);
+  tela(`${barra(f).replace(/class="at"/, 'class="ok"')}<div class="tc"><button class="back" id="voltar">← Voltar</button><span class="sp"></span><span>Revisão</span></div>
+    <h1>Tudo certo, ${esc(primeiro(R.nome))}?</h1><p class="sub">Confira e envie. Vai abrir o WhatsApp com a mensagem pronta, é só tocar em enviar.</p>
+    <div class="card resumo">${linhasResumo(R).map(([k, n, v]) => `<div class="it" style="--cor:var(${COR[k]})"><span>${n}</span><b>${esc(v)}</b></div>`).join('')}
+      ${R.ref ? `<div class="it"><span>Referência</span><b>${esc(R.ref)}</b></div>` : ''}${R.obs ? `<div class="it"><span>Detalhes</span><b>${esc(R.obs)}</b></div>` : ''}</div>
+    <div class="row" style="margin-top:18px"><button class="btn zap" id="enviar">Enviar para ${esc(ed)} no WhatsApp</button></div>`);
+  $('#voltar').onclick = () => { pos = f.length - 1; perguntaCliente(); };
+  $('#enviar').onclick = () => {
+    const txt = mensagem(R);
+    if (!ED.w){ toast('Isto é um exemplo. No link real, abre o WhatsApp do editor.'); return enviado(txt); }
+    window.open('https://api.whatsapp.com/send?phone=' + ED.w + '&text=' + encodeURIComponent(txt), '_blank');
+    enviado(txt);
+  };
+}
+function mensagem(r){
+  const p = { n:r.nome, s:r.s, t:r.t, q:r.q, d:r.d, e:r.e, g:r.g, p:r.p, v:r.v, ref:r.ref || undefined, obs:r.obs || undefined, em:Date.now() };
+  const L = [`Oi, ${primeiro(ED.n)}! Aqui é ${r.nome}. Respondi o briefing:`, ''];
+  for (const [, n, v] of linhasResumo(r)) L.push(`*${n}:* ${v}`);
+  if (r.ref) L.push(`*Referência:* ${r.ref}`);
+  if (r.obs) L.push(`*Detalhes:* ${r.obs}`);
+  L.push('', 'Abrir no Base FL:', BASE + '#r=' + enc(p));
+  return L.join('\n');
+}
+function enviado(txt){
+  confete(); vibra([10, 40, 18]);
+  const ed = primeiro(ED.n);
+  tela(`<div class="fim"><div class="selo">✓</div><h1>Prontinho!</h1>
+    <p class="sub">Agora é só tocar em <b>enviar</b> no WhatsApp. ${esc(ed)} vai analisar e te responder com o orçamento.</p>
+    <button class="btn ghost" id="denovo">O WhatsApp não abriu? Tentar de novo</button>
+    <div class="row"><button class="btn ghost" id="cop">Copiar a mensagem</button></div></div>`);
+  if (!ED.w) $('#denovo').classList.add('hide');
+  $('#denovo').onclick = () => window.open('https://api.whatsapp.com/send?phone=' + ED.w + '&text=' + encodeURIComponent(txt), '_blank');
+  $('#cop').onclick = async () => { await copia(txt); toast('Copiado. Cole na conversa com ' + ed + '.'); };
+}
+
+// =====================================================================
+// 2) EDITOR: abre a mensagem que o cliente mandou (#r=...)
+// =====================================================================
+function respostas(r){
+  $('#topo').innerHTML = `<img src="/logo.png" alt=""><div class="nm">Briefing recebido<small>Base FL</small></div>`;
+  $('#foot').textContent = 'As respostas ficam só neste link. Nada é salvo em servidor.';
+  const quando = r.em ? new Date(r.em).toLocaleDateString('pt-BR', { day:'2-digit', month:'short' }) : '';
+  const S = [];
+  if (r.p === 'urgente') S.push(['🔥', '<b>Pediu urgência.</b> Cobre a taxa de urgência; a calculadora já soma 40%.']);
+  if (+r.q > 1) S.push(['📦', `<b>${esc(valor('q', r.q))}.</b> Dá para oferecer pacote com desconto por volume.`]);
+  const nsab = [];
+  if (r.d === 'ns') nsab.push('a duração'); if (r.e === 'ns') nsab.push('o estilo de edição'); if (r.g === 'ns') nsab.push('o tempo de gravação');
+  if (nsab.length) S.push(['💭', `<b>Não soube dizer ${nsab.join(' e ')}.</b> Pergunte antes de fechar ou mande duas opções de preço.`]);
+  if (r.t === 'outro') S.push(['✳️', '<b>Tipo "Outro".</b> Leia os detalhes e escolha o tipo mais parecido na calculadora.']);
+  if (r.ref) S.push(['🔗', '<b>Mandou referência.</b> Abra o link para medir o nível da edição antes de calcular.']);
+  if (r.v && r.v !== 'x') S.push(['💰', `<b>Valor em mente: ${esc(valor('v', r.v))}.</b> Calcule o seu preço e compare. Se ficar acima, ofereça uma versão mais simples em vez de baixar o valor.`]);
+  if (r.v === 'x') S.push(['💰', '<b>Não disse o valor.</b> Mande o seu preço com segurança e explique o que está incluso.']);
+  tela(`<div class="tc"><span>${esc(quando)}</span></div>
+    <h1>${esc(r.n || 'Cliente')}</h1><p class="sub">Respondeu o seu briefing. Calcule o preço com as respostas já preenchidas.</p>
+    <div class="card resumo">${linhasResumo(r).map(([k, n, v]) => `<div class="it" style="--cor:var(${COR[k]})"><span>${n}</span><b>${esc(v)}</b></div>`).join('')}
+      ${r.ref ? `<div class="it"><span>Referência</span><b><a href="${/^https?:\/\//i.test(r.ref) ? esc(r.ref) : 'https://' + esc(r.ref)}" target="_blank" rel="noopener noreferrer">${esc(r.ref)}</a></b></div>` : ''}${r.obs ? `<div class="it"><span>Detalhes</span><b>${esc(r.obs)}</b></div>` : ''}</div>
+    <div class="row" style="margin-top:16px"><button class="btn" id="calc">Calcular o preço</button></div>
+    <div class="row"><button class="btn ghost" id="dem">＋ Pôr nas Demandas</button><button class="btn ghost" id="cop">Copiar resumo</button></div>
+    ${S.length ? `<h2>O que observar</h2><ul class="sinais">${S.map(([i, t]) => `<li><i>${i}</i><span>${t}</span></li>`).join('')}</ul>` : ''}`);
+  $('#calc').onclick = () => {
+    const b = { modo:r.s, tipo:r.t !== 'outro' ? r.t : undefined, dur:r.d !== 'ns' ? r.d : undefined, edicao:r.e !== 'ns' ? r.e : undefined,
+                prazo: r.p === 'urgente' ? 'urgente' : r.p ? 'normal' : undefined, gHoras:r.g !== 'ns' ? r.g : undefined, qtd:r.q ? +r.q : 1, cliente:r.n };
+    location.href = '/preco/#b=' + enc(b);
+  };
+  const resumo = () => [`Briefing de ${r.n}`, ...linhasResumo(r).map(([, n, v]) => `${n}: ${v}`), r.ref ? 'Referência: ' + r.ref : '', r.obs ? 'Detalhes: ' + r.obs : ''].filter(Boolean).join('\n');
+  $('#cop').onclick = async () => { await copia(resumo()); toast('Resumo copiado'); };
+  $('#dem').onclick = () => {
+    const tit = [r.q && +r.q > 1 ? valor('q', r.q) : '', r.t && r.t !== 'outro' ? valor('t', r.t) : 'Vídeo'].filter(Boolean).join(' · ');
+    store.set('fl_nova_demanda', JSON.stringify({ cliente:r.n || '', titulo:tit, valor:'', prazo:'', rev_total:2, coluna:'orcamento', notas:resumo(), briefing:true }));
+    location.href = '/painel/';
+  };
+}
+
+// =====================================================================
+// 3) EDITOR: gera o próprio link (precisa do acesso)
+// =====================================================================
+let acesso = false, vencido = false, sess = null;
+try { sess = JSON.parse(store.get('fl_sess') || 'null'); } catch { sess = null; }
+const meu = () => { try { return JSON.parse(store.get('fl_brief_eu') || 'null'); } catch { return null; } };
+const meuLink = e => BASE + '#p=' + enc({ n:e.n, w:e.w });
+function cabecalhoEditor(){
+  $('#topo').innerHTML = `<img src="/logo.png" alt=""><div class="nm">Gerador de Briefing<small>Base FL</small></div><div class="sp"></div><button class="link" id="conta">${sess ? 'Sair' : 'Entrar'}</button>`;
+  $('#foot').textContent = 'O cliente não precisa de conta nem de app. Só abre o link e responde.';
+  $('#conta').onclick = () => { if (sess){ salva(null); acesso = false; inicioEditor(); } else login(inicioEditor); };
+}
+function inicioEditor(){
+  cabecalhoEditor();
+  if (!acesso) return vitrine();
+  const e = meu();
+  if (!e) return dados();
+  pronto(e);
+}
+function vitrine(){
+  tela(`<h1>O cliente responde. Você só calcula.</h1>
+    <p class="sub">Mande um link. O cliente responde em 1 minuto, só tocando nas opções, e tudo chega no seu WhatsApp, pronto para abrir no Quanto Cobrar?.</p>
+    <div class="mock" aria-hidden="true"><div class="prog"><i class="ok" style="--cor:var(--accent)"></i><i class="ok" style="--cor:var(--c-grav)"></i><i class="at" style="--cor:var(--c-video)"></i><i></i><i></i><i></i><i></i><i></i></div>
+      <p>Que tipo de vídeo?</p><div class="o on">📱 Reels / TikTok / Shorts</div><div class="o">▶️ YouTube / vídeo longo</div><div class="o">🏢 Para empresa ou anúncio</div></div>
+    <ol class="passos"><li><span><b>Você manda o seu link</b> para o cliente, no WhatsApp ou na bio.</span></li><li><span><b>Ele responde</b> serviço, tipo, quantidade, estilo, prazo e valor em mente.</span></li><li><span><b>As respostas chegam no seu WhatsApp</b> com um botão que já abre a calculadora preenchida.</span></li></ol>
+    <div class="lock"><ul><li>Seu link pessoal, com o seu nome</li><li>Respostas organizadas no seu WhatsApp</li><li>Liga direto no Quanto Cobrar? e nas Demandas</li></ul>
+      <button class="btn" id="comprar">${vencido ? 'Renovar meu acesso' : 'Quero o meu link'}</button>
+      <button class="link ja" id="entrar">Já comprei · entrar</button>
+      <button class="link ja" id="demo">Ver como o cliente vê</button></div>`);
+  $('#comprar').onclick = () => { if (BUY_URL) location.href = BUY_URL; else toast('Link de compra em breve.'); };
+  $('#entrar').onclick = () => login(inicioEditor);
+  $('#demo').onclick = () => window.open(BASE + '#p=' + enc({ n:'Seu nome', w:'' }) , '_blank');
+}
+function dados(){
+  const e = meu() || {};
+  const tel = e.w ? e.w.replace(/^55/, '') : '';
+  tela(`<h1>Crie o seu link</h1><p class="sub">Só uma vez. É assim que o cliente vai te ver e para onde as respostas vão.</p>
+    <label for="dn">Seu nome (aparece para o cliente)</label><input class="inp" id="dn" placeholder="Ex.: Fernando Luz" value="${esc(e.n || '')}" maxlength="40" autocomplete="name">
+    <label for="dw">Seu WhatsApp com DDD</label><input class="inp" id="dw" placeholder="Ex.: 48 99999-8888" value="${esc(tel)}" inputmode="tel" autocomplete="tel">
+    <button class="btn" id="criar">Criar meu link</button><div class="err" id="erro"></div>`);
+  $('#dn').focus();
+  $('#criar').onclick = () => {
+    const n = $('#dn').value.trim(); let w = $('#dw').value.replace(/\D/g, '');
+    if (!n){ $('#erro').textContent = 'Coloque o seu nome.'; return $('#dn').focus(); }
+    if (w.length >= 12 && w.startsWith('55')) w = w.slice(2);
+    if (w.length < 10 || w.length > 11){ $('#erro').textContent = 'Confira o WhatsApp: DDD + número, como 48 99999-8888.'; return $('#dw').focus(); }
+    store.set('fl_brief_eu', JSON.stringify({ n, w:'55' + w })); vibra([10,30,10]); confete(); pronto(meu(), true);
+  };
+}
+function pronto(e, novo){
+  const link = meuLink(e);
+  const convite = `Oi! Para eu te passar um orçamento certinho, responde essas perguntas rápidas? Leva 1 minuto, é só tocar nas opções:\n${link}`;
+  tela(`<h1>${novo ? 'Seu link está pronto!' : 'Seu link de briefing'}</h1><p class="sub">Mande para cada cliente novo. As respostas chegam no WhatsApp ${esc(e.w.replace(/^55(\d{2})(\d+)(\d{4})$/, '($1) $2-$3'))}.</p>
+    <div class="linkbox"><code>${esc(link)}</code></div>
+    <div class="row"><button class="btn zap" id="mandar">Mandar para um cliente</button></div>
+    <div class="row"><button class="btn ghost" id="cop">Copiar link</button><button class="btn ghost" id="ver">Ver como o cliente vê</button></div>
+    <h2>Como funciona</h2>
+    <ol class="passos"><li><span><b>O cliente responde</b> em 1 minuto, sem conta e sem baixar nada.</span></li><li><span><b>A mensagem chega no seu WhatsApp</b> com as respostas e um link no final.</span></li><li><span><b>Toque no link</b> e depois em <b>Calcular o preço</b>: a calculadora abre já preenchida.</span></li></ol>
+    <p style="margin-top:22px"><button class="link" id="mudar">Mudar meu nome ou WhatsApp</button></p>`);
+  $('#cop').onclick = async () => { await copia(link); toast('Link copiado'); };
+  $('#ver').onclick = () => window.open(link, '_blank');
+  $('#mudar').onclick = dados;
+  $('#mandar').onclick = async () => {
+    if (navigator.share && celular){ try { await navigator.share({ text:convite }); return; } catch(err){ if (err.name === 'AbortError') return; } }
+    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(convite), '_blank');
+  };
+}
+
+// ===================== login e licença =====================
+async function api(path, { method='GET', body, auth=true } = {}){
+  const h = { apikey:SUPA.key, 'Content-Type':'application/json' };
+  if (auth && sess) h.Authorization = 'Bearer ' + sess.access_token;
+  const r = await fetch(SUPA.url + path, { method, headers:h, body: body ? JSON.stringify(body) : undefined });
+  const t = await r.text(); let j; try { j = t ? JSON.parse(t) : {}; } catch { j = t; }
+  if (!r.ok){ const e = new Error(traduz(j?.msg || j?.message || j?.error_description || j?.error || ('Erro ' + r.status))); e.status = r.status; throw e; }
+  return j;
+}
+function traduz(m){
+  m = String(m||'');
+  if (/only request this after (\d+)/i.test(m)) return 'Aguarde ' + m.match(/after (\d+)/i)[1] + ' segundos para pedir outro código.';
+  if (/expired|invalid/i.test(m) && /token|otp/i.test(m)) return 'Código inválido ou expirado. Confira ou peça outro.';
+  if (/rate limit/i.test(m)) return 'Muitas tentativas. Aguarde alguns minutos.';
+  if (/failed to fetch|network|load failed/i.test(m)) return 'Sem conexão com a internet.';
+  return m;
+}
+const fromAuth = r => ({ access_token:r.access_token, refresh_token:r.refresh_token, expires_at:r.expires_at || Math.floor(Date.now()/1000) + (r.expires_in||3600), email:r.user?.email });
+function salva(s){ sess = s; store.set('fl_sess', s ? JSON.stringify(s) : null); }
+async function sessaoValida(){
+  if (!sess) return false;
+  if (sess.expires_at - Date.now()/1000 > 90) return true;
+  try { const r = await api('/auth/v1/token?grant_type=refresh_token', { method:'POST', body:{ refresh_token:sess.refresh_token }, auth:false }); salva({ ...fromAuth(r), email:r.user?.email || sess.email }); return true; }
+  catch(e){ if (e.status >= 400 && e.status < 500){ salva(null); return false; } return true; }
+}
+async function checaAcesso(){
+  acesso = false; vencido = false;
+  try {
+    const pk = await api(`/rest/v1/packs?select=buy_url&id=eq.${PACK}`, { auth:false }).catch(() => []);
+    if (pk[0]?.buy_url) BUY_URL = pk[0].buy_url;
+    if (!(await sessaoValida())) return;
+    const lic = await api(`/rest/v1/licenses?select=*&pack_id=eq.${PACK}`);
+    const agora = Date.now(), ativa = lic.find(l => l.status === 'active');
+    const venc = ativa?.expires_at ? new Date(ativa.expires_at).getTime() : null;
+    acesso = !!ativa && (!venc || venc > agora);
+    vencido = !!ativa && !!venc && venc <= agora;
+    if (acesso && venc){ const dias = Math.ceil((venc - agora) / 864e5); if (dias <= 15) setTimeout(() => toast(`Seu acesso vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}. Renove para não perder.`), 1200); }
+  } catch {}
+}
+function login(depois){
+  let email = '';
+  const etapa = codigo => {
+    tela(`<div class="tc"><button class="back" id="voltar">← Voltar</button></div>
+      <h1>${codigo ? 'Digite o código' : 'Entre com o e-mail da compra'}</h1>
+      <p class="sub">${codigo ? 'Enviamos um código para ' + esc(email) + '. Confira também o spam.' : 'O mesmo e-mail que você usou para comprar. Vamos mandar um código de acesso.'}</p>
+      <input class="inp" id="campo" ${codigo ? 'inputmode="numeric" autocomplete="one-time-code" placeholder="Código"' : 'type="email" autocomplete="email" placeholder="seu@email.com"'}>
+      <button class="btn" id="ir">${codigo ? 'Entrar' : 'Enviar código'}</button><div class="err" id="erro"></div>`);
+    $('#campo').focus();
+    $('#campo').onkeydown = e => { if (e.key === 'Enter') $('#ir').click(); };
+    $('#voltar').onclick = () => codigo ? etapa(false) : depois();
+    $('#ir').onclick = async () => {
+      const b = $('#ir'); b.disabled = true; $('#erro').textContent = '';
+      try {
+        if (!codigo){
+          email = $('#campo').value.trim().toLowerCase();
+          if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new Error('Digite um e-mail válido.');
+          await api('/auth/v1/otp', { method:'POST', body:{ email, create_user:true }, auth:false });
+          etapa(true);
+        } else {
+          const token = $('#campo').value.replace(/\D/g,'');
+          if (token.length < 6) throw new Error('Digite o código que chegou no e-mail.');
+          const r = await api('/auth/v1/verify', { method:'POST', body:{ type:'email', email, token }, auth:false });
+          salva(fromAuth(r)); await checaAcesso();
+          if (!acesso){
+            tela(`<h1>Quase lá</h1><p class="sub">Não encontramos o Gerador de Briefing nas compras de <b>${esc(email)}</b>. Se comprou com outro e-mail, saia e entre com ele.</p>
+              <button class="btn" id="comprar">Quero o meu link</button><div class="row"><button class="btn ghost" id="seguir">Voltar</button></div>`);
+            $('#comprar').onclick = () => { if (BUY_URL) location.href = BUY_URL; else toast('Link de compra em breve.'); };
+            $('#seguir').onclick = depois; return;
+          }
+          vibra([10,30,10]); toast('Ferramenta desbloqueada'); depois();
+        }
+      } catch(e){ $('#erro').textContent = traduz(e.message); b.disabled = false; }
+    };
+  };
+  etapa(false);
+}
+
+// ===================== início =====================
+async function inicio(){
+  const h = location.hash;
+  const mp = h.match(/^#p=([\w-]+)/), mr = h.match(/^#r=([\w-]+)/);
+  if (mp){
+    ED = dec(mp[1]);
+    if (!ED || !ED.n){ tela('<h1>Link incompleto</h1><p class="sub">Esse link de briefing parece ter sido cortado. Peça o link de novo para quem te mandou.</p>'); return; }
+    ED.n = String(ED.n).slice(0, 40); ED.w = String(ED.w || '').replace(/\D/g, '');
+    document.title = 'Briefing · ' + ED.n;
+    R = {}; pos = 0; cabecalhoCliente(); return perguntaCliente();
+  }
+  if (mr){
+    const r = dec(mr[1]);
+    if (!r){ tela('<h1>Link incompleto</h1><p class="sub">A mensagem parece ter sido cortada. Peça para o cliente reenviar.</p>'); return; }
+    return respostas(r);
+  }
+  cabecalhoEditor();
+  tela('<p class="sub">Carregando…</p>', '');
+  await checaAcesso();
+  inicioEditor();
+}
+addEventListener('hashchange', inicio);
+inicio();
+</script>
+</body>
+</html>

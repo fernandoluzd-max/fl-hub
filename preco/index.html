@@ -68,17 +68,6 @@ h1{font-weight:850;font-stretch:118%;font-size:clamp(27px,7.6vw,34px);line-heigh
 .row{display:flex;gap:10px;margin-top:12px}
 .row .btn{flex:1}
 .nivel{margin-top:18px;color:var(--mute);font-size:13px}
-.guia-btn{display:flex;align-items:center;gap:12px;width:100%;margin-top:18px;cursor:pointer;text-align:left;background:linear-gradient(90deg,rgba(242,165,65,.10),transparent);border:1px dashed rgba(242,165,65,.45);border-radius:16px;padding:14px 16px}
-.guia-btn b{display:block;font-size:15px}.guia-btn small{display:block;color:var(--mute);font-size:13px}
-.guia-btn .ic{font-size:22px}
-.pg{display:flex;flex-direction:column;gap:10px}
-.pq-i{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 14px 14px 16px;display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:start}
-.pq-i::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:4px;border-radius:0 4px 4px 0;background:var(--cor)}
-.pq-i q{quotes:none;font-size:16px;font-weight:650;line-height:1.35;padding-left:4px}
-.pq-i .vira{grid-column:1/-1;padding-left:4px;font-size:12.5px;color:var(--mute)}
-.pq-i .vira b{color:var(--cor);font-weight:700}
-.cp{cursor:pointer;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:7px 10px;font-size:13px;font-weight:650;white-space:nowrap}
-.cp.ok{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
 /* ---------- timeline (assinatura da página) ---------- */
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:5;background:linear-gradient(180deg,rgba(13,15,14,0),rgba(13,15,14,.92) 22%,#0D0F0E);padding:22px 0 calc(12px + env(safe-area-inset-bottom))}
@@ -348,7 +337,6 @@ function pergunta(){
   } else {
     h += '<div class="opts">' + q.o.map(([v,t,s,ic]) => `<button class="opt${q.big?' big':''}" style="--cor:${cor(id)}" data-v="${v}">${ic?`<span class="ic">${ic}</span>`:''}<span><b>${t}</b>${s?`<small>${s}</small>`:''}</span></button>`).join('') + '</div>';
   }
-  if (id === 'modo') h += `<button class="guia-btn" id="guia"><span class="ic">💬</span><span><b>Antes: perguntas pro cliente</b><small>6 perguntas para copiar no WhatsApp. As respostas preenchem esta calculadora.</small></span></button>`;
   if (id === 'modo' && store.get('fl_nivel')) h += `<p class="nivel">Seu nível: <b>${NIVEL[store.get('fl_nivel')].t}</b> · <button class="link" id="trocaNivel">mudar</button></p>`;
   tela(h, 'entra');
   desenhaTimeline();
@@ -358,13 +346,13 @@ function pergunta(){
     if (id === 'modo') R = { modo:b.dataset.v };
     if (id === 'nivel') store.set('fl_nivel', b.dataset.v); else R[id] = b.dataset.v;
     if (id !== 'nivel') pos++;
+    else if (veioDoBriefing) pulaPreenchidas();
     fila = montaFila();
     const alvo = desenhaTimeline(id);
     await voa(b, alvo);
     ocupado = false; pergunta();
   });
   if ($('#voltar')) $('#voltar').onclick = () => { pos = Math.max(0, pos-1); pergunta(); };
-  if ($('#guia')) $('#guia').onclick = guia;
   if ($('#trocaNivel')) $('#trocaNivel').onclick = () => { store.set('fl_nivel', null); pergunta(); };
   if (q.input){
     const go = async (v, btn) => { R.gExtra = v; pos++; fila = montaFila(); const alvo = desenhaTimeline('gExtra'); await voa(btn, alvo); pergunta(); };
@@ -373,32 +361,6 @@ function pergunta(){
     $('#pular').onclick = e => go(0, e.currentTarget);
     $('#seguir').onclick = e => go(Math.max(0, parseFloat((inp.value||'0').replace(/\./g,'').replace(',','.')) || 0), $('.field'));
   }
-}
-
-// ===================== perguntas pro cliente (bônus) =====================
-const GUIA = [
-  ['O vídeo é pra quê? Vender, divulgar, ensinar…?', 'Como é essa edição', '--c-edit'],
-  ['Onde ele vai ser postado? Reels, YouTube, anúncio…?', 'Tipo de vídeo', '--c-video'],
-  ['Quantos vídeos são e mais ou menos de que duração?', 'Duração e pacote', '--c-video'],
-  ['Você já tem as gravações ou eu preciso gravar?', 'Editar ou Gravar + Editar', '--c-grav'],
-  ['Tem algum vídeo de referência que você curte? Pode mandar o link.', 'Nível da edição e expectativa', '--c-edit'],
-  ['Pra quando você precisa?', 'Prazo', '--c-prazo'],
-];
-function guia(){
-  $('#dock').classList.add('hide');
-  const msg = 'Oi! Pra eu montar o seu orçamento certinho, me conta rapidinho:\n\n' + GUIA.map(([q], i) => `${i+1}. ${q}`).join('\n');
-  tela(`<div class="tc"><button class="back" id="voltar">← Voltar</button><span class="sp"></span><span>Bônus</span></div>
-    <h1>Perguntas pro cliente</h1><p class="sub">Mande antes de calcular. Cada resposta vira uma escolha aqui na calculadora, e você evita retrabalho.</p>
-    <button class="btn" id="todas">Copiar todas numa mensagem</button>
-    <h2>Ou uma de cada vez</h2>
-    <div class="pg">${GUIA.map(([q, v, c], i) => `<div class="pq-i" style="--cor:var(${c})"><q>${q}</q><button class="cp" data-i="${i}">Copiar</button><span class="vira">Vira na calculadora: <b>${v}</b></span></div>`).join('')}</div>
-    <div class="acoes"><button class="btn" id="calc">Já tenho as respostas, calcular</button></div>`, 'entra');
-  $('#voltar').onclick = () => { $('#dock').classList.remove('hide'); pergunta(); };
-  $('#calc').onclick = () => { $('#dock').classList.remove('hide'); R = {}; pos = 0; pergunta(); };
-  const marca = b => { b.classList.add('ok'); b.textContent = '✓ Copiado'; vibra(8); setTimeout(() => { b.classList.remove('ok'); b.textContent = b.id === 'todas' ? 'Copiar todas numa mensagem' : 'Copiar'; }, 1800); };
-  const cp = async t => { try { await navigator.clipboard.writeText(t); } catch { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); } };
-  $('#todas').onclick = async e => { await cp(msg); marca(e.currentTarget); toast('Copiado. Cole na conversa com o cliente.'); };
-  document.querySelectorAll('.cp').forEach(b => b.onclick = async () => { await cp(GUIA[+b.dataset.i][0]); marca(b); });
 }
 
 // ===================== cálculo =====================
@@ -515,7 +477,7 @@ function resultado(revelar = false){
     c = calcula(); if ($('#pq')) $('#pq').textContent = porque(c); vibra(6); pinta(true);
   });
   $('#voltar').onclick = () => { clearInterval(slotTimer); pos = fila.length - 1; pergunta(); };
-  $('#novo').onclick = () => { clearInterval(slotTimer); R = {}; pos = 0; qtd = 1; pergunta(); };
+  $('#novo').onclick = () => { clearInterval(slotTimer); veioDoBriefing = false; BRIEF_CLIENTE = ''; R = {}; pos = 0; qtd = 1; pergunta(); };
   if ($('#orc')) $('#orc').onclick = () => orcamento(c);
   if ($('#comprar')) $('#comprar').onclick = () => { if (BUY_URL) location.href = BUY_URL; else toast('Link de compra em breve.'); };
   if ($('#entrar2')) $('#entrar2').onclick = () => { clearInterval(slotTimer); login(() => { pergunta(); }); };
@@ -565,6 +527,7 @@ function orcamento(c){
     $('#txt').value = L.join('\n');
   };
   let ultimo = {};
+  if (BRIEF_CLIENTE) $('#cli').value = BRIEF_CLIENTE;
   monta(); $('#cli').oninput = monta;
   $('#contrato').onclick = () => { store.set('fl_ultimo_orc', JSON.stringify(ultimo)); location.href = '/contrato/'; };
   $('#painel').onclick = () => {
@@ -665,8 +628,30 @@ function login(depois){
   etapa(false);
 }
 
+// ===================== vindo do Gerador de Briefing =====================
+let BRIEF_CLIENTE = '', veioDoBriefing = false;
+function pulaPreenchidas(){
+  fila = montaFila();
+  const i = fila.findIndex(id => id === 'nivel' || id === 'gExtra' || R[id] == null);
+  pos = i < 0 ? fila.length : i;
+}
+function doBriefing(){
+  const m = location.hash.match(/^#b=([\w-]+)/); if (!m) return;
+  history.replaceState(null, '', location.pathname);
+  let b; try { b = JSON.parse(decodeURIComponent(escape(atob(m[1].replace(/-/g,'+').replace(/_/g,'/'))))); } catch { return; }
+  const ok = (v, T) => v && T[v] ? v : undefined;
+  R = { modo: MODO[b.modo] ? b.modo : undefined };
+  if (!R.modo){ R = {}; return; }
+  R.tipo = ok(b.tipo, TIPO); R.dur = ok(b.dur, DUR); R.edicao = ok(b.edicao, EDICAO); R.prazo = ok(b.prazo, PRAZO); R.gHoras = ok(b.gHoras, GHORAS);
+  if (PACOTE[b.qtd] !== undefined) qtd = +b.qtd;
+  BRIEF_CLIENTE = String(b.cliente || '').slice(0, 60);
+  pulaPreenchidas(); veioDoBriefing = true;
+  setTimeout(() => toast(BRIEF_CLIENTE ? `Respostas de ${BRIEF_CLIENTE} já preenchidas` : 'Respostas do briefing já preenchidas'), 400);
+}
+
 // ===================== início =====================
 addEventListener('resize', posicionaAgulha);
+doBriefing();
 botaoConta(); pergunta();
 checaAcesso().then(() => { if ($('#card')) resultado(false); });
 </script>
