@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finanças e Demandas — Base FL</title>
+<meta name="description" content="Finanças e Demandas: organize seus trabalhos de edição do orçamento ao pagamento. Prazos, revisões, dinheiro a receber e meta do mês.">
+<link rel="icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0D0F0E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0D0F0E; --panel:#151816; --panel2:#1B1F1C; --line:#272D29; --ink:#F4F0E4; --mute:#9A968A; --dim:#5f5c55;
+  --accent:#F2A541; --accent-ink:#17130B; --ok:#7fce8f; --err:#ff8f7a;
+  --f:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:15px/1.45 var(--f);min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(700px 420px at 85% -8%,rgba(242,165,65,.09),transparent 70%),radial-gradient(600px 420px at -10% 12%,rgba(127,206,143,.06),transparent 70%)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:10px}
+.top{position:relative;max-width:1400px;margin:0 auto;padding:16px 18px 0}
+header{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+header img{width:32px;height:32px;border-radius:9px}
+header .nm{font-weight:800;font-stretch:112%;font-size:15px;line-height:1.1}
+header .nm small{display:block;font-weight:500;font-stretch:100%;color:var(--mute);font-size:12px}
+header .sp{flex:1}
+.link{background:none;border:0;color:var(--mute);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.aviso{display:none;align-items:center;flex-wrap:wrap;gap:8px 12px;background:linear-gradient(90deg,rgba(242,165,65,.14),rgba(242,165,65,.04));border:1px solid rgba(242,165,65,.35);border-radius:14px;padding:11px 14px;margin-bottom:14px;font-size:14px}
+.aviso.on{display:flex}
+.aviso span{flex:1 1 220px}
+.aviso button{flex:none;cursor:pointer;background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:8px 12px;font-weight:750;font-size:13.5px}
+
+/* ---------- mês (assinatura: o tanque da meta) ---------- */
+.mes{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+.k{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 14px;min-width:0}
+.k > span{display:block;color:var(--mute);font-size:12.5px}
+.k b{display:block;font-weight:850;font-stretch:112%;font-size:21px;letter-spacing:-.01em;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k small{display:block;color:var(--dim);font-size:12px}
+.meta{cursor:pointer;text-align:left;position:relative;overflow:hidden}
+.meta .tq{height:8px;background:var(--bg);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:8px 0 4px}
+.meta .tq i{display:block;height:100%;width:0;background:linear-gradient(90deg,#3FB8AF,var(--ok));border-radius:6px;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.meta.bateu .tq i{background:linear-gradient(90deg,var(--accent),#ffd27a)}
+.k.red b{color:var(--err)}
+.cmp{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:750;border-radius:7px;padding:2px 7px;margin-left:6px;vertical-align:middle;font-stretch:100%}
+.cmp.sobe{color:#0c1a10;background:var(--ok)}.cmp.desce{color:#1a0d0a;background:var(--err)}.cmp.igual{color:var(--mute);background:var(--bg);border:1px solid var(--line)}
+.barras{display:flex;align-items:flex-end;gap:5px;height:34px;margin-top:8px}
+.barras div{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%;justify-content:flex-end}
+.barras i{display:block;width:100%;min-height:2px;border-radius:4px 4px 2px 2px;background:#2c332e;transition:height .8s cubic-bezier(.2,.8,.2,1)}
+.barras div:last-child i{background:var(--ok)}
+.barras span{font-size:10px;color:var(--dim);line-height:1}
+.mes .meta{grid-row:span 1}
+.k.fogo b{color:var(--accent)}
+
+/* ---------- quadro ---------- */
+.board{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 18px 120px;max-width:1400px;margin:0 auto;scrollbar-width:thin;scrollbar-color:#2c332e transparent}
+.col{flex:0 0 min(84vw,300px);scroll-snap-align:start;background:rgba(21,24,22,.6);border:1px solid var(--line);border-radius:18px;display:flex;flex-direction:column;max-height:calc(100vh - 260px);min-height:220px;transition:border-color .15s,background .15s}
+.col.alvo{border-color:var(--cor);background:color-mix(in srgb,var(--cor) 8%,rgba(21,24,22,.6))}
+.ch{display:flex;align-items:baseline;gap:8px;padding:12px 14px 10px;border-bottom:1px solid var(--line);position:relative}
+.ch::before{content:"";position:absolute;left:14px;right:14px;top:0;height:3px;border-radius:0 0 3px 3px;background:var(--cor)}
+.ch b{font-weight:800;font-size:14.5px}
+.ch .n{color:var(--mute);font-size:12.5px;font-variant-numeric:tabular-nums}
+.ch .sp{flex:1}
+.ch .soma{color:var(--mute);font-size:12.5px;font-variant-numeric:tabular-nums}
+.cards{display:flex;flex-direction:column;gap:8px;padding:10px;overflow-y:auto;flex:1}
+.vazio{color:var(--dim);font-size:13px;text-align:center;padding:18px 8px;border:1px dashed var(--line);border-radius:12px}
+.card{position:relative;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:11px 12px 10px;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:pan-x pan-y;transition:transform .15s,border-color .15s,opacity .2s}
+.card:hover{border-color:#3a443c}
+.card.fantasma{opacity:.25}
+.card .cl{font-weight:750;font-size:15px;padding-right:30px;line-height:1.25;word-break:break-word}
+.card .tt{color:var(--mute);font-size:13px;margin-top:2px;word-break:break-word}
+.card .rod{display:flex;align-items:center;gap:8px;margin-top:9px;flex-wrap:wrap}
+.card .vl{font-weight:800;font-variant-numeric:tabular-nums;font-size:14px}
+.bd{font-size:11.5px;font-weight:700;border-radius:7px;padding:2px 7px;background:var(--bg);border:1px solid var(--line);color:var(--mute);white-space:nowrap}
+.bd.atraso{color:#1a0d0a;background:var(--err);border-color:var(--err)}
+.bd.logo{color:var(--accent-ink);background:var(--accent);border-color:var(--accent)}
+.bd.pago{color:#0c1a10;background:var(--ok);border-color:var(--ok)}
+.revs{display:inline-flex;gap:3px;align-items:center}
+.revs i{width:7px;height:7px;border-radius:50%;border:1.5px solid var(--mute)}
+.revs i.on{background:var(--accent);border-color:var(--accent)}
+.revs i.extra{background:var(--err);border-color:var(--err)}
+.av{position:absolute;right:8px;top:8px;width:30px;height:30px;border-radius:10px;border:1px solid var(--line);background:var(--bg);display:grid;place-items:center;cursor:pointer;color:var(--mute);font-size:15px;transition:all .15s}
+.av:hover{color:var(--ink);border-color:var(--cor);background:color-mix(in srgb,var(--cor) 20%,var(--bg))}
+.voa{position:fixed;z-index:40;pointer-events:none;box-shadow:0 18px 40px rgba(0,0,0,.5);transform:rotate(2deg)}
+.fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:20;display:flex;align-items:center;gap:8px;cursor:pointer;background:var(--accent);color:var(--accent-ink);border:0;border-radius:18px;padding:15px 20px;font-weight:800;font-size:15.5px;box-shadow:0 12px 30px rgba(242,165,65,.28)}
+.fab:active{transform:scale(.97)}
+
+/* ---------- folha (detalhes / nova) ---------- */
+.veu{position:fixed;inset:0;z-index:50;background:rgba(5,6,6,.6);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .2s}
+.veu.on{opacity:1;pointer-events:auto}
+.folha{position:fixed;z-index:51;left:0;right:0;bottom:0;max-height:92vh;overflow-y:auto;background:#121513;border:1px solid var(--line);border-bottom:0;border-radius:24px 24px 0 0;padding:10px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .32s cubic-bezier(.2,.8,.2,1);max-width:560px;margin:0 auto}
+.folha.on{transform:none}
+.folha .pega{width:42px;height:5px;border-radius:5px;background:#333a35;margin:2px auto 14px}
+.folha h2{font-weight:850;font-stretch:112%;font-size:22px;letter-spacing:-.015em;line-height:1.15;margin-bottom:4px;word-break:break-word}
+.folha .sub{color:var(--mute);font-size:14px;margin-bottom:14px}
+label{display:block;font-size:13px;color:var(--mute);margin:12px 0 6px}
+label i{font-style:normal;color:var(--dim)}
+.inp,textarea{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:13px;padding:13px 14px;font:inherit;font-size:16px;outline:none}
+textarea{min-height:70px;resize:vertical}
+.inp:focus,textarea:focus{border-color:var(--accent)}
+.inp.erro{border-color:var(--err)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-weight:650;font-size:13.5px;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:9px 11px;display:inline-flex;align-items:center;gap:6px}
+.chip .dt{width:8px;height:8px;border-radius:50%;background:var(--cor)}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;cursor:pointer;font-weight:750;font-size:16px;border-radius:15px;padding:15px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);margin-top:16px}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.perigo{background:transparent;color:var(--err);border-color:rgba(255,143,122,.35)}
+.row{display:flex;gap:10px}.row .btn{flex:1}
+.sec{font-weight:800;font-size:14px;margin:20px 0 8px}
+.msgs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.msg{cursor:pointer;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:11px 12px;font-size:13.5px;font-weight:650}
+.msg small{display:block;color:var(--mute);font-weight:500;font-size:12px}
+.revctl{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:10px 12px}
+.revctl .revs i{width:10px;height:10px}
+.revctl span{flex:1;font-size:14px}
+.revctl button{cursor:pointer;width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-size:18px;font-weight:700}
+.tabs{display:inline-flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:14px}
+.tab{cursor:pointer;border:0;background:transparent;color:var(--mute);font-weight:750;font-size:14px;border-radius:10px;padding:9px 16px}
+.tab.on{background:var(--ink);color:var(--bg)}
+.ferr{max-width:1400px;margin:0 auto;padding:0 18px 120px}
+.flista{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.fc{display:flex;align-items:center;gap:12px;cursor:pointer;text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:16px;padding:13px 14px;transition:border-color .15s}
+.fc:hover{border-color:#3a443c}
+.fc .lg{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-weight:900;font-stretch:115%;font-size:17px;flex:none;color:#101311}
+.fc .tx{flex:1;min-width:0}
+.fc .tx b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fc .tx > span{display:block;color:var(--mute);font-size:12.5px;margin-top:3px}
+.fc .vl{text-align:right;font-variant-numeric:tabular-nums;flex:none}
+.fc .bd{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
+.fc .vl b{display:block;font-weight:800;font-size:15px}
+.fc .vl span{display:block;font-size:11.5px;color:var(--mute)}
+.fsec{font-weight:800;font-size:14px;margin:18px 0 10px;color:var(--mute)}
+.fvazio{color:var(--dim);font-size:14px;text-align:center;padding:30px 12px;border:1px dashed var(--line);border-radius:16px}
+.toast{pointer-events:none;position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;transition:all .25s;z-index:60;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+#festa{position:fixed;inset:0;pointer-events:none;z-index:70}
+.login{max-width:440px;margin:6vh auto 0;padding:0 18px}
+.login h1{font-weight:850;font-stretch:118%;font-size:32px;line-height:1.05;letter-spacing:-.025em;margin-bottom:8px}
+.login p{color:var(--mute);margin-bottom:18px}
+.err{color:var(--err);font-size:14px;min-height:20px;margin-top:8px}
+.hide{display:none!important}
+@media (min-width:900px){
+  .board{scroll-snap-type:none}
+  .board{gap:10px}
+  .col{flex:1 1 0;min-width:190px;max-height:calc(100vh - 230px)}
+  .folha{bottom:auto;top:50%;border-radius:24px;border-bottom:1px solid var(--line);transform:translate(0,-46%) scale(.97);opacity:0;pointer-events:none;transition:all .22s}
+  .folha.on{transform:translate(0,-50%);opacity:1;pointer-events:auto}
+  .folha .pega{display:none}
+}
+@media (max-width:720px){
+  .mes{grid-template-columns:repeat(3,1fr);gap:8px}
+  .mes .meta{grid-column:1/-1}
+  .k{padding:10px 11px}
+  .k b{font-size:17px}
+  .k > span{font-size:11.5px}
+  .k small{display:none}
+  .meta small{display:block}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="top">
+  <header>
+    <img src="/logo.png" alt="">
+    <div class="nm">Finanças e Demandas<small>Base FL</small></div>
+    <div class="sp"></div>
+    <button class="link" id="conta"></button>
+  </header>
+  <div class="aviso" id="aviso"><span id="avisoTx"></span><button id="avisoBt"></button></div>
+  <div class="tabs" role="tablist"><button class="tab" data-aba="trab" role="tab">Trabalhos</button><button class="tab" data-aba="ferr" role="tab">Minhas ferramentas</button></div>
+  <div class="mes" id="mes"></div>
+</div>
+<div class="board" id="board"></div>
+<div class="ferr hide" id="ferr"></div>
+<button class="fab hide" id="fab">＋ Nova demanda</button>
+<div class="veu" id="veu"></div>
+<div class="folha" id="folha"></div>
+<div class="toast" id="toast"></div>
+<canvas id="festa"></canvas>
+
+<script>
+// ===================== CONFIG =====================
+const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
+const PACK = 'fl-painel';
+const COLS = [
+  { id:'orcamento', t:'Orçamento enviado', c:'#9A968A' },
+  { id:'fechado',   t:'Fechado',           c:'#5AA9F0' },
+  { id:'editando',  t:'Editando',          c:'#9B7BF7' },
+  { id:'revisao',   t:'Em revisão',        c:'#F2A541' },
+  { id:'entregue',  t:'Entregue',          c:'#3FB8AF' },
+  { id:'pago',      t:'Pago',              c:'#7fce8f' },
+];
+const EM_ANDAMENTO = ['fechado','editando','revisao'];
+
+// ===================== utilidades =====================
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const so = s => String(s ?? '').trim();
+const store = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k,v){ try { v==null ? localStorage.removeItem(k) : localStorage.setItem(k,v); } catch {} } };
+const brl = v => 'R$ ' + Math.round(+v || 0).toLocaleString('pt-BR');
+const numero = v => { const n = parseFloat(String(v ?? '').replace(/[^\d,.-]/g,'').replace(/\.(?=\d{3}(\D|$))/g,'').replace(',','.')); return isFinite(n) && n > 0 ? Math.round(n*100)/100 : 0; };
+const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const vibra = p => { try { navigator.vibrate && navigator.vibrate(p); } catch {} };
+const hojeISO = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset()*6e4).toISOString().slice(0,10); };
+const diasAte = iso => { if (!iso) return null; const a = new Date(iso + 'T00:00:00'), b = new Date(hojeISO() + 'T00:00:00'); return Math.round((a - b) / 864e5); };
+const dataCurta = iso => { if (!iso) return ''; const d = new Date(iso + 'T00:00:00'); return d.toLocaleDateString('pt-BR', d.getFullYear() === new Date().getFullYear() ? { day:'2-digit', month:'short' } : { day:'2-digit', month:'short', year:'numeric' }).replace(/\./g,''); };
+function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2400); }
+const nomeCurto = s => so(s).split(' ')[0] || 'tudo bem';
+
+// ===================== estado =====================
+let sess = null, acesso = false, vencido = false, BUY_URL = '', modo = 'demo';   // demo | cheio | leitura
+let D = [], META = 3000, F = [], ABA = store.get('fl_aba') === 'ferr' ? 'ferr' : 'trab';
+try { sess = JSON.parse(store.get('fl_sess') || 'null'); } catch { sess = null; }
+
+function exemplo(){
+  const d = n => { const x = new Date(); x.setDate(x.getDate() + n); return new Date(x.getTime() - x.getTimezoneOffset()*6e4).toISOString().slice(0,10); };
+  const agora = new Date().toISOString();
+  return [
+    { id:'e1', cliente:'Studio Ana', titulo:'4 Reels de lançamento', valor:720, prazo:d(3), coluna:'editando', rev_total:2, rev_usadas:0 },
+    { id:'e2', cliente:'Clínica Sorriso', titulo:'Vídeo institucional', valor:1800, prazo:d(-1), coluna:'revisao', rev_total:2, rev_usadas:1 },
+    { id:'e3', cliente:'Pedro Fitness', titulo:'8 Reels por mês', valor:1400, prazo:d(10), coluna:'fechado', rev_total:2, rev_usadas:0 },
+    { id:'e4', cliente:'Loja Bella', titulo:'Anúncio de 30s', valor:650, prazo:d(-3), coluna:'entregue', rev_total:2, rev_usadas:2, entregue_em:agora },
+    { id:'e5', cliente:'Café Central', titulo:'2 vídeos para YouTube', valor:900, prazo:d(5), coluna:'orcamento', rev_total:2, rev_usadas:0 },
+    { id:'e6', cliente:'Dra. Júlia', titulo:'Reels de dicas', valor:980, prazo:d(-6), coluna:'pago', rev_total:2, rev_usadas:1, entregue_em:agora, pago_em:agora },
+    ...[[1,450],[1,300],[2,2100],[3,1900],[4,1600],[5,1300]].map(([k, v], i) => { const x = new Date(); x.setDate(1); x.setMonth(x.getMonth() - k); x.setDate(10 + i); const t = x.toISOString(); return { id:'h' + i, cliente:['Studio Ana','Loja Bella','Pedro Fitness','Café Central','Clínica Sorriso','Dra. Júlia'][i], titulo:'Trabalho anterior', valor:v, prazo:null, coluna:'pago', rev_total:2, rev_usadas:1, entregue_em:t, pago_em:t }; }),
+  ];
+}
+
+// ===================== API =====================
+async function api(path, { method='GET', body, auth=true, prefer } = {}){
+  const h = { apikey:SUPA.key, 'Content-Type':'application/json' };
+  if (auth && sess) h.Authorization = 'Bearer ' + sess.access_token;
+  if (prefer) h.Prefer = prefer;
+  const r = await fetch(SUPA.url + path, { method, headers:h, body: body ? JSON.stringify(body) : undefined });
+  const t = await r.text(); let j; try { j = t ? JSON.parse(t) : {}; } catch { j = t; }
+  if (!r.ok){ const e = new Error(traduz(j?.msg || j?.message || j?.error_description || j?.error || ('Erro ' + r.status))); e.status = r.status; throw e; }
+  return j;
+}
+function traduz(m){
+  m = String(m||'');
+  if (/only request this after (\d+)/i.test(m)) return 'Aguarde ' + m.match(/after (\d+)/i)[1] + ' segundos para pedir outro código.';
+  if (/expired|invalid/i.test(m) && /token|otp/i.test(m)) return 'Código inválido ou expirado. Confira ou peça outro.';
+  if (/rate limit/i.test(m)) return 'Muitas tentativas. Aguarde alguns minutos.';
+  if (/failed to fetch|network|load failed/i.test(m)) return 'Sem conexão com a internet.';
+  if (/row-level security/i.test(m)) return 'Seu acesso a Finanças e Demandas não está ativo.';
+  return m;
+}
+const fromAuth = r => ({ access_token:r.access_token, refresh_token:r.refresh_token, expires_at:r.expires_at || Math.floor(Date.now()/1000) + (r.expires_in||3600), email:r.user?.email });
+function salvaSess(s){ sess = s; store.set('fl_sess', s ? JSON.stringify(s) : null); }
+async function sessaoValida(){
+  if (!sess) return false;
+  if (sess.expires_at - Date.now()/1000 > 90) return true;
+  try { const r = await api('/auth/v1/token?grant_type=refresh_token', { method:'POST', body:{ refresh_token:sess.refresh_token }, auth:false }); salvaSess({ ...fromAuth(r), email:r.user?.email || sess.email }); return true; }
+  catch(e){ if (e.status >= 400 && e.status < 500){ salvaSess(null); return false; } return true; }
+}
+
+async function carrega(){
+  modo = 'demo'; acesso = false; vencido = false;
+  if (await sessaoValida()){
+    try {
+      const [lic, pk] = await Promise.all([ api(`/rest/v1/licenses?select=*&pack_id=eq.${PACK}`), api(`/rest/v1/packs?select=buy_url&id=eq.${PACK}`) ]);
+      if (pk[0]?.buy_url) BUY_URL = pk[0].buy_url;
+      const agora = Date.now(), ativa = lic.find(l => l.status === 'active');
+      const venc = ativa?.expires_at ? new Date(ativa.expires_at).getTime() : null;
+      acesso = !!ativa && (!venc || venc > agora); vencido = !!ativa && !!venc && venc <= agora;
+      if (acesso && venc){ const dias = Math.ceil((venc - agora)/864e5); if (dias <= 15) aviso(`Seu acesso vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}.`, 'Renovar'); }
+      const linhas = await api('/rest/v1/demandas?select=*&order=criado_em.asc');
+      const cfg = await api('/rest/v1/editor_config?select=meta_mes').catch(() => []);
+      const ferr = await api('/rest/v1/ferramentas?select=*&order=criado_em.asc').catch(() => []);
+      F = Array.isArray(ferr) ? ferr : [];
+      if (acesso){ modo = 'cheio'; D = linhas; if (cfg[0]) META = +cfg[0].meta_mes || META; }
+      else if (linhas.length){ modo = 'leitura'; D = linhas; if (cfg[0]) META = +cfg[0].meta_mes || META; }
+    } catch(e){ toast(traduz(e.message)); }
+  }
+  if (modo === 'demo'){ D = exemplo(); F = exemploFerr(); META = 5000; aviso(sess ? 'Você está vendo um exemplo. Desbloqueie Finanças e Demandas para organizar os seus trabalhos.' : 'Este é um exemplo. Desbloqueie para organizar os seus trabalhos de verdade.', 'Desbloquear', !sess); }
+  if (modo === 'leitura') aviso(vencido ? 'Seu acesso de 1 ano terminou. Seus trabalhos estão salvos, mas só para leitura.' : 'Seu acesso a Finanças e Demandas não está ativo. Seus trabalhos estão salvos, só para leitura.', 'Renovar');
+  $('#fab').classList.toggle('hide', modo === 'leitura');
+  botaoConta(); desenha();
+  // veio da calculadora?
+  const nova = store.get('fl_nova_demanda');
+  if (nova && modo === 'cheio'){ store.set('fl_nova_demanda', null); try { folhaNova(JSON.parse(nova)); } catch {} }
+  else if (location.hash === '#nova' && modo !== 'leitura') folhaNova({});
+}
+function aviso(txt, bt, comEntrar){
+  $('#avisoTx').textContent = txt; $('#avisoBt').textContent = bt; $('#aviso').classList.add('on');
+  $('#avisoBt').onclick = () => BUY_URL ? (location.href = BUY_URL) : toast('Link de compra em breve.');
+  if (comEntrar && !$('#avisoEntrar')){ const b = document.createElement('button'); b.id = 'avisoEntrar'; b.textContent = 'Já comprei'; b.style.cssText = 'background:transparent;color:var(--ink);border:1px solid var(--line)'; b.onclick = login; $('#aviso').appendChild(b); }
+}
+
+// grava (otimista: atualiza a tela na hora; se falhar, avisa e recarrega)
+async function grava(id, campos){
+  const d = D.find(x => x.id === id); if (!d) return;
+  Object.assign(d, campos, { atualizado_em:new Date().toISOString() });
+  if (modo !== 'cheio') return;
+  try { await api(`/rest/v1/demandas?id=eq.${id}`, { method:'PATCH', body:{ ...campos, atualizado_em:d.atualizado_em } }); }
+  catch(e){ toast('Não salvou: ' + traduz(e.message)); carrega(); }
+}
+
+// ===================== números do mês =====================
+function numerosMes(){
+  const m = new Date(), ini = new Date(m.getFullYear(), m.getMonth(), 1).getTime();
+  const pagoMes = D.filter(d => d.coluna === 'pago' && d.pago_em && new Date(d.pago_em).getTime() >= ini).reduce((a, d) => a + (+d.valor || 0), 0);
+  const receber = D.filter(d => [...EM_ANDAMENTO, 'entregue'].includes(d.coluna)).reduce((a, d) => a + (+d.valor || 0), 0);
+  const atrasos = D.filter(d => EM_ANDAMENTO.includes(d.coluna) && diasAte(d.prazo) !== null && diasAte(d.prazo) < 0).length;
+  const entregues = D.filter(d => d.entregue_em).sort((a, b) => new Date(b.entregue_em) - new Date(a.entregue_em));
+  let seq = 0; for (const d of entregues){ if (!d.prazo || new Date(d.entregue_em).toISOString().slice(0,10) <= d.prazo) seq++; else break; }
+  // últimos 6 meses (para comparar e para o mini gráfico)
+  const meses = [];
+  for (let k = 5; k >= 0; k--){
+    const a = new Date(m.getFullYear(), m.getMonth() - k, 1).getTime(), b = new Date(m.getFullYear(), m.getMonth() - k + 1, 1).getTime();
+    meses.push({ nome:new Date(a).toLocaleDateString('pt-BR', { month:'short' }).replace('.',''), v:D.filter(d => d.pago_em && new Date(d.pago_em).getTime() >= a && new Date(d.pago_em).getTime() < b).reduce((s, d) => s + (+d.valor || 0), 0) });
+  }
+  const pagoAnt = meses[4].v;
+  return { pagoMes, receber, atrasos, seq, pagoAnt, meses };
+}
+let ultimoPct = 0;
+function comparativo(n){
+  const ant = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1).toLocaleDateString('pt-BR', { month:'long' });
+  if (!n.pagoAnt && !n.pagoMes) return '';
+  if (!n.pagoAnt) return `<span class="cmp sobe" title="Em ${ant} não teve recebimento registrado">novo</span>`;
+  const v = Math.round((n.pagoMes - n.pagoAnt) / n.pagoAnt * 100);
+  return `<span class="cmp ${v > 0 ? 'sobe' : v < 0 ? 'desce' : 'igual'}" title="Comparado com ${ant} inteiro (${brl(n.pagoAnt)})">${v > 0 ? '↑' : v < 0 ? '↓' : '='} ${Math.abs(v)}% vs ${ant.slice(0,3)}</span>`;
+}
+function desenhaMes(){
+  const n = numerosMes(), pct = Math.min(100, META ? n.pagoMes / META * 100 : 0);
+  const mesNome = new Date().toLocaleDateString('pt-BR', { month:'long' });
+  $('#mes').innerHTML = `
+    <button class="k meta ${pct >= 100 ? 'bateu' : ''}" id="kmeta" title="Toque para mudar a meta">
+      <span>Recebido em ${mesNome}</span><b>${brl(n.pagoMes)} <small style="display:inline;color:var(--mute);font-size:13px;font-weight:600">de ${brl(META)}</small>${comparativo(n)}</b>
+      <div class="tq"><i id="tq"></i></div><small>${pct >= 100 ? 'Meta batida! 🏆' : `Faltam ${brl(Math.max(0, META - n.pagoMes))} para a meta`}</small>
+      <div class="barras" title="Recebido nos últimos 6 meses">${(() => { const mx = Math.max(1, ...n.meses.map(x => x.v)); return n.meses.map(x => `<div title="${x.nome}: ${brl(x.v)}"><i style="height:${Math.round(x.v / mx * 26) + 2}px"></i><span>${x.nome}</span></div>`).join(''); })()}</div></button>
+    <div class="k"><span>A receber</span><b>${brl(n.receber)}</b><small>trabalhos em aberto</small></div>
+    <div class="k ${n.atrasos ? 'red' : ''}"><span>Atrasados</span><b>${n.atrasos}</b><small>${n.atrasos ? 'prazo já passou' : 'tudo em dia'}</small></div>
+    <div class="k fogo"><span>Entregas no prazo</span><b>${n.seq ? '🔥 ' + n.seq : '0'}</b><small>em sequência</small></div>`;
+  requestAnimationFrame(() => { $('#tq').style.width = ultimoPct + '%'; requestAnimationFrame(() => { $('#tq').style.width = pct + '%'; ultimoPct = pct; }); });
+  $('#kmeta').onclick = folhaMeta;
+}
+
+// ===================== quadro =====================
+function badgePrazo(d){
+  if (d.coluna === 'pago') return `<span class="bd pago">Pago</span>`;
+  if (!d.prazo) return '';
+  const n = diasAte(d.prazo);
+  if (d.coluna === 'entregue') return `<span class="bd">Aguardando pagamento</span>`;
+  if (d.coluna === 'orcamento') return `<span class="bd">${dataCurta(d.prazo)}</span>`;
+  if (n < 0) return `<span class="bd atraso">${-n === 1 ? '1 dia' : -n + ' dias'} atrasado</span>`;
+  if (n === 0) return `<span class="bd logo">Entrega hoje</span>`;
+  if (n === 1) return `<span class="bd logo">Amanhã</span>`;
+  return `<span class="bd">${dataCurta(d.prazo)} · ${n} dias</span>`;
+}
+function revs(d, grande){
+  const t = Math.max(0, +d.rev_total || 0), u = Math.max(0, +d.rev_usadas || 0), tot = Math.max(t, u);
+  if (!tot) return '';
+  return `<span class="revs" title="${u} de ${t} revisões usadas">${Array.from({ length:tot }, (_, i) => `<i class="${i < u ? (i >= t ? 'extra' : 'on') : ''}"></i>`).join('')}</span>`;
+}
+function desenha(){
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.aba === ABA));
+  $('#board').classList.toggle('hide', ABA !== 'trab'); $('#ferr').classList.toggle('hide', ABA !== 'ferr');
+  $('#fab').textContent = ABA === 'ferr' ? '＋ Adicionar ferramenta' : '＋ Nova demanda';
+  if (ABA === 'ferr') return desenhaFerr();
+  desenhaTrab();
+}
+function desenhaTrab(){
+  desenhaMes();
+  const b = $('#board');
+  b.innerHTML = COLS.map((c, ci) => {
+    const lista = D.filter(d => d.coluna === c.id);
+    const soma = lista.reduce((a, d) => a + (+d.valor || 0), 0);
+    return `<section class="col" data-col="${c.id}" style="--cor:${c.c}">
+      <div class="ch"><b>${c.t}</b><span class="n">${lista.length}</span><span class="sp"></span><span class="soma">${soma ? brl(soma) : ''}</span></div>
+      <div class="cards">${lista.length ? lista.map(d => cardHTML(d, c, ci)).join('') : `<div class="vazio">${ci === 0 ? 'Orçamentos que você mandou aparecem aqui' : c.id === 'pago' ? 'Arraste para cá quando receber 💰' : 'Nada por aqui'}</div>`}</div>
+    </section>`;
+  }).join('');
+  b.querySelectorAll('.card').forEach(liga);
+}
+function cardHTML(d, c, ci){
+  const prox = COLS[ci + 1];
+  return `<article class="card" data-id="${d.id}" style="--cor:${c.c}" tabindex="0">
+    <div class="cl">${esc(d.cliente)}</div>${d.titulo ? `<div class="tt">${esc(d.titulo)}</div>` : ''}
+    <div class="rod"><span class="vl">${brl(d.valor)}</span>${badgePrazo(d)}${d.coluna !== 'orcamento' && d.coluna !== 'pago' ? revs(d) : ''}</div>
+    ${prox && modo !== 'leitura' ? `<button class="av" data-av="${prox.id}" title="Mover para ${prox.t}" style="--cor:${prox.c}">→</button>` : ''}
+  </article>`;
+}
+
+// ===================== mover (com voo + comemoração) =====================
+async function move(id, col, origemEl){
+  const d = D.find(x => x.id === id); if (!d || d.coluna === col) return;
+  if (modo === 'leitura'){ toast('Renove o acesso para mexer nos cartões.'); return; }
+  const campos = { coluna:col };
+  const agora = new Date().toISOString();
+  if ((col === 'entregue' || col === 'pago') && !d.entregue_em) campos.entregue_em = agora;
+  if (col === 'pago') campos.pago_em = agora; else if (d.coluna === 'pago') campos.pago_em = null;
+  if (!['entregue','pago'].includes(col) && d.entregue_em) campos.entregue_em = null;
+  const noPrazo = col === 'entregue' && (!d.prazo || hojeISO() <= d.prazo);
+  const r0 = origemEl instanceof Element ? origemEl.getBoundingClientRect() : origemEl;
+  await grava(id, campos);
+  desenha();
+  const novo = document.querySelector(`.card[data-id="${CSS.escape(id)}"]`);
+  if (novo){
+    novo.scrollIntoView({ behavior: calmo ? 'auto' : 'smooth', block:'nearest', inline:'nearest' });
+    if (r0 && !calmo){
+      const r1 = novo.getBoundingClientRect();
+      novo.animate([{ transform:`translate(${r0.left - r1.left}px,${r0.top - r1.top}px) rotate(2deg)` }, { transform:'none' }], { duration:420, easing:'cubic-bezier(.3,.8,.2,1)' });
+    }
+  }
+  vibra(10);
+  if (col === 'pago'){ festa(); vibra([15, 50, 25]); toast(`+${brl(d.valor)} no mês 🎉`); }
+  else if (noPrazo) toast('Entregue no prazo 🔥');
+  else toast(`Movido para ${COLS.find(c => c.id === col).t}`);
+}
+
+// arrastar (mouse: na hora; toque: segurar um instante)
+let arr = null;
+function liga(el){
+  const id = el.dataset.id;
+  el.addEventListener('click', e => {
+    if (el._arrastou){ el._arrastou = false; return; }
+    const av = e.target.closest('.av'); if (av){ e.stopPropagation(); move(id, av.dataset.av, el); return; }
+    folhaDetalhe(id);
+  });
+  el.addEventListener('keydown', e => { if (e.key === 'Enter') folhaDetalhe(id); });
+  el.addEventListener('pointerdown', e => {
+    if (modo === 'leitura' || e.target.closest('.av') || e.button > 0) return;
+    const ini = { x:e.clientX, y:e.clientY, t:Date.now() };
+    let ativo = false, tempo = null;
+    const comeca = () => {
+      ativo = true; const r = el.getBoundingClientRect();
+      const g = el.cloneNode(true); g.classList.add('voa'); Object.assign(g.style, { left:r.left+'px', top:r.top+'px', width:r.width+'px' });
+      document.body.appendChild(g); el.classList.add('fantasma'); vibra(12);
+      arr = { id, el, g, dx:ini.x - r.left, dy:ini.y - r.top, alvo:null };
+    };
+    if (e.pointerType !== 'mouse') tempo = setTimeout(comeca, 260);
+    const mexe = ev => {
+      const dist = Math.hypot(ev.clientX - ini.x, ev.clientY - ini.y);
+      if (!ativo){ if (e.pointerType === 'mouse' && dist > 6) comeca(); else if (dist > 9){ clearTimeout(tempo); solta(); } return; }
+      ev.preventDefault();
+      arr.g.style.left = (ev.clientX - arr.dx) + 'px'; arr.g.style.top = (ev.clientY - arr.dy) + 'px';
+      arr.g.style.display = 'none'; const sob = document.elementFromPoint(ev.clientX, ev.clientY); arr.g.style.display = '';
+      const col = sob?.closest('.col'); document.querySelectorAll('.col').forEach(c => c.classList.toggle('alvo', c === col)); arr.alvo = col?.dataset.col || null;
+      const bd = $('#board'), W = innerWidth;
+      if (ev.clientX > W - 50) bd.scrollLeft += 14; else if (ev.clientX < 50) bd.scrollLeft -= 14;
+    };
+    const solta = () => {
+      clearTimeout(tempo); removeEventListener('pointermove', mexe); removeEventListener('pointerup', fim); removeEventListener('pointercancel', fim);
+    };
+    const fim = () => {
+      solta(); if (!ativo) return;
+      const a = arr; arr = null; a.el._arrastou = true; setTimeout(() => a.el._arrastou = false, 50);
+      document.querySelectorAll('.col').forEach(c => c.classList.remove('alvo'));
+      a.el.classList.remove('fantasma');
+      const d = D.find(x => x.id === a.id);
+      if (a.alvo && d && a.alvo !== d.coluna){ const r = a.g.getBoundingClientRect(); a.g.remove(); move(a.id, a.alvo, r); }
+      else a.g.remove();
+    };
+    addEventListener('pointermove', mexe, { passive:false }); addEventListener('pointerup', fim); addEventListener('pointercancel', fim);
+  });
+}
+document.addEventListener('touchmove', e => { if (arr) e.preventDefault(); }, { passive:false });
+document.addEventListener('contextmenu', e => { if (e.target.closest('.card')) e.preventDefault(); });
+
+// ===================== folhas =====================
+function abreFolha(html){
+  $('#folha').innerHTML = '<div class="pega"></div>' + html;
+  $('#veu').classList.add('on'); $('#folha').classList.add('on'); $('#folha').scrollTop = 0;
+}
+function fechaFolha(){ $('#veu').classList.remove('on'); $('#folha').classList.remove('on'); }
+$('#veu').onclick = fechaFolha;
+addEventListener('keydown', e => { if (e.key === 'Escape') fechaFolha(); });
+
+function form(d){
+  return `<label for="fc">Cliente</label><input class="inp" id="fc" value="${esc(d.cliente)}" placeholder="Ex.: Studio Ana" autocomplete="off">
+    <label for="ft">O que é o trabalho</label><input class="inp" id="ft" value="${esc(d.titulo)}" placeholder="Ex.: 4 Reels de lançamento" autocomplete="off">
+    <div class="duo"><div><label for="fv">Valor</label><input class="inp" id="fv" value="${d.valor ? esc(String(d.valor).replace('.',',')) : ''}" placeholder="R$" inputmode="decimal"></div>
+    <div><label for="fp">Prazo de entrega</label><input class="inp" id="fp" type="date" value="${esc(d.prazo || '')}"></div></div>
+    <label>Revisões incluídas</label><div class="chips" id="frev">${[1,2,3].map(n => `<button class="chip${(d.rev_total ?? 2) === n ? ' on' : ''}" data-v="${n}">${n}</button>`).join('')}</div>
+    <label for="fw">WhatsApp do cliente <i>(opcional, para as mensagens prontas)</i></label><input class="inp" id="fw" value="${esc(d.whatsapp || '')}" placeholder="Ex.: 48 99999-8888" inputmode="tel">
+    <label for="fn">Anotações <i>(opcional)</i></label><textarea id="fn" placeholder="Links do material, referências, combinados…">${esc(d.notas || '')}</textarea>`;
+}
+function leForm(){
+  let rev = 2; const on = document.querySelector('#frev .chip.on'); if (on) rev = +on.dataset.v;
+  return { cliente:so($('#fc').value), titulo:so($('#ft').value), valor:numero($('#fv').value), prazo:$('#fp').value || null, rev_total:rev, whatsapp:so($('#fw').value) || null, notas:so($('#fn').value) || null };
+}
+function ligaChips(){ document.querySelectorAll('#frev .chip').forEach(b => b.onclick = () => document.querySelectorAll('#frev .chip').forEach(x => x.classList.toggle('on', x === b))); }
+
+function folhaNova(pre = {}){
+  if (modo === 'leitura') return toast('Renove o acesso para criar demandas.');
+  const d = { cliente:pre.cliente || '', titulo:pre.titulo || '', valor:pre.valor || '', prazo:pre.prazo || '', rev_total:pre.rev_total || 2, whatsapp:'', notas:'' };
+  let col = pre.coluna || 'fechado';
+  abreFolha(`<h2>Nova demanda</h2><p class="sub">${pre.cliente ? 'Trouxe os dados do seu orçamento. Confira e salve.' : 'Leva 20 segundos.'}</p>
+    ${form(d)}
+    <label>Onde ela entra</label><div class="chips" id="fcol">${COLS.slice(0,3).map(c => `<button class="chip${c.id === col ? ' on' : ''}" data-v="${c.id}" style="--cor:${c.c}"><span class="dt"></span>${c.t}</button>`).join('')}</div>
+    <button class="btn" id="salvar">Adicionar às demandas</button>`);
+  ligaChips();
+  document.querySelectorAll('#fcol .chip').forEach(b => b.onclick = () => { col = b.dataset.v; document.querySelectorAll('#fcol .chip').forEach(x => x.classList.toggle('on', x === b)); });
+  setTimeout(() => !pre.cliente && $('#fc').focus(), 250);
+  $('#salvar').onclick = async () => {
+    const v = leForm(); if (!v.cliente){ $('#fc').classList.add('erro'); $('#fc').focus(); vibra(30); return; }
+    const b = $('#salvar'); b.disabled = true;
+    const nova = { ...v, coluna:col, rev_usadas:0 };
+    if (modo === 'cheio'){
+      try { const [r] = await api('/rest/v1/demandas', { method:'POST', body:nova, prefer:'return=representation' }); D.push(r); }
+      catch(e){ toast('Não salvou: ' + traduz(e.message)); b.disabled = false; return; }
+    } else D.push({ ...nova, id:'n' + Date.now(), criado_em:new Date().toISOString() });
+    fechaFolha(); desenha(); vibra(10); toast(modo === 'demo' ? 'Adicionado no exemplo (não fica salvo)' : 'Demanda adicionada');
+    history.replaceState(null, '', location.pathname);
+  };
+}
+
+function folhaDetalhe(id){
+  const d = D.find(x => x.id === id); if (!d) return;
+  const ci = COLS.findIndex(c => c.id === d.coluna), ro = modo === 'leitura';
+  const t = +d.rev_total || 0, u = +d.rev_usadas || 0;
+  abreFolha(`<h2>${esc(d.cliente)}</h2><p class="sub">${esc(d.titulo || 'Sem descrição')} · ${brl(d.valor)}${d.prazo ? ' · entrega ' + dataCurta(d.prazo) : ''}</p>
+    ${ro ? '' : `<label>Etapa</label><div class="chips" id="dcol">${COLS.map(c => `<button class="chip${c.id === d.coluna ? ' on' : ''}" data-v="${c.id}" style="--cor:${c.c}"><span class="dt"></span>${c.t}</button>`).join('')}</div>`}
+    ${d.coluna !== 'orcamento' ? `<label>Revisões</label><div class="revctl">${revs({ rev_total:t, rev_usadas:u })}<span>${u} de ${t} usadas${u > t ? ` · <b style="color:var(--err)">${u - t} extra${u - t > 1 ? 's' : ''}, cobrar à parte</b>` : u === t && t ? ' · <b style="color:var(--accent)">próxima é extra</b>' : ''}</span>${ro ? '' : '<button id="rmenos" aria-label="Tirar uma revisão">−</button><button id="rmais" aria-label="Somar uma revisão">+</button>'}</div>` : ''}
+    <div class="sec">Mensagens prontas pro cliente</div>
+    <div class="msgs">
+      <button class="msg" data-m="material">📦 Pedir material<small>Para começar o trabalho</small></button>
+      <button class="msg" data-m="pronto">🎬 Vídeo pronto<small>Avisar a entrega</small></button>
+      <button class="msg" data-m="revisao">🔁 Revisão recebida<small>Com o contador</small></button>
+      <button class="msg" data-m="pagamento">💰 Lembrar pagamento<small>Educado e direto</small></button>
+    </div>
+    ${ro ? '' : `<div class="sec">Dados</div>${form(d)}<button class="btn" id="salvar">Salvar alterações</button><button class="btn perigo" id="apagar">Apagar demanda</button>`}`);
+  if (!ro){
+    ligaChips();
+    document.querySelectorAll('#dcol .chip').forEach(b => b.onclick = () => { fechaFolha(); const card = document.querySelector(`.card[data-id="${CSS.escape(id)}"]`); move(id, b.dataset.v, card); });
+    if ($('#rmais')) $('#rmais').onclick = async () => { await grava(id, { rev_usadas:u + 1 }); vibra(8); desenha(); folhaDetalhe(id); if (u + 1 > t) toast('Revisão extra: lembre de cobrar à parte'); };
+    if ($('#rmenos')) $('#rmenos').onclick = async () => { if (u > 0){ await grava(id, { rev_usadas:u - 1 }); desenha(); folhaDetalhe(id); } };
+    $('#salvar').onclick = async () => { const v = leForm(); if (!v.cliente){ $('#fc').classList.add('erro'); return; } await grava(id, v); fechaFolha(); desenha(); toast('Salvo'); };
+    $('#apagar').onclick = async () => {
+      const b = $('#apagar'); if (!b._conf){ b._conf = true; b.textContent = 'Toque de novo para apagar'; setTimeout(() => { b._conf = false; b.textContent = 'Apagar demanda'; }, 3000); return; }
+      D = D.filter(x => x.id !== id); fechaFolha(); desenha(); toast('Demanda apagada');
+      if (modo === 'cheio') try { await api(`/rest/v1/demandas?id=eq.${id}`, { method:'DELETE' }); } catch(e){ toast('Não apagou: ' + traduz(e.message)); carrega(); }
+    };
+  }
+  document.querySelectorAll('.msg').forEach(b => b.onclick = () => mensagem(d, b.dataset.m));
+}
+function mensagem(d, tipo){
+  const n = nomeCurto(d.cliente), tr = so(d.titulo) || 'o seu vídeo';
+  const T = {
+    material: `Oi, ${n}! Tudo certo para começarmos ${tr}. Pode me mandar o material? (vídeos brutos, logo, fontes e referências). Assim que chegar, o prazo começa a contar.`,
+    pronto: `Oi, ${n}! ${tr.charAt(0).toUpperCase() + tr.slice(1)} ficou pronto. Segue o link para você ver: \n\nQualquer ajuste, me fala por aqui.`,
+    revisao: `Oi, ${n}! Recebi os seus ajustes. Esta é a revisão ${Math.max(1, +d.rev_usadas || 1)} de ${+d.rev_total || 2} incluídas no nosso combinado. Te mando a nova versão em breve.`,
+    pagamento: `Oi, ${n}! Passando para lembrar do pagamento de ${brl(d.valor)} referente a ${tr}. Qualquer dúvida, estou à disposição. Obrigado!`,
+  };
+  let tel = String(d.whatsapp || '').replace(/\D/g, '');
+  if (tel && (tel.length === 10 || tel.length === 11)) tel = '55' + tel;
+  window.open(`https://api.whatsapp.com/send?${tel ? 'phone=' + tel + '&' : ''}text=${encodeURIComponent(T[tipo])}`, '_blank');
+}
+function folhaMeta(){
+  abreFolha(`<h2>Meta do mês</h2><p class="sub">Quanto você quer receber por mês? A barra enche conforme os trabalhos chegam em "Pago".</p>
+    <label for="mm">Meta</label><input class="inp" id="mm" value="${Math.round(META)}" inputmode="decimal" style="font-size:22px;font-weight:800">
+    <div class="chips" style="margin-top:10px">${[2000,3000,5000,8000,10000].map(v => `<button class="chip" data-v="${v}">${brl(v)}</button>`).join('')}</div>
+    <button class="btn" id="salvar">Salvar meta</button>`);
+  document.querySelectorAll('.chips .chip').forEach(b => b.onclick = () => $('#mm').value = b.dataset.v);
+  $('#salvar').onclick = async () => {
+    const v = numero($('#mm').value); if (!v){ $('#mm').classList.add('erro'); return; }
+    META = v; fechaFolha(); desenhaMes(); toast('Meta salva');
+    if (modo === 'cheio') try { await api('/rest/v1/editor_config', { method:'POST', body:{ meta_mes:v }, prefer:'resolution=merge-duplicates' }); } catch(e){ toast('Não salvou a meta: ' + traduz(e.message)); }
+  };
+}
+
+// ===================== minhas ferramentas =====================
+const COMUNS = ['CapCut Pro','Adobe Creative Cloud','Premiere Pro','After Effects','Envato Elements','Artlist','Epidemic Sound','Motion Array','Canva Pro','Google One','iCloud+','Dropbox','Frame.io','ChatGPT Plus'];
+const CORES_F = ['#F2A541','#3FB8AF','#9B7BF7','#5AA9F0','#7fce8f','#E8875F','#C9C2AE'];
+function corF(nome){ let h = 0; for (const ch of so(nome)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return CORES_F[h % CORES_F.length]; }
+function exemploFerr(){
+  const d = n => { const x = new Date(); x.setDate(x.getDate() + n); return new Date(x.getTime() - x.getTimezoneOffset()*6e4).toISOString().slice(0,10); };
+  return [
+    { id:'f1', nome:'CapCut Pro', valor:65.9, ciclo:'mensal', cobranca:d(2) },
+    { id:'f2', nome:'Envato Elements', valor:99, ciclo:'mensal', cobranca:d(12) },
+    { id:'f3', nome:'Google One', valor:34.99, ciclo:'mensal', cobranca:d(20) },
+    { id:'f4', nome:'Canva Pro', valor:289, ciclo:'anual', cobranca:d(140) },
+  ];
+}
+const mensal = f => f.ciclo === 'anual' ? (+f.valor || 0) / 12 : (+f.valor || 0);
+function proxima(f){
+  if (!f.cobranca) return null;
+  const hoje = new Date(hojeISO() + 'T00:00:00'); const base = new Date(f.cobranca + 'T00:00:00'); const dia = base.getDate();
+  let d = new Date(base), k = 0;
+  while (d < hoje && k < 600){ k++; d = new Date(base); if (f.ciclo === 'anual') d.setFullYear(base.getFullYear() + k); else { d.setMonth(base.getMonth() + k); if (d.getDate() !== dia) d.setDate(0); } }
+  return new Date(d.getTime() - d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+}
+const centavos = v => 'R$ ' + (+v || 0).toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+function desenhaFerr(){
+  const n = numerosMes(), custo = F.reduce((a, f) => a + mensal(f), 0), sobra = n.pagoMes - custo;
+  const pct = n.pagoMes > 0 ? Math.round(custo / n.pagoMes * 100) : null;
+  const ord = F.map(f => ({ ...f, prox:proxima(f) })).sort((a, b) => (a.prox || '9999').localeCompare(b.prox || '9999'));
+  const prox = ord.find(f => f.prox);
+  const mesNome = new Date().toLocaleDateString('pt-BR', { month:'long' });
+  $('#mes').innerHTML = `
+    <div class="k meta" style="cursor:default"><span>Sobrou em ${mesNome}</span><b style="color:${sobra >= 0 ? 'var(--ok)' : 'var(--err)'}">${brl(sobra)}</b><small>recebido ${brl(n.pagoMes)} menos ${brl(custo)} de ferramentas</small></div>
+    <div class="k"><span>Ferramentas por mês</span><b>${brl(custo)}</b><small>${F.length} ${F.length === 1 ? 'assinatura' : 'assinaturas'}</small></div>
+    <div class="k ${prox && diasAte(prox.prox) <= 3 ? 'fogo' : ''}"><span>Próxima cobrança</span><b>${prox ? (diasAte(prox.prox) === 0 ? 'Hoje' : diasAte(prox.prox) === 1 ? 'Amanhã' : dataCurta(prox.prox)) : '—'}</b><small>${prox ? esc(prox.nome) : 'nenhuma cadastrada'}</small></div>
+    <div class="k ${pct !== null && pct > 30 ? 'red' : ''}"><span>Peso no faturamento</span><b>${pct === null ? '—' : pct + '%'}</b><small>${pct === null ? 'sem recebimentos no mês' : 'do que você recebeu'}</small></div>`;
+  const card = f => {
+    const dd = diasAte(f.prox); const c = corF(f.nome);
+    const bd = f.prox == null ? '' : dd === 0 ? '<span class="bd logo">Cobra hoje</span>' : dd <= 3 ? `<span class="bd logo">Renova em ${dd} ${dd === 1 ? 'dia' : 'dias'}</span>` : `<span class="bd">Renova ${dataCurta(f.prox)}</span>`;
+    return `<button class="fc" data-id="${esc(f.id)}"><span class="lg" style="background:${c}">${esc(so(f.nome)[0] || '?').toUpperCase()}</span>
+      <span class="tx"><b>${esc(f.nome)}</b><span>${bd}</span></span>
+      <span class="vl"><b>${centavos(f.valor)}</b><span>${f.ciclo === 'anual' ? 'por ano · ' + centavos(mensal(f)) + '/mês' : 'por mês'}</span></span></button>`;
+  };
+  $('#ferr').innerHTML = F.length
+    ? `<div class="fsec">Ordenadas pela próxima cobrança</div><div class="flista">${ord.map(card).join('')}</div>`
+    : `<div class="fvazio">Cadastre as ferramentas que você assina para ver quanto elas custam por mês e não ser pego de surpresa nas renovações.</div>`;
+  document.querySelectorAll('.fc').forEach(b => b.onclick = () => folhaFerr(F.find(f => String(f.id) === b.dataset.id)));
+}
+function folhaFerr(f){
+  if (modo === 'leitura') return toast('Renove o acesso para editar.');
+  const novo = !f; f = f || { nome:'', valor:'', ciclo:'mensal', cobranca:'' };
+  let ciclo = f.ciclo || 'mensal';
+  abreFolha(`<h2>${novo ? 'Adicionar ferramenta' : esc(f.nome)}</h2><p class="sub">${novo ? 'Toque numa das comuns ou escreva o nome.' : 'Edite os dados ou remova a assinatura.'}</p>
+    ${novo ? `<div class="chips" id="comuns">${COMUNS.map(n => `<button class="chip" data-v="${esc(n)}">${esc(n)}</button>`).join('')}</div>` : ''}
+    <label for="gn">Nome</label><input class="inp" id="gn" value="${esc(f.nome)}" placeholder="Ex.: CapCut Pro" autocomplete="off">
+    <div class="duo"><div><label for="gv">Valor</label><input class="inp" id="gv" value="${f.valor ? esc(String(f.valor).replace('.',',')) : ''}" placeholder="R$" inputmode="decimal"></div>
+    <div><label for="gc">Próxima cobrança</label><input class="inp" id="gc" type="date" value="${esc(proxima(f) || f.cobranca || '')}"></div></div>
+    <label>Cobrança</label><div class="chips" id="gciclo"><button class="chip${ciclo === 'mensal' ? ' on' : ''}" data-v="mensal">Mensal</button><button class="chip${ciclo === 'anual' ? ' on' : ''}" data-v="anual">Anual</button></div>
+    <button class="btn" id="gsalvar">${novo ? 'Adicionar' : 'Salvar'}</button>${novo ? '' : '<button class="btn perigo" id="gapagar">Remover ferramenta</button>'}`);
+  document.querySelectorAll('#comuns .chip').forEach(b => b.onclick = () => { $('#gn').value = b.dataset.v; document.querySelectorAll('#comuns .chip').forEach(x => x.classList.toggle('on', x === b)); $('#gv').focus(); });
+  document.querySelectorAll('#gciclo .chip').forEach(b => b.onclick = () => { ciclo = b.dataset.v; document.querySelectorAll('#gciclo .chip').forEach(x => x.classList.toggle('on', x === b)); });
+  $('#gsalvar').onclick = async () => {
+    const v = { nome:so($('#gn').value), valor:numero($('#gv').value), ciclo, cobranca:$('#gc').value || null };
+    if (!v.nome){ $('#gn').classList.add('erro'); $('#gn').focus(); return; }
+    if (!v.valor){ $('#gv').classList.add('erro'); $('#gv').focus(); return; }
+    const b = $('#gsalvar'); b.disabled = true;
+    try {
+      if (novo){
+        if (modo === 'cheio'){ const [r] = await api('/rest/v1/ferramentas', { method:'POST', body:v, prefer:'return=representation' }); F.push(r); }
+        else F.push({ ...v, id:'g' + Date.now() });
+      } else {
+        Object.assign(f, v);
+        if (modo === 'cheio') await api(`/rest/v1/ferramentas?id=eq.${f.id}`, { method:'PATCH', body:v });
+      }
+      fechaFolha(); desenha(); vibra(8); toast(novo ? (modo === 'demo' ? 'Adicionada no exemplo (não fica salvo)' : 'Ferramenta adicionada') : 'Salvo');
+    } catch(e){ toast('Não salvou: ' + traduz(e.message)); b.disabled = false; }
+  };
+  if ($('#gapagar')) $('#gapagar').onclick = async () => {
+    const b = $('#gapagar'); if (!b._conf){ b._conf = true; b.textContent = 'Toque de novo para remover'; setTimeout(() => { b._conf = false; b.textContent = 'Remover ferramenta'; }, 3000); return; }
+    F = F.filter(x => x.id !== f.id); fechaFolha(); desenha(); toast('Ferramenta removida');
+    if (modo === 'cheio') try { await api(`/rest/v1/ferramentas?id=eq.${f.id}`, { method:'DELETE' }); } catch(e){ toast('Não removeu: ' + traduz(e.message)); carrega(); }
+  };
+}
+
+// ===================== comemoração =====================
+function festa(){
+  if (calmo) return;
+  const cv = $('#festa'), cx = cv.getContext('2d'); cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; cx.scale(devicePixelRatio, devicePixelRatio);
+  const cores = ['#F2A541','#7fce8f','#3FB8AF','#9B7BF7','#F4F0E4'];
+  const ps = Array.from({ length:110 }, () => ({ x:innerWidth/2, y:innerHeight*0.35, vx:(Math.random()-.5)*12, vy:-Math.random()*11-3, r:Math.random()*5+3, c:cores[Math.random()*cores.length|0], a:Math.random()*6, va:(Math.random()-.5)*.3 }));
+  let t0 = performance.now();
+  const f = now => {
+    const k = (now - t0) / 1000; cx.clearRect(0, 0, innerWidth, innerHeight);
+    ps.forEach(p => { p.vy += .35; p.x += p.vx; p.y += p.vy; p.a += p.va; cx.save(); cx.translate(p.x, p.y); cx.rotate(p.a); cx.globalAlpha = Math.max(0, 1 - k/1.8); cx.fillStyle = p.c; cx.fillRect(-p.r/2, -p.r/2, p.r, p.r*1.6); cx.restore(); });
+    if (k < 1.9) requestAnimationFrame(f); else cx.clearRect(0, 0, innerWidth, innerHeight);
+  };
+  requestAnimationFrame(f);
+}
+
+// ===================== login =====================
+function botaoConta(){ const b = $('#conta'); b.textContent = sess ? 'Sair' : 'Entrar'; b.onclick = () => { if (sess){ salvaSess(null); location.reload(); } else login(); }; }
+function login(){
+  let email = '';
+  const etapa = codigo => {
+    abreFolha(`<h2>${codigo ? 'Digite o código' : 'Entre com o e-mail da compra'}</h2>
+      <p class="sub">${codigo ? 'Enviamos um código para ' + esc(email) + '. Confira também o spam.' : 'O mesmo e-mail que você usou para comprar. Vamos mandar um código de acesso.'}</p>
+      <input class="inp" id="campo" ${codigo ? 'inputmode="numeric" autocomplete="one-time-code" placeholder="Código"' : 'type="email" autocomplete="email" placeholder="seu@email.com"'}>
+      <button class="btn" id="ir">${codigo ? 'Entrar' : 'Enviar código'}</button><div class="err" id="erro"></div>`);
+    setTimeout(() => $('#campo').focus(), 250);
+    $('#campo').onkeydown = e => { if (e.key === 'Enter') $('#ir').click(); };
+    $('#ir').onclick = async () => {
+      const b = $('#ir'); b.disabled = true; $('#erro').textContent = '';
+      try {
+        if (!codigo){
+          email = $('#campo').value.trim().toLowerCase();
+          if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new Error('Digite um e-mail válido.');
+          await api('/auth/v1/otp', { method:'POST', body:{ email, create_user:true }, auth:false });
+          etapa(true);
+        } else {
+          const token = $('#campo').value.replace(/\D/g,'');
+          if (token.length < 6) throw new Error('Digite o código que chegou no e-mail.');
+          const r = await api('/auth/v1/verify', { method:'POST', body:{ type:'email', email, token }, auth:false });
+          salvaSess(fromAuth(r)); fechaFolha(); $('#aviso').classList.remove('on'); $('#avisoEntrar')?.remove(); await carrega();
+          toast(modo === 'cheio' ? 'Ferramenta desbloqueada' : 'Entrou, mas Finanças e Demandas não está nas compras deste e-mail');
+        }
+      } catch(e){ $('#erro').textContent = traduz(e.message); b.disabled = false; }
+    };
+  };
+  etapa(false);
+}
+
+$('#fab').onclick = () => ABA === 'ferr' ? folhaFerr() : folhaNova({});
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => { ABA = t.dataset.aba; store.set('fl_aba', ABA); desenha(); scrollTo({ top:0 }); });
+carrega();
+</script>
+</body>
+</html>

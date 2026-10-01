@@ -1,4 +1,4 @@
-// Pluga & Edita: janela do aplicativo. Toda a lógica de instalação fica no núcleo (flcore).
+// Base FL: janela do aplicativo. Toda a lógica de instalação fica no núcleo (flcore).
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use flcore::{env::capcut_running, Env, Pack};
@@ -168,10 +168,10 @@ fn main() {
         .invoke_handler(tauri::generate_handler![status, install_pack, install_remote, uninstall_pack, diagnose, log_text, session_get, session_set, open_media])
         .setup(|app| {
             if let Some(w) = app.get_webview_window("main") {
-                let _ = w.set_title("Pluga & Edita");
+                let _ = w.set_title("Base FL");
             }
             Ok(())
         })
         .run(tauri::generate_context!())
-        .expect("erro ao iniciar o Pluga & Edita");
+        .expect("erro ao iniciar o Base FL");
 }

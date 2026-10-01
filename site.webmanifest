@@ -1,0 +1,13 @@
+{
+  "name": "Base FL",
+  "short_name": "Base FL",
+  "description": "o ecossistema do editor de vídeo",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#141615",
+  "theme_color": "#141615",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Quanto Cobrar? — Pluga &amp; Edita</title>
+<title>Quanto Cobrar? — Base FL</title>
 <meta name="description" content="Monte o trabalho como uma timeline e descubra quanto cobrar em 1 minuto. Orçamento pronto pro WhatsApp.">
 <link rel="icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#0D0F0E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
@@ -139,6 +141,12 @@ h2{font-size:16px;font-weight:750;margin:24px 0 10px}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{cursor:pointer;font-weight:750;font-size:15px;font-variant-numeric:tabular-nums;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px 0;width:54px;transition:all .15s}
 .chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.nivs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.nv{cursor:pointer;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:11px 12px;transition:all .15s}
+.nv b{display:block;font-size:14.5px;font-weight:750}
+.nv span{display:block;color:var(--mute);font-size:12px;font-variant-numeric:tabular-nums}
+.nv.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.nv.on span{color:#5c594f}
 .pac{margin-top:10px;color:var(--mute);font-size:14px;min-height:21px}
 .pac b{color:var(--ink)}
 .acoes{margin-top:22px}
@@ -151,7 +159,7 @@ h2{font-size:16px;font-weight:750;margin:24px 0 10px}
 .bolha .hr{position:absolute;right:10px;bottom:6px;font-size:11px;color:rgba(233,237,239,.6)}
 .inp{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font:inherit;font-size:16px;outline:none;margin-bottom:12px}
 .inp:focus{border-color:var(--accent)}
-.toast{position:fixed;left:50%;bottom:calc(var(--dock) + 24px);transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;transition:all .25s;z-index:30;white-space:nowrap}
+.toast{pointer-events:none;position:fixed;left:50%;bottom:calc(var(--dock) + 24px);transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;transition:all .25s;z-index:30;white-space:nowrap}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 .err{color:#ff8f7a;font-size:14px;min-height:20px;margin-top:8px}
 .foot{color:var(--dim);font-size:12px;margin-top:30px}
@@ -166,7 +174,7 @@ h2{font-size:16px;font-weight:750;margin:24px 0 10px}
 <div class="wrap">
   <header>
     <img src="/logo.png" alt="">
-    <div class="nm">Quanto Cobrar?<small>Pluga &amp; Edita</small></div>
+    <div class="nm">Quanto Cobrar?<small>Base FL</small></div>
     <div class="sp"></div>
     <button class="link" id="conta"></button>
   </header>
@@ -184,6 +192,7 @@ h2{font-size:16px;font-weight:750;margin:24px 0 10px}
 // ===================== CONFIG =====================
 const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
 const PACK = 'fl-preco';
+let vencido = false;
 let BUY_URL = '';   // vem do banco (packs.buy_url)
 
 // ===================== REGRAS DE PREÇO (ajuste aqui) =====================
@@ -241,7 +250,7 @@ try { sess = JSON.parse(store.get('fl_sess') || 'null'); } catch { sess = null; 
 const Q = {
   modo:   () => ({ h:'Quanto cobrar por esse trabalho?', s:'Monte o trabalho na timeline aqui embaixo. São poucas perguntas e o seu preço sai em 1 minuto.', big:true,
             o:[['editar','Editar','Só a edição do vídeo','✂️'],['gravar','Gravar','Só a captação','🎥'],['ambos','Gravar + Editar','O trabalho completo','🎬']] }),
-  nivel:  () => ({ h:'Há quanto tempo você edita?', s:'Só pergunto uma vez. Isso define o seu valor base.', o:Object.entries(NIVEL).map(([k,v])=>[k,v.t,v.s,'']) }),
+  nivel:  () => ({ h:'Há quanto tempo você edita?', s:'Só pergunto uma vez. Isso define o seu valor base.', o:Object.entries(NIVEL).map(([k,v])=>[k,v.t,`${v.s} · base de R$ ${v.h} por hora`,'']) }),
   tipo:   () => ({ h:'Que tipo de vídeo?', o:Object.entries(TIPO).map(([k,v])=>[k,v.t,v.s,v.ic]) }),
   dur:    () => ({ h:'Quanto tempo o vídeo vai ter pronto?', s:'A duração final, depois de editado.', o:Object.entries(DUR).map(([k,v])=>[k,v.t,'','']) }),
   edicao: () => ({ h:'Como é essa edição?', o:Object.entries(EDICAO).map(([k,v])=>[k,v.t,v.s,v.ic]) }),
@@ -458,25 +467,27 @@ let slotTimer = null;
 function resultado(revelar = false){
   clearInterval(slotTimer);
   $('#tcB').textContent = 'Renderizado';
-  const c = calcula(), temPac = R.modo !== 'gravar';
+  let c = calcula(); const temPac = R.modo !== 'gravar';
   const corpo = acesso ? `
       <div class="lb">Valor de referência</div>
       <div class="preco"><span class="rs">R$</span><span id="vref">0</span></div>
       <div class="faixa">Faixa justa: <b id="vfx"></b></div>
       <div class="stats"><div><b id="vh"></b><span>de trabalho</span></div><div><b id="vcada"></b><span id="vcadal">por vídeo</span></div></div>
-      <p class="pq">${porque(c)}</p>` : `
+      <p class="pq" id="pq">${porque(c)}</p>` : `
       <div class="lb">Seu preço está renderizado</div>
       <div class="preco"><span class="rs">R$</span><span class="slot" id="slot"></span></div>
       <div class="faixa">Tempo estimado: <b id="vh"></b></div>
       <div class="lock">
-        <p>Desbloqueie para ver o valor e mandar o orçamento</p>
-        <div class="sm">Pagamento único. Use quantas vezes quiser, no celular e no computador.</div>
+        <p>${vencido ? 'Seu acesso de 1 ano terminou' : 'Desbloqueie para ver o valor e mandar o orçamento'}</p>
+        <div class="sm">${vencido ? 'Renove para continuar calculando e mandando orçamentos.' : 'Acesso de 1 ano. Use quantas vezes quiser, no celular e no computador.'}</div>
         <ul><li>Faixa justa e valor de referência para cada trabalho</li><li>Preço de pacotes de 4, 8, 12 e 20 vídeos</li><li>Orçamento pronto para enviar no WhatsApp</li></ul>
-        <button class="btn" id="comprar">Desbloquear meu preço</button>
+        <button class="btn" id="comprar">${vencido ? 'Renovar meu acesso' : 'Desbloquear meu preço'}</button>
         <button class="link ja" id="entrar2">Já comprei · entrar</button>
       </div>`;
   tela(`<div class="tc"><button class="back" id="voltar">← Ajustar respostas</button><span class="sp"></span><span>Renderizado</span></div>
     <div class="card ${revelar ? 'revela' : ''}" id="card"><div class="glow"></div>${corpo}</div>
+    <h2>Seu nível de experiência</h2>
+    <div class="nivs">${Object.entries(NIVEL).map(([k,v]) => `<button class="nv${(store.get('fl_nivel')||'medio')===k?' on':''}" data-k="${k}"><b>${v.t}</b><span>R$ ${v.h} por hora</span></button>`).join('')}</div>
     ${temPac ? `<h2>${R.modo === 'ambos' ? 'Quantos vídeos saem dessa gravação?' : 'Quantos vídeos?'}</h2>
       <div class="chips">${Object.keys(PACOTE).map(n => `<button class="chip${+n===qtd?' on':''}" data-n="${n}">${n}</button>`).join('')}</div>
       <div class="pac" id="pac"></div>` : ''}
@@ -498,7 +509,11 @@ function resultado(revelar = false){
     }
   };
   pinta(revelar);
-  document.querySelectorAll('.chip').forEach(b => b.onclick = () => { qtd = +b.dataset.n; document.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b)); vibra(6); pinta(false); });
+  document.querySelectorAll('.chip[data-n]').forEach(b => b.onclick = () => { qtd = +b.dataset.n; document.querySelectorAll('.chip[data-n]').forEach(x => x.classList.toggle('on', x === b)); vibra(6); pinta(false); });
+  document.querySelectorAll('.nv').forEach(b => b.onclick = () => {
+    store.set('fl_nivel', b.dataset.k); document.querySelectorAll('.nv').forEach(x => x.classList.toggle('on', x === b));
+    c = calcula(); if ($('#pq')) $('#pq').textContent = porque(c); vibra(6); pinta(true);
+  });
   $('#voltar').onclick = () => { clearInterval(slotTimer); pos = fila.length - 1; pergunta(); };
   $('#novo').onclick = () => { clearInterval(slotTimer); R = {}; pos = 0; qtd = 1; pergunta(); };
   if ($('#orc')) $('#orc').onclick = () => orcamento(c);
@@ -527,7 +542,7 @@ function orcamento(c){
     <input class="inp" id="cli" placeholder="Nome do cliente (opcional)" autocomplete="off">
     <div class="chat"><div class="para">Assim o seu cliente vai receber</div><div class="bolha"><textarea id="txt"></textarea><span class="hr">${hora} ✓✓</span></div></div>
     <div class="row"><button class="btn ghost" id="copiar">Copiar</button><button class="btn" id="zap">Enviar no WhatsApp</button></div>
-    <button class="btn ghost" id="contrato" style="margin-top:10px">Cliente aprovou? Gerar contrato</button>`, 'entra');
+    <div class="row" style="margin-top:10px"><button class="btn ghost" id="painel">＋ Pôr nas Demandas</button><button class="btn ghost" id="contrato">Gerar contrato</button></div>`, 'entra');
   const monta = () => {
     const nome = $('#cli').value.trim();
     const val = new Date(Date.now() + 7*864e5).toLocaleDateString('pt-BR');
@@ -552,6 +567,13 @@ function orcamento(c){
   let ultimo = {};
   monta(); $('#cli').oninput = monta;
   $('#contrato').onclick = () => { store.set('fl_ultimo_orc', JSON.stringify(ultimo)); location.href = '/contrato/'; };
+  $('#painel').onclick = () => {
+    const uteis = R.prazo === 'urgente' ? 2 : (c.ed ? Math.max(2, Math.ceil((c.ed.horas * qtd)/6) + 1) : 2);
+    const p = new Date(); let n = 0; while (n < uteis){ p.setDate(p.getDate() + 1); if (p.getDay() % 6) n++; }
+    const iso = new Date(p.getTime() - p.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+    store.set('fl_nova_demanda', JSON.stringify({ cliente:ultimo.cliente || '', titulo:ultimo.entrega || ultimo.servico || '', valor:t.ref, prazo:iso, rev_total:c.ed ? 2 : 1, coluna:'orcamento' }));
+    location.href = '/painel/';
+  };
   $('#voltar').onclick = () => resultado(false);
   $('#copiar').onclick = async () => { try { await navigator.clipboard.writeText($('#txt').value); } catch { $('#txt').select(); document.execCommand('copy'); } vibra(10); toast('Copiado. É só colar na conversa.'); };
   $('#zap').onclick = async () => {
@@ -590,8 +612,12 @@ async function checaAcesso(){
   acesso = false;
   try {
     if (!(await sessaoValida())) return;
-    const [lic, pk] = await Promise.all([ api(`/rest/v1/licenses?select=status&pack_id=eq.${PACK}`), api(`/rest/v1/packs?select=buy_url&id=eq.${PACK}`) ]);
-    acesso = lic.some(l => l.status === 'active');
+    const [lic, pk] = await Promise.all([ api(`/rest/v1/licenses?select=*&pack_id=eq.${PACK}`), api(`/rest/v1/packs?select=buy_url&id=eq.${PACK}`) ]);
+    const agora = Date.now(), ativa = lic.find(l => l.status === 'active');
+    const venc = ativa?.expires_at ? new Date(ativa.expires_at).getTime() : null;
+    acesso = !!ativa && (!venc || venc > agora);
+    vencido = !!ativa && !!venc && venc <= agora;
+    if (acesso && venc){ const dias = Math.ceil((venc - agora) / 864e5); if (dias <= 15) setTimeout(() => toast(`Seu acesso vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}. Renove para não perder.`), 1200); }
     if (pk[0]?.buy_url) BUY_URL = pk[0].buy_url;
   } catch {}
   botaoConta();
