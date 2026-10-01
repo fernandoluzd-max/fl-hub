@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>LUTs — Base FL</title>
-<meta name="description" content="3 LUTs de conversão (Apple Log e ZV-E10) e 20 looks de finalização, direto em Ajuste › LUT no CapCut.">
+<meta name="description" content="20 looks de finalização e 3 LUTs de conversão (Sony S-Log2, S-Log3 e Apple Log), direto em Ajuste › LUT no CapCut.">
 <link rel="icon" href="https://basefl.com/favicon.png">
 <link rel="apple-touch-icon" href="https://basefl.com/apple-touch-icon.png">
 <meta name="theme-color" content="#0B0C0C">
 <meta property="og:title" content="LUTs — Base FL">
-<meta property="og:description" content="3 LUTs de conversão (Apple Log e ZV-E10) e 20 looks de finalização, direto em Ajuste › LUT no CapCut.">
+<meta property="og:description" content="20 looks de finalização e 3 LUTs de conversão (Sony S-Log2, S-Log3 e Apple Log), direto em Ajuste › LUT no CapCut.">
 <meta property="og:image" content="https://basefl.com/icon-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -129,21 +129,21 @@ footer a{color:var(--mute)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 
 .palco{min-height:470px;display:flex;flex-direction:column;padding:16px 16px 40px}
-.cena{position:relative;flex:1;min-height:320px;border-radius:14px;overflow:hidden;border:1px solid #2a2a30}
-.img{position:absolute;inset:0}
-.img svg{width:100%;height:100%;display:block}
-.antes{filter:saturate(.42) contrast(.7) brightness(1.08)}
-.depois{clip-path:inset(0 0 0 50%);transition:filter .6s ease}
+.cena{position:relative;flex:1;min-height:320px;border-radius:14px;overflow:hidden;border:1px solid #2a2a30;background:#1a1a1f}
+.img{position:absolute;inset:0;transition:filter .6s ease}
+.img img{width:100%;height:100%;object-fit:cover;object-position:50% 35%;display:block}
+.depois{clip-path:inset(0 0 0 50%)}
 .corte{position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;box-shadow:0 0 14px rgba(255,255,255,.7);z-index:2}
 .corte span{position:absolute;top:50%;left:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.4)}
 .corte span::before{content:"‹ ›";position:absolute;inset:0;display:grid;place-items:center;color:#111;font-weight:900;font-size:13px;letter-spacing:2px}
-.tg{position:absolute;top:12px;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:99px;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);z-index:3}
-.tg.l{left:12px}.tg.r{right:12px;background:color-mix(in srgb,var(--a) 70%,#000);color:#fff;transition:background .3s}
+.tg{position:absolute;top:12px;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:99px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);z-index:3;color:#fff}
+.tg.l{left:12px}.tg.r{right:12px;background:color-mix(in srgb,var(--a) 75%,#000)}
 .lutbar{margin-top:12px}
 .lutbar small{font-size:10.5px;color:#7a7980;letter-spacing:.06em}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
 .chip{font-size:12px;font-weight:600;padding:7px 11px;border-radius:9px;background:#1b1a1f;border:1px solid #2b2a31;color:#bdbbc4;transition:all .25s}
 .chip.on{background:linear-gradient(135deg,var(--a),var(--a2));border-color:transparent;color:#fff;transform:translateY(-2px)}
+.chip.cv{border-style:dashed}
 
 </style>
 </head>
@@ -159,37 +159,25 @@ footer a{color:var(--mute)}
   <div class="hero">
     <div>
       <span class="kick">Kit para o CapCut</span>
-      <h1>Do vídeo lavado ao <em>look de cinema.</em></h1>
-      <p class="lead"><b>3 LUTs de conversão</b> para Apple Log e Sony ZV-E10 e <b>20 looks de finalização</b>, instalados direto em Ajuste › LUT no seu CapCut.</p>
-      <div class="ctas"><button class="btn" data-comprar>Quero as LUTs <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="nota"><b class="pcur">R$ 19</b> · acesso vitalício<br><span class="parc">ou 6x de R$ 3,55 no cartão</span><br>Precisa do <b>CapCut para computador</b><br>Mac ou Windows</span></div>
+      <h1>Transforme a imagem do seu vídeo <em>com um clique.</em></h1>
+      <p class="lead"><b>20 looks de cinema</b> para o seu vídeo de sempre, direto em Ajuste › LUT no CapCut. E, para quem grava em Log, <b>3 LUTs de conversão</b> que devolvem a cor certa na hora.</p>
+      <div class="ctas"><button class="btn" data-comprar>Quero as LUTs <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="nota"><b class="pcur">R$ 19</b> · acesso vitalício<br><span class="parc">ou 12x de R$ 1,95 no cartão</span><br>Precisa do <b>CapCut para computador</b><br>Mac ou Windows</span></div>
     </div>
     <div class="palco" aria-label="Demonstração de LUTs"><div class="cena">
-    <div class="img antes"><svg viewBox="0 0 600 420" preserveAspectRatio="xMidYMid slice"><use href="#cena"/></svg></div>
-    <div class="img depois" id="depois"><svg viewBox="0 0 600 420" preserveAspectRatio="xMidYMid slice"><use href="#cena"/></svg></div>
+    <div class="img antes" id="antes"><img src="https://images.pexels.com/photos/30674285/pexels-photo-30674285.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="" loading="eager"></div>
+    <div class="img depois" id="depois"><img src="https://images.pexels.com/photos/30674285/pexels-photo-30674285.jpeg?auto=compress&cs=tinysrgb&w=1400" alt=""></div>
     <div class="corte" id="corte"><span></span></div>
-    <span class="tg l">Antes · Log</span><span class="tg r" id="tgr">Depois</span>
+    <span class="tg l" id="tgl">Antes · Rec.709</span><span class="tg r" id="tgr">Depois</span>
   </div>
-  <div class="lutbar"><small>Ajuste › LUT</small><div class="chips" id="chips"></div></div>
-  <svg width="0" height="0" style="position:absolute"><defs>
-    <linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b6ea8"/><stop offset=".55" stop-color="#e9a36b"/><stop offset="1" stop-color="#f7cf8a"/></linearGradient>
-    <linearGradient id="mar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f6f86"/><stop offset="1" stop-color="#14323f"/></linearGradient>
-    <radialGradient id="sol"><stop offset="0" stop-color="#fff6d6"/><stop offset=".4" stop-color="#ffd27a"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
-    <g id="cena"><rect width="600" height="420" fill="url(#ceu)"/><circle cx="420" cy="215" r="110" fill="url(#sol)"/>
-      <path d="M0 250 L90 170 L170 230 L250 150 L360 240 L450 190 L600 260 V420 H0Z" fill="#5b4a6e" opacity=".75"/>
-      <path d="M0 285 L120 225 L220 270 L330 215 L470 280 L600 245 V420 H0Z" fill="#3a3550"/>
-      <rect y="300" width="600" height="120" fill="url(#mar)"/>
-      <path d="M380 300 h80 l-10 120 h-60z" fill="#ffd9a0" opacity=".35"/>
-      <g fill="#1a1620"><circle cx="190" cy="268" r="11"/><path d="M178 279 h24 l6 50 h-36z"/><path d="M181 329 h7 v40 h-7zM193 329 h7 v40 h-7z"/></g>
-      <path d="M0 360 C120 345 220 375 330 362 S520 350 600 365 V420 H0Z" fill="#0d1d25" opacity=".8"/></g>
-  </defs></svg><span class="rot">Demonstração · imagem ilustrativa</span></div>
+  <div class="lutbar"><small>Ajuste › LUT</small><div class="chips" id="chips"></div></div><span class="rot">Demonstração · foto: Pexels</span></div>
   </div>
 
   
 
   <section>
     <h2 class="rv">Cor bonita sem virar colorista.</h2>
-    <div class="bens"><div class="bem rv"><span class="n">01</span><h3>Conversão em 1 clique</h3><p>Gravou em Apple Log ou na Sony ZV-E10? A LUT de conversão devolve a cor normal na hora.</p></div><div class="bem rv d1"><span class="n">02</span><h3>20 looks de finalização</h3><p>Do quente ao frio, do filme ao preto e branco. Escolha o clima do vídeo sem mexer em curva.</p></div><div class="bem rv d2"><span class="n">03</span><h3>No lugar certo do CapCut</h3><p>Ficam em Ajuste › LUT. Aplica, ajusta a intensidade e pronto.</p></div></div>
-    <div class="inclui rv"><span>3 LUTs de conversão</span><span>Apple Log</span><span>Sony ZV-E10</span><span>20 looks</span><span>Acesso vitalício</span></div>
+    <div class="bens"><div class="bem rv"><span class="n">01</span><h3>20 looks de finalização</h3><p>Do quente ao frio, do filme ao preto e branco. Escolha o clima do vídeo e ajuste a intensidade.</p></div><div class="bem rv d1"><span class="n">02</span><h3>Feitos para o vídeo de sempre</h3><p>A maioria dos vídeos sai em Rec.709, o padrão do celular e da câmera. Os looks foram feitos para ele.</p></div><div class="bem rv d2"><span class="n">03</span><h3>3 LUTs de conversão</h3><p>Grava em Log? Sony S-Log2 e S-Log3 (como na ZV-E10) e Apple Log (iPhone em ProRes Log) voltam para a cor normal num clique.</p></div></div>
+    <div class="inclui rv"><span>20 looks de finalização</span><span>Conversão Sony S-Log2</span><span>Conversão Sony S-Log3</span><span>Conversão Apple Log</span><span>Acesso vitalício</span><span>Aula ensinando a usar</span></div>
   </section>
 
   
@@ -198,16 +186,16 @@ footer a{color:var(--mute)}
 
   <section>
     <h2 class="rv">Perguntas rápidas</h2>
-    <div class="faq rv"><details><summary>Funciona se eu não gravo em Log?</summary><p>Sim. Os 20 looks funcionam em qualquer vídeo. As 3 de conversão são para quem grava em Apple Log ou na ZV-E10.</p></details><details><summary>Funciona em qual CapCut?</summary><p>No CapCut para computador, no Mac ou no Windows.</p></details><details><summary>Como recebo o acesso?</summary><p>Assim que a compra é aprovada, ele aparece liberado no app Base FL e no navegador. É só entrar com o mesmo e-mail da compra.</p></details><details><summary>Quanto tempo de acesso?</summary><p>Vitalício. Comprou uma vez, fica liberado na sua conta para sempre, no app Base FL.</p></details></div>
+    <div class="faq rv"><details><summary>Funciona se eu não gravo em Log?</summary><p>Sim. Os 20 looks são para vídeo comum (Rec.709), que é o padrão do celular e da maioria das câmeras. As 3 de conversão são só para quem grava em Log.</p></details><details><summary>O que é Rec.709?</summary><p>É o perfil de cor padrão dos vídeos. Se você grava sem mexer em nada no celular ou na câmera, seu vídeo já está em Rec.709.</p></details><details><summary>Funciona em qual CapCut?</summary><p>No CapCut para computador, no Mac ou no Windows.</p></details><details><summary>Como recebo o acesso?</summary><p>Assim que a compra é aprovada, ele aparece liberado no app Base FL e no navegador. É só entrar com o mesmo e-mail da compra.</p></details><details><summary>Quanto tempo de acesso?</summary><p>Vitalício. Comprou uma vez, fica liberado na sua conta para sempre, no app Base FL.</p></details><details><summary>Tem aula ensinando a usar?</summary><p>Sim. Junto com o acesso vem uma aula mostrando, passo a passo, como usar e tirar o melhor proveito.</p></details></div>
   </section>
 
   <div class="final rv">
     <span class="kick">LUTs</span>
     <h2 style="margin-top:16px">Dê cara de cinema ao seu próximo vídeo.</h2>
     <div class="preco vpreco" hidden></div>
-    <div class="parcf">ou <b>6x de R$ 3,55</b> no cartão · ou à vista no Pix</div>
+    <div class="parcf">ou <b>12x de R$ 1,95</b> no cartão · ou à vista no Pix</div>
     <div class="ctas"><button class="btn" data-comprar>Quero as LUTs <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
-    <div class="selos"><span>Acesso vitalício</span><span>Liberado na hora da compra</span><span>Mac e Windows</span></div>
+    <div class="selos"><span>Acesso vitalício</span><span>Aula ensinando a usar</span><span>Liberado na hora da compra</span><span>Mac e Windows</span></div>
   </div>
 
   <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo</footer>
@@ -244,16 +232,17 @@ let visivel = true;
 new IntersectionObserver(es => { visivel = es[0].isIntersecting; }, { threshold:.1 }).observe($('.palco'));
 async function enquantoVisivel(){ while (!visivel) await new Promise(r => setTimeout(r, 300)); }
 
+// [perfil do "antes", filtro do antes, nome do look, filtro do depois]
 const LOOKS = [
-  ['Conversão Apple Log', 'none'],
-  ['Teal & Orange', 'saturate(1.35) contrast(1.12) hue-rotate(-6deg)'],
-  ['Filme quente', 'sepia(.28) saturate(1.25) contrast(1.05) brightness(1.03)'],
-  ['Noite fria', 'hue-rotate(18deg) saturate(1.1) brightness(.86) contrast(1.15)'],
-  ['P&B contraste', 'grayscale(1) contrast(1.35) brightness(1.02)'],
+  ['Rec.709', 'none', 'Teal & Orange', 'saturate(1.3) contrast(1.12) hue-rotate(-8deg)'],
+  ['Rec.709', 'none', 'Filme quente', 'sepia(.3) saturate(1.2) contrast(1.06) brightness(1.02)'],
+  ['Rec.709', 'none', 'Noite fria', 'hue-rotate(20deg) saturate(1.05) brightness(.84) contrast(1.15)'],
+  ['Rec.709', 'none', 'P&B contraste', 'grayscale(1) contrast(1.35) brightness(1.03)'],
+  ['S-Log3', 'saturate(.4) contrast(.66) brightness(1.12)', 'Conversão S-Log3 → Rec.709', 'none'],
 ];
-$('#chips').innerHTML = LOOKS.map(([n]) => `<span class="chip">${n}</span>`).join('');
+$('#chips').innerHTML = LOOKS.map(([, , n]) => `<span class="chip${n.startsWith('Conversão') ? ' cv' : ''}">${n}</span>`).join('');
 const chips = [...document.querySelectorAll('.chip')];
-let x = 50, alvo = 50;
+let x = 50;
 function corte(v){ x = v; $('#depois').style.clipPath = `inset(0 0 0 ${v}%)`; $('#corte').style.left = v + '%'; }
 async function varre(de, ate, ms){
   const t0 = performance.now();
@@ -263,9 +252,10 @@ async function demo(){
   let i = 0;
   while (true){
     await enquantoVisivel();
-    const [n, f] = LOOKS[i % LOOKS.length];
+    const [pa, fa, n, fd] = LOOKS[i % LOOKS.length];
     chips.forEach((c, k) => c.classList.toggle('on', k === i % LOOKS.length));
-    $('#depois').style.filter = f; $('#tgr').textContent = n;
+    $('#antes').style.filter = fa; $('#depois').style.filter = fd;
+    $('#tgl').textContent = 'Antes · ' + pa; $('#tgr').textContent = n;
     if (calmo){ corte(50); await dorme(2500); i++; continue; }
     await varre(x, 15, 900); await varre(15, 85, 1500); await varre(85, 45, 900);
     await dorme(700); i++;

@@ -112,7 +112,28 @@ footer a{color:var(--mute);cursor:pointer;text-decoration:underline;text-underli
 .icon{position:relative}
 .lock{position:absolute;right:-7px;bottom:-7px;width:28px;height:28px;border-radius:50%;background:var(--bg2);border:1px solid var(--line);display:grid;place-items:center}
 .lock svg{width:15px;height:15px}
-.card.locked h3,.card.locked p{opacity:.75}
+.card{--c:242,165,65;position:relative;overflow:hidden}
+.card.on .icon{background:linear-gradient(145deg,rgba(var(--c),.75),rgb(var(--c)) 60%,rgba(var(--c),.85))}
+.card.on{border-top:2px solid rgba(var(--c),.55)}
+/* vitrine: o que a pessoa ainda não tem chama para conhecer */
+.card.locked{border-color:rgba(var(--c),.45);background:radial-gradient(120% 70% at 100% 0%,rgba(var(--c),.22),transparent 62%),radial-gradient(90% 60% at 0% 100%,rgba(var(--c),.08),transparent 70%),var(--card);box-shadow:0 18px 40px -26px rgba(var(--c),.8)}
+.card.locked .icon{background:linear-gradient(145deg,rgba(var(--c),.75),rgb(var(--c)) 60%,rgba(var(--c),.85));border:none;box-shadow:0 10px 26px -10px rgba(var(--c),.9)}
+.card.locked .icon svg{stroke:#141615}
+.card.locked .lock{background:var(--card);border-color:rgba(var(--c),.6)}
+.card.locked .lock svg{stroke:rgb(var(--c))}
+.card.locked::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.07),transparent);transform:skewX(-18deg);animation:brilho 5s ease-in-out infinite;pointer-events:none}
+@keyframes brilho{0%,62%{left:-60%}100%{left:130%}}
+.card.clica{cursor:pointer}
+.card.locked:hover{transform:translateY(-4px);border-color:rgba(var(--c),.85);box-shadow:0 24px 50px -24px rgba(var(--c),.95)}
+.selo{position:absolute;top:14px;right:14px;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgb(var(--c));background:rgba(var(--c),.14);border:1px solid rgba(var(--c),.45);border-radius:99px;padding:4px 9px}
+.gancho{font-family:"Archivo",var(--font);font-weight:800;font-size:16.5px;line-height:1.2;color:rgb(var(--c));margin-top:-4px}
+.oferta{font-size:12.5px;color:var(--mute)}
+.oferta b{color:var(--ink);font-size:14px}
+.btns .cta{background:rgb(var(--c));color:#141615;box-shadow:0 10px 24px -10px rgba(var(--c),.9);transition:filter .15s,transform .15s}
+.btns .cta:hover{filter:brightness(1.08);transform:translateY(-1px)}
+
+:root[data-tema="claro"] .gancho,:root[data-tema="claro"] .selo{filter:brightness(.7) saturate(1.3)}
+@media (prefers-reduced-motion:reduce){.card.locked::after{animation:none;display:none}}
 .tag{font-size:10.5px;font-weight:700;color:var(--accent-ink);background:var(--accent);border-radius:6px;padding:1px 6px}
 </style>
 </head>
@@ -144,7 +165,6 @@ footer a{color:var(--mute);cursor:pointer;text-decoration:underline;text-underli
         <div class="pill"><span class="dot" id="d-run"></span><span id="t-run">…</span></div>
       </div></div><div class="cards"></div></section>
     <section class="sec" id="s-ferramentas"><div class="sec-h"><div><h2>Ferramentas</h2><p>Para precificar, fechar e organizar seus trabalhos.</p></div></div><div class="cards"></div></section>
-    <section class="sec" id="s-cursos"><div class="sec-h"><div><h2>Cursos</h2><p>Para aprender e evoluir na edição.</p></div></div><div class="cards"></div></section>
     <div class="login" id="login">
       <h2 id="l-title">Entre com o e-mail da compra</h2>
       <p id="l-sub">Use o mesmo e-mail que você usou para comprar. Vamos enviar um código de acesso.</p>
@@ -205,22 +225,15 @@ const ICONS = {
 // catálogo: packId = id do manifest do .flpack
 const PRODUCTS = [
   // KITS: instalam no CapCut (Instalar / Atualizar / Remover)
-  {sec:'kits', key:'legendas', packId:'fl-legendas', name:'Legendas', desc:'Títulos e legendas dinâmicas, organizados em pastas no CapCut.'},
-  {sec:'kits', key:'sons', packId:'fl-sons', name:'Efeitos Sonoros', desc:'65 whooshes, impactos, risers e foleys direto nas suas predefinições do CapCut, organizados por categoria.'},
-  {sec:'kits', key:'luts', packId:'fl-luts', name:'LUTs', desc:'3 LUTs de conversão (Apple Log e ZV-E10) + 20 looks de finalização, direto em Ajuste › LUT.', lut:true},
+  {sec:'kits', key:'legendas', packId:'fl-legendas', name:'Legendas', desc:'Títulos e legendas dinâmicas, organizados em pastas no CapCut.', cor:'242,165,65', preco:'R$ 67', acesso:'vitalício', gancho:'Títulos que prendem nos 3 primeiros segundos'},
+  {sec:'kits', key:'sons', packId:'fl-sons', name:'Efeitos Sonoros', desc:'65 whooshes, impactos, risers e foleys direto nas suas predefinições do CapCut, organizados por categoria.', cor:'90,184,255', preco:'R$ 19', acesso:'vitalício', gancho:'O som que faltava no seu corte'},
+  {sec:'kits', key:'luts', packId:'fl-luts', name:'LUTs', desc:'20 looks de finalização + 3 LUTs de conversão (S-Log2, S-Log3 e Apple Log), direto em Ajuste › LUT.', lut:true, cor:'255,111,174', preco:'R$ 19', acesso:'vitalício', gancho:'Cor de cinema em um clique'},
   // FERRAMENTAS: abrem no navegador e no celular (Abrir)
-  {sec:'ferramentas', key:'preco', packId:'fl-preco', name:'Quanto Cobrar?', desc:'Descubra quanto cobrar por uma edição ou gravação em 1 minuto e mande o orçamento pronto no WhatsApp.', web:'https://basefl.com/preco/'},
-  {sec:'ferramentas', key:'contrato', packId:'fl-contrato', name:'Gerador de Contrato', desc:'Termo rápido para o WhatsApp ou contrato completo em PDF, já preenchido com o seu orçamento.', web:'https://basefl.com/contrato/'},
-  {sec:'ferramentas', key:'briefing', packId:'fl-briefing', name:'Gerador de Briefing', desc:'Perguntas certas para o cliente antes de começar, num link para ele responder.', web:'https://basefl.com/briefing/'},
-  {sec:'ferramentas', key:'painel', packId:'fl-painel', name:'Organizador Base', desc:'Seus trabalhos, prazos e pagamentos num só lugar.', web:'https://basefl.com/painel/'},
+  {sec:'ferramentas', key:'preco', packId:'fl-preco', name:'Quanto Cobrar?', desc:'Descubra quanto cobrar por uma edição ou gravação em 1 minuto e mande o orçamento pronto no WhatsApp.', web:'https://basefl.com/preco/', cor:'123,216,143', preco:'R$ 47', acesso:'1 ano', gancho:'Pare de chutar preço'},
+  {sec:'ferramentas', key:'contrato', packId:'fl-contrato', name:'Gerador de Contrato', desc:'Termo rápido para o WhatsApp ou contrato completo em PDF, pronto em poucos toques.', web:'https://basefl.com/contrato/', cor:'169,139,255', preco:'R$ 47', acesso:'1 ano', gancho:'Combinado bom é combinado por escrito'},
+  {sec:'ferramentas', key:'briefing', packId:'fl-briefing', name:'Gerador de Briefing', desc:'Perguntas certas para o cliente antes de começar, num link para ele responder.', web:'https://basefl.com/briefing/', cor:'63,208,194', preco:'R$ 47', acesso:'1 ano', gancho:'O cliente responde, você só confere'},
+  {sec:'ferramentas', key:'painel', packId:'fl-painel', name:'Organizador Base', desc:'Seus trabalhos, prazos e pagamentos num só lugar.', web:'https://basefl.com/painel/', cor:'255,179,71', preco:'R$ 67', acesso:'1 ano', gancho:'Saiba o que entregar e o que já entrou'},
 ];
-
-// CURSOS: para acrescentar outro curso, copie uma linha. packId = licença que libera o curso (vem da Greenn).
-const COLE_AQUI_O_LINK_DO_CURSO = 'COLE_AQUI_O_LINK_DO_CURSO';
-const CURSOS = [
-  { key:'curso', packId:'fl-curso-reels', name:'Reels Academy', desc:'Aprenda a editar vídeos que prendem a atenção no CapCut.', url: COLE_AQUI_O_LINK_DO_CURSO, venda: COLE_AQUI_O_LINK_DO_CURSO },
-];
-const abreLink = u => (!u || u.startsWith('COLE_AQUI')) ? step('O link do curso ainda não foi configurado.', 'warn') : T.opener.openUrl(u);
 
 // ===== Servidor (chave pública: pode ficar no app) =====
 const SUPA = { url: 'https://otlaexuqyavpzxwzcsfo.supabase.co', key: 'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
@@ -345,21 +358,24 @@ function render(){
     const inst = state?.installed?.find(i=>i.id===p.packId);
     const novo = inst && srv && inst.version !== srv.version;
     const c = document.createElement('div'); c.className = 'card' + (srv && owned ? ' on' : '') + (srv && !owned ? ' locked' : '');
+    if (p.cor) c.style.setProperty('--c', p.cor);
     let meta = '';
     if (p.web && srv && owned) meta = '<span class="dot ok"></span>Liberado · abre no navegador e no celular';
     else if (inst) meta = `<span class="dot ok"></span>Instalado · v${inst.version}` + (p.media && inst.media_files ? ` · ${inst.media_files.length} sons` : '') + (p.lut && inst.lut_names ? ` · ${inst.lut_names.length} LUTs` : '') + (novo ? ' <span class="tag">nova versão</span>' : '');
     else if (srv && owned) meta = '<span class="dot"></span>Liberado · não instalado';
     else if (srv && cat?.vencidos?.has(p.packId)) meta = '<span class="dot err"></span>Acesso vencido · renove para continuar';
-    else if (srv) meta = '<span class="dot"></span>Bloqueado · não incluso na sua compra';
+    else if (srv) meta = `<span class="oferta"><b>${p.preco || ''}</b> · acesso ${p.acesso || ''}</span>`;
     const vc = cat?.vence?.[p.packId];
     if (vc && owned){ const dias = Math.ceil((vc - Date.now()) / 864e5); meta += dias <= 30 ? ` · <span class="tag">vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}</span>` : ` · válido até ${vc.toLocaleDateString('pt-BR')}`; }
     const cad = (srv && !owned) ? '<span class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>' : '';
-    c.innerHTML = `<div class="icon">${ICONS[p.key]}${cad}</div><h3>${p.name}</h3><p>${p.desc}</p><div class="meta">${meta}</div>`;
+    const vitrine = srv && !owned && !cat?.vencidos?.has(p.packId);
+    c.innerHTML = (vitrine ? `<span class="selo">Conheça</span>` : '') + `<div class="icon">${ICONS[p.key]}${cad}</div><h3>${p.name}</h3>` + (vitrine && p.gancho ? `<div class="gancho">${p.gancho}</div>` : '') + `<p>${p.desc}</p><div class="meta">${meta}</div>`;
+    if (vitrine && srv.buy_url){ c.classList.add('clica'); c.onclick = e => { if (!e.target.closest('button')) T.opener.openUrl(srv.buy_url); }; }
     const b = document.createElement('div'); b.className = 'btns';
     if (p.web && srv){
       if (owned) b.appendChild(btn('Abrir', 'primary', () => T.opener.openUrl(p.web)));
       else {
-        if (srv.buy_url) b.appendChild(btn(cat?.vencidos?.has(p.packId) ? 'Renovar' : 'Desbloquear', 'primary', () => T.opener.openUrl(srv.buy_url)));
+        if (srv.buy_url) b.appendChild(btn(cat?.vencidos?.has(p.packId) ? 'Renovar' : 'Conhecer  →', 'primary cta', () => T.opener.openUrl(srv.buy_url)));
         b.appendChild(btn('Experimentar', 'ghost', () => T.opener.openUrl(p.web)));
       }
     }
@@ -367,23 +383,11 @@ function render(){
     else {
       if (srv && owned && p.media && inst && !novo) b.appendChild(btn('Abrir pasta', 'primary', () => invoke('open_media', { id: p.packId }).catch(e => step(String(e), 'err'))));
       else if (srv && owned) b.appendChild(btn(inst ? 'Atualizar' : 'Instalar', 'primary', () => doInstall(p, srv)));
-      else if (srv && srv.buy_url) b.appendChild(btn(cat?.vencidos?.has(p.packId) ? 'Renovar' : 'Desbloquear', 'primary', () => T.opener.openUrl(srv.buy_url)));
+      else if (srv && srv.buy_url) b.appendChild(btn(cat?.vencidos?.has(p.packId) ? 'Renovar' : 'Conhecer  →', 'primary cta', () => T.opener.openUrl(srv.buy_url)));
       else if (srv) b.innerHTML = '<div class="soon" style="flex:1">Disponível para compra</div>';
       if (inst) b.appendChild(btn('Remover', 'ghost', () => doRemove(p, inst)));
     }
     c.appendChild(b); $('#s-' + p.sec + ' .cards').appendChild(c);
-  }
-  // cursos
-  const meus = CURSOS.filter(k => cat?.owned?.has(k.packId));
-  const box = $('#s-cursos .cards');
-  if (!meus.length){
-    const k = CURSOS[0], c = document.createElement('div'); c.className = 'card';
-    c.innerHTML = `<div class="icon">${ICONS.curso}</div><h3>${k ? k.name : 'Cursos'}</h3><p>Você ainda não tem cursos aqui. Conheça o Reels Academy.</p><div class="meta"></div>`;
-    const b = document.createElement('div'); b.className = 'btns'; b.appendChild(btn('Ver curso', 'primary', () => abreLink(k?.venda))); c.appendChild(b); box.appendChild(c);
-  } else for (const k of meus){
-    const c = document.createElement('div'); c.className = 'card on';
-    c.innerHTML = `<div class="icon">${ICONS[k.key] || ICONS.curso}</div><h3>${k.name}</h3><p>${k.desc}</p><div class="meta"><span class="dot ok"></span>Liberado</div>`;
-    const b = document.createElement('div'); b.className = 'btns'; b.appendChild(btn('Acessar', 'primary', () => abreLink(k.url))); c.appendChild(b); box.appendChild(c);
   }
 }
 
