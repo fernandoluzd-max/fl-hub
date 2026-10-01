@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Gerador de Contrato — Base FL</title>
 <meta name="description" content="Termo rápido para o WhatsApp ou contrato completo em PDF, já preenchido com o seu orçamento.">
-<link rel="icon" href="/favicon.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" href="https://basefl.com/favicon.png">
+<link rel="apple-touch-icon" href="https://basefl.com/apple-touch-icon.png">
 <meta name="theme-color" content="#0B0C0C">
 <meta property="og:title" content="Gerador de Contrato — Base FL">
 <meta property="og:description" content="Termo rápido para o WhatsApp ou contrato completo em PDF, já preenchido com o seu orçamento.">
@@ -47,6 +47,10 @@ h1 em{font-style:normal;color:var(--a)}
 .btn svg{width:18px;height:18px}
 .nota{color:var(--mute);font-size:13.5px;line-height:1.4}
 .nota b{color:var(--ink)}
+.nota .parc{color:var(--mute)}
+.parcf{color:var(--mute);font-size:15px;margin:2px 0 4px}
+.parcf b{color:var(--ink)}
+.nota .pcur{font-family:var(--d);font-weight:900;font-size:17px;color:var(--a)}
 .hero{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center;padding:36px 0 20px}
 .hero.empilha{grid-template-columns:1fr;text-align:center;gap:40px}
 .hero.empilha .lead{margin:0 auto}
@@ -74,6 +78,23 @@ h2{font-family:var(--d);font-weight:850;font-stretch:106%;font-size:clamp(26px,3
 .cb b{display:block;font-size:17px}
 .cb span{display:block;color:var(--mute);font-size:14px;margin:4px 0 10px}
 .cb em{font-style:normal;font-size:13px;font-weight:700;color:var(--c)}
+.pss{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px;counter-reset:x}
+.ps{position:relative;background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:22px;padding:24px 22px}
+.ps .pn{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--a),var(--a2));color:var(--ai);font-family:var(--d);font-weight:900;font-size:20px;box-shadow:0 10px 26px -10px var(--a)}
+.ps h3{font-size:19px;margin:16px 0 6px}
+.ps p{color:var(--mute);font-size:14.5px}
+.ps:not(:last-child)::after{content:"";position:absolute;right:-17px;top:44px;width:18px;height:2px;background:linear-gradient(90deg,var(--a),transparent)}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
+.av{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px}
+.av.com{border-color:color-mix(in srgb,var(--a) 45%,var(--line));background:linear-gradient(180deg,color-mix(in srgb,var(--a) 8%,var(--card)),var(--card))}
+.av h4{font-family:var(--d);font-weight:850;font-size:18px;margin-bottom:14px}
+.av.com h4{color:var(--a)}
+.av ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.av li{display:flex;gap:10px;font-size:15px;line-height:1.4}
+.av li::before{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:900;margin-top:1px}
+.nao li{color:var(--mute)}
+.nao li::before{content:"✕";background:#2a2020;color:#e07a6e}
+.sim li::before{content:"✓";background:var(--a);color:var(--ai)}
 .faq{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-top:26px}
 details{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
 summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 18px;font-weight:650;font-size:15px}
@@ -100,7 +121,8 @@ footer a{color:var(--mute)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 @media (max-width:900px){
   .hero{grid-template-columns:1fr;gap:30px;text-align:left}
-  .bens,.faq{grid-template-columns:1fr}
+  .bens,.faq,.pss,.ad{grid-template-columns:1fr}
+  .ps:not(:last-child)::after{display:none}
   section{padding-top:70px}
   .palco{min-height:360px}
 }
@@ -136,7 +158,7 @@ footer a{color:var(--mute)}
 <div class="fx"></div>
 <div class="wrap">
   <div class="top">
-    <a class="mk" href="/"><img src="/logo.png" alt=""><span><b>Base FL</b><small>Ferramentas</small></span></a>
+    <a class="mk" href="https://basefl.com/"><img src="https://basefl.com/logo.png" alt=""><span><b>Base FL</b><small>Ferramentas</small></span></a>
     <span class="sp"></span>
     <button class="cta-s" data-comprar>Comprar</button>
   </div>
@@ -146,7 +168,7 @@ footer a{color:var(--mute)}
       <span class="kick">Ferramenta</span>
       <h1>Combinado bom é <em>combinado por escrito.</em></h1>
       <p class="lead">Gere um <b>termo rápido para o WhatsApp</b> ou um <b>contrato completo em PDF</b>, com prazo, revisões, pagamento e uso das imagens. Você responde poucas perguntas e o texto se monta sozinho.</p>
-      <div class="ctas"><button class="btn" data-comprar>Quero meu contrato <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="nota">Funciona no <b>celular e no computador</b></span></div>
+      <div class="ctas"><button class="btn" data-comprar>Quero meu contrato <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="nota"><b class="pcur">R$ 47</b> · acesso de 1 ano<br><span class="parc">ou 6x de R$ 8,79 no cartão</span><br>Funciona no <b>celular e no computador</b></span></div>
     </div>
     <div class="palco" aria-label="Demonstração de Gerador de Contrato"><div class="pp">
     <div class="pp-h"><b>CONTRATO DE PRESTAÇÃO DE SERVIÇO</b><small>Edição de vídeo</small></div>
@@ -158,13 +180,17 @@ footer a{color:var(--mute)}
   <div class="env" id="env">📎 Enviar PDF pro cliente</div><span class="rot">Demonstração</span></div>
   </div>
 
+  <section><span class="kick rv">Como funciona</span><h2 class="rv" style="margin-top:14px">Contrato pronto em poucos toques.</h2><div class="pss"><div class="ps rv"><span class="pn">1</span><h3>Escolha o formato</h3><p>Termo rápido para trabalhos pequenos ou contrato completo em PDF para os maiores.</p></div><div class="ps rv d1"><span class="pn">2</span><h3>Responda o básico</h3><p>Partes, trabalho, prazo, valor, pagamento e uso das imagens. Você vê o contrato se montando.</p></div><div class="ps rv d2"><span class="pn">3</span><h3>Envie para o cliente</h3><p>Mande o PDF pelo celular ou o texto no WhatsApp, na mesma hora.</p></div></div></section>
+
   <section>
     <h2 class="rv">Menos dor de cabeça, mais cliente sério.</h2>
-    <div class="bens"><div class="bem rv"><span class="n">01</span><h3>Dois formatos</h3><p>Termo rápido para mandar no WhatsApp em trabalhos pequenos, ou contrato completo em PDF para os maiores.</p></div><div class="bem rv d1"><span class="n">02</span><h3>Pronto em poucos passos</h3><p>Formato, partes, trabalho, prazo, valor e uso das imagens. Você toca nas opções e vê o contrato se montando na hora.</p></div><div class="bem rv d2"><span class="n">03</span><h3>Tudo que costuma dar briga</h3><p>Prazo, revisões incluídas, forma de pagamento, atraso de material e uso das imagens, em linguagem simples.</p></div></div>
+    <div class="bens"><div class="bem rv"><span class="n">01</span><h3>Dois formatos</h3><p>Termo rápido para mandar no WhatsApp em trabalhos pequenos, ou contrato completo em PDF para os maiores.</p></div><div class="bem rv d1"><span class="n">02</span><h3>Pronto em poucos passos</h3><p>Formato, partes, trabalho, prazo, valor e uso das imagens. Você toca nas opções e vê o contrato se montando na hora.</p></div><div class="bem rv d2"><span class="n">03</span><h3>Tudo que costuma dar briga</h3><p>Prazo, revisões incluídas, forma de pagamento, atraso de material e uso das imagens, em linguagem simples.</p></div><div class="bem rv d3"><span class="n">04</span><h3>Sem juridiquês</h3><p>Texto claro, que o cliente lê e entende sem precisar de advogado.</p></div><div class="bem rv d4"><span class="n">05</span><h3>PDF com cara profissional</h3><p>Resumo do trabalho, cláusulas numeradas e espaço para assinatura.</p></div><div class="bem rv d5"><span class="n">06</span><h3>Direto do celular</h3><p>Gere e envie o PDF pelo WhatsApp sem abrir o computador.</p></div></div>
     <div class="inclui rv"><span>Termo rápido</span><span>Contrato em PDF</span><span>8 cláusulas</span><span>Enviar pelo celular</span><span>Celular e computador</span></div>
   </section>
 
-  <section><h2 class="rv">Funciona sozinho. <em class="ac">E combina com:</em></h2><p class="sub2 rv">Cada ferramenta é vendida separadamente. Se você tiver mais de uma, elas conversam entre si.</p><div class="cbs rv"><a class="cb" href="/conheca/quanto-cobrar/" style="--c:#7BD88F"><b>Quanto Cobrar?</b><span>Gerou o orçamento? Um toque e ele vira contrato, já preenchido.</span><em>Ver produto →</em></a></div></section>
+  <section><h2 class="rv">Menos briga, mais trabalho bem pago.</h2><div class="ad"><div class="av rv"><h4>Sem o Gerador de Contrato</h4><ul class="nao"><li>Tudo combinado só por áudio</li><li>Cliente pede a quinta alteração de graça</li><li>Pagamento atrasa e não tem o que mostrar</li><li>Vídeo usado em anúncio sem ter combinado</li></ul></div><div class="av com rv d1"><h4>Com o Gerador de Contrato</h4><ul class="sim"><li>Tudo combinado por escrito, em linguagem simples</li><li>Número de revisões definido desde o começo</li><li>Forma e data de pagamento claras</li><li>Uso das imagens combinado antes de começar</li></ul></div></div></section>
+
+  <section><h2 class="rv">Funciona sozinho. <em class="ac">E combina com:</em></h2><p class="sub2 rv">Cada ferramenta é vendida separadamente. Se você tiver mais de uma, elas conversam entre si.</p><div class="cbs rv"><a class="cb" href="https://basefl.com/conheca/quanto-cobrar/" style="--c:#7BD88F"><b>Quanto Cobrar?</b><span>Gerou o orçamento? Um toque e ele vira contrato, já preenchido.</span><em>Ver produto →</em></a></div></section>
 
   <section>
     <h2 class="rv">Perguntas rápidas</h2>
@@ -175,19 +201,21 @@ footer a{color:var(--mute)}
     <span class="kick">Gerador de Contrato</span>
     <h2 style="margin-top:16px">Feche o próximo trabalho no papel.</h2>
     <div class="preco vpreco" hidden></div>
+    <div class="parcf">ou <b>6x de R$ 8,79</b> no cartão · ou à vista no Pix</div>
     <div class="ctas"><button class="btn" data-comprar>Quero meu contrato <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
     <div class="selos"><span>Acesso de 1 ano</span><span>Liberado na hora da compra</span><span>Celular e computador</span></div>
   </div>
 
-  <footer><a href="/">Base FL</a> · o ecossistema do editor de vídeo</footer>
+  <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo</footer>
 </div>
 <div class="toast" id="toast"></div>
 <script>
 
 // ====== COLE AQUI o link de checkout da Greenn e o preço (ex.: 'R$ 47') ======
-const CHECKOUT = 'COLE_AQUI_O_LINK_DA_GREENN';
-const PRECO = '';
+const CHECKOUT = 'https://payfast.greenn.com.br/4yskq2y';
+const PRECO = 'R$ 47';
 const PRODUTO = 'gerador-de-contrato';
+const ACESSO = '1 ano de acesso';
 // ============================================================================
 const $ = s => document.querySelector(s);
 const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -204,7 +232,7 @@ document.querySelectorAll('[data-comprar]').forEach(b => b.addEventListener('cli
   e.preventDefault(); const l = linkCompra();
   if (l) location.href = l; else toast('Link de compra em breve.');
 }));
-if (PRECO && !PRECO.startsWith('__')) document.querySelectorAll('.vpreco').forEach(e => { e.innerHTML = PRECO + ' <small>/ 1 ano de acesso</small>'; e.hidden = false; });
+if (PRECO && !PRECO.startsWith('__')) document.querySelectorAll('.vpreco').forEach(e => { e.innerHTML = PRECO + ' <small>/ ' + ACESSO + '</small>'; e.hidden = false; });
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); } }), { threshold:.15 });
 document.querySelectorAll('.rv').forEach(el => io.observe(el));
 // a demonstração só roda enquanto está visível

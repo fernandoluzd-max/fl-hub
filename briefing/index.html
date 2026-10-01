@@ -317,7 +317,7 @@ function respostas(r){
     <div class="card resumo">${linhasResumo(r).map(([k, n, v]) => `<div class="it" style="--cor:var(${COR[k]})"><span>${n}</span><b>${esc(v)}</b></div>`).join('')}
       ${r.ref ? `<div class="it"><span>Referência</span><b><a href="${/^https?:\/\//i.test(r.ref) ? esc(r.ref) : 'https://' + esc(r.ref)}" target="_blank" rel="noopener noreferrer">${esc(r.ref)}</a></b></div>` : ''}${r.obs ? `<div class="it"><span>Detalhes</span><b>${esc(r.obs)}</b></div>` : ''}</div>
     <div class="row" style="margin-top:16px"><button class="btn" id="calc">Calcular no Quanto Cobrar?</button></div>
-    <div class="row"><button class="btn ghost" id="dem">＋ Pôr nas Demandas</button><button class="btn ghost" id="cop">Copiar resumo</button></div>
+    <div class="row"><button class="btn ghost" id="dem">＋ Pôr no Organizador</button><button class="btn ghost" id="cop">Copiar resumo</button></div>
     ${S.length ? `<h2>O que observar</h2><ul class="sinais">${S.map(([i, t]) => `<li><i>${i}</i><span>${t}</span></li>`).join('')}</ul>` : ''}`);
   $('#calc').onclick = () => {
     const b = { modo:r.s, tipo:r.t !== 'outro' ? r.t : undefined, dur:r.d !== 'ns' ? r.d : undefined, edicao:r.e !== 'ns' ? r.e : undefined,
@@ -358,7 +358,7 @@ function vitrine(){
     <div class="mock" aria-hidden="true"><div class="prog"><i class="ok" style="--cor:var(--accent)"></i><i class="ok" style="--cor:var(--c-grav)"></i><i class="at" style="--cor:var(--c-video)"></i><i></i><i></i><i></i><i></i><i></i></div>
       <p>Que tipo de vídeo?</p><div class="o on">📱 Reels / TikTok / Shorts</div><div class="o">▶️ YouTube / vídeo longo</div><div class="o">🏢 Para empresa ou anúncio</div></div>
     <ol class="passos"><li><span><b>Você manda o seu link</b> para o cliente, no WhatsApp ou na bio.</span></li><li><span><b>Ele responde</b> serviço, tipo, quantidade, estilo, prazo e valor em mente.</span></li><li><span><b>As respostas chegam no seu WhatsApp</b> com um botão que já abre a calculadora preenchida.</span></li></ol>
-    <div class="lock"><ul><li>Seu link pessoal, com o seu nome</li><li>Respostas organizadas no seu WhatsApp</li><li>Liga direto no Quanto Cobrar? e nas Demandas</li></ul>
+    <div class="lock"><ul><li>Seu link pessoal, com o seu nome</li><li>Respostas organizadas no seu WhatsApp</li><li>Avisos do que observar antes de passar o preço</li></ul>
       <button class="btn" id="comprar">${vencido ? 'Renovar meu acesso' : 'Quero o meu link'}</button>
       <button class="link ja" id="entrar">Já comprei · entrar</button>
       <button class="link ja" id="demo">Ver como o cliente vê</button></div>`);

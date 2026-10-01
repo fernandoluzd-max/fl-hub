@@ -504,7 +504,7 @@ function orcamento(c){
     <input class="inp" id="cli" placeholder="Nome do cliente (opcional)" autocomplete="off">
     <div class="chat"><div class="para">Assim o seu cliente vai receber</div><div class="bolha"><textarea id="txt"></textarea><span class="hr">${hora} ✓✓</span></div></div>
     <div class="row"><button class="btn ghost" id="copiar">Copiar</button><button class="btn" id="zap">Enviar no WhatsApp</button></div>
-    <div class="row" style="margin-top:10px"><button class="btn ghost" id="painel">＋ Pôr nas Demandas</button><button class="btn ghost" id="contrato">Gerar contrato</button></div>`, 'entra');
+    <div class="row" style="margin-top:10px"><button class="btn ghost" id="painel">＋ Pôr no Organizador</button><button class="btn ghost" id="contrato">Gerar contrato</button></div>`, 'entra');
   const monta = () => {
     const nome = $('#cli').value.trim();
     const val = new Date(Date.now() + 7*864e5).toLocaleDateString('pt-BR');

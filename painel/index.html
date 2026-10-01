@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Finanças e Demandas — Base FL</title>
-<meta name="description" content="Finanças e Demandas: organize seus trabalhos de edição do orçamento ao pagamento. Prazos, revisões, dinheiro a receber e meta do mês.">
+<title>Organizador Base — Base FL</title>
+<meta name="description" content="Organizador Base: organize seus trabalhos de edição do orçamento ao pagamento. Prazos, revisões, dinheiro a receber e meta do mês.">
 <link rel="icon" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
@@ -169,7 +169,7 @@ textarea{min-height:70px;resize:vertical}
 <div class="top">
   <header>
     <img src="/logo.png" alt="">
-    <div class="nm">Finanças e Demandas<small>Base FL</small></div>
+    <div class="nm">Organizador Base<small>Base FL</small></div>
     <div class="sp"></div>
     <button class="link" id="conta"></button>
   </header>
@@ -249,7 +249,7 @@ function traduz(m){
   if (/expired|invalid/i.test(m) && /token|otp/i.test(m)) return 'Código inválido ou expirado. Confira ou peça outro.';
   if (/rate limit/i.test(m)) return 'Muitas tentativas. Aguarde alguns minutos.';
   if (/failed to fetch|network|load failed/i.test(m)) return 'Sem conexão com a internet.';
-  if (/row-level security/i.test(m)) return 'Seu acesso a Finanças e Demandas não está ativo.';
+  if (/row-level security/i.test(m)) return 'Seu acesso a Organizador Base não está ativo.';
   return m;
 }
 const fromAuth = r => ({ access_token:r.access_token, refresh_token:r.refresh_token, expires_at:r.expires_at || Math.floor(Date.now()/1000) + (r.expires_in||3600), email:r.user?.email });
@@ -279,8 +279,8 @@ async function carrega(){
       else if (linhas.length){ modo = 'leitura'; D = linhas; if (cfg[0]) META = +cfg[0].meta_mes || META; }
     } catch(e){ toast(traduz(e.message)); }
   }
-  if (modo === 'demo'){ D = exemplo(); F = exemploFerr(); META = 5000; aviso(sess ? 'Você está vendo um exemplo. Desbloqueie Finanças e Demandas para organizar os seus trabalhos.' : 'Este é um exemplo. Desbloqueie para organizar os seus trabalhos de verdade.', 'Desbloquear', !sess); }
-  if (modo === 'leitura') aviso(vencido ? 'Seu acesso de 1 ano terminou. Seus trabalhos estão salvos, mas só para leitura.' : 'Seu acesso a Finanças e Demandas não está ativo. Seus trabalhos estão salvos, só para leitura.', 'Renovar');
+  if (modo === 'demo'){ D = exemplo(); F = exemploFerr(); META = 5000; aviso(sess ? 'Você está vendo um exemplo. Desbloqueie Organizador Base para organizar os seus trabalhos.' : 'Este é um exemplo. Desbloqueie para organizar os seus trabalhos de verdade.', 'Desbloquear', !sess); }
+  if (modo === 'leitura') aviso(vencido ? 'Seu acesso de 1 ano terminou. Seus trabalhos estão salvos, mas só para leitura.' : 'Seu acesso a Organizador Base não está ativo. Seus trabalhos estão salvos, só para leitura.', 'Renovar');
   $('#fab').classList.toggle('hide', modo === 'leitura');
   botaoConta(); desenha();
   // veio da calculadora?
@@ -496,7 +496,7 @@ function folhaNova(pre = {}){
   abreFolha(`<h2>Nova demanda</h2><p class="sub">${pre.briefing ? 'Trouxe as respostas do briefing. Coloque o valor e salve.' : pre.cliente ? 'Trouxe os dados do seu orçamento. Confira e salve.' : 'Leva 20 segundos.'}</p>
     ${form(d)}
     <label>Onde ela entra</label><div class="chips" id="fcol">${COLS.slice(0,3).map(c => `<button class="chip${c.id === col ? ' on' : ''}" data-v="${c.id}" style="--cor:${c.c}"><span class="dt"></span>${c.t}</button>`).join('')}</div>
-    <button class="btn" id="salvar">Adicionar às demandas</button>`);
+    <button class="btn" id="salvar">Adicionar ao organizador</button>`);
   ligaChips();
   document.querySelectorAll('#fcol .chip').forEach(b => b.onclick = () => { col = b.dataset.v; document.querySelectorAll('#fcol .chip').forEach(x => x.classList.toggle('on', x === b)); });
   setTimeout(() => !pre.cliente && $('#fc').focus(), 250);
@@ -687,7 +687,7 @@ function login(){
           if (token.length < 6) throw new Error('Digite o código que chegou no e-mail.');
           const r = await api('/auth/v1/verify', { method:'POST', body:{ type:'email', email, token }, auth:false });
           salvaSess(fromAuth(r)); fechaFolha(); $('#aviso').classList.remove('on'); $('#avisoEntrar')?.remove(); await carrega();
-          toast(modo === 'cheio' ? 'Ferramenta desbloqueada' : 'Entrou, mas Finanças e Demandas não está nas compras deste e-mail');
+          toast(modo === 'cheio' ? 'Ferramenta desbloqueada' : 'Entrou, mas Organizador Base não está nas compras deste e-mail');
         }
       } catch(e){ $('#erro').textContent = traduz(e.message); b.disabled = false; }
     };
