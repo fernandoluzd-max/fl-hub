@@ -1,4 +1,4 @@
-name: Gerar instaladores do Pluga & Edita
+name: Gerar instaladores do Base FL
 
 on:
   push:
@@ -45,16 +45,18 @@ jobs:
         run: |
           mkdir -p saida
           if [ "${{ matrix.nome }}" = "mac" ]; then
-            cp "$(find target -path '*bundle/dmg/*.dmg' | head -1)" saida/Pluga-Edita-Mac.dmg
+            cp "$(find target -path '*bundle/dmg/*.dmg' | head -1)" saida/Base-FL-Mac.dmg
+            cp saida/Base-FL-Mac.dmg saida/Pluga-Edita-Mac.dmg          # nome antigo: mantém links antigos funcionando
           else
-            cp "$(find target -path '*bundle/nsis/*.exe' | head -1)" saida/Pluga-Edita-Windows.exe
+            cp "$(find target -path '*bundle/nsis/*.exe' | head -1)" saida/Base-FL-Windows.exe
+            cp saida/Base-FL-Windows.exe saida/Pluga-Edita-Windows.exe  # nome antigo: mantém links antigos funcionando
           fi
           ls -la saida
 
       - name: Guardar o instalador
         uses: actions/upload-artifact@v4
         with:
-          name: Pluga-Edita-${{ matrix.nome }}
+          name: Base-FL-${{ matrix.nome }}
           path: saida/*
           if-no-files-found: error
 
@@ -77,12 +79,14 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.versao.outputs.v }}
-          name: Pluga & Edita ${{ steps.versao.outputs.v }}
+          name: Base FL ${{ steps.versao.outputs.v }}
           make_latest: true
           overwrite_files: true
           body: |
-            Instaladores do app Pluga & Edita.
-            Mac: Pluga-Edita-Mac.dmg · Windows: Pluga-Edita-Windows.exe
+            Instaladores do app Base FL.
+            Mac: Base-FL-Mac.dmg · Windows: Base-FL-Windows.exe
           files: |
+            saida/Base-FL-Mac.dmg
+            saida/Base-FL-Windows.exe
             saida/Pluga-Edita-Mac.dmg
             saida/Pluga-Edita-Windows.exe
