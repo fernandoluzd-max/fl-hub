@@ -73,13 +73,13 @@ h1 em{font-style:normal;background:linear-gradient(90deg,#F6B356,#E8923A);-webki
 .barra i:nth-child(1){background:#ff5f57}.barra i:nth-child(2){background:#febc2e}.barra i:nth-child(3){background:#28c840}
 .barra span{flex:1;text-align:center;color:#7d7b72;font-size:12px;margin-right:48px}
 .escala{position:relative;overflow:hidden}
-.st{position:absolute;left:0;top:0;width:1080px;height:600px;transform-origin:0 0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;font-size:13px;background:radial-gradient(900px 520px at 12% -12%,#27352C 0%,#171A18 45%,transparent 75%),#0D0F0E}
+.st{position:absolute;left:0;top:0;width:1080px;height:640px;transform-origin:0 0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;font-size:13px;background:radial-gradient(900px 520px at 12% -12%,#27352C 0%,#171A18 45%,transparent 75%),#0D0F0E}
 .st-h{display:flex;align-items:center;gap:11px;padding:16px 22px 8px}
 .st-h img{width:34px;height:34px;border-radius:9px}
 .st-h b{font-size:15px;display:block;line-height:1.1}
 .st-h small{color:#9d998c;font-size:11px}
 .st-h .tm{margin-left:auto;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:#9d998c}
-.st-b{display:grid;grid-template-columns:210px 1fr;gap:16px;padding:8px 22px 18px;height:532px}
+.st-b{display:grid;grid-template-columns:210px 1fr;gap:16px;padding:8px 22px 18px;height:572px}
 .st-side{background:#141615;border:1px solid #262d28;border-radius:14px;padding:12px 14px;overflow:hidden}
 .st-side h6{font-size:11px;color:#9d998c;letter-spacing:.04em;font-weight:600;margin-bottom:10px}
 .lg{display:flex;flex-direction:column;gap:7px;font-size:11.5px;color:#d9d5c8}
@@ -98,10 +98,11 @@ h1 em{font-style:normal;background:linear-gradient(90deg,#F6B356,#E8923A);-webki
 .pl span{display:flex;align-items:center;gap:5px;border:1px solid #262d28;background:#141615;border-radius:99px;padding:3px 9px;font-size:10px;color:#9d998c}
 .pl span::before{content:"";width:6px;height:6px;border-radius:50%;background:#7fce8f}
 .cs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.c{position:relative;background:#171A18;border:1px solid #262d28;border-radius:13px;padding:11px;display:flex;flex-direction:column;gap:6px;transition:border-color .3s,transform .3s}
+.c{--c:242,165,65;position:relative;overflow:hidden;background:#171A18;border:1px solid #262d28;border-radius:13px;padding:11px;display:flex;flex-direction:column;gap:6px;transition:border-color .3s,transform .3s}
 .c .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,#26262c,#131316);border:1px solid #2f2f37;transition:background .4s}
 .c .ic svg{width:19px;height:19px;stroke:#fff}
-.c.on .ic{background:linear-gradient(145deg,#f6b862,#F2A541 60%,#d98a2b);border:none}
+.c.on .ic{background:linear-gradient(145deg,rgba(var(--c),.75),rgb(var(--c)) 60%,rgba(var(--c),.85));border:none}
+.c.on{border-top:2px solid rgba(var(--c),.55)}
 .c.on .ic svg{stroke:#141615}
 .c h4{font-size:12.5px;font-weight:700}
 .c p{color:#9d998c;font-size:10.5px;line-height:1.35;min-height:28px}
@@ -113,7 +114,17 @@ h1 em{font-style:normal;background:linear-gradient(90deg,#F6B356,#E8923A);-webki
 .c .bs span.gh{flex:none;background:transparent;color:#F4F0E4;border:1px solid #262d28;padding:6px 8px}
 .c .bs span .fill{position:absolute;inset:0 auto 0 0;width:0;background:rgba(20,22,21,.25)}
 .c .bs span em{position:relative;font-style:normal}
-.c.alvo{border-color:#F2A541;transform:translateY(-2px)}
+.c.alvo{border-color:rgb(var(--c));transform:translateY(-2px)}
+.c.vit{border-color:rgba(var(--c),.45);background:radial-gradient(120% 70% at 100% 0%,rgba(var(--c),.22),transparent 62%),#171A18;box-shadow:0 14px 30px -20px rgba(var(--c),.8)}
+.c.vit .ic{background:linear-gradient(145deg,rgba(var(--c),.75),rgb(var(--c)) 60%,rgba(var(--c),.85));border:none}
+.c.vit .ic svg{stroke:#141615}
+.c.vit::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.07),transparent);transform:skewX(-18deg);animation:brilho 5s ease-in-out infinite}
+@keyframes brilho{0%,62%{left:-60%}100%{left:130%}}
+.c .sl{position:absolute;top:10px;right:10px;font-size:8px;font-weight:800;letter-spacing:.08em;color:rgb(var(--c));background:rgba(var(--c),.14);border:1px solid rgba(var(--c),.45);border-radius:99px;padding:2px 6px}
+.c .gc{font-weight:800;font-size:11.5px;line-height:1.2;color:rgb(var(--c));margin-top:-2px}
+.c .pr{font-size:9.5px;color:#9d998c}.c .pr b{color:#F4F0E4;font-size:11px}
+.c .bs span.cta{background:rgb(var(--c));box-shadow:0 8px 18px -8px rgba(var(--c),.9)}
+.c.vit p{min-height:0}
 .cur{position:absolute;left:900px;top:560px;width:22px;height:22px;z-index:5;transition:left .7s cubic-bezier(.5,0,.2,1),top .7s cubic-bezier(.5,0,.2,1);filter:drop-shadow(0 2px 4px rgba(0,0,0,.6));pointer-events:none}
 .cur.clk{animation:clk .25s}
 @keyframes clk{50%{transform:scale(.8)}}
@@ -140,7 +151,7 @@ h2{font-family:var(--d);font-weight:850;font-stretch:108%;font-size:clamp(28px,4
 .pt>p{color:var(--mute);font-size:14.5px;margin-bottom:18px}
 .pt ul{list-style:none;display:flex;flex-direction:column;gap:9px}
 .pt li{display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
-.pt li .ic{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(145deg,#f6b862,#F2A541 60%,#d98a2b)}
+.pt li .ic{--k:242,165,65;flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(var(--k),.75),rgb(var(--k)) 60%,rgba(var(--k),.85));box-shadow:0 8px 20px -10px rgba(var(--k),.9)}
 .pt li .ic svg{width:18px;height:18px;stroke:#141615}
 .pt li b{display:block;font-size:14.5px}
 .pt li small{display:block;color:var(--mute);font-size:12.5px;line-height:1.35}
@@ -281,8 +292,8 @@ footer{color:var(--dim);font-size:12.5px;text-align:center;padding:40px 0 34px}
         <p>Materiais prontos que instalam direto no seu CapCut.</p>
         <ul>
           <li><span class="ic"><svg><use href="#i-legendas"/></svg></span><span><b>Legendas</b><small>Títulos e legendas dinâmicas, em pastas</small></span></li>
-          <li><span class="ic"><svg><use href="#i-sons"/></svg></span><span><b>Efeitos Sonoros</b><small>65 whooshes, impactos, risers e foleys</small></span></li>
-          <li><span class="ic"><svg><use href="#i-luts"/></svg></span><span><b>LUTs</b><small>3 de conversão + 20 looks de finalização</small></span></li>
+          <li><span class="ic" style="--k:90,184,255"><svg><use href="#i-sons"/></svg></span><span><b>Efeitos Sonoros</b><small>65 whooshes, impactos, risers e foleys</small></span></li>
+          <li><span class="ic" style="--k:255,111,174"><svg><use href="#i-luts"/></svg></span><span><b>LUTs</b><small>3 de conversão + 20 looks de finalização</small></span></li>
         </ul>
         <p class="bt">Botões: Instalar, Atualizar e Remover.</p>
       </div>
@@ -290,10 +301,10 @@ footer{color:var(--dim);font-size:12.5px;text-align:center;padding:40px 0 34px}
         <div class="lb"><h3>Ferramentas</h3><span class="onde">Navegador e celular</span></div>
         <p>Para precificar, fechar e organizar seus trabalhos.</p>
         <ul>
-          <li><span class="ic"><svg><use href="#i-briefing"/></svg></span><span><b>Gerador de Briefing</b><small>O cliente responde num link</small></span></li>
-          <li><span class="ic"><svg><use href="#i-preco"/></svg></span><span><b>Quanto Cobrar?</b><small>Seu preço e o orçamento em 1 minuto</small></span></li>
-          <li><span class="ic"><svg><use href="#i-contrato"/></svg></span><span><b>Gerador de Contrato</b><small>Termo rápido ou contrato em PDF</small></span></li>
-          <li><span class="ic"><svg><use href="#i-painel"/></svg></span><span><b>Organizador Base</b><small>Trabalhos, prazos e pagamentos</small></span></li>
+          <li><span class="ic" style="--k:63,208,194"><svg><use href="#i-briefing"/></svg></span><span><b>Gerador de Briefing</b><small>O cliente responde num link</small></span></li>
+          <li><span class="ic" style="--k:123,216,143"><svg><use href="#i-preco"/></svg></span><span><b>Quanto Cobrar?</b><small>Seu preço e o orçamento em 1 minuto</small></span></li>
+          <li><span class="ic" style="--k:169,139,255"><svg><use href="#i-contrato"/></svg></span><span><b>Gerador de Contrato</b><small>Termo rápido ou contrato em PDF</small></span></li>
+          <li><span class="ic" style="--k:255,179,71"><svg><use href="#i-painel"/></svg></span><span><b>Organizador Base</b><small>Trabalhos, prazos e pagamentos</small></span></li>
         </ul>
         <p class="bt">Botão: Abrir.</p>
       </div>
@@ -303,7 +314,7 @@ footer{color:var(--dim);font-size:12.5px;text-align:center;padding:40px 0 34px}
   <section class="blk">
     <div class="kick rv">Do primeiro contato ao pagamento</div>
     <h2 class="rv d1">As ferramentas passam a bola uma para a outra.</h2>
-    <p class="h2sub rv d2">O que você preenche em uma já chega pronto na próxima. Sem copiar e colar.</p>
+    <p class="h2sub rv d2">Cada ferramenta é vendida separadamente. Se você tiver mais de uma, o que preenche numa já chega pronto na outra.</p>
     <div class="fluxo rv d2">
       <div class="nd"><span class="n">01</span><b>Briefing</b><small>O cliente conta o que precisa</small></div><span class="lig"></span>
       <div class="nd"><span class="n">02</span><b>Quanto Cobrar?</b><small>Abre já preenchido e dá o seu preço</small></div><span class="lig"></span>
@@ -396,7 +407,7 @@ document.querySelectorAll('.rv').forEach(el => io.observe(el));
 // ===== demonstração animada do app =====
 const $ = s => document.querySelector(s);
 const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const W = 1080, H = 600;
+const W = 1080, H = 640;
 function ajusta(){
   const e = $('#escala'), s = e.clientWidth / W;
   $('#st').style.transform = `scale(${s})`; e.style.height = (H * s) + 'px';
@@ -405,18 +416,22 @@ addEventListener('resize', ajusta); ajusta();
 setTimeout(() => $('#janela').classList.add('in'), 150);
 
 const KITS = [
-  { k:'legendas', t:'Legendas', d:'Títulos e legendas dinâmicas, organizados em pastas.', on:true, mt:'Instalado · v1.0.0' },
-  { k:'sons', t:'Efeitos Sonoros', d:'65 whooshes, impactos, risers e foleys.', on:false, mt:'Liberado · não instalado', id:'c-sons' },
-  { k:'luts', t:'LUTs', d:'3 de conversão + 20 looks de finalização.', on:true, mt:'Instalado · v1.0.0 · 23 LUTs' },
+  { k:'legendas', t:'Legendas', d:'Títulos e legendas dinâmicas, organizados em pastas.', on:true, mt:'Instalado · v1.0.0', c:'242,165,65' },
+  { k:'sons', t:'Efeitos Sonoros', d:'65 whooshes, impactos, risers e foleys.', on:false, mt:'Liberado · não instalado', id:'c-sons', c:'90,184,255' },
+  { k:'luts', t:'LUTs', d:'20 looks + 3 LUTs de conversão.', vit:true, g:'Cor de cinema em um clique', pr:'R$ 19', ac:'vitalício', c:'255,111,174' },
 ];
 const FERR = [
-  { k:'preco', t:'Quanto Cobrar?', d:'Seu preço e o orçamento em 1 minuto.' },
-  { k:'contrato', t:'Gerador de Contrato', d:'Termo rápido ou contrato em PDF.' },
-  { k:'briefing', t:'Gerador de Briefing', d:'O cliente responde num link.', id:'c-brief' },
-  { k:'painel', t:'Organizador Base', d:'Trabalhos, prazos e pagamentos.' },
+  { k:'preco', t:'Quanto Cobrar?', d:'Seu preço e o orçamento em 1 minuto.', c:'123,216,143' },
+  { k:'contrato', t:'Gerador de Contrato', d:'Termo rápido ou contrato em PDF.', vit:true, g:'Combinado por escrito', pr:'R$ 47', ac:'1 ano', c:'169,139,255', id:'c-contrato' },
+  { k:'briefing', t:'Gerador de Briefing', d:'O cliente responde num link.', id:'c-brief', c:'63,208,194' },
+  { k:'painel', t:'Organizador Base', d:'Trabalhos, prazos e pagamentos.', vit:true, g:'O que entregar e o que já entrou', pr:'R$ 67', ac:'1 ano', c:'255,179,71' },
 ];
-const card = (c, web) => `<div class="c${c.on || web ? ' on' : ''}"${c.id ? ` id="${c.id}"` : ''}><span class="ic"><svg><use href="#i-${c.k}"/></svg></span><h4>${c.t}</h4><p>${c.d}</p><span class="mt">${web ? 'Liberado · navegador e celular' : c.mt}</span>
-  <div class="bs">${web ? '<span><em>Abrir</em></span>' : c.on ? '<span><em>Atualizar</em></span><span class="gh">Remover</span>' : '<span><span class="fill"></span><em>Instalar</em></span>'}</div></div>`;
+const card = (c, web) => {
+  const cls = c.vit ? ' vit' : (c.on || web ? ' on' : '');
+  const bs = c.vit ? '<span class="cta"><em>Conhecer →</em></span>' : web ? '<span><em>Abrir</em></span>' : c.on ? '<span><em>Atualizar</em></span><span class="gh">Remover</span>' : '<span><span class="fill"></span><em>Instalar</em></span>';
+  const mt = c.vit ? `<span class="pr"><b>${c.pr}</b> · acesso ${c.ac}</span>` : `<span class="mt">${web ? 'Liberado · navegador e celular' : c.mt}</span>`;
+  return `<div class="c${cls}" style="--c:${c.c}"${c.id ? ` id="${c.id}"` : ''}>${c.vit ? '<span class="sl">CONHEÇA</span>' : ''}<span class="ic"><svg><use href="#i-${c.k}"/></svg></span><h4>${c.t}</h4>${c.vit ? `<div class="gc">${c.g}</div>` : ''}<p>${c.d}</p>${mt}<div class="bs">${bs}</div></div>`;
+};
 function monta(){
   $('#kits').innerHTML = KITS.map(c => card(c)).join('');
   $('#kits').style.gridTemplateColumns = 'repeat(3,1fr)';
@@ -454,6 +469,9 @@ async function roda(){
     const br = $('#c-brief'); br.classList.add('alvo'); await vaiPara(br.querySelector('.bs span')); await clica();
     log('Abrindo Gerador de Briefing no navegador', 'ok'); toastm('Abrindo no navegador…');
     await dorme(700); br.classList.remove('alvo');
+    await dorme(1200);
+    const ct = $('#c-contrato'); await vaiPara(ct.querySelector('.bs span')); await clica();
+    log('Abrindo a página do Gerador de Contrato', 'ok'); toastm('Conhecendo o Gerador de Contrato…');
     await dorme(2600);
     if (calmo) break;
   }
