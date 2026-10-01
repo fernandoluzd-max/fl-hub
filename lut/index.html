@@ -3,104 +3,131 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Copia Cor — Base FL</title>
-<meta name="description" content="Copie a cor de qualquer vídeo de referência e baixe a sua LUT pronta para o CapCut.">
-<link rel="icon" href="/favicon.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="theme-color" content="#0B0C0C">
+<title>Mood — Base FL</title>
+<meta name="description" content="Copie o mood de qualquer vídeo. Escolha a referência, ajuste e baixe a LUT pronta.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#141615">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0B0C0C; --panel:#141716; --panel2:#1A1E1C; --line:#262B28; --ink:#F4F0E4; --mute:#A3A396; --dim:#63625a;
-  --a:#FF6FAE; --a2:#B45CFF; --ai:#16070f; --ok:#7fce8f;
-  --grad:linear-gradient(120deg,#FFB347,#FF6FAE 45%,#B45CFF 75%,#5AB8FF);
+  --bg:#111312; --panel:#191C1B; --panel2:#202423; --line:#2B302E; --ink:#F4F0E4; --mute:#B3B4A2; --dim:#6F7066;
+  --a:#FF6FAE; --a2:#B45CFF; --ok:#7fce8f;
+  --grad:linear-gradient(125deg,#FFB347,#FF6FAE 38%,#B45CFF 70%,#5AB8FF);
   --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   --f:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --m:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--bg)}
 body{color:var(--ink);font:16px/1.5 var(--f);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(800px 460px at 85% -10%,rgba(255,111,174,.13),transparent 70%),radial-gradient(700px 420px at -5% 5%,rgba(90,184,255,.08),transparent 70%)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(760px 520px at 88% -8%,rgba(180,92,255,.16),transparent 70%),radial-gradient(620px 420px at -6% 4%,rgba(255,179,71,.07),transparent 70%)}
 button{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--a);outline-offset:3px;border-radius:10px}
 .wrap{position:relative;max-width:1180px;margin:0 auto;padding:16px 18px 48px}
-header{display:flex;align-items:center;gap:10px;margin-bottom:18px}
-header img{width:34px;height:34px;border-radius:9px}
-header .nm{font-family:var(--d);font-weight:800;font-size:16px;line-height:1.1}
-header .nm small{display:block;font-family:var(--f);font-weight:500;color:var(--mute);font-size:12px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.mood{font-family:var(--d);font-weight:800;font-size:30px;line-height:1;letter-spacing:-.02em;display:inline-flex;align-items:baseline;color:var(--ink)}
+.mood svg{height:.56em;width:1em;margin:0 .035em;flex:none}
+header .de{font-family:var(--m);font-size:10.5px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;padding-left:12px;border-left:1px solid var(--line)}
 header .sp{flex:1}
 .link{background:none;border:0;color:var(--mute);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.mono{font-family:var(--m);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
 
-/* passos */
 .passos{display:flex;gap:6px;margin-bottom:22px}
 .passos div{flex:1;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--dim);padding:9px 12px;border-radius:12px;background:var(--panel);border:1px solid var(--line);white-space:nowrap;overflow:hidden}
 .passos i{flex:none;font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;background:var(--panel2);border:1px solid var(--line)}
-.passos .at{color:var(--ink);border-color:rgba(255,111,174,.5)}
+.passos .at{color:var(--ink);border-color:rgba(180,92,255,.55)}
 .passos .at i{background:var(--grad);color:#111;border:0}
 .passos .ok{color:var(--mute)}
 .passos .ok i{background:var(--ok);color:#0b1a10;border:0}
 @media (max-width:640px){.passos span{display:none}.passos div{justify-content:center}}
 
-h1{font-family:var(--d);font-weight:850;font-stretch:112%;font-size:clamp(26px,5vw,40px);line-height:1.04;letter-spacing:-.03em;margin-bottom:8px;text-wrap:balance}
+.sobre-t{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sobre-t::before{content:"";width:26px;height:2px;border-radius:2px;background:var(--grad)}
+h1{font-family:var(--d);font-weight:800;font-size:clamp(28px,5.2vw,44px);line-height:1.02;letter-spacing:-.03em;margin-bottom:10px;text-wrap:balance}
 h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .sub{color:var(--mute);font-size:15.5px;max-width:60ch;margin-bottom:22px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;font-weight:750;font-size:16px;border-radius:15px;padding:15px 22px;border:0;background:var(--grad);color:#14070e;transition:transform .12s,filter .15s,box-shadow .2s;box-shadow:0 12px 34px -14px rgba(255,111,174,.8)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;font-weight:750;font-size:16px;border-radius:15px;padding:15px 22px;border:0;background:var(--grad);color:#14070e;transition:transform .12s,filter .15s,box-shadow .2s;box-shadow:0 12px 34px -14px rgba(180,92,255,.85)}
 .btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
 .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
 .btn.full{width:100%}
 .hide{display:none!important}
 
-/* passo 1: as duas imagens */
+/* passo 1 */
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;min-height:300px;border-radius:22px;border:1.5px dashed #3a403c;background:var(--panel);cursor:pointer;overflow:hidden;transition:border-color .2s,background .2s,transform .15s}
-.drop:hover,.drop.sobre{border-color:var(--a);background:var(--panel2)}
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;min-height:310px;border-radius:22px;border:1.5px dashed #3d4340;background:var(--panel);cursor:pointer;overflow:hidden;transition:border-color .2s,background .2s,transform .15s}
+.drop:hover,.drop.sobre{border-color:var(--a2);background:var(--panel2)}
 .drop.sobre{transform:scale(1.01)}
 .drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
-.drop .n{font-family:var(--d);font-weight:900;font-size:13px;letter-spacing:.12em;color:var(--a)}
-.drop b{font-family:var(--d);font-weight:800;font-size:21px}
-.drop p{color:var(--mute);font-size:14px;max-width:26ch}
-.drop .up{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--line);margin-bottom:4px}
-.drop .up svg{width:24px;height:24px;stroke:var(--ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.drop canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.drop .bola{width:62px;height:62px;border-radius:50%;margin-bottom:6px}
+.drop .bola.r{background:var(--grad)}
+.drop .bola.v{border:9px solid var(--ink)}
+.drop .n{font-family:var(--m);font-size:11.5px;letter-spacing:.16em;color:var(--mute)}
+.drop b{font-family:var(--d);font-weight:800;font-size:21px;padding:0 14px}
+.drop p{color:var(--mute);font-size:14px;max-width:30ch;padding:0 10px}
+.drop>canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .drop.tem{border-style:solid;border-color:var(--line)}
 .drop.tem .txt{display:none}
-.drop .tag{position:absolute;left:12px;top:12px;z-index:2;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:99px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px)}
-.drop .troca{position:absolute;right:12px;top:12px;z-index:2;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:99px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);display:none}
+.drop.lendo::after{content:"Abrindo…";position:absolute;inset:0;display:grid;place-items:center;background:rgba(17,19,18,.82);font-weight:700;z-index:4}
+.drop .tag,.drop .troca{position:absolute;top:12px;z-index:2;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:99px;background:rgba(0,0,0,.62);backdrop-filter:blur(6px)}
+.drop .tag{left:12px}.drop .troca{right:12px;display:none}
 .drop.tem .troca{display:block}
+.drop .nota{position:absolute;left:12px;right:12px;bottom:12px;z-index:2;font-size:12px;font-weight:600;padding:7px 10px;border-radius:12px;background:rgba(0,0,0,.66);backdrop-filter:blur(6px);text-align:left;line-height:1.3}
+.drop .nota.al{color:#ffcf8a}
+.tira{position:absolute;left:10px;right:10px;bottom:10px;z-index:3;display:flex;gap:6px;align-items:flex-end}
+.tira button{flex:1;min-width:0;aspect-ratio:16/10;border-radius:9px;overflow:hidden;border:2px solid transparent;padding:0;cursor:pointer;background:#000;max-width:88px}
+.tira button.on{border-color:#fff}
+.tira canvas{width:100%;height:100%;object-fit:cover;display:block}
+.tira+.nota{bottom:auto;top:46px;right:auto}
 .acoes{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:20px}
 .dica{color:var(--dim);font-size:13px}
-@media (max-width:720px){.duo{grid-template-columns:1fr}.drop{min-height:210px}}
+.dicas{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
+.dicas div{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:13px 14px;font-size:13.5px;color:var(--mute);line-height:1.4}
+.dicas b{display:block;color:var(--ink);font-size:14px;margin-bottom:2px}
+@media (max-width:720px){.duo{grid-template-columns:1fr}.drop{min-height:220px}.dicas{grid-template-columns:1fr}}
 
-/* analisando */
-.scan{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--line);max-width:760px;margin:0 auto;aspect-ratio:16/9;background:#111}
-.scan canvas{width:100%;height:100%;object-fit:cover;display:block}
-.scan::after{content:"";position:absolute;top:0;bottom:0;width:26%;left:-30%;background:linear-gradient(90deg,transparent,rgba(255,111,174,.35),rgba(180,92,255,.5),transparent);animation:varre 1.3s ease-in-out infinite}
-@keyframes varre{to{left:110%}}
-.scan-t{text-align:center;margin-top:18px;color:var(--mute);font-weight:600}
+/* analisando: as duas bolas da marca se encontram */
+.junta{position:relative;height:250px;max-width:520px;margin:26px auto 0}
+.junta .b{position:absolute;top:50%;width:190px;height:190px;margin-top:-95px;border-radius:50%;overflow:hidden}
+.junta .b canvas{width:100%;height:100%;object-fit:cover;display:block}
+.junta .b.r{left:calc(50% - 170px);box-shadow:0 0 0 4px #FF6FAE,0 0 60px rgba(180,92,255,.5);animation:jr 2.1s cubic-bezier(.6,0,.3,1) both}
+.junta .b.v{left:calc(50% - 20px);box-shadow:0 0 0 8px var(--ink);animation:jv 2.1s cubic-bezier(.6,0,.3,1) both}
+.junta .b.v::after{content:"";position:absolute;inset:0;background:var(--grad);mix-blend-mode:soft-light;opacity:0;animation:jc 2.1s ease both}
+@keyframes jr{from{transform:translateX(-46px)}to{transform:translateX(20px)}}
+@keyframes jv{from{transform:translateX(46px)}to{transform:translateX(-20px)}}
+@keyframes jc{60%{opacity:0}to{opacity:.85}}
+.scan-t{text-align:center;margin-top:10px;color:var(--mute);font-weight:600;min-height:24px}
+.barra{max-width:300px;height:5px;border-radius:5px;background:var(--panel2);margin:14px auto 0;overflow:hidden}
+.barra i{display:block;height:100%;width:0;background:var(--grad);border-radius:5px;transition:width .5s ease}
 
-/* passo 3: ajuste */
-.ed{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;align-items:start}
+/* passo 2 */
+.ed{display:grid;grid-template-columns:minmax(0,1fr) 372px;grid-template-areas:"a b" "c b";gap:14px 18px;align-items:start}
+.pvw{grid-area:a;min-width:0}.painel{grid-area:b}.extras{grid-area:c;min-width:0}
+.modos{display:inline-flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:4px;margin-bottom:10px}
+.md{cursor:pointer;border:0;background:none;font-weight:700;font-size:13px;color:var(--mute);padding:7px 12px;border-radius:9px}
+.md.on{background:var(--ink);color:#111}
 .pv{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:#0e0f0f;touch-action:none;user-select:none;-webkit-user-select:none}
 .pv canvas{display:block;width:100%;height:auto}
 .pv .dep{position:absolute;inset:0;width:100%;height:100%}
 .pv .corte{position:absolute;top:0;bottom:0;width:2px;background:#fff;box-shadow:0 0 14px rgba(255,255,255,.7);z-index:2;cursor:ew-resize}
 .pv .corte span{position:absolute;top:50%;left:50%;width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.45);display:grid;place-items:center;color:#111;font-weight:900;font-size:13px;letter-spacing:2px}
-.pv .tg{position:absolute;top:12px;z-index:3;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:99px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);pointer-events:none}
-.pv .tg.l{left:12px}.pv .tg.r{right:12px;background:var(--grad);color:#111}
-.sob{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
-.refm{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px 12px 8px 8px}
-.refm canvas{width:64px;height:40px;border-radius:8px;object-fit:cover}
-.refm small{display:block;color:var(--mute);font-size:11.5px}
-.pal{display:flex;gap:0;border-radius:10px;overflow:hidden;border:1px solid var(--line);height:40px;flex:1;min-width:160px}
-.pal i{flex:1}
+.tg{position:absolute;top:12px;z-index:3;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:99px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);pointer-events:none}
+.tg.l{left:12px}.tg.r{right:12px;background:var(--grad);color:#111}
+.lado{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lado figure{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#0e0f0f;aspect-ratio:16/10}
+.lado canvas{width:100%;height:100%;object-fit:cover;display:block}
+.pals{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.pal{display:flex;border-radius:9px;overflow:hidden;height:26px}
+.pal i{flex:1;transition:background .25s}
 .cenas{margin-top:16px}
 .cenas h3{font-size:14px;font-weight:700;margin-bottom:4px}
 .cenas p{color:var(--mute);font-size:13px;margin-bottom:10px}
 .cg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.cn{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;border:1.5px dashed #3a403c;background:var(--panel);display:grid;place-items:center;cursor:pointer;color:var(--mute);font-size:13px;font-weight:600;text-align:center}
+.cn{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;border:1.5px dashed #3d4340;background:var(--panel);display:grid;place-items:center;cursor:pointer;color:var(--mute);font-size:13px;font-weight:600;text-align:center}
 .cn input{position:absolute;inset:0;opacity:0;cursor:pointer}
 .cn canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .cn.tem{border-style:solid;border-color:var(--line)}
@@ -108,7 +135,16 @@ h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;back
 .cn.tem .x{display:block}
 
 .painel{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:18px}
-.painel h2{font-family:var(--d);font-weight:800;font-size:15px;letter-spacing:.02em;margin-bottom:12px}
+.med{display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.med .anel{flex:none;width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(from 210deg,#FFB347,#FF6FAE,#B45CFF,#5AB8FF var(--p,0%),#2c322e 0);transition:--p .3s}
+.med .anel b{width:60px;height:60px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-family:var(--d);font-weight:800;font-size:19px;font-variant-numeric:tabular-nums}
+.med strong{display:block;font-size:15px;line-height:1.25}
+.med small{display:block;color:var(--mute);font-size:12.5px;line-height:1.35;margin-top:2px}
+.painel .mono{display:block;margin-bottom:9px}
+.est{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:16px}
+.es{cursor:pointer;border:1px solid var(--line);background:var(--panel2);border-radius:14px;padding:10px 6px;text-align:center;transition:border-color .15s,background .15s}
+.es b{display:block;font-size:14px}.es small{display:block;color:var(--mute);font-size:11.5px;line-height:1.25}
+.es.on{border-color:transparent;background:linear-gradient(var(--panel2),var(--panel2)) padding-box,var(--grad) border-box;border:1.5px solid transparent}
 .ctl{margin-bottom:14px}
 .ctl .l{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;font-weight:600;margin-bottom:6px}
 .ctl .l small{font-weight:500;color:var(--mute);font-size:12px}
@@ -116,42 +152,44 @@ h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;back
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;background:var(--trk,#2c322e);outline:none;cursor:pointer}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:0;box-shadow:0 2px 8px rgba(0,0,0,.5)}
 input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:0}
-.grande input[type=range]{height:8px;--trk:linear-gradient(90deg,#2c322e,var(--a))}
+.grande input[type=range]{height:9px;--trk:linear-gradient(90deg,#2c322e,#FF6FAE 60%,#B45CFF)}
 .sw{display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px;margin:4px 0 16px;cursor:pointer}
 .sw b{display:block;font-size:14px}.sw small{display:block;color:var(--mute);font-size:12.5px;line-height:1.3}
 .sw .tog{flex:none;width:44px;height:26px;border-radius:26px;background:#2c322e;position:relative;transition:background .2s}
 .sw .tog::after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
 .sw.on .tog{background:var(--ok)}.sw.on .tog::after{transform:translateX(18px)}
 details.fino{border-top:1px solid var(--line);padding-top:12px;margin-bottom:6px}
-details.fino summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;font-weight:700;font-size:14px;margin-bottom:12px}
+details.fino summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:baseline;font-weight:700;font-size:14px;margin-bottom:12px}
+details.fino summary small{font-weight:500;color:var(--dim);font-size:12px;margin-left:8px;flex:1}
 details.fino summary::-webkit-details-marker{display:none}
 details.fino summary::after{content:"+";color:var(--a);font-size:18px}
 details.fino[open] summary::after{content:"–"}
 .rst{display:block;margin:2px 0 14px auto}
-@media (max-width:960px){.ed{grid-template-columns:1fr}}
+@media (max-width:960px){.ed{grid-template-columns:minmax(0,1fr);grid-template-areas:"a" "b" "c"}.pvw{position:sticky;top:0;z-index:6;background:var(--bg);padding:6px 0 8px;margin:-6px 0 0}}
 
 /* pronto */
 .fim{max-width:640px;margin:0 auto;text-align:center}
+.fim .sobre-t{justify-content:center}
 .arq{display:flex;align-items:center;gap:14px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:16px;margin:22px 0 16px}
-.arq .ic{flex:none;width:56px;height:56px;border-radius:16px;background:var(--grad);display:grid;place-items:center;font-family:var(--d);font-weight:900;font-size:13px;color:#111}
+.arq .ic{flex:none;width:56px;height:56px;border-radius:16px;background:var(--grad);display:grid;place-items:center;font-family:var(--m);font-size:12px;color:#111}
 .arq b{display:block;font-family:var(--d);font-weight:800;font-size:19px}
 .arq small{display:block;color:var(--mute);font-size:13px}
 .como{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px 20px;margin-top:18px}
 .como h3{font-size:15px;margin-bottom:10px}
 .como ol{padding-left:20px;display:flex;flex-direction:column;gap:7px;color:var(--mute);font-size:14.5px}
 .como b{color:var(--ink)}
-.capcut{display:flex;align-items:center;gap:12px;text-align:left;background:linear-gradient(90deg,rgba(255,111,174,.10),transparent);border:1px dashed rgba(255,111,174,.45);border-radius:18px;padding:14px 16px;margin-top:14px}
+.capcut{display:flex;align-items:center;gap:12px;text-align:left;background:linear-gradient(90deg,rgba(180,92,255,.12),transparent);border:1px dashed rgba(180,92,255,.5);border-radius:18px;padding:14px 16px;margin-top:14px}
 .capcut b{display:block;font-size:15px}.capcut small{display:block;color:var(--mute);font-size:13px}
-.capcut .breve{margin-left:auto;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--a);border:1px solid rgba(255,111,174,.5);border-radius:99px;padding:4px 9px;white-space:nowrap}
+.capcut .breve{margin-left:auto;font-family:var(--m);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#d7b3ff;border:1px solid rgba(180,92,255,.55);border-radius:99px;padding:4px 9px;white-space:nowrap}
 .progs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
 .pg{cursor:pointer;font-weight:700;font-size:13px;color:var(--mute);background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:7px 13px}
 .pg.on{background:var(--ink);color:#111;border-color:var(--ink)}
 .lock{border-top:1px dashed var(--line);margin-top:16px;padding-top:16px}
 .lock p{font-weight:700;margin-bottom:4px}.lock .sm{color:var(--mute);font-size:14px;margin-bottom:12px}
 .inp{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font:inherit;font-size:16px;outline:none;margin-bottom:12px}
-.inp:focus{border-color:var(--a)}
+.inp:focus{border-color:var(--a2)}
 .err{color:#ff8f7a;font-size:14px;min-height:20px;margin-top:8px}
-.toast{pointer-events:none;position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#111;font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;transition:all .25s;z-index:30;white-space:nowrap}
+.toast{pointer-events:none;position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#111;font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;transition:all .25s;z-index:30;max-width:92vw;text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 .entra>*{animation:entra .35s cubic-bezier(.2,.8,.2,1) both}
 @keyframes entra{from{opacity:0;transform:translateY(10px)}}
@@ -161,8 +199,8 @@ details.fino[open] summary::after{content:"–"}
 <body>
 <div class="wrap">
   <header>
-    <img src="/logo.png" alt="">
-    <div class="nm">Copia Cor<small>Base FL</small></div>
+    <span class="mood" aria-label="Mood">M<svg viewBox="0 0 414 231" aria-hidden="true"><defs><linearGradient id="mg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="298" y2="231"><stop offset="0" stop-color="#FFB347"/><stop offset=".38" stop-color="#FF6FAE"/><stop offset=".7" stop-color="#B45CFF"/><stop offset="1" stop-color="#5AB8FF"/></linearGradient></defs><circle cx="115.5" cy="115.5" r="115.5" fill="url(#mg)"/><circle cx="298" cy="115.5" r="99.9" fill="none" stroke="currentColor" stroke-width="31.2"/></svg>d</span>
+    <span class="de">Base FL</span>
     <div class="sp"></div>
     <button class="link" id="conta"></button>
   </header>
@@ -183,11 +221,11 @@ const N = 33;                       // tamanho padrão do .cube
 const $ = s => document.querySelector(s);
 const store = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k,v){ try { v==null ? localStorage.removeItem(k) : localStorage.setItem(k,v); } catch {} } };
 const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const espera = ms => new Promise(r => setTimeout(r, calmo ? Math.min(ms, 80) : ms));
-function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2400); }
+const espera = ms => new Promise(r => setTimeout(r, calmo ? Math.min(ms, 60) : ms));
+function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 3200); }
 function tela(html){ const m = $('#tela'); m.className = 'entra'; m.innerHTML = html; window.scrollTo({ top:0 }); }
 function passos(at){
-  const P = ['Seu vídeo e a referência','Ajuste','Pronto'];
+  const P = ['Referência e seu vídeo','Ajuste','Pronto'];
   $('#passos').innerHTML = P.map((p, i) => `<div class="${i < at ? 'ok' : i === at ? 'at' : ''}"><i>${i < at ? '✓' : i + 1}</i><span>${p}</span></div>`).join('');
 }
 
@@ -196,46 +234,84 @@ const lin = c => c <= .04045 ? c / 12.92 : Math.pow((c + .055) / 1.055, 2.4);
 const gam = c => c <= .0031308 ? c * 12.92 : 1.055 * Math.pow(c, 1 / 2.4) - .055;
 const fL = t => t > .008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116;
 const fI = t => t > .206893 ? t * t * t : (t - 16 / 116) / 7.787;
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const suave = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
 function lab(r, g, b){   // r,g,b em 0..1
   r = lin(r); g = lin(g); b = lin(b);
   const x = (.4124564*r + .3575761*g + .1804375*b) / .95047, y = .2126729*r + .7151522*g + .072175*b, z = (.0193339*r + .119192*g + .9503041*b) / 1.08883;
   const fx = fL(x), fy = fL(y), fz = fL(z);
   return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
 }
-function rgb(L, a, b){
+function linear(L, a, b){   // Lab -> RGB linear (pode sair da faixa 0..1)
   const fy = (L + 16) / 116, fx = fy + a / 500, fz = fy - b / 200;
   const x = fI(fx) * .95047, y = fI(fy), z = fI(fz) * 1.08883;
-  const r = 3.2404542*x - 1.5371385*y - .4985314*z, g = -.969266*x + 1.8760108*y + .041556*z, bb = .0556434*x - .2040259*y + 1.0572252*z;
-  return [gam(Math.min(1, Math.max(0, r))), gam(Math.min(1, Math.max(0, g))), gam(Math.min(1, Math.max(0, bb)))];
+  return [3.2404542*x - 1.5371385*y - .4985314*z, -.969266*x + 1.8760108*y + .041556*z, .0556434*x - .2040259*y + 1.0572252*z];
 }
-const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
-const suave = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
+function rgb(L, a, b){   // Lab -> sRGB. Cor que não cabe na tela perde saturação aos poucos, sem mudar de tom.
+  let v = linear(L, a, b);
+  const fora = v => v[0] < -.0005 || v[1] < -.0005 || v[2] < -.0005 || v[0] > 1.0005 || v[1] > 1.0005 || v[2] > 1.0005;
+  if (fora(v)){
+    let lo = 0, hi = 1;
+    for (let i = 0; i < 7; i++){ const m = (lo + hi) / 2; if (fora(linear(L, a * m, b * m))) hi = m; else lo = m; }
+    v = linear(L, a * lo, b * lo);
+  }
+  return [gam(clamp(v[0], 0, 1)), gam(clamp(v[1], 0, 1)), gam(clamp(v[2], 0, 1))];
+}
 
-// ===================== imagens =====================
+// ===================== imagens e vídeos =====================
+const ehVideo = f => /^video\//.test(f.type) || /\.(mp4|mov|m4v|webm|mkv)$/i.test(f.name || '');
 function carrega(file){
   return new Promise((ok, erro) => {
-    if (!file || !/^image\//.test(file.type)) return erro(new Error('Envie uma imagem (print em PNG ou JPG).'));
+    if (!file || !/^image\//.test(file.type)) return erro(new Error('Envie um print (PNG ou JPG) ou o arquivo do vídeo.'));
     const u = URL.createObjectURL(file), im = new Image();
     im.onload = () => { URL.revokeObjectURL(u); ok(im); }; im.onerror = () => erro(new Error('Não consegui abrir essa imagem.')); im.src = u;
   });
 }
 function paraCanvas(im, max){
-  const k = Math.min(1, max / Math.max(im.width, im.height)), c = document.createElement('canvas');
-  c.width = Math.max(1, Math.round(im.width * k)); c.height = Math.max(1, Math.round(im.height * k));
+  const W = im.videoWidth || im.width, H = im.videoHeight || im.height;
+  const k = Math.min(1, max / Math.max(W, H)), c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(W * k)); c.height = Math.max(1, Math.round(H * k));
   c.getContext('2d', { willReadFrequently:true }).drawImage(im, 0, 0, c.width, c.height); return c;
 }
-function medidas(cv){   // média e desvio em Lab
-  const s = paraCanvas(cv, 220), d = s.getContext('2d').getImageData(0, 0, s.width, s.height).data;
-  let n = 0, m = [0,0,0], q = [0,0,0];
-  for (let i = 0; i < d.length; i += 4){ const v = lab(d[i]/255, d[i+1]/255, d[i+2]/255); n++; for (let k = 0; k < 3; k++){ m[k] += v[k]; q[k] += v[k]*v[k]; } }
-  const med = m.map(x => x / n), dp = q.map((x, k) => Math.sqrt(Math.max(1e-6, x / n - med[k]*med[k])));
-  return { med, dp };
+function semBarras(cv){   // tira as barras pretas do print (elas estragam a leitura das cores)
+  const s = paraCanvas(cv, 160), w = s.width, h = s.height, d = s.getContext('2d').getImageData(0, 0, w, h).data;
+  const escura = (x0, y0, x1, y1) => { let mx = 0, sm = 0, n = 0; for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++){ const i = (y * w + x) * 4, v = Math.max(d[i], d[i+1], d[i+2]); sm += v; n++; if (v > mx) mx = v; } return sm / n < 9 && mx < 40; };
+  let t = 0, b = h, l = 0, r = w;
+  while (t < h * .42 && escura(0, t, w, t + 1)) t++;
+  while (b > h * .58 && escura(0, b - 1, w, b)) b--;
+  while (l < w * .42 && escura(l, t, l + 1, b)) l++;
+  while (r > w * .58 && escura(r - 1, t, r, b)) r--;
+  if ((t + (h - b)) / h < .02 && (l + (w - r)) / w < .02) return { cv, cortou:false };
+  const fx = cv.width / w, fy = cv.height / h, m = 1;   // 1px de folga para não sobrar risco preto
+  const X = Math.round((l ? l + m : 0) * fx), Y = Math.round((t ? t + m : 0) * fy), W2 = Math.round((r < w ? r - m : w) * fx) - X, H2 = Math.round((b < h ? b - m : h) * fy) - Y;
+  if (W2 < 40 || H2 < 40) return { cv, cortou:false };
+  const c = document.createElement('canvas'); c.width = W2; c.height = H2; c.getContext('2d', { willReadFrequently:true }).drawImage(cv, X, Y, W2, H2, 0, 0, W2, H2);
+  return { cv:c, cortou:true };
 }
-function paleta(cv, k = 5){   // k-means simples: as cores principais da referência
-  const s = paraCanvas(cv, 90), d = s.getContext('2d').getImageData(0, 0, s.width, s.height).data, px = [];
+function brilhoMedio(cv){ const s = paraCanvas(cv, 48), d = s.getContext('2d').getImageData(0, 0, s.width, s.height).data; let t = 0; for (let i = 0; i < d.length; i += 4) t += d[i]*.3 + d[i+1]*.59 + d[i+2]*.11; return t / (d.length / 4); }
+async function quadros(file, n = 5){   // pega alguns quadros espalhados pelo vídeo
+  const u = URL.createObjectURL(file), v = document.createElement('video'); v.muted = true; v.playsInline = true; v.preload = 'auto';
+  const falha = new Error('Não consegui abrir esse vídeo aqui. Tire um print dele e envie a imagem.');
+  try {
+    await new Promise((ok, er) => { v.onloadeddata = ok; v.onerror = () => er(falha); setTimeout(() => er(falha), 15000); v.src = u; });
+    if (!v.videoWidth) throw falha;
+    const dur = isFinite(v.duration) ? v.duration : 0, out = [];
+    const vai = t => new Promise((ok, er) => { v.onseeked = ok; setTimeout(() => er(falha), 8000); v.currentTime = t; });
+    for (let i = 0; i < n; i++){
+      if (dur) await vai(dur * (i + .5) / n);
+      const c = paraCanvas(v, 900); if (brilhoMedio(c) > 6 || !dur) out.push(c);
+      if (!dur) break;
+    }
+    if (!out.length) throw new Error('Esse vídeo parece todo escuro. Envie um print de um trecho mais claro.');
+    return out;
+  } finally { URL.revokeObjectURL(u); }
+}
+function paleta(cv, k = 5){   // k-means simples: as cores principais
+  const s = paraCanvas(cv, 80), d = s.getContext('2d').getImageData(0, 0, s.width, s.height).data, px = [];
   for (let i = 0; i < d.length; i += 4) px.push([d[i], d[i+1], d[i+2]]);
+  px.sort((a, b) => (a[0]*.3 + a[1]*.59 + a[2]*.11) - (b[0]*.3 + b[1]*.59 + b[2]*.11));
   let c = Array.from({ length:k }, (_, i) => px[Math.floor((i + .5) * px.length / k)].slice());
-  for (let it = 0; it < 8; it++){
+  for (let it = 0; it < 6; it++){
     const sm = c.map(() => [0,0,0,0]);
     for (const p of px){ let b = 0, bd = 1e9; for (let j = 0; j < k; j++){ const dd = (p[0]-c[j][0])**2 + (p[1]-c[j][1])**2 + (p[2]-c[j][2])**2; if (dd < bd){ bd = dd; b = j; } } sm[b][0] += p[0]; sm[b][1] += p[1]; sm[b][2] += p[2]; sm[b][3]++; }
     c = sm.map((s2, j) => s2[3] ? [s2[0]/s2[3], s2[1]/s2[3], s2[2]/s2[3]] : c[j]);
@@ -243,42 +319,204 @@ function paleta(cv, k = 5){   // k-means simples: as cores principais da referê
   return c.sort((a, b) => (a[0]*.3 + a[1]*.59 + a[2]*.11) - (b[0]*.3 + b[1]*.59 + b[2]*.11)).map(v => `rgb(${v.map(Math.round).join(',')})`);
 }
 
-// ===================== o coração: a transformação de cor =====================
-let S = null, R = null;     // medidas do seu vídeo e da referência
-const PADRAO = { cor:100, luz:70, pele:true, expo:0, contr:0, sat:0, temp:0, tint:0, fade:0 };
-let A = { ...PADRAO };
-function transforma(r, g, b){
-  const [L, a, bb] = lab(r, g, b);
-  const kL = clamp(R.dp[0] / S.dp[0], .6, 1.7), ka = clamp(R.dp[1] / S.dp[1], .5, 2.2), kb = clamp(R.dp[2] / S.dp[2], .5, 2.2);
-  const cor = A.cor / 100, luz = A.luz / 100;
-  let L2 = L + ((R.med[0] + (L - S.med[0]) * kL) - L) * luz;
-  let a2 = a + ((R.med[1] + (a - S.med[1]) * ka) - a) * cor;
-  let b2 = bb + ((R.med[2] + (bb - S.med[2]) * kb) - bb) * cor;
-  if (A.pele){   // tons de pele: segura a mudança de cor para a pele continuar natural
-    const h = Math.atan2(bb, a) * 180 / Math.PI, C = Math.hypot(a, bb);
-    const w = suave(8, 28, h) * (1 - suave(62, 82, h)) * suave(8, 18, C) * (1 - suave(55, 75, C)) * suave(22, 38, L) * (1 - suave(88, 96, L));
-    a2 += (a + (a2 - a) * .3 - a2) * w; b2 += (bb + (b2 - bb) * .3 - b2) * w;
-  }
-  // ajuste fino
-  L2 += A.expo * .22;
-  L2 = 50 + (L2 - 50) * (1 + A.contr * .006);
-  const s = 1 + A.sat / 100; a2 *= s; b2 *= s;
-  b2 += A.temp * .2; a2 += A.tint * .16;
-  if (A.fade) L2 += A.fade * .16 * Math.pow(1 - clamp(L2, 0, 100) / 100, 2);
-  return rgb(clamp(L2, 0, 100), a2, b2);
+// =====================================================================
+// O CORAÇÃO: leitura das duas imagens e montagem da LUT
+// 1) Luz: a curva de claridade do seu vídeo é levada para a da referência,
+//    ponto a ponto (pretos, sombras, meios-tons, luzes e brancos).
+// 2) Cor por faixa de luz: sombras, meios e luzes recebem cada um a cor que
+//    têm na referência (é isso que copia sombra azulada + luz quente, etc.).
+// 3) Refino: pequenas correções por direção de cor, para acertar tons
+//    específicos (verdes, laranjas, azuis) que as etapas 1 e 2 não pegam.
+// Tudo depende só da cor de entrada, então cabe inteiro no arquivo .cube.
+// =====================================================================
+function amostra(cvs, lado){   // pixels de uma ou mais imagens -> Lab e RGB
+  const partes = []; let n = 0;
+  for (const cv of cvs){ const s = paraCanvas(cv, lado), d = s.getContext('2d', { willReadFrequently:true }).getImageData(0, 0, s.width, s.height).data; partes.push(d); n += d.length / 4; }
+  const P = new Float32Array(n * 3), C = new Float32Array(n * 3); let j = 0;
+  for (const d of partes) for (let i = 0; i < d.length; i += 4){ const r = d[i]/255, g = d[i+1]/255, b = d[i+2]/255, v = lab(r, g, b); C[j] = r; C[j+1] = g; C[j+2] = b; P[j] = v[0]; P[j+1] = v[1]; P[j+2] = v[2]; j += 3; }
+  return { P, C, n };
 }
+function quantis(v, K){
+  const s = Float32Array.from(v).sort(), n = s.length, q = new Float32Array(K + 1);
+  for (let i = 0; i <= K; i++){ const p = (.004 + .992 * i / K) * (n - 1), j = p | 0, f = p - j; q[i] = s[j] + ((j + 1 < n ? s[j+1] : s[j]) - s[j]) * f; }
+  return q;
+}
+function interp(xs, ys, x){   // fora da faixa, segura o valor da ponta
+  const n = xs.length; if (x <= xs[0]) return ys[0]; if (x >= xs[n-1]) return ys[n-1];
+  let lo = 0, hi = n - 1; while (hi - lo > 1){ const m = (lo + hi) >> 1; if (xs[m] <= x) lo = m; else hi = m; }
+  const dx = xs[hi] - xs[lo]; return dx > 1e-9 ? ys[lo] + (ys[hi] - ys[lo]) * (x - xs[lo]) / dx : ys[lo];
+}
+const canal = (P, k, passo = 1) => { const n = Math.ceil(P.length / 3 / passo), o = new Float32Array(n); for (let i = 0; i < n; i++) o[i] = P[i * passo * 3 + k]; return o; };
+function alisa(v, vezes){ const n = v.length; for (let p = 0; p < vezes; p++){ let ant = v[0]; for (let i = 1; i < n - 1; i++){ const c = v[i]; v[i] = (ant + 2 * c + v[i+1]) / 4; ant = c; } } return v; }
+function semente(a){ return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+const ZC = [.06, .28, .5, .72, .94], ZS = .15, REG = 5, MIX = .3;
+const posicao = (q, UU, L) => (1 - MIX) * interp(q, UU, L) + MIX * clamp(L, 0, 100) / 100;   // 5 faixas de luz, das sombras às luzes
+function pesosZona(u, w){ let s = 0; for (let k = 0; k < ZC.length; k++){ const d = (u - ZC[k]) / ZS; s += w[k] = Math.exp(-.5 * d * d); } for (let k = 0; k < ZC.length; k++) w[k] /= s; }
+function zonas(P, q, UU){
+  const Z = ZC.length, acc = Array.from({ length:Z }, () => new Float64Array(6)), w = new Float64Array(Z);
+  for (let i = 0; i < P.length; i += 3){
+    pesosZona(posicao(q, UU, P[i]), w); const a = P[i+1], b = P[i+2];
+    for (let k = 0; k < Z; k++){ const c = acc[k], x = w[k]; c[0] += x; c[1] += x*a; c[2] += x*b; c[3] += x*a*a; c[4] += x*a*b; c[5] += x*b*b; }
+  }
+  return acc.map(c => { const n = c[0] || 1e-9, ma = c[1]/n, mb = c[2]/n; return { ma, mb, caa:c[3]/n - ma*ma + REG, cab:c[4]/n - ma*mb, cbb:c[5]/n - mb*mb + REG }; });
+}
+// matriz 2x2 simétrica [p q; q r] guardada como [p,q,r]
+const raiz2 = ([p, q, r]) => { const s = Math.sqrt(Math.max(0, p*r - q*q)), t = Math.sqrt(Math.max(1e-9, p + r + 2*s)); return [(p + s)/t, q/t, (r + s)/t]; };
+const inv2 = ([p, q, r]) => { const d = p*r - q*q || 1e-9; return [r/d, -q/d, p/d]; };
+const sanduiche = (A, B) => { // A·B·A (simétrica)
+  const m11 = A[0]*B[0] + A[1]*B[1], m12 = A[0]*B[1] + A[1]*B[2], m21 = A[1]*B[0] + A[2]*B[1], m22 = A[1]*B[1] + A[2]*B[2];
+  return [m11*A[0] + m12*A[1], m11*A[1] + m12*A[2], m21*A[1] + m22*A[2]];
+};
+function limita2([p, q, r], mn, mx){   // segura o quanto a cor pode esticar ou encolher
+  const m = (p + r) / 2, d = Math.sqrt(((p - r) / 2) ** 2 + q*q), l1 = clamp(m + d, mn, mx), l2 = clamp(m - d, mn, mx);
+  if (d < 1e-9) return [l1, 0, l1];
+  let vx = q, vy = (m + d) - p; if (Math.abs(vx) + Math.abs(vy) < 1e-9){ vx = p >= r ? 1 : 0; vy = p >= r ? 0 : 1; }
+  const n = Math.hypot(vx, vy); vx /= n; vy /= n;
+  return [l1*vx*vx + l2*(1 - vx*vx), (l1 - l2)*vx*vy, l1*vy*vy + l2*(1 - vy*vy)];
+}
+const REFINO = { voltas:6, passo:.55, forca:.8, teto:16 }, GANHO_MAX = 3.2, LMAX = 2.2, CMAX = 2;
+let M = null;   // tudo que foi medido
+function prepara(S, R){
+  const K = 64, UU = Float32Array.from({ length:K + 1 }, (_, i) => i / K);
+  const qs = quantis(canal(S.P, 0), K), qr = quantis(canal(R.P, 0), K);
+  // 1) curva de luz
+  const y = new Float32Array(K + 1), m = K >> 1; y[m] = qr[m];
+  for (let i = m + 1; i <= K; i++){ const dx = qs[i] - qs[i-1]; y[i] = y[i-1] + clamp(qr[i] - qr[i-1], .4 * dx, LMAX * dx); }
+  for (let i = m - 1; i >= 0; i--){ const dx = qs[i+1] - qs[i]; y[i] = y[i+1] - clamp(qr[i+1] - qr[i], .4 * dx, LMAX * dx); }
+  const xs = [0, ...qs, 100], ys = [Math.max(0, y[0] - qs[0]), ...y, Math.min(100, y[K] + (100 - qs[K]))];
+  for (let i = 1; i < xs.length; i++) if (xs[i] < xs[i-1]) xs[i] = xs[i-1];
+  const TL = new Float32Array(101); for (let i = 0; i <= 100; i++) TL[i] = interp(xs, ys, i);
+  alisa(TL, 4); for (let i = 0; i <= 100; i++) TL[i] = clamp(TL[i], 0, 100);
+  // 2) cor por faixa de luz (transporte ótimo linear em cada faixa)
+  const zs = zonas(S.P, qs, UU), zr = zonas(R.P, qr, UU);
+  const T = zs.map((s, k) => { const r = zr[k], A = raiz2([s.caa, s.cab, s.cbb]), Ai = inv2(A); return limita2(sanduiche(Ai, raiz2(sanduiche(A, [r.caa, r.cab, r.cbb]))), .45, CMAX); });
+  M = { qs, UU, TL, zs, zr, T, ref:[] };
+  // 3) refino: aproxima a distribuição inteira, com passos pequenos e suaves
+  const ps = Math.max(1, Math.floor(S.n / 9000)), pr = Math.max(1, Math.floor(R.n / 9000));
+  const ns = Math.ceil(S.n / ps), nr = Math.ceil(R.n / pr), X = new Float32Array(ns * 3), Y = new Float32Array(nr * 3), o = [0,0,0];
+  for (let i = 0; i < ns; i++){ const j = i * ps * 3; base(S.P[j], S.P[j+1], S.P[j+2], o); X[i*3] = o[0]; X[i*3+1] = o[1]; X[i*3+2] = o[2]; }
+  for (let i = 0; i < nr; i++){ const j = i * pr * 3; Y[i*3] = R.P[j]; Y[i*3+1] = R.P[j+1]; Y[i*3+2] = R.P[j+2]; }
+  const rnd = semente(20261), KQ = 40, px = new Float32Array(ns), py = new Float32Array(nr);
+  for (let v = 0; v < REFINO.voltas; v++){
+    // três direções perpendiculares, diferentes a cada volta
+    let e = [[rnd()-.5, rnd()-.5, rnd()-.5], [rnd()-.5, rnd()-.5, rnd()-.5]];
+    if (v === 0) e = [[1,0,0],[0,1,0]];
+    const nz = a => { const n = Math.hypot(...a) || 1; return a.map(x => x / n); };
+    const e1 = nz(e[0]), d = e[1][0]*e1[0] + e[1][1]*e1[1] + e[1][2]*e1[2], e2 = nz(e[1].map((x, i) => x - d * e1[i]));
+    const e3 = [e1[1]*e2[2] - e1[2]*e2[1], e1[2]*e2[0] - e1[0]*e2[2], e1[0]*e2[1] - e1[1]*e2[0]];
+    for (const ax of [e1, e2, e3]){
+      for (let i = 0; i < ns; i++) px[i] = X[i*3]*ax[0] + X[i*3+1]*ax[1] + X[i*3+2]*ax[2];
+      for (let i = 0; i < nr; i++) py[i] = Y[i*3]*ax[0] + Y[i*3+1]*ax[1] + Y[i*3+2]*ax[2];
+      const qa = quantis(px, KQ), qb = quantis(py, KQ), dd = new Float32Array(KQ + 1);
+      for (let i = 0; i <= KQ; i++) dd[i] = qb[i] - qa[i];
+      alisa(dd, 3);
+      const mm = KQ >> 1;   // não deixa a correção inverter nem esticar demais
+      for (let i = mm + 1; i <= KQ; i++){ const dx = qa[i] - qa[i-1]; dd[i] = dd[i-1] + clamp(dd[i] - dd[i-1], -.5 * dx, 1.0 * dx); }
+      for (let i = mm - 1; i >= 0; i--){ const dx = qa[i+1] - qa[i]; dd[i] = dd[i+1] - clamp(dd[i+1] - dd[i], -.5 * dx, 1.0 * dx); }
+      for (let i = 0; i <= KQ; i++) dd[i] *= REFINO.passo;
+      for (let i = 1; i <= KQ; i++) if (qa[i] < qa[i-1]) qa[i] = qa[i-1];
+      M.ref.push({ ax, qa, dd });
+      for (let i = 0; i < ns; i++){ const t = interp(qa, dd, px[i]); X[i*3] += t*ax[0]; X[i*3+1] += t*ax[1]; X[i*3+2] += t*ax[2]; }
+    }
+  }
+  // 4) grava o resultado em cada ponto da grade da LUT e suaviza a grade (evita degraus na imagem)
+  const T3 = N * N * N, L0 = new Float32Array(T3 * 3), D = new Float32Array(T3 * 3), W = new Float32Array(T3); let i = 0;
+  for (let b = 0; b < N; b++) for (let g = 0; g < N; g++) for (let r = 0; r < N; r++){
+    const v = lab(r / (N-1), g / (N-1), b / (N-1)); completo(v[0], v[1], v[2], o);
+    L0[i*3] = v[0]; L0[i*3+1] = v[1]; L0[i*3+2] = v[2]; D[i*3] = o[0] - v[0]; D[i*3+1] = o[1] - v[1]; D[i*3+2] = o[2] - v[2];
+    const h = Math.atan2(v[2], v[1]) * 180 / Math.PI, C = Math.hypot(v[1], v[2]);   // tons de pele
+    W[i] = suave(8, 28, h) * (1 - suave(62, 82, h)) * suave(8, 18, C) * (1 - suave(55, 75, C)) * suave(22, 38, v[0]) * (1 - suave(88, 96, v[0]));
+    i++;
+  }
+  // suaviza a grade; se alguma região ainda mudar de cor rápido demais (o que daria degraus e manchas), suaviza de novo só o necessário
+  const tmp = new Float32Array(T3 * 3);
+  const borra = () => {
+    for (const [st, src, dst] of [[1, D, tmp], [N, tmp, D], [N*N, D, tmp]]){
+      for (let b = 0; b < N; b++) for (let g = 0; g < N; g++) for (let r = 0; r < N; r++){
+        const id = b*N*N + g*N + r, c = st === 1 ? r : st === N ? g : b, a = c > 0 ? id - st : id, z = c < N - 1 ? id + st : id;
+        for (let k = 0; k < 3; k++) dst[id*3+k] = (src[a*3+k] + 2 * src[id*3+k] + src[z*3+k]) / 4;
+      }
+    }
+    D.set(tmp);
+  };
+  const ganho = () => {   // maior esticada entre pontos vizinhos (1 = não muda nada)
+    let mx = 0;
+    for (const st of [1, N, N*N]) for (let b = 0; b < N; b++) for (let g = 0; g < N; g++) for (let r = 0; r < N; r++){
+      const id = b*N*N + g*N + r, c = st === 1 ? r : st === N ? g : b; if (c === 0) continue;
+      const p = id*3, q = (id - st)*3, e = Math.hypot(L0[p] - L0[q], L0[p+1] - L0[q+1], L0[p+2] - L0[q+2]);
+      if (e < 1.5) continue;
+      const s = Math.hypot(L0[p] + D[p] - L0[q] - D[q], L0[p+1] + D[p+1] - L0[q+1] - D[q+1], L0[p+2] + D[p+2] - L0[q+2] - D[q+2]) / e;
+      if (s > mx) mx = s;
+    }
+    return mx;
+  };
+  borra(); M.passes = 1; M.g0 = ganho();
+  while (M.passes < 3 && ganho() > GANHO_MAX){ borra(); M.passes++; }
+  M.g1 = ganho();
+  M.L0 = L0; M.D = D; M.W = W;
+  // pontos de controle para medir a semelhança
+  const pm = Math.max(1, Math.floor(S.n / 5000)), nm = Math.ceil(S.n / pm); M.amC = new Float32Array(nm * 3); M.amL = new Float32Array(nm * 3);
+  for (let k = 0; k < nm; k++) for (let c = 0; c < 3; c++){ M.amC[k*3+c] = S.C[k*pm*3+c]; M.amL[k*3+c] = S.P[k*pm*3+c]; }
+  const qm = Math.max(1, Math.floor(R.n / 5000)), nq = Math.ceil(R.n / qm); M.amR = new Float32Array(nq * 3);
+  for (let k = 0; k < nq; k++) for (let c = 0; c < 3; c++) M.amR[k*3+c] = R.P[k*qm*3+c];
+  M.qR = DIRS.map(dv => quantis(projeta(M.amR, dv), 32));
+  M.antes = nota(distancia(M.amL));
+}
+const _w = new Float64Array(ZC.length);
+function base(L, a, b, o){   // etapas 1 e 2
+  pesosZona(posicao(M.qs, M.UU, L), _w);
+  let a2 = 0, b2 = 0;
+  for (let k = 0; k < ZC.length; k++){ const s = M.zs[k], r = M.zr[k], t = M.T[k], da = a - s.ma, db = b - s.mb; a2 += _w[k] * (r.ma + t[0]*da + t[1]*db); b2 += _w[k] * (r.mb + t[1]*da + t[2]*db); }
+  const Lc = clamp(L, 0, 100), j = Math.min(99, Lc | 0);
+  o[0] = M.TL[j] + (M.TL[j+1] - M.TL[j]) * (Lc - j); o[1] = a2; o[2] = b2;
+}
+function completo(L, a, b, o){   // etapas 1, 2 e 3
+  base(L, a, b, o); let x = o[0], y = o[1], z = o[2];
+  for (const f of M.ref){ const t = interp(f.qa, f.dd, x*f.ax[0] + y*f.ax[1] + z*f.ax[2]); x += t*f.ax[0]; y += t*f.ax[1]; z += t*f.ax[2]; }
+  let dx = x - o[0], dy = y - o[1], dz = z - o[2]; const n = Math.hypot(dx, dy, dz);
+  if (n > 1e-6){ const k = REFINO.forca * REFINO.teto * Math.tanh(n / REFINO.teto) / n; o[0] += dx * k; o[1] += dy * k; o[2] += dz * k; }
+}
+// semelhança: compara a distribuição de cores do resultado com a da referência
+const DIRS = [[1,0,0],[0,1,0],[0,0,1],[.7071,.7071,0],[.7071,-.7071,0],[.7071,0,.7071],[.7071,0,-.7071],[0,.7071,.7071],[0,.7071,-.7071],[.5774,.5774,.5774],[.5774,-.5774,.5774],[.5774,.5774,-.5774],[.5774,-.5774,-.5774]];
+function projeta(P, d){ const n = P.length / 3, o = new Float32Array(n); for (let i = 0; i < n; i++) o[i] = P[i*3]*d[0] + P[i*3+1]*d[1] + P[i*3+2]*d[2]; return o; }
+function distancia(P){ let t = 0; DIRS.forEach((d, k) => { const q = quantis(projeta(P, d), 32), r = M.qR[k]; let s = 0; for (let i = 0; i <= 32; i++) s += Math.abs(q[i] - r[i]); t += s / 33; }); return t / DIRS.length; }
+const nota = d => Math.round(100 * Math.exp(-d / 16));
+function semelhanca(){   // usa a LUT final, igual ao arquivo que será baixado
+  const n = M.amC.length / 3, P = new Float32Array(n * 3), o = [0,0,0];
+  for (let i = 0; i < n; i++){ pelaLUT(M.amC[i*3], M.amC[i*3+1], M.amC[i*3+2], o); const v = lab(o[0], o[1], o[2]); P[i*3] = v[0]; P[i*3+1] = v[1]; P[i*3+2] = v[2]; }
+  return nota(distancia(P));
+}
+
+// ===================== ajustes da pessoa =====================
+const PADRAO = { forca:100, cor:100, luz:100, pele:true, expo:0, contr:0, sat:0, temp:0, tint:0, fade:0 };
+let A = { ...PADRAO };
 let LUT = null;
 function montaLUT(){
-  const t = new Float32Array(N * N * N * 3); let i = 0;
-  for (let b = 0; b < N; b++) for (let g = 0; g < N; g++) for (let r = 0; r < N; r++){ const v = transforma(r / (N-1), g / (N-1), b / (N-1)); t[i++] = v[0]; t[i++] = v[1]; t[i++] = v[2]; }
+  const T3 = N * N * N, t = LUT || new Float32Array(T3 * 3), L0 = M.L0, D = M.D, W = M.W;
+  const f = A.forca / 100, cor = f * A.cor / 100, luz = f * A.luz / 100, kc = 1 + A.contr * .006, ks = 1 + A.sat / 100;
+  for (let i = 0; i < T3; i++){
+    const j = i * 3, pc = cor * (A.pele ? 1 - .65 * W[i] : 1);
+    let L = L0[j] + D[j] * luz, a = L0[j+1] + D[j+1] * pc, b = L0[j+2] + D[j+2] * pc;
+    L += A.expo * .22; L = 50 + (L - 50) * kc; a *= ks; b *= ks; b += A.temp * .2; a += A.tint * .16;
+    L = clamp(L, 0, 100); if (A.fade) L = clamp(L + A.fade * .16 * Math.pow(1 - L / 100, 2), 0, 100);
+    const v = rgb(L, a, b); t[j] = v[0]; t[j+1] = v[1]; t[j+2] = v[2];
+  }
   LUT = t;
+}
+function pelaLUT(r, g, b, o){
+  const Mx = N - 1, NN = N * N, fr = r * Mx, fg = g * Mx, fb = b * Mx, r0 = Math.min(Mx - 1, fr | 0), g0 = Math.min(Mx - 1, fg | 0), b0 = Math.min(Mx - 1, fb | 0), dr = fr - r0, dg = fg - g0, db = fb - b0;
+  for (let k = 0; k < 3; k++){
+    const p = (b0*NN + g0*N + r0)*3 + k, c00 = LUT[p] + (LUT[p+3] - LUT[p]) * dr, c10 = LUT[p+N*3] + (LUT[p+N*3+3] - LUT[p+N*3]) * dr, q = p + NN*3, c01 = LUT[q] + (LUT[q+3] - LUT[q]) * dr, c11 = LUT[q+N*3] + (LUT[q+N*3+3] - LUT[q+N*3]) * dr;
+    const c0 = c00 + (c10 - c00) * dg, c1 = c01 + (c11 - c01) * dg; o[k] = c0 + (c1 - c0) * db;
+  }
 }
 function aplica(origem, destino){   // aplica a LUT (igual ao arquivo final) num canvas
   const w = origem.width, h = origem.height; destino.width = w; destino.height = h;
-  const src = origem.getContext('2d').getImageData(0, 0, w, h), d = src.data, out = destino.getContext('2d').createImageData(w, h), o = out.data, M = N - 1, NN = N * N;
+  const src = origem.getContext('2d').getImageData(0, 0, w, h), d = src.data, out = destino.getContext('2d').createImageData(w, h), o = out.data, Mx = N - 1, NN = N * N;
   for (let i = 0; i < d.length; i += 4){
-    const fr = d[i] / 255 * M, fg = d[i+1] / 255 * M, fb = d[i+2] / 255 * M;
-    const r0 = fr | 0, g0 = fg | 0, b0 = fb | 0, r1 = r0 < M ? r0 + 1 : M, g1 = g0 < M ? g0 + 1 : M, b1 = b0 < M ? b0 + 1 : M, dr = fr - r0, dg = fg - g0, db = fb - b0;
+    const fr = d[i] / 255 * Mx, fg = d[i+1] / 255 * Mx, fb = d[i+2] / 255 * Mx;
+    const r0 = fr | 0, g0 = fg | 0, b0 = fb | 0, r1 = r0 < Mx ? r0 + 1 : Mx, g1 = g0 < Mx ? g0 + 1 : Mx, b1 = b0 < Mx ? b0 + 1 : Mx, dr = fr - r0, dg = fg - g0, db = fb - b0;
     for (let k = 0; k < 3; k++){
       const c000 = LUT[(b0*NN + g0*N + r0)*3 + k], c100 = LUT[(b0*NN + g0*N + r1)*3 + k], c010 = LUT[(b0*NN + g1*N + r0)*3 + k], c110 = LUT[(b0*NN + g1*N + r1)*3 + k];
       const c001 = LUT[(b1*NN + g0*N + r0)*3 + k], c101 = LUT[(b1*NN + g0*N + r1)*3 + k], c011 = LUT[(b1*NN + g1*N + r0)*3 + k], c111 = LUT[(b1*NN + g1*N + r1)*3 + k];
@@ -291,114 +529,175 @@ function aplica(origem, destino){   // aplica a LUT (igual ao arquivo final) num
   destino.getContext('2d').putImageData(out, 0, 0);
 }
 function arquivoCube(titulo){
-  const L = ['# Criado no Copia Cor · Base FL (basefl.com)', `TITLE "${titulo}"`, `LUT_3D_SIZE ${N}`, 'DOMAIN_MIN 0.0 0.0 0.0', 'DOMAIN_MAX 1.0 1.0 1.0', ''];
+  const L = ['# Criado no Mood · Base FL (basefl.com)', `TITLE "${titulo}"`, `LUT_3D_SIZE ${N}`, 'DOMAIN_MIN 0.0 0.0 0.0', 'DOMAIN_MAX 1.0 1.0 1.0', ''];
   for (let i = 0; i < LUT.length; i += 3) L.push(LUT[i].toFixed(6) + ' ' + LUT[i+1].toFixed(6) + ' ' + LUT[i+2].toFixed(6));
   return L.join('\n') + '\n';
 }
 
 // ===================== estado =====================
-let VID = null, REF = null, CENAS = [null, null, null];   // canvases (prévia)
+let VIDS = [], iV = 0, REFS = [], iR = 0, CENAS = [null, null, null], NOTAS = { V:'', R:'' };
 let acesso = false, vencido = false, sess = null;
 try { sess = JSON.parse(store.get('fl_sess') || 'null'); } catch { sess = null; }
 
 // ===================== PASSO 1 =====================
+const SETA = '';
 function passo1(){
   passos(0);
-  tela(`<h1>Copie a cor de <em>qualquer vídeo</em>.</h1>
-    <p class="sub">Coloque um print do seu vídeo e um print do vídeo que tem a cor que você quer. A gente monta a LUT e você ajusta do seu jeito.</p>
+  tela(`<div class="sobre-t"><span class="mono">Colorização</span></div>
+    <h1>Copie o mood de <em>qualquer vídeo</em>.</h1>
+    <p class="sub">Coloque a referência (o vídeo com a cor que você quer) e o seu vídeo. O Mood lê as cores, monta a LUT e mostra o resultado na hora.</p>
     <div class="duo">
-      <label class="drop" id="dV"><span class="tag hide">Seu vídeo</span><span class="troca">Trocar</span><canvas class="hide"></canvas>
-        <span class="txt"><span class="up"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg></span></span><span class="txt n">01 · SEU VÍDEO</span><b class="txt">Print do seu vídeo</b><p class="txt">Arraste, clique ou cole com Ctrl/Cmd + V</p><input type="file" accept="image/*"></label>
       <label class="drop" id="dR"><span class="tag hide">Referência</span><span class="troca">Trocar</span><canvas class="hide"></canvas>
-        <span class="txt"><span class="up"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg></span></span><span class="txt n">02 · REFERÊNCIA</span><b class="txt">Print da cor que você quer</b><p class="txt">Um frame de um filme, clipe ou vídeo que você gosta</p><input type="file" accept="image/*"></label>
+        <span class="txt bola r"></span><span class="txt n">01 · REFERÊNCIA</span><b class="txt">A cor que você quer</b><p class="txt">Solte aqui um print ou o próprio vídeo. Também dá para colar com Ctrl/Cmd + V.</p><input type="file" accept="image/*,video/*" multiple></label>
+      <label class="drop" id="dV"><span class="tag hide">Seu vídeo</span><span class="troca">Trocar</span><canvas class="hide"></canvas>
+        <span class="txt bola v"></span><span class="txt n">02 · SEU VÍDEO</span><b class="txt">O vídeo que vai receber a cor</b><p class="txt">Solte aqui um print ou o arquivo do vídeo, do jeito que saiu da câmera.</p><input type="file" accept="image/*,video/*" multiple></label>
     </div>
-    <div class="acoes"><button class="btn" id="ir" disabled>Copiar a cor</button><button class="link" id="ex">Não tenho prints agora · usar um exemplo</button><span class="dica">Suas imagens não saem do seu aparelho.</span></div>`);
-  const poe = (el, cv) => { const c = el.querySelector('canvas'); c.width = cv.width; c.height = cv.height; c.getContext('2d').drawImage(cv, 0, 0); c.classList.remove('hide'); el.querySelector('.tag').classList.remove('hide'); el.classList.add('tem'); $('#ir').disabled = !(VID && REF); };
-  const recebe = async (qual, file) => { try { const cv = paraCanvas(await carrega(file), 900); if (qual === 'V'){ VID = cv; poe($('#dV'), cv); } else { REF = cv; poe($('#dR'), cv); } } catch(e){ toast(e.message); } };
-  for (const [id, q] of [['#dV','V'],['#dR','R']]){
-    const el = $(id); el.querySelector('input').onchange = e => recebe(q, e.target.files[0]);
+    <div class="acoes"><button class="btn" id="ir" disabled>Copiar o mood</button><button class="link" id="ex">Não tenho nada agora · usar um exemplo</button><span class="dica">Seus arquivos não saem do seu aparelho.</span></div>
+    <div class="dicas">
+      <div><b>Mande o vídeo, se tiver</b>O Mood lê vários momentos dele sozinho. Fica mais preciso que um print só.</div>
+      <div><b>Cenas parecidas copiam melhor</b>Pessoa com pessoa, paisagem com paisagem, dia com dia.</div>
+      <div><b>Só a imagem</b>Print sem botões, legendas ou molduras por cima. Barras pretas o Mood tira sozinho.</div>
+    </div>`);
+  const lista = q => q === 'V' ? VIDS : REFS, idx = q => q === 'V' ? iV : iR, zona = q => $(q === 'V' ? '#dV' : '#dR');
+  const poe = q => {
+    const el = zona(q), L = lista(q), cv = L[idx(q)]; el.querySelectorAll('.tira,.nota').forEach(x => x.remove());
+    if (!cv) return;
+    const c = el.querySelector('canvas'); c.width = cv.width; c.height = cv.height; c.getContext('2d').drawImage(cv, 0, 0); c.classList.remove('hide'); el.querySelector('.tag').classList.remove('hide'); el.classList.add('tem');
+    if (L.length > 1){
+      const t = document.createElement('div'); t.className = 'tira';
+      L.forEach((f, i) => { const b = document.createElement('button'); b.type = 'button'; b.className = i === idx(q) ? 'on' : ''; b.title = 'Usar este quadro na prévia'; const m = paraCanvas(f, 120); b.appendChild(m); b.onclick = e => { e.preventDefault(); e.stopPropagation(); if (q === 'V') iV = i; else iR = i; poe(q); }; t.appendChild(b); });
+      el.appendChild(t);
+    }
+    if (NOTAS[q]){ const n = document.createElement('span'); n.className = 'nota' + (/escur|clar/.test(NOTAS[q]) ? ' al' : ''); n.textContent = NOTAS[q]; if (L.length > 1) n.style.cssText = 'bottom:auto;top:46px;right:auto'; el.appendChild(n); }
+    $('#ir').disabled = !(VIDS.length && REFS.length);
+  };
+  const recebe = async (q, files) => {
+    files = [...(files || [])]; if (!files.length) return;
+    const el = zona(q); el.classList.add('lendo');
+    try {
+      let cvs = [], veioVideo = false;
+      for (const f of files.slice(0, 6)){
+        if (ehVideo(f)){ cvs.push(...await quadros(f, files.length > 1 ? 2 : 5)); veioVideo = true; }
+        else cvs.push(paraCanvas(await carrega(f), 900));
+      }
+      let cortou = false; cvs = cvs.slice(0, 6).map(c => { const r = semBarras(c); cortou = cortou || r.cortou; return r.cv; });
+      const br = cvs.reduce((s, c) => s + brilhoMedio(c), 0) / cvs.length, nt = [];
+      if (veioVideo) nt.push(cvs.length + ' momentos do vídeo lidos'); else if (cvs.length > 1) nt.push(cvs.length + ' prints lidos');
+      if (cortou) nt.push('barras pretas removidas');
+      if (br < 26) nt.push('imagem bem escura: se puder, use um trecho mais claro'); else if (br > 232) nt.push('imagem muito clara: se puder, use outro trecho');
+      NOTAS[q] = nt.join(' · '); if (NOTAS[q]) NOTAS[q] = NOTAS[q][0].toUpperCase() + NOTAS[q].slice(1);
+      if (q === 'V'){ VIDS = cvs; iV = cvs.length >> 1; CENAS = [null, null, null]; } else { REFS = cvs; iR = cvs.length >> 1; }
+      poe(q);
+    } catch(e){ toast(e.message); }
+    el.classList.remove('lendo');
+  };
+  for (const q of ['R', 'V']){
+    const el = zona(q), inp = el.querySelector('input'); inp.onchange = e => { recebe(q, e.target.files); inp.value = ''; };
     el.ondragover = e => { e.preventDefault(); el.classList.add('sobre'); }; el.ondragleave = () => el.classList.remove('sobre');
-    el.ondrop = e => { e.preventDefault(); el.classList.remove('sobre'); recebe(q, e.dataTransfer.files[0]); };
+    el.ondrop = e => { e.preventDefault(); el.classList.remove('sobre'); recebe(q, e.dataTransfer.files); };
   }
-  document.onpaste = e => { const f = [...(e.clipboardData?.files || [])].find(x => /^image\//.test(x.type)); if (f) recebe(!VID ? 'V' : 'R', f); };
-  if (VID) poe($('#dV'), VID); if (REF) poe($('#dR'), REF);
-  $('#ex').onclick = () => { VID = exemplo('v'); REF = exemplo('r'); poe($('#dV'), VID); poe($('#dR'), REF); toast('Exemplo carregado'); };
+  document.onpaste = e => { const f = [...(e.clipboardData?.files || [])].filter(x => /^image\//.test(x.type)); if (f.length) recebe(!REFS.length ? 'R' : 'V', f); };
+  poe('R'); poe('V');
+  $('#ex').onclick = () => { VIDS = [exemplo('v')]; REFS = [exemplo('r')]; iV = iR = 0; NOTAS = { V:'', R:'' }; CENAS = [null, null, null]; poe('R'); poe('V'); toast('Exemplo carregado'); };
   $('#ir').onclick = analisa;
 }
 function exemplo(q){   // imagens de demonstração desenhadas aqui mesmo (sem arquivo externo)
-  const c = document.createElement('canvas'); c.width = 900; c.height = 506; const x = c.getContext('2d');
+  const c = document.createElement('canvas'); c.width = 900; c.height = 506; const x = c.getContext('2d', { willReadFrequently:true });
   const g = x.createLinearGradient(0, 0, 0, 506);
   if (q === 'v'){ g.addColorStop(0, '#9aa7b0'); g.addColorStop(.55, '#b9b6ad'); g.addColorStop(1, '#8a8478'); } else { g.addColorStop(0, '#0d3b4a'); g.addColorStop(.5, '#e08a3c'); g.addColorStop(1, '#2a1410'); }
   x.fillStyle = g; x.fillRect(0, 0, 900, 506);
   x.fillStyle = q === 'v' ? '#7f8a80' : '#123039'; x.beginPath(); x.moveTo(0, 330); x.lineTo(180, 210); x.lineTo(330, 300); x.lineTo(520, 180); x.lineTo(720, 310); x.lineTo(900, 240); x.lineTo(900, 506); x.lineTo(0, 506); x.fill();
   x.fillStyle = q === 'v' ? '#6f7466' : '#0b1d22'; x.fillRect(0, 380, 900, 126);
-  x.fillStyle = q === 'v' ? '#c9a58c' : '#f0a868'; x.beginPath(); x.arc(450, 250, 62, 0, 7); x.fill();           // rosto
-  x.fillStyle = q === 'v' ? '#59616b' : '#12303a'; x.beginPath(); x.moveTo(340, 506); x.quadraticCurveTo(450, 300, 560, 506); x.fill(); // corpo
-  x.fillStyle = q === 'v' ? '#e7e2d5' : '#ffd9a0'; x.beginPath(); x.arc(720, 110, 44, 0, 7); x.fill();           // sol
+  x.fillStyle = q === 'v' ? '#c9a58c' : '#f0a868'; x.beginPath(); x.arc(450, 250, 62, 0, 7); x.fill();
+  x.fillStyle = q === 'v' ? '#59616b' : '#12303a'; x.beginPath(); x.moveTo(340, 506); x.quadraticCurveTo(450, 300, 560, 506); x.fill();
+  x.fillStyle = q === 'v' ? '#e7e2d5' : '#ffd9a0'; x.beginPath(); x.arc(720, 110, 44, 0, 7); x.fill();
   return c;
 }
 async function analisa(){
   passos(0);
-  tela(`<div class="scan"><canvas id="sc"></canvas></div><p class="scan-t" id="st">Lendo as cores da referência…</p>`);
-  const c = $('#sc'); c.width = VID.width; c.height = VID.height; c.getContext('2d').drawImage(VID, 0, 0);
-  await espera(700); S = medidas(VID); $('#st').textContent = 'Comparando com o seu vídeo…';
-  await espera(600); R = medidas(REF); R.pal = paleta(REF); $('#st').textContent = 'Montando a sua LUT…';
-  A = { ...PADRAO }; montaLUT(); await espera(500);
+  tela(`<div class="junta"><div class="b r"><canvas id="jr"></canvas></div><div class="b v"><canvas id="jv"></canvas></div></div><p class="scan-t" id="st">Lendo as cores da referência…</p><div class="barra"><i id="bar"></i></div>`);
+  const poe = (id, cv) => { const c = $(id); c.width = cv.width; c.height = cv.height; c.getContext('2d').drawImage(cv, 0, 0); };
+  poe('#jr', REFS[iR]); poe('#jv', VIDS[iV]);
+  const bar = p => $('#bar').style.width = p + '%';
+  await espera(60); bar(22); await espera(520);
+  const lado = n => n > 3 ? 150 : n > 1 ? 190 : 260;
+  const R = amostra(REFS, lado(REFS.length)); $('#st').textContent = 'Medindo luz, sombras e tons do seu vídeo…'; bar(48); await espera(520);
+  const S = amostra(VIDS, lado(VIDS.length)); $('#st').textContent = 'Casando as cores ponto a ponto…'; bar(74); await espera(120);
+  prepara(S, R); A = { ...PADRAO }; LUT = null; montaLUT();
+  M.pal = paleta(REFS[iR]);
+  if (VIDS.length > 1 && !CENAS.some(Boolean)){ let k = 0; VIDS.forEach((c, i) => { if (i !== iV && k < 3) CENAS[k++] = paraCanvas(c, 480); }); }
+  $('#st').textContent = 'Sua LUT está pronta.'; bar(100); await espera(520);
   passo2();
 }
 
 // ===================== PASSO 2: ajuste =====================
-const FINO = [['expo','Exposição',-100,100],['contr','Contraste',-100,100],['sat','Saturação',-100,100],['temp','Temperatura',-100,100,'linear-gradient(90deg,#5AA9F0,#2c322e,#F2A541)'],['tint','Tonalidade',-100,100,'linear-gradient(90deg,#7BC67E,#2c322e,#E06FC0)'],['fade','Fade (pretos lavados)',0,100]];
-let corteX = 50;
+const FINO = [['cor','Quanto da cor',0,100],['luz','Quanto da luz',0,100],['expo','Exposição',-100,100],['contr','Contraste',-100,100],['sat','Saturação',-100,100],['temp','Temperatura',-100,100,'linear-gradient(90deg,#5AA9F0,#2c322e,#F2A541)'],['tint','Tonalidade',-100,100,'linear-gradient(90deg,#7BC67E,#2c322e,#E06FC0)'],['fade','Pretos lavados (fade)',0,100]];
+const ESTILOS = [['Suave', 60, 'só um toque'], ['Fiel', 100, 'igual à referência'], ['Intenso', 125, 'ainda mais forte']];
+let corteX = 50, modo = 'ab';
 function passo2(){
   passos(1);
+  const VID = VIDS[iV], REF = REFS[iR];
   tela(`<div class="ed">
-    <div>
-      <div class="pv" id="pv"><canvas id="cA"></canvas><canvas class="dep" id="cD"></canvas><div class="corte" id="ct"><span>‹ ›</span></div><span class="tg l">Antes</span><span class="tg r">Com a sua LUT</span></div>
-      <div class="sob"><div class="refm"><canvas id="rf"></canvas><span><b style="font-size:13px">Referência</b><small>cores principais →</small></span></div><div class="pal" id="pal"></div></div>
-      <div class="cenas"><h3>Teste em outras cenas</h3><p>Uma LUT pode ficar ótima num print e estranha em outro. Coloque até 3 cenas do mesmo vídeo para conferir antes de baixar.</p><div class="cg" id="cg"></div></div>
+    <div class="pvw">
+        <div class="modos"><button class="md" data-m="ab">Antes e depois</button><button class="md" data-m="lado">Ao lado da referência</button></div>
+        <div class="pv" id="pv"><canvas id="cA"></canvas><canvas class="dep" id="cD"></canvas><div class="corte" id="ct"><span>‹ ›</span></div><span class="tg l">Antes</span><span class="tg r">Com a sua LUT</span></div>
+        <div class="lado hide" id="lado"><figure><canvas id="cL"></canvas><span class="tg l" style="background:var(--grad);color:#111">Seu vídeo com a LUT</span></figure><figure><canvas id="cR"></canvas><span class="tg l">Referência</span></figure></div>
+    </div>
+    <div class="extras">
+      <div class="pals"><span class="mono">Referência</span><div class="pal" id="pal"></div><span class="mono">Seu vídeo agora</span><div class="pal" id="pal2"></div></div>
+      <div class="cenas"><h3>Confira em outras cenas</h3><p>${VIDS.length > 1 ? 'Estes são outros momentos do seu vídeo, já com a LUT. Se todos ficaram bons, pode baixar.' : 'Uma LUT pode ficar ótima num print e estranha em outro. Coloque até 3 cenas do mesmo vídeo para conferir antes de baixar.'}</p><div class="cg" id="cg"></div></div>
     </div>
     <div class="painel">
-      <h2>QUANTO COPIAR</h2>
-      <div class="ctl grande"><div class="l"><span>Cor <small>os tons da referência</small></span><output id="o-cor"></output></div><input type="range" id="i-cor" min="0" max="100"></div>
-      <div class="ctl grande"><div class="l"><span>Luz <small>claridade e contraste</small></span><output id="o-luz"></output></div><input type="range" id="i-luz" min="0" max="100"></div>
+      <div class="med"><span class="anel" id="anel"><b id="pct">–</b></span><span><strong id="medT">Parecido com a referência</strong><small id="medS"></small></span></div>
+      <span class="mono">Quanto copiar</span>
+      <div class="est" id="est">${ESTILOS.map(([n, v, d]) => `<button class="es" data-v="${v}"><b>${n}</b><small>${d}</small></button>`).join('')}</div>
+      <div class="ctl grande"><div class="l"><span>Intensidade</span><output id="o-forca"></output></div><input type="range" id="i-forca" min="0" max="130"></div>
       <div class="sw" id="pele" role="switch" tabindex="0"><span class="tog"></span><span><b>Manter a pele natural</b><small>Segura os tons de pele para ninguém ficar laranja ou verde.</small></span></div>
-      <details class="fino"><summary>Ajuste fino</summary>
+      <details class="fino"><summary>Ajuste fino <small>opcional</small></summary>
         ${FINO.map(([k, t, mn, mx, trk]) => `<div class="ctl"><div class="l"><span>${t}</span><output id="o-${k}"></output></div><input type="range" id="i-${k}" min="${mn}" max="${mx}"${trk ? ` style="--trk:${trk}"` : ''}></div>`).join('')}
-        <button class="link rst" id="rst">Zerar o ajuste fino</button>
+        <button class="link rst" id="rst">Voltar ao padrão</button>
       </details>
-      <button class="btn full" id="pronto">Está bom, quero a LUT</button>
+      <button class="btn full" id="pronto">Ficou bom, quero a LUT</button>
       <button class="link" id="volta" style="display:block;margin:12px auto 0">← Trocar as imagens</button>
     </div></div>`);
-  const cA = $('#cA'), cD = $('#cD'); cA.width = VID.width; cA.height = VID.height; cA.getContext('2d').drawImage(VID, 0, 0);
-  const rf = $('#rf'); rf.width = REF.width; rf.height = REF.height; rf.getContext('2d').drawImage(REF, 0, 0);
-  $('#pal').innerHTML = R.pal.map(c => `<i style="background:${c}"></i>`).join('');
-  let pend = false;
-  const pinta = () => { if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; montaLUT(); aplica(VID, cD); cortar(corteX); CENAS.forEach((c, i) => { if (c) aplica(c, document.querySelector(`#cn${i} canvas`)); }); }); };
+  const cA = $('#cA'), cD = $('#cD'), cL = $('#cL'), cR = $('#cR'); cA.width = VID.width; cA.height = VID.height; cA.getContext('2d').drawImage(VID, 0, 0);
+  cR.width = REF.width; cR.height = REF.height; cR.getContext('2d').drawImage(REF, 0, 0);
+  $('#pal').innerHTML = M.pal.map(c => `<i style="background:${c}"></i>`).join(''); $('#pal2').innerHTML = M.pal.map(() => '<i></i>').join('');
   const cortar = v => { corteX = clamp(v, 0, 100); cD.style.clipPath = `inset(0 0 0 ${corteX}%)`; $('#ct').style.left = corteX + '%'; };
-  const liga = k => { const i = $('#i-' + k), o = $('#o-' + k); i.value = A[k]; o.textContent = (k === 'cor' || k === 'luz') ? A[k] + '%' : (A[k] > 0 ? '+' : '') + A[k]; i.oninput = () => { A[k] = +i.value; o.textContent = (k === 'cor' || k === 'luz') ? A[k] + '%' : (A[k] > 0 ? '+' : '') + A[k]; pinta(); }; };
-  ['cor','luz', ...FINO.map(f => f[0])].forEach(liga);
+  let hMed = 0;
+  const mede = () => {
+    const s = semelhanca(); $('#pct').textContent = s + '%'; $('#anel').style.setProperty('--p', s + '%');
+    $('#medT').textContent = s >= 88 ? 'Muito parecido com a referência' : s >= 72 ? 'Parecido com a referência' : s >= 50 ? 'Lembra a referência' : 'Ainda longe da referência';
+    $('#medS').textContent = `Antes da LUT: ${M.antes}%.` + (A.forca >= 95 && s < 72 ? ' As cenas são bem diferentes: uma referência mais parecida com o seu vídeo copia melhor.' : '');
+    const p = paleta(cD); document.querySelectorAll('#pal2 i').forEach((el, i) => el.style.background = p[i]);
+  };
+  let pend = false;
+  const pinta = () => { if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; montaLUT(); aplica(VID, cD); if (modo === 'lado') cL.getContext('2d').drawImage(cD, 0, 0); CENAS.forEach((c, i) => { if (c) aplica(c, document.querySelector(`#cn${i} canvas`)); }); clearTimeout(hMed); hMed = setTimeout(mede, 140); }); };
+  const troca = m => { modo = m; document.querySelectorAll('.md').forEach(b => b.classList.toggle('on', b.dataset.m === m)); $('#pv').classList.toggle('hide', m !== 'ab'); $('#lado').classList.toggle('hide', m !== 'lado'); if (m === 'lado'){ cL.width = cD.width; cL.height = cD.height; cL.getContext('2d').drawImage(cD, 0, 0); } };
+  document.querySelectorAll('.md').forEach(b => b.onclick = () => troca(b.dataset.m));
+  const txt = k => k === 'forca' || k === 'cor' || k === 'luz' ? A[k] + '%' : (A[k] > 0 ? '+' : '') + A[k];
+  const estilos = () => document.querySelectorAll('.es').forEach(b => b.classList.toggle('on', +b.dataset.v === A.forca));
+  const liga = k => { const i = $('#i-' + k), o = $('#o-' + k); i.value = A[k]; o.textContent = txt(k); i.oninput = () => { A[k] = +i.value; o.textContent = txt(k); if (k === 'forca') estilos(); pinta(); }; };
+  ['forca', ...FINO.map(f => f[0])].forEach(liga); estilos();
+  document.querySelectorAll('.es').forEach(b => b.onclick = () => { A.forca = +b.dataset.v; liga('forca'); estilos(); pinta(); });
   const pele = $('#pele'); const pp = () => { pele.classList.toggle('on', A.pele); pele.setAttribute('aria-checked', A.pele); }; pp();
   pele.onclick = () => { A.pele = !A.pele; pp(); pinta(); }; pele.onkeydown = e => { if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); pele.click(); } };
-  $('#rst').onclick = () => { FINO.forEach(([k]) => A[k] = 0); FINO.forEach(([k]) => liga(k)); pinta(); };
-  // divisor arrastável
+  $('#rst').onclick = () => { FINO.forEach(([k]) => A[k] = PADRAO[k]); FINO.forEach(([k]) => liga(k)); pinta(); };
   const pv = $('#pv'); let arr = false;
-  const mov = e => { const r = pv.getBoundingClientRect(); cortar(((e.touches ? e.touches[0].clientX : e.clientX) - r.left) / r.width * 100); };
+  const mov = e => { const r = pv.getBoundingClientRect(); cortar((e.clientX - r.left) / r.width * 100); };
   pv.onpointerdown = e => { arr = true; pv.setPointerCapture(e.pointerId); mov(e); }; pv.onpointermove = e => { if (arr) mov(e); }; pv.onpointerup = pv.onpointercancel = () => arr = false;
-  // outras cenas
   const cg = $('#cg');
   cg.innerHTML = [0,1,2].map(i => `<label class="cn" id="cn${i}"><canvas class="hide"></canvas><span class="t">＋ Cena ${i + 1}</span><button class="x" type="button" data-i="${i}">✕</button><input type="file" accept="image/*" data-i="${i}"></label>`).join('');
   const mostra = i => { const el = $('#cn' + i), c = el.querySelector('canvas'); if (CENAS[i]){ aplica(CENAS[i], c); c.classList.remove('hide'); el.classList.add('tem'); el.querySelector('.t').classList.add('hide'); } else { c.classList.add('hide'); el.classList.remove('tem'); el.querySelector('.t').classList.remove('hide'); } };
-  cg.querySelectorAll('input').forEach(inp => inp.onchange = async e => { const i = +inp.dataset.i; try { CENAS[i] = paraCanvas(await carrega(e.target.files[0]), 480); mostra(i); } catch(er){ toast(er.message); } inp.value = ''; });
+  cg.querySelectorAll('input').forEach(inp => inp.onchange = async e => { const i = +inp.dataset.i; try { CENAS[i] = paraCanvas(semBarras(paraCanvas(await carrega(e.target.files[0]), 900)).cv, 480); mostra(i); } catch(er){ toast(er.message); } inp.value = ''; });
   cg.querySelectorAll('.x').forEach(b => b.onclick = e => { e.preventDefault(); CENAS[+b.dataset.i] = null; mostra(+b.dataset.i); });
-  aplica(VID, cD); cortar(corteX); [0,1,2].forEach(mostra);
-  if (!calmo) (async () => { for (const v of [20, 80, 50]){ await espera(380); if (!arr) { cD.style.transition = 'clip-path .5s ease'; $('#ct').style.transition = 'left .5s ease'; cortar(v); } } await espera(520); cD.style.transition = ''; $('#ct').style.transition = ''; })();
+  montaLUT(); aplica(VID, cD); cortar(corteX); [0,1,2].forEach(mostra); troca(modo); mede();
+  if (!calmo && modo === 'ab') (async () => { for (const v of [20, 80, 50]){ await espera(380); if (!arr && $('#ct')) { cD.style.transition = 'clip-path .5s ease'; $('#ct').style.transition = 'left .5s ease'; cortar(v); } } await espera(520); if ($('#ct')){ cD.style.transition = ''; $('#ct').style.transition = ''; } })();
   $('#volta').onclick = passo1;
   $('#pronto').onclick = passo3;
 }
 
 // ===================== PASSO 3: pronto =====================
-// o mesmo arquivo .cube serve para todos; muda só onde importar
 const PROGS = {
   'CapCut': ['Selecione o clipe na timeline.', 'Abra <b>Ajuste › LUT</b> e clique em <b>Importar</b>.', 'Escolha o arquivo {arq}.', 'Regule a <b>intensidade</b> no próprio CapCut, se quiser.'],
   'Premiere': ['Selecione o clipe e abra o painel <b>Lumetri Color</b>.', 'Em <b>Criativo › Look</b>, escolha <b>Procurar…</b>.', 'Selecione o arquivo {arq}.', 'Ajuste a <b>intensidade</b> no controle logo abaixo.'],
@@ -411,11 +710,11 @@ function passo3(){
   montaLUT();
   const { nome } = proximoNome();
   const trava = acesso ? '' : `<div class="lock"><p>${vencido ? 'Seu acesso de 1 ano terminou' : 'Desbloqueie para baixar a sua LUT'}</p><div class="sm">${vencido ? 'Renove para continuar criando LUTs.' : 'Crie quantas LUTs quiser, por 1 ano, no celular e no computador.'}</div>
-      <button class="btn full" id="comprar">${vencido ? 'Renovar meu acesso' : 'Desbloquear o Copia Cor'}</button><button class="link" id="entrar" style="display:block;margin:12px auto 0">Já comprei · entrar</button></div>`;
-  tela(`<div class="fim"><h1>Sua LUT está <em>pronta</em>.</h1><p class="sub" style="margin:0 auto">Ela leva a cor da referência para o seu vídeo, com os ajustes que você fez.</p>
+      <button class="btn full" id="comprar">${vencido ? 'Renovar meu acesso' : 'Desbloquear o Mood'}</button><button class="link" id="entrar" style="display:block;margin:12px auto 0">Já comprei · entrar</button></div>`;
+  tela(`<div class="fim"><div class="sobre-t"><span class="mono">Sua LUT</span></div><h1>O mood está <em>copiado</em>.</h1><p class="sub" style="margin:0 auto">A LUT leva a cor da referência para o seu vídeo, com os ajustes que você fez.</p>
     <div class="arq"><span class="ic">.cube</span><span><b>${nome}</b><small>Arquivo ${nome}.cube · padrão ${N}×${N}×${N} · funciona no CapCut, Premiere, DaVinci e Final Cut</small></span></div>
     ${acesso ? `<button class="btn full" id="baixar">Baixar ${nome}</button>` : trava}
-    <div class="capcut"><span><b>Instalar direto no CapCut</b><small>Um clique no app Base FL e a LUT aparece em Ajuste › LUT. Em breve.</small></span><span class="breve">Em breve</span></div>
+    <div class="capcut"><span><b>Instalar direto no CapCut</b><small>Um clique no app Base FL e a LUT aparece em Ajuste › LUT.</small></span><span class="breve">Em breve</span></div>
     <div class="como"><h3>Como usar no seu programa</h3>
       <div class="progs" id="progs">${Object.keys(PROGS).map((k, i) => `<button class="pg${i ? '' : ' on'}" data-k="${k}">${k}</button>`).join('')}</div>
       <ol id="progOl"></ol></div>
@@ -423,7 +722,7 @@ function passo3(){
   const prog = k => { $('#progOl').innerHTML = PROGS[k].map(t => `<li>${t.replace('{arq}', `<b>${nome}.cube</b>`)}</li>`).join(''); document.querySelectorAll('.pg').forEach(b => b.classList.toggle('on', b.dataset.k === k)); };
   document.querySelectorAll('.pg').forEach(b => b.onclick = () => prog(b.dataset.k)); prog('CapCut');
   $('#aj').onclick = passo2;
-  $('#nova').onclick = () => { VID = REF = null; CENAS = [null, null, null]; passo1(); };
+  $('#nova').onclick = () => { VIDS = []; REFS = []; iV = iR = 0; NOTAS = { V:'', R:'' }; CENAS = [null, null, null]; M = null; LUT = null; passo1(); };
   if ($('#baixar')) $('#baixar').onclick = () => {
     const { n, nome: nm } = proximoNome();
     const blob = new Blob([arquivoCube(nm)], { type:'text/plain' }), a = document.createElement('a');
@@ -468,7 +767,7 @@ async function checaAcesso(){
     acesso = !!ativa && (!venc || venc > agora); vencido = !!ativa && !!venc && venc <= agora;
   } catch {}
 }
-function botaoConta(){ const b = $('#conta'); b.textContent = sess ? 'Sair' : 'Entrar'; b.onclick = () => { if (sess){ salva(null); acesso = false; toast('Você saiu.'); } else login(() => (VID && REF && LUT) ? passo3() : passo1()); }; }
+function botaoConta(){ const b = $('#conta'); b.textContent = sess ? 'Sair' : 'Entrar'; b.onclick = () => { if (sess){ salva(null); acesso = false; toast('Você saiu.'); } else login(() => (VIDS.length && REFS.length && LUT) ? passo3() : passo1()); }; }
 function login(depois){
   let email = '';
   const etapa = codigo => {
@@ -491,13 +790,14 @@ function login(depois){
           if (token.length < 6) throw new Error('Digite o código que chegou no e-mail.');
           const r = await api('/auth/v1/verify', { method:'POST', body:{ type:'email', email, token }, auth:false });
           salva(fromAuth(r)); await checaAcesso();
-          toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas o Copia Cor não está nas compras deste e-mail'); depois();
+          toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas o Mood não está nas compras deste e-mail'); depois();
         }
       } catch(e){ $('#erro').textContent = traduz(e.message); b.disabled = false; }
     };
   };
   etapa(false);
 }
+
 
 // ===================== início =====================
 botaoConta(); passo1();

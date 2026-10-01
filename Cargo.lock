@@ -1071,7 +1071,7 @@ dependencies = [
 
 [[package]]
 name = "flhub"
-version = "0.8.6"
+version = "0.8.7"
 dependencies = [
  "flcore",
  "reqwest 0.12.28",
