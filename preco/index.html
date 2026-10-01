@@ -4,157 +4,253 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Quanto Cobrar? — Pluga &amp; Edita</title>
-<meta name="description" content="Descubra quanto cobrar por uma edição ou gravação em 1 minuto e mande o orçamento pronto pro cliente.">
+<meta name="description" content="Monte o trabalho como uma timeline e descubra quanto cobrar em 1 minuto. Orçamento pronto pro WhatsApp.">
 <link rel="icon" href="/favicon.png">
 <meta name="theme-color" content="#0D0F0E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0D0F0E; --bg2:#141615; --card:#171A18; --line:#262d28; --ink:#F4F0E4; --mute:#9d998c;
-  --accent:#F2A541; --accent-ink:#141615; --ok:#7fce8f; --err:#ff8f7a;
-  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+  --bg:#0D0F0E; --panel:#151816; --panel2:#1B1F1C; --line:#272D29; --ink:#F4F0E4; --mute:#9A968A; --dim:#5f5c55;
+  --accent:#F2A541; --accent-ink:#17130B;
+  /* cores das faixas da timeline (por tipo de informação) */
+  --c-video:#3FB8AF; --c-edit:#9B7BF7; --c-prazo:#F2A541; --c-grav:#5AA9F0; --c-nivel:#C9C2AE;
+  --zap:#005C4B;
+  --f:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  --dock:118px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:radial-gradient(900px 500px at 10% -10%,#27352C 0%,#171A18 45%,transparent 75%),var(--bg);color:var(--ink);font:16px/1.5 var(--font);min-height:100vh}
-.wrap{max-width:520px;margin:0 auto;padding:18px 16px 40px;min-height:100vh;display:flex;flex-direction:column}
-header{display:flex;align-items:center;gap:10px;margin-bottom:22px}
-header img{width:34px;height:34px;border-radius:9px}
-header b{font-size:15px;line-height:1.2}
-header span{display:block;color:var(--mute);font-size:12px;font-weight:400}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:16px/1.5 var(--f);font-stretch:100%;min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(700px 420px at 85% -8%,rgba(242,165,65,.10),transparent 70%),radial-gradient(600px 400px at -10% 10%,rgba(63,184,175,.07),transparent 70%)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:10px}
+
+.wrap{position:relative;max-width:520px;margin:0 auto;padding:16px 18px calc(var(--dock) + 34px)}
+header{display:flex;align-items:center;gap:10px;margin-bottom:26px}
+header img{width:32px;height:32px;border-radius:9px}
+header .nm{font-weight:800;font-stretch:112%;font-size:15px;letter-spacing:-.01em;line-height:1.1}
+header .nm small{display:block;font-weight:500;font-stretch:100%;color:var(--mute);font-size:12px;letter-spacing:0}
 header .sp{flex:1}
-.link{background:none;border:0;color:var(--mute);font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:22px}
-.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .25s}
-.back{background:none;border:0;color:var(--mute);font:inherit;font-size:14px;cursor:pointer;margin-bottom:10px;padding:4px 0}
-h1{font-size:28px;line-height:1.15;letter-spacing:-.02em;margin-bottom:6px}
-h1 em{font-style:normal;color:var(--accent)}
-.sub{color:var(--mute);font-size:15px;margin-bottom:20px}
+.link{background:none;border:0;color:var(--mute);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- perguntas ---------- */
+.tc{font-variant-numeric:tabular-nums;font-stretch:80%;font-weight:700;color:var(--accent);font-size:13px;letter-spacing:.02em;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.tc .back{background:none;border:0;color:var(--mute);font-stretch:100%;font-weight:500;cursor:pointer;padding:2px 0}
+.tc .sp{flex:1}
+h1{font-weight:850;font-stretch:118%;font-size:clamp(27px,7.6vw,34px);line-height:1.04;letter-spacing:-.025em;margin-bottom:8px;text-wrap:balance}
+.sub{color:var(--mute);font-size:15px;margin-bottom:22px;max-width:42ch}
 .opts{display:flex;flex-direction:column;gap:10px}
-.opt{display:flex;align-items:center;gap:14px;text-align:left;width:100%;cursor:pointer;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;transition:border-color .15s,transform .1s}
-.opt:active{transform:scale(.99)}
-.opt:hover{border-color:#3a443c}
-.opt .ic{font-size:22px;width:28px;text-align:center;flex:none}
-.opt b{display:block;font-size:16px}
-.opt small{display:block;color:var(--mute);font-size:13px;line-height:1.35}
-.opt.big{padding:20px 18px}
-.field{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 6px 6px 18px}
+.opt{position:relative;display:flex;align-items:center;gap:14px;text-align:left;width:100%;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px 16px 16px 14px;overflow:hidden;transition:transform .12s,border-color .15s,background .15s}
+.opt::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:4px;border-radius:0 4px 4px 0;background:var(--cor,var(--accent));opacity:.9}
+.opt:hover{border-color:#3a443c;background:var(--panel2)}
+.opt:active{transform:scale(.985)}
+.opt .ic{font-size:22px;width:30px;text-align:center;flex:none;margin-left:4px}
+.opt b{display:block;font-size:16.5px;font-weight:700}
+.opt small{display:block;color:var(--mute);font-size:13.5px;line-height:1.35}
+.opt.big{padding:20px 16px 20px 14px}
+.opt.big b{font-size:19px;font-stretch:110%}
+.opt.picked{border-color:var(--cor);background:var(--panel2)}
+.entra .opt{animation:entra .32s cubic-bezier(.2,.8,.2,1) both}
+.entra .opt:nth-child(2){animation-delay:.04s}.entra .opt:nth-child(3){animation-delay:.08s}.entra .opt:nth-child(4){animation-delay:.12s}.entra .opt:nth-child(5){animation-delay:.16s}
+@keyframes entra{from{opacity:0;transform:translateY(10px)}}
+.field{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:6px 8px 6px 18px}
 .field span{color:var(--mute);font-weight:700}
-.field input{flex:1;min-width:0;background:none;border:0;color:var(--ink);font:inherit;font-size:22px;font-weight:700;padding:10px 0;outline:none}
-.btn{display:block;width:100%;cursor:pointer;font:inherit;font-weight:750;font-size:16px;border-radius:14px;padding:15px 18px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink)}
+.field input{flex:1;min-width:0;background:none;border:0;color:var(--ink);font:inherit;font-size:26px;font-weight:800;font-stretch:110%;padding:10px 0;outline:none;font-variant-numeric:tabular-nums}
+.field:focus-within{border-color:var(--accent)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;cursor:pointer;font-weight:750;font-size:16px;border-radius:16px;padding:16px 18px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);transition:transform .12s,filter .15s}
+.btn:active{transform:scale(.98)}
+.btn:hover{filter:brightness(1.06)}
 .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
-.btn:disabled{opacity:.5}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 .row{display:flex;gap:10px;margin-top:12px}
 .row .btn{flex:1}
-/* resultado */
-.res{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;position:relative;overflow:hidden}
-.res .lb{color:var(--mute);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-.res .faixa{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin:4px 0 16px}
-.res .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-.res .grid div{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
-.res .grid b{display:block;font-size:20px}
-.res .grid .ref b{color:var(--accent)}
-.res .pq{color:var(--mute);font-size:14px}
-.blur .val{filter:blur(9px);user-select:none}
-.lockbox{display:none;position:absolute;inset:0;background:rgba(13,15,14,.55);backdrop-filter:blur(2px);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:12px}
-.blur .lockbox{display:flex}
-.lockbox p{font-weight:700;font-size:17px}
-.lockbox small{color:var(--mute)}
-.lockbox .btn{width:auto;padding:12px 22px}
-h2{font-size:15px;margin:22px 0 10px}
+.nivel{margin-top:18px;color:var(--mute);font-size:13px}
+
+/* ---------- timeline (assinatura da página) ---------- */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:5;background:linear-gradient(180deg,rgba(13,15,14,0),rgba(13,15,14,.92) 22%,#0D0F0E);padding:22px 0 calc(12px + env(safe-area-inset-bottom))}
+.dock .in{max-width:520px;margin:0 auto;padding:0 18px}
+.tl{position:relative;background:#101311;border:1px solid var(--line);border-radius:14px;padding:6px 10px 10px;overflow:hidden}
+.ruler{height:16px;background:repeating-linear-gradient(90deg,#3a403b 0 1px,transparent 1px 10px),repeating-linear-gradient(90deg,#4f564f 0 1px,transparent 1px 50px);background-size:auto 6px,auto 10px;background-repeat:repeat-x;background-position:0 100%,0 100%;margin-bottom:6px;opacity:.8}
+.track{position:relative;display:flex;gap:3px;min-height:40px;align-items:stretch;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth;padding-right:14px}
+.track::-webkit-scrollbar{display:none}
+.clip{position:relative;display:flex;align-items:center;padding:0 10px;height:40px;border-radius:7px;background:color-mix(in srgb,var(--cor) 26%,#101311);border:1px solid color-mix(in srgb,var(--cor) 70%,transparent);color:var(--ink);font-size:12.5px;font-weight:650;white-space:nowrap;flex:none}
+.clip::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:var(--cor);opacity:.9}
+.clip span{overflow:hidden;text-overflow:ellipsis}
+.vazio{display:flex;align-items:center;height:40px;color:var(--dim);font-size:13px;padding-left:2px}
+.head{position:absolute;top:0;bottom:0;z-index:2;width:2px;background:var(--accent);left:12px;transition:left .45s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 12px rgba(242,165,65,.7)}
+.head::before{content:"";position:absolute;top:-2px;left:-5px;border:6px solid transparent;border-top:8px solid var(--accent)}
+.dock .meta{display:flex;justify-content:space-between;margin-top:7px;font-size:11.5px;color:var(--dim);font-variant-numeric:tabular-nums}
+.voa{position:fixed;z-index:20;pointer-events:none;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--ink);background:color-mix(in srgb,var(--cor) 40%,#101311);border:1px solid var(--cor);white-space:nowrap;overflow:hidden}
+
+/* ---------- render ---------- */
+.render{padding-top:6vh}
+.render .pct{font-weight:900;font-stretch:125%;font-size:84px;line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.render .pct small{font-size:.4em;color:var(--mute);font-weight:700}
+.render .pb{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin:18px 0 16px}
+.render .pb i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--c-video),var(--c-edit),var(--accent))}
+.render ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.render li{color:var(--dim);font-size:15px;display:flex;gap:10px;align-items:baseline;transition:color .2s}
+.render li::before{content:"";width:8px;height:8px;border-radius:50%;border:1.5px solid currentColor;flex:none;transform:translateY(-1px)}
+.render li.ok{color:var(--ink)}
+.render li.ok::before{background:var(--accent);border-color:var(--accent)}
+
+/* ---------- resultado ---------- */
+.resh{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}
+.card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px 20px 20px;overflow:hidden}
+.card .lb{color:var(--mute);font-size:13px;font-weight:600}
+.preco{font-weight:900;font-stretch:118%;font-size:clamp(38px,11vw,52px);line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums;margin:8px 0 6px;white-space:nowrap}
+.preco .rs{font-size:.42em;font-weight:700;color:var(--mute);letter-spacing:0;margin-right:6px;vertical-align:.55em}
+.faixa{color:var(--mute);font-size:15px;font-variant-numeric:tabular-nums}
+.faixa b{color:var(--ink)}
+.stats{display:flex;gap:10px;margin:18px 0 14px}
+.stats div{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:11px 13px}
+.stats b{display:block;font-size:19px;font-weight:800;font-stretch:110%;font-variant-numeric:tabular-nums}
+.stats span{color:var(--mute);font-size:12.5px}
+.pq{color:var(--mute);font-size:14.5px;line-height:1.5}
+.glow{position:absolute;inset:-40% -20% auto;height:180px;background:radial-gradient(closest-side,rgba(242,165,65,.28),transparent);opacity:0;pointer-events:none}
+.revela .glow{animation:glow 1.4s ease-out}
+@keyframes glow{20%{opacity:1}to{opacity:0}}
+/* travado */
+.slot{display:inline-flex;gap:4px;vertical-align:baseline}
+.slot i{font-style:normal;display:inline-block;width:.62em;text-align:center;background:var(--bg);border:1px solid var(--line);border-radius:8px;color:transparent;text-shadow:0 0 14px rgba(244,240,228,.85);filter:blur(1.2px)}
+.slot em{font-style:normal;color:var(--dim);margin:0 1px}
+.lock{margin-top:16px;border-top:1px dashed var(--line);padding-top:16px}
+.lock p{font-weight:700;font-size:17px;line-height:1.3;margin-bottom:4px}
+.lock .sm{color:var(--mute);font-size:14px;margin-bottom:14px}
+.lock ul{list-style:none;margin:0 0 16px;display:flex;flex-direction:column;gap:6px;font-size:14.5px}
+.lock li{display:flex;gap:9px}
+.lock li::before{content:"";flex:none;width:16px;height:16px;margin-top:2px;border-radius:5px;background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%2317130B' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat}
+.lock .btn{animation:pulsa 2.4s ease-in-out infinite}
+@keyframes pulsa{50%{box-shadow:0 0 0 6px rgba(242,165,65,.14)}}
+.lock .ja{display:block;margin:12px auto 0}
+h2{font-size:16px;font-weight:750;margin:24px 0 10px}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{cursor:pointer;font:inherit;font-weight:700;font-size:15px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:9px 16px}
+.chip{cursor:pointer;font-weight:750;font-size:15px;font-variant-numeric:tabular-nums;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px 0;width:54px;transition:all .15s}
 .chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.pac{margin-top:10px;color:var(--mute);font-size:14px;min-height:20px}
+.pac{margin-top:10px;color:var(--mute);font-size:14px;min-height:21px}
 .pac b{color:var(--ink)}
-textarea{width:100%;min-height:250px;resize:vertical;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:16px;font:14px/1.5 var(--font)}
-.inp{width:100%;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font:inherit;font-size:16px;outline:none;margin-bottom:12px}
-.inp:focus,.field:focus-within,textarea:focus{border-color:var(--accent);outline:none}
-.err{color:var(--err);font-size:14px;min-height:20px;margin-top:8px}
-.ok{color:var(--ok);font-size:14px;min-height:20px;margin-top:8px;text-align:center}
-.foot{margin-top:auto;padding-top:28px;color:#5e5b53;font-size:12px;text-align:center}
-.nivel{margin-top:16px;color:var(--mute);font-size:13px;text-align:center}
+.acoes{margin-top:22px}
+
+/* ---------- orçamento ---------- */
+.chat{background:#0b1410 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='4' cy='4' r='1' fill='%23ffffff' fill-opacity='.04'/%3E%3C/svg%3E");border:1px solid var(--line);border-radius:22px;padding:16px 14px 18px}
+.chat .para{font-size:13px;color:var(--mute);margin:0 4px 10px}
+.bolha{position:relative;margin-left:auto;max-width:94%;background:var(--zap);border-radius:14px 4px 14px 14px;padding:10px 12px 22px}
+.bolha textarea{width:100%;min-height:268px;resize:vertical;background:transparent;border:0;color:#e9edef;font:14.5px/1.45 var(--f);outline:none}
+.bolha .hr{position:absolute;right:10px;bottom:6px;font-size:11px;color:rgba(233,237,239,.6)}
+.inp{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font:inherit;font-size:16px;outline:none;margin-bottom:12px}
+.inp:focus{border-color:var(--accent)}
+.toast{position:fixed;left:50%;bottom:calc(var(--dock) + 24px);transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;transition:all .25s;z-index:30;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.err{color:#ff8f7a;font-size:14px;min-height:20px;margin-top:8px}
+.foot{color:var(--dim);font-size:12px;margin-top:30px}
 .hide{display:none!important}
+
+.sai{animation:sai .18s ease-in forwards}
+@keyframes sai{to{opacity:0;transform:translateY(-6px)}}
+@media (prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <img src="/logo.png" alt="">
-    <div><b>Quanto Cobrar?</b><span>Pluga &amp; Edita</span></div>
+    <div class="nm">Quanto Cobrar?<small>Pluga &amp; Edita</small></div>
     <div class="sp"></div>
     <button class="link" id="conta"></button>
   </header>
-  <div class="bar" id="bar"><i></i></div>
   <main id="tela"></main>
-  <div class="foot">Valores de referência para te ajudar a decidir. Quem bate o martelo é você.</div>
+  <p class="foot">Valores de referência para te ajudar a decidir. Quem bate o martelo é você.</p>
 </div>
+
+<div class="dock" id="dock"><div class="in">
+  <div class="tl"><div class="ruler"></div><div class="track" id="track"></div></div>
+  <div class="meta"><span id="tcA">00:00</span><span id="tcB">Sua timeline</span></div>
+</div></div>
+<div class="toast" id="toast"></div>
 
 <script>
 // ===================== CONFIG =====================
 const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
 const PACK = 'fl-preco';
-let BUY_URL = '';   // link de compra da Greenn (também vem do banco, campo buy_url)
+let BUY_URL = '';   // vem do banco (packs.buy_url)
 
 // ===================== REGRAS DE PREÇO (ajuste aqui) =====================
-const NIVEL = {                     // valor por hora usado nos bastidores
-  comeco:{ t:'Começando',  s:'Menos de 1 ano editando para clientes', h:40 },
-  medio: { t:'1 a 3 anos', s:'Já tenho alguns clientes e portfólio',   h:70 },
-  pro:   { t:'3+ anos',    s:'Experiente, portfólio forte',            h:120 },
+const NIVEL = {
+  comeco:{ t:'Começando',  s:'Menos de 1 ano editando para clientes', h:40,  c:'Começando' },
+  medio: { t:'1 a 3 anos', s:'Já tenho alguns clientes e portfólio',   h:70,  c:'1–3 anos' },
+  pro:   { t:'3+ anos',    s:'Experiente, portfólio forte',            h:120, c:'3+ anos' },
 };
 const TIPO = {
-  reels:    { t:'Reels / Shorts / TikTok', s:'Vídeo curto vertical', ic:'📱', mult:1,   piso:50,  teto:1500,  nome:'Reels' },
-  youtube:  { t:'YouTube / vídeo longo',   s:'Vlog, aula, podcast, tutorial', ic:'▶️', mult:1, piso:80, teto:6000, nome:'vídeo para YouTube' },
-  comercial:{ t:'Comercial / Institucional', s:'Para empresa ou marca anunciar', ic:'🏢', mult:1.3, piso:200, teto:15000, nome:'vídeo comercial' },
-  evento:   { t:'Evento / Casamento',      s:'Muito material gravado', ic:'💍', mult:1.4, piso:300, teto:12000, nome:'vídeo de evento' },
+  reels:    { t:'Reels / Shorts / TikTok',   s:'Vídeo curto vertical',          ic:'📱', mult:1,   piso:50,  teto:1500,  nome:'Reels', c:'Reels' },
+  youtube:  { t:'YouTube / vídeo longo',     s:'Vlog, aula, podcast, tutorial', ic:'▶️', mult:1,   piso:80,  teto:6000,  nome:'vídeo para YouTube', c:'YouTube' },
+  comercial:{ t:'Comercial / Institucional', s:'Para empresa ou marca anunciar', ic:'🏢', mult:1.3, piso:200, teto:15000, nome:'vídeo comercial', c:'Comercial' },
+  evento:   { t:'Evento / Casamento',        s:'Muito material gravado',        ic:'💍', mult:1.4, piso:300, teto:12000, nome:'vídeo de evento', c:'Evento' },
 };
-const DUR = {                        // horas de edição simples pela duração final
-  d1:{ t:'Até 1 minuto', h:1.5, nome:'até 1 min' }, d3:{ t:'1 a 3 minutos', h:3, nome:'de 1 a 3 min' },
-  d10:{ t:'3 a 10 minutos', h:5, nome:'de 3 a 10 min' }, d30:{ t:'10 a 30 minutos', h:9, nome:'de 10 a 30 min' },
-  d60:{ t:'Mais de 30 minutos', h:14, nome:'com mais de 30 min' },
+const DUR = {
+  d1:{ t:'Até 1 minuto', h:1.5, nome:'até 1 min', c:'≤ 1 min' }, d3:{ t:'1 a 3 minutos', h:3, nome:'de 1 a 3 min', c:'1–3 min' },
+  d10:{ t:'3 a 10 minutos', h:5, nome:'de 3 a 10 min', c:'3–10 min' }, d30:{ t:'10 a 30 minutos', h:9, nome:'de 10 a 30 min', c:'10–30 min' },
+  d60:{ t:'Mais de 30 minutos', h:14, nome:'com mais de 30 min', c:'30+ min' },
 };
 const EDICAO = {
-  simples:  { t:'Simples',    s:'Cortes, limpeza e legenda',                ic:'✂️', mult:1,   nome:'edição simples' },
-  caprichada:{ t:'Caprichada', s:'Ritmo, B-roll, efeitos sonoros e zooms',   ic:'⚡', mult:1.8, nome:'edição caprichada' },
-  avancada: { t:'Avançada',   s:'Motion, animações, color e efeitos',       ic:'🚀', mult:3,   nome:'edição avançada' },
+  simples:   { t:'Simples',    s:'Cortes, limpeza e legenda',              ic:'✂️', mult:1,   nome:'edição simples', c:'Simples' },
+  caprichada:{ t:'Caprichada', s:'Ritmo, B-roll, efeitos sonoros e zooms', ic:'⚡', mult:1.8, nome:'edição caprichada', c:'Caprichada' },
+  avancada:  { t:'Avançada',   s:'Motion, animações, color e efeitos',     ic:'🚀', mult:3,   nome:'edição avançada', c:'Avançada' },
 };
-const PRAZO = { normal:{ t:'Normal', s:'Prazo combinado sem pressa', ic:'🗓️', mult:1 }, urgente:{ t:'Urgente', s:'Precisa em até 48 horas', ic:'🔥', mult:1.4 } };
-const GHORAS = { g2:{ t:'Até 2 horas', s:'Uma gravação rápida', h:2 }, g4:{ t:'Meio período', s:'Cerca de 4 horas', h:4 }, g8:{ t:'Dia inteiro', s:'Cerca de 8 horas', h:8 } };
+const PRAZO = { normal:{ t:'Normal', s:'Prazo combinado sem pressa', ic:'🗓️', mult:1, c:'Normal' }, urgente:{ t:'Urgente', s:'Precisa em até 48 horas', ic:'🔥', mult:1.4, c:'Urgente' } };
+const GHORAS = { g2:{ t:'Até 2 horas', s:'Uma gravação rápida', h:2, c:'Grav. 2 h' }, g4:{ t:'Meio período', s:'Cerca de 4 horas', h:4, c:'Grav. 4 h' }, g8:{ t:'Dia inteiro', s:'Cerca de 8 horas', h:8, c:'Grav. 8 h' } };
 const GESTR = {
-  basica:{ t:'Básica', s:'Celular ou câmera simples', ic:'📷', mult:1 },
-  pro:   { t:'Profissional', s:'Câmera, luz e áudio', ic:'🎥', mult:1.5 },
-  full:  { t:'Completa', s:'Várias câmeras, ajudante, estrutura grande', ic:'🎬', mult:2.2 },
+  basica:{ t:'Básica',       s:'Celular ou câmera simples',               ic:'📷', mult:1,   c:'Kit básico' },
+  pro:   { t:'Profissional', s:'Câmera, luz e áudio',                     ic:'🎥', mult:1.5, c:'Kit pro' },
+  full:  { t:'Completa',     s:'Várias câmeras, ajudante, estrutura grande', ic:'🎬', mult:2.2, c:'Estrutura completa' },
 };
-const PREP = 1;                                  // hora extra de preparação/backup na gravação
-const PACOTE = { 1:0, 4:.05, 8:.10, 12:.12, 20:.15 };   // desconto máximo 15%
+const PREP = 1;
+const PACOTE = { 1:0, 4:.05, 8:.10, 12:.12, 20:.15 };
+const MODO = { editar:'Editar', gravar:'Gravar', ambos:'Gravar + Editar' };
+const COR = { modo:'--c-video', nivel:'--c-nivel', tipo:'--c-video', dur:'--c-video', edicao:'--c-edit', prazo:'--c-prazo', gHoras:'--c-grav', gEstr:'--c-grav', gExtra:'--c-grav' };
 
 // ===================== utilidades =====================
 const $ = s => document.querySelector(s);
-const brl = v => 'R$ ' + Math.round(v).toLocaleString('pt-BR');
+const fmt = v => Math.round(v).toLocaleString('pt-BR');
+const brl = v => 'R$ ' + fmt(v);
 const arred = v => v < 100 ? Math.round(v/5)*5 : v < 1000 ? Math.round(v/10)*10 : Math.round(v/50)*50;
 const meiaHora = h => Math.max(.5, Math.round(h*2)/2);
 const horasTxt = h => (h % 1 ? h.toLocaleString('pt-BR') : h) + (h === 1 ? ' hora' : ' horas');
 const store = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k,v){ try { v==null ? localStorage.removeItem(k) : localStorage.setItem(k,v); } catch {} } };
+const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const espera = ms => new Promise(r => setTimeout(r, calmo ? 0 : ms));
+const vibra = p => { try { navigator.vibrate && navigator.vibrate(p); } catch {} };
+const cor = id => `var(${COR[id] || '--accent'})`;
+function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2200); }
 
 // ===================== estado =====================
-let R = {};                 // respostas
-let fila = [], pos = 0;     // perguntas do fluxo
-let qtd = 1;
-let acesso = false, sess = null;
+let R = {}, fila = [], pos = 0, qtd = 1, acesso = false, sess = null, ocupado = false;
 try { sess = JSON.parse(store.get('fl_sess') || 'null'); } catch { sess = null; }
 
-// ===================== perguntas =====================
 const Q = {
-  modo:   () => ({ h:'O que você vai <em>fazer</em>?', s:'Escolha e responda poucas perguntas. Leva 1 minuto.', big:true,
-            o:[['editar','Editar','Só a edição do vídeo','✂️'],['gravar','Gravar','Só a captação','🎥'],['ambos','Gravar + Editar','O pacote completo','🎬']] }),
-  nivel:  () => ({ h:'Há quanto tempo você <em>edita</em>?', s:'Pergunto só uma vez. Isso define o seu valor base.', o:Object.entries(NIVEL).map(([k,v])=>[k,v.t,v.s,'']) }),
-  tipo:   () => ({ h:'Que tipo de <em>vídeo</em>?', o:Object.entries(TIPO).map(([k,v])=>[k,v.t,v.s,v.ic]) }),
-  dur:    () => ({ h:'Quanto tempo vai ter o vídeo <em>pronto</em>?', s:'A duração final, depois de editado.', o:Object.entries(DUR).map(([k,v])=>[k,v.t,'','']) }),
-  edicao: () => ({ h:'Como é essa <em>edição</em>?', o:Object.entries(EDICAO).map(([k,v])=>[k,v.t,v.s,v.ic]) }),
-  prazo:  () => ({ h:'Qual o <em>prazo</em>?', o:Object.entries(PRAZO).map(([k,v])=>[k,v.t,v.s,v.ic]) }),
-  gHoras: () => ({ h:'Quanto tempo de <em>gravação</em>?', o:Object.entries(GHORAS).map(([k,v])=>[k,v.t,v.s,'⏱️']) }),
-  gEstr:  () => ({ h:'Qual <em>estrutura</em> você vai levar?', o:Object.entries(GESTR).map(([k,v])=>[k,v.t,v.s,v.ic]) }),
-  gExtra: () => ({ h:'Algum <em>custo extra</em>?', s:'Transporte, aluguel de equipamento, ajudante… Some tudo. Se não tiver, é só pular.', input:true }),
+  modo:   () => ({ h:'Quanto cobrar por esse trabalho?', s:'Monte o trabalho na timeline aqui embaixo. São poucas perguntas e o seu preço sai em 1 minuto.', big:true,
+            o:[['editar','Editar','Só a edição do vídeo','✂️'],['gravar','Gravar','Só a captação','🎥'],['ambos','Gravar + Editar','O trabalho completo','🎬']] }),
+  nivel:  () => ({ h:'Há quanto tempo você edita?', s:'Só pergunto uma vez. Isso define o seu valor base.', o:Object.entries(NIVEL).map(([k,v])=>[k,v.t,v.s,'']) }),
+  tipo:   () => ({ h:'Que tipo de vídeo?', o:Object.entries(TIPO).map(([k,v])=>[k,v.t,v.s,v.ic]) }),
+  dur:    () => ({ h:'Quanto tempo o vídeo vai ter pronto?', s:'A duração final, depois de editado.', o:Object.entries(DUR).map(([k,v])=>[k,v.t,'','']) }),
+  edicao: () => ({ h:'Como é essa edição?', o:Object.entries(EDICAO).map(([k,v])=>[k,v.t,v.s,v.ic]) }),
+  prazo:  () => ({ h:'E o prazo?', o:Object.entries(PRAZO).map(([k,v])=>[k,v.t,v.s,v.ic]) }),
+  gHoras: () => ({ h:'Quanto tempo de gravação?', o:Object.entries(GHORAS).map(([k,v])=>[k,v.t,v.s,'⏱️']) }),
+  gEstr:  () => ({ h:'Qual estrutura você vai levar?', o:Object.entries(GESTR).map(([k,v])=>[k,v.t,v.s,v.ic]) }),
+  gExtra: () => ({ h:'Algum custo extra?', s:'Transporte, aluguel de equipamento, ajudante. Some tudo. Se não tiver, é só pular.', input:true }),
 };
-
+function rotulo(id){
+  const v = R[id];
+  if (id === 'nivel') return NIVEL[store.get('fl_nivel')]?.c;
+  if (id === 'modo') return MODO[v];
+  if (id === 'tipo') return TIPO[v]?.c;
+  if (id === 'dur') return DUR[v]?.c;
+  if (id === 'edicao') return EDICAO[v]?.c;
+  if (id === 'prazo') return PRAZO[v]?.c;
+  if (id === 'gHoras') return GHORAS[v]?.c;
+  if (id === 'gEstr') return GESTR[v]?.c;
+  if (id === 'gExtra') return v ? 'Extras ' + brl(v) : 'Sem extras';
+}
 function montaFila(){
   const f = ['modo'];
   if (!store.get('fl_nivel')) f.push('nivel');
@@ -162,45 +258,105 @@ function montaFila(){
   if (R.modo === 'editar' || R.modo === 'ambos'){ f.push('tipo'); if (R.tipo !== 'reels') f.push('dur'); f.push('edicao','prazo'); }
   return f;
 }
+// total previsto de perguntas (para o contador), assumindo o caminho mais provável
+function totalPrevisto(){
+  const f = montaFila(); if (!R.modo) return 4;
+  if ((R.modo === 'editar' || R.modo === 'ambos') && !R.tipo) return f.length + 1;
+  return f.length;
+}
 
-function tela(html){ $('#tela').innerHTML = html; window.scrollTo(0,0); }
+// ===================== timeline =====================
+function clipsAtuais(){
+  const ids = [];
+  for (let i = 0; i < pos && i < fila.length; i++) if (fila[i] !== 'nivel') ids.push(fila[i]);
+  return ids;
+}
+function desenhaTimeline(novo){
+  const tr = $('#track'); const ids = clipsAtuais();
+  tr.innerHTML = ids.length ? '' : '<div class="vazio">Escolha uma opção para começar</div>';
+  let alvo = null;
+  for (const id of ids){
+    const c = document.createElement('div'); c.className = 'clip'; c.style.setProperty('--cor', cor(id));
+    c.innerHTML = `<span></span>`; c.querySelector('span').textContent = rotulo(id) || '';
+    if (id === novo){ c.style.opacity = 0; alvo = c; }
+    tr.appendChild(c);
+  }
+  posicionaAgulha();
+  const tot = totalPrevisto(), feito = Math.min(pos, tot);
+  $('#tcA').textContent = '00:' + String(feito).padStart(2,'0') + ' / 00:' + String(tot).padStart(2,'0');
+  $('#tcB').textContent = feito >= tot ? 'Pronto para renderizar' : 'Sua timeline';
+  return alvo;
+}
+function posicionaAgulha(){
+  const tr = $('#track');
+  if (!window.HEAD){ window.HEAD = document.createElement('div'); HEAD.className = 'head'; }
+  const h = HEAD; tr.appendChild(h);
+  const clips = tr.querySelectorAll('.clip'), last = clips[clips.length - 1];
+  h.style.left = (last ? last.offsetLeft + last.offsetWidth + 1 : 2) + 'px';
+  tr.scrollLeft = tr.scrollWidth;
+}
+async function voa(btn, alvo){
+  if (!alvo) return;
+  if (calmo){ alvo.style.opacity = 1; return; }
+  const a = btn.getBoundingClientRect(), b = alvo.getBoundingClientRect();
+  const g = document.createElement('div'); g.className = 'voa'; g.style.setProperty('--cor', getComputedStyle(alvo).getPropertyValue('--cor'));
+  g.textContent = alvo.textContent; Object.assign(g.style, { left:a.left+'px', top:a.top+'px', width:a.width+'px', height:a.height+'px' });
+  document.body.appendChild(g);
+  const an = g.animate([
+    { transform:'translate(0,0)', width:a.width+'px', height:a.height+'px', borderRadius:'18px', opacity:.95 },
+    { transform:`translate(${b.left-a.left}px,${b.top-a.top}px)`, width:b.width+'px', height:b.height+'px', borderRadius:'7px', opacity:1 }
+  ], { duration:430, easing:'cubic-bezier(.5,0,.2,1)' });
+  await an.finished.catch(()=>{});
+  g.remove(); alvo.style.opacity = 1;
+  alvo.animate([{ transform:'scaleY(1.25)' }, { transform:'scaleY(1)' }], { duration:180, easing:'ease-out' });
+  vibra(8);
+}
 
+// ===================== telas de pergunta =====================
+function tela(html, cls=''){ const m = $('#tela'); m.className = cls; m.innerHTML = html; window.scrollTo({ top:0 }); }
 function pergunta(){
   fila = montaFila();
-  if (pos >= fila.length) return resultado();
+  if (pos >= fila.length) return renderiza();
+  $('#dock').classList.remove('hide');
   const id = fila[pos], q = Q[id]();
-  $('#bar').classList.remove('hide');
-  $('#bar i').style.width = Math.round(pos / (fila.length) * 100) + '%';
-  let h = (pos > 0 ? '<button class="back" id="voltar">← Voltar</button>' : '') + `<h1>${q.h}</h1>` + (q.s ? `<p class="sub">${q.s}</p>` : '<div style="height:14px"></div>');
+  const tot = totalPrevisto();
+  let h = `<div class="tc">${pos > 0 ? '<button class="back" id="voltar">← Voltar</button>' : ''}<span class="sp"></span><span>${String(pos+1).padStart(2,'0')} / ${String(tot).padStart(2,'0')}</span></div>`;
+  h += `<h1>${q.h}</h1>` + (q.s ? `<p class="sub">${q.s}</p>` : '<div style="height:16px"></div>');
   if (q.input){
-    h += `<div class="field"><span>R$</span><input id="extra" inputmode="numeric" placeholder="0" value="${R.gExtra||''}"></div>
+    h += `<div class="field"><span>R$</span><input id="extra" inputmode="decimal" placeholder="0" value="${R.gExtra||''}"></div>
           <div class="row"><button class="btn ghost" id="pular">Não tenho</button><button class="btn" id="seguir">Continuar</button></div>`;
   } else {
-    h += '<div class="opts">' + q.o.map(([v,t,s,ic]) => `<button class="opt${q.big?' big':''}" data-v="${v}">${ic?`<span class="ic">${ic}</span>`:''}<span><b>${t}</b>${s?`<small>${s}</small>`:''}</span></button>`).join('') + '</div>';
+    h += '<div class="opts">' + q.o.map(([v,t,s,ic]) => `<button class="opt${q.big?' big':''}" style="--cor:${cor(id)}" data-v="${v}">${ic?`<span class="ic">${ic}</span>`:''}<span><b>${t}</b>${s?`<small>${s}</small>`:''}</span></button>`).join('') + '</div>';
   }
   if (id === 'modo' && store.get('fl_nivel')) h += `<p class="nivel">Seu nível: <b>${NIVEL[store.get('fl_nivel')].t}</b> · <button class="link" id="trocaNivel">mudar</button></p>`;
-  tela(h);
-  document.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+  tela(h, 'entra');
+  desenhaTimeline();
+  document.querySelectorAll('.opt').forEach(b => b.onclick = async () => {
+    if (ocupado) return; ocupado = true;
+    b.classList.add('picked');
+    if (id === 'modo') R = { modo:b.dataset.v };
     if (id === 'nivel') store.set('fl_nivel', b.dataset.v); else R[id] = b.dataset.v;
-    if (id === 'modo'){ R = { modo:b.dataset.v }; }
-    if (id !== 'nivel') pos++;          // nível sai da fila depois de salvo: a próxima pergunta já ocupa esta posição
-    pergunta();
+    if (id !== 'nivel') pos++;
+    fila = montaFila();
+    const alvo = desenhaTimeline(id);
+    await voa(b, alvo);
+    ocupado = false; pergunta();
   });
-  if ($('#voltar')) $('#voltar').onclick = () => { pos = Math.max(0, pos-1); if (fila[pos] === 'nivel') store.set('fl_nivel', null); pergunta(); };
+  if ($('#voltar')) $('#voltar').onclick = () => { pos = Math.max(0, pos-1); pergunta(); };
   if ($('#trocaNivel')) $('#trocaNivel').onclick = () => { store.set('fl_nivel', null); pergunta(); };
   if (q.input){
-    const go = v => { R.gExtra = v; pos++; pergunta(); };
-    $('#extra').focus();
-    $('#extra').onkeydown = e => { if (e.key === 'Enter') $('#seguir').click(); };
-    $('#pular').onclick = () => go(0);
-    $('#seguir').onclick = () => go(Math.max(0, parseFloat(($('#extra').value||'0').replace(/\./g,'').replace(',','.')) || 0));
+    const go = async (v, btn) => { R.gExtra = v; pos++; fila = montaFila(); const alvo = desenhaTimeline('gExtra'); await voa(btn, alvo); pergunta(); };
+    const inp = $('#extra'); setTimeout(() => inp.focus(), 50);
+    inp.onkeydown = e => { if (e.key === 'Enter') $('#seguir').click(); };
+    $('#pular').onclick = e => go(0, e.currentTarget);
+    $('#seguir').onclick = e => go(Math.max(0, parseFloat((inp.value||'0').replace(/\./g,'').replace(',','.')) || 0), $('.field'));
   }
 }
 
 // ===================== cálculo =====================
 function calcula(){
   const vh = NIVEL[store.get('fl_nivel') || 'medio'].h;
-  const out = { ed:null, gr:null };
+  const out = { ed:null, gr:null, vh };
   if (R.modo !== 'gravar'){
     const t = TIPO[R.tipo], d = DUR[R.tipo === 'reels' ? 'd1' : R.dur], e = EDICAO[R.edicao], p = PRAZO[R.prazo];
     const horas = d.h * e.mult * (R.tipo === 'evento' ? 1.4 : 1);
@@ -211,116 +367,159 @@ function calcula(){
   if (R.modo !== 'editar'){
     const g = GHORAS[R.gHoras], s = GESTR[R.gEstr];
     const horas = Math.max(2, g.h) + PREP;
-    const ref = horas * vh * s.mult + (R.gExtra || 0);
-    out.gr = { horas, ref, g, s, extra:R.gExtra || 0 };
+    out.gr = { horas, ref: horas * vh * s.mult + (R.gExtra || 0), g, s, extra:R.gExtra || 0 };
   }
   return out;
 }
-
 function totais(c, n){
   const desc = PACOTE[n] || 0;
-  const ed = c.ed ? c.ed.ref * n * (1 - desc) : 0;
-  const gr = c.gr ? c.gr.ref : 0;
+  const ed = c.ed ? c.ed.ref * n * (1 - desc) : 0, gr = c.gr ? c.gr.ref : 0;
   const ref = arred(ed + gr);
-  return { ref, min:arred(ref * .85), max:arred(ref * 1.25), cada: c.ed ? arred(ed / n) : 0, desc,
-           horas: meiaHora((c.ed ? c.ed.horas * n * (1 - desc*1.5) : 0) + (c.gr ? c.gr.horas : 0)) };
+  return { ref, min:arred(ref*.85), max:arred(ref*1.25), cada: c.ed ? arred(ed/n) : 0, desc,
+           horas: meiaHora((c.ed ? c.ed.horas*n*(1-desc*1.5) : 0) + (c.gr ? c.gr.horas : 0)) };
 }
-
 function porque(c){
   const nv = NIVEL[store.get('fl_nivel') || 'medio'].t.toLowerCase();
   if (c.ed && c.gr) return `Gravação de ${c.gr.g.t.toLowerCase()} com estrutura ${c.gr.s.t.toLowerCase()}, mais ${c.ed.e.nome} de um ${c.ed.t.nome}. Calculado pelo tempo de trabalho no seu nível (${nv})${c.gr.extra ? ', somando os custos extras' : ''}.`;
   if (c.gr) return `Gravação de ${c.gr.g.t.toLowerCase()} com estrutura ${c.gr.s.t.toLowerCase()}, já contando 1 hora de preparação e backup${c.gr.extra ? ' e os custos extras' : ''}. Calculado para o seu nível (${nv}).`;
   const e = c.ed;
-  return `Um ${e.t.nome} ${e.t.nome === 'Reels' ? '' : e.d.nome + ' '}com ${e.e.nome} leva por volta de ${horasTxt(meiaHora(e.horas))} de trabalho. No seu nível (${nv}), isso dá esse valor${e.p.mult > 1 ? ', com acréscimo de urgência' : ''}${e.t.mult > 1 && R.tipo === 'comercial' ? ' e adicional por ser para marca' : ''}.`;
+  return `Um ${e.t.nome} ${e.t.nome === 'Reels' ? '' : e.d.nome + ' '}com ${e.e.nome} leva por volta de ${horasTxt(meiaHora(e.horas))} de trabalho. No seu nível (${nv}), isso dá esse valor${e.p.mult > 1 ? ', com acréscimo de urgência' : ''}${R.tipo === 'comercial' ? ' e adicional por ser para marca' : ''}.`;
+}
+
+// ===================== render (momento de revelação) =====================
+async function renderiza(){
+  const c = calcula();
+  const passos = [];
+  if (c.gr) passos.push(`Calculando a gravação (${horasTxt(c.gr.horas)} com preparação)`);
+  if (c.ed) passos.push(`Estimando a edição (~${horasTxt(meiaHora(c.ed.horas))})`);
+  passos.push(`Aplicando o seu nível (${NIVEL[store.get('fl_nivel')||'medio'].t.toLowerCase()})`);
+  if (c.ed && c.ed.p.mult > 1) passos.push('Somando a urgência');
+  else if (c.gr && c.gr.extra) passos.push('Somando os custos extras');
+  else passos.push('Conferindo com o mercado');
+  $('#tcB').textContent = 'Renderizando…';
+  tela(`<div class="render"><div class="pct" id="pct">0<small>%</small></div><div class="pb"><i id="pbi"></i></div>
+        <ul>${passos.map(p => `<li>${p}</li>`).join('')}</ul></div>`);
+  const lis = [...document.querySelectorAll('.render li')], T = calmo ? 1 : 1900, t0 = performance.now();
+  await new Promise(fim => {
+    const f = now => {
+      const k = Math.min(1, (now - t0) / T), e = 1 - Math.pow(1 - k, 2.2);
+      $('#pct').firstChild.nodeValue = Math.round(e * 100); $('#pbi').style.width = (e*100) + '%';
+      lis.forEach((li, i) => li.classList.toggle('ok', e >= (i + 1) / (lis.length + .3)));
+      k < 1 ? requestAnimationFrame(f) : fim();
+    };
+    requestAnimationFrame(f);
+  });
+  vibra([10, 40, 18]);
+  await espera(250);
+  resultado(true);
 }
 
 // ===================== resultado =====================
-function resultado(){
-  $('#bar i').style.width = '100%';
-  const c = calcula(); const temPac = R.modo !== 'gravar';
-  tela(`
-    <button class="back" id="voltar">← Voltar</button>
-    <h1>Quanto <em>cobrar</em></h1><div style="height:14px"></div>
-    <div class="res ${acesso ? '' : 'blur'}" id="res">
-      <div class="lb">Faixa sugerida</div>
-      <div class="faixa val" id="faixa"></div>
-      <div class="grid">
-        <div class="ref"><span class="lb">Referência</span><b class="val" id="ref"></b></div>
-        <div><span class="lb">Tempo estimado</span><b id="horas"></b></div>
-      </div>
-      <p class="pq">${porque(c)}</p>
-      <div class="lockbox"><p>Seu preço está pronto 🔒</p><small>Desbloqueie a calculadora para ver os valores e gerar orçamentos ilimitados.</small>
-        <button class="btn" id="comprar">Desbloquear</button><button class="link" id="entrar2">Já comprei · entrar</button></div>
-    </div>
+let slotTimer = null;
+function resultado(revelar = false){
+  clearInterval(slotTimer);
+  $('#tcB').textContent = 'Renderizado';
+  const c = calcula(), temPac = R.modo !== 'gravar';
+  const corpo = acesso ? `
+      <div class="lb">Valor de referência</div>
+      <div class="preco"><span class="rs">R$</span><span id="vref">0</span></div>
+      <div class="faixa">Faixa justa: <b id="vfx"></b></div>
+      <div class="stats"><div><b id="vh"></b><span>de trabalho</span></div><div><b id="vcada"></b><span id="vcadal">por vídeo</span></div></div>
+      <p class="pq">${porque(c)}</p>` : `
+      <div class="lb">Seu preço está renderizado</div>
+      <div class="preco"><span class="rs">R$</span><span class="slot" id="slot"></span></div>
+      <div class="faixa">Tempo estimado: <b id="vh"></b></div>
+      <div class="lock">
+        <p>Desbloqueie para ver o valor e mandar o orçamento</p>
+        <div class="sm">Pagamento único. Use quantas vezes quiser, no celular e no computador.</div>
+        <ul><li>Faixa justa e valor de referência para cada trabalho</li><li>Preço de pacotes de 4, 8, 12 e 20 vídeos</li><li>Orçamento pronto para enviar no WhatsApp</li></ul>
+        <button class="btn" id="comprar">Desbloquear meu preço</button>
+        <button class="link ja" id="entrar2">Já comprei · entrar</button>
+      </div>`;
+  tela(`<div class="tc"><button class="back" id="voltar">← Ajustar respostas</button><span class="sp"></span><span>Renderizado</span></div>
+    <div class="card ${revelar ? 'revela' : ''}" id="card"><div class="glow"></div>${corpo}</div>
     ${temPac ? `<h2>${R.modo === 'ambos' ? 'Quantos vídeos saem dessa gravação?' : 'Quantos vídeos?'}</h2>
-    <div class="chips">${Object.keys(PACOTE).map(n => `<button class="chip${+n===qtd?' on':''}" data-n="${n}">${n}</button>`).join('')}</div>
-    <div class="pac" id="pac"></div>` : ''}
-    <div style="height:20px"></div>
-    <button class="btn" id="orc" ${acesso ? '' : 'disabled'}>Gerar orçamento</button>
-    <div class="row"><button class="btn ghost" id="novo">Novo cálculo</button></div>`);
-  const pinta = () => {
+      <div class="chips">${Object.keys(PACOTE).map(n => `<button class="chip${+n===qtd?' on':''}" data-n="${n}">${n}</button>`).join('')}</div>
+      <div class="pac" id="pac"></div>` : ''}
+    <div class="acoes">${acesso ? '<button class="btn" id="orc">Gerar orçamento</button>' : ''}
+      <div class="row"><button class="btn ghost" id="novo">Novo cálculo</button></div></div>`);
+  let atual = 0;
+  const pinta = anima => {
     const t = totais(c, qtd);
-    $('#faixa').textContent = `${brl(t.min)} a ${brl(t.max)}`;
-    $('#ref').textContent = brl(t.ref);
-    $('#horas').textContent = '~' + horasTxt(t.horas);
-    if ($('#pac')) $('#pac').innerHTML = qtd > 1 ? `<span class="val">${qtd} vídeos: <b>${brl(t.ref)}</b> (${brl(t.cada)} cada)</span> · ${Math.round(t.desc*100)}% de desconto pelo volume` : 'Escolha uma quantidade para ver o valor do pacote.';
-    if ($('#pac')) $('#pac').classList.toggle('blur', !acesso);
+    $('#vh').textContent = '~' + horasTxt(t.horas);
+    if (acesso){
+      $('#vfx').textContent = `${brl(t.min)} a ${brl(t.max)}`;
+      const cada = c.ed ? t.cada : t.ref;
+      $('#vcada').textContent = brl(cada); $('#vcadal').textContent = c.ed ? (qtd > 1 ? 'cada vídeo' : 'por vídeo') : 'pela gravação';
+      conta($('#vref'), atual, t.ref, anima ? 1100 : 380); atual = t.ref;
+      if ($('#pac')) $('#pac').innerHTML = qtd > 1 ? `<b>${qtd} vídeos por ${brl(t.ref)}</b> · ${Math.round(t.desc*100)}% de desconto pelo volume` : 'Escolha uma quantidade para montar um pacote.';
+    } else {
+      montaSlot(fmt(t.ref));
+      if ($('#pac')) $('#pac').textContent = qtd > 1 ? `Pacote de ${qtd} vídeos com ${Math.round(t.desc*100)}% de desconto pelo volume.` : 'Escolha uma quantidade para montar um pacote.';
+    }
   };
-  pinta();
-  document.querySelectorAll('.chip').forEach(b => b.onclick = () => { qtd = +b.dataset.n; document.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b)); pinta(); });
-  $('#voltar').onclick = () => { pos = fila.length - 1; pergunta(); };
-  $('#novo').onclick = () => { R = {}; pos = 0; qtd = 1; pergunta(); };
-  $('#orc').onclick = () => orcamento(c);
-  $('#comprar').onclick = () => { if (BUY_URL) location.href = BUY_URL; else alertaInline('O link de compra ainda não foi configurado.'); };
-  $('#entrar2').onclick = () => login(() => resultado());
+  pinta(revelar);
+  document.querySelectorAll('.chip').forEach(b => b.onclick = () => { qtd = +b.dataset.n; document.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b)); vibra(6); pinta(false); });
+  $('#voltar').onclick = () => { clearInterval(slotTimer); pos = fila.length - 1; pergunta(); };
+  $('#novo').onclick = () => { clearInterval(slotTimer); R = {}; pos = 0; qtd = 1; pergunta(); };
+  if ($('#orc')) $('#orc').onclick = () => orcamento(c);
+  if ($('#comprar')) $('#comprar').onclick = () => { if (BUY_URL) location.href = BUY_URL; else toast('Link de compra em breve.'); };
+  if ($('#entrar2')) $('#entrar2').onclick = () => { clearInterval(slotTimer); login(() => { pergunta(); }); };
 }
-function alertaInline(m){ const p = document.createElement('p'); p.className = 'err'; p.textContent = m; $('#res').after(p); }
+function conta(el, de, ate, ms){
+  if (calmo){ el.textContent = fmt(ate); return; }
+  const t0 = performance.now();
+  const f = now => { const k = Math.min(1, (now - t0) / ms), e = 1 - Math.pow(2, -10 * k); el.textContent = fmt(de + (ate - de) * (k >= 1 ? 1 : e)); if (k < 1) requestAnimationFrame(f); };
+  requestAnimationFrame(f);
+}
+function montaSlot(txt){
+  const s = $('#slot'); s.innerHTML = [...txt].map(ch => /\d/.test(ch) ? '<i>0</i>' : `<em>${ch}</em>`).join('');
+  const roda = () => s.querySelectorAll('i').forEach(i => i.textContent = Math.floor(Math.random()*10));
+  roda(); clearInterval(slotTimer); if (!calmo) slotTimer = setInterval(roda, 90);
+}
 
 // ===================== orçamento =====================
 function orcamento(c){
   const t = totais(c, qtd);
-  tela(`<button class="back" id="voltar">← Voltar</button>
-    <h1>Seu <em>orçamento</em></h1><p class="sub">Coloque o nome do cliente, ajuste o que quiser e mande.</p>
+  $('#tcB').textContent = 'Exportando';
+  const hora = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+  tela(`<div class="tc"><button class="back" id="voltar">← Voltar ao preço</button><span class="sp"></span><span>Exportar</span></div>
+    <h1>Orçamento pronto pra enviar</h1><p class="sub">Coloque o nome do cliente. Você pode mexer no texto antes de mandar.</p>
     <input class="inp" id="cli" placeholder="Nome do cliente (opcional)" autocomplete="off">
-    <textarea id="txt"></textarea>
-    <div class="row"><button class="btn ghost" id="copiar">Copiar</button><button class="btn" id="zap">Enviar no WhatsApp</button></div>
-    <div class="ok" id="msg"></div>`);
+    <div class="chat"><div class="para">Assim o seu cliente vai receber</div><div class="bolha"><textarea id="txt"></textarea><span class="hr">${hora} ✓✓</span></div></div>
+    <div class="row"><button class="btn ghost" id="copiar">Copiar</button><button class="btn" id="zap">Enviar no WhatsApp</button></div>`, 'entra');
   const monta = () => {
     const nome = $('#cli').value.trim();
     const val = new Date(Date.now() + 7*864e5).toLocaleDateString('pt-BR');
-    const L = [];
-    L.push(nome ? `Olá, ${nome}! Tudo bem? Segue o orçamento:` : 'Olá! Tudo bem? Segue o orçamento:', '');
-    let serv = [], ent = [];
-    if (c.gr){ serv.push(`Gravação (${c.gr.g.t.toLowerCase()}, estrutura ${c.gr.s.t.toLowerCase()})`); }
+    const L = [nome ? `Olá, ${nome}! Tudo bem? Segue o orçamento:` : 'Olá! Tudo bem? Segue o orçamento:', ''];
+    const serv = [], ent = [];
+    if (c.gr) serv.push(`Gravação (${c.gr.g.t.toLowerCase()}, estrutura ${c.gr.s.t.toLowerCase()})`);
     if (c.ed){
-      serv.push(`Edição de ${c.ed.t.nome} — ${c.ed.e.nome}`);
-      const dur = R.tipo === 'reels' ? 'até 1 min' : c.ed.d.nome;
-      ent.push(`${qtd} ${qtd > 1 ? 'vídeos' : 'vídeo'} editado${qtd > 1 ? 's' : ''} (${dur})`);
+      serv.push(`Edição de ${c.ed.t.nome} (${c.ed.e.nome})`);
+      ent.push(`${qtd} ${qtd > 1 ? 'vídeos editados' : 'vídeo editado'} (${R.tipo === 'reels' ? 'até 1 min' : c.ed.d.nome})`);
     } else ent.push('Material bruto gravado, organizado e entregue');
     L.push('*Serviço:* ' + serv.join(' + '));
     L.push('*Entrega:* ' + ent.join(' + '));
     const hEd = c.ed ? c.ed.horas * qtd : 0;
-    const dias = c.ed && R.prazo === 'urgente' ? 'em até 48 horas' : `em até ${Math.max(2, Math.ceil(hEd / 6) + 1)} dias úteis após receber o material`;
-    L.push('*Prazo:* ' + (c.ed ? dias : 'material entregue em até 2 dias úteis após a gravação'));
+    L.push('*Prazo:* ' + (c.ed ? (R.prazo === 'urgente' ? 'em até 48 horas' : `em até ${Math.max(2, Math.ceil(hEd/6)+1)} dias úteis após receber o material`) : 'material entregue em até 2 dias úteis após a gravação'));
     if (c.ed) L.push('*Revisões:* 2 rodadas de ajustes incluídas' + (qtd > 1 ? ' por vídeo' : ''));
     L.push('*Investimento:* ' + brl(t.ref) + (qtd > 1 && c.ed ? ` (${qtd} vídeos)` : ''));
-    L.push('*Válido até:* ' + val, '');
-    L.push('Qualquer dúvida, fico à disposição!');
+    L.push('*Válido até:* ' + val, '', 'Qualquer dúvida, fico à disposição!');
     $('#txt').value = L.join('\n');
   };
   monta(); $('#cli').oninput = monta;
-  $('#voltar').onclick = () => resultado();
-  $('#copiar').onclick = async () => { try { await navigator.clipboard.writeText($('#txt').value); } catch { $('#txt').select(); document.execCommand('copy'); } $('#msg').textContent = '✓ Copiado! É só colar na conversa com o cliente.'; };
+  $('#voltar').onclick = () => resultado(false);
+  $('#copiar').onclick = async () => { try { await navigator.clipboard.writeText($('#txt').value); } catch { $('#txt').select(); document.execCommand('copy'); } vibra(10); toast('Copiado. É só colar na conversa.'); };
   $('#zap').onclick = async () => {
     const texto = $('#txt').value;
-    if (navigator.share && /Android|iPhone|iPad/i.test(navigator.userAgent)){ try { await navigator.share({ text: texto }); return; } catch(e){ if (e.name === 'AbortError') return; } }
+    if (navigator.share && /Android|iPhone|iPad/i.test(navigator.userAgent)){ try { await navigator.share({ text:texto }); toast('Orçamento enviado. Boa venda!'); return; } catch(e){ if (e.name === 'AbortError') return; } }
     window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(texto), '_blank');
   };
 }
 
 // ===================== login e licença =====================
 async function api(path, { method='GET', body, auth=true } = {}){
-  const h = { apikey: SUPA.key, 'Content-Type':'application/json' };
+  const h = { apikey:SUPA.key, 'Content-Type':'application/json' };
   if (auth && sess) h.Authorization = 'Bearer ' + sess.access_token;
   const r = await fetch(SUPA.url + path, { method, headers:h, body: body ? JSON.stringify(body) : undefined });
   const t = await r.text(); let j; try { j = t ? JSON.parse(t) : {}; } catch { j = t; }
@@ -347,29 +546,25 @@ async function checaAcesso(){
   acesso = false;
   try {
     if (!(await sessaoValida())) return;
-    const [lic, pk] = await Promise.all([
-      api(`/rest/v1/licenses?select=status&pack_id=eq.${PACK}`),
-      api(`/rest/v1/packs?select=buy_url&id=eq.${PACK}`),
-    ]);
+    const [lic, pk] = await Promise.all([ api(`/rest/v1/licenses?select=status&pack_id=eq.${PACK}`), api(`/rest/v1/packs?select=buy_url&id=eq.${PACK}`) ]);
     acesso = lic.some(l => l.status === 'active');
     if (pk[0]?.buy_url) BUY_URL = pk[0].buy_url;
   } catch {}
-  conta();
+  botaoConta();
 }
-function conta(){
-  const b = $('#conta');
-  b.textContent = sess ? 'Sair' : 'Entrar';
-  b.onclick = () => { if (sess){ salva(null); acesso = false; conta(); R = {}; pos = 0; pergunta(); } else login(() => { R = {}; pos = 0; pergunta(); }); };
+function botaoConta(){
+  const b = $('#conta'); b.textContent = sess ? 'Sair' : 'Entrar';
+  b.onclick = () => { clearInterval(slotTimer); if (sess){ salva(null); acesso = false; botaoConta(); R = {}; pos = 0; pergunta(); } else login(() => { R = {}; pos = 0; pergunta(); }); };
 }
 function login(depois){
-  $('#bar').classList.add('hide');
+  $('#dock').classList.add('hide');
   let email = '';
   const etapa = codigo => {
-    tela(`<button class="back" id="voltar">← Voltar</button>
-      <h1>${codigo ? 'Digite o <em>código</em>' : 'Entre com o <em>e-mail da compra</em>'}</h1>
+    tela(`<div class="tc"><button class="back" id="voltar">← Voltar</button></div>
+      <h1>${codigo ? 'Digite o código' : 'Entre com o e-mail da compra'}</h1>
       <p class="sub">${codigo ? 'Enviamos um código para ' + email + '. Confira também o spam.' : 'O mesmo e-mail que você usou para comprar. Vamos mandar um código de acesso.'}</p>
       <input class="inp" id="campo" ${codigo ? 'inputmode="numeric" autocomplete="one-time-code" placeholder="Código"' : 'type="email" autocomplete="email" placeholder="seu@email.com"'}>
-      <button class="btn" id="ir">${codigo ? 'Entrar' : 'Enviar código'}</button><div class="err" id="erro"></div>`);
+      <button class="btn" id="ir">${codigo ? 'Entrar' : 'Enviar código'}</button><div class="err" id="erro"></div>`, 'entra');
     $('#campo').focus();
     $('#campo').onkeydown = e => { if (e.key === 'Enter') $('#ir').click(); };
     $('#voltar').onclick = () => codigo ? etapa(false) : depois();
@@ -386,11 +581,13 @@ function login(depois){
           if (token.length < 6) throw new Error('Digite o código que chegou no e-mail.');
           const r = await api('/auth/v1/verify', { method:'POST', body:{ type:'email', email, token }, auth:false });
           salva(fromAuth(r)); await checaAcesso();
-          if (!acesso){ tela(`<h1>Quase lá</h1><p class="sub">Não encontramos a calculadora nas compras de <b>${email}</b>. Se comprou com outro e-mail, saia e entre com ele.</p>
-            <button class="btn" id="comprar">Desbloquear agora</button><div class="row"><button class="btn ghost" id="seguir">Continuar sem desbloquear</button></div>`);
-            $('#comprar').onclick = () => { if (BUY_URL) location.href = BUY_URL; };
-            $('#seguir').onclick = depois; return; }
-          depois();
+          if (!acesso){
+            tela(`<h1>Quase lá</h1><p class="sub">Não encontramos a calculadora nas compras de <b>${email}</b>. Se comprou com outro e-mail, saia e entre com ele.</p>
+              <button class="btn" id="comprar">Desbloquear agora</button><div class="row"><button class="btn ghost" id="seguir">Continuar sem desbloquear</button></div>`);
+            $('#comprar').onclick = () => { if (BUY_URL) location.href = BUY_URL; else toast('Link de compra em breve.'); };
+            $('#seguir').onclick = depois; return;
+          }
+          vibra([10,30,10]); toast('Ferramenta desbloqueada'); depois();
         }
       } catch(e){ $('#erro').textContent = traduz(e.message); b.disabled = false; }
     };
@@ -399,7 +596,9 @@ function login(depois){
 }
 
 // ===================== início =====================
-conta(); pergunta(); checaAcesso().then(() => { if (fila[pos] === undefined || pos >= fila.length) resultado(); });
+addEventListener('resize', posicionaAgulha);
+botaoConta(); pergunta();
+checaAcesso().then(() => { if ($('#card')) resultado(false); });
 </script>
 </body>
 </html>
