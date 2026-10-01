@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finanças e Demandas — Base FL</title>
+<meta name="description" content="Seus trabalhos, prazos e pagamentos num só lugar, com meta do mês e comparativo com o mês passado.">
+<link rel="icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0B0C0C">
+<meta property="og:title" content="Finanças e Demandas — Base FL">
+<meta property="og:description" content="Seus trabalhos, prazos e pagamentos num só lugar, com meta do mês e comparativo com o mês passado.">
+<meta property="og:image" content="https://basefl.com/icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--a:#FFB347;--a2:#FF7A45;--ai:#111;--pattern:linear-gradient(90deg,rgba(255,179,71,.05) 1px,transparent 1px) 0 0/90px 100%;--fxx:50%}
+
+:root{
+  --bg:#0B0C0C; --bg2:#121413; --card:#161918; --line:#252A27; --ink:#F4F0E4; --mute:#A8A89A; --dim:#6b6a61;
+  --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --f:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:16px/1.55 var(--f);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+.fx{position:absolute;inset:0 0 auto;height:900px;pointer-events:none;overflow:hidden;z-index:0}
+.fx::before{content:"";position:absolute;width:1000px;height:700px;left:var(--fxx,70%);top:-300px;transform:translateX(-50%);background:radial-gradient(closest-side,color-mix(in srgb,var(--a) 26%,transparent),transparent 72%)}
+.fx::after{content:"";position:absolute;inset:0;background-image:var(--pattern);mask-image:radial-gradient(ellipse 70% 60% at 60% 10%,#000 25%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse 70% 60% at 60% 10%,#000 25%,transparent 75%)}
+.top{display:flex;align-items:center;gap:12px;padding:20px 0}
+.top a.mk{display:flex;align-items:center;gap:10px;text-decoration:none}
+.top img{width:36px;height:36px;border-radius:10px}
+.top b{font-family:var(--d);font-weight:800;font-size:16px;line-height:1.1;display:block}
+.top small{display:block;color:var(--mute);font-size:12px}
+.top .sp{flex:1}
+.top .cta-s{font-weight:700;font-size:14px;text-decoration:none;border-radius:99px;padding:9px 16px;background:var(--a);color:var(--ai);cursor:pointer;border:0;font-family:var(--f)}
+.kick{display:inline-flex;align-items:center;gap:8px;font-family:var(--d);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--a);background:color-mix(in srgb,var(--a) 12%,transparent);border:1px solid color-mix(in srgb,var(--a) 40%,transparent);border-radius:99px;padding:6px 13px}
+h1{font-family:var(--d);font-weight:850;font-stretch:110%;font-size:clamp(36px,5.6vw,62px);line-height:1;letter-spacing:-.035em;margin:18px 0 16px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--a)}
+.lead{color:var(--mute);font-size:clamp(16px,1.9vw,18.5px);max-width:520px}
+.lead b{color:var(--ink);font-weight:600}
+.ctas{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font:inherit;font-weight:750;font-size:17px;border:0;border-radius:16px;padding:17px 26px;cursor:pointer;background:var(--a);color:var(--ai);box-shadow:0 12px 40px -12px color-mix(in srgb,var(--a) 70%,transparent);transition:transform .15s,box-shadow .2s;text-decoration:none}
+.btn:hover{transform:translateY(-2px);box-shadow:0 18px 50px -12px color-mix(in srgb,var(--a) 85%,transparent)}
+.btn svg{width:18px;height:18px}
+.nota{color:var(--mute);font-size:13.5px;line-height:1.4}
+.nota b{color:var(--ink)}
+.hero{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center;padding:36px 0 20px}
+.hero.empilha{grid-template-columns:1fr;text-align:center;gap:40px}
+.hero.empilha .lead{margin:0 auto}
+.hero.empilha .ctas{justify-content:center}
+.palco{position:relative;border-radius:24px;border:1px solid var(--line);background:linear-gradient(180deg,#151817,#0f1110);box-shadow:0 40px 100px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.02) inset;overflow:hidden;min-height:420px;text-align:left}
+.palco::before{content:"";position:absolute;inset:-30% -10% auto;height:70%;background:radial-gradient(closest-side,color-mix(in srgb,var(--a) 18%,transparent),transparent);pointer-events:none}
+.palco .rot{position:absolute;left:16px;bottom:14px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;z-index:3}
+section{padding:90px 0 0}
+h2{font-family:var(--d);font-weight:850;font-stretch:106%;font-size:clamp(26px,3.8vw,40px);line-height:1.05;letter-spacing:-.03em;max-width:20ch;text-wrap:balance}
+.sub2{color:var(--mute);font-size:16.5px;max-width:560px;margin-top:10px}
+.bens{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+.bem{position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px 22px;overflow:hidden}
+.bem::after{content:"";position:absolute;right:-60px;top:-60px;width:160px;height:160px;background:radial-gradient(closest-side,color-mix(in srgb,var(--a) 16%,transparent),transparent)}
+.bem .n{font-family:var(--d);font-weight:900;font-size:13px;color:var(--a);letter-spacing:.1em}
+.bem h3{font-size:19px;line-height:1.25;margin:10px 0 8px;font-weight:700}
+.bem p{color:var(--mute);font-size:14.5px}
+.inclui{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.inclui span{display:inline-flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--line);border-radius:99px;padding:9px 15px;font-size:14px}
+.inclui span::before{content:"";width:16px;height:16px;border-radius:5px;background:var(--a) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%23111' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat}
+.ac{font-style:normal;color:var(--a)}
+.cbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:24px}
+.cb{position:relative;display:block;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 18px 16px 20px;transition:border-color .2s,transform .2s}
+.cb::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:0 4px 4px 0;background:var(--c)}
+.cb:hover{border-color:var(--c);transform:translateY(-2px)}
+.cb b{display:block;font-size:17px}
+.cb span{display:block;color:var(--mute);font-size:14px;margin:4px 0 10px}
+.cb em{font-style:normal;font-size:13px;font-weight:700;color:var(--c)}
+.faq{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-top:26px}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 18px;font-weight:650;font-size:15px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--a);font-size:20px;transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 18px 16px;color:var(--mute);font-size:14.5px}
+.final{position:relative;margin:90px 0 0;border-radius:28px;padding:50px 28px;text-align:center;overflow:hidden;background:linear-gradient(180deg,#181b1a,#111312);border:1px solid var(--line)}
+.final::before{content:"";position:absolute;inset:auto -10% -70% -10%;height:130%;background:radial-gradient(closest-side,color-mix(in srgb,var(--a) 22%,transparent),transparent 70%)}
+.final>*{position:relative}
+.final h2{margin:0 auto 10px}
+.final .preco{font-family:var(--d);font-weight:900;font-size:clamp(40px,6vw,58px);letter-spacing:-.03em;line-height:1;margin:18px 0 6px}
+.final .preco small{font-size:.38em;color:var(--mute);font-weight:700;letter-spacing:0}
+.final .ctas{justify-content:center}
+.selos{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:18px;color:var(--mute);font-size:13.5px}
+.selos span{display:flex;align-items:center;gap:7px}
+.selos span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--a)}
+footer{color:var(--dim);font-size:12.5px;text-align:center;padding:40px 0 34px}
+footer a{color:var(--mute)}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.rv.vis{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}
+.toast{pointer-events:none;position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#111;font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;transition:all .25s;z-index:50}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:30px;text-align:left}
+  .bens,.faq{grid-template-columns:1fr}
+  section{padding-top:70px}
+  .palco{min-height:360px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+
+.palco{min-height:470px;max-width:980px;margin:0 auto;width:100%}
+.fd{position:absolute;inset:18px 18px 40px;display:flex;flex-direction:column;gap:12px}
+.kp{display:grid;grid-template-columns:1.1fr 1fr .9fr;gap:12px;background:#151715;border:1px solid #262a26;border-radius:14px;padding:14px 16px;align-items:center}
+.kp small{display:block;font-size:11px;color:var(--mute)}
+.kp b{display:block;font-family:var(--d);font-weight:900;font-size:28px;letter-spacing:-.02em;line-height:1.1}
+.kp em{font-style:normal;font-size:11.5px;font-weight:700;color:#7fce8f;opacity:0;transition:opacity .4s}
+.kp em.on{opacity:1}
+.mb{height:9px;border-radius:9px;background:#262a26;margin-top:8px;overflow:hidden}
+.mb i{display:block;height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,var(--a),var(--a2));transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.br{display:flex;align-items:flex-end;gap:5px;height:52px}
+.br i{flex:1;border-radius:4px 4px 2px 2px;background:#2d322d;height:0;transition:height .8s cubic-bezier(.2,.8,.2,1)}
+.br.on i{height:var(--h)}
+.br i.at{background:linear-gradient(180deg,var(--a),var(--a2))}
+.kb{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;min-height:0}
+.col{background:#121412;border:1px solid #232723;border-radius:12px;padding:10px 8px;display:flex;flex-direction:column;gap:7px}
+.col h6{font-size:11px;color:var(--mute);font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin:0 2px 2px}
+.cd{position:relative;background:#1a1d1a;border:1px solid #2a2f2a;border-radius:10px;padding:8px 9px 8px 11px;font-size:12px}
+.cd::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--c,#888)}
+.cd b{display:block;font-size:12px}
+.cd small{color:var(--mute);font-size:10.5px}
+.cd.voa{position:absolute;z-index:5;transition:left .7s cubic-bezier(.5,0,.2,1),top .7s cubic-bezier(.5,0,.2,1);box-shadow:0 14px 30px -10px rgba(0,0,0,.8);border-color:var(--a)}
+.conf{position:absolute;width:7px;height:12px;border-radius:2px;z-index:6;pointer-events:none;animation:cai 1.4s ease-out forwards}
+@keyframes cai{to{transform:translate(var(--x),var(--y)) rotate(540deg);opacity:0}}
+@media (max-width:640px){.palco{min-height:640px}.kp{grid-template-columns:1fr 1fr}.br{display:none}.kb{grid-template-columns:repeat(2,1fr);grid-auto-rows:1fr}}
+
+</style>
+</head>
+<body>
+<div class="fx"></div>
+<div class="wrap">
+  <div class="top">
+    <a class="mk" href="/"><img src="/logo.png" alt=""><span><b>Base FL</b><small>Ferramentas</small></span></a>
+    <span class="sp"></span>
+    <button class="cta-s" data-comprar>Comprar</button>
+  </div>
+
+  <div class="hero empilha">
+    <div>
+      <span class="kick">Ferramenta</span>
+      <h1>Saiba o que entregar, <em>e o que já entrou.</em></h1>
+      <p class="lead">Um quadro com <b>todos os seus trabalhos</b>, do orçamento ao pagamento. Com <b>meta do mês</b>, comparativo com o mês passado e o controle das ferramentas que você assina.</p>
+      <div class="ctas"><button class="btn" data-comprar>Quero organizar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="nota">Funciona no <b>celular e no computador</b></span></div>
+    </div>
+    <div class="palco" aria-label="Demonstração de Finanças e Demandas"><div class="fd">
+    <div class="kp"><div><small>Recebido em outubro</small><b>R$ <span id="rec">0</span></b><em id="cmp">↑ 18% vs setembro</em></div>
+      <div class="meta"><small>Meta do mês · R$ 5.000</small><div class="mb"><i id="mb"></i></div></div>
+      <div class="br" id="br"><i style="--h:40%"></i><i style="--h:55%"></i><i style="--h:35%"></i><i style="--h:62%"></i><i style="--h:58%"></i><i style="--h:80%" class="at"></i></div></div>
+    <div class="kb" id="kb"><div class="col" data-c="0"><h6>Orçamento</h6></div><div class="col" data-c="1"><h6>Editando</h6></div><div class="col" data-c="2"><h6>Entregue</h6></div><div class="col" data-c="3"><h6>Pago</h6></div></div>
+  </div><span class="rot">Demonstração</span></div>
+  </div>
+
+  <section>
+    <h2 class="rv">O lado do trabalho que ninguém te ensina.</h2>
+    <div class="bens"><div class="bem rv"><span class="n">01</span><h3>Do orçamento ao pago</h3><p>Arraste cada trabalho pelas colunas e veja na hora o que está atrasado, em revisão ou esperando pagamento.</p></div><div class="bem rv d1"><span class="n">02</span><h3>Meta e comparativo</h3><p>Defina sua meta do mês e compare com o mês passado. Você sabe se está crescendo ou não.</p></div><div class="bem rv d2"><span class="n">03</span><h3>Ferramentas que você assina</h3><p>Anote CapCut Pro, banco de imagens e o que mais você paga, e veja quanto isso pesa no mês.</p></div></div>
+    <div class="inclui rv"><span>Quadro de trabalhos</span><span>Contador de revisões</span><span>Mensagens prontas para o cliente</span><span>Meta do mês</span><span>Comparativo mensal</span><span>Assinaturas</span></div>
+  </section>
+
+  <section><h2 class="rv">Funciona sozinho. <em class="ac">E combina com:</em></h2><p class="sub2 rv">Cada ferramenta é vendida separadamente. Se você tiver mais de uma, elas conversam entre si.</p><div class="cbs rv"><a class="cb" href="/conheca/quanto-cobrar/" style="--c:#7BD88F"><b>Quanto Cobrar?</b><span>O orçamento entra no quadro com valor e prazo.</span><em>Ver produto →</em></a><a class="cb" href="/conheca/gerador-de-briefing/" style="--c:#3FD0C2"><b>Gerador de Briefing</b><span>O pedido do cliente vira um card com as respostas.</span><em>Ver produto →</em></a></div></section>
+
+  <section>
+    <h2 class="rv">Perguntas rápidas</h2>
+    <div class="faq rv"><details><summary>Meus dados ficam salvos?</summary><p>Sim, na sua conta. Você acessa do celular ou do computador com o mesmo e-mail.</p></details><details><summary>Funciona sozinho?</summary><p>Sim. Você cadastra seus trabalhos direto nele. Se tiver também o Quanto Cobrar? ou o Briefing, vendidos separadamente, um toque manda o trabalho para cá.</p></details><details><summary>Como recebo o acesso?</summary><p>Assim que a compra é aprovada, ele aparece liberado no app Base FL e no navegador. É só entrar com o mesmo e-mail da compra.</p></details><details><summary>Quanto tempo de acesso?</summary><p>1 ano, com todas as atualizações desse período. Perto de vencer, o app avisa e você pode renovar.</p></details></div>
+  </section>
+
+  <div class="final rv">
+    <span class="kick">Finanças e Demandas</span>
+    <h2 style="margin-top:16px">Feche o mês sabendo exatamente onde está.</h2>
+    <div class="preco vpreco" hidden></div>
+    <div class="ctas"><button class="btn" data-comprar>Quero organizar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+    <div class="selos"><span>Acesso de 1 ano</span><span>Liberado na hora da compra</span><span>Celular e computador</span></div>
+  </div>
+
+  <footer><a href="/">Base FL</a> · o ecossistema do editor de vídeo</footer>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+
+// ====== COLE AQUI o link de checkout da Greenn e o preço (ex.: 'R$ 47') ======
+const CHECKOUT = 'COLE_AQUI_O_LINK_DA_GREENN';
+const PRECO = '';
+const PRODUTO = 'financas-e-demandas';
+// ============================================================================
+const $ = s => document.querySelector(s);
+const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const dorme = ms => new Promise(r => setTimeout(r, calmo ? Math.min(ms, 60) : ms));
+function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2400); }
+// link de compra com a origem Base FL (utm) — ?de=app quando vem do app
+function linkCompra(){
+  if (!/^https?:\/\//.test(CHECKOUT)) return '';
+  const u = new URL(CHECKOUT), de = new URLSearchParams(location.search).get('de') || 'pagina';
+  u.searchParams.set('utm_source', 'basefl'); u.searchParams.set('utm_medium', de); u.searchParams.set('utm_campaign', PRODUTO); u.searchParams.set('src', 'basefl-' + de);
+  return u.toString();
+}
+document.querySelectorAll('[data-comprar]').forEach(b => b.addEventListener('click', e => {
+  e.preventDefault(); const l = linkCompra();
+  if (l) location.href = l; else toast('Link de compra em breve.');
+}));
+if (PRECO && !PRECO.startsWith('__')) document.querySelectorAll('.vpreco').forEach(e => { e.innerHTML = PRECO + ' <small>/ 1 ano de acesso</small>'; e.hidden = false; });
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); } }), { threshold:.15 });
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+// a demonstração só roda enquanto está visível
+let visivel = true;
+new IntersectionObserver(es => { visivel = es[0].isIntersecting; }, { threshold:.1 }).observe($('.palco'));
+async function enquantoVisivel(){ while (!visivel) await new Promise(r => setTimeout(r, 300)); }
+
+const CORES = ['#9A968A','#9B7BF7','#5AA9F0','#7fce8f'];
+const FIXOS = [[0,'Studio Ana','4 Reels · R$ 600'],[1,'Clínica Viva','Institucional · R$ 1.800'],[2,'João Fit','8 Reels · R$ 1.150'],[3,'Café Grão','YouTube · R$ 900'],[3,'Loja Bela','Anúncio · R$ 700']];
+const card = (n, d, c) => `<div class="cd" style="--c:${CORES[c]}"><b>${n}</b><small>${d}</small></div>`;
+function conta(el, de, ate, ms){ const t0 = performance.now(); return new Promise(fim => { const f = now => { const k = Math.min(1, (now - t0) / ms), e = 1 - Math.pow(2, -10*k); el.textContent = Math.round(de + (ate - de) * (k >= 1 ? 1 : e)).toLocaleString('pt-BR'); k < 1 ? requestAnimationFrame(f) : fim(); }; requestAnimationFrame(f); }); }
+function confete(x, y){ const fd = $('.fd'); for (let i = 0; i < 26; i++){ const c = document.createElement('i'); c.className = 'conf'; c.style.cssText = `left:${x}px;top:${y}px;background:${['#FFB347','#7fce8f','#9B7BF7','#5AA9F0'][i%4]};--x:${(Math.random()-.5)*220}px;--y:${-40 - Math.random()*120}px`; fd.appendChild(c); setTimeout(() => c.remove(), 1500); } }
+async function demo(){
+  while (true){
+    await enquantoVisivel();
+    document.querySelectorAll('.col').forEach(c => c.querySelectorAll('.cd').forEach(x => x.remove()));
+    FIXOS.forEach(([c, n, d]) => document.querySelector(`.col[data-c="${c}"]`).insertAdjacentHTML('beforeend', card(n, d, c)));
+    const cols = [...document.querySelectorAll('.col')];
+    cols[0].insertAdjacentHTML('afterbegin', ''); cols[0].querySelector('h6').insertAdjacentHTML('afterend', `<div class="cd" id="mv" style="--c:${CORES[0]}"><b>Marina Costa</b><small>8 Reels · R$ 1.350</small></div>`);
+    $('#rec').textContent = '1.600'; $('#mb').style.width = '0'; $('#br').classList.remove('on'); $('#cmp').classList.remove('on');
+    await dorme(500); $('#mb').style.width = '32%'; $('#br').classList.add('on');
+    for (let k = 1; k <= 3; k++){
+      await dorme(900);
+      const mv = $('#mv'), fd = $('.fd').getBoundingClientRect(), a = mv.getBoundingClientRect();
+      const destino = cols[k], ref = destino.querySelector('h6').getBoundingClientRect();
+      const g = mv.cloneNode(true); g.id = ''; g.classList.add('voa'); g.style.left = (a.left - fd.left) + 'px'; g.style.top = (a.top - fd.top) + 'px'; g.style.width = a.width + 'px';
+      $('.fd').appendChild(g); mv.style.visibility = 'hidden'; void g.offsetWidth;
+      g.style.left = (ref.left - fd.left) + 'px'; g.style.top = (ref.bottom - fd.top + 7) + 'px';
+      await dorme(720); g.remove(); mv.remove();
+      destino.querySelector('h6').insertAdjacentHTML('afterend', `<div class="cd" id="mv" style="--c:${CORES[k]}"><b>Marina Costa</b><small>8 Reels · R$ 1.350</small></div>`);
+      if (k === 3){ const r = $('#mv').getBoundingClientRect(); confete(r.left - fd.left + r.width/2, r.top - fd.top); await conta($('#rec'), 1600, 2950, 1000); $('#mb').style.width = '59%'; $('#cmp').classList.add('on'); }
+    }
+    await dorme(3200);
+  }
+}
+demo();
+
+</script>
+</body>
+</html>
