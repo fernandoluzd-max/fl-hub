@@ -17,7 +17,7 @@ struct Status {
 }
 
 #[tauri::command]
-fn status() -> Status {
+fn status(app: tauri::AppHandle) -> Status {
     let env = Env::detect();
     let uds = env.capcut_user_data();
     Status {
@@ -26,7 +26,7 @@ fn status() -> Status {
         user_data: uds.iter().map(|p| p.to_string_lossy().to_string()).collect(),
         installed: flcore::installed(&env),
         system: format!("{:?}", env.target),
-        version: env!("CARGO_PKG_VERSION").into(),
+        version: app.package_info().version.to_string(),
     }
 }
 
