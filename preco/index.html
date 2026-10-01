@@ -297,21 +297,25 @@ function orcamento(c){
       const dur = R.tipo === 'reels' ? 'até 1 min' : c.ed.d.nome;
       ent.push(`${qtd} ${qtd > 1 ? 'vídeos' : 'vídeo'} editado${qtd > 1 ? 's' : ''} (${dur})`);
     } else ent.push('Material bruto gravado, organizado e entregue');
-    L.push('🎬 Serviço: ' + serv.join(' + '));
-    L.push('📦 Entrega: ' + ent.join(' + '));
+    L.push('*Serviço:* ' + serv.join(' + '));
+    L.push('*Entrega:* ' + ent.join(' + '));
     const hEd = c.ed ? c.ed.horas * qtd : 0;
     const dias = c.ed && R.prazo === 'urgente' ? 'em até 48 horas' : `em até ${Math.max(2, Math.ceil(hEd / 6) + 1)} dias úteis após receber o material`;
-    L.push('⏱ Prazo: ' + (c.ed ? dias : 'material entregue em até 2 dias úteis após a gravação'));
-    if (c.ed) L.push('🔁 Revisões: 2 rodadas de ajustes incluídas' + (qtd > 1 ? ' por vídeo' : ''));
-    L.push('💰 Investimento: ' + brl(t.ref) + (qtd > 1 && c.ed ? ` (${qtd} vídeos)` : ''));
-    L.push('📅 Válido até: ' + val, '');
+    L.push('*Prazo:* ' + (c.ed ? dias : 'material entregue em até 2 dias úteis após a gravação'));
+    if (c.ed) L.push('*Revisões:* 2 rodadas de ajustes incluídas' + (qtd > 1 ? ' por vídeo' : ''));
+    L.push('*Investimento:* ' + brl(t.ref) + (qtd > 1 && c.ed ? ` (${qtd} vídeos)` : ''));
+    L.push('*Válido até:* ' + val, '');
     L.push('Qualquer dúvida, fico à disposição!');
     $('#txt').value = L.join('\n');
   };
   monta(); $('#cli').oninput = monta;
   $('#voltar').onclick = () => resultado();
   $('#copiar').onclick = async () => { try { await navigator.clipboard.writeText($('#txt').value); } catch { $('#txt').select(); document.execCommand('copy'); } $('#msg').textContent = '✓ Copiado! É só colar na conversa com o cliente.'; };
-  $('#zap').onclick = () => window.open('https://wa.me/?text=' + encodeURIComponent($('#txt').value), '_blank');
+  $('#zap').onclick = async () => {
+    const texto = $('#txt').value;
+    if (navigator.share && /Android|iPhone|iPad/i.test(navigator.userAgent)){ try { await navigator.share({ text: texto }); return; } catch(e){ if (e.name === 'AbortError') return; } }
+    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(texto), '_blank');
+  };
 }
 
 // ===================== login e licença =====================
