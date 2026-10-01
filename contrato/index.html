@@ -161,7 +161,7 @@ textarea{min-height:88px;resize:vertical;line-height:1.4}
 const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
 const PACK = 'fl-contrato';
 let vencido = false;
-let BUY_URL = '', acesso = false, sess = null;
+let BUY_URL = 'https://basefl.com/conheca/gerador-de-contrato/?de=ferramenta', acesso = false, sess = null;
 
 // ===================== utilidades =====================
 const $ = s => document.querySelector(s);
@@ -582,7 +582,7 @@ async function checaAcesso(){
     acesso = !!ativa && (!venc || venc > agora);
     vencido = !!ativa && !!venc && venc <= agora;
     if (acesso && venc){ const dias = Math.ceil((venc - agora) / 864e5); if (dias <= 15) setTimeout(() => toast(`Seu acesso vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}. Renove para não perder.`), 1200); }
-    if (pk[0]?.buy_url) BUY_URL = pk[0].buy_url;
+    /* link de compra: página de vendas (fixo acima) */
   } catch {} finally { botaoConta(); }
 }
 function botaoConta(){

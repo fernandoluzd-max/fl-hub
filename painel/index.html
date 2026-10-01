@@ -215,7 +215,7 @@ function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on
 const nomeCurto = s => so(s).split(' ')[0] || 'tudo bem';
 
 // ===================== estado =====================
-let sess = null, acesso = false, vencido = false, BUY_URL = '', modo = 'demo';   // demo | cheio | leitura
+let sess = null, acesso = false, vencido = false, BUY_URL = 'https://basefl.com/conheca/financas-e-demandas/?de=ferramenta', modo = 'demo';   // demo | cheio | leitura
 let D = [], META = 3000, F = [], ABA = store.get('fl_aba') === 'ferr' ? 'ferr' : 'trab';
 try { sess = JSON.parse(store.get('fl_sess') || 'null'); } catch { sess = null; }
 
@@ -266,7 +266,7 @@ async function carrega(){
   if (await sessaoValida()){
     try {
       const [lic, pk] = await Promise.all([ api(`/rest/v1/licenses?select=*&pack_id=eq.${PACK}`), api(`/rest/v1/packs?select=buy_url&id=eq.${PACK}`) ]);
-      if (pk[0]?.buy_url) BUY_URL = pk[0].buy_url;
+      /* link de compra: página de vendas (fixo acima) */
       const agora = Date.now(), ativa = lic.find(l => l.status === 'active');
       const venc = ativa?.expires_at ? new Date(ativa.expires_at).getTime() : null;
       acesso = !!ativa && (!venc || venc > agora); vencido = !!ativa && !!venc && venc <= agora;
