@@ -130,7 +130,7 @@ footer a{color:var(--mute)}
 
 .palco{min-height:470px;display:flex;flex-direction:column;padding:16px 16px 40px}
 .cena{position:relative;flex:1;min-height:320px;border-radius:14px;overflow:hidden;border:1px solid #2a2a30;background:#1a1a1f}
-.img{position:absolute;inset:0;transition:filter .6s ease}
+.img{position:absolute;inset:0}
 .img img{width:100%;height:100%;object-fit:cover;object-position:50% 35%;display:block}
 .depois{clip-path:inset(0 0 0 50%)}
 .corte{position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;box-shadow:0 0 14px rgba(255,255,255,.7);z-index:2}
@@ -169,7 +169,7 @@ footer a{color:var(--mute)}
     <div class="corte" id="corte"><span></span></div>
     <span class="tg l" id="tgl">Antes · Rec.709</span><span class="tg r" id="tgr">Depois</span>
   </div>
-  <div class="lutbar"><small>Ajuste › LUT</small><div class="chips" id="chips"></div></div><span class="rot">Demonstração · foto: Pexels</span></div>
+  <div class="lutbar"><small>Ajuste › LUT</small><div class="chips" id="chips"></div></div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="lut-teal" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="1.08"/><feComponentTransfer><feFuncR type="table" tableValues="0.03 0.21 0.50 0.80 0.97"/><feFuncG type="table" tableValues="0.06 0.26 0.51 0.77 0.95"/><feFuncB type="table" tableValues="0.11 0.31 0.49 0.68 0.86"/></feComponentTransfer></filter><filter id="lut-quente" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.95"/><feComponentTransfer><feFuncR type="table" tableValues="0.07 0.30 0.58 0.84 0.98"/><feFuncG type="table" tableValues="0.05 0.26 0.52 0.78 0.94"/><feFuncB type="table" tableValues="0.04 0.20 0.44 0.70 0.86"/></feComponentTransfer></filter><filter id="lut-frio" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.9"/><feComponentTransfer><feFuncR type="table" tableValues="0.03 0.21 0.48 0.76 0.96"/><feFuncG type="table" tableValues="0.05 0.24 0.50 0.77 0.96"/><feFuncB type="table" tableValues="0.10 0.31 0.54 0.78 0.94"/></feComponentTransfer></filter><filter id="lut-pastel" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.8"/><feComponentTransfer><feFuncR type="table" tableValues="0.10 0.30 0.55 0.80 0.97"/><feFuncG type="table" tableValues="0.10 0.30 0.54 0.79 0.96"/><feFuncB type="table" tableValues="0.12 0.31 0.53 0.77 0.94"/></feComponentTransfer></filter><filter id="lut-pb" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues="0.06 0.22 0.50 0.78 0.96"/><feFuncG type="table" tableValues="0.06 0.22 0.50 0.78 0.96"/><feFuncB type="table" tableValues="0.06 0.22 0.50 0.78 0.96"/></feComponentTransfer></filter><filter id="lut-log" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.5"/><feComponentTransfer><feFuncR type="table" tableValues="0.16 0.33 0.50 0.66 0.82"/><feFuncG type="table" tableValues="0.16 0.33 0.50 0.66 0.82"/><feFuncB type="table" tableValues="0.16 0.33 0.50 0.66 0.82"/></feComponentTransfer></filter></defs></svg><span class="rot">Demonstração · foto: Pexels</span></div>
   </div>
 
   
@@ -234,11 +234,12 @@ async function enquantoVisivel(){ while (!visivel) await new Promise(r => setTim
 
 // [perfil do "antes", filtro do antes, nome do look, filtro do depois]
 const LOOKS = [
-  ['Rec.709', 'none', 'Teal & Orange', 'saturate(1.3) contrast(1.12) hue-rotate(-8deg)'],
-  ['Rec.709', 'none', 'Filme quente', 'sepia(.3) saturate(1.2) contrast(1.06) brightness(1.02)'],
-  ['Rec.709', 'none', 'Noite fria', 'hue-rotate(20deg) saturate(1.05) brightness(.84) contrast(1.15)'],
-  ['Rec.709', 'none', 'P&B contraste', 'grayscale(1) contrast(1.35) brightness(1.03)'],
-  ['S-Log3', 'saturate(.4) contrast(.66) brightness(1.12)', 'Conversão S-Log3 → Rec.709', 'none'],
+  ['Rec.709', 'none', 'Teal & Orange', 'url(#lut-teal)'],
+  ['Rec.709', 'none', 'Filme quente', 'url(#lut-quente)'],
+  ['Rec.709', 'none', 'Frio suave', 'url(#lut-frio)'],
+  ['Rec.709', 'none', 'Pastel', 'url(#lut-pastel)'],
+  ['Rec.709', 'none', 'P&B filme', 'url(#lut-pb)'],
+  ['S-Log3', 'url(#lut-log)', 'Conversão S-Log3 → Rec.709', 'none'],
 ];
 $('#chips').innerHTML = LOOKS.map(([, , n]) => `<span class="chip${n.startsWith('Conversão') ? ' cv' : ''}">${n}</span>`).join('');
 const chips = [...document.querySelectorAll('.chip')];
