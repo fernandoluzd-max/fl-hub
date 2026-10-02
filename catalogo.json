@@ -2,6 +2,7 @@
   "_leia": "FONTE ÚNICA de nomes, preços, links e acessos do Base FL. Mudou algo aqui? Rode: python3 tools/gera_catalogo.py (atualiza site, app e páginas de vendas).",
   "juros_mes": 0.0339,
   "parcelas": 12,
+  "garantia_dias": 7,
   "produtos": [
     {
       "key": "briefing",

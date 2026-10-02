@@ -662,3 +662,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   .cmp{width:340px;max-width:none}
 }
 @media (prefers-reduced-motion:reduce){.cmp-palco.guia .cmp-lado.depois,.cmp-palco.guia .cmp-linha{transition:none}}
+
+/* v10 */
+.cmp-pp[hidden]{display:none}
+.pv-linha+.pv-linha{margin-top:0}

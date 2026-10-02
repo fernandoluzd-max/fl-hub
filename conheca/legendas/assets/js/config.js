@@ -19,7 +19,7 @@ window.PACK_CONFIG = {
 
   // Garantia, em dias. Deixe "" para não mostrar o bloco de garantia na oferta.
   // Só preencha com o prazo que está configurado no produto, na Greenn.
-  GARANTIA_DIAS: "",
+  GARANTIA_DIAS: "7",
 
   // ANTES E DEPOIS (2 comparadores de arrastar). Troque só os arquivos; os nomes abaixo já estão certos.
   // A página confere se os arquivos existem: enquanto faltar algum, o comparador dele não aparece.
