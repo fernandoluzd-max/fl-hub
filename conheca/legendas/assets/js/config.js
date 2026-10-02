@@ -5,7 +5,7 @@
    ========================================================================== */
 window.PACK_CONFIG = {
   // Link do checkout. Enquanto for "#", os botões levam até a oferta na própria página.
-  CHECKOUT_URL: "https://payfast.greenn.com.br/kpw6g37",
+  CHECKOUT_URL: "https://payfast.greenn.com.br/kpw6g37?b_id_1=yr2m2me",
 
   // Preço (só o número, sem "R$")
   PRECO: "67",
