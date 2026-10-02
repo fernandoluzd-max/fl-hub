@@ -144,6 +144,16 @@ footer a{color:var(--mute)}
 .kitb .por small{font-size:.36em;color:var(--mute);font-weight:700;letter-spacing:0}
 .kitb a.btn{text-decoration:none;display:inline-flex}
 .kitb .trilho li.meu{color:var(--mute);border-style:dashed}.kitb .trilho li.meu::after{content:" ✓ já é seu";font-weight:500}
+.link-c{display:inline-flex;align-items:center;gap:6px;background:none;border:0;font:inherit;font-weight:650;font-size:15px;color:var(--mute);cursor:pointer;text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--line)}
+.link-c:hover{color:var(--ink)}.link-c svg{width:16px;height:16px}
+a.btn{text-decoration:none}
+.teste h2{margin:0 auto 8px}
+.of-inc{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 10px;max-width:720px;margin:22px auto 4px;padding:0}
+.of-inc li{display:inline-flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--line);border-radius:99px;padding:8px 14px;font-size:14px}
+.of-inc li::before{content:"✓";color:var(--a);font-weight:900}
+.of-gar{display:flex;gap:12px;align-items:flex-start;text-align:left;max-width:520px;margin:22px auto 0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;color:var(--mute);font-size:14.5px}
+.of-gar b{color:var(--ink)}.of-gar svg{flex:none;width:26px;height:26px;fill:none;stroke:var(--a);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fecho{margin:90px 0 0;text-align:center}.fecho h2{margin:0 auto}.fecho .ctas{justify-content:center}.fecho .nota{margin-top:14px}
 .conta{border:1px solid var(--line);border-left:3px solid var(--a);background:var(--card);border-radius:14px;padding:13px 16px;margin:0 0 18px;font-size:15px;color:var(--mute)}.conta b{color:var(--ink)}.conta a{color:var(--a)}
 @media (max-width:760px){.kitb{grid-template-columns:1fr;text-align:center}.kitb .trilho{justify-content:center}.teste{padding:22px 12px 14px}.teste iframe{height:720px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
@@ -183,7 +193,6 @@ footer a{color:var(--mute)}
       <h1>Transforme a imagem do seu vídeo <em>com um clique.</em></h1>
       <p class="lead"><b>20 looks de cinema</b> para o seu vídeo de sempre, direto em Ajuste › LUT no CapCut. E, para quem grava em Log, <b>3 LUTs de conversão</b> que devolvem a cor certa na hora.</p>
       <div class="ctas"><button class="btn" data-comprar>Quero as LUTs <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="nota"><b class="pcur">R$ 19</b> · acesso vitalício<br><span class="parc">ou 12x de R$ 1,95 no cartão · <b>7 dias de garantia</b></span><br>Precisa do <b>CapCut para computador</b><br>Mac ou Windows</span></div>
-      
     </div>
     <div class="palco" aria-label="Demonstração de LUTs"><div class="cena">
     <div class="img antes" id="antes"><img src="https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="" loading="eager"></div>
@@ -201,12 +210,22 @@ footer a{color:var(--mute)}
   <section>
     <h2 class="rv">Cor bonita sem virar colorista.</h2>
     <div class="bens"><div class="bem rv"><span class="n">01</span><h3>20 looks de finalização</h3><p>Do quente ao frio, do filme ao preto e branco. Escolha o clima do vídeo e ajuste a intensidade.</p></div><div class="bem rv d1"><span class="n">02</span><h3>Feitos para o vídeo de sempre</h3><p>A maioria dos vídeos sai em Rec.709, o padrão do celular e da câmera. Os looks foram feitos para ele.</p></div><div class="bem rv d2"><span class="n">03</span><h3>3 LUTs de conversão</h3><p>Grava em Log? Sony S-Log2 e S-Log3 (como na ZV-E10) e Apple Log (iPhone em ProRes Log) voltam para a cor normal num clique.</p></div></div>
-    <div class="inclui rv"><span>20 looks de finalização</span><span>Conversão Sony S-Log2</span><span>Conversão Sony S-Log3</span><span>Conversão Apple Log</span><span>Acesso vitalício</span><span>Aula ensinando a usar</span></div>
   </section>
 
   
 
   
+
+  <section id="oferta"><div class="final rv">
+    <span class="kick">O que você leva</span>
+    <h2 style="margin-top:16px">Dê cara de cinema ao seu próximo vídeo.</h2>
+    <ul class="of-inc"><li>20 looks de finalização</li><li>Conversão Sony S-Log2</li><li>Conversão Sony S-Log3</li><li>Conversão Apple Log</li><li>Acesso vitalício</li><li>Aula ensinando a usar</li></ul>
+    <div class="preco vpreco" hidden></div>
+    <div class="parcf">ou <b>12x de R$ 1,95</b> no cartão · ou à vista no Pix</div>
+    <div class="ctas"><button class="btn" data-comprar>Quero as LUTs <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+    <p class="of-gar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.2-2.9 7.6-7 9.5-4.1-1.9-7-5.3-7-9.5V6z"/><path d="M8.800 12.200l2.300 2.300 4.200-4.600"/></svg><span><b>7 dias de garantia.</b> Usou e não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</span></p>
+    <div class="selos"><span>Acesso vitalício</span><span>Liberado na hora da compra</span><span>Aula ensinando a usar</span><span>Mac e Windows</span></div>
+  </div></section>
 
   
 
@@ -215,13 +234,10 @@ footer a{color:var(--mute)}
     <div class="faq rv"><details><summary>Funciona se eu não gravo em Log?</summary><p>Sim. Os 20 looks são para vídeo comum (Rec.709), que é o padrão do celular e da maioria das câmeras. As 3 de conversão são só para quem grava em Log.</p></details><details><summary>O que é Rec.709?</summary><p>É o perfil de cor padrão dos vídeos. Se você grava sem mexer em nada no celular ou na câmera, seu vídeo já está em Rec.709.</p></details><details><summary>Funciona em qual CapCut?</summary><p>No CapCut para computador, no Mac ou no Windows.</p></details><details><summary>Como recebo o acesso?</summary><p>Assim que a compra é aprovada, ele aparece liberado no app Base FL e no navegador. É só entrar com o mesmo e-mail da compra.</p></details><details><summary>Quanto tempo de acesso?</summary><p>Vitalício. Comprou uma vez, fica liberado na sua conta para sempre, no app Base FL.</p></details><details><summary>Tem aula ensinando a usar?</summary><p>Sim. Junto com o acesso vem uma aula mostrando, passo a passo, como usar e tirar o melhor proveito.</p></details><details><summary>E se eu comprar e não gostar?</summary><p>Você tem 7 dias de garantia. Dentro desse prazo é só pedir o reembolso e você recebe o valor de volta.</p></details></div>
   </section>
 
-  <div class="final rv">
-    <span class="kick">LUTs</span>
-    <h2 style="margin-top:16px">Dê cara de cinema ao seu próximo vídeo.</h2>
-    <div class="preco vpreco" hidden></div>
-    <div class="parcf">ou <b>12x de R$ 1,95</b> no cartão · ou à vista no Pix</div>
+  <div class="fecho rv">
+    <h2>Dê cara de cinema ao seu próximo vídeo.</h2>
     <div class="ctas"><button class="btn" data-comprar>Quero as LUTs <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
-    <div class="selos"><span>7 dias de garantia</span><span>Acesso vitalício</span><span>Aula ensinando a usar</span><span>Liberado na hora da compra</span><span>Mac e Windows</span></div>
+    <p class="nota"><b class="pcur">R$ 19</b> · acesso vitalício · 7 dias de garantia</p>
   </div>
 
   <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo</footer>

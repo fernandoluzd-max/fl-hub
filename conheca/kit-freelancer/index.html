@@ -144,6 +144,16 @@ footer a{color:var(--mute)}
 .kitb .por small{font-size:.36em;color:var(--mute);font-weight:700;letter-spacing:0}
 .kitb a.btn{text-decoration:none;display:inline-flex}
 .kitb .trilho li.meu{color:var(--mute);border-style:dashed}.kitb .trilho li.meu::after{content:" ✓ já é seu";font-weight:500}
+.link-c{display:inline-flex;align-items:center;gap:6px;background:none;border:0;font:inherit;font-weight:650;font-size:15px;color:var(--mute);cursor:pointer;text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--line)}
+.link-c:hover{color:var(--ink)}.link-c svg{width:16px;height:16px}
+a.btn{text-decoration:none}
+.teste h2{margin:0 auto 8px}
+.of-inc{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 10px;max-width:720px;margin:22px auto 4px;padding:0}
+.of-inc li{display:inline-flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--line);border-radius:99px;padding:8px 14px;font-size:14px}
+.of-inc li::before{content:"✓";color:var(--a);font-weight:900}
+.of-gar{display:flex;gap:12px;align-items:flex-start;text-align:left;max-width:520px;margin:22px auto 0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;color:var(--mute);font-size:14.5px}
+.of-gar b{color:var(--ink)}.of-gar svg{flex:none;width:26px;height:26px;fill:none;stroke:var(--a);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fecho{margin:90px 0 0;text-align:center}.fecho h2{margin:0 auto}.fecho .ctas{justify-content:center}.fecho .nota{margin-top:14px}
 .conta{border:1px solid var(--line);border-left:3px solid var(--a);background:var(--card);border-radius:14px;padding:13px 16px;margin:0 0 18px;font-size:15px;color:var(--mute)}.conta b{color:var(--ink)}.conta a{color:var(--a)}
 @media (max-width:760px){.kitb{grid-template-columns:1fr;text-align:center}.kitb .trilho{justify-content:center}.teste{padding:22px 12px 14px}.teste iframe{height:720px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
@@ -180,7 +190,6 @@ footer a{color:var(--mute)}
       <h1>Do primeiro contato ao pagamento. <em>Sem retrabalho.</em></h1>
       <p class="lead">As quatro ferramentas do editor freelancer, <b>em ordem</b>: o cliente responde o briefing, você calcula, manda a proposta, fecha o contrato e o trabalho <b>entra sozinho no organizador</b>. Nada é digitado duas vezes.</p>
       <div class="ctas"><button class="btn" data-comprar>Quero o Kit Freelancer <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="nota"><b class="pcur">R$ 97</b> · acesso de 1 ano · em vez de R$ 208<br><span class="parc">ou 12x de R$ 9,97 no cartão · <b>7 dias de garantia</b></span><br>Funciona no <b>celular e no computador</b></span></div>
-      
     </div>
     <div class="palco" aria-label="Demonstração de Kit Freelancer"><div class="kd"><div class="kl" data-k="briefing" style="--c:rgb(63,208,194)"><img src="https://basefl.com/icones/briefing.png" alt="" width="44" height="44"><span><b>Gerador de Briefing</b><small>Entender o trabalho</small></span><i>R$ 47</i></div><div class="kl" data-k="preco" style="--c:rgb(123,216,143)"><img src="https://basefl.com/icones/preco.png" alt="" width="44" height="44"><span><b>Quanto Cobrar?</b><small>Saber quanto cobrar</small></span><i>R$ 47</i></div><div class="kl" data-k="contrato" style="--c:rgb(169,139,255)"><img src="https://basefl.com/icones/contrato.png" alt="" width="44" height="44"><span><b>Gerador de Contrato</b><small>Formalizar</small></span><i>R$ 47</i></div><div class="kl" data-k="painel" style="--c:rgb(255,179,71)"><img src="https://basefl.com/icones/painel.png" alt="" width="44" height="44"><span><b>Base Demandas</b><small>Executar e organizar</small></span><i>R$ 67</i></div><div class="kt"><span>Separadas</span><s>R$ 208</s></div><div class="kt tot"><span>No kit</span><b>R$ 97</b></div></div><span class="rot">O que vem no kit</span></div>
   </div>
@@ -192,12 +201,22 @@ footer a{color:var(--mute)}
   <section>
     <h2 class="rv">Quatro ferramentas. Um processo só.</h2>
     <div class="bens"><div class="bem rv"><span class="n">01</span><h3>Gerador de Briefing</h3><p>Um link com as perguntas certas. O cliente responde em 1 minuto e o trabalho já chega pronto para calcular. <b>Separada: R$ 47.</b></p></div><div class="bem rv d1"><span class="n">02</span><h3>Quanto Cobrar?</h3><p>Descubra quanto cobrar em 1 minuto e mande a proposta por link para o cliente aprovar. <b>Separada: R$ 47.</b></p></div><div class="bem rv d2"><span class="n">03</span><h3>Gerador de Contrato</h3><p>Contrato pronto em 2 minutos. O cliente lê e aceita pelo celular, por um link. <b>Separada: R$ 47.</b></p></div><div class="bem rv d3"><span class="n">04</span><h3>Base Demandas</h3><p>Seus trabalhos, prazos, pagamentos e custos fixos num só lugar. Os trabalhos entram sozinhos. <b>Separada: R$ 67.</b></p></div></div>
-    <div class="inclui rv"><span>Gerador de Briefing</span><span>Quanto Cobrar?</span><span>Gerador de Contrato</span><span>Base Demandas</span><span>Uma conta só</span><span>Celular e computador</span><span>Aula ensinando a usar</span></div>
   </section>
 
   <section><h2 class="rv">O que muda na sua rotina.</h2><div class="ad"><div class="av rv"><h4>Sem o Kit Freelancer</h4><ul class="nao"><li>Dez mensagens para entender o pedido</li><li>Preço no chute, orçamento montado do zero</li><li>Combinado só por áudio</li><li>Prazos e pagamentos espalhados</li></ul></div><div class="av com rv d1"><h4>Com o Kit Freelancer</h4><ul class="sim"><li>Pedido organizado em 1 minuto</li><li>Preço calculado e proposta por link</li><li>Contrato aceito pelo celular</li><li>Tudo num quadro, com o que falta receber</li></ul></div></div></section>
 
   
+
+  <section id="oferta"><div class="final rv">
+    <span class="kick">O que você leva</span>
+    <h2 style="margin-top:16px">Seu próximo trabalho, do começo ao fim, num lugar só.</h2>
+    <ul class="of-inc"><li>Gerador de Briefing</li><li>Quanto Cobrar?</li><li>Gerador de Contrato</li><li>Base Demandas</li><li>Uma conta só</li><li>Celular e computador</li><li>Aula ensinando a usar</li></ul>
+    <div class="preco vpreco" hidden></div>
+    <div class="parcf">ou <b>12x de R$ 9,97</b> no cartão · ou à vista no Pix</div>
+    <div class="ctas"><button class="btn" data-comprar>Quero o Kit Freelancer <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+    <p class="of-gar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.2-2.9 7.6-7 9.5-4.1-1.9-7-5.3-7-9.5V6z"/><path d="M8.800 12.200l2.300 2.300 4.200-4.600"/></svg><span><b>7 dias de garantia.</b> Usou e não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</span></p>
+    <div class="selos"><span>Acesso de 1 ano</span><span>Liberado na hora da compra</span><span>Aula ensinando a usar</span><span>Celular e computador</span></div>
+  </div></section>
 
   
 
@@ -206,13 +225,10 @@ footer a{color:var(--mute)}
     <div class="faq rv"><details><summary>Já tenho uma das ferramentas. Vale a pena?</summary><p>Vale. Por R$ 97 você libera todas as que ainda não tem, na mesma conta, sem novo cadastro e sem perder nada do que já fez. Entre com o seu e-mail e esta página mostra o que você já tem e o que será liberado. Se faltar só uma, ela mesma avisa e leva você para a ferramenta avulsa.</p></details><details><summary>Preciso usar todas?</summary><p>Não. Cada uma funciona sozinha. Juntas, uma preenche a outra e você não digita nada duas vezes.</p></details><details><summary>O meu cliente vê os meus preços internos?</summary><p>Não. O cliente só abre o que você manda para ele: o briefing para responder, a proposta para aprovar e o contrato para aceitar. Horas, valor por hora e a sua organização ficam só com você.</p></details><details><summary>Como recebo o acesso?</summary><p>Assim que a compra é aprovada, ele aparece liberado no app Base FL e no navegador. É só entrar com o mesmo e-mail da compra.</p></details><details><summary>Quanto tempo de acesso?</summary><p>1 ano, com todas as atualizações desse período. Perto de vencer, o app avisa e você pode renovar.</p></details><details><summary>Tem aula ensinando a usar?</summary><p>Sim. Junto com o acesso vem uma aula mostrando, passo a passo, como usar cada ferramenta.</p></details><details><summary>E se eu comprar e não gostar?</summary><p>Você tem 7 dias de garantia. Dentro desse prazo é só pedir o reembolso e você recebe o valor de volta.</p></details></div>
   </section>
 
-  <div class="final rv">
-    <span class="kick">Kit Freelancer</span>
-    <h2 style="margin-top:16px">Seu próximo trabalho, do começo ao fim, num lugar só.</h2>
-    <div class="preco vpreco" hidden></div>
-    <div class="parcf">ou <b>12x de R$ 9,97</b> no cartão · ou à vista no Pix</div>
+  <div class="fecho rv">
+    <h2>Seu próximo trabalho, do começo ao fim, num lugar só.</h2>
     <div class="ctas"><button class="btn" data-comprar>Quero o Kit Freelancer <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
-    <div class="selos"><span>7 dias de garantia</span><span>Acesso de 1 ano</span><span>Aula ensinando a usar</span><span>Liberado na hora da compra</span><span>Celular e computador</span></div>
+    <p class="nota"><b class="pcur">R$ 97</b> · acesso de 1 ano · em vez de R$ 208 · 7 dias de garantia</p>
   </div>
 
   <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo</footer>

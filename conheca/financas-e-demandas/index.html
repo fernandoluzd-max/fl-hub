@@ -144,6 +144,16 @@ footer a{color:var(--mute)}
 .kitb .por small{font-size:.36em;color:var(--mute);font-weight:700;letter-spacing:0}
 .kitb a.btn{text-decoration:none;display:inline-flex}
 .kitb .trilho li.meu{color:var(--mute);border-style:dashed}.kitb .trilho li.meu::after{content:" ✓ já é seu";font-weight:500}
+.link-c{display:inline-flex;align-items:center;gap:6px;background:none;border:0;font:inherit;font-weight:650;font-size:15px;color:var(--mute);cursor:pointer;text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--line)}
+.link-c:hover{color:var(--ink)}.link-c svg{width:16px;height:16px}
+a.btn{text-decoration:none}
+.teste h2{margin:0 auto 8px}
+.of-inc{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 10px;max-width:720px;margin:22px auto 4px;padding:0}
+.of-inc li{display:inline-flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--line);border-radius:99px;padding:8px 14px;font-size:14px}
+.of-inc li::before{content:"✓";color:var(--a);font-weight:900}
+.of-gar{display:flex;gap:12px;align-items:flex-start;text-align:left;max-width:520px;margin:22px auto 0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;color:var(--mute);font-size:14.5px}
+.of-gar b{color:var(--ink)}.of-gar svg{flex:none;width:26px;height:26px;fill:none;stroke:var(--a);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fecho{margin:90px 0 0;text-align:center}.fecho h2{margin:0 auto}.fecho .ctas{justify-content:center}.fecho .nota{margin-top:14px}
 .conta{border:1px solid var(--line);border-left:3px solid var(--a);background:var(--card);border-radius:14px;padding:13px 16px;margin:0 0 18px;font-size:15px;color:var(--mute)}.conta b{color:var(--ink)}.conta a{color:var(--a)}
 @media (max-width:760px){.kitb{grid-template-columns:1fr;text-align:center}.kitb .trilho{justify-content:center}.teste{padding:22px 12px 14px}.teste iframe{height:720px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
@@ -190,8 +200,8 @@ footer a{color:var(--mute)}
       <span class="kick">Ferramenta</span>
       <h1>Saiba o que entregar, <em>e o que já entrou.</em></h1>
       <p class="lead">Um quadro com <b>todos os seus trabalhos</b>, do orçamento ao pagamento. Com <b>meta do mês</b>, o que falta receber e os <b>custos fixos</b> de quem vive de edição.</p>
-      <div class="ctas"><button class="btn" data-comprar>Quero organizar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="nota"><b class="pcur">R$ 67</b> · acesso de 1 ano<br><span class="parc">ou 12x de R$ 6,89 no cartão · <b>7 dias de garantia</b></span><br>Funciona no <b>celular e no computador</b></span></div>
-      <a class="testar" href="/painel/?de=venda">Mexa num quadro de exemplo →</a>
+      <div class="ctas"><a class="btn" href="/painel/?de=venda">Mexa num quadro de exemplo →</a><button class="link-c" data-comprar>Já conheço, quero liberar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+      <p class="nota" style="margin-top:14px">Funciona no <b>celular e no computador</b> · 7 dias de garantia</p>
     </div>
     <div class="palco" aria-label="Demonstração de Base Demandas"><div class="fd">
     <div class="kp"><div><small>Recebido em outubro</small><b>R$ <span id="rec">0</span></b><em id="cmp">↑ 18% vs setembro</em></div>
@@ -208,12 +218,22 @@ footer a{color:var(--mute)}
   <section>
     <h2 class="rv">O lado do trabalho que ninguém te ensina.</h2>
     <div class="bens"><div class="bem rv"><span class="n">01</span><h3>Do orçamento ao pago</h3><p>Arraste cada trabalho pelas colunas e veja na hora o que está atrasado, em revisão ou esperando pagamento.</p></div><div class="bem rv d1"><span class="n">02</span><h3>Meta e comparativo</h3><p>Defina sua meta do mês e compare com o mês passado. Você sabe se está crescendo ou não.</p></div><div class="bem rv d2"><span class="n">03</span><h3>Custos fixos</h3><p>Internet, CapCut, Adobe, armazenamento, trilhas. Anote o que você paga todo mês e veja quanto isso pesa no que entrou.</p></div><div class="bem rv d3"><span class="n">04</span><h3>Contador de revisões</h3><p>Veja quantas rodadas de ajuste o cliente já usou.</p></div><div class="bem rv d4"><span class="n">05</span><h3>Mensagens prontas</h3><p>Cobrança, entrega e pedido de material prontos para o WhatsApp.</p></div><div class="bem rv d5"><span class="n">06</span><h3>Comemora com você</h3><p>Trabalho pago vira confete na tela. Pequenas vitórias contam.</p></div></div>
-    <div class="inclui rv"><span>Quadro de trabalhos</span><span>Contador de revisões</span><span>Mensagens prontas para o cliente</span><span>Meta do mês</span><span>A receber e previsto</span><span>Custos fixos</span><span>Aula ensinando a usar</span></div>
   </section>
 
   <section><h2 class="rv">Organização de quem vive de edição.</h2><div class="ad"><div class="av rv"><h4>Sem o Base Demandas</h4><ul class="nao"><li>Prazos anotados em vários lugares</li><li>Não lembra quem ainda não pagou</li><li>Não sabe quanto ganhou no mês</li><li>Não sabe quanto custa manter o próprio trabalho</li></ul></div><div class="av com rv d1"><h4>Com o Base Demandas</h4><ul class="sim"><li>Todos os trabalhos num quadro só</li><li>Pagamentos pendentes à vista</li><li>Meta do mês e comparativo com o anterior</li><li>Custos fixos somados no seu mês</li></ul></div></div></section>
 
   
+
+  <section id="oferta"><div class="final rv">
+    <span class="kick">O que você leva</span>
+    <h2 style="margin-top:16px">Feche o mês sabendo exatamente onde está.</h2>
+    <ul class="of-inc"><li>Quadro de trabalhos</li><li>Contador de revisões</li><li>Mensagens prontas para o cliente</li><li>Meta do mês</li><li>A receber e previsto</li><li>Custos fixos</li><li>Aula ensinando a usar</li></ul>
+    <div class="preco vpreco" hidden></div>
+    <div class="parcf">ou <b>12x de R$ 6,89</b> no cartão · ou à vista no Pix</div>
+    <div class="ctas"><button class="btn" data-comprar>Quero organizar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+    <p class="of-gar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.2-2.9 7.6-7 9.5-4.1-1.9-7-5.3-7-9.5V6z"/><path d="M8.800 12.200l2.300 2.300 4.200-4.600"/></svg><span><b>7 dias de garantia.</b> Usou e não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</span></p>
+    <div class="selos"><span>Acesso de 1 ano</span><span>Liberado na hora da compra</span><span>Aula ensinando a usar</span><span>Celular e computador</span></div>
+  </div></section>
 
   <section><div class="kitb rv"><div><span class="kick">Kit Freelancer</span><h2 style="margin-top:12px">Ou leve as quatro. <em class="ac">Uma preenche a outra.</em></h2>
           <p>O cliente responde o briefing, você calcula, manda a proposta, fecha o contrato e o trabalho entra sozinho no organizador. Sem digitar nada duas vezes.</p><ul class="trilho"><li data-k="briefing" class="">1. Gerador de Briefing</li><li data-k="preco" class="">2. Quanto Cobrar?</li><li data-k="contrato" class="">3. Gerador de Contrato</li><li data-k="painel" class="aqui">4. Base Demandas</li></ul></div>
@@ -224,13 +244,10 @@ footer a{color:var(--mute)}
     <div class="faq rv"><details><summary>Meus dados ficam salvos?</summary><p>Sim, na sua conta. Você acessa do celular ou do computador com o mesmo e-mail.</p></details><details><summary>Funciona sozinho?</summary><p>Sim. Você cadastra seus trabalhos direto nele. Se tiver também o Briefing, o Quanto Cobrar? ou o Contrato, vendidos separadamente, os trabalhos entram aqui sozinhos.</p></details><details><summary>Como recebo o acesso?</summary><p>Assim que a compra é aprovada, ele aparece liberado no app Base FL e no navegador. É só entrar com o mesmo e-mail da compra.</p></details><details><summary>Quanto tempo de acesso?</summary><p>1 ano, com todas as atualizações desse período. Perto de vencer, o app avisa e você pode renovar.</p></details><details><summary>Tem aula ensinando a usar?</summary><p>Sim. Junto com o acesso vem uma aula mostrando, passo a passo, como usar e tirar o melhor proveito.</p></details><details><summary>E se eu quiser as outras ferramentas depois?</summary><p>Você compra quando quiser, com o mesmo e-mail: o acesso entra na mesma conta, sem novo cadastro. E a qualquer momento você libera todas as que faltam por R$ 97.</p></details><details><summary>E se eu comprar e não gostar?</summary><p>Você tem 7 dias de garantia. Dentro desse prazo é só pedir o reembolso e você recebe o valor de volta.</p></details></div>
   </section>
 
-  <div class="final rv">
-    <span class="kick">Base Demandas</span>
-    <h2 style="margin-top:16px">Feche o mês sabendo exatamente onde está.</h2>
-    <div class="preco vpreco" hidden></div>
-    <div class="parcf">ou <b>12x de R$ 6,89</b> no cartão · ou à vista no Pix</div>
+  <div class="fecho rv">
+    <h2>Feche o mês sabendo exatamente onde está.</h2>
     <div class="ctas"><button class="btn" data-comprar>Quero organizar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
-    <div class="selos"><span>7 dias de garantia</span><span>Acesso de 1 ano</span><span>Aula ensinando a usar</span><span>Liberado na hora da compra</span><span>Celular e computador</span></div>
+    <p class="nota"><b class="pcur">R$ 67</b> · acesso de 1 ano · 7 dias de garantia</p>
   </div>
 
   <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo</footer>

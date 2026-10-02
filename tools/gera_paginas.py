@@ -132,6 +132,16 @@ footer a{color:var(--mute)}
 .kitb .por small{font-size:.36em;color:var(--mute);font-weight:700;letter-spacing:0}
 .kitb a.btn{text-decoration:none;display:inline-flex}
 .kitb .trilho li.meu{color:var(--mute);border-style:dashed}.kitb .trilho li.meu::after{content:" ✓ já é seu";font-weight:500}
+.link-c{display:inline-flex;align-items:center;gap:6px;background:none;border:0;font:inherit;font-weight:650;font-size:15px;color:var(--mute);cursor:pointer;text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--line)}
+.link-c:hover{color:var(--ink)}.link-c svg{width:16px;height:16px}
+a.btn{text-decoration:none}
+.teste h2{margin:0 auto 8px}
+.of-inc{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 10px;max-width:720px;margin:22px auto 4px;padding:0}
+.of-inc li{display:inline-flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--line);border-radius:99px;padding:8px 14px;font-size:14px}
+.of-inc li::before{content:"✓";color:var(--a);font-weight:900}
+.of-gar{display:flex;gap:12px;align-items:flex-start;text-align:left;max-width:520px;margin:22px auto 0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;color:var(--mute);font-size:14.5px}
+.of-gar b{color:var(--ink)}.of-gar svg{flex:none;width:26px;height:26px;fill:none;stroke:var(--a);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fecho{margin:90px 0 0;text-align:center}.fecho h2{margin:0 auto}.fecho .ctas{justify-content:center}.fecho .nota{margin-top:14px}
 .conta{border:1px solid var(--line);border-left:3px solid var(--a);background:var(--card);border-radius:14px;padding:13px 16px;margin:0 0 18px;font-size:15px;color:var(--mute)}.conta b{color:var(--ink)}.conta a{color:var(--a)}
 @media (max-width:760px){.kitb{grid-template-columns:1fr;text-align:center}.kitb .trilho{justify-content:center}.teste{padding:22px 12px 14px}.teste iframe{height:720px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
@@ -195,8 +205,31 @@ def pagina(p):
     if p.get('combina'):
         itens = ''.join(f'<a class="cb" href="https://basefl.com/conheca/{sl}/" style="--c:{c}"><b>{n}</b><span>{t}</span><em>Ver produto →</em></a>' for sl,n,c,t in p['combina'])
         combina = f'<section><h2 class="rv">Funciona sozinho. <em class="ac">E combina com:</em></h2><p class="sub2 rv">Cada ferramenta é vendida separadamente. Se você tiver mais de uma, elas conversam entre si.</p><div class="cbs rv">{itens}</div></section>'
-    hero_cls = 'hero empilha' if p.get('empilha') else 'hero'
     seta = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
+    hero_cls = 'hero empilha' if p.get('empilha') else 'hero'
+    inclui_li = ''.join(f'<li>{x}</li>' for x in p['inclui'])
+    # TOPO: quando a página tem algo para a pessoa VER ou TESTAR de verdade, esse é o botão principal
+    # (o preço fica para a oferta, depois de ela entender o que recebe). Quem já decidiu tem o atalho ao lado.
+    if p.get('ver'):
+        url, rot = p['ver']
+        hero_cta = f'''<div class="ctas"><a class="btn" href="{url}">{rot}</a><button class="link-c" data-comprar>Já conheço, quero liberar {seta}</button></div>
+      <p class="nota" style="margin-top:14px">{p['nota']} · {CAT['garantia_dias']} dias de garantia</p>'''
+    else:
+        hero_cta = f'''<div class="ctas"><button class="btn" data-comprar>{p['cta']} {seta}</button><span class="nota"><b class="pcur">{p['preco']}</b> · {p['acesso_txt']}<br><span class="parc">ou 12x de {p['parc6']} no cartão · <b>{CAT['garantia_dias']} dias de garantia</b></span><br>{p['nota']}</span></div>'''
+    # MIOLO: a página pode trazer a própria narrativa ('miolo'); senão, usa o molde comum
+    if p.get('miolo'):
+        miolo = p['miolo'].replace('__TESTE__', p.get('teste', ''))
+    else:
+        miolo = f'''{p.get('teste', '')}
+
+  {passos}
+
+  <section>
+    <h2 class="rv">{p['h2']}</h2>
+    <div class="bens">{bens}</div>
+  </section>
+
+  {ad}'''
     css = CSS_BASE + p['css']
     capa = p.get('capa') or f"https://basefl.com/capas/{p['slug']}.jpg"   # capa do produto ao compartilhar o link
     js = JS_BASE.replace('__PACK__', p.get('pack', '')).replace('__SLUG__', p['slug']).replace('__ACESSO__', p['acesso_curto']).replace('__CHECKOUT__', p['checkout']).replace('__PRECO__', p['preco']) + p['js']
@@ -236,25 +269,25 @@ def pagina(p):
       <span class="kick">{p['kick']}</span>
       <h1>{p['h1']}</h1>
       <p class="lead">{p['lead']}</p>
-      <div class="ctas"><button class="btn" data-comprar>{p['cta']} {seta}</button><span class="nota"><b class="pcur">{p['preco']}</b> · {p['acesso_txt']}<br><span class="parc">ou 12x de {p['parc6']} no cartão · <b>{G} dias de garantia</b></span><br>{p['nota']}</span></div>
-      {p.get('testar_hero', '')}
+      {hero_cta}
     </div>
     <div class="palco" aria-label="Demonstração de {p['nome']}">{p['demo']}<span class="rot">{p['rot']}</span></div>
   </div>
 
-  {p.get('teste', '')}
-
-  {passos}
-
-  <section>
-    <h2 class="rv">{p['h2']}</h2>
-    <div class="bens">{bens}</div>
-    <div class="inclui rv">{inclui}</div>
-  </section>
-
-  {ad}
+  {miolo}
 
   {combina}
+
+  <section id="oferta"><div class="final rv">
+    <span class="kick">O que você leva</span>
+    <h2 style="margin-top:16px">{p['fh2']}</h2>
+    <ul class="of-inc">{inclui_li}</ul>
+    <div class="preco vpreco" hidden></div>
+    <div class="parcf">ou <b>12x de {p['parc6']}</b> no cartão · ou à vista no Pix</div>
+    <div class="ctas"><button class="btn" data-comprar>{p.get('cta_oferta') or p['cta']} {seta}</button></div>
+    <p class="of-gar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.2-2.9 7.6-7 9.5-4.1-1.9-7-5.3-7-9.5V6z"/><path d="M8.800 12.200l2.300 2.300 4.200-4.600"/></svg><span><b>{G} dias de garantia.</b> Usou e não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</span></p>
+    <div class="selos"><span>{p['acesso_selo']}</span><span>Liberado na hora da compra</span><span>Aula ensinando a usar</span><span>{p['selo']}</span></div>
+  </div></section>
 
   {p.get('kit', '')}
 
@@ -263,13 +296,10 @@ def pagina(p):
     <div class="faq rv">{faq}</div>
   </section>
 
-  <div class="final rv">
-    <span class="kick">{p['nome']}</span>
-    <h2 style="margin-top:16px">{p['fh2']}</h2>
-    <div class="preco vpreco" hidden></div>
-    <div class="parcf">ou <b>12x de {p['parc6']}</b> no cartão · ou à vista no Pix</div>
-    <div class="ctas"><button class="btn" data-comprar>{p['cta']} {seta}</button></div>
-    <div class="selos"><span>{G} dias de garantia</span><span>{p['acesso_selo']}</span><span>Aula ensinando a usar</span><span>Liberado na hora da compra</span><span>{p['selo']}</span></div>
+  <div class="fecho rv">
+    <h2>{p.get('fecho') or p['fh2']}</h2>
+    <div class="ctas"><button class="btn" data-comprar>{p.get('cta_oferta') or p['cta']} {seta}</button></div>
+    <p class="nota"><b class="pcur">{p['preco']}</b> · {p['acesso_txt']} · {G} dias de garantia</p>
   </div>
 
   <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo</footer>
@@ -529,7 +559,7 @@ demo();
         ('Pacotes sem conta de cabeça','4, 8, 12 ou 20 vídeos com o desconto já calculado. Você vende volume sem perder dinheiro.'),
         ('Proposta por link','O cliente abre no celular, vê serviço, prazo e valor, e aprova com um toque. As suas horas e o seu valor por hora ficam só com você.')],
   inclui=['Edição e gravação','Valor por hora do seu nível','Pacotes com desconto','Proposta por link','Orçamento em texto para o WhatsApp','Celular e computador'],
-  faq=[('Serve para gravação também?','Sim. Você escolhe editar, gravar ou os dois, e ele considera horas de gravação, estrutura e custos extras.'), ('Os valores são fixos?','São uma referência para o seu nível. Você ajusta o nível e a quantidade e decide o valor final.'), FAQ_ACESSO, FAQ_ANO],
+  faq=[('O cálculo grátis é igual ao da versão liberada?','É a mesma calculadora. Sem liberar, você faz 1 cálculo. Liberando, calcula quantas vezes quiser e manda a proposta por link.'), ('E se na minha cidade o preço for outro?','O valor é uma referência, calculada pelo tempo de trabalho e pelo seu nível. Antes de mandar a proposta você pode ajustar o valor final para a sua realidade.'), ('Serve para gravação também?','Sim. Você escolhe editar, gravar ou os dois, e ele considera horas de gravação, estrutura e custos extras.'), FAQ_ACESSO, FAQ_ANO],
   combina=[('gerador-de-briefing','Gerador de Briefing','#3FD0C2','As respostas do cliente abrem a calculadora já preenchida.'),('gerador-de-contrato','Gerador de Contrato','#A98BFF','O orçamento vira contrato sem digitar de novo.'),('financas-e-demandas','Base Demandas','#FFB347','O orçamento entra no seu quadro de trabalhos.')],
   fh2='Sua próxima proposta sai em 1 minuto.', selo='Celular e computador'))
 
@@ -767,10 +797,169 @@ demo();
   fh2='Feche o mês sabendo exatamente onde está.', selo='Celular e computador'))
 
 
+
+QC_MIOLO = r'''
+  <section class="dor">
+    <div class="dor-g">
+      <div>
+        <span class="kick rv">A pergunta que trava</span>
+        <h2 class="rv" style="margin-top:14px">O cliente pergunta o preço. <em class="ac">E você trava.</em></h2>
+        <p class="sub2 rv">Você digita um valor, apaga, digita outro. Não é falta de talento: é que ninguém te mostrou a conta.</p>
+        <ul class="dor-l rv">
+          <li><b>Chuta baixo</b> e passa o mês trabalhando por menos do que vale.</li>
+          <li><b>Chuta alto</b>, não sabe explicar de onde veio, e o cliente some.</li>
+          <li><b>Demora pra responder</b> e ele fecha com quem respondeu primeiro.</li>
+        </ul>
+      </div>
+      <div class="zap rv" aria-label="Conversa de exemplo no WhatsApp">
+        <div class="zap-t"><i>C</i><span><b>Cliente</b><small>online</small></span></div>
+        <div class="zap-c">
+          <div class="bl in">Oi! Vi seus vídeos, gostei muito 👏</div>
+          <div class="bl in">Quanto fica pra editar 8 Reels por mês?</div>
+        </div>
+        <div class="zap-d"><span id="zapTxt"></span><i class="zap-cur"></i></div>
+      </div>
+    </div>
+  </section>
+
+  __TESTE__
+
+  <section class="conta-s">
+    <span class="kick rv">De onde sai o número</span>
+    <h2 class="rv" style="margin-top:14px">O preço sai do seu tempo de trabalho. <em class="ac">E você vê a conta.</em></h2>
+    <p class="sub2 rv">Nada de tabela de internet. A calculadora estima as horas do trabalho e multiplica pelo valor da sua hora. Olha o mesmo pedido do cliente ali de cima:</p>
+    <div class="cx-g"><div class="cx rv">
+      <div class="cx-n" role="group" aria-label="Seu nível">
+        <button type="button" data-n="comeco">Começando<small>R$ 40 por hora</small></button>
+        <button type="button" data-n="medio" class="on">1 a 3 anos<small>R$ 70 por hora</small></button>
+        <button type="button" data-n="pro">3+ anos<small>R$ 120 por hora</small></button>
+      </div>
+      <div class="cx-l"><span>Trabalho</span><b>8 Reels, edição caprichada</b></div>
+      <div class="cx-l"><span>Tempo estimado por vídeo</span><b>2h42</b></div>
+      <div class="cx-l"><span>Valor da sua hora</span><b>R$ <i id="cxH">70</i></b></div>
+      <div class="cx-l"><span>Cada vídeo, sozinho</span><b>R$ <i id="cxU">189</i></b></div>
+      <div class="cx-l"><span>Pacote de 8 vídeos</span><b>10% de desconto</b></div>
+      <div class="cx-t"><span>Valor de referência</span><b>R$ <i id="cxR">1.350</i></b></div>
+      <p class="cx-f">Faixa justa para negociar: <b>R$ <i id="cxMn">1.150</i> a R$ <i id="cxMx">1.700</i></b></p>
+    </div>
+    <div class="cx-o rv">
+      <p><b>Seu nível muda, o preço acompanha.</b> Toque nos níveis ali em cima e veja.</p>
+      <p><b>Pacotes de 4, 8, 12 ou 20 vídeos</b> já saem com o desconto calculado: 5%, 10%, 12% ou 15%.</p>
+      <p><b>Urgente, em até 48 horas?</b> O valor sobe 40%.</p>
+      <p><b>Gravação também entra:</b> horas de captação, estrutura e custos extras, como transporte.</p>
+      <p class="cx-m">É uma referência para você decidir com segurança. O valor final é sempre seu: dá para ajustar antes de mandar.</p>
+    </div></div>
+  </section>
+
+  <section class="prop">
+    <div class="prop-g">
+      <div class="fone rv" id="fone" aria-label="Exemplo da proposta que o cliente recebe">
+        <div class="fone-t"><i>A</i><span><b>Ana Editora</b><small>Proposta de serviço</small></span></div>
+        <div class="fone-c">
+          <small class="pk">PROPOSTA</small><b class="pt">Para Studio Zeta</b>
+          <div class="pl"><span>Serviço</span>Edição caprichada de Reels</div>
+          <div class="pl"><span>O que você recebe</span>8 vídeos editados (até 1 min)</div>
+          <div class="pl"><span>Prazo</span>Em até 5 dias úteis após receber o material</div>
+          <div class="pl"><span>Revisões</span>2 rodadas de ajustes incluídas</div>
+          <div class="pl"><span>Pagamento</span>50% na aprovação e 50% na entrega</div>
+          <div class="pv"><span>Investimento</span><b>R$ 1.350</b></div>
+        </div>
+        <div class="fone-b" id="foneB"><span class="a">Aprovar proposta</span><span class="b">✓ Proposta aprovada</span></div>
+      </div>
+      <div>
+        <span class="kick rv">O que o cliente recebe</span>
+        <h2 class="rv" style="margin-top:14px">Ele não vê a sua conta. <em class="ac">Vê uma proposta.</em></h2>
+        <p class="sub2 rv">Calculou, tocou em “Gerar o link da proposta”, mandou. Em vez de um número solto no WhatsApp, o cliente abre isto:</p>
+        <ul class="prop-l rv">
+          <li>Serviço, entrega, prazo, revisões, pagamento e valor, numa página só.</li>
+          <li>Abre no celular dele, sem conta e sem baixar nada.</li>
+          <li>Ele aprova com um toque, ou pede um ajuste. A resposta aparece na sua conta.</li>
+          <li>As suas horas e o valor da sua hora <b>ficam só com você</b>.</li>
+          <li>Prefere mandar texto? O orçamento também sai pronto pra colar no WhatsApp.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+'''
+QC_CSS = r'''
+.dor-g,.prop-g{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.prop-g{grid-template-columns:.8fr 1.2fr}
+.dor-l,.prop-l{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px;max-width:520px}
+.dor-l li,.prop-l li{position:relative;padding-left:26px;color:var(--mute);font-size:16px}
+.dor-l li b,.prop-l li b{color:var(--ink)}
+.dor-l li::before{content:"";position:absolute;left:0;top:.55em;width:12px;height:2px;border-radius:2px;background:#ff8f7a}
+.prop-l li::before{content:"✓";position:absolute;left:0;top:0;color:var(--a);font-weight:900}
+.zap{max-width:400px;width:100%;margin-left:auto;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#0b141a}
+.zap-t{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#111b21;border-bottom:1px solid #1f2c33}
+.zap-t i,.fone-t i{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:800;background:#2a3942;color:#e9edef}
+.zap-t b,.fone-t b{display:block;font-size:14.5px}.zap-t small,.fone-t small{display:block;color:#8696a0;font-size:12px}
+.zap-c{padding:16px 14px 6px;display:flex;flex-direction:column;gap:6px;min-height:150px}
+.bl{max-width:82%;padding:8px 11px;border-radius:10px;font-size:14.5px;line-height:1.4;color:#e9edef}
+.bl.in{background:#202c33;border-top-left-radius:2px;align-self:flex-start}
+.zap-d{margin:10px 12px 14px;min-height:44px;display:flex;align-items:center;gap:2px;padding:10px 14px;border-radius:22px;background:#2a3942;font-size:15px;color:#e9edef}
+.zap-cur{width:2px;height:18px;background:var(--a);animation:pisca .9s steps(1) infinite}
+@keyframes pisca{50%{opacity:0}}
+.cx-g{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;margin-top:26px}
+@media (max-width:900px){.cx-g{grid-template-columns:1fr;gap:22px}}
+.cx{max-width:620px;border:1px solid var(--line);border-radius:22px;background:var(--card);padding:18px}
+.cx-n{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.cx-n button{font:inherit;font-weight:700;font-size:14px;color:var(--mute);background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px 6px;cursor:pointer;transition:border-color .2s,color .2s,background .2s}
+.cx-n button small{display:block;font-weight:500;font-size:12px;margin-top:2px}
+.cx-n button.on{border-color:var(--a);color:var(--ink);background:color-mix(in srgb,var(--a) 12%,var(--bg2))}
+.cx-l,.cx-t{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:11px 4px;border-bottom:1px solid var(--line);font-size:15px}
+.cx-l span,.cx-t span{color:var(--mute)}.cx i{font-style:normal;font-variant-numeric:tabular-nums}
+.cx-t{border-bottom:0;padding-top:16px}.cx-t b{font-family:var(--d);font-weight:900;font-size:36px;letter-spacing:-.03em;line-height:1;color:var(--a)}
+.cx-f{color:var(--mute);font-size:14px;text-align:right;padding:0 4px}.cx-f b{color:var(--ink)}
+.cx-o{max-width:620px;display:grid;gap:10px;color:var(--mute);font-size:15.5px}.cx-o b{color:var(--ink)}
+.cx-m{margin-top:6px;padding-top:14px;border-top:1px solid var(--line);font-size:14.5px}
+.fone{max-width:330px;width:100%;border:1px solid var(--line);border-radius:30px;background:#0B0C0C;padding:16px 14px 18px;box-shadow:0 40px 90px -40px #000}
+.fone-t{display:flex;align-items:center;gap:10px;margin-bottom:12px}.fone-t i{border-radius:11px;background:#F2A541;color:#141414}
+.fone-c{background:#FAF7F0;color:#1b1a17;border-radius:16px;padding:16px 16px 14px}
+.pk{font-weight:800;font-size:11px;letter-spacing:.1em;color:#a67a2a}.pt{display:block;font-family:var(--d);font-size:21px;font-weight:850;letter-spacing:-.02em;margin:2px 0 8px}
+.pl{border-top:1px solid #e6e0d2;padding:8px 0;font-size:13.5px;line-height:1.35}.pl span{display:block;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#6b665a}
+.pv{border-top:1px solid #e6e0d2;padding-top:10px;display:flex;justify-content:space-between;align-items:baseline}.pv span{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#6b665a}.pv b{font-family:var(--d);font-weight:900;font-size:28px;letter-spacing:-.03em}
+.fone-b{position:relative;margin-top:12px;height:50px;border-radius:14px;background:#F2A541;color:#141414;font-weight:800;font-size:15.5px;overflow:hidden;transition:background .4s}
+.fone-b span{position:absolute;inset:0;display:grid;place-items:center;transition:opacity .35s,transform .35s}
+.fone-b .b{opacity:0;transform:translateY(10px)}
+.fone-b.ok{background:var(--a)}.fone-b.ok .a{opacity:0;transform:translateY(-10px)}.fone-b.ok .b{opacity:1;transform:none}
+@media (max-width:900px){.dor-g,.prop-g{grid-template-columns:1fr;gap:28px}.zap{margin:0 auto}.fone{margin:0 auto;order:2}}
+'''
+QC_JS = r'''
+// conversa: o editor digita um valor, apaga, digita outro (enquanto a seção está visível)
+(function(){
+  const el = $('#zapTxt'); if (!el) return;
+  const frases = ['R$ 400', 'R$ 800?', 'acho que uns 600...', 'deixa eu ver e já te falo'];
+  let vis = false; new IntersectionObserver(e => { vis = e[0].isIntersecting; }, { threshold: .3 }).observe(el.parentNode);
+  if (calmo) { el.textContent = frases[3]; return; }
+  (async () => { while (true){ for (const f of frases){
+    while (!vis) await dorme(300);
+    for (let i = 1; i <= f.length; i++){ el.textContent = f.slice(0, i); await dorme(70); }
+    await dorme(f === frases[3] ? 2600 : 900);
+    for (let i = f.length; i >= 0; i--){ el.textContent = f.slice(0, i); await dorme(28); }
+    await dorme(350);
+  } } })();
+})();
+// a conta do exemplo: os números vêm das mesmas regras da calculadora
+(function(){
+  const N = {"comeco": {"h": 40, "um": 108, "ref": 780, "mn": 660, "mx": 980}, "medio": {"h": 70, "um": 189, "ref": 1350, "mn": 1150, "mx": 1700}, "pro": {"h": 120, "um": 324, "ref": 2350, "mn": 2000, "mx": 2950}}, f = v => v.toLocaleString('pt-BR');
+  document.querySelectorAll('.cx-n button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.cx-n button').forEach(x => x.classList.toggle('on', x === b));
+    const n = N[b.dataset.n]; $('#cxH').textContent = n.h; $('#cxU').textContent = f(n.um); $('#cxR').textContent = f(n.ref); $('#cxMn').textContent = f(n.mn); $('#cxMx').textContent = f(n.mx);
+  }));
+})();
+// a proposta: o botão vira "aprovada" quando aparece na tela (e repete)
+(function(){
+  const b = $('#foneB'); if (!b) return;
+  let vis = false; new IntersectionObserver(e => { vis = e[0].isIntersecting; }, { threshold: .6 }).observe(b);
+  if (calmo) return;
+  (async () => { while (true){ while (!vis) await dorme(300); await dorme(2200); b.classList.add('ok'); await dorme(3200); b.classList.remove('ok'); await dorme(600); } })();
+})();
+'''
 EXTRA = {
  'efeitos-sonoros': dict(),
  'luts': dict(),
- 'quanto-cobrar': dict(passos_h2='Do pedido do cliente à proposta enviada, em 1 minuto.',
+ 'quanto-cobrar': dict(miolo=QC_MIOLO, css=QC_CSS, js=QC_JS, cta_oferta='Liberar a calculadora completa', fecho='O próximo cliente vai perguntar o preço. <em class="ac">Você já vai saber.</em>',
+   passos_h2='Do pedido do cliente à proposta enviada, em 1 minuto.',
    passos=[('Conte o trabalho','Editar, gravar ou os dois. Tipo de vídeo, duração, estilo e prazo, tocando nas opções.'),('Veja o seu preço','Valor de referência para o seu nível, faixa justa para negociar e preço de pacotes.'),('Mande a proposta','Um link com serviço, entrega, prazo e valor. O cliente aprova pelo celular. Se preferir, mande só o texto no WhatsApp.')],
    ad_h2='O que muda no seu jeito de cobrar.',
    antes=['Chuta um valor e torce para o cliente aceitar','Cobra igual por trabalhos bem diferentes','Monta o orçamento do zero toda vez','Dá desconto sem saber se ainda compensa'],
@@ -805,7 +994,7 @@ JORNADA = [c for c in sorted(CAT['produtos'], key=lambda c: c.get('jornada', 99)
 seta = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
 TESTE = {   # o que cada página oferece para experimentar antes de comprar (a ferramenta de verdade, com limite)
- 'quanto-cobrar': ('Faça 1 cálculo grátis agora', 'É a calculadora de verdade. Responda as perguntas e veja o seu preço. O primeiro cálculo é por nossa conta.', True),
+ 'quanto-cobrar': ('Faça a conta do seu próximo trabalho.', 'É a calculadora de verdade, não uma demonstração. O primeiro cálculo é por nossa conta.', True),
  'gerador-de-briefing': ('Teste como o seu cliente vai responder', '', False),
  'gerador-de-contrato': ('Monte um contrato de teste', '', False),
  'financas-e-demandas': ('Mexa num quadro de exemplo', '', False),
@@ -817,8 +1006,9 @@ for p in PAGINAS:
     p['acesso_txt'] = 'acesso vitalício' if vit else 'acesso de 1 ano'
     p['acesso_selo'] = 'Acesso vitalício' if vit else 'Acesso de 1 ano'
     p['acesso_curto'] = 'acesso vitalício' if vit else '1 ano de acesso'
-    for k in ('passos','passos_h2','antes','depois','ad_h2'):
+    for k in ('passos','passos_h2','antes','depois','ad_h2','miolo','cta_oferta','fecho'):
         if k in ex: p[k] = ex[k]
+    p['css'] += ex.get('css', ''); p['js'] += ex.get('js', '')
     if 'mais' in ex: p['bens'] = p['bens'] + ex['mais']
     p['combina'] = None
     p['inclui'] = p['inclui'] + ['Aula ensinando a usar']
@@ -826,10 +1016,10 @@ for p in PAGINAS:
     if p['slug'] in TESTE:
         tit, txt, embutido = TESTE[p['slug']]
         if embutido:
-            p['testar_hero'] = f'<a class="testar" href="#teste">{tit} ↓</a>'
+            p['ver'] = ('#teste', 'Fazer 1 cálculo grátis ↓')
             p['teste'] = f'<section id="teste"><div class="teste rv"><h2>{tit}</h2><p>{txt}</p><iframe src="{c["url"]}?de=venda" title="{c["nome"]}" loading="lazy"></iframe></div></section>'
         else:
-            p['testar_hero'] = f'<a class="testar" href="{c["url"]}?de=venda">{tit} →</a>'
+            p['ver'] = (c['url'] + '?de=venda', tit + ' →')
         # o kit: as quatro ferramentas, na ordem de um trabalho
         trilho = ''.join(f'<li data-k="{j["key"]}" class="{"aqui" if j["slug"] == p["slug"] else ""}">{i+1}. {j["nome"]}</li>' for i, j in enumerate(JORNADA))
         p['kit'] = f'''<section><div class="kitb rv"><div><span class="kick">{KIT["nome"]}</span><h2 style="margin-top:12px">Ou leve as quatro. <em class="ac">Uma preenche a outra.</em></h2>
