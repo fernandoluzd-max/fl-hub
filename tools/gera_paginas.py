@@ -1348,6 +1348,105 @@ PN_JS = r'''
 })();
 (function(){ const k = document.querySelector('.mkp'); if (!k) return; new IntersectionObserver((e, o) => { if (e[0].isIntersecting){ k.classList.add('vis'); o.disconnect(); } }, { threshold: .4 }).observe(k); })();
 '''
+
+KT_MIOLO = r'''
+  <section class="jor" id="jornada">
+    <span class="kick rv">Um trabalho, do começo ao fim</span>
+    <h2 class="rv" style="margin-top:14px">Cinco passos. <em class="ac">Você digita uma vez só.</em></h2>
+    <p class="sub2 rv">Acompanhe o mesmo trabalho passando pelas quatro ferramentas. Repare no que já chega preenchido em cada passo.</p>
+    <div class="jx rv" id="jx">
+      <div class="jx-t" role="tablist" aria-label="Passos do trabalho">
+        <button role="tab" aria-selected="true" data-i="0"><i>1</i>Briefing</button>
+        <button role="tab" aria-selected="false" data-i="1"><i>2</i>Preço</button>
+        <button role="tab" aria-selected="false" data-i="2"><i>3</i>Proposta</button>
+        <button role="tab" aria-selected="false" data-i="3"><i>4</i>Contrato</button>
+        <button role="tab" aria-selected="false" data-i="4"><i>5</i>Organizador</button>
+      </div>
+      <div class="jx-p" role="tabpanel" aria-live="polite">
+        <div class="jx-c" id="jxC"></div>
+        <div class="jx-d"><small id="jxF"></small><b id="jxH"></b><p id="jxP"></p><span class="jx-v" id="jxV"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sj">
+    <span class="kick rv">Separadas ou juntas</span>
+    <h2 class="rv" style="margin-top:14px">Cada uma funciona sozinha. <em class="ac">Juntas, uma preenche a outra.</em></h2>
+    <div class="sj-g rv">
+      <div class="sj-c">
+        <small>Uma ferramenta só</small>
+        <ul><li>Resolve aquele pedaço do trabalho</li><li>Você digita cliente, serviço, prazo e valor nela</li><li>Na ferramenta seguinte, digita de novo</li></ul>
+      </div>
+      <div class="sj-c dest">
+        <small>As quatro, no kit</small>
+        <ul><li>O que o cliente respondeu no briefing vira preço</li><li>O preço vira proposta, a proposta vira contrato</li><li>O contrato aceito vira um card no organizador, sozinho</li></ul>
+      </div>
+    </div>
+    <p class="sj-n rv">Não precisa usar todas em todo trabalho. Trabalho pequeno? Às vezes é só preço e termo rápido. Elas estão lá quando você precisar.</p>
+  </section>
+'''
+KT_CSS = r'''
+.jx{margin-top:26px;border:1px solid var(--line);border-radius:24px;background:var(--card);overflow:hidden}
+.jx-t{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--line)}
+.jx-t button{font:inherit;font-weight:700;font-size:14.5px;color:var(--mute);background:none;border:0;border-right:1px solid var(--line);padding:14px 8px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;transition:color .2s,background .2s}
+.jx-t button:last-child{border-right:0}
+.jx-t button i{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:800;border:1px solid var(--line);flex:none}
+.jx-t button[aria-selected=true]{color:var(--ink);background:var(--bg2)}
+.jx-t button[aria-selected=true] i{background:var(--a);color:var(--ai);border-color:transparent}
+.jx-t button.feito i{border-color:var(--a);color:var(--a)}
+.jx-p{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;padding:28px}
+.jx-c{background:#0D0F0E;border:1px solid var(--line);border-radius:18px;padding:18px;min-height:250px;display:flex;flex-direction:column;justify-content:center;gap:0}
+.jx-c .tt{font-family:var(--d);font-weight:850;font-size:19px;letter-spacing:-.02em;margin-bottom:8px}
+.jx-c .ln{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:14.5px}
+.jx-c .ln span{color:var(--mute)}.jx-c .ln b{text-align:right}
+.jx-c .ln.veio b{color:var(--a)}
+.jx-c .big{font-family:var(--d);font-weight:900;font-size:40px;letter-spacing:-.03em;color:var(--a);line-height:1;margin:6px 0 10px}
+.jx-c .bt{margin-top:12px;border-radius:12px;padding:12px;text-align:center;font-weight:800;font-size:14.5px;background:var(--a);color:var(--ai)}
+.jx-c .bt.ok{background:transparent;border:1px solid var(--a);color:var(--a)}
+.jx-d small{font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--a)}
+.jx-d b{display:block;font-family:var(--d);font-weight:850;font-size:26px;letter-spacing:-.02em;line-height:1.1;margin:6px 0 8px}
+.jx-d p{color:var(--mute);font-size:16px}
+.jx-v{display:inline-block;margin-top:14px;font-size:13.5px;font-weight:650;border:1px dashed color-mix(in srgb,var(--a) 60%,transparent);border-radius:10px;padding:8px 12px;color:var(--ink)}
+.jx-p.troca .jx-c,.jx-p.troca .jx-d{animation:jxin .4s cubic-bezier(.2,.8,.2,1) both}
+@keyframes jxin{from{opacity:0;transform:translateY(10px)}}
+.sj-g{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+.sj-c{border:1px solid var(--line);border-radius:22px;background:var(--card);padding:22px}
+.sj-c.dest{border-color:color-mix(in srgb,var(--a) 55%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--a) 9%,var(--card)),var(--card))}
+.sj-c small{font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--a)}
+.sj-c ul{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px;font-size:15.5px}
+.sj-c li{position:relative;padding-left:22px;color:var(--mute)}.sj-c li::before{content:"·";position:absolute;left:6px;color:var(--dim);font-weight:900}
+.sj-c.dest li{color:var(--ink)}.sj-c.dest li::before{content:"✓";left:0;color:var(--a)}
+.sj-n{margin-top:16px;color:var(--mute);font-size:15px;max-width:70ch}
+@media (max-width:900px){.jx-p{grid-template-columns:1fr;gap:18px;padding:18px}.jx-d{order:-1}.sj-g{grid-template-columns:1fr}
+  .jx-t button{flex-direction:column;gap:4px;font-size:11.5px;padding:10px 2px}.jx-c{min-height:0}}
+'''
+KT_JS = r'''
+// um trabalho só passando pelas quatro ferramentas (o que aparece em destaque veio do passo anterior)
+(function(){
+  const ln = (a, b, v) => `<div class="ln${v ? ' veio' : ''}"><span>${a}</span><b>${b}</b></div>`;
+  const P = [
+    ['Gerador de Briefing', 'O cliente responde o seu link.', 'Em 1 minuto, pelo celular, tocando nas opções. O pedido chega organizado na sua conta.', 'Você digitou: nada',
+      '<div class="tt">Studio Zeta</div>' + ln('Serviço', 'Só a edição') + ln('Tipo de vídeo', 'Reels / TikTok / Shorts') + ln('Quantidade', '5 a 8 vídeos') + ln('Prazo', 'Em até 1 semana')],
+    ['Quanto Cobrar?', 'As respostas abrem a calculadora.', 'Tipo de vídeo, quantidade e prazo já vêm do briefing. Você só confere o estilo da edição e vê o valor para o seu nível.', 'Veio do briefing: tipo, quantidade e prazo',
+      '<div class="tt">Valor de referência</div><div class="big">R$ 1.350</div>' + ln('Tipo de vídeo', 'Reels', 1) + ln('Quantidade', '8 vídeos', 1) + ln('Edição', 'Caprichada')],
+    ['Quanto Cobrar? · proposta', 'O preço vira proposta por link.', 'Serviço, entrega, prazo e valor já estão montados. O cliente abre no celular e aprova com um toque.', 'Veio do preço: serviço, entrega e valor',
+      '<div class="tt">Proposta para Studio Zeta</div>' + ln('Serviço', 'Edição caprichada de Reels', 1) + ln('Entrega', '8 vídeos editados', 1) + ln('Investimento', 'R$ 1.350', 1) + '<div class="bt">Aprovar proposta</div>'],
+    ['Gerador de Contrato', 'A proposta aprovada vira contrato.', 'Cliente, serviço, prazo, revisões e valor entram sozinhos nas cláusulas. O cliente lê e aceita pelo celular.', 'Veio da proposta: cliente, serviço, prazo e valor',
+      '<div class="tt">Contrato · Studio Zeta</div>' + ln('Serviço', 'Edição caprichada de Reels', 1) + ln('Revisões', '2 rodadas incluídas') + ln('Valor total', 'R$ 1.350', 1) + '<div class="bt ok">✓ Aceito pelo cliente</div>'],
+    ['Base Demandas', 'O trabalho entra no quadro sozinho.', 'Assim que o cliente aceita, o card aparece em “Fechado”, com valor e prazo. Você só move de coluna e acompanha o pagamento.', 'Entrou sozinho: cliente, valor e prazo',
+      '<div class="tt">Fechado</div>' + ln('Cliente', 'Studio Zeta', 1) + ln('Trabalho', '8 Reels', 1) + ln('Valor', 'R$ 1.350', 1) + ln('Revisões', '0 de 2 usadas')],
+  ];
+  const bs = [...document.querySelectorAll('.jx-t button')], pn = document.querySelector('.jx-p'); if (!pn) return;
+  let at = 0, mexeu = false, vis = false;
+  function mostra(i){ at = i; bs.forEach((b, k) => { b.setAttribute('aria-selected', k === i ? 'true' : 'false'); b.classList.toggle('feito', k < i); });
+    $('#jxF').textContent = P[i][0]; $('#jxH').textContent = P[i][1]; $('#jxP').textContent = P[i][2]; $('#jxV').textContent = P[i][3]; $('#jxC').innerHTML = P[i][4];
+    pn.classList.remove('troca'); void pn.offsetWidth; pn.classList.add('troca'); }
+  bs.forEach((b, i) => b.addEventListener('click', () => { mexeu = true; mostra(i); }));
+  mostra(0);
+  new IntersectionObserver(e => { vis = e[0].isIntersecting; }, { threshold: .35 }).observe(pn);
+  if (!calmo) (async () => { while (!mexeu){ await dorme(4200); if (vis && !mexeu) mostra((at + 1) % P.length); } })();
+})();
+'''
 EXTRA = {
  'efeitos-sonoros': dict(),
  'luts': dict(),
@@ -1456,7 +1555,8 @@ def pagina_kit():
       kick='Kit · as 4 ferramentas', desc=f'Briefing, preço, proposta, contrato e organizador trabalhando juntos. As quatro ferramentas do freelancer por {brl(k["preco"])}.',
       h1='Do primeiro contato ao pagamento. <em>Sem retrabalho.</em>',
       lead='As quatro ferramentas do editor freelancer, <b>em ordem</b>: o cliente responde o briefing, você calcula, manda a proposta, fecha o contrato e o trabalho <b>entra sozinho no organizador</b>. Nada é digitado duas vezes.',
-      cta='Quero o Kit Freelancer', nota='Funciona no <b>celular e no computador</b>', rot='O que vem no kit', demo=demo, css=css, js='',
+      cta='Quero o Kit Freelancer', nota='Funciona no <b>celular e no computador</b>', rot='O que vem no kit', demo=demo, css=css + KT_CSS, js=KT_JS,
+      miolo=KT_MIOLO, ver=('#jornada', 'Ver um trabalho do começo ao fim ↓'), cta_oferta='Liberar as quatro ferramentas', fecho='Seu próximo trabalho, do pedido ao pagamento, <em class="ac">sem digitar duas vezes.</em>',
       checkout=k['checkout'], preco=brl(k['preco']), parc6=brl(parcela(k['preco'], CAT), 2),
       acesso_txt=f'acesso de 1 ano · em vez de {brl(k["de"])}', acesso_selo='Acesso de 1 ano', acesso_curto='1 ano de acesso',
       passos_h2='Um trabalho inteiro, do pedido ao pagamento.', passos=passos_j,
