@@ -100,6 +100,9 @@ footer a{color:var(--mute);cursor:pointer;text-decoration:underline;text-underli
 .box pre{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;max-height:340px;overflow:auto;font-size:12px;white-space:pre-wrap;-webkit-user-select:text;user-select:text}
 .banner{background:linear-gradient(90deg,rgba(242,165,65,.14),transparent);border:1px solid rgba(242,165,65,.3);border-radius:14px;padding:12px 16px;font-size:13px;display:none}
 .banner.show{display:block}
+.banner.nova{background:linear-gradient(90deg,rgba(123,216,143,.16),transparent);border-color:rgba(123,216,143,.4);margin-bottom:10px}
+.banner.nova.show{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.banner.nova button{font:inherit;font-size:13px;font-weight:700;border:0;border-radius:9px;padding:7px 12px;background:#7BD88F;color:#0c1a10;cursor:pointer}
 .login{align-self:center;width:min(420px,100%);background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:none;flex-direction:column;gap:14px;margin-top:40px}
 .login.show{display:flex}
 .login h2{font-size:18px}
@@ -161,6 +164,7 @@ button.aula svg{width:15px;height:15px;fill:currentColor;flex:none}
       <div class="log" id="log"><div class="empty">O que o app fizer aparece aqui.</div></div>
     </aside>
     <div class="grid" id="grid">
+      <div class="banner nova" id="nova"></div>
       <div class="banner" id="banner"></div>
     <section class="sec" id="s-kits"><div class="sec-h"><div><h2>Kits</h2><p>Materiais prontos que instalam direto no seu CapCut.</p></div>
       <div class="status">
@@ -352,6 +356,22 @@ function step(txt, kind='ok'){
   d.querySelector('span').textContent = txt; log.appendChild(d); log.scrollTop = log.scrollHeight;
 }
 
+// AVISO DE VERSÃO NOVA: o app não se atualiza sozinho. Uma vez por abertura ele pergunta ao GitHub qual é a última versão publicada
+// e, se a instalada for mais antiga, mostra uma faixa com o botão de baixar. Ferramenta nova só aparece na lista depois de atualizar.
+let versaoVista = false;
+const maior = (a, b) => { const x = a.split('.').map(Number), y = b.split('.').map(Number); for (let i = 0; i < 3; i++){ if ((x[i]||0) !== (y[i]||0)) return (x[i]||0) > (y[i]||0); } return false; };
+async function confereVersao(){
+  if (versaoVista || !state?.version) return; versaoVista = true;
+  try {
+    const r = await fetch('https://api.github.com/repos/fernandoluzd-max/fl-hub/releases/latest', { headers:{ Accept:'application/vnd.github+json' } });
+    if (!r.ok) return; const j = await r.json();
+    const v = (String(j.tag_name || '') + ' ' + String(j.name || '')).match(/\d+\.\d+\.\d+/); if (!v || !maior(v[0], state.version)) return;
+    const arq = state.system === 'Mac' ? 'Base-FL-Mac.dmg' : 'Base-FL-Windows.exe';
+    const n = $('#nova'); n.innerHTML = '<span><b>Tem versão nova do Base FL (' + v[0] + ').</b> Ela pode trazer ferramentas e correções que ainda não aparecem aqui.</span>';
+    const b = document.createElement('button'); b.textContent = 'Baixar a atualização'; b.onclick = () => T.opener.openUrl('https://github.com/fernandoluzd-max/fl-hub/releases/latest/download/' + arq);
+    n.appendChild(b); n.classList.add('show');
+  } catch(e){}
+}
 function btn(txt, cls, fn){ const b = document.createElement('button'); b.className = cls; b.textContent = txt; b.disabled = busy; b.onclick = fn; return b; }
 
 function render(){
@@ -426,6 +446,7 @@ async function refresh(){
   $('#d-run').className = 'dot ' + (state.capcut_running ? 'warn' : 'ok');
   $('#t-run').textContent = state.capcut_running ? 'CapCut aberto — feche para instalar' : 'CapCut fechado';
   $('#ver').textContent = `Base FL v${state.version} · ${state.system === 'Mac' ? 'macOS' : state.system}`;
+  confereVersao();
   const bn = $('#banner');
   if (!sess) bn.classList.remove('show');
   else if (catErr){ bn.textContent = catErr + ' Verifique a internet: a lista de packs será atualizada sozinha.'; bn.classList.add('show'); }

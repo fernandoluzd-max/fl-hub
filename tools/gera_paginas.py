@@ -1353,9 +1353,9 @@ PN_JS = r'''
 PAGINAS.append(dict(
   slug='caseup', nome='CaseUp', secao='Ferramentas', cor='#D4E157', cor2='#A9B93A', ink='#171A06',
   pattern='radial-gradient(circle at 1px 1px,rgba(212,225,87,.10) 1px,transparent 0) 0 0/28px 28px', fxx='72%',
-  kick='Ferramenta', desc='Junte seus melhores vídeos numa página, mande o link para o cliente e receba pedidos de orçamento.',
-  h1='Seu portfólio <em>num link só.</em>',
-  lead='Junte os seus melhores vídeos numa página com o seu nome. Você <b>cola os links</b>, escolhe a cor e publica. O cliente abre, assiste e toca em <b>“Pedir orçamento”</b>.',
+  kick='Ferramenta', desc='Seus melhores vídeos e os seus links numa página só. Serve de portfólio para o cliente e de link da bio.',
+  h1='Seu portfólio e seus links, <em>numa página só.</em>',
+  lead='Junte os seus melhores vídeos numa página com o seu nome. Você <b>cola os links</b>, coloca os seus botões (WhatsApp, Instagram, o que quiser) e publica. Serve para mandar ao cliente <b>e para colocar na bio</b>.',
   cta='Quero o meu portfólio', nota='O cliente <b>não precisa de conta</b><br>nem baixar nada',
   rot='Portfólio de exemplo, de verdade',
   demo='<iframe class="cu-f" src="https://basefl.com/e/?exemplo" title="Portfólio de exemplo" loading="lazy"></iframe>',
@@ -1367,11 +1367,12 @@ PAGINAS.append(dict(
 """,
   js='',
   h2='', bens=[],
-  inclui=['Link com o seu nome','Até 24 vídeos','Instagram, TikTok, YouTube, Vimeo e Drive','Filtro por tipo de vídeo','Botão de pedir orçamento','6 cores para escolher','Celular e computador'],
+  inclui=['Link com o seu nome','Até 24 vídeos','Até 12 botões de link','Serve de link da bio','Instagram, TikTok, YouTube, Vimeo e Drive','Filtro por tipo de vídeo','Botão de pedir orçamento','6 cores e 3 estilos de botão','Celular e computador'],
   faq=[('Preciso subir os arquivos dos vídeos?','Não. Você só cola o link de onde o vídeo já está: Instagram, TikTok, YouTube, Vimeo ou Google Drive.'),
        ('O vídeo toca dentro da página?','Na maioria dos casos, sim. Quando o site não deixa tocar fora dele, o cliente toca e o vídeo abre no próprio site. No Instagram, o perfil precisa ser público.'),
        ('Se eu apagar o vídeo do Instagram, o que acontece?','Ele deixa de abrir no portfólio, porque o CaseUp não guarda o vídeo, só o link. É só tirar da lista ou colar um link novo.'),
-       ('Posso mudar depois de publicar?','Pode. Troca vídeos, ordem, cor, frase e até o final do link quando quiser. Também dá para tirar a página do ar sem apagar nada.'),
+       ('Dá para usar como link da bio?','Dá. Você coloca até 12 botões: WhatsApp, Instagram, TikTok, YouTube, e-mail ou qualquer outro link. Se quiser, pode publicar só com os botões, sem vídeo.'),
+       ('Posso mudar depois de publicar?','Pode. Troca vídeos, botões, ordem, cor, frase e até o final do link quando quiser. Também dá para tirar a página do ar sem apagar nada.'),
        ('O cliente precisa de conta?','Não. Ele abre o link no celular ou no computador e assiste.'),
        FAQ_ACESSO,
        ('E depois de 1 ano?','O acesso é de 1 ano. Se não renovar, a página sai do ar, e volta como estava quando você renova.')],
@@ -1411,9 +1412,9 @@ CU_MIOLO = r"""
     <span class="kick rv">Como você monta</span>
     <h2 class="rv" style="margin-top:14px">Três minutos. <em class="ac">Sem subir arquivo nenhum.</em></h2>
     <div class="pss">
-      <div class="ps rv"><span class="pn">1</span><h3>Cole os links</h3><p>Do Instagram, TikTok, YouTube, Vimeo ou Google Drive. Os vídeos continuam onde já estão.</p></div>
+      <div class="ps rv"><span class="pn">1</span><h3>Cole os links dos vídeos</h3><p>Do Instagram, TikTok, YouTube, Vimeo ou Google Drive. Os vídeos continuam onde já estão.</p></div>
       <div class="ps rv d1"><span class="pn">2</span><h3>Diga o que é cada um</h3><p>Reels, anúncio, YouTube, institucional, evento. O cliente filtra pelo tipo que interessa a ele.</p></div>
-      <div class="ps rv d2"><span class="pn">3</span><h3>Publique</h3><p>Escolha a cor e o final do link. Sai um endereço com o seu nome para mandar no WhatsApp ou colocar na bio.</p></div>
+      <div class="ps rv d2"><span class="pn">3</span><h3>Coloque os botões e publique</h3><p>WhatsApp, Instagram, o link que quiser. Escolha a cor e o final do link. Você vê a página pronta enquanto monta.</p></div>
     </div>
   </section>
 

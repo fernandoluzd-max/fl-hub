@@ -21,7 +21,7 @@ body{color:var(--ink);font:16px/1.5 var(--f);min-height:100vh;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(700px 420px at 85% -8%,rgba(212,225,87,.09),transparent 70%)}
 button,input,select{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:10px}
-.wrap{position:relative;max-width:560px;margin:0 auto;padding:16px 18px 60px}
+.wrap{position:relative;max-width:560px;margin:0 auto;padding:16px 18px 150px}
 header{display:flex;align-items:center;gap:10px;margin-bottom:22px}
 header img{width:38px;height:38px;border-radius:11px;box-shadow:0 0 0 1px rgba(255,255,255,.10);flex:none}
 header .nm{font-weight:800;font-stretch:112%;font-size:15px;letter-spacing:-.01em;line-height:1.1}
@@ -30,43 +30,68 @@ header .sp{flex:1}
 .link{background:none;border:0;color:var(--mute);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 h1{font-weight:850;font-stretch:118%;font-size:clamp(27px,7.6vw,34px);line-height:1.04;letter-spacing:-.025em;margin-bottom:8px;text-wrap:balance}
 .sub{color:var(--mute);font-size:15px;margin-bottom:22px;max-width:46ch}
-h2{font-size:16px;font-weight:750;margin:26px 0 4px}
 .dica{color:var(--mute);font-size:13.5px;margin-bottom:10px}
-label{display:block;font-size:13px;font-weight:700;color:var(--mute);margin:16px 0 6px}
-.inp{width:100%;min-height:50px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:0 14px;font-size:16px;outline:none;transition:border-color .2s}
-.inp:focus{border-color:var(--accent)}
-.inp.ruim{border-color:var(--err)}
-.lk{display:flex;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding-left:14px;transition:border-color .2s}
-.lk:focus-within{border-color:var(--accent)}.lk.ruim{border-color:var(--err)}
-.lk span{color:var(--mute);font-size:15px;white-space:nowrap}
-.lk input{flex:1;min-width:0;min-height:50px;background:none;border:0;outline:none;font-size:16px;font-weight:700;padding:0 12px 0 0}
+label{display:block;font-size:13px;font-weight:700;color:var(--mute);margin:14px 0 6px}
+.inp{width:100%;min-height:50px;background:var(--bg);border:1px solid var(--line);border-radius:13px;padding:0 14px;font-size:16px;outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--accent)}.inp.ruim{border-color:var(--err)}
+.lkb{display:flex;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:13px;padding-left:14px;transition:border-color .2s}
+.lkb:focus-within{border-color:var(--accent)}.lkb.ruim{border-color:var(--err)}
+.lkb span{color:var(--mute);font-size:15px;white-space:nowrap}
+.lkb input{flex:1;min-width:0;min-height:50px;background:none;border:0;outline:none;font-size:16px;font-weight:700;padding:0 12px 0 0}
 .msg{font-size:13px;margin-top:6px;min-height:18px;color:var(--mute)}.msg.ok{color:var(--accent)}.msg.ruim{color:var(--err)}
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:54px;border:0;border-radius:15px;background:var(--accent);color:var(--accent-ink);font-weight:800;font-size:16.5px;cursor:pointer;margin-top:22px;text-decoration:none;transition:transform .15s,opacity .2s}
 .btn:active{transform:scale(.985)}.btn:disabled{opacity:.5;cursor:default}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);margin-top:10px}
 .row{display:flex;gap:10px}.row .btn{margin-top:10px}
+/* blocos numerados */
+.bloco{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px 16px 18px;margin-top:14px;transition:border-color .3s}
+.bloco.feito{border-color:rgba(212,225,87,.35)}
+.bh{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.bh i{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:13px;border:1px solid var(--line);color:var(--mute);transition:all .3s}
+.bloco.feito .bh i{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.bloco.feito .bh i::before{content:"✓"}.bloco.feito .bh i span{display:none}
+.bh b{font-size:17px;font-weight:800;font-stretch:108%;letter-spacing:-.01em}
+.bh small{margin-left:auto;font-size:12px;color:var(--dim);font-weight:600}
+/* botões de link */
+.tipos{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.tipos button{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:9px 14px;font-size:14px;font-weight:650;cursor:pointer;transition:border-color .2s,transform .15s}
+.tipos button:hover{border-color:var(--accent)}.tipos button:active{transform:scale(.96)}
+.tipos svg,.li svg{width:18px;height:18px;fill:none;stroke:var(--accent);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ll{list-style:none;display:grid;gap:8px;margin-top:12px}
+.li{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px;animation:entra .3s ease both}
+.li .cm{display:grid;gap:6px;min-width:0}
+.li input{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:15px;outline:none}
+.li input:focus{border-color:var(--accent)}.li input.ruim{border-color:var(--err)}
+.li input.r{font-weight:700}
 /* vídeos */
 .add{display:flex;gap:8px}
 .add .inp{flex:1;min-width:0}
-.add button{flex:none;min-width:54px;border:0;border-radius:13px;background:var(--panel2);border:1px solid var(--line);font-weight:800;font-size:22px;cursor:pointer}
+.add button{flex:none;min-width:54px;border-radius:13px;background:var(--accent);color:var(--accent-ink);border:0;font-weight:800;font-size:22px;cursor:pointer}
 .vl{list-style:none;display:grid;gap:8px;margin-top:10px}
-.vl li{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px 8px 8px 8px}
+.vl li{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:8px;animation:entra .3s ease both}
 .th{width:44px;height:62px;border-radius:8px;background:linear-gradient(160deg,rgba(212,225,87,.28),#101210) center/cover;display:grid;place-items:center;font-size:9px;font-weight:800;letter-spacing:.04em;color:rgba(255,255,255,.8);text-transform:uppercase;overflow:hidden;text-align:center}
 .vm{min-width:0;display:grid;gap:6px}
-.vm input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:14.5px;outline:none}
+.vm input{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:14.5px;outline:none}
 .vm input:focus{border-color:var(--accent)}
-.vm select{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:6px 8px;font-size:13.5px;max-width:100%}
+.vm select{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:6px 8px;font-size:13.5px;max-width:100%}
 .vm small{color:var(--dim);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .va{display:grid;gap:4px}
-.va button{width:34px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-size:14px;cursor:pointer;color:var(--mute)}
-.va button:disabled{opacity:.3}
-.va .x{color:var(--err)}
-.vazio{border:1px dashed #3a403c;border-radius:14px;padding:18px;text-align:center;color:var(--mute);font-size:14.5px;margin-top:10px}
-/* cor, selos, opções */
+.va button{width:34px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--panel);font-size:14px;cursor:pointer;color:var(--mute)}
+.va button:disabled{opacity:.3}.va .x{color:var(--err)}
+.li .va{grid-auto-flow:column}
+.vazio{border:1px dashed #3a403c;border-radius:14px;padding:16px;text-align:center;color:var(--mute);font-size:14.5px;margin-top:10px}
+/* visual */
 .cores{display:flex;gap:10px;flex-wrap:wrap}
-.cores button{width:38px;height:38px;border-radius:50%;border:0;cursor:pointer;background:var(--c)}
-.cores button[aria-pressed=true]{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--ink)}
-.tog{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:10px;cursor:pointer}
+.cores button{width:38px;height:38px;border-radius:50%;border:0;cursor:pointer;background:var(--c);transition:transform .15s}
+.cores button:active{transform:scale(.9)}
+.cores button[aria-pressed=true]{box-shadow:0 0 0 3px var(--panel),0 0 0 5px var(--ink)}
+.estilos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.estilos button{border:1px solid var(--line);background:var(--bg);border-radius:14px;padding:12px 8px 10px;cursor:pointer;font-size:12.5px;font-weight:650;color:var(--mute);display:grid;gap:8px;justify-items:center}
+.estilos button[aria-pressed=true]{border-color:var(--accent);color:var(--ink)}
+.estilos i{display:block;width:100%;height:26px;border-radius:9px;background:var(--panel2);border:1px solid var(--line)}
+.estilos .contorno i{background:transparent;border-color:var(--accent)}
+.estilos .vidro i{border-radius:99px;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
+.tog{display:flex;gap:12px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:10px;cursor:pointer}
 .tog input{width:22px;height:22px;accent-color:var(--accent);flex:none;margin-top:1px}
 .tog b{display:block;font-size:15px}.tog small{display:block;color:var(--mute);font-size:13.5px}
 /* link pronto */
@@ -74,6 +99,25 @@ label{display:block;font-size:13px;font-weight:700;color:var(--mute);margin:16px
 .pronto small{display:block;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
 .pronto code{display:block;font:700 17px/1.3 var(--f);margin:6px 0 2px;overflow-wrap:anywhere}
 .pronto p{color:var(--mute);font-size:13.5px}
+/* barra fixa: progresso + prévia + salvar */
+.barra{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(13,15,14,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+.barra-in{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center}
+.prog{min-width:0}
+.prog b{display:block;font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prog i{display:block;height:7px;border-radius:7px;background:var(--panel2);overflow:hidden;margin-top:6px}
+.prog u{display:block;height:100%;width:0;border-radius:7px;background:linear-gradient(90deg,#9fb23a,var(--accent));transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.barra .btn{margin:0;width:auto;min-height:48px;padding:0 20px;font-size:15.5px;white-space:nowrap}
+.barra .btn.ghost{padding:0 14px}
+/* prévia */
+.previa{display:none}
+.fone{width:330px;height:660px;border-radius:38px;border:8px solid #232826;background:#0B0C0C;overflow:hidden;box-shadow:0 40px 90px -30px #000}
+.fone iframe{display:block;width:100%;height:100%;border:0}
+.previa p{text-align:center;color:var(--dim);font-size:12.5px;margin-top:10px}
+.folha{position:fixed;inset:0;z-index:40;background:rgba(4,4,4,.92);display:none;flex-direction:column}
+.folha.on{display:flex}
+.folha .fh{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;color:var(--mute);font-size:14px}
+.folha .fh button{background:none;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-weight:700;cursor:pointer}
+.folha iframe{flex:1;width:100%;border:0;background:#0B0C0C;border-radius:22px 22px 0 0}
 /* vitrine */
 .lock{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:18px;margin-top:18px}
 .lock ul{list-style:none;display:grid;gap:8px;margin-bottom:6px}
@@ -81,38 +125,73 @@ label{display:block;font-size:13px;font-weight:700;color:var(--mute);margin:16px
 .demo{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#0B0C0C;margin-top:6px}
 .demo iframe{display:block;width:100%;height:560px;border:0}
 .foot{color:var(--dim);font-size:12.5px;text-align:center;margin-top:28px}
-.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:var(--ink);color:#141414;font-weight:700;font-size:14.5px;padding:11px 18px;border-radius:99px;opacity:0;pointer-events:none;transition:all .25s;z-index:60;max-width:90vw;text-align:center}
+.toast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,20px);background:var(--ink);color:#141414;font-weight:700;font-size:14.5px;padding:11px 18px;border-radius:99px;opacity:0;pointer-events:none;transition:all .25s;z-index:60;max-width:90vw;text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}
+.conf{position:fixed;top:-12px;width:9px;height:14px;border-radius:2px;z-index:70;pointer-events:none;animation:cai linear forwards}
+@keyframes cai{to{transform:translateY(105vh) rotate(720deg);opacity:.9}}
 .entra{animation:entra .3s ease both}@keyframes entra{from{opacity:0;transform:translateY(8px)}}
-@media (prefers-reduced-motion:reduce){.entra{animation:none}}
+@media (min-width:980px){
+  .wrap.largo{max-width:1040px;display:grid;grid-template-columns:minmax(0,560px) 1fr;gap:0 50px;align-items:start}
+  .wrap.largo header,.wrap.largo .foot{grid-column:1/-1}
+  .wrap.largo .previa{display:block;position:sticky;top:20px;justify-self:center}
+  #verPrevia{display:none!important}
+}
+@media (prefers-reduced-motion:reduce){.entra,.li,.vl li{animation:none}.conf{display:none}}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="wrap">
   <header id="topo"></header>
   <main id="tela"><p class="sub">Carregando…</p></main>
+  <aside class="previa" id="previa" aria-label="Prévia da sua página"><div class="fone"><iframe id="fPrev" title="Prévia" src="about:blank"></iframe></div><p>É assim que o cliente vê. Atualiza enquanto você mexe.</p></aside>
   <p class="foot" id="foot"></p>
 </div>
+<div class="barra" id="barra" hidden><div class="barra-in"><div class="prog"><b id="pgT"></b><i><u id="pgU"></u></i></div><button class="btn ghost" id="verPrevia" type="button">Prévia</button><button class="btn" id="salvar" type="button">Publicar</button></div></div>
+<div class="folha" id="folha"><div class="fh"><span>É assim que o cliente vê</span><button id="fechaFolha" type="button">Fechar</button></div><iframe id="fFolha" title="Prévia" src="about:blank"></iframe></div>
 <div class="toast" id="toast"></div>
 
 <script src="/catalogo.js"></script>
 <script src="/base.js"></script>
 <script src="/case/video.js"></script>
 <script>
-/* CaseUp — tela do EDITOR. O cliente vê o portfólio em /e/ (página pública, sem nada interno). */
+/* CaseUp — tela do EDITOR. O cliente vê a página em /e/ (pública, sem nada interno). */
 const PACK = 'fl-case';
 const CORES = { lima:'#D4E157', agua:'#3FD0C2', ambar:'#F2A541', roxo:'#A98BFF', rosa:'#FF6FAE', azul:'#5AB8FF' };
-const MAX = 24;
-const $ = s => document.querySelector(s), esc = Base.esc;
+const MAXV = 24, MAXL = 12;
+const ICO = {
+  whatsapp:'<path d="M4 20l1.300-4.200A8 8 0 1 1 8.400 19z"/><path d="M9 9.500c0 3 2.500 5.500 5.500 5.500l1.200-1.500-2-1-.800.800a4 4 0 0 1-2.200-2.200l.800-.800-1-2z"/>',
+  instagram:'<rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.600"/><path d="M16.800 7.200v.01"/>',
+  tiktok:'<path d="M14 4v10.500a3.500 3.500 0 1 1-3.500-3.500"/><path d="M14 4c.400 2.600 2 4.200 4.500 4.500"/>',
+  youtube:'<rect x="3" y="6" width="18" height="12" rx="4"/><path d="M10.500 9.500v5l4.200-2.500z"/>',
+  email:'<rect x="3.500" y="5.500" width="17" height="13" rx="2.500"/><path d="M4.500 7.500l7.500 5.500 7.500-5.500"/>',
+  site:'<circle cx="12" cy="12" r="8.500"/><path d="M3.500 12h17M12 3.500c2.500 2.600 2.500 14.400 0 17M12 3.500c-2.500 2.600-2.500 14.400 0 17"/>' };
+// cada tipo de botão: nome, texto padrão, o que pedir, e como transformar o que a pessoa digita num endereço
+const TIPO = {
+  whatsapp:  { n:'WhatsApp',  r:'Chamar no WhatsApp', ph:'(11) 99999-9999', modo:'tel',  ok: v => { const d = v.replace(/\D/g, ''); return /^(55)?\d{10,11}$/.test(d) ? d : null; } },
+  instagram: { n:'Instagram', r:'Instagram', ph:'@seuperfil', modo:'text', ok: v => perfil(v, 'instagram.com', u => 'https://instagram.com/' + u) },
+  tiktok:    { n:'TikTok',    r:'TikTok',    ph:'@seuperfil', modo:'text', ok: v => perfil(v, 'tiktok.com', u => 'https://www.tiktok.com/@' + u) },
+  youtube:   { n:'YouTube',   r:'YouTube',   ph:'@seucanal ou o link do canal', modo:'text', ok: v => perfil(v, 'youtube.com', u => 'https://www.youtube.com/@' + u) },
+  email:     { n:'E-mail',    r:'Mandar um e-mail', ph:'voce@email.com', modo:'email', ok: v => /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(v.trim()) ? v.trim().toLowerCase() : null },
+  site:      { n:'Outro link', r:'', ph:'Cole o endereço. Ex.: seusite.com.br', modo:'url', ok: v => endereco(v) },
+};
+function endereco(v){ v = v.trim(); if (!v) return null; if (!/^https?:\/\//i.test(v)) v = 'https://' + v; v = v.replace(/^http:\/\//i, 'https://'); try { const u = new URL(v); return /\.[a-z]{2,}$/i.test(u.hostname) ? u.toString() : null; } catch { return null; } }
+function perfil(v, dominio, monta){ v = v.trim(); if (!v) return null;
+  if (/^https?:\/\//i.test(v) || v.includes(dominio)) { const e = endereco(v); return e && new URL(e).hostname.replace(/^www\./, '').endsWith(dominio) ? e : null; }
+  const u = v.replace(/^@/, ''); return /^[\w.\-]{2,40}$/.test(u) ? monta(u) : null; }
+
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)], esc = Base.esc;
+const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2600); }
 function tela(html){ const m = $('#tela'); m.className = 'entra'; m.innerHTML = html; }
 async function copia(t){ try { await navigator.clipboard.writeText(t); } catch { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); } }
+function confete(){ if (calmo) return; const cs = Object.values(CORES); for (let i = 0; i < 46; i++){ const d = document.createElement('i'); d.className = 'conf'; d.style.left = Math.random() * 100 + 'vw'; d.style.background = cs[i % cs.length]; d.style.animationDuration = (1.6 + Math.random() * 1.6) + 's'; d.style.animationDelay = Math.random() * .4 + 's'; document.body.appendChild(d); setTimeout(() => d.remove(), 3800); } }
 const semAcento = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
 const paraSlug = s => semAcento(String(s || '').toLowerCase()).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 30);
 const slugOk = s => /^[a-z0-9](?:[a-z0-9-]{1,28})[a-z0-9]$/.test(s);
 const link = s => location.origin + '/e/?' + s;
+const svg = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICO[k]}</svg>`;
 
-let P = null, EXTRA = {}, sujo = false;     // P: o portfólio em edição
+let P = null, EXTRA = {}, sujo = false, cheio = false;
 const prod = () => Base.produto('case') || { nome:'CaseUp', preco:'' };
 const acesso = () => Base.tem(PACK);
 
@@ -123,15 +202,17 @@ function topo(){
   $('#conta').onclick = async () => { if (Base.sessao()) { sujo = false; Base.sair(); inicio(); } else if (await Base.login()) inicio(); };
   $('#foot').textContent = 'O cliente não precisa de conta nem de app. Só abre o link.';
 }
+function modo(editando){ $('#wrap').classList.toggle('largo', editando); $('#barra').hidden = !editando; if (!editando) $('#previa').style.display = ''; }
 
-// ---------- quem ainda não tem: mostra o que é, com um portfólio de exemplo de verdade ----------
+// ---------- quem ainda não tem ----------
 function vitrine(){
+  modo(false);
   const venc = Base.vencido(PACK), p = prod();
-  tela(`<h1>Seu portfólio num link.</h1>
-    <p class="sub">Junte os seus melhores vídeos numa página, mande o link para o cliente e receba o pedido de orçamento por ela.</p>
-    <div class="demo"><iframe src="/e/?exemplo" title="Portfólio de exemplo" loading="lazy"></iframe></div>
-    <div class="lock"><ul><li>Seu link, com o seu nome</li><li>Vídeos do Instagram, TikTok, YouTube, Vimeo e Drive</li><li>Botão de orçamento que abre o seu briefing ou o seu WhatsApp</li></ul>
-      <button class="btn" id="comprar">${venc ? 'Renovar meu acesso' : 'Criar o meu portfólio' + (p.preco ? ' · R$ ' + p.preco : '')}</button>
+  tela(`<h1>Seu portfólio e seus links, numa página só.</h1>
+    <p class="sub">Junte os seus melhores vídeos e os seus contatos numa página com a sua cara. Um link para a bio, para o WhatsApp, para onde você quiser.</p>
+    <div class="demo"><iframe src="/e/?exemplo" title="Página de exemplo" loading="lazy"></iframe></div>
+    <div class="lock"><ul><li>Seu link, com o seu nome</li><li>Botões para WhatsApp, Instagram, site e o que mais você quiser</li><li>Vídeos do Instagram, TikTok, YouTube, Vimeo e Drive</li><li>Botão de orçamento que abre o seu WhatsApp ou o seu briefing</li></ul>
+      <button class="btn" id="comprar">${venc ? 'Renovar meu acesso' : 'Criar a minha página' + (p.preco ? ' · R$ ' + p.preco : '')}</button>
       ${Base.sessao() ? '' : '<button class="link" id="entrar" style="display:block;margin:14px auto 0">Já comprei · entrar</button>'}</div>`);
   $('#comprar').onclick = () => Base.comprar('case', 'ferramenta');
   if ($('#entrar')) $('#entrar').onclick = async () => { if (await Base.login()) inicio(); };
@@ -140,61 +221,109 @@ function vitrine(){
 // ---------- editor ----------
 function novo(){
   const nome = EXTRA.perfil_nome || '';
-  return { slug: paraSlug(nome), nome, frase:'', whatsapp: EXTRA.perfil_whatsapp || '', cor:'lima', selos:[], videos:[], briefing:true, publicado:true, visitas:0, _novo:true };
+  return { slug: paraSlug(nome), nome, frase:'', whatsapp: EXTRA.perfil_whatsapp || '', cor:'lima', estilo:'cheio', selos:[], links:[], videos:[], briefing:true, publicado:true, visitas:0, _novo:true };
 }
+function zapBonito(z){ const d = String(z || '').replace(/\D/g, '').replace(/^55(?=\d{10,11}$)/, ''); return d.length >= 10 ? `(${d.slice(0,2)}) ${d.slice(2, d.length - 4)}-${d.slice(-4)}` : (z || ''); }
+const bloco = (n, t, extra, corpo) => `<section class="bloco" id="b${n}"><div class="bh"><i><span>${n}</span></i><b>${t}</b>${extra ? `<small>${extra}</small>` : ''}</div>${corpo}</section>`;
+
 function editor(){
+  modo(true);
   const p = P, publicado = !p._novo;
-  tela(`${publicado ? `<div class="pronto"><small>${p.publicado ? 'Seu portfólio está no ar' : 'Seu portfólio está fora do ar'}</small><code id="lkTxt">${esc(link(p.slug).replace(/^https?:\/\//, ''))}</code>
+  tela(`${publicado ? `<div class="pronto"><small>${p.publicado ? 'Sua página está no ar' : 'Sua página está fora do ar'}</small><code id="lkTxt">${esc(link(p.slug).replace(/^https?:\/\//, ''))}</code>
         <p>${p.visitas ? p.visitas + (p.visitas === 1 ? ' abertura' : ' aberturas') + ' até agora.' : 'Mande para um cliente ou coloque na bio.'}</p>
-        <div class="row"><button class="btn" id="copiar">Copiar link</button><a class="btn ghost" id="abrir" href="${esc(link(p.slug))}" target="_blank" rel="noopener">Ver a página</a></div></div>`
-      : `<h1>Monte o seu portfólio.</h1><p class="sub">Leva uns 3 minutos. Você pode mudar tudo depois.</p>`}
+        <div class="row"><button class="btn" id="copiar">Copiar link</button><a class="btn ghost" id="abrir" href="${esc(link(p.slug))}" target="_blank" rel="noopener">Abrir a página</a></div></div>`
+      : `<h1>Monte a sua página.</h1><p class="sub">Cinco blocos curtos. A barra lá embaixo mostra o quanto falta, e a prévia muda enquanto você mexe.</p>`}
 
-    <label for="nome">Seu nome ou o nome do seu estúdio</label><input class="inp" id="nome" maxlength="60" value="${esc(p.nome)}" placeholder="Ex.: João Editor" autocomplete="name">
-    <label for="frase">O que você faz, em uma frase</label><input class="inp" id="frase" maxlength="120" value="${esc(p.frase || '')}" placeholder="Ex.: Edito Reels e anúncios para negócios locais">
+    ${bloco(1, 'Você', '', `
+      <label for="nome">Seu nome ou o nome do seu estúdio</label><input class="inp" id="nome" maxlength="60" value="${esc(p.nome)}" placeholder="Ex.: João Editor" autocomplete="name">
+      <label for="frase">O que você faz, em uma frase</label><input class="inp" id="frase" maxlength="120" value="${esc(p.frase || '')}" placeholder="Ex.: Edito Reels e anúncios para negócios locais">
+      <label for="slug">O final do seu link</label>
+      <div class="lkb" id="lkBox"><span>${esc(location.host)}/e/?</span><input id="slug" maxlength="30" value="${esc(p.slug)}" autocapitalize="none" autocomplete="off" spellcheck="false" placeholder="seu-nome"></div>
+      <p class="msg" id="slugMsg"></p>`)}
 
-    <label for="slug">O final do seu link</label>
-    <div class="lk" id="lkBox"><span>${esc(location.host)}/e/?</span><input id="slug" maxlength="30" value="${esc(p.slug)}" autocapitalize="none" autocomplete="off" spellcheck="false" placeholder="seu-nome"></div>
-    <p class="msg" id="slugMsg"></p>
+    ${bloco(2, 'Seus botões', 'até ' + MAXL, `
+      <p class="dica">Toque no que você quer colocar na página. Cada um vira um botão.</p>
+      <div class="tipos" id="tipos">${Object.entries(TIPO).map(([k, t]) => `<button type="button" data-k="${k}">${svg(k)}${t.n}</button>`).join('')}</div>
+      <ul class="ll" id="ll"></ul>`)}
 
-    <h2>Seus vídeos</h2>
-    <p class="dica">Cole o link de cada vídeo: Instagram, TikTok, YouTube, Vimeo ou Google Drive. Até ${MAX}.</p>
-    <div class="add"><input class="inp" id="url" inputmode="url" placeholder="Cole o link do vídeo aqui" autocomplete="off"><button id="mais" aria-label="Adicionar vídeo">+</button></div>
-    <p class="msg" id="urlMsg"></p>
-    <ul class="vl" id="vl"></ul>
+    ${bloco(3, 'Seus vídeos', 'até ' + MAXV, `
+      <p class="dica">Cole o link de cada vídeo: Instagram, TikTok, YouTube, Vimeo ou Google Drive. Os vídeos continuam onde já estão.</p>
+      <div class="add"><input class="inp" id="url" inputmode="url" placeholder="Cole o link do vídeo aqui" autocomplete="off"><button id="mais" type="button" aria-label="Adicionar vídeo">+</button></div>
+      <p class="msg" id="urlMsg"></p>
+      <ul class="vl" id="vl"></ul>`)}
 
-    <h2>Três destaques (opcional)</h2>
-    <p class="dica">Aparecem embaixo do seu nome. Ex.: “Reels”, “Anúncios”, “Entrega em 3 dias”.</p>
-    <div class="row">${[0,1,2].map(i => `<input class="inp selo" maxlength="28" value="${esc(p.selos[i] || '')}" aria-label="Destaque ${i+1}">`).join('')}</div>
+    ${bloco(4, 'A cara da página', '', `
+      <label>Cor</label>
+      <div class="cores" role="group" aria-label="Cor da página">${Object.entries(CORES).map(([k, c]) => `<button type="button" data-c="${k}" style="--c:${c}" aria-pressed="${p.cor === k}" aria-label="${k}"></button>`).join('')}</div>
+      <label>Estilo dos botões</label>
+      <div class="estilos" role="group" aria-label="Estilo dos botões">${[['cheio','Cheio'],['contorno','Contorno'],['vidro','Arredondado']].map(([k, t]) => `<button type="button" class="${k}" data-e="${k}" aria-pressed="${(p.estilo || 'cheio') === k}"><i></i>${t}</button>`).join('')}</div>
+      <label>Três destaques (opcional)</label>
+      <p class="dica">Aparecem embaixo do seu nome. Ex.: “Reels”, “Anúncios”, “Entrega em 3 dias”.</p>
+      <div class="row">${[0,1,2].map(i => `<input class="inp selo" maxlength="28" value="${esc(p.selos[i] || '')}" aria-label="Destaque ${i+1}">`).join('')}</div>`)}
 
-    <h2>Cor da página</h2>
-    <div class="cores" role="group" aria-label="Cor da página">${Object.entries(CORES).map(([k, c]) => `<button type="button" data-c="${k}" style="--c:${c}" aria-pressed="${p.cor === k}" aria-label="${k}"></button>`).join('')}</div>
+    ${bloco(5, 'Botão “Pedir orçamento”', '', `
+      <p class="dica">É o botão colorido, no topo da página. Sem WhatsApp nem briefing, ele não aparece.</p>
+      <label for="zap">Seu WhatsApp, com DDD</label><input class="inp" id="zap" inputmode="tel" maxlength="20" value="${esc(zapBonito(p.whatsapp))}" placeholder="(11) 99999-9999" autocomplete="tel">
+      ${EXTRA.tem_briefing
+        ? `<label class="tog"><input type="checkbox" id="brf" ${p.briefing ? 'checked' : ''}><span><b>Abrir o meu briefing</b><small>O cliente responde as perguntas e o pedido chega organizado no Gerador de Briefing. Desmarcado, o botão abre o seu WhatsApp.</small></span></label>`
+        : `<p class="dica" style="margin-top:10px">O botão abre o seu WhatsApp, com a mensagem “vi o seu portfólio e quero um orçamento” já escrita.</p>`}
+      ${publicado ? `<label class="tog"><input type="checkbox" id="pub" ${p.publicado ? 'checked' : ''}><span><b>Página no ar</b><small>Desmarque para tirar do ar sem apagar nada.</small></span></label>` : ''}`)}`);
 
-    <h2>O botão “Pedir orçamento”</h2>
-    <label for="zap" style="margin-top:8px">Seu WhatsApp, com DDD</label><input class="inp" id="zap" inputmode="tel" maxlength="20" value="${esc(zapBonito(p.whatsapp))}" placeholder="(11) 99999-9999" autocomplete="tel">
-    ${EXTRA.tem_briefing
-      ? `<label class="tog"><input type="checkbox" id="brf" ${p.briefing ? 'checked' : ''}><span><b>Abrir o meu briefing</b><small>O cliente responde as perguntas e o pedido chega organizado no Gerador de Briefing. Desmarcado, o botão abre o seu WhatsApp.</small></span></label>`
-      : `<p class="dica" style="margin-top:10px">O botão abre o seu WhatsApp. Quem tem o Gerador de Briefing pode fazer o botão abrir o briefing, e o pedido já chega organizado.</p>`}
-    ${publicado ? `<label class="tog"><input type="checkbox" id="pub" ${p.publicado ? 'checked' : ''}><span><b>Portfólio no ar</b><small>Desmarque para tirar a página do ar sem apagar nada.</small></span></label>` : ''}
-
-    <button class="btn" id="salvar">${publicado ? 'Salvar alterações' : 'Publicar o meu portfólio'}</button>`);
-
-  lista();
-  $('#nome').oninput = e => { p.nome = e.target.value; if (p._novo && !p._slugMexido){ $('#slug').value = p.slug = paraSlug(p.nome); confereSlug(); } sujo = true; };
-  $('#frase').oninput = e => { p.frase = e.target.value; sujo = true; };
-  $('#slug').oninput = e => { const v = paraSlug(e.target.value.replace(/\s/g, '-')); if (v !== e.target.value) e.target.value = v; p.slug = v; p._slugMexido = true; sujo = true; confereSlug(); };
-  $('#zap').oninput = e => { p.whatsapp = e.target.value; sujo = true; };
-  document.querySelectorAll('.selo').forEach((el, i) => el.oninput = () => { p.selos[i] = el.value; sujo = true; });
-  document.querySelectorAll('.cores button').forEach(b => b.onclick = () => { p.cor = b.dataset.c; document.querySelectorAll('.cores button').forEach(x => x.setAttribute('aria-pressed', x === b)); sujo = true; });
-  if ($('#brf')) $('#brf').onchange = e => { p.briefing = e.target.checked; sujo = true; };
-  if ($('#pub')) $('#pub').onchange = e => { p.publicado = e.target.checked; sujo = true; };
+  $('#salvar').textContent = publicado ? 'Salvar' : 'Publicar';
+  listaLinks(); listaVideos();
+  $('#nome').oninput = e => { p.nome = e.target.value; if (p._novo && !p._slugMexido){ $('#slug').value = p.slug = paraSlug(p.nome); confereSlug(); } mexeu(); };
+  $('#frase').oninput = e => { p.frase = e.target.value; mexeu(); };
+  $('#slug').oninput = e => { const v = paraSlug(e.target.value.replace(/\s/g, '-')); if (v !== e.target.value) e.target.value = v; p.slug = v; p._slugMexido = true; mexeu(); confereSlug(); };
+  $('#zap').oninput = e => { p.whatsapp = e.target.value; mexeu(); };
+  $$('.selo').forEach((el, i) => el.oninput = () => { p.selos[i] = el.value; mexeu(); });
+  $$('.cores button').forEach(b => b.onclick = () => { p.cor = b.dataset.c; $$('.cores button').forEach(x => x.setAttribute('aria-pressed', x === b)); mexeu(); });
+  $$('.estilos button').forEach(b => b.onclick = () => { p.estilo = b.dataset.e; $$('.estilos button').forEach(x => x.setAttribute('aria-pressed', x === b)); mexeu(); });
+  $$('#tipos button').forEach(b => b.onclick = () => novoLink(b.dataset.k));
+  if ($('#brf')) $('#brf').onchange = e => { p.briefing = e.target.checked; mexeu(); };
+  if ($('#pub')) $('#pub').onchange = e => { p.publicado = e.target.checked; mexeu(); };
   $('#mais').onclick = adiciona;
   $('#url').onkeydown = e => { if (e.key === 'Enter'){ e.preventDefault(); adiciona(); } };
   $('#url').onpaste = () => setTimeout(adiciona, 30);
-  $('#salvar').onclick = salva;
   if ($('#copiar')) $('#copiar').onclick = async () => { await copia(link(P.slug)); toast('Link copiado'); };
-  confereSlug();
+  confereSlug(); cheio = progresso().pct === 100; atualiza(false);
 }
-function zapBonito(z){ const d = String(z || '').replace(/\D/g, '').replace(/^55(?=\d{10,11}$)/, ''); return d.length >= 10 ? `(${d.slice(0,2)}) ${d.slice(2, d.length - 4)}-${d.slice(-4)}` : (z || ''); }
+function mexeu(){ sujo = true; atualiza(true); }
+
+// ---------- progresso (o que falta para a página ficar completa) ----------
+function progresso(){
+  const p = P, z = String(p.whatsapp || '').replace(/\D/g, ''), temContato = /^(55)?\d{10,11}$/.test(z) || (EXTRA.tem_briefing && p.briefing);
+  const linksOk = p.links.filter(l => l.v).length, itens = [
+    [1, !!p.nome.trim() && slugOk(p.slug) && !!(p.frase || '').trim(), !p.nome.trim() ? 'escreva o seu nome' : !(p.frase || '').trim() ? 'conte o que você faz, em uma frase' : 'confira o final do link'],
+    [2, linksOk >= 1, 'coloque pelo menos um botão'],
+    [3, p.videos.length >= 3, p.videos.length ? 'coloque mais ' + (3 - p.videos.length) + (3 - p.videos.length === 1 ? ' vídeo' : ' vídeos') : 'cole o link de um vídeo'],
+    [4, p.selos.filter(s => s && s.trim()).length >= 1, 'escreva um destaque'],
+    [5, temContato, 'coloque o seu WhatsApp'],
+  ];
+  const feitos = itens.filter(i => i[1]).length, falta = itens.find(i => !i[1]);
+  return { itens, pct: Math.round(feitos / itens.length * 100), falta: falta ? falta[2] : null };
+}
+function atualiza(comemora){
+  const g = progresso();
+  g.itens.forEach(([n, ok]) => { const b = $('#b' + n); if (b) b.classList.toggle('feito', ok); });
+  $('#pgU').style.width = g.pct + '%';
+  $('#pgT').textContent = g.pct === 100 ? 'Página completa 🎉' : g.pct + '% · falta: ' + g.falta;
+  if (comemora && g.pct === 100 && !cheio){ confete(); toast('Página completa! Agora é só ' + (P._novo ? 'publicar.' : 'salvar.')); }
+  cheio = g.pct === 100;
+  mandaPrevia();
+}
+
+// ---------- prévia ao vivo: a mesma página pública, recebendo o rascunho ----------
+const prontas = new WeakSet();
+function rascunho(){
+  const p = P, z = String(p.whatsapp || '').replace(/\D/g, '');
+  return { nome: p.nome || 'Seu nome', frase: p.frase, cor: p.cor, estilo: p.estilo || 'cheio', selos: p.selos.filter(s => s && s.trim()),
+    links: p.links.filter(l => l.v), videos: p.videos, whatsapp: /^(55)?\d{10,11}$/.test(z) ? (z.length <= 11 ? '55' + z : z) : null,
+    briefing: EXTRA.tem_briefing && p.briefing ? 'previa' : null };
+}
+function mandaPrevia(){ [$('#fPrev'), $('#fFolha')].forEach(f => { if (f && prontas.has(f)) { try { f.contentWindow.postMessage({ fl:'previa', p: rascunho() }, location.origin); } catch {} } }); }
+addEventListener('message', e => { if (e.origin !== location.origin || !e.data || e.data.fl !== 'previa-pronta') return;
+  [$('#fPrev'), $('#fFolha')].forEach(f => { if (f && f.contentWindow === e.source) prontas.add(f); }); if (P) mandaPrevia(); });
+function ligaPrevia(f){ if (f.dataset.on) return; f.dataset.on = '1'; f.src = '/e/?previa'; }
 
 let tSlug;
 function confereSlug(){
@@ -209,7 +338,32 @@ function confereSlug(){
   }, 350);
 }
 
-function lista(){
+// ---------- botões de link ----------
+function novoLink(k){
+  if (P.links.length >= MAXL) return toast('A página aceita até ' + MAXL + ' botões.');
+  const l = { k, r: TIPO[k].r, v: '', _t: k === 'whatsapp' ? zapBonito(P.whatsapp) : '' };
+  if (k === 'whatsapp' && l._t) l.v = TIPO.whatsapp.ok(l._t) || '';
+  P.links.push(l); listaLinks(); mexeu();
+  const ins = $$('#ll .li'); const ult = ins[ins.length - 1]; if (ult) ult.querySelector(l.v ? '.r' : '.v').focus();
+}
+function listaLinks(){
+  const ul = $('#ll'), ls = P.links;
+  ul.innerHTML = ls.map((l, i) => { const t = TIPO[l.k], txt = l._t != null ? l._t : (l.k === 'whatsapp' ? zapBonito(l.v) : l.k === 'email' ? l.v : l.v.replace(/^https:\/\/(www\.)?/, ''));
+    return `<li class="li">${svg(l.k)}<div class="cm"><input class="r" data-i="${i}" maxlength="40" value="${esc(l.r || '')}" placeholder="${l.k === 'site' ? 'Nome do botão. Ex.: Tabela de pacotes' : 'Nome do botão'}" aria-label="Nome do botão ${i+1}">
+      <input class="v" data-i="${i}" maxlength="300" value="${esc(txt)}" placeholder="${esc(t.ph)}" inputmode="${t.modo}" autocapitalize="none" spellcheck="false" aria-label="${esc(t.n)} do botão ${i+1}"></div>
+      <div class="va"><button data-a="cima" data-i="${i}" ${i ? '' : 'disabled'} aria-label="Subir">↑</button><button data-a="baixo" data-i="${i}" ${i < ls.length - 1 ? '' : 'disabled'} aria-label="Descer">↓</button><button class="x" data-a="tira" data-i="${i}" aria-label="Remover">×</button></div></li>`; }).join('');
+  $$('#ll .r').forEach(el => el.oninput = () => { P.links[+el.dataset.i].r = el.value; mexeu(); });
+  $$('#ll .v').forEach(el => { const l = P.links[+el.dataset.i];
+    el.oninput = () => { l._t = el.value; const ok = TIPO[l.k].ok(el.value); l.v = ok || ''; el.classList.remove('ruim'); mexeu(); };
+    el.onblur = () => { el.classList.toggle('ruim', !!el.value.trim() && !l.v); };
+    if (l._t && !l.v) el.classList.add('ruim'); });
+  $$('#ll .va button').forEach(b => b.onclick = () => { const i = +b.dataset.i, a = b.dataset.a;
+    if (a === 'tira') ls.splice(i, 1); else { const j = a === 'cima' ? i - 1 : i + 1; [ls[i], ls[j]] = [ls[j], ls[i]]; }
+    listaLinks(); mexeu(); });
+}
+
+// ---------- vídeos ----------
+function listaVideos(){
   const ul = $('#vl'), vs = P.videos;
   if (!vs.length){ ul.outerHTML = '<div class="vazio" id="vl">Nenhum vídeo ainda. Cole o primeiro link ali em cima.</div>'; return; }
   if (ul.tagName !== 'UL'){ ul.outerHTML = '<ul class="vl" id="vl"></ul>'; }
@@ -218,42 +372,50 @@ function lista(){
       <div class="vm"><input value="${esc(v.n || '')}" maxlength="60" placeholder="Título (opcional). Ex.: Reels de receita" data-i="${i}" class="vn" aria-label="Título do vídeo ${i+1}">
         <div style="display:flex;gap:8px;align-items:center;min-width:0"><select data-i="${i}" class="vt" aria-label="Tipo do vídeo ${i+1}">${Object.entries(CaseVideo.TIPOS).map(([k, t]) => `<option value="${k}"${v.t === k ? ' selected' : ''}>${t}</option>`).join('')}</select><small>${esc(v.u.replace(/^https:\/\/(www\.)?/, ''))}</small></div></div>
       <div class="va"><button data-a="cima" data-i="${i}" ${i ? '' : 'disabled'} aria-label="Subir">↑</button><button data-a="baixo" data-i="${i}" ${i < vs.length - 1 ? '' : 'disabled'} aria-label="Descer">↓</button><button class="x" data-a="tira" data-i="${i}" aria-label="Remover">×</button></div></li>`; }).join('');
-  document.querySelectorAll('.vn').forEach(el => el.oninput = () => { P.videos[+el.dataset.i].n = el.value; sujo = true; });
-  document.querySelectorAll('.vt').forEach(el => el.onchange = () => { P.videos[+el.dataset.i].t = el.value; sujo = true; });
-  document.querySelectorAll('.va button').forEach(b => b.onclick = () => { const i = +b.dataset.i, a = b.dataset.a;
+  $$('.vn').forEach(el => el.oninput = () => { P.videos[+el.dataset.i].n = el.value; mexeu(); });
+  $$('.vt').forEach(el => el.onchange = () => { P.videos[+el.dataset.i].t = el.value; mexeu(); });
+  $$('#vl .va button').forEach(b => b.onclick = () => { const i = +b.dataset.i, a = b.dataset.a;
     if (a === 'tira') vs.splice(i, 1); else { const j = a === 'cima' ? i - 1 : i + 1; [vs[i], vs[j]] = [vs[j], vs[i]]; }
-    sujo = true; lista(); });
+    listaVideos(); mexeu(); });
 }
 function adiciona(){
   const el = $('#url'), m = $('#urlMsg'), u = el.value.trim(); if (!u) return;
   const diz = (cls, t) => { m.className = 'msg ' + cls; m.textContent = t; el.classList.toggle('ruim', cls === 'ruim'); };
-  if (P.videos.length >= MAX) return diz('ruim', 'O portfólio aceita até ' + MAX + ' vídeos. Tire um para colocar outro.');
+  if (P.videos.length >= MAXV) return diz('ruim', 'A página aceita até ' + MAXV + ' vídeos. Tire um para colocar outro.');
   const limpo = u.split('?')[0].includes('youtube.com/watch') ? u : u.replace(/[?&](igsh|igshid|utm_[a-z]+|si|is_from_webapp|sender_device)=[^&]*/g, '').replace(/\?$/, '');
   const inf = CaseVideo.le(limpo);
   if (!inf) return diz('ruim', 'Não reconheci esse link. Use o link do vídeo no Instagram, TikTok, YouTube, Vimeo ou Google Drive.');
   if (P.videos.some(v => v.u === limpo)) return diz('ruim', 'Esse vídeo já está na lista.');
   const tipo = inf.site === 'youtube' && !inf.vertical ? 'youtube' : inf.vertical ? 'reels' : 'outro';
   const v = { u: limpo, t: tipo, n: '', c: inf.capa || null };
-  P.videos.push(v); el.value = ''; sujo = true; lista();
+  P.videos.push(v); el.value = ''; listaVideos(); mexeu();
   diz('ok', inf.site === 'drive' ? 'Adicionado. No Drive, deixe o arquivo como “Qualquer pessoa com o link”.' : inf.site === 'tiktok' && !inf.embed ? 'Adicionado. Esse link curto abre no TikTok; o link completo do vídeo toca dentro da página.' : 'Adicionado.');
-  if (!v.c) CaseVideo.buscaCapa(limpo).then(c => { if (c){ v.c = c; lista(); } });
+  if (!v.c) CaseVideo.buscaCapa(limpo).then(c => { if (c){ v.c = c; listaVideos(); mandaPrevia(); } });
 }
 
 async function salva(){
   const b = $('#salvar'), p = P;
-  if (!p.nome.trim()){ toast('Escreva o seu nome'); $('#nome').focus(); return; }
-  if (!slugOk(p.slug)){ toast('Confira o final do seu link'); $('#slug').focus(); return; }
-  if (!p.videos.length){ toast('Coloque pelo menos um vídeo'); $('#url').focus(); return; }
+  const vai = (t, sel) => { toast(t); const e = $(sel); if (e){ e.scrollIntoView({ block:'center', behavior: calmo ? 'auto' : 'smooth' }); e.focus({ preventScroll:true }); } };
+  if (!p.nome.trim()) return vai('Escreva o seu nome', '#nome');
+  if (!slugOk(p.slug)) return vai('Confira o final do seu link', '#slug');
+  const ruim = p.links.findIndex(l => !l.v);
+  if (ruim >= 0) return vai(p.links[ruim]._t ? 'Confira este botão: ' + TIPO[p.links[ruim].k].n : 'Preencha ou remova o botão vazio', '#ll .li:nth-child(' + (ruim + 1) + ') .v');
+  if (!p.videos.length && !p.links.length) return vai('Coloque pelo menos um botão ou um vídeo', '#tipos button');
   const z = String(p.whatsapp || '').replace(/\D/g, '');
-  if (z && !/^(55)?\d{10,11}$/.test(z)){ toast('Confira o WhatsApp, com DDD'); $('#zap').focus(); return; }
-  if (!z && !(EXTRA.tem_briefing && p.briefing)){ toast('Coloque o seu WhatsApp para o cliente pedir orçamento'); $('#zap').focus(); return; }
+  if (z && !/^(55)?\d{10,11}$/.test(z)) return vai('Confira o WhatsApp, com DDD', '#zap');
   b.disabled = true; b.textContent = 'Salvando…';
   try {
-    const r = await Base.rpc('portfolio_salvar', { p: { slug:p.slug, nome:p.nome, frase:p.frase, whatsapp:p.whatsapp, cor:p.cor, selos:p.selos.filter(s => s && s.trim()), videos:p.videos, briefing:!!p.briefing, publicado:p.publicado !== false } });
-    const era = p._novo; P = { ...r, selos: r.selos || [], videos: r.videos || [] }; sujo = false;
-    editor(); window.scrollTo({ top:0, behavior:'smooth' }); toast(era ? 'Portfólio no ar!' : 'Alterações salvas');
-  } catch(e){ b.disabled = false; b.textContent = p._novo ? 'Publicar o meu portfólio' : 'Salvar alterações'; toast(Base.traduz(e.message)); }
+    const r = await Base.rpc('portfolio_salvar', { p: { slug:p.slug, nome:p.nome, frase:p.frase, whatsapp:p.whatsapp, cor:p.cor, estilo:p.estilo, selos:p.selos.filter(s => s && s.trim()),
+      links:p.links.map(l => ({ k:l.k, r:l.r, v:l.v })), videos:p.videos, briefing:!!p.briefing, publicado:p.publicado !== false } });
+    const era = p._novo; P = { ...r, selos: r.selos || [], links: r.links || [], videos: r.videos || [] }; sujo = false;
+    b.disabled = false; editor(); window.scrollTo({ top:0, behavior: calmo ? 'auto' : 'smooth' });
+    if (era){ confete(); toast('Sua página está no ar!'); } else toast('Alterações salvas');
+  } catch(e){ b.disabled = false; b.textContent = p._novo ? 'Publicar' : 'Salvar'; toast(Base.traduz(e.message)); }
 }
+$('#salvar').onclick = salva;
+$('#verPrevia').onclick = () => { ligaPrevia($('#fFolha')); $('#folha').classList.add('on'); document.body.style.overflow = 'hidden'; mandaPrevia(); };
+$('#fechaFolha').onclick = () => { $('#folha').classList.remove('on'); document.body.style.overflow = ''; };
+addEventListener('keydown', e => { if (e.key === 'Escape') $('#fechaFolha').click(); });
 addEventListener('beforeunload', e => { if (sujo){ e.preventDefault(); e.returnValue = ''; } });
 
 async function inicio(){
@@ -264,12 +426,14 @@ async function inicio(){
   try {
     const r = await Base.rpc('portfolio');
     EXTRA = r || {};
-    P = r && r.portfolio ? { ...r.portfolio, selos: r.portfolio.selos || [], videos: r.portfolio.videos || [] } : novo();
+    P = r && r.portfolio ? { ...r.portfolio, selos: r.portfolio.selos || [], links: r.portfolio.links || [], videos: r.portfolio.videos || [] } : novo();
+    if (matchMedia('(min-width:980px)').matches) ligaPrevia($('#fPrev'));
     editor();
-  } catch(e){ tela(`<h1>Não consegui abrir.</h1><p class="sub">${esc(Base.traduz(e.message))}</p><button class="btn" onclick="location.reload()">Tentar de novo</button>`); }
+  } catch(e){ modo(false); tela(`<h1>Não consegui abrir.</h1><p class="sub">${esc(Base.traduz(e.message))}</p><button class="btn" onclick="location.reload()">Tentar de novo</button>`); }
 }
 // só redesenha quando a pessoa entrou ou saiu (em outra aba, por exemplo)
 Base.aoMudar(() => { if (!!Base.sessao() !== ($('#conta')?.textContent === 'Sair')) { sujo = false; inicio(); } });
+addEventListener('resize', () => { if (P && acesso() && matchMedia('(min-width:980px)').matches) ligaPrevia($('#fPrev')); });
 inicio();
 </script>
 </body>
