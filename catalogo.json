@@ -94,6 +94,23 @@
       "desc": "Copie a cor de qualquer vídeo: coloque a referência e o seu vídeo e baixe a LUT pronta para o CapCut."
     },
     {
+      "key": "case",
+      "pack": "fl-case",
+      "nome": "CaseUp",
+      "curto": "Portfólio",
+      "preco": 47,
+      "_preco": "PROVISÓRIO: o Fernando ainda vai definir o preço e criar o produto na Greenn. Enquanto 'checkout' estiver vazio, o botão de compra avisa 'Link de compra em breve'.",
+      "acesso": "1 ano",
+      "slug": "caseup",
+      "url": "/case/",
+      "cor": "212,225,87",
+      "checkout": "",
+      "greenn": "",
+      "tipo": "ferramenta",
+      "gancho": "Seu portfólio num link",
+      "desc": "Junte seus melhores vídeos numa página, mande o link para o cliente e receba pedidos de orçamento."
+    },
+    {
       "key": "legendas",
       "pack": "fl-legendas",
       "nome": "Títulos Dinâmicos",

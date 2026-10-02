@@ -286,7 +286,7 @@ def pagina(p):
     <div class="parcf">ou <b>12x de {p['parc6']}</b> no cartão · ou à vista no Pix</div>
     <div class="ctas"><button class="btn" data-comprar>{p.get('cta_oferta') or p['cta']} {seta}</button></div>
     <p class="of-gar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.2-2.9 7.6-7 9.5-4.1-1.9-7-5.3-7-9.5V6z"/><path d="M8.800 12.200l2.300 2.300 4.200-4.600"/></svg><span><b>{G} dias de garantia.</b> Usou e não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</span></p>
-    <div class="selos"><span>{p['acesso_selo']}</span><span>Liberado na hora da compra</span><span>Aula ensinando a usar</span><span>{p['selo']}</span></div>
+    <div class="selos"><span>{p['acesso_selo']}</span><span>Liberado na hora da compra</span>{'' if p.get('sem_aula') else '<span>Aula ensinando a usar</span>'}<span>{p['selo']}</span></div>
   </div></section>
 
   {p.get('kit', '')}
@@ -1349,6 +1349,125 @@ PN_JS = r'''
 (function(){ const k = document.querySelector('.mkp'); if (!k) return; new IntersectionObserver((e, o) => { if (e[0].isIntersecting){ k.classList.add('vis'); o.disconnect(); } }, { threshold: .4 }).observe(k); })();
 '''
 
+# ---------------------------------------------------------------- CASEUP (portfólio do editor)
+PAGINAS.append(dict(
+  slug='caseup', nome='CaseUp', secao='Ferramentas', cor='#D4E157', cor2='#A9B93A', ink='#171A06',
+  pattern='radial-gradient(circle at 1px 1px,rgba(212,225,87,.10) 1px,transparent 0) 0 0/28px 28px', fxx='72%',
+  kick='Ferramenta', desc='Junte seus melhores vídeos numa página, mande o link para o cliente e receba pedidos de orçamento.',
+  h1='Seu portfólio <em>num link só.</em>',
+  lead='Junte os seus melhores vídeos numa página com o seu nome. Você <b>cola os links</b>, escolhe a cor e publica. O cliente abre, assiste e toca em <b>“Pedir orçamento”</b>.',
+  cta='Quero o meu portfólio', nota='O cliente <b>não precisa de conta</b><br>nem baixar nada',
+  rot='Portfólio de exemplo, de verdade',
+  demo='<iframe class="cu-f" src="https://basefl.com/e/?exemplo" title="Portfólio de exemplo" loading="lazy"></iframe>',
+  css=r"""
+.palco{min-height:0;height:600px;padding:0}
+@media (max-width:900px){.palco{height:560px}}
+.cu-f{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:24px}
+.palco .rot{background:rgba(0,0,0,.6);padding:4px 9px;border-radius:8px;color:var(--mute)}
+""",
+  js='',
+  h2='', bens=[],
+  inclui=['Link com o seu nome','Até 24 vídeos','Instagram, TikTok, YouTube, Vimeo e Drive','Filtro por tipo de vídeo','Botão de pedir orçamento','6 cores para escolher','Celular e computador'],
+  faq=[('Preciso subir os arquivos dos vídeos?','Não. Você só cola o link de onde o vídeo já está: Instagram, TikTok, YouTube, Vimeo ou Google Drive.'),
+       ('O vídeo toca dentro da página?','Na maioria dos casos, sim. Quando o site não deixa tocar fora dele, o cliente toca e o vídeo abre no próprio site. No Instagram, o perfil precisa ser público.'),
+       ('Se eu apagar o vídeo do Instagram, o que acontece?','Ele deixa de abrir no portfólio, porque o CaseUp não guarda o vídeo, só o link. É só tirar da lista ou colar um link novo.'),
+       ('Posso mudar depois de publicar?','Pode. Troca vídeos, ordem, cor, frase e até o final do link quando quiser. Também dá para tirar a página do ar sem apagar nada.'),
+       ('O cliente precisa de conta?','Não. Ele abre o link no celular ou no computador e assiste.'),
+       FAQ_ACESSO,
+       ('E depois de 1 ano?','O acesso é de 1 ano. Se não renovar, a página sai do ar, e volta como estava quando você renova.')],
+  combina=[('gerador-de-briefing','Gerador de Briefing','#3FD0C2','O botão “Pedir orçamento” abre o seu briefing, e o pedido chega organizado.')],
+  fh2='Na próxima vez que pedirem “manda uns trabalhos seus”, você manda um link.', selo='Celular e computador'))
+
+CU_MIOLO = r"""
+  <section class="cu1">
+    <span class="kick rv">Quando o cliente pede para ver</span>
+    <h2 class="rv" style="margin-top:14px">“Tem portfólio?” <em class="ac">E você manda cinco links soltos.</em></h2>
+    <p class="sub2 rv">Um do Instagram, dois do Drive, um do TikTok. O cliente abre o primeiro, se perde no resto, e você não sabe se ele viu o seu melhor trabalho.</p>
+    <div class="vv rv">
+      <div class="zp" aria-label="Conversa sem portfólio">
+        <div class="zp-h"><b>Sem portfólio</b><span>5 links</span></div>
+        <div class="zp-c">
+          <div class="bl in">Você tem portfólio? Queria ver uns trabalhos</div>
+          <div class="bl eu lk">instagram.com/reel/Cx8f…</div>
+          <div class="bl eu lk">drive.google.com/file/d/1aB…</div>
+          <div class="bl eu lk">instagram.com/reel/Cz2k…</div>
+          <div class="bl eu lk">vm.tiktok.com/ZM8…</div>
+          <div class="bl eu lk">drive.google.com/file/d/9xQ…</div>
+          <div class="bl in vis">visto por último hoje às 14:02</div>
+        </div>
+      </div>
+      <div class="zp com" aria-label="Conversa com o CaseUp">
+        <div class="zp-h"><b>Com o CaseUp</b><span>1 link</span></div>
+        <div class="zp-c">
+          <div class="bl in">Você tem portfólio? Queria ver uns trabalhos</div>
+          <div class="bl eu">Tenho! Está tudo aqui 👇<i>basefl.com/e/?joao</i></div>
+          <div class="bl in ok">Gostei! Já pedi o orçamento por lá ✅</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cu2">
+    <span class="kick rv">Como você monta</span>
+    <h2 class="rv" style="margin-top:14px">Três minutos. <em class="ac">Sem subir arquivo nenhum.</em></h2>
+    <div class="pss">
+      <div class="ps rv"><span class="pn">1</span><h3>Cole os links</h3><p>Do Instagram, TikTok, YouTube, Vimeo ou Google Drive. Os vídeos continuam onde já estão.</p></div>
+      <div class="ps rv d1"><span class="pn">2</span><h3>Diga o que é cada um</h3><p>Reels, anúncio, YouTube, institucional, evento. O cliente filtra pelo tipo que interessa a ele.</p></div>
+      <div class="ps rv d2"><span class="pn">3</span><h3>Publique</h3><p>Escolha a cor e o final do link. Sai um endereço com o seu nome para mandar no WhatsApp ou colocar na bio.</p></div>
+    </div>
+  </section>
+
+  <section class="cu3">
+    <div class="cu3-g">
+      <div>
+        <span class="kick rv">O botão que importa</span>
+        <h2 class="rv" style="margin-top:14px">Um portfólio que <em class="ac">pede o orçamento por você.</em></h2>
+        <p class="sub2 rv">Em cima e embaixo dos vídeos tem um botão “Pedir orçamento”. Você decide o que ele faz:</p>
+        <ul class="cu-l rv">
+          <li><b>Abre o seu WhatsApp</b>, com a mensagem “vi o seu portfólio e quero um orçamento” já escrita.</li>
+          <li><b>Ou abre o seu briefing</b>, se você tem o Gerador de Briefing: o cliente responde o que precisa e o pedido chega organizado, pronto para virar preço.</li>
+        </ul>
+        <p class="cu-n rv">Na sua tela você também vê quantas vezes o portfólio foi aberto.</p>
+      </div>
+      <div class="cu-b rv" aria-hidden="true">
+        <div class="cu-bt">Pedir orçamento</div>
+        <div class="cu-s"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+        <div class="cu-c"><small>Briefing recebido</small><b>Studio Zeta</b><span>Só a edição · Reels · 5 a 8 vídeos · em até 1 semana</span></div>
+      </div>
+    </div>
+  </section>
+"""
+CU_CSS = r"""
+.vv{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px;align-items:start}
+.zp{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#0b141a}
+.zp.com{border-color:color-mix(in srgb,var(--a) 55%,transparent)}
+.zp-h{display:flex;justify-content:space-between;align-items:baseline;padding:12px 16px;background:#111b21;border-bottom:1px solid #1f2c33}
+.zp-h b{font-family:var(--d);font-weight:800;font-size:16px}.zp-h span{font-size:12.5px;font-weight:700;color:var(--mute)}
+.zp.com .zp-h span{color:var(--a)}
+.zp-c{padding:14px 12px;display:flex;flex-direction:column;gap:6px}
+.bl{max-width:84%;padding:8px 11px;border-radius:10px;font-size:14.5px;line-height:1.4;color:#e9edef}
+.bl.in{background:#202c33;border-top-left-radius:2px;align-self:flex-start}
+.bl.eu{background:#005c4b;border-top-right-radius:2px;align-self:flex-end}
+.bl.lk{color:#7ad8cc;text-decoration:underline;font-size:13.5px}
+.bl i{display:block;font-style:normal;color:#7ad8cc;text-decoration:underline;margin-top:2px}
+.bl.vis{background:none;color:#8696a0;font-size:12px;padding:6px 2px 0}
+.bl.ok{background:color-mix(in srgb,var(--a) 20%,#202c33);border:1px solid color-mix(in srgb,var(--a) 50%,transparent)}
+.cu3-g{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.cu-l{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:12px;max-width:540px}
+.cu-l li{position:relative;padding-left:26px;color:var(--mute);font-size:16px}.cu-l li b{color:var(--ink)}
+.cu-l li::before{content:"✓";position:absolute;left:0;top:0;color:var(--a);font-weight:900}
+.cu-n{margin-top:16px;color:var(--mute);font-size:15px}
+.cu-b{max-width:340px;width:100%;margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:12px}
+.cu-bt{width:100%;text-align:center;background:var(--a);color:var(--ai);font-weight:800;font-size:17px;border-radius:16px;padding:17px;box-shadow:0 14px 40px -14px color-mix(in srgb,var(--a) 70%,transparent)}
+.cu-s{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center}
+.cu-s svg{width:18px;height:18px;fill:none;stroke:var(--a);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.cu-c{width:100%;background:var(--card);border:1px solid var(--line);border-left:3px solid #3FD0C2;border-radius:16px;padding:16px}
+.cu-c small{display:block;font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#3FD0C2}
+.cu-c b{display:block;font-family:var(--d);font-weight:850;font-size:20px;letter-spacing:-.02em;margin:3px 0}
+.cu-c span{color:var(--mute);font-size:14px}
+@media (max-width:900px){.vv,.cu3-g{grid-template-columns:1fr}.cu3-g{gap:26px}.cu-b{margin:0 auto}}
+"""
+
 KT_MIOLO = r'''
   <section class="jor" id="jornada">
     <span class="kick rv">Um trabalho, do começo ao fim</span>
@@ -1448,6 +1567,7 @@ KT_JS = r'''
 })();
 '''
 EXTRA = {
+ 'caseup': dict(miolo=CU_MIOLO, css=CU_CSS, sem_aula=True, ver=('https://basefl.com/e/?exemplo', 'Abrir um portfólio de exemplo →'), cta_oferta='Criar o meu portfólio', fecho='O próximo “tem portfólio?” <em class="ac">você responde com um link.</em>'),
  'efeitos-sonoros': dict(),
  'luts': dict(),
  'quanto-cobrar': dict(miolo=QC_MIOLO, css=QC_CSS, js=QC_JS, cta_oferta='Liberar a calculadora completa', fecho='O próximo cliente vai perguntar o preço. <em class="ac">Você já vai saber.</em>',
@@ -1501,13 +1621,14 @@ for p in PAGINAS:
     p['acesso_txt'] = 'acesso vitalício' if vit else 'acesso de 1 ano'
     p['acesso_selo'] = 'Acesso vitalício' if vit else 'Acesso de 1 ano'
     p['acesso_curto'] = 'acesso vitalício' if vit else '1 ano de acesso'
-    for k in ('passos','passos_h2','antes','depois','ad_h2','miolo','cta_oferta','fecho'):
+    for k in ('passos','passos_h2','antes','depois','ad_h2','miolo','cta_oferta','fecho','ver','sem_aula'):
         if k in ex: p[k] = ex[k]
     p['css'] += ex.get('css', ''); p['js'] += ex.get('js', '')
     if 'mais' in ex: p['bens'] = p['bens'] + ex['mais']
     p['combina'] = None
-    p['inclui'] = p['inclui'] + ['Aula ensinando a usar']
-    p['faq'] = p['faq'] + [('Tem aula ensinando a usar?', 'Sim. Junto com o acesso vem uma aula mostrando, passo a passo, como usar e tirar o melhor proveito.')]
+    if not ex.get('sem_aula'):
+        p['inclui'] = p['inclui'] + ['Aula ensinando a usar']
+        p['faq'] = p['faq'] + [('Tem aula ensinando a usar?', 'Sim. Junto com o acesso vem uma aula mostrando, passo a passo, como usar e tirar o melhor proveito.')]
     if p['slug'] in TESTE:
         tit, txt, embutido = TESTE[p['slug']]
         if embutido:

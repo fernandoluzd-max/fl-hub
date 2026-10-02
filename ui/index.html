@@ -227,7 +227,7 @@ const NO_APP = {
   // 'avulso' = só aparece sozinho para quem comprou esse item separado, antes de ele virar bônus.
   legendas:{ sec:'kits' }, sons:{ sec:'kits' }, luts:{ sec:'kits', lut:true },
   // FERRAMENTAS: abrem no navegador e no celular. As quatro primeiras seguem a ordem da jornada de um trabalho.
-  briefing:{ sec:'ferramentas' }, preco:{ sec:'ferramentas' }, contrato:{ sec:'ferramentas' }, painel:{ sec:'ferramentas' }, mood:{ sec:'ferramentas' },
+  briefing:{ sec:'ferramentas' }, preco:{ sec:'ferramentas' }, contrato:{ sec:'ferramentas' }, painel:{ sec:'ferramentas' }, case:{ sec:'ferramentas' }, mood:{ sec:'ferramentas' },
 };
 const PRODUCTS = Object.keys(NO_APP).map(k => { const c = POR_KEY[k]; return { ...NO_APP[k], key:k, packId:c.pack, name:c.nome, desc:c.desc, cor:c.cor, preco:'R$ ' + c.preco, acesso:c.acesso, gancho:c.gancho, inclui:c.inclui, avulso:c.avulso, web: c.url ? 'https://basefl.com' + c.url : undefined }; });
 

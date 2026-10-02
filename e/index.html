@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portfólio — CaseUp</title>
+<meta name="description" content="Portfólio de edição de vídeo. Veja os trabalhos e peça um orçamento.">
+<meta name="theme-color" content="#0B0C0C">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta property="og:title" content="Portfólio de edição de vídeo">
+<meta property="og:description" content="Veja os trabalhos e peça um orçamento.">
+<meta property="og:image" content="https://basefl.com/capas/caseup.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0C0C;--card:#151816;--card2:#1B1F1C;--line:#272D29;--ink:#F4F0E4;--mute:#A8A89A;--dim:#6b6a61;--a:#D4E157;--ai:#171A06;
+  --f:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:16px/1.5 var(--f);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}a{color:inherit}
+:focus-visible{outline:2px solid var(--a);outline-offset:3px;border-radius:10px}
+.capa{height:150px;background:radial-gradient(120% 130% at 18% 0%,color-mix(in srgb,var(--a) 85%,#fff 0%) 0%,color-mix(in srgb,var(--a) 30%,#0B0C0C) 46%,#0B0C0C 100%)}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px 40px}
+.eu{margin-top:-46px}
+.foto{width:92px;height:92px;border-radius:50%;border:4px solid var(--bg);background:var(--a);color:var(--ai);display:grid;place-items:center;font-weight:900;font-stretch:115%;font-size:36px}
+h1{font-weight:850;font-stretch:112%;font-size:clamp(26px,6.4vw,38px);letter-spacing:-.025em;line-height:1.08;margin-top:12px;overflow-wrap:anywhere}
+.frase{color:var(--mute);font-size:17px;margin-top:6px;max-width:52ch}
+.selos{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.selos span{font-size:13px;border:1px solid var(--line);border-radius:99px;padding:6px 12px;color:#cfd0c2}
+.cta{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.btn{flex:1 1 200px;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:0 20px;border-radius:15px;border:0;background:var(--a);color:var(--ai);font-weight:800;font-size:16.5px;text-decoration:none;transition:transform .15s}
+.btn:active{transform:scale(.98)}
+.btn.gh{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.filtros{display:flex;gap:6px;margin:30px -18px 14px;padding:0 18px;overflow-x:auto;scrollbar-width:none}
+.filtros::-webkit-scrollbar{display:none}
+.filtros button{flex:none;font-size:14px;font-weight:650;border:1px solid var(--line);border-radius:99px;padding:8px 15px;color:var(--mute);background:none;transition:background .2s,color .2s}
+.filtros button[aria-pressed=true]{background:var(--ink);color:#141414;border-color:var(--ink)}
+.grade{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.v{position:relative;aspect-ratio:9/16;border-radius:14px;overflow:hidden;border:0;padding:0;background:linear-gradient(160deg,color-mix(in srgb,var(--a) 22%,#1b1f1c),#0f1110);text-align:left;display:block;width:100%}
+.v img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.v::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.75));z-index:1}
+.v .pl{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);z-index:2;display:grid;place-items:center;transition:transform .2s,background .2s}
+.v .pl::after{content:"";border:8px solid transparent;border-left:13px solid #fff;margin-left:6px}
+.v:hover .pl{transform:scale(1.08);background:var(--a)}.v:hover .pl::after{border-left-color:var(--ai)}
+.v .site{position:absolute;left:10px;top:10px;z-index:2;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+.v .rod{position:absolute;left:10px;right:10px;bottom:9px;z-index:2;display:flex;flex-direction:column;gap:3px}
+.v .rod b{font-size:13.5px;font-weight:700;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.v .rod small{align-self:flex-start;font-size:10.5px;font-weight:800;background:rgba(0,0,0,.55);padding:2px 7px;border-radius:6px}
+.vazio{color:var(--mute);text-align:center;padding:40px 0}
+.fim{margin-top:34px;border:1px solid var(--line);border-radius:22px;background:var(--card);padding:26px 20px;text-align:center}
+.fim b{display:block;font-weight:850;font-stretch:110%;font-size:22px;letter-spacing:-.02em}
+.fim p{color:var(--mute);margin:4px 0 16px}
+.fim .cta{justify-content:center;margin-top:0}.fim .btn{flex:0 1 280px}
+footer{margin-top:28px;text-align:center;font-size:12.5px;color:var(--dim)}
+footer a{color:var(--mute)}
+/* player */
+.tela{position:fixed;inset:0;z-index:50;background:rgba(4,4,4,.93);display:grid;place-items:center;padding:16px}
+.tela .cx{position:relative;width:min(100%,960px);aspect-ratio:16/9;max-height:calc(100vh - 96px);border-radius:16px;overflow:hidden;background:#000}
+.tela .cx.vert{width:min(100%,calc((100vh - 110px)*9/16),420px);aspect-ratio:9/16}
+.tela iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.tela .x{position:fixed;top:12px;right:12px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:24px;line-height:1}
+.tela .fora{position:fixed;bottom:16px;left:0;right:0;text-align:center;font-size:13.5px}
+.tela .fora a{color:#fff}
+.erro{max-width:420px;margin:18vh auto 0;text-align:center;padding:0 22px}
+.erro b{display:block;font-weight:850;font-size:24px;letter-spacing:-.02em;margin-bottom:6px}.erro p{color:var(--mute)}
+.esq{opacity:.5}.esq .foto,.esq .l{background:var(--card2);color:transparent;border-radius:12px}.esq .l{height:22px;margin-top:12px;width:60%}
+@media (min-width:700px){.grade{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.capa{height:190px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"><div class="capa"></div><div class="wrap esq"><div class="eu"><div class="foto">.</div><div class="l"></div><div class="l" style="width:40%"></div></div></div></div>
+<script src="/case/video.js"></script>
+<script>
+/* Página PÚBLICA do portfólio. O visitante é o cliente do editor: aqui não existe nenhum dado interno da conta. */
+const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
+const CORES = { lima:['#D4E157','#171A06'], agua:['#3FD0C2','#04201D'], ambar:['#F2A541','#1A1206'], roxo:['#A98BFF','#120B26'], rosa:['#FF6FAE','#26081A'], azul:['#5AB8FF','#06182A'] };
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+// o final do link: basefl.com/e/?joao  (também aceita /e/#joao)
+function slug(){
+  const q = location.search.replace(/^\?/, '').split('&')[0].split('=')[0], h = location.hash.replace(/^#/, '');
+  const s = decodeURIComponent(q || h || '').toLowerCase();
+  return /^[a-z0-9-]{3,30}$/.test(s) ? s : null;
+}
+const EXEMPLO = { ok:true, nome:'João Editor', frase:'Edito Reels e anúncios para negócios locais', cor:'lima', selos:['Reels','Anúncios','Entrega em 3 dias'], whatsapp:null, briefing:null, exemplo:true,
+  videos:[{u:'https://www.youtube.com/shorts/exemplo0001',t:'reels',n:'Reels de receita'},{u:'https://www.youtube.com/shorts/exemplo0002',t:'anuncio',n:'Anúncio de loja'},{u:'https://www.youtube.com/shorts/exemplo0003',t:'reels',n:'Bastidores'},
+          {u:'https://www.youtube.com/shorts/exemplo0004',t:'youtube',n:'Corte de podcast'},{u:'https://www.youtube.com/shorts/exemplo0005',t:'anuncio',n:'Lançamento'},{u:'https://www.youtube.com/shorts/exemplo0006',t:'reels',n:'Antes e depois'}] };
+async function busca(s){
+  if (s === 'exemplo') return EXEMPLO;
+  const r = await fetch(SUPA.url + '/rest/v1/rpc/pub_portfolio', { method:'POST', headers:{ apikey:SUPA.key, 'Content-Type':'application/json' }, body:JSON.stringify({ p_slug:s }) });
+  if (!r.ok) throw new Error('rede'); return r.json();
+}
+function erro(t, p){ $('#app').innerHTML = `<div class="erro"><b>${t}</b><p>${p}</p></div>`; }
+
+let P = null, filtro = 'todos';
+function orcamento(){
+  if (P.briefing) return { href:'/b/#' + P.briefing, rot:'Pedir orçamento', alvo:'' };
+  if (P.whatsapp) return { href:'https://wa.me/' + P.whatsapp + '?text=' + encodeURIComponent('Oi, ' + P.nome.split(' ')[0] + '! Vi o seu portfólio e quero um orçamento.'), rot:'Pedir orçamento', alvo:' target="_blank" rel="noopener"' };
+  return null;
+}
+function desenha(){
+  const [a, ai] = CORES[P.cor] || CORES.lima;
+  document.documentElement.style.setProperty('--a', a); document.documentElement.style.setProperty('--ai', ai);
+  document.title = P.nome + ' — portfólio';
+  const vs = (P.videos || []).map((v, i) => ({ ...v, i, info: CaseVideo.le(v.u) })).filter(v => v.info || P.exemplo);
+  const tipos = [...new Set(vs.map(v => v.t))].filter(t => CaseVideo.TIPOS[t]);
+  const o = orcamento(), zap = P.whatsapp && P.briefing ? `<a class="btn gh" href="https://wa.me/${P.whatsapp}" target="_blank" rel="noopener">WhatsApp</a>` : '';
+  const cta = o ? `<div class="cta"><a class="btn" href="${o.href}"${o.alvo}>${o.rot}</a>${zap}</div>` : '';
+  $('#app').innerHTML = `<div class="capa"></div><div class="wrap">
+    <div class="eu"><div class="foto" aria-hidden="true">${esc((P.nome || '?').trim().charAt(0).toUpperCase())}</div>
+      <h1>${esc(P.nome)}</h1>${P.frase ? `<p class="frase">${esc(P.frase)}</p>` : ''}
+      ${(P.selos || []).length ? `<div class="selos">${P.selos.map(s => `<span>${esc(s)}</span>`).join('')}</div>` : ''}
+      ${cta}</div>
+    ${tipos.length > 1 ? `<div class="filtros" role="group" aria-label="Filtrar por tipo"><button aria-pressed="true" data-f="todos">Todos</button>${tipos.map(t => `<button aria-pressed="false" data-f="${t}">${CaseVideo.TIPOS[t]}</button>`).join('')}</div>` : '<div style="height:26px"></div>'}
+    <div class="grade" id="grade"></div>
+    ${o && vs.length > 5 ? `<div class="fim"><b>Gostou do que viu?</b><p>Me conta o que você precisa. Eu respondo com o valor.</p><div class="cta"><a class="btn" href="${o.href}"${o.alvo}>${o.rot}</a></div></div>` : ''}
+    <footer>${P.exemplo ? 'Este é um portfólio de exemplo. ' : ''}Feito com <a href="/conheca/caseup/?de=portfolio">CaseUp</a> · Base FL</footer></div>`;
+  const g = $('#grade');
+  function grade(){
+    const l = vs.filter(v => filtro === 'todos' || v.t === filtro);
+    g.innerHTML = l.length ? l.map(v => {
+      const inf = v.info || { site:'youtube', vertical:true }, capa = v.c || inf.capa;
+      return `<button class="v" data-i="${v.i}" aria-label="Assistir: ${esc(v.n || CaseVideo.TIPOS[v.t] || 'vídeo')}">
+        ${capa && !P.exemplo ? `<img src="${esc(capa)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
+        <span class="site">${CaseVideo.NOMES[inf.site] || ''}</span><span class="pl"></span>
+        <span class="rod">${v.n ? `<b>${esc(v.n)}</b>` : ''}<small>${CaseVideo.TIPOS[v.t] || ''}</small></span></button>`; }).join('') : '<p class="vazio">Nenhum vídeo deste tipo.</p>';
+  }
+  grade();
+  document.querySelectorAll('.filtros button').forEach(b => b.onclick = () => { filtro = b.dataset.f; document.querySelectorAll('.filtros button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false')); grade(); });
+  g.onclick = e => { const b = e.target.closest('.v'); if (!b) return; const v = vs.find(x => x.i === +b.dataset.i); if (P.exemplo) return; toca(v); };
+}
+// toca dentro da página quando o site deixa; senão, abre o vídeo no próprio site
+function toca(v){
+  const inf = v.info;
+  if (!inf.embed){ window.open(v.u, '_blank', 'noopener'); return; }
+  const d = document.createElement('div'); d.className = 'tela'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-label', 'Vídeo');
+  d.innerHTML = `<button class="x" aria-label="Fechar">×</button><div class="cx${inf.vertical ? ' vert' : ''}"><iframe src="${esc(inf.embed)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="Vídeo"></iframe></div>
+    <p class="fora"><a href="${esc(v.u)}" target="_blank" rel="noopener">Não abriu? Ver no ${CaseVideo.NOMES[inf.site]}</a></p>`;
+  const fecha = () => { d.remove(); document.removeEventListener('keydown', tecla); document.body.style.overflow = ''; };
+  const tecla = e => { if (e.key === 'Escape') fecha(); };
+  d.addEventListener('click', e => { if (e.target === d || e.target.classList.contains('x')) fecha(); });
+  document.addEventListener('keydown', tecla); document.body.style.overflow = 'hidden'; document.body.appendChild(d); d.querySelector('.x').focus();
+}
+(async () => {
+  const s = slug();
+  if (!s) return erro('Link incompleto', 'Confira o endereço que você recebeu.');
+  try { P = await busca(s); } catch { return erro('Sem conexão', 'Não consegui abrir o portfólio agora. Tente de novo em instantes.'); }
+  if (!P || !P.ok) return erro('Portfólio não encontrado', 'O link pode estar errado, ou o portfólio saiu do ar.');
+  desenha();
+})();
+addEventListener('hashchange', () => location.reload());
+</script>
+</body>
+</html>

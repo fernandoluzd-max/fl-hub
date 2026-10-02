@@ -9,6 +9,7 @@ def carrega():
     with open(os.path.join(RAIZ, 'catalogo.json'), encoding='utf-8') as f:
         c = json.load(f)
     c.pop('_leia', None)
+    for p in c['produtos']: p.pop('_preco', None)
     por = {p['key']: p for p in c['produtos']}
     k = c['kit']; k.pop('_preco', None)
     k['de'] = sum(por[x]['preco'] for x in k['inclui'])          # soma dos avulsos (ex.: 128)
