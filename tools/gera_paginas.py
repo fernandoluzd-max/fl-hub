@@ -711,7 +711,7 @@ demo();
         ('Só as perguntas que mudam o preço','Serviço, tipo, quantidade, duração, estilo, prazo e valor em mente. Nada de formulário cansativo.'),
         ('Avisos do que observar','Pedido urgente, pacote de vídeos, cliente que não soube responder, valor em mente: você vê tudo antes de responder.')],
   inclui=['Link com o seu nome','Briefings salvos na sua conta','Aviso no seu WhatsApp','Avisos do que observar','Resumo para copiar','Celular e computador'],
-  faq=[('O cliente precisa baixar algo?','Não. Ele abre o link no celular, responde tocando nas opções e envia. Sem conta e sem app.'), ('Preciso ter outra ferramenta?','Não. O briefing funciona sozinho. Se você também tiver o Quanto Cobrar?, que é vendido separadamente, as respostas abrem o cálculo já preenchido.'), FAQ_ACESSO, FAQ_ANO],
+  faq=[('O cliente precisa baixar algo?','Não. Ele abre o link no celular, responde tocando nas opções e envia. Sem conta e sem app.'), ('E se o cliente não gostar de formulário?','São poucas perguntas, todas de tocar, e leva cerca de 1 minuto. No final ele pode escrever o que quiser e mandar um link de referência. Você pode testar como ele vê antes de mandar.'), ('Dá para mudar as perguntas?','As perguntas são fixas: são as que mudam o preço de um trabalho de vídeo. O campo de detalhes, no final, fica livre para o cliente escrever o resto.'), ('Preciso ter outra ferramenta?','Não. O briefing funciona sozinho. Se você também tiver o Quanto Cobrar?, que é vendido separadamente, as respostas abrem o cálculo já preenchido.'), FAQ_ACESSO, FAQ_ANO],
   combina=[('quanto-cobrar','Quanto Cobrar?','#7BD88F','As respostas do cliente abrem o cálculo do preço já preenchido.'),('financas-e-demandas','Base Demandas','#FFB347','O pedido entra direto no seu quadro de trabalhos.')],
   fh2='Receba o próximo pedido já organizado.', selo='Celular e computador'))
 
@@ -1110,6 +1110,135 @@ GC_JS = r'''
   } })();
 })();
 '''
+
+BR_MIOLO = r'''
+  <section class="vai">
+    <span class="kick rv">Antes de qualquer orçamento</span>
+    <h2 class="rv" style="margin-top:14px">Nove mensagens depois, <em class="ac">você ainda não sabe o prazo.</em></h2>
+    <p class="sub2 rv">O cliente chega com “quero uns vídeos” e você vira entrevistador. Com o link, a conversa encurta para duas mensagens.</p>
+    <div class="vv rv">
+      <div class="zp" aria-label="Conversa sem o link de briefing">
+        <div class="zp-h"><b>Sem o link</b><span>9 mensagens</span></div>
+        <div class="zp-c">
+          <div class="bl in">Oi, quero uns vídeos pro meu Instagram</div>
+          <div class="bl eu">Oi! Claro. Quantos vídeos seriam?</div>
+          <div class="bl in">Não sei ainda, uns 4?</div>
+          <div class="bl eu">Você já tem o material gravado?</div>
+          <div class="bl in">Tenho alguns</div>
+          <div class="bl eu">De quanto tempo cada um, mais ou menos?</div>
+          <div class="bl in">Curtinho</div>
+          <div class="bl eu">E pra quando você precisa?</div>
+          <div class="bl in vis">visto por último ontem às 22:14</div>
+        </div>
+      </div>
+      <div class="zp com" aria-label="Conversa com o link de briefing">
+        <div class="zp-h"><b>Com o link</b><span>2 mensagens</span></div>
+        <div class="zp-c">
+          <div class="bl in">Oi, quero uns vídeos pro meu Instagram</div>
+          <div class="bl eu">Oi! Me conta o que você precisa por aqui, leva 1 minuto 👇<i>basefl.com/b/…</i></div>
+          <div class="bl in ok">✅ Respondi o seu briefing!</div>
+          <p class="zp-n">O pedido já está na sua conta, organizado.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="io">
+    <span class="kick rv">O que entra, o que chega</span>
+    <h2 class="rv" style="margin-top:14px">Ele toca nas opções. <em class="ac">Você recebe o pedido pronto.</em></h2>
+    <div class="io-g">
+      <div class="fone rv" aria-label="Exemplo do que o cliente vê">
+        <small class="fn-r">O que o cliente vê</small>
+        <div class="fone-t"><i>A</i><span><b>Ana Editora</b><small>Pedido de orçamento</small></span></div>
+        <b class="q">Como você imagina a edição?</b>
+        <div class="op2">Simples e direta<small>Cortes, limpeza e legenda</small></div>
+        <div class="op2">Dinâmica<small>Ritmo rápido, zooms, efeitos sonoros e imagens de apoio</small></div>
+        <div class="op2">Nível cinema<small>Animações, motion e cor de filme</small></div>
+        <div class="op2 on">Não sei, quero uma sugestão</div>
+        <p class="fn-n">Sem conta, sem baixar nada. Só as perguntas que mudam o preço: serviço, tipo, quantidade, duração, estilo, prazo e valor em mente.</p>
+      </div>
+      <div class="seta-io" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="rec rv" aria-label="Exemplo do que chega para o editor">
+        <small class="fn-r">O que chega para você</small>
+        <b class="rc-t">Clínica Sorriso Feliz</b>
+        <div class="rc-l"><span>Serviço</span>Gravação + edição</div>
+        <div class="rc-l"><span>Tipo de vídeo</span>Para empresa ou anúncio</div>
+        <div class="rc-l"><span>Quantidade</span>5 a 8 vídeos</div>
+        <div class="rc-l"><span>Estilo de edição</span>Não sei, quero uma sugestão</div>
+        <div class="rc-l"><span>Prazo</span>Em até 1 semana</div>
+        <div class="rc-l"><span>Valor em mente</span>R$ 800 a R$ 2.000</div>
+        <div class="rc-l"><span>Referência</span>instagram.com/reel/…</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="obs">
+    <span class="kick rv">Não é só um formulário</span>
+    <h2 class="rv" style="margin-top:14px">Ele te avisa <em class="ac">o que observar antes de passar o preço.</em></h2>
+    <p class="sub2 rv">Junto com as respostas, o briefing aponta o que merece atenção naquele pedido. Estes são os avisos do exemplo acima:</p>
+    <ul class="ob rv">
+      <li><i>📦</i><span><b>5 a 8 vídeos.</b> Dá para oferecer pacote com desconto por volume.</span></li>
+      <li><i>💭</i><span><b>Não soube dizer o estilo de edição.</b> Pergunte antes de fechar ou mande duas opções de preço.</span></li>
+      <li><i>🔗</i><span><b>Mandou referência.</b> Abra o link para medir o nível da edição antes de calcular.</span></li>
+      <li><i>💰</i><span><b>Valor em mente: R$ 800 a R$ 2.000.</b> Calcule o seu preço e compare. Se ficar acima, ofereça uma versão mais simples em vez de baixar o valor.</span></li>
+    </ul>
+  </section>
+
+  <section class="onde">
+    <span class="kick rv">Um link, para sempre</span>
+    <h2 class="rv" style="margin-top:14px">Você cria uma vez <em class="ac">e usa em todo lugar.</em></h2>
+    <div class="od rv">
+      <div><b>No WhatsApp</b><p>Chegou cliente novo? Em vez de dez perguntas, você manda o link.</p></div>
+      <div><b>Na bio do Instagram</b><p>Quem quer orçamento já chega com o pedido respondido.</p></div>
+      <div><b>Na resposta automática</b><p>O cliente responde enquanto você está editando.</p></div>
+    </div>
+    <p class="od-n rv">Cada resposta fica salva na sua conta, na lista de briefings recebidos, e o cliente ainda te avisa no WhatsApp que respondeu.</p>
+  </section>
+'''
+BR_CSS = r'''
+.vv{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px;align-items:start}
+.zp{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#0b141a}
+.zp.com{border-color:color-mix(in srgb,var(--a) 55%,transparent)}
+.zp-h{display:flex;justify-content:space-between;align-items:baseline;padding:12px 16px;background:#111b21;border-bottom:1px solid #1f2c33}
+.zp-h b{font-family:var(--d);font-weight:800;font-size:16px}.zp-h span{font-size:12.5px;font-weight:700;color:var(--mute)}
+.zp.com .zp-h span{color:var(--a)}
+.zp-c{padding:14px 12px;display:flex;flex-direction:column;gap:6px}
+.bl{max-width:84%;padding:8px 11px;border-radius:10px;font-size:14.5px;line-height:1.4;color:#e9edef}
+.bl.in{background:#202c33;border-top-left-radius:2px;align-self:flex-start}
+.bl.eu{background:#005c4b;border-top-right-radius:2px;align-self:flex-end}
+.bl i{display:block;font-style:normal;color:#7ad8cc;text-decoration:underline;margin-top:2px}
+.bl.vis{background:none;color:#8696a0;font-size:12px;padding:6px 2px 0}
+.bl.ok{background:color-mix(in srgb,var(--a) 22%,#202c33);border:1px solid color-mix(in srgb,var(--a) 50%,transparent)}
+.zp-n{margin-top:10px;font-size:14px;color:var(--mute)}
+.io-g{display:grid;grid-template-columns:1fr auto 1fr;gap:22px;align-items:center;margin-top:28px}
+.fone,.rec{position:relative;width:100%;max-width:360px;border:1px solid var(--line);border-radius:26px;background:#0D0F0E;padding:34px 16px 18px;box-shadow:0 40px 90px -40px #000}
+.fone{margin-left:auto}.rec{border-color:color-mix(in srgb,var(--a) 45%,transparent);background:var(--card)}
+.fn-r{position:absolute;top:12px;left:16px;font-weight:800;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.rec .fn-r{color:var(--a)}
+.fone-t{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.fone-t i{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-style:normal;font-weight:800;background:#F2A541;color:#141414}
+.fone-t b{display:block;font-size:14.5px}.fone-t small{display:block;color:#8696a0;font-size:12px}
+.q{display:block;font-family:var(--d);font-weight:850;font-size:21px;letter-spacing:-.02em;margin-bottom:12px}
+.op2{position:relative;background:#171a19;border:1px solid #252a27;border-radius:13px;padding:11px 14px 11px 16px;font-size:14.5px;font-weight:650;margin-bottom:8px;transition:border-color .3s,background .3s}
+.op2 small{display:block;font-weight:500;font-size:12.5px;color:var(--mute)}
+.op2::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:var(--a)}
+.op2.on{border-color:var(--a);background:#16211f}
+.fn-n{margin-top:12px;font-size:13px;color:var(--mute)}
+.seta-io{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center}
+.seta-io svg{width:20px;height:20px;fill:none;stroke:var(--a);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.rc-t{display:block;font-family:var(--d);font-weight:850;font-size:22px;letter-spacing:-.02em;margin-bottom:8px}
+.rc-l{display:grid;grid-template-columns:42% 1fr;gap:10px;padding:10px 0 10px 12px;border-top:1px solid var(--line);font-size:14.5px;font-weight:650;position:relative}
+.rc-l::before{content:"";position:absolute;left:0;top:11px;bottom:11px;width:3px;border-radius:3px;background:var(--a)}
+.rc-l span{font-weight:500;color:var(--mute)}
+.ob{list-style:none;margin:26px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ob li{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;font-size:15px;color:var(--mute)}
+.ob li i{font-style:normal;font-size:22px;line-height:1.1}.ob li b{color:var(--ink)}
+.od{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:26px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--card)}
+.od>div{padding:22px 20px;border-left:1px solid var(--line)}.od>div:first-child{border-left:0}
+.od b{font-family:var(--d);font-weight:800;font-size:18px}.od p{color:var(--mute);font-size:15px;margin-top:4px}
+.od-n{margin-top:16px;color:var(--mute);font-size:15px;max-width:70ch}
+@media (max-width:900px){.vv,.ob,.od{grid-template-columns:1fr}.io-g{grid-template-columns:1fr;justify-items:center}.fone{margin:0 auto}.seta-io{transform:rotate(90deg)}.od>div{border-left:0;border-top:1px solid var(--line)}.od>div:first-child{border-top:0}}
+'''
 EXTRA = {
  'efeitos-sonoros': dict(),
  'luts': dict(),
@@ -1127,7 +1256,8 @@ EXTRA = {
    antes=['Tudo combinado só por áudio','Cliente pede a quinta alteração de graça','Pagamento atrasa e não tem o que mostrar','Vídeo usado em anúncio sem ter combinado'],
    depois=['Tudo combinado por escrito, em linguagem simples','Número de revisões definido desde o começo','Forma e data de pagamento claras','Uso das imagens combinado antes de começar'],
    mais=[('Sem juridiquês','Texto claro, que o cliente lê e entende sem precisar de advogado.'),('PDF com cara profissional','Resumo do trabalho, cláusulas numeradas e espaço para assinatura.'),('Direto do celular','Gere e envie o PDF pelo WhatsApp sem abrir o computador.')]),
- 'gerador-de-briefing': dict(passos_h2='Três passos e o pedido chega organizado.',
+ 'gerador-de-briefing': dict(miolo=BR_MIOLO, css=BR_CSS, cta_oferta='Criar o meu link de briefing', fecho='O próximo cliente que disser “quero uns vídeos” <em class="ac">recebe um link.</em>',
+   passos_h2='Três passos e o pedido chega organizado.',
    passos=[('Crie o seu link','Coloque seu nome e seu WhatsApp uma vez. O link fica pronto para sempre.'),('Mande para o cliente','Ele responde em 1 minuto, tocando nas opções, sem conta e sem app.'),('Receba tudo organizado','O briefing fica salvo na sua conta, com avisos do que observar antes de passar o preço. O cliente te avisa no WhatsApp.')],
    ad_h2='O fim do “me passa mais detalhes?”.',
    antes=['Dez mensagens até entender o pedido','Cliente responde pela metade','Você esquece de perguntar o prazo','O orçamento sai errado e precisa refazer'],
