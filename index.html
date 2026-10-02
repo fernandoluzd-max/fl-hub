@@ -278,9 +278,9 @@ footer{color:var(--dim);font-size:12.5px;text-align:center;padding:40px 0 34px}
         <div class="lb"><h3>Kits</h3><span class="onde">CapCut no computador</span></div>
         <p>Materiais prontos que instalam direto no seu CapCut.</p>
         <ul>
-          <li><span class="ic"><img src="icones/legendas.png" alt="" width="44" height="44" loading="lazy"></span><span><b>Legendas</b><small>Títulos e legendas dinâmicas, em pastas</small></span></li>
-          <li><span class="ic" style="--k:90,184,255"><img src="icones/sons.png" alt="" width="44" height="44" loading="lazy"></span><span><b>Efeitos Sonoros</b><small>65 whooshes, impactos, risers e foleys</small></span></li>
-          <li><span class="ic" style="--k:255,111,174"><img src="icones/luts.png" alt="" width="44" height="44" loading="lazy"></span><span><b>LUTs</b><small>3 de conversão + 20 looks de finalização</small></span></li>
+          <li><span class="ic"><img src="icones/legendas.png" alt="" width="44" height="44" loading="lazy"></span><span><b>Títulos Dinâmicos</b><small>+70 títulos e legendas, em pastas no CapCut</small></span></li>
+          <li><span class="ic" style="--k:90,184,255"><img src="icones/sons.png" alt="" width="44" height="44" loading="lazy"></span><span><b>Efeitos Sonoros</b><small>Bônus dos Títulos · 65 whooshes, impactos e risers</small></span></li>
+          <li><span class="ic" style="--k:255,111,174"><img src="icones/luts.png" alt="" width="44" height="44" loading="lazy"></span><span><b>LUTs</b><small>Bônus dos Títulos · 20 looks + 3 de conversão</small></span></li>
         </ul>
         <p class="bt">Botões: Instalar, Atualizar e Remover.</p>
       </div>
@@ -406,9 +406,7 @@ setTimeout(() => $('#janela').classList.add('in'), 150);
 // ícone oficial de cada produto: um arquivo por produto na pasta /icones/ (gerado por tools/gera_icones.py)
 const icone = k => `<img src="icones/${k}.png" alt="" width="44" height="44" loading="lazy">`;
 const KITS = [
-  { k:'legendas', t:'Legendas', d:'Títulos e legendas dinâmicas, organizados em pastas.', on:true, mt:'Instalado · v1.0.0', c:'242,165,65' },
-  { k:'sons', t:'Efeitos Sonoros', d:'65 whooshes, impactos, risers e foleys.', on:false, mt:'Liberado · não instalado', id:'c-sons', c:'90,184,255' },
-  { k:'luts', t:'LUTs', d:'20 looks + 3 LUTs de conversão.', vit:true, g:'Cor de cinema em um clique', pr:'R$ 19', ac:'vitalício', c:'255,111,174' },
+  { k:'legendas', t:'Títulos Dinâmicos', d:'+70 títulos e legendas, mais 65 efeitos sonoros e 23 LUTs de bônus. Tudo no CapCut em um clique.', on:false, mt:'Liberado · não instalado', id:'c-kit', c:'242,165,65' },
 ];
 const FERR = [
   { k:'preco', t:'Quanto Cobrar?', d:'Seu preço e o orçamento em 1 minuto.', c:'123,216,143' },
@@ -445,15 +443,15 @@ async function roda(){
   while (visivel){
     monta(); const cur = $('#cur'); cur.style.left = '940px'; cur.style.top = '600px';
     await dorme(900);
-    const sons = $('#c-sons'), bt = sons.querySelector('.bs span');
+    const sons = $('#c-kit'), bt = sons.querySelector('.bs span');
     sons.classList.add('alvo'); await vaiPara(bt); await clica();
-    bt.querySelector('em').textContent = 'Instalando…'; log('Baixando Efeitos Sonoros', 'run');
+    bt.querySelector('em').textContent = 'Instalando…'; log('Instalando Títulos Dinâmicos', 'run');
     const fill = bt.querySelector('.fill'); fill.style.transition = 'width 2.2s linear'; requestAnimationFrame(() => fill.style.width = '100%');
-    await dorme(1000); log('Colocando 65 sons nas predefinições do CapCut', 'run');
+    await dorme(1000); log('Colocando títulos, sons e LUTs no CapCut', 'run');
     await dorme(1250);
-    log('Efeitos Sonoros instalado. Abra o CapCut.', 'ok');
+    log('Tudo instalado. Abra o CapCut.', 'ok');
     sons.classList.remove('alvo'); sons.classList.add('on');
-    sons.querySelector('.mt').textContent = 'Instalado · v1.1.0';
+    sons.querySelector('.mt').textContent = 'Instalado · 65 sons · 23 LUTs';
     sons.querySelector('.bs').innerHTML = '<span><em>Atualizar</em></span><span class="gh">Remover</span>';
     await dorme(1400);
     const br = $('#c-brief'); br.classList.add('alvo'); await vaiPara(br.querySelector('.bs span')); await clica();

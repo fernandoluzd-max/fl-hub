@@ -251,10 +251,10 @@
         cur.style.opacity = 1; cur.style.left = "82%"; cur.style.top = "88%";
         await wait(900); goTo($("#instBtn")); await wait(800);
         cur.classList.add("clk"); await wait(260); cur.classList.remove("clk");
-        $("#instTxt").textContent = "Instalando…"; log("Baixando Legendas");
+        $("#instTxt").textContent = "Instalando…"; log("Instalando Títulos Dinâmicos");
         void fill.offsetWidth; fill.style.transition = "width 2s linear"; fill.style.width = "100%";
         await wait(950); log("Colocando os títulos no CapCut");
-        await wait(1150); log("Legendas instalado. Abra o CapCut.", true);
+        await wait(1150); log("Tudo instalado. Abra o CapCut.", true);
         $("#instCard").classList.add("on"); $("#instMeta").textContent = "Instalado · v1.0.0"; $("#instTxt").textContent = "Instalado ✓";
         await wait(1300);
         // troca para o CapCut

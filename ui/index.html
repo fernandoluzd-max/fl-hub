@@ -217,9 +217,11 @@ const icone = key => `<img src="icones/${key}.png" alt="" width="72" height="72"
 // catálogo: packId = id do manifest do .flpack
 const PRODUCTS = [
   // KITS: instalam no CapCut (Instalar / Atualizar / Remover)
-  {sec:'kits', key:'legendas', packId:'fl-legendas', name:'Legendas', desc:'Títulos e legendas dinâmicas, organizados em pastas no CapCut.', cor:'242,165,65', preco:'R$ 67', acesso:'vitalício', gancho:'Títulos que prendem nos 3 primeiros segundos'},
-  {sec:'kits', key:'sons', packId:'fl-sons', name:'Efeitos Sonoros', desc:'65 whooshes, impactos, risers e foleys direto nas suas predefinições do CapCut, organizados por categoria.', cor:'90,184,255', preco:'R$ 19', acesso:'vitalício', gancho:'O som que faltava no seu corte'},
-  {sec:'kits', key:'luts', packId:'fl-luts', name:'LUTs', desc:'20 looks de finalização + 3 LUTs de conversão (S-Log2, S-Log3 e Apple Log), direto em Ajuste › LUT.', lut:true, cor:'255,111,174', preco:'R$ 19', acesso:'vitalício', gancho:'Cor de cinema em um clique'},
+  // Títulos Dinâmicos é o kit completo: instala também os itens de 'inclui'.
+  // 'avulso' = só aparece sozinho para quem comprou esse item separado, antes de ele virar bônus.
+  {sec:'kits', key:'legendas', packId:'fl-legendas', name:'Títulos Dinâmicos', inclui:['sons','luts'], desc:'+70 títulos e legendas dinâmicas, mais 65 efeitos sonoros e 23 LUTs de bônus. Tudo entra no seu CapCut em um clique.', cor:'242,165,65', preco:'R$ 67', acesso:'vitalício', gancho:'Títulos que prendem nos 3 primeiros segundos'},
+  {sec:'kits', key:'sons', packId:'fl-sons', avulso:true, name:'Efeitos Sonoros', desc:'65 whooshes, impactos, risers e foleys direto nas suas predefinições do CapCut, organizados por categoria.', cor:'90,184,255', preco:'R$ 19', acesso:'vitalício', gancho:'O som que faltava no seu corte'},
+  {sec:'kits', key:'luts', packId:'fl-luts', avulso:true, name:'LUTs', desc:'20 looks de finalização + 3 LUTs de conversão (S-Log2, S-Log3 e Apple Log), direto em Ajuste › LUT.', lut:true, cor:'255,111,174', preco:'R$ 19', acesso:'vitalício', gancho:'Cor de cinema em um clique'},
   // FERRAMENTAS: abrem no navegador e no celular (Abrir)
   {sec:'ferramentas', key:'mood', packId:'fl-lut', name:'Mood', desc:'Copie a cor de qualquer vídeo: coloque a referência e o seu vídeo e baixe a LUT pronta para o CapCut.', web:'https://basefl.com/lut/', cor:'180,92,255', acesso:'1 ano', preco:'R$ 97', gancho:'A cor daquele vídeo, no seu'},
   {sec:'ferramentas', key:'preco', packId:'fl-preco', name:'Quanto Cobrar?', desc:'Descubra quanto cobrar por uma edição ou gravação em 1 minuto e mande o orçamento pronto no WhatsApp.', web:'https://basefl.com/preco/', cor:'123,216,143', preco:'R$ 47', acesso:'1 ano', gancho:'Pare de chutar preço'},
@@ -346,15 +348,18 @@ function render(){
       c.innerHTML = `<div class="icon">${icone(p.key)}</div><h3>${p.name}</h3><p>${p.desc}</p><div class="meta"><span class="dot"></span>Em breve</div><div class="btns"><button class="primary" disabled>Em breve</button></div>`;
       $('#s-' + p.sec + ' .cards').appendChild(c); continue;
     }
+    if (p.avulso && !(cat?.owned?.has(p.packId) && !cat?.owned?.has('fl-legendas'))) continue;
     const srv = cat?.packs?.find(x => x.id === p.packId);
     const owned = !!cat?.owned?.has(p.packId);
     const inst = state?.installed?.find(i=>i.id===p.packId);
-    const novo = inst && srv && inst.version !== srv.version;
+    let novo = inst && srv && inst.version !== srv.version;
+    const partes = partesDoKit(p), falta = owned && partes.some(x => !x.inst), sonsInst = partes.find(x => x.p.media && x.inst);
+    if (p.inclui && owned) novo = novo || partes.some(x => x.inst && x.inst.version !== x.srv.version);
     const c = document.createElement('div'); c.className = 'card k-' + p.key + (srv && owned ? ' on' : '') + (srv && !owned ? ' locked' : '');
     if (p.cor) c.style.setProperty('--c', p.cor);
     let meta = '';
     if (p.web && srv && owned) meta = '<span class="dot ok"></span>Liberado · abre no navegador e no celular';
-    else if (inst) meta = `<span class="dot ok"></span>Instalado · v${inst.version}` + (p.media && inst.media_files ? ` · ${inst.media_files.length} sons` : '') + (p.lut && inst.lut_names ? ` · ${inst.lut_names.length} LUTs` : '') + (novo ? ' <span class="tag">nova versão</span>' : '');
+    else if (inst) meta = `<span class="dot ok"></span>Instalado · v${inst.version}` + partes.map(x => x.p.media && x.inst?.media_files ? ` · ${x.inst.media_files.length} sons` : x.p.lut && x.inst?.lut_names ? ` · ${x.inst.lut_names.length} LUTs` : '').join('') + (inst && falta ? ' <span class="tag">falta instalar os bônus</span>' : '') + (novo ? ' <span class="tag">nova versão</span>' : '');
     else if (srv && owned) meta = '<span class="dot"></span>Liberado · não instalado';
     else if (srv && cat?.vencidos?.has(p.packId)) meta = '<span class="dot err"></span>Acesso vencido · renove para continuar';
     else if (srv) meta = p.preco ? `<span class="oferta"><b>${p.preco}</b> · acesso ${p.acesso || ''}</span>` : '<span class="oferta"><b>Novo</b> · experimente agora</span>';
@@ -375,10 +380,13 @@ function render(){
     else if (!srv && !inst){ b.innerHTML = '<div class="soon" style="flex:1">' + (catErr ? 'Sem conexão' : 'Em breve') + '</div>'; }
     else {
       if (srv && owned && p.media && inst && !novo) b.appendChild(btn('Abrir pasta', 'primary', () => invoke('open_media', { id: p.packId }).catch(e => step(String(e), 'err'))));
+      else if (srv && owned && p.inclui) b.appendChild(btn(!inst ? 'Instalar' : falta ? 'Instalar tudo' : 'Atualizar', 'primary', () => doInstallKit(p)));
       else if (srv && owned) b.appendChild(btn(inst ? 'Atualizar' : 'Instalar', 'primary', () => doInstall(p, srv)));
       else if (srv && srv.buy_url) b.appendChild(btn(cat?.vencidos?.has(p.packId) ? 'Renovar' : 'Conhecer  →', 'primary cta', () => T.opener.openUrl(srv.buy_url)));
       else if (srv) b.innerHTML = '<div class="soon" style="flex:1">Disponível para compra</div>';
-      if (inst) b.appendChild(btn('Remover', 'ghost', () => doRemove(p, inst)));
+      if (p.inclui && owned && sonsInst) b.appendChild(btn('Pasta dos sons', 'ghost', () => invoke('open_media', { id: sonsInst.p.packId }).catch(e => step(String(e), 'err'))));
+      if (p.inclui && partes.some(x => x.inst)) b.appendChild(btn('Remover', 'ghost', () => doRemoveKit(p)));
+      else if (inst) b.appendChild(btn('Remover', 'ghost', () => doRemove(p, inst)));
     }
     c.appendChild(b); $('#s-' + p.sec + ' .cards').appendChild(c);
   }
@@ -401,22 +409,45 @@ async function refresh(){
   render();
 }
 
+// as partes de um kit: ele mesmo + os itens de 'inclui' que este e-mail tem liberados
+function partesDoKit(p){
+  return [p, ...(p.inclui || []).map(k => PRODUCTS.find(x => x.key === k))].map(x => ({ p:x, srv: cat?.packs?.find(y => y.id === x.packId), inst: state?.installed?.find(i => i.id === x.packId) }))
+    .filter(x => x.srv && cat?.owned?.has(x.p.packId));
+}
+async function baixaEInstala(p, srv){
+  const caminho = srv.file_path.split('/').map(encodeURIComponent).join('/');
+  const s = await api('/storage/v1/object/sign/packs/' + caminho, { method:'POST', body:{ expiresIn: 120 } });
+  return invoke('install_remote', { url: SUPA.url + '/storage/v1' + (s.signedURL || s.signedUrl), packId: p.packId });
+}
+const erroInstala = e => { const m = String(e.message || e); return /not found|object not found|400|403/i.test(m) ? 'Este pack não está liberado para ' + (sess?.email||'este e-mail') + '.' : traduz(m); };
+async function doInstallKit(p){   // um clique: títulos + efeitos sonoros + LUTs
+  if (state.capcut_running){ step('Feche o CapCut antes de instalar.', 'warn'); return; }
+  busy = true; render();
+  const partes = partesDoKit(p); let ok = 0;
+  try {
+    if (!(await validSess())) throw new Error('Sua sessão expirou. Entre de novo.');
+    for (const x of partes){ step('Instalando ' + x.p.name + '…', 'run'); await baixaEInstala(x.p, x.srv); ok++; }
+    const tem = k => partes.some(x => x.p.key === k);
+    step('Pronto! Abra o CapCut: os títulos' + (tem('sons') ? ' e os efeitos sonoros' : '') + ' estão nas predefinições' + (tem('luts') ? ' e os LUTs em Ajuste › Seus › LUT' : '') + '.', 'ok');
+  } catch(e){ step((ok ? 'Parte do kit foi instalada. ' : '') + erroInstala(e), 'err'); }
+  busy = false; await refresh();
+}
+async function doRemoveKit(p){
+  busy = true; render(); step('Removendo ' + p.name + '…', 'run');
+  try { for (const x of partesDoKit(p)) if (x.inst) await invoke('uninstall_pack', { id: x.inst.id }); step(p.name + ' removido.', 'ok'); }
+  catch(e){ step(String(e), 'err'); }
+  busy = false; await refresh();
+}
 async function doInstall(p, srv){
   if (!p.media && state.capcut_running){ step('Feche o CapCut antes de instalar.', 'warn'); return; }
   busy = true; render(); step('Instalando ' + p.name + '…', 'run');
   try {
     if (!(await validSess())) throw new Error('Sua sessão expirou. Entre de novo.');
-    const caminho = srv.file_path.split('/').map(encodeURIComponent).join('/');
-    const s = await api('/storage/v1/object/sign/packs/' + caminho, { method:'POST', body:{ expiresIn: 120 } });
-    const link = SUPA.url + '/storage/v1' + (s.signedURL || s.signedUrl);
-    const r = await invoke('install_remote', { url: link, packId: p.packId });
+    const r = await baixaEInstala(p, srv);
     if (p.media) step(`Pronto! Os sons estão em ${state.system === 'Windows' ? 'Vídeos' : 'Filmes'} › Pluga & Edita › ${p.name}. Clique em "Abrir pasta" e arraste para o CapCut.`, 'ok');
     else if (p.lut) step('Pronto! Abra o CapCut: os LUTs estão em Ajuste › Seus › LUT.', 'ok');
     else step('Pronto! Abra o CapCut: está tudo nas predefinições.', 'ok');
-  } catch(e){
-    const m = String(e.message || e);
-    step(/not found|object not found|400|403/i.test(m) ? 'Este pack não está liberado para ' + (sess?.email||'este e-mail') + '.' : traduz(m), 'err');
-  }
+  } catch(e){ step(erroInstala(e), 'err'); }
   busy = false; await refresh();
 }
 

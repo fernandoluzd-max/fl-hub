@@ -525,3 +525,19 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
   .reveal,.chores li,.lane-clips li,.flow li{opacity:1!important;transform:none!important}
 }
+
+/* ---------- bônus na oferta ---------- */
+.bonus{margin:22px 0 4px;padding:18px;border-radius:18px;background:var(--panel-2);border:1px dashed var(--acc-a25)}
+.bonus-t{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;text-align:center}
+.bonus-t span{color:var(--acc);font-weight:700}
+.bonus-g{display:grid;gap:10px}
+.bonus-c{display:flex;gap:14px;align-items:center;text-align:left;padding:12px;border-radius:14px;background:var(--panel);border:1px solid var(--line)}
+.bonus-c img{flex:none;width:56px;height:56px;border-radius:15px;box-shadow:0 0 0 1px rgba(255,255,255,.10)}
+.bonus-c b{display:block;font-family:var(--display);font-weight:800;font-size:17px;color:var(--text)}
+.bonus-c small{display:block;color:var(--muted);font-size:14px;line-height:1.4;margin:2px 0 4px}
+.bonus-c em{font-style:normal;font-weight:700;font-size:14px;color:#8fdc9f}
+.bonus-c em s{color:var(--dim);font-weight:500;margin-right:4px}
+.price-de{font-size:15px;color:var(--muted);margin-bottom:2px}
+.price-de s{color:var(--dim)}
+.parc.bn{color:var(--acc-hi);font-weight:600}
+@media (min-width:720px){.bonus-g{grid-template-columns:1fr 1fr}}
