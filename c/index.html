@@ -96,6 +96,7 @@ textarea.inp{min-height:92px;resize:vertical}
 const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const docBonito = t => { const d = String(t || '').replace(/\D/g, ''); return d.length === 11 ? d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : d.length === 14 ? d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5') : String(t || ''); };
 const primeiro = n => String(n || '').trim().split(/\s+/)[0] || '';
 const dinheiro = v => 'R$ ' + (+v || 0).toLocaleString('pt-BR', { minimumFractionDigits: (+v % 1) ? 2 : 0, maximumFractionDigits:2 });
 const dia = iso => { if (!iso) return ''; const d = new Date(String(iso).length <= 10 ? iso + 'T12:00:00' : iso); return isNaN(d) ? '' : d.toLocaleDateString('pt-BR', { day:'numeric', month:'long', year:'numeric' }); };
@@ -125,13 +126,13 @@ function desenha(){
       ${aceito ? '<div class="selo-l"><div class="selo">ACEITO</div></div>' : ''}
       <h1>${esc(c.titulo)}</h1>
       <div class="sb">Entre ${esc(a.nome)} e ${esc(b.nome)}</div>
-      <p><b>CONTRATADO:</b> ${esc(a.nome)}${a.doc ? ', CPF/CNPJ ' + esc(a.doc) : ''}${a.cidade ? ', ' + esc(a.cidade) : ''}.</p>
-      <p><b>CONTRATANTE:</b> ${esc(b.nome)}${(ac.doc || b.doc) ? ', CPF/CNPJ ' + esc(ac.doc || b.doc) : ''}.</p>
+      <p><b>CONTRATADO:</b> ${esc(a.nome)}${a.doc ? ', CPF/CNPJ ' + esc(docBonito(a.doc)) : ''}${a.cidade ? ', ' + esc(a.cidade) : ''}.</p>
+      <p><b>CONTRATANTE:</b> ${esc(b.nome)}${(ac.doc || b.doc) ? ', CPF/CNPJ ' + esc(docBonito(ac.doc || b.doc)) : ''}.</p>
       ${(r.servico || r.valor) ? `<div class="resumo">${linha('Serviço', r.servico)}${linha('Entrega', r.entrega)}${linha('Prazo', r.prazo)}${linha('Revisões', rev)}${linha('Valor total', r.valor ? dinheiro(r.valor) : '')}${linha('Pagamento', r.pagamento)}</div>` : ''}
       ${(c.clausulas || []).map(([t, p]) => `<h3>${esc(t)}</h3><p>${esc(p)}</p>`).join('')}
       ${c.local_data ? `<p class="loc">${esc(c.local_data)}</p>` : ''}
       <div class="ass"><div>${esc(a.nome)}<small>Contratado</small></div><div>${esc(aceito && ac.nome ? ac.nome : b.nome)}<small>Contratante</small></div></div>
-      ${aceito ? `<div class="registro"><b>Aceite eletrônico registrado.</b><br>${esc(ac.nome || '')}${ac.doc ? ' · CPF/CNPJ ' + esc(ac.doc) : ''}<br>${diaHora(ac.em)}</div>` : ''}
+      ${aceito ? `<div class="registro"><b>Aceite eletrônico registrado.</b><br>${esc(ac.nome || '')}${ac.doc ? ' · CPF/CNPJ ' + esc(docBonito(ac.doc)) : ''}<br>${diaHora(ac.em)}</div>` : ''}
     </article>
     <div id="acoes" class="noprint"></div>
     <p class="foot noprint">Contrato enviado por ${esc(a.nome || ed.nome || 'seu editor')}.</p>`;

@@ -543,6 +543,7 @@ function resultado(revelar = false){
       <button class="btn" id="comprar">Liberar acesso completo · R$ ${prod.preco}</button>${Base.sessao() ? '' : '<button class="link ja" id="entrar2">Já comprei · entrar</button>'}`;
     $('#prox').appendChild(d);
   }
+  desenhaTimeline();
   let atual = 0;
   const pinta = anima => {
     const t = totais(c, qtd);
@@ -555,7 +556,8 @@ function resultado(revelar = false){
       if ($('#pac')) $('#pac').innerHTML = qtd > 1 ? `<b>${qtd} vídeos por ${brl(t.ref)}</b> · ${Math.round(t.desc*100)}% de desconto pelo volume` : 'Escolha uma quantidade para montar um pacote.';
       // ligação leve com o organizador: só aparece para quem cadastrou custos fixos lá
       const custo = acesso ? +Base.eu.custo_mes || 0 : 0;
-      $('#custos').textContent = custo > 0 ? `Seus custos fixos somam ${brl(custo)} por mês. Este trabalho cobre ${Math.min(999, Math.round(t.ref / custo * 100))}% deles.` : '';
+      const vezes = custo > 0 ? t.ref / custo : 0;
+      $('#custos').textContent = !custo ? '' : `Seus custos fixos somam ${brl(custo)} por mês. ` + (vezes >= 2 ? `Este trabalho paga ${Math.floor(vezes)} meses deles.` : vezes >= 1 ? 'Este trabalho paga os custos do mês.' : `Este trabalho cobre ${Math.round(vezes * 100)}% deles.`);
     } else {
       montaSlot(fmt(t.ref));
       if ($('#pac')) $('#pac').textContent = qtd > 1 ? `Pacote de ${qtd} vídeos com ${Math.round(t.desc*100)}% de desconto pelo volume.` : 'Escolha uma quantidade para montar um pacote.';

@@ -515,7 +515,7 @@ function enviado(novo){
   const msg = `Olá, ${nome.split(' ')[0]}! Segue o contrato do nosso trabalho. É só abrir, ler e aceitar por aqui:\n${link}`;
   tela(`<div class="tc noprint"><button class="back" id="voltar">← Início</button><span class="sp"></span><span class="n">${aceito ? 'Aceito' : 'Aguardando o cliente'}</span></div>
     <h1>${aceito ? `${esc(nome)} aceitou!` : novo ? 'Link do contrato pronto' : `Contrato para ${esc(nome)}`}</h1>
-    <p class="sub">${aceito ? `Aceito por ${esc(ac.nome || nome)}${ac.doc ? ' (' + esc(ac.doc) + ')' : ''} em ${new Date(ac.em).toLocaleDateString('pt-BR')} às ${new Date(ac.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}. Trabalho fechado.` : 'Mande o link. O cliente lê no celular e aceita com o nome dele. Fica registrado com data e hora.'}</p>
+    <p class="sub">${aceito ? `Aceito por ${esc(ac.nome || nome)}${ac.doc ? ' (' + esc(docBonito(ac.doc)) + ')' : ''} em ${new Date(ac.em).toLocaleDateString('pt-BR')} às ${new Date(ac.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}. Trabalho fechado.` : 'Mande o link. O cliente lê no celular e aceita com o nome dele. Fica registrado com data e hora.'}</p>
     <div class="linkbox"><code>${esc(link.replace(/^https?:\/\//, ''))}</code></div>
     ${aceito ? '' : '<div class="row"><button class="btn zap" id="mandar" style="margin-top:8px">Mandar no WhatsApp</button></div>'}
     <div class="row"><button class="btn ghost" id="cop">Copiar link</button><button class="btn ghost" id="ver">${aceito ? 'Abrir o contrato aceito' : 'Ver como o cliente vê'}</button></div>
