@@ -630,7 +630,7 @@ demo();
         ('Pronto em poucos passos','Formato, partes, trabalho, prazo, valor e uso das imagens. Você toca nas opções e vê o contrato se montando na hora.'),
         ('Tudo que costuma dar briga','Prazo, revisões incluídas, forma de pagamento, atraso de material e uso das imagens, em linguagem simples.')],
   inclui=['Aceite por link','Termo rápido','Contrato em PDF','8 cláusulas','Celular e computador'],
-  faq=[('O contrato tem validade?','É um modelo de referência claro e organizado para combinar o trabalho por escrito. Para casos específicos, vale consultar um advogado.'), ('O cliente precisa de conta?','Não. Ele abre o link no celular, lê e aceita. Se preferir, você manda o PDF ou o texto pelo WhatsApp.'), FAQ_ACESSO, FAQ_ANO],
+  faq=[('O contrato tem validade?','É um modelo de referência claro e organizado para combinar o trabalho por escrito. Para casos específicos, vale consultar um advogado.'), ('Meu cliente vai estranhar receber contrato?','O texto é curto e em linguagem simples, e protege os dois lados: ele também fica com prazo, entrega e número de revisões por escrito. Para trabalhos pequenos, o termo rápido é ainda mais leve.'), ('Posso mudar o que está escrito?','Você escolhe prazo, número de revisões, forma de pagamento, se pode usar o trabalho no portfólio e se entrega os arquivos de projeto. O texto das cláusulas se ajusta a essas escolhas.'), ('O cliente precisa de conta?','Não. Ele abre o link no celular, lê e aceita. Se preferir, você manda o PDF ou o texto pelo WhatsApp.'), FAQ_ACESSO, FAQ_ANO],
   combina=[('quanto-cobrar','Quanto Cobrar?','#7BD88F','Gerou o orçamento? Um toque e ele vira contrato, já preenchido.')],
   fh2='Feche o próximo trabalho no papel.', selo='Celular e computador'))
 
@@ -955,6 +955,161 @@ QC_JS = r'''
   (async () => { while (true){ while (!vis) await dorme(300); await dorme(2200); b.classList.add('ok'); await dorme(3200); b.classList.remove('ok'); await dorme(600); } })();
 })();
 '''
+
+GC_MIOLO = r'''
+  <section class="briga">
+    <span class="kick rv">Onde o combinado quebra</span>
+    <h2 class="rv" style="margin-top:14px">Toda dor de cabeça com cliente <em class="ac">começa com uma mensagem assim.</em></h2>
+    <p class="sub2 rv">Toque em uma e veja o trecho do contrato que já responde por você.</p>
+    <div class="bg rv" id="briga">
+      <div class="bg-m" role="tablist" aria-label="Mensagens do cliente">
+        <button role="tab" aria-selected="true" data-i="0">“Só mais um ajustezinho, é rapidinho 🙏”<small>a quinta alteração</small></button>
+        <button role="tab" aria-selected="false" data-i="1">“Te pago semana que vem. Já pode mandar o vídeo?”<small>o pagamento que escorrega</small></button>
+        <button role="tab" aria-selected="false" data-i="2">“Ainda não te mandei os vídeos, mas o prazo continua sexta, né?”<small>o material que não chega</small></button>
+        <button role="tab" aria-selected="false" data-i="3">“Me manda o projeto aberto também?”<small>o que não foi combinado</small></button>
+        <button role="tab" aria-selected="false" data-i="4">“Desisti do projeto. Você devolve o sinal?”<small>o cancelamento no meio</small></button>
+      </div>
+      <div class="bg-c" role="tabpanel" aria-live="polite">
+        <small class="bg-k">No seu contrato</small>
+        <b id="bgT"></b>
+        <p id="bgP"></p>
+        <span class="bg-r" id="bgR"></span>
+      </div>
+    </div>
+    <p class="bg-n rv">Os trechos acima são do contrato completo que a ferramenta gera. É um modelo de referência, em linguagem simples; para casos específicos, vale consultar um advogado.</p>
+  </section>
+
+  <section class="aceite">
+    <div class="ac-g">
+      <div>
+        <span class="kick rv">Como o cliente aceita</span>
+        <h2 class="rv" style="margin-top:14px">Ele não imprime nada. <em class="ac">Lê e aceita pelo celular.</em></h2>
+        <p class="sub2 rv">Você manda um link. O cliente abre, lê o contrato inteiro e confirma com o nome dele.</p>
+        <ul class="ac-l rv">
+          <li>Sem conta, sem aplicativo, sem cartório.</li>
+          <li>O aceite fica registrado com o <b>nome, a data e a hora</b>.</li>
+          <li>Você vê na sua conta quando ele aceitou.</li>
+          <li>Ele pode salvar o contrato em PDF ou tirar uma dúvida com você antes.</li>
+          <li>Prefere do jeito antigo? O contrato também sai em <b>PDF</b>, com espaço para assinatura.</li>
+        </ul>
+      </div>
+      <div class="fone rv" id="foneC" aria-label="Exemplo da tela em que o cliente aceita o contrato">
+        <div class="fone-t"><i>A</i><span><b>Ana Editora</b><small>Contrato</small></span></div>
+        <div class="fone-c">
+          <b class="pt">Contrato de prestação de serviços de edição de vídeo</b>
+          <div class="rs"><span>Serviço</span>Edição caprichada de Reels<span>Entrega</span>8 vídeos editados (até 1 min)<span>Revisões</span>2 rodadas de ajustes<span>Valor total</span>R$ 1.350</div>
+          <p class="clx"><b>4. Revisões</b> Estão incluídas 2 rodadas de ajustes. Cada rodada reúne todos os pedidos de alteração de uma só vez…</p>
+        </div>
+        <div class="ace">
+          <div class="cp"><small>Seu nome completo</small><span id="aceN"></span></div>
+          <div class="ck" id="aceK"><i></i>Li o contrato acima e estou de acordo com tudo.</div>
+          <div class="fone-b" id="aceB"><span class="a">Aceitar contrato</span><span class="b">✓ Aceito em 2 de outubro, 13:59</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fmt">
+    <span class="kick rv">Dois formatos</span>
+    <h2 class="rv" style="margin-top:14px">Trabalho pequeno ou cliente grande. <em class="ac">Tem um para cada.</em></h2>
+    <div class="fm rv">
+      <div class="fm-c">
+        <small>Para o trabalho rápido</small><b>Termo rápido</b>
+        <p>Um acordo curto, direto ao ponto: serviço, entrega, prazo, revisões, pagamento, uso do vídeo e cancelamento.</p>
+        <ul><li>Fica pronto em poucos toques</li><li>Vai por link ou como texto no WhatsApp</li><li>Bom para 1 vídeo, um freela de fim de semana</li></ul>
+      </div>
+      <div class="fm-c dest">
+        <small>Para o trabalho maior</small><b>Contrato completo</b>
+        <p>Documento com 8 cláusulas: o que será feito, entrega, prazo, revisões, valor e pagamento, responsabilidades, uso do vídeo, cancelamento e foro.</p>
+        <ul><li>Vai por link, com aceite registrado</li><li>Também sai em PDF, com assinaturas</li><li>Bom para pacote mensal, empresa, valor alto</li></ul>
+      </div>
+    </div>
+    <p class="fm-n rv">Nos dois, você só toca nas opções e preenche nome, prazo e valor. Se o trabalho veio do Quanto Cobrar?, já chega preenchido.</p>
+  </section>
+'''
+GC_CSS = r'''
+.bg{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px;align-items:stretch}
+.bg-m{display:grid;gap:8px}
+.bg-m button{font:inherit;text-align:left;font-weight:650;font-size:15.5px;line-height:1.35;color:var(--mute);background:#111b21;border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:12px 14px;cursor:pointer;transition:border-color .2s,color .2s,transform .2s}
+.bg-m button small{display:block;margin-top:3px;font-weight:500;font-size:12px;color:var(--dim)}
+.bg-m button[aria-selected=true]{border-color:var(--a);color:var(--ink);transform:translateX(4px)}
+.bg-c{position:relative;background:#FAF7F0;color:#1b1a17;border-radius:20px;padding:26px 24px 22px;display:flex;flex-direction:column;box-shadow:0 30px 70px -40px #000}
+.bg-k{font-weight:800;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#7556F0}
+.bg-c b{font-family:var(--d);font-weight:850;font-size:22px;letter-spacing:-.02em;margin:6px 0 10px}
+.bg-c p{font-family:Georgia,"Times New Roman",serif;font-size:16.5px;line-height:1.6;color:#2a2823;flex:1}
+.bg-c p mark{background:#e9e2ff;color:inherit;padding:1px 3px;border-radius:4px}
+.bg-r{margin-top:16px;padding-top:14px;border-top:1px solid #e6e0d2;font-size:14.5px;font-weight:650;color:#3b3930}
+.bg-c.troca b,.bg-c.troca p,.bg-c.troca .bg-r{animation:bgin .35s cubic-bezier(.2,.8,.2,1) both}
+@keyframes bgin{from{opacity:0;transform:translateY(8px)}}
+.bg-n{margin-top:16px;color:var(--dim);font-size:13.5px;max-width:70ch}
+.ac-g{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center}
+.ac-l{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px;max-width:520px}
+.ac-l li{position:relative;padding-left:26px;color:var(--mute);font-size:16px}.ac-l li b{color:var(--ink)}
+.ac-l li::before{content:"✓";position:absolute;left:0;top:0;color:var(--a);font-weight:900}
+.fone{max-width:330px;width:100%;margin-left:auto;border:1px solid var(--line);border-radius:30px;background:#0B0C0C;padding:16px 14px 18px;box-shadow:0 40px 90px -40px #000}
+.fone-t{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.fone-t i{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-style:normal;font-weight:800;background:#F2A541;color:#141414}
+.fone-t b{display:block;font-size:14.5px}.fone-t small{display:block;color:#8696a0;font-size:12px}
+.fone-c{background:#FAF7F0;color:#1b1a17;border-radius:16px;padding:16px 16px 12px}
+.pt{display:block;font-family:var(--d);font-size:15.5px;font-weight:850;letter-spacing:-.01em;text-align:center;line-height:1.2}
+.rs{margin-top:12px;background:#efe9db;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.3}
+.rs span{display:block;margin-top:7px;font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#6b665a}.rs span:first-child{margin-top:0}
+.clx{margin-top:10px;font-family:Georgia,serif;font-size:12.5px;line-height:1.5;color:#2a2823}.clx b{font-family:var(--f);display:block;font-size:12.5px}
+.ace{margin-top:12px;border:1px solid var(--line);border-radius:16px;padding:12px;background:#121413}
+.cp small{display:block;font-size:11.5px;font-weight:700;color:var(--mute);margin-bottom:5px}
+.cp span{display:block;min-height:38px;border:1px solid var(--line);border-radius:10px;padding:8px 11px;font-size:14.5px;background:#0D0F0E}
+.ck{display:flex;gap:9px;align-items:flex-start;margin:10px 0;font-size:12.5px;color:var(--mute);line-height:1.35}
+.ck i{flex:none;width:18px;height:18px;border-radius:5px;border:1.5px solid #4a504c;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:900;color:#141414;transition:background .2s,border-color .2s}
+.ck.on i{background:#F2A541;border-color:#F2A541}.ck.on i::before{content:"✓"}
+.fone-b{position:relative;height:48px;border-radius:13px;background:#F2A541;color:#141414;font-weight:800;font-size:14.5px;overflow:hidden;transition:background .4s}
+.fone-b span{position:absolute;inset:0;display:grid;place-items:center;transition:opacity .35s,transform .35s}
+.fone-b .b{opacity:0;transform:translateY(10px);font-size:13.5px}
+.fone-b.ok{background:var(--a);color:#fff}.fone-b.ok .a{opacity:0;transform:translateY(-10px)}.fone-b.ok .b{opacity:1;transform:none}
+.fm{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+.fm-c{border:1px solid var(--line);border-radius:22px;background:var(--card);padding:24px 22px}
+.fm-c.dest{border-color:color-mix(in srgb,var(--a) 55%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--a) 9%,var(--card)),var(--card))}
+.fm-c small{font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--a)}
+.fm-c>b{display:block;font-family:var(--d);font-weight:850;font-size:24px;letter-spacing:-.02em;margin:6px 0 8px}
+.fm-c p{color:var(--mute);font-size:15px}
+.fm-c ul{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px;font-size:14.5px}
+.fm-c li{position:relative;padding-left:22px}.fm-c li::before{content:"✓";position:absolute;left:0;color:var(--a);font-weight:900}
+.fm-n{margin-top:16px;color:var(--mute);font-size:15px;max-width:70ch}
+@media (max-width:900px){.bg,.ac-g,.fm{grid-template-columns:1fr}.ac-g{gap:28px}.fone{margin:0 auto}.bg-m button[aria-selected=true]{transform:none}
+  /* celular: as mensagens viram uma fileira de arrastar, e o trecho do contrato fica logo abaixo, sempre à vista */
+  .bg{gap:12px}.bg-m{grid-auto-flow:column;grid-auto-columns:76%;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -20px;padding:2px 20px 6px;scrollbar-width:none}.bg-m::-webkit-scrollbar{display:none}.bg-m button{scroll-snap-align:center}.bg-c{min-height:300px}}
+'''
+GC_JS = r'''
+// mensagem do cliente -> trecho real do contrato completo (mesmo texto que a ferramenta gera)
+(function(){
+  const C = [
+    ['4. Revisões', 'Estão incluídas 2 rodadas de ajustes. Cada rodada reúne todos os pedidos de alteração de uma só vez. <mark>Ajustes além disso, ou mudanças no que foi combinado aqui, serão orçados à parte.</mark>', 'Você responde sem briga: “claro, te passo o valor desse ajuste extra”.'],
+    ['5. Valor e pagamento', 'O valor total é R$ 1.350, pago 50% na aprovação e 50% na entrega final. <mark>Os arquivos finais em alta qualidade são liberados após o pagamento combinado.</mark>', 'O vídeo final sai quando o pagamento entra. Está escrito.'],
+    ['3. Prazo', 'Prazo de entrega: em até 5 dias úteis. <mark>O prazo começa a contar quando o CONTRATANTE envia todo o material</mark> e as informações necessárias. Atrasos no envio do material adiam a entrega na mesma proporção.', 'O atraso dele não vira madrugada sua.'],
+    ['7. Uso do vídeo', 'Após o pagamento, o CONTRATANTE pode usar o vídeo final livremente em seus canais e campanhas. <mark>Os arquivos de projeto e o material bruto não fazem parte da entrega, salvo combinação por escrito.</mark>', 'Quer o projeto aberto? É outro combinado, com outro valor.'],
+    ['8. Cancelamento e foro', '<mark>Se o CONTRATANTE cancelar depois que o trabalho começou, o valor já pago cobre o que foi feito até ali e não é devolvido.</mark> Se o CONTRATADO não puder concluir, devolve o valor proporcional ao que não foi entregue.', 'O que você já trabalhou está pago. Para os dois lados fica justo.'],
+  ];
+  const cx = document.querySelector('.bg-c'), bs = [...document.querySelectorAll('.bg-m button')]; if (!cx) return;
+  let mexeu = false, vis = false, at = 0;
+  function mostra(i){ at = i; bs.forEach((b, k) => b.setAttribute('aria-selected', k === i ? 'true' : 'false')); $('#bgT').textContent = C[i][0]; $('#bgP').innerHTML = C[i][1]; $('#bgR').textContent = C[i][2]; cx.classList.remove('troca'); void cx.offsetWidth; cx.classList.add('troca'); }
+  bs.forEach((b, i) => b.addEventListener('click', () => { mexeu = true; mostra(i); }));
+  const rolo = document.querySelector('.bg-m');
+  mostra(0);
+  new IntersectionObserver(e => { vis = e[0].isIntersecting; }, { threshold: .3 }).observe(cx);
+  if (!calmo) (async () => { while (!mexeu){ await dorme(4200); if (vis && !mexeu){ mostra((at + 1) % C.length); if (rolo.scrollWidth > rolo.clientWidth + 4) rolo.scrollTo({ left: bs[at].offsetLeft - 20, behavior: 'smooth' }); } } })();
+})();
+// o aceite: o cliente escreve o nome, marca e aceita (repete enquanto está visível)
+(function(){
+  const b = $('#aceB'); if (!b) return; const n = $('#aceN'), k = $('#aceK'), nome = 'Marina Souza';
+  if (calmo) { n.textContent = nome; k.classList.add('on'); b.classList.add('ok'); return; }
+  let vis = false; new IntersectionObserver(e => { vis = e[0].isIntersecting; }, { threshold: .5 }).observe(b);
+  (async () => { while (true){
+    while (!vis) await dorme(300);
+    n.textContent = ''; k.classList.remove('on'); b.classList.remove('ok'); await dorme(900);
+    for (let i = 1; i <= nome.length; i++){ n.textContent = nome.slice(0, i); await dorme(75); }
+    await dorme(500); k.classList.add('on'); await dorme(700); b.classList.add('ok'); await dorme(3800);
+  } })();
+})();
+'''
 EXTRA = {
  'efeitos-sonoros': dict(),
  'luts': dict(),
@@ -965,7 +1120,8 @@ EXTRA = {
    antes=['Chuta um valor e torce para o cliente aceitar','Cobra igual por trabalhos bem diferentes','Monta o orçamento do zero toda vez','Dá desconto sem saber se ainda compensa'],
    depois=['Preço calculado pelo tempo de trabalho e pelo seu nível','Faixa justa para negociar com segurança','Proposta pronta em 1 minuto','Desconto de pacote já calculado'],
    mais=[('Gravação também','Horas de captação, estrutura e custos extras, como transporte, entram na conta.'),('Faixa para negociar','Valor mínimo e máximo justos, para você não baixar demais na conversa.'),('No meio da conversa','Funciona no celular. Calcula na hora, enquanto o cliente espera a resposta.')]),
- 'gerador-de-contrato': dict(passos_h2='Contrato pronto em poucos toques.',
+ 'gerador-de-contrato': dict(miolo=GC_MIOLO, css=GC_CSS, js=GC_JS, cta_oferta='Liberar o Gerador de Contrato', fecho='O próximo “só mais um ajustezinho” <em class="ac">já vai estar combinado.</em>',
+   passos_h2='Contrato pronto em poucos toques.',
    passos=[('Escolha o formato','Termo rápido para trabalhos pequenos ou contrato completo em PDF para os maiores.'),('Responda o básico','Partes, trabalho, prazo, valor, pagamento e uso das imagens. Você vê o contrato se montando.'),('Envie para o cliente','Mande o link: ele lê e aceita pelo celular. Ou envie o PDF, na mesma hora.')],
    ad_h2='Menos briga, mais trabalho bem pago.',
    antes=['Tudo combinado só por áudio','Cliente pede a quinta alteração de graça','Pagamento atrasa e não tem o que mostrar','Vídeo usado em anúncio sem ter combinado'],
