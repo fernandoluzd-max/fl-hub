@@ -220,6 +220,7 @@
     '.flb-prox b{display:block;font-size:17px;font-weight:800;line-height:1.25;color:#F4F0E4}' +
     '.flb-prox span.tx{display:block;color:#9A968A;font-size:14px;margin-top:3px}' +
     '.flb-prox .flb-btn{margin-top:14px;padding:13px 16px;font-size:15.5px}' +
+    '.flb-prox .tem{display:block;margin-top:10px;font-size:13.5px;line-height:1.45;color:#9A968A}.flb-prox .tem i{font-style:normal;color:#F4F0E4}' +
     '.flb-prox .kit{display:block;margin-top:10px;text-align:center;font-size:13px;color:#9A968A;text-decoration:underline;text-underline-offset:3px;cursor:pointer;background:none;border:0;width:100%;font-family:inherit}' +
     '.flb-prox.trancado b::before{content:"";display:inline-block;width:15px;height:15px;margin-right:7px;vertical-align:-1px;background:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23F2A541\' stroke-width=\'2.6\' stroke-linecap=\'round\'%3E%3Crect x=\'5\' y=\'11\' width=\'14\' height=\'10\' rx=\'2\'/%3E%3Cpath d=\'M8 11V7a4 4 0 0 1 8 0v4\'/%3E%3C/svg%3E") center/contain no-repeat}' +
     '.flb-trilha{display:flex;gap:4px;margin:0 0 18px;padding:0;list-style:none;font:600 11.5px/1.2 "Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#5f5c55}' +
@@ -288,17 +289,43 @@
   }
   function sair() { grava(null); limpaEstado(); avisa(); }
 
+  // ---------- OFERTA: a regra única de "o que esta conta tem, o que falta e o que faz sentido oferecer" ----------
+  // Todas as telas (ferramentas, páginas de venda, app) perguntam aqui. Nada de preço ou regra solta em outra tela.
+  // A conta em si fica no catálogo (CATALOGO_OFERTA, gerada por tools/gera_catalogo.py), igual para site e app.
+  function calculaOferta(temPack) {
+    if (window.CATALOGO_OFERTA) return window.CATALOGO_OFERTA(temPack);
+    var J = CAT.kit ? CAT.kit.inclui.map(function (k) { return POR_KEY[k]; }) : [];      // catálogo antigo em cache: sem oferta de conjunto
+    return { tenho: J.filter(function (p) { return temPack(p.pack); }), faltam: J.filter(function (p) { return !temPack(p.pack); }), todas: null, completo: false };
+  }
+  function oferta() { return calculaOferta(tem); }
+  function nomes(l) { l = l.map(function (p) { return p.nome; }); return l.length < 2 ? l.join('') : l.slice(0, -1).join(', ') + ' e ' + l[l.length - 1]; }
+
   // ---------- comprar: sempre pela página do produto, com a origem anotada ----------
+  // Nunca leva ao pagamento de algo que a conta já tem: nesse caso abre a ferramenta.
+  function destinoCompra(key) {
+    var o = oferta();
+    if (key === 'kit') {
+      if (o.completo) return { abrir: '/' };
+      if (!o.todas) return { key: o.faltam[0].key };          // falta 1 (ou o conjunto não compensa): a avulsa
+      return { key: 'kit' };
+    }
+    var p = POR_KEY[key] || POR_PACK[key];
+    if (p && tem(p.pack)) return { abrir: p.url || '/' };
+    return { key: p ? p.key : key };
+  }
   function linkCompra(key, origem) {
-    var p = key === 'kit' ? CAT.kit : (POR_KEY[key] || POR_PACK[key]); if (!p) return '/';
+    var d = destinoCompra(key); if (d.abrir) return d.abrir;
+    var p = d.key === 'kit' ? CAT.kit : POR_KEY[d.key]; if (!p) return '/';
     return '/conheca/' + p.slug + '/?de=' + encodeURIComponent(origem || 'ferramenta');
   }
   function comprar(key, origem) {
-    var p = key === 'kit' ? CAT.kit : (POR_KEY[key] || POR_PACK[key]);
+    var d = destinoCompra(key);
+    if (d.abrir) { (window.top || window).location.href = d.abrir; return; }
+    var p = d.key === 'kit' ? CAT.kit : POR_KEY[d.key];
     // ferramenta aberta dentro da página de vendas (teste grátis): quem leva ao pagamento é a própria página
     try { if (window.top !== window && window.top.location.pathname.indexOf('/conheca/' + p.slug + '/') === 0) { window.top.postMessage({ fl: 'comprar' }, location.origin); return; } } catch (e) {}
     evento('checkout_clicked', p && p.pack || 'kit', { de: origem || 'ferramenta' });
-    (window.top || window).location.href = linkCompra(key, origem);
+    (window.top || window).location.href = linkCompra(d.key, origem);
   }
 
   // ---------- "Próximo passo": abre se a pessoa tem; mostra como liberar se não tem ----------
@@ -307,11 +334,15 @@
     poeCss();
     var p = POR_KEY[op.alvo], d = document.createElement('div'), dono = tem(p.pack);
     d.className = 'flb-prox' + (dono ? '' : ' trancado'); d.style.setProperty('--flc', p.cor);
-    var kit = CAT.kit, faltam = kit ? kit.packs.filter(function (k) { return !tem(k); }).length : 0;
-    d.innerHTML = '<span class="rot">' + esc(op.rotulo || 'Próximo passo') + '</span><b>' + esc(op.titulo) + '</b>' + (op.texto ? '<span class="tx">' + esc(op.texto) + '</span>' : '') +
-      (dono ? '<button class="flb-btn" data-a="abrir">' + esc(op.botao || 'Continuar') + ' →</button>'
-            : '<button class="flb-btn" data-a="liberar">' + (vencido(p.pack) ? 'Renovar ' : 'Liberar ') + esc(p.nome) + ' · ' + brl(p.preco) + '</button>' +
-              (kit && faltam > 1 ? '<button class="kit" data-a="kit">ou as 4 ferramentas no ' + esc(kit.nome) + ' por ' + brl(kit.preco) + '</button>' : ''));
+    var o = oferta(), avulsa = (vencido(p.pack) ? 'Renovar ' : 'Liberar ') + esc(p.nome) + ' · ' + brl(p.preco), h;
+    if (dono) h = '<button class="flb-btn" data-a="abrir">' + esc(op.botao || 'Continuar') + ' →</button>';
+    else if (o.todas && o.tenho.length)      // já é cliente: a oferta principal é liberar tudo o que falta
+      h = '<span class="tem">Você já tem: <i>' + esc(nomes(o.tenho)) + '</i>. Faltam: <i>' + esc(nomes(o.faltam)) + '</i>.</span>' +
+          '<button class="flb-btn" data-a="kit">' + esc(o.todas.rotulo) + '</button>' +
+          '<button class="kit" data-a="liberar">ou só ' + esc(p.nome) + ' por ' + brl(p.preco) + '</button>';
+    else h = '<button class="flb-btn" data-a="liberar">' + avulsa + '</button>' +
+          (o.todas ? '<button class="kit" data-a="kit">ou ' + esc(o.todas.titulo.toLowerCase()) + ' por ' + brl(o.todas.preco) + '</button>' : '');
+    d.innerHTML = '<span class="rot">' + esc(op.rotulo || 'Próximo passo') + '</span><b>' + esc(op.titulo) + '</b>' + (op.texto ? '<span class="tx">' + esc(op.texto) + '</span>' : '') + h;
     d.addEventListener('click', function (e) {
       var a = e.target.closest('[data-a]'); if (!a) return;
       if (a.dataset.a === 'abrir') { if (typeof op.abrir === 'function') op.abrir(); else location.href = op.abrir; }
@@ -343,7 +374,7 @@
     eu: E, sessao: le, email: function () { var s = le(); return s ? s.email : ''; },
     pronto: null, carrega: carrega, tem: tem, vencido: vencido, dias: diasRestantes,
     api: api, rpc: rpc, traduz: traduz, login: login, sair: sair, aoMudar: function (f) { ouvintes.push(f); },
-    evento: evento, teste: teste, comprar: comprar, linkCompra: linkCompra, proximo: proximo, trilha: trilha, trabalhoDaUrl: trabalhoDaUrl,
+    evento: evento, teste: teste, comprar: comprar, linkCompra: linkCompra, oferta: oferta, calculaOferta: calculaOferta, nomes: nomes, proximo: proximo, trilha: trilha, trabalhoDaUrl: trabalhoDaUrl,
     folha: abreFolha, fechaFolha: fechaFolha, esc: esc, brl: brl, cofre: cofre
   };
   window.Base = Base;

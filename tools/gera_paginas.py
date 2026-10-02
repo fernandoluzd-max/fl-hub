@@ -131,6 +131,8 @@ footer a{color:var(--mute)}
 .kitb .por{font-family:var(--d);font-weight:900;font-size:46px;letter-spacing:-.03em;line-height:1;margin:4px 0 14px}
 .kitb .por small{font-size:.36em;color:var(--mute);font-weight:700;letter-spacing:0}
 .kitb a.btn{text-decoration:none;display:inline-flex}
+.kitb .trilho li.meu{color:var(--mute);border-style:dashed}.kitb .trilho li.meu::after{content:" ✓ já é seu";font-weight:500}
+.conta{border:1px solid var(--line);border-left:3px solid var(--a);background:var(--card);border-radius:14px;padding:13px 16px;margin:0 0 18px;font-size:15px;color:var(--mute)}.conta b{color:var(--ink)}.conta a{color:var(--a)}
 @media (max-width:760px){.kitb{grid-template-columns:1fr;text-align:center}.kitb .trilho{justify-content:center}.teste{padding:22px 12px 14px}.teste iframe{height:720px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 """
@@ -162,7 +164,8 @@ function evento(nome){
       body:JSON.stringify({ p_nome:nome, p_pack:PACK, p_visitante:v, p_dados:{ pagina:PRODUTO, de:new URLSearchParams(location.search).get('de') || 'pagina' } }) }).catch(() => {});
   } catch {}
 }
-function compra(){ const l = linkCompra(); if (l){ evento('checkout_clicked'); location.href = l; } else toast('Link de compra em breve.'); }
+window.FLV = { pack: PACK, slug: PRODUTO, ir: null };   // 'ir': quando a conta já tem o produto, o botão abre a ferramenta em vez do pagamento (oferta-venda.js)
+function compra(){ if (FLV.ir){ location.href = FLV.ir; return; } const l = linkCompra(); if (l){ evento('checkout_clicked'); location.href = l; } else toast('Link de compra em breve.'); }
 document.querySelectorAll('[data-comprar]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); compra(); }));
 // o teste grátis embutido (a ferramenta de verdade) pede a compra por aqui
 addEventListener('message', e => { if (e.origin === location.origin && e.data && e.data.fl === 'comprar') compra(); });
@@ -225,6 +228,7 @@ def pagina(p):
     <span class="sp"></span>
     <button class="cta-s" data-comprar>Comprar</button>
   </div>
+  <div class="conta" id="conta" hidden></div>
 
   <div class="{hero_cls}">
     <div>
@@ -273,6 +277,9 @@ def pagina(p):
 <script>
 {js}
 </script>
+<script src="/catalogo.js" defer></script>
+<script src="/base.js" defer></script>
+<script src="/oferta-venda.js" defer></script>
 </body>
 </html>
 """
@@ -823,11 +830,11 @@ for p in PAGINAS:
         else:
             p['testar_hero'] = f'<a class="testar" href="{c["url"]}?de=venda">{tit} →</a>'
         # o kit: as quatro ferramentas, na ordem de um trabalho
-        trilho = ''.join(f'<li class="{"aqui" if j["slug"] == p["slug"] else ""}">{i+1}. {j["nome"]}</li>' for i, j in enumerate(JORNADA))
+        trilho = ''.join(f'<li data-k="{j["key"]}" class="{"aqui" if j["slug"] == p["slug"] else ""}">{i+1}. {j["nome"]}</li>' for i, j in enumerate(JORNADA))
         p['kit'] = f'''<section><div class="kitb rv"><div><span class="kick">{KIT["nome"]}</span><h2 style="margin-top:12px">Ou leve as quatro. <em class="ac">Uma preenche a outra.</em></h2>
           <p>O cliente responde o briefing, você calcula, manda a proposta, fecha o contrato e o trabalho entra sozinho no organizador. Sem digitar nada duas vezes.</p><ul class="trilho">{trilho}</ul></div>
           <div class="lado"><div class="de">{brl(KIT["de"])} separadas</div><div class="por">{brl(KIT["preco"])} <small>/ 1 ano</small></div><a class="btn" href="https://basefl.com/conheca/{KIT["slug"]}/?de={p["slug"]}">Ver o {KIT["nome"]} {seta}</a></div></div></section>'''
-        p['faq'] = p['faq'] + [('E se eu quiser as outras ferramentas depois?', f'Você compra quando quiser, com o mesmo e-mail: o acesso entra na mesma conta, sem novo cadastro. Se já sabe que vai usar as quatro, o {KIT["nome"]} sai por {brl(KIT["preco"])} em vez de {brl(KIT["de"])}.')]
+        p['faq'] = p['faq'] + [('E se eu quiser as outras ferramentas depois?', f'Você compra quando quiser, com o mesmo e-mail: o acesso entra na mesma conta, sem novo cadastro. E a qualquer momento você libera todas as que faltam por {brl(KIT["preco"])}.')]
     d = os.path.join(BASE, p['slug']); os.makedirs(d, exist_ok=True)
     open(os.path.join(d, 'index.html'), 'w', encoding='utf-8').write(pagina(p))
     print('ok', p['slug'])
@@ -840,7 +847,7 @@ def pagina_kit():
                 ('Manda a proposta', 'Um link com serviço, prazo e valor. O cliente aprova com um toque. Suas horas ficam só com você.'),
                 ('Fecha o contrato', 'Cliente, serviço, prazo e valor já vêm preenchidos. Ele lê e aceita pelo celular.'),
                 ('O trabalho entra no organizador', 'Prazo, revisões e pagamento num quadro. Você só acompanha e entrega.')]
-    linhas = ''.join(f'<div class="kl" style="--c:rgb({j["cor"]})"><img src="https://basefl.com/icones/{j["key"]}.png" alt="" width="44" height="44"><span><b>{j["nome"]}</b><small>{j["passo"]}</small></span><i>{brl(j["preco"])}</i></div>' for j in JORNADA)
+    linhas = ''.join(f'<div class="kl" data-k="{j["key"]}" style="--c:rgb({j["cor"]})"><img src="https://basefl.com/icones/{j["key"]}.png" alt="" width="44" height="44"><span><b>{j["nome"]}</b><small>{j["passo"]}</small></span><i>{brl(j["preco"])}</i></div>' for j in JORNADA)
     demo = f'<div class="kd">{linhas}<div class="kt"><span>Separadas</span><s>{brl(k["de"])}</s></div><div class="kt tot"><span>No kit</span><b>{brl(k["preco"])}</b></div></div>'
     css = """
 .kd{width:100%;max-width:420px;display:flex;flex-direction:column;gap:8px}
@@ -853,6 +860,7 @@ def pagina_kit():
 .kl i{font-style:normal;color:var(--mute);font-size:13.5px;font-variant-numeric:tabular-nums;text-decoration:line-through}
 .kt{display:flex;justify-content:space-between;align-items:baseline;padding:4px 6px 0;color:var(--mute);font-size:14px}
 .kt.tot{color:var(--ink)}
+.kl.meu b{color:var(--mute)}.kl.meu i{text-decoration:none;color:var(--a)}.kl.meu i::before{content:"✓ já é seu";}.kl.meu i{font-size:0}.kl.meu i::before{font-size:13px}
 .kt.tot b{font-family:var(--d);font-weight:900;font-size:34px;letter-spacing:-.03em;color:var(--a)}
 @keyframes kl{to{opacity:1;transform:none}}
 """
@@ -872,7 +880,7 @@ def pagina_kit():
       antes=['Dez mensagens para entender o pedido', 'Preço no chute, orçamento montado do zero', 'Combinado só por áudio', 'Prazos e pagamentos espalhados'],
       depois=['Pedido organizado em 1 minuto', 'Preço calculado e proposta por link', 'Contrato aceito pelo celular', 'Tudo num quadro, com o que falta receber'],
       combina=None,
-      faq=[('Já tenho uma das ferramentas. Vale a pena?', f'O kit libera as que faltam na mesma conta, sem novo cadastro e sem perder nada do que você já fez. Como as quatro separadas somam {brl(k["de"])}, o kit compensa a partir da segunda ferramenta.'),
+      faq=[('Já tenho uma das ferramentas. Vale a pena?', f'Vale. Por {brl(k["preco"])} você libera todas as que ainda não tem, na mesma conta, sem novo cadastro e sem perder nada do que já fez. Entre com o seu e-mail e esta página mostra o que você já tem e o que será liberado. Se faltar só uma, ela mesma avisa e leva você para a ferramenta avulsa.'),
            ('Preciso usar todas?', 'Não. Cada uma funciona sozinha. Juntas, uma preenche a outra e você não digita nada duas vezes.'),
            ('O meu cliente vê os meus preços internos?', 'Não. O cliente só abre o que você manda para ele: o briefing para responder, a proposta para aprovar e o contrato para aceitar. Horas, valor por hora e a sua organização ficam só com você.'),
            FAQ_ACESSO, FAQ_ANO, ('Tem aula ensinando a usar?', 'Sim. Junto com o acesso vem uma aula mostrando, passo a passo, como usar cada ferramenta.')],

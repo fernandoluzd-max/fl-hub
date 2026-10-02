@@ -147,7 +147,8 @@
   "kit": {
     "key": "kit",
     "nome": "Kit Freelancer",
-    "preco": 67,
+    "preco": 97,
+    "_preco": "Preço de TODAS as ferramentas fora do checkout (página do kit e upgrade de quem já tem alguma). O desconto de R$ 67 existe só como order bump dentro do checkout.",
     "acesso": "1 ano",
     "slug": "kit-freelancer",
     "inclui": [
@@ -156,7 +157,7 @@
       "contrato",
       "painel"
     ],
-    "checkout": "https://payfast.greenn.com.br/yr2m2me/offer/E8jUkj",
+    "checkout": "https://payfast.greenn.com.br/yr2m2me",
     "greenn": "195949",
     "gancho": "Do primeiro contato ao pagamento, sem retrabalho"
   }

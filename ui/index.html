@@ -130,6 +130,7 @@ button.aula svg{width:15px;height:15px;fill:currentColor;flex:none}
 .selo{position:absolute;top:14px;right:14px;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgb(var(--c));background:rgba(var(--c),.14);border:1px solid rgba(var(--c),.45);border-radius:99px;padding:4px 9px}
 .gancho{font-family:"Archivo",var(--font);font-weight:800;font-size:16.5px;line-height:1.2;color:rgb(var(--c));margin-top:-4px}
 .oferta{font-size:12.5px;color:var(--mute)}
+.up{font:inherit;font-size:13px;font-weight:700;border:1px solid #F2A541;color:#F2A541;background:transparent;border-radius:99px;padding:8px 14px;cursor:pointer}.up:hover{background:#F2A541;color:#141414}
 .oferta b{color:var(--ink);font-size:14px}
 .btns .cta{background:rgb(var(--c));color:#141615;box-shadow:0 10px 24px -10px rgba(var(--c),.9);transition:filter .15s,transform .15s}
 .btns .cta:hover{filter:brightness(1.08);transform:translateY(-1px)}
@@ -166,7 +167,7 @@ button.aula svg{width:15px;height:15px;fill:currentColor;flex:none}
         <div class="pill"><span class="dot" id="d-found"></span><span id="t-found">Procurando o CapCut…</span></div>
         <div class="pill"><span class="dot" id="d-run"></span><span id="t-run">…</span></div>
       </div></div><div class="cards"></div></section>
-    <section class="sec" id="s-ferramentas"><div class="sec-h"><div><h2>Ferramentas</h2><p id="s-ferr-sub">Para precificar, fechar e organizar seus trabalhos.</p></div></div><div class="cards"></div></section>
+    <section class="sec" id="s-ferramentas"><div class="sec-h"><div><h2>Ferramentas</h2><p id="s-ferr-sub">Para precificar, fechar e organizar seus trabalhos.</p></div><span class="sp" style="flex:1"></span><button class="up" id="s-ferr-up" hidden></button></div><div class="cards"></div></section>
     <div class="login" id="login">
       <h2 id="l-title">Entre com o e-mail da compra</h2>
       <p id="l-sub">Use o mesmo e-mail que você usou para comprar. Vamos enviar um código de acesso.</p>
@@ -357,6 +358,10 @@ function render(){
   document.querySelectorAll('#grid .cards').forEach(c => c.innerHTML = '');
   if (!sess) return;
   const daJornada = CAT.kit.packs.filter(k => cat?.owned?.has(k)).length;
+  // oferta de conjunto: a mesma regra do site (catálogo). Só aparece para quem já tem alguma e ainda faz sentido.
+  const of = window.CATALOGO_OFERTA ? window.CATALOGO_OFERTA(k => !!cat?.owned?.has(k)) : null, up = $('#s-ferr-up');
+  up.hidden = !(of && of.todas && of.tenho.length);
+  if (!up.hidden){ up.textContent = of.todas.rotulo + '  →'; up.title = 'Libera: ' + of.faltam.map(p => p.nome).join(', '); up.onclick = () => T.opener.openUrl('https://basefl.com/conheca/' + CAT.kit.slug + '/?de=app'); }
   $('#s-ferr-sub').textContent = daJornada >= 2 ? 'A ordem de um trabalho: Briefing → Preço e proposta → Contrato → Organizador. Um passo já preenche o próximo.' : 'Para precificar, fechar e organizar seus trabalhos.';
   for (const p of PRODUCTS){
     if (p.emBreve){

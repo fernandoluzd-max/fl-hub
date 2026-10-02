@@ -143,6 +143,8 @@ footer a{color:var(--mute)}
 .kitb .por{font-family:var(--d);font-weight:900;font-size:46px;letter-spacing:-.03em;line-height:1;margin:4px 0 14px}
 .kitb .por small{font-size:.36em;color:var(--mute);font-weight:700;letter-spacing:0}
 .kitb a.btn{text-decoration:none;display:inline-flex}
+.kitb .trilho li.meu{color:var(--mute);border-style:dashed}.kitb .trilho li.meu::after{content:" ✓ já é seu";font-weight:500}
+.conta{border:1px solid var(--line);border-left:3px solid var(--a);background:var(--card);border-radius:14px;padding:13px 16px;margin:0 0 18px;font-size:15px;color:var(--mute)}.conta b{color:var(--ink)}.conta a{color:var(--a)}
 @media (max-width:760px){.kitb{grid-template-columns:1fr;text-align:center}.kitb .trilho{justify-content:center}.teste{padding:22px 12px 14px}.teste iframe{height:720px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 
@@ -177,6 +179,7 @@ footer a{color:var(--mute)}
     <span class="sp"></span>
     <button class="cta-s" data-comprar>Comprar</button>
   </div>
+  <div class="conta" id="conta" hidden></div>
 
   <div class="hero">
     <div>
@@ -209,12 +212,12 @@ footer a{color:var(--mute)}
   
 
   <section><div class="kitb rv"><div><span class="kick">Kit Freelancer</span><h2 style="margin-top:12px">Ou leve as quatro. <em class="ac">Uma preenche a outra.</em></h2>
-          <p>O cliente responde o briefing, você calcula, manda a proposta, fecha o contrato e o trabalho entra sozinho no organizador. Sem digitar nada duas vezes.</p><ul class="trilho"><li class="">1. Gerador de Briefing</li><li class="aqui">2. Quanto Cobrar?</li><li class="">3. Gerador de Contrato</li><li class="">4. Base Demandas</li></ul></div>
-          <div class="lado"><div class="de">R$ 208 separadas</div><div class="por">R$ 67 <small>/ 1 ano</small></div><a class="btn" href="https://basefl.com/conheca/kit-freelancer/?de=quanto-cobrar">Ver o Kit Freelancer <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div></section>
+          <p>O cliente responde o briefing, você calcula, manda a proposta, fecha o contrato e o trabalho entra sozinho no organizador. Sem digitar nada duas vezes.</p><ul class="trilho"><li data-k="briefing" class="">1. Gerador de Briefing</li><li data-k="preco" class="aqui">2. Quanto Cobrar?</li><li data-k="contrato" class="">3. Gerador de Contrato</li><li data-k="painel" class="">4. Base Demandas</li></ul></div>
+          <div class="lado"><div class="de">R$ 208 separadas</div><div class="por">R$ 97 <small>/ 1 ano</small></div><a class="btn" href="https://basefl.com/conheca/kit-freelancer/?de=quanto-cobrar">Ver o Kit Freelancer <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div></section>
 
   <section>
     <h2 class="rv">Perguntas rápidas</h2>
-    <div class="faq rv"><details><summary>Serve para gravação também?</summary><p>Sim. Você escolhe editar, gravar ou os dois, e ele considera horas de gravação, estrutura e custos extras.</p></details><details><summary>Os valores são fixos?</summary><p>São uma referência para o seu nível. Você ajusta o nível e a quantidade e decide o valor final.</p></details><details><summary>Como recebo o acesso?</summary><p>Assim que a compra é aprovada, ele aparece liberado no app Base FL e no navegador. É só entrar com o mesmo e-mail da compra.</p></details><details><summary>Quanto tempo de acesso?</summary><p>1 ano, com todas as atualizações desse período. Perto de vencer, o app avisa e você pode renovar.</p></details><details><summary>Tem aula ensinando a usar?</summary><p>Sim. Junto com o acesso vem uma aula mostrando, passo a passo, como usar e tirar o melhor proveito.</p></details><details><summary>E se eu quiser as outras ferramentas depois?</summary><p>Você compra quando quiser, com o mesmo e-mail: o acesso entra na mesma conta, sem novo cadastro. Se já sabe que vai usar as quatro, o Kit Freelancer sai por R$ 67 em vez de R$ 208.</p></details></div>
+    <div class="faq rv"><details><summary>Serve para gravação também?</summary><p>Sim. Você escolhe editar, gravar ou os dois, e ele considera horas de gravação, estrutura e custos extras.</p></details><details><summary>Os valores são fixos?</summary><p>São uma referência para o seu nível. Você ajusta o nível e a quantidade e decide o valor final.</p></details><details><summary>Como recebo o acesso?</summary><p>Assim que a compra é aprovada, ele aparece liberado no app Base FL e no navegador. É só entrar com o mesmo e-mail da compra.</p></details><details><summary>Quanto tempo de acesso?</summary><p>1 ano, com todas as atualizações desse período. Perto de vencer, o app avisa e você pode renovar.</p></details><details><summary>Tem aula ensinando a usar?</summary><p>Sim. Junto com o acesso vem uma aula mostrando, passo a passo, como usar e tirar o melhor proveito.</p></details><details><summary>E se eu quiser as outras ferramentas depois?</summary><p>Você compra quando quiser, com o mesmo e-mail: o acesso entra na mesma conta, sem novo cadastro. E a qualquer momento você libera todas as que faltam por R$ 97.</p></details></div>
   </section>
 
   <div class="final rv">
@@ -257,7 +260,8 @@ function evento(nome){
       body:JSON.stringify({ p_nome:nome, p_pack:PACK, p_visitante:v, p_dados:{ pagina:PRODUTO, de:new URLSearchParams(location.search).get('de') || 'pagina' } }) }).catch(() => {});
   } catch {}
 }
-function compra(){ const l = linkCompra(); if (l){ evento('checkout_clicked'); location.href = l; } else toast('Link de compra em breve.'); }
+window.FLV = { pack: PACK, slug: PRODUTO, ir: null };   // 'ir': quando a conta já tem o produto, o botão abre a ferramenta em vez do pagamento (oferta-venda.js)
+function compra(){ if (FLV.ir){ location.href = FLV.ir; return; } const l = linkCompra(); if (l){ evento('checkout_clicked'); location.href = l; } else toast('Link de compra em breve.'); }
 document.querySelectorAll('[data-comprar]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); compra(); }));
 // o teste grátis embutido (a ferramenta de verdade) pede a compra por aqui
 addEventListener('message', e => { if (e.origin === location.origin && e.data && e.data.fl === 'comprar') compra(); });
@@ -300,5 +304,8 @@ async function demo(){
 demo();
 
 </script>
+<script src="/catalogo.js" defer></script>
+<script src="/base.js" defer></script>
+<script src="/oferta-venda.js" defer></script>
 </body>
 </html>

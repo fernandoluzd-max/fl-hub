@@ -143,6 +143,8 @@ footer a{color:var(--mute)}
 .kitb .por{font-family:var(--d);font-weight:900;font-size:46px;letter-spacing:-.03em;line-height:1;margin:4px 0 14px}
 .kitb .por small{font-size:.36em;color:var(--mute);font-weight:700;letter-spacing:0}
 .kitb a.btn{text-decoration:none;display:inline-flex}
+.kitb .trilho li.meu{color:var(--mute);border-style:dashed}.kitb .trilho li.meu::after{content:" ✓ já é seu";font-weight:500}
+.conta{border:1px solid var(--line);border-left:3px solid var(--a);background:var(--card);border-radius:14px;padding:13px 16px;margin:0 0 18px;font-size:15px;color:var(--mute)}.conta b{color:var(--ink)}.conta a{color:var(--a)}
 @media (max-width:760px){.kitb{grid-template-columns:1fr;text-align:center}.kitb .trilho{justify-content:center}.teste{padding:22px 12px 14px}.teste iframe{height:720px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 
@@ -173,6 +175,7 @@ footer a{color:var(--mute)}
     <span class="sp"></span>
     <button class="cta-s" data-comprar>Comprar</button>
   </div>
+  <div class="conta" id="conta" hidden></div>
 
   <div class="hero">
     <div>
@@ -252,7 +255,8 @@ function evento(nome){
       body:JSON.stringify({ p_nome:nome, p_pack:PACK, p_visitante:v, p_dados:{ pagina:PRODUTO, de:new URLSearchParams(location.search).get('de') || 'pagina' } }) }).catch(() => {});
   } catch {}
 }
-function compra(){ const l = linkCompra(); if (l){ evento('checkout_clicked'); location.href = l; } else toast('Link de compra em breve.'); }
+window.FLV = { pack: PACK, slug: PRODUTO, ir: null };   // 'ir': quando a conta já tem o produto, o botão abre a ferramenta em vez do pagamento (oferta-venda.js)
+function compra(){ if (FLV.ir){ location.href = FLV.ir; return; } const l = linkCompra(); if (l){ evento('checkout_clicked'); location.href = l; } else toast('Link de compra em breve.'); }
 document.querySelectorAll('[data-comprar]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); compra(); }));
 // o teste grátis embutido (a ferramenta de verdade) pede a compra por aqui
 addEventListener('message', e => { if (e.origin === location.origin && e.data && e.data.fl === 'comprar') compra(); });
@@ -297,5 +301,8 @@ async function demo(){
 demo();
 
 </script>
+<script src="/catalogo.js" defer></script>
+<script src="/base.js" defer></script>
+<script src="/oferta-venda.js" defer></script>
 </body>
 </html>
