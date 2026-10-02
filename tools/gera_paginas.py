@@ -792,7 +792,7 @@ demo();
         ('Meta e comparativo','Defina sua meta do mês e compare com o mês passado. Você sabe se está crescendo ou não.'),
         ('Custos fixos','Internet, CapCut, Adobe, armazenamento, trilhas. Anote o que você paga todo mês e veja quanto isso pesa no que entrou.')],
   inclui=['Quadro de trabalhos','Contador de revisões','Mensagens prontas para o cliente','Meta do mês','A receber e previsto','Custos fixos'],
-  faq=[('Meus dados ficam salvos?','Sim, na sua conta. Você acessa do celular ou do computador com o mesmo e-mail.'), ('Funciona sozinho?','Sim. Você cadastra seus trabalhos direto nele. Se tiver também o Briefing, o Quanto Cobrar? ou o Contrato, vendidos separadamente, os trabalhos entram aqui sozinhos.'), FAQ_ACESSO, FAQ_ANO],
+  faq=[('Meus dados ficam salvos?','Sim, na sua conta. Você acessa do celular ou do computador com o mesmo e-mail.'), ('Já uso planilha ou Trello. Por que trocar?','Dá para fazer em planilha, sim. A diferença é que aqui já vem pronto para trabalho de vídeo: colunas do orçamento ao pago, contador de revisões, mensagens para o cliente e os números do mês, sem montar nada.'), ('É difícil de usar no celular?','Não. No celular você move o trabalho de coluna tocando na seta do card, e os números do mês ficam no topo.'), ('Funciona sozinho?','Sim. Você cadastra seus trabalhos direto nele. Se tiver também o Briefing, o Quanto Cobrar? ou o Contrato, vendidos separadamente, os trabalhos entram aqui sozinhos.'), FAQ_ACESSO, FAQ_ANO],
   combina=[('quanto-cobrar','Quanto Cobrar?','#7BD88F','O orçamento entra no quadro com valor e prazo.'),('gerador-de-briefing','Gerador de Briefing','#3FD0C2','O pedido do cliente vira um card com as respostas.')],
   fh2='Feche o mês sabendo exatamente onde está.', selo='Celular e computador'))
 
@@ -1239,6 +1239,115 @@ BR_CSS = r'''
 .od-n{margin-top:16px;color:var(--mute);font-size:15px;max-width:70ch}
 @media (max-width:900px){.vv,.ob,.od{grid-template-columns:1fr}.io-g{grid-template-columns:1fr;justify-items:center}.fone{margin:0 auto}.seta-io{transform:rotate(90deg)}.od>div{border-left:0;border-top:1px solid var(--line)}.od>div:first-child{border-top:0}}
 '''
+
+PN_MIOLO = r'''
+  <section class="caos">
+    <span class="kick rv">O que escapa</span>
+    <h2 class="rv" style="margin-top:14px">Editar você sabe. <em class="ac">O que some é o resto.</em></h2>
+    <p class="sub2 rv">O prazo ficou num áudio, o valor numa conversa, a revisão na memória. Toque em “Organizar” e veja as mesmas dúvidas viradas em resposta.</p>
+    <div class="cs rv" id="caos">
+      <div class="cs-b">
+        <div class="nt" style="--x:-14px;--y:10px;--r:-5deg"><b>Café Central</b><span class="p">o prazo era sexta ou segunda?</span><span class="r"><i style="--c:#9B7BF7"></i>Editando · entrega 07 de out</span></div>
+        <div class="nt" style="--x:22px;--y:-8px;--r:4deg"><b>Loja Bella</b><span class="p">já mandei o vídeo dela?</span><span class="r"><i style="--c:#3FB8AF"></i>Entregue · falta pagar R$ 650</span></div>
+        <div class="nt" style="--x:-6px;--y:18px;--r:7deg"><b>Clínica Sorriso</b><span class="p">é a 3ª ou a 4ª alteração?</span><span class="r"><i style="--c:#F2A541"></i>Em revisão · 1 de 2 usadas</span></div>
+        <div class="nt" style="--x:16px;--y:14px;--r:-7deg"><b>Pedro Fitness</b><span class="p">fechou ou só pediu orçamento?</span><span class="r"><i style="--c:#5AA9F0"></i>Fechado · R$ 1.400</span></div>
+        <div class="nt" style="--x:-20px;--y:-12px;--r:3deg"><b>Studio Ana</b><span class="p">a Ana já pagou?</span><span class="r"><i style="--c:#7BD88F"></i>Pago · R$ 720</span></div>
+        <div class="nt" style="--x:10px;--y:-16px;--r:-3deg"><b>Este mês</b><span class="p">quanto entrou até agora?</span><span class="r"><i style="--c:#7BD88F"></i>Recebido R$ 980 de R$ 5.000</span></div>
+      </div>
+      <button type="button" class="cs-bt" id="caosBt" aria-pressed="false">Organizar</button>
+    </div>
+  </section>
+
+  <section class="mesx">
+    <span class="kick rv">O mês numa linha</span>
+    <h2 class="rv" style="margin-top:14px">Quanto entrou, quanto falta, <em class="ac">quanto ainda vem.</em></h2>
+    <p class="sub2 rv">No topo do quadro, cinco números que respondem o que todo editor se pergunta no dia 20.</p>
+    <div class="mkp rv">
+      <div class="mk1 gr"><span>Recebido no mês</span><b>R$ 980 <small>de R$ 5.000</small></b><i><u></u></i><em>Faltam R$ 4.020 para a meta</em></div>
+      <div class="mk1"><span>A receber</span><b>R$ 650</b><em>entregue, falta pagar</em></div>
+      <div class="mk1"><span>Previsto</span><b>R$ 3.920</b><em>fechado, em produção</em></div>
+      <div class="mk1"><span>Custos fixos</span><b>R$ 224</b><em>por mês</em></div>
+      <div class="mk1 al"><span>Atrasados</span><b>1</b><em>prazo já passou</em></div>
+    </div>
+    <p class="mkp-n rv">Você define a meta. O quadro compara com o mês passado e mostra quanto sobrou depois dos custos fixos: CapCut, armazenamento, trilhas, internet.</p>
+  </section>
+
+  <section class="dets">
+    <span class="kick rv">Dentro de cada trabalho</span>
+    <h2 class="rv" style="margin-top:14px">O que você <em class="ac">para de fazer de cabeça.</em></h2>
+    <div class="dt">
+      <div class="dt-c rv">
+        <div class="dt-v"><span class="bol"><i class="on"></i><i class="on"></i><i class="ex"></i></span><small>3 de 2 usadas · <b>1 extra</b></small></div>
+        <b>Contar revisão</b>
+        <p>Cada trabalho mostra quantas rodadas de ajuste já foram. Passou do combinado, aparece em vermelho, e você sabe que é hora de cobrar o extra.</p>
+      </div>
+      <div class="dt-c rv">
+        <div class="dt-v zapm">Oi, Bella! Passando para lembrar do pagamento de R$ 650 referente a anúncio de 30s. Qualquer dúvida, estou à disposição. Obrigado!</div>
+        <b>Escrever a mensagem chata</b>
+        <p>Pedir material, avisar que ficou pronto, confirmar a revisão, lembrar o pagamento. Quatro mensagens prontas, com o nome do cliente e o valor, direto no WhatsApp.</p>
+      </div>
+      <div class="dt-c rv">
+        <div class="dt-v jr"><span>Briefing</span><span>Preço</span><span>Contrato</span><span class="on">Organizador</span></div>
+        <b>Cadastrar o trabalho</b>
+        <p>Dá para criar um trabalho direto no quadro. E se você usa o Briefing, o Quanto Cobrar? ou o Contrato, o trabalho aceito pelo cliente entra aqui sozinho, com valor e prazo.</p>
+      </div>
+    </div>
+  </section>
+'''
+PN_CSS = r'''
+.cs{margin-top:26px;border:1px solid var(--line);border-radius:24px;background:var(--card);padding:34px 40px 24px;text-align:center;overflow:hidden}
+.cs-b{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:left}
+.nt{background:#f3e7c4;color:#2a2416;border-radius:6px;padding:14px 14px 16px;min-height:96px;box-shadow:0 14px 26px -14px #000;transform:translate(var(--x),var(--y)) rotate(var(--r));transition:transform .7s cubic-bezier(.2,.8,.2,1),background .5s,color .5s,border-radius .5s,box-shadow .5s}
+.nt b{display:block;font-family:var(--d);font-weight:850;font-size:16.5px;letter-spacing:-.01em}
+.nt span{display:block;font-size:14.5px;line-height:1.35;margin-top:4px;transition:opacity .4s}
+.nt .p{font-family:"Bradley Hand","Segoe Print","Comic Sans MS",cursive;font-size:16px}
+.nt .r{display:none;font-weight:650}
+.nt .r i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-right:7px}
+.cs.ok .nt{transform:none;background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:14px;box-shadow:none}
+.cs.ok .nt .p{display:none}.cs.ok .nt .r{display:block;color:var(--mute);animation:ntin .5s .25s both}
+@keyframes ntin{from{opacity:0;transform:translateY(6px)}}
+.cs-bt{margin-top:26px;font:inherit;font-weight:750;font-size:16px;border:0;border-radius:14px;padding:14px 28px;cursor:pointer;background:var(--a);color:var(--ai)}
+.cs.ok .cs-bt{background:transparent;color:var(--mute);border:1px solid var(--line)}
+.mkp{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:10px;margin-top:26px}
+.mk1{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:3px}
+.mk1 span{font-size:13px;color:var(--mute)}
+.mk1 b{font-family:var(--d);font-weight:850;font-size:22px;letter-spacing:-.02em}.mk1 b small{font-size:.55em;color:var(--mute);font-weight:700}
+.mk1 em{font-style:normal;font-size:12.5px;color:var(--dim)}
+.mk1 i{display:block;height:8px;border-radius:6px;background:var(--bg);border:1px solid var(--line);overflow:hidden;margin:6px 0 2px}
+.mk1 u{display:block;height:100%;width:0;background:linear-gradient(90deg,#3FB8AF,#7BD88F);transition:width 1.2s cubic-bezier(.2,.8,.2,1) .3s}
+.mkp.vis .mk1 u{width:19.600%}
+.mk1.al b{color:#ff8f7a}
+.mkp-n{margin-top:16px;color:var(--mute);font-size:15px;max-width:70ch}
+.dt{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.dt-c{border:1px solid var(--line);border-radius:20px;background:var(--card);padding:18px}
+.dt-c>b{display:block;font-family:var(--d);font-weight:850;font-size:19px;letter-spacing:-.02em;margin:14px 0 6px}
+.dt-c p{color:var(--mute);font-size:15px}
+.dt-v{min-height:112px;border-radius:14px;background:var(--bg2);border:1px solid var(--line);padding:14px;display:flex;flex-direction:column;justify-content:center;gap:8px;font-size:13.5px;color:var(--mute)}
+.dt-v small b{color:#ff8f7a}
+.bol{display:flex;gap:8px}.bol i{width:16px;height:16px;border-radius:50%;border:2px solid #4a504c}
+.bol i.on{background:var(--a);border-color:var(--a)}.bol i.ex{background:#ff8f7a;border-color:#ff8f7a}
+.zapm{background:#005c4b;border-color:transparent;color:#e9edef;font-size:13.5px;line-height:1.45;border-radius:14px 4px 14px 14px}
+.jr{flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px}
+.jr span{border:1px solid var(--line);border-radius:99px;padding:6px 10px;font-size:12.5px;font-weight:650}
+.jr span.on{background:var(--a);color:var(--ai);border-color:transparent}
+.jr span:not(:last-child)::after{content:"→";margin-left:8px;color:var(--dim)}
+@media (max-width:900px){.cs-b{grid-template-columns:1fr 1fr}.mkp{grid-template-columns:1fr 1fr}.mk1.gr{grid-column:1/-1}.dt{grid-template-columns:1fr}.nt{--x:0px!important;--y:0px!important}}
+@media (max-width:520px){.cs{padding:20px 14px 18px}.cs-b{gap:10px}.nt{padding:11px 11px 13px}.nt b{font-size:15px}.nt .p{font-size:14.5px}}
+'''
+PN_JS = r'''
+// caos -> organizado: as mesmas seis dúvidas viram resposta
+(function(){
+  const c = $('#caos'), b = $('#caosBt'); if (!c) return;
+  let mexeu = false;
+  function poe(ok){ c.classList.toggle('ok', ok); b.textContent = ok ? 'Bagunçar de novo' : 'Organizar'; b.setAttribute('aria-pressed', ok ? 'true' : 'false'); }
+  b.addEventListener('click', () => { mexeu = true; poe(!c.classList.contains('ok')); });
+  if (calmo) { poe(true); return; }
+  // se a pessoa não tocar, organiza sozinho depois de alguns segundos na tela
+  const io = new IntersectionObserver(e => { if (e[0].isIntersecting){ io.disconnect(); setTimeout(() => { if (!mexeu) poe(true); }, 3200); } }, { threshold: .6 });
+  io.observe(c);
+})();
+(function(){ const k = document.querySelector('.mkp'); if (!k) return; new IntersectionObserver((e, o) => { if (e[0].isIntersecting){ k.classList.add('vis'); o.disconnect(); } }, { threshold: .4 }).observe(k); })();
+'''
 EXTRA = {
  'efeitos-sonoros': dict(),
  'luts': dict(),
@@ -1263,7 +1372,8 @@ EXTRA = {
    antes=['Dez mensagens até entender o pedido','Cliente responde pela metade','Você esquece de perguntar o prazo','O orçamento sai errado e precisa refazer'],
    depois=['Uma mensagem só, com tudo','As perguntas certas, sempre as mesmas','Prazo e valor em mente já respondidos','Você responde mais rápido e com mais segurança'],
    mais=[('Sem conta e sem app','O cliente só abre o link no celular e responde.'),('Na bio ou no automático','Use o mesmo link no Instagram e na resposta automática do WhatsApp.'),('Resumo para copiar','Cole nas suas anotações ou mande para quem trabalha com você.')]),
- 'financas-e-demandas': dict(passos_h2='Seu mês inteiro num quadro só.',
+ 'financas-e-demandas': dict(miolo=PN_MIOLO, css=PN_CSS, js=PN_JS, cta_oferta='Liberar o Base Demandas', fecho='No dia 20, você abre o quadro <em class="ac">e sabe como está o mês.</em>',
+   passos_h2='Seu mês inteiro num quadro só.',
    passos=[('Cadastre o trabalho','Cliente, valor, prazo de entrega e quantas revisões estão incluídas.'),('Mova pelas colunas','Orçamento, fechado, editando, revisão, entregue e pago. Arraste ou toque na seta.'),('Acompanhe o mês','Quanto entrou, quanto falta para a meta e como está em relação ao mês passado.')],
    ad_h2='Organização de quem vive de edição.',
    antes=['Prazos anotados em vários lugares','Não lembra quem ainda não pagou','Não sabe quanto ganhou no mês','Não sabe quanto custa manter o próprio trabalho'],

@@ -183,6 +183,45 @@ a.btn{text-decoration:none}
 @keyframes cai{to{transform:translate(var(--x),var(--y)) rotate(540deg);opacity:0}}
 @media (max-width:640px){.palco{min-height:640px}.kp{grid-template-columns:1fr 1fr}.br{display:none}.kb{grid-template-columns:repeat(2,1fr);grid-auto-rows:1fr}}
 
+.cs{margin-top:26px;border:1px solid var(--line);border-radius:24px;background:var(--card);padding:34px 40px 24px;text-align:center;overflow:hidden}
+.cs-b{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:left}
+.nt{background:#f3e7c4;color:#2a2416;border-radius:6px;padding:14px 14px 16px;min-height:96px;box-shadow:0 14px 26px -14px #000;transform:translate(var(--x),var(--y)) rotate(var(--r));transition:transform .7s cubic-bezier(.2,.8,.2,1),background .5s,color .5s,border-radius .5s,box-shadow .5s}
+.nt b{display:block;font-family:var(--d);font-weight:850;font-size:16.5px;letter-spacing:-.01em}
+.nt span{display:block;font-size:14.5px;line-height:1.35;margin-top:4px;transition:opacity .4s}
+.nt .p{font-family:"Bradley Hand","Segoe Print","Comic Sans MS",cursive;font-size:16px}
+.nt .r{display:none;font-weight:650}
+.nt .r i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-right:7px}
+.cs.ok .nt{transform:none;background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:14px;box-shadow:none}
+.cs.ok .nt .p{display:none}.cs.ok .nt .r{display:block;color:var(--mute);animation:ntin .5s .25s both}
+@keyframes ntin{from{opacity:0;transform:translateY(6px)}}
+.cs-bt{margin-top:26px;font:inherit;font-weight:750;font-size:16px;border:0;border-radius:14px;padding:14px 28px;cursor:pointer;background:var(--a);color:var(--ai)}
+.cs.ok .cs-bt{background:transparent;color:var(--mute);border:1px solid var(--line)}
+.mkp{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:10px;margin-top:26px}
+.mk1{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:3px}
+.mk1 span{font-size:13px;color:var(--mute)}
+.mk1 b{font-family:var(--d);font-weight:850;font-size:22px;letter-spacing:-.02em}.mk1 b small{font-size:.55em;color:var(--mute);font-weight:700}
+.mk1 em{font-style:normal;font-size:12.5px;color:var(--dim)}
+.mk1 i{display:block;height:8px;border-radius:6px;background:var(--bg);border:1px solid var(--line);overflow:hidden;margin:6px 0 2px}
+.mk1 u{display:block;height:100%;width:0;background:linear-gradient(90deg,#3FB8AF,#7BD88F);transition:width 1.2s cubic-bezier(.2,.8,.2,1) .3s}
+.mkp.vis .mk1 u{width:19.600%}
+.mk1.al b{color:#ff8f7a}
+.mkp-n{margin-top:16px;color:var(--mute);font-size:15px;max-width:70ch}
+.dt{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.dt-c{border:1px solid var(--line);border-radius:20px;background:var(--card);padding:18px}
+.dt-c>b{display:block;font-family:var(--d);font-weight:850;font-size:19px;letter-spacing:-.02em;margin:14px 0 6px}
+.dt-c p{color:var(--mute);font-size:15px}
+.dt-v{min-height:112px;border-radius:14px;background:var(--bg2);border:1px solid var(--line);padding:14px;display:flex;flex-direction:column;justify-content:center;gap:8px;font-size:13.5px;color:var(--mute)}
+.dt-v small b{color:#ff8f7a}
+.bol{display:flex;gap:8px}.bol i{width:16px;height:16px;border-radius:50%;border:2px solid #4a504c}
+.bol i.on{background:var(--a);border-color:var(--a)}.bol i.ex{background:#ff8f7a;border-color:#ff8f7a}
+.zapm{background:#005c4b;border-color:transparent;color:#e9edef;font-size:13.5px;line-height:1.45;border-radius:14px 4px 14px 14px}
+.jr{flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px}
+.jr span{border:1px solid var(--line);border-radius:99px;padding:6px 10px;font-size:12.5px;font-weight:650}
+.jr span.on{background:var(--a);color:var(--ai);border-color:transparent}
+.jr span:not(:last-child)::after{content:"→";margin-left:8px;color:var(--dim)}
+@media (max-width:900px){.cs-b{grid-template-columns:1fr 1fr}.mkp{grid-template-columns:1fr 1fr}.mk1.gr{grid-column:1/-1}.dt{grid-template-columns:1fr}.nt{--x:0px!important;--y:0px!important}}
+@media (max-width:520px){.cs{padding:20px 14px 18px}.cs-b{gap:10px}.nt{padding:11px 11px 13px}.nt b{font-size:15px}.nt .p{font-size:14.5px}}
+
 </style>
 </head>
 <body>
@@ -212,15 +251,59 @@ a.btn{text-decoration:none}
   </div>
 
   
-
-  <section><span class="kick rv">Como funciona</span><h2 class="rv" style="margin-top:14px">Seu mês inteiro num quadro só.</h2><div class="pss"><div class="ps rv"><span class="pn">1</span><h3>Cadastre o trabalho</h3><p>Cliente, valor, prazo de entrega e quantas revisões estão incluídas.</p></div><div class="ps rv d1"><span class="pn">2</span><h3>Mova pelas colunas</h3><p>Orçamento, fechado, editando, revisão, entregue e pago. Arraste ou toque na seta.</p></div><div class="ps rv d2"><span class="pn">3</span><h3>Acompanhe o mês</h3><p>Quanto entrou, quanto falta para a meta e como está em relação ao mês passado.</p></div></div></section>
-
-  <section>
-    <h2 class="rv">O lado do trabalho que ninguém te ensina.</h2>
-    <div class="bens"><div class="bem rv"><span class="n">01</span><h3>Do orçamento ao pago</h3><p>Arraste cada trabalho pelas colunas e veja na hora o que está atrasado, em revisão ou esperando pagamento.</p></div><div class="bem rv d1"><span class="n">02</span><h3>Meta e comparativo</h3><p>Defina sua meta do mês e compare com o mês passado. Você sabe se está crescendo ou não.</p></div><div class="bem rv d2"><span class="n">03</span><h3>Custos fixos</h3><p>Internet, CapCut, Adobe, armazenamento, trilhas. Anote o que você paga todo mês e veja quanto isso pesa no que entrou.</p></div><div class="bem rv d3"><span class="n">04</span><h3>Contador de revisões</h3><p>Veja quantas rodadas de ajuste o cliente já usou.</p></div><div class="bem rv d4"><span class="n">05</span><h3>Mensagens prontas</h3><p>Cobrança, entrega e pedido de material prontos para o WhatsApp.</p></div><div class="bem rv d5"><span class="n">06</span><h3>Comemora com você</h3><p>Trabalho pago vira confete na tela. Pequenas vitórias contam.</p></div></div>
+  <section class="caos">
+    <span class="kick rv">O que escapa</span>
+    <h2 class="rv" style="margin-top:14px">Editar você sabe. <em class="ac">O que some é o resto.</em></h2>
+    <p class="sub2 rv">O prazo ficou num áudio, o valor numa conversa, a revisão na memória. Toque em “Organizar” e veja as mesmas dúvidas viradas em resposta.</p>
+    <div class="cs rv" id="caos">
+      <div class="cs-b">
+        <div class="nt" style="--x:-14px;--y:10px;--r:-5deg"><b>Café Central</b><span class="p">o prazo era sexta ou segunda?</span><span class="r"><i style="--c:#9B7BF7"></i>Editando · entrega 07 de out</span></div>
+        <div class="nt" style="--x:22px;--y:-8px;--r:4deg"><b>Loja Bella</b><span class="p">já mandei o vídeo dela?</span><span class="r"><i style="--c:#3FB8AF"></i>Entregue · falta pagar R$ 650</span></div>
+        <div class="nt" style="--x:-6px;--y:18px;--r:7deg"><b>Clínica Sorriso</b><span class="p">é a 3ª ou a 4ª alteração?</span><span class="r"><i style="--c:#F2A541"></i>Em revisão · 1 de 2 usadas</span></div>
+        <div class="nt" style="--x:16px;--y:14px;--r:-7deg"><b>Pedro Fitness</b><span class="p">fechou ou só pediu orçamento?</span><span class="r"><i style="--c:#5AA9F0"></i>Fechado · R$ 1.400</span></div>
+        <div class="nt" style="--x:-20px;--y:-12px;--r:3deg"><b>Studio Ana</b><span class="p">a Ana já pagou?</span><span class="r"><i style="--c:#7BD88F"></i>Pago · R$ 720</span></div>
+        <div class="nt" style="--x:10px;--y:-16px;--r:-3deg"><b>Este mês</b><span class="p">quanto entrou até agora?</span><span class="r"><i style="--c:#7BD88F"></i>Recebido R$ 980 de R$ 5.000</span></div>
+      </div>
+      <button type="button" class="cs-bt" id="caosBt" aria-pressed="false">Organizar</button>
+    </div>
   </section>
 
-  <section><h2 class="rv">Organização de quem vive de edição.</h2><div class="ad"><div class="av rv"><h4>Sem o Base Demandas</h4><ul class="nao"><li>Prazos anotados em vários lugares</li><li>Não lembra quem ainda não pagou</li><li>Não sabe quanto ganhou no mês</li><li>Não sabe quanto custa manter o próprio trabalho</li></ul></div><div class="av com rv d1"><h4>Com o Base Demandas</h4><ul class="sim"><li>Todos os trabalhos num quadro só</li><li>Pagamentos pendentes à vista</li><li>Meta do mês e comparativo com o anterior</li><li>Custos fixos somados no seu mês</li></ul></div></div></section>
+  <section class="mesx">
+    <span class="kick rv">O mês numa linha</span>
+    <h2 class="rv" style="margin-top:14px">Quanto entrou, quanto falta, <em class="ac">quanto ainda vem.</em></h2>
+    <p class="sub2 rv">No topo do quadro, cinco números que respondem o que todo editor se pergunta no dia 20.</p>
+    <div class="mkp rv">
+      <div class="mk1 gr"><span>Recebido no mês</span><b>R$ 980 <small>de R$ 5.000</small></b><i><u></u></i><em>Faltam R$ 4.020 para a meta</em></div>
+      <div class="mk1"><span>A receber</span><b>R$ 650</b><em>entregue, falta pagar</em></div>
+      <div class="mk1"><span>Previsto</span><b>R$ 3.920</b><em>fechado, em produção</em></div>
+      <div class="mk1"><span>Custos fixos</span><b>R$ 224</b><em>por mês</em></div>
+      <div class="mk1 al"><span>Atrasados</span><b>1</b><em>prazo já passou</em></div>
+    </div>
+    <p class="mkp-n rv">Você define a meta. O quadro compara com o mês passado e mostra quanto sobrou depois dos custos fixos: CapCut, armazenamento, trilhas, internet.</p>
+  </section>
+
+  <section class="dets">
+    <span class="kick rv">Dentro de cada trabalho</span>
+    <h2 class="rv" style="margin-top:14px">O que você <em class="ac">para de fazer de cabeça.</em></h2>
+    <div class="dt">
+      <div class="dt-c rv">
+        <div class="dt-v"><span class="bol"><i class="on"></i><i class="on"></i><i class="ex"></i></span><small>3 de 2 usadas · <b>1 extra</b></small></div>
+        <b>Contar revisão</b>
+        <p>Cada trabalho mostra quantas rodadas de ajuste já foram. Passou do combinado, aparece em vermelho, e você sabe que é hora de cobrar o extra.</p>
+      </div>
+      <div class="dt-c rv">
+        <div class="dt-v zapm">Oi, Bella! Passando para lembrar do pagamento de R$ 650 referente a anúncio de 30s. Qualquer dúvida, estou à disposição. Obrigado!</div>
+        <b>Escrever a mensagem chata</b>
+        <p>Pedir material, avisar que ficou pronto, confirmar a revisão, lembrar o pagamento. Quatro mensagens prontas, com o nome do cliente e o valor, direto no WhatsApp.</p>
+      </div>
+      <div class="dt-c rv">
+        <div class="dt-v jr"><span>Briefing</span><span>Preço</span><span>Contrato</span><span class="on">Organizador</span></div>
+        <b>Cadastrar o trabalho</b>
+        <p>Dá para criar um trabalho direto no quadro. E se você usa o Briefing, o Quanto Cobrar? ou o Contrato, o trabalho aceito pelo cliente entra aqui sozinho, com valor e prazo.</p>
+      </div>
+    </div>
+  </section>
+
 
   
 
@@ -230,7 +313,7 @@ a.btn{text-decoration:none}
     <ul class="of-inc"><li>Quadro de trabalhos</li><li>Contador de revisões</li><li>Mensagens prontas para o cliente</li><li>Meta do mês</li><li>A receber e previsto</li><li>Custos fixos</li><li>Aula ensinando a usar</li></ul>
     <div class="preco vpreco" hidden></div>
     <div class="parcf">ou <b>12x de R$ 6,89</b> no cartão · ou à vista no Pix</div>
-    <div class="ctas"><button class="btn" data-comprar>Quero organizar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+    <div class="ctas"><button class="btn" data-comprar>Liberar o Base Demandas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
     <p class="of-gar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.2-2.9 7.6-7 9.5-4.1-1.9-7-5.3-7-9.5V6z"/><path d="M8.800 12.200l2.300 2.300 4.200-4.600"/></svg><span><b>7 dias de garantia.</b> Usou e não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</span></p>
     <div class="selos"><span>Acesso de 1 ano</span><span>Liberado na hora da compra</span><span>Aula ensinando a usar</span><span>Celular e computador</span></div>
   </div></section>
@@ -241,12 +324,12 @@ a.btn{text-decoration:none}
 
   <section>
     <h2 class="rv">Perguntas rápidas</h2>
-    <div class="faq rv"><details><summary>Meus dados ficam salvos?</summary><p>Sim, na sua conta. Você acessa do celular ou do computador com o mesmo e-mail.</p></details><details><summary>Funciona sozinho?</summary><p>Sim. Você cadastra seus trabalhos direto nele. Se tiver também o Briefing, o Quanto Cobrar? ou o Contrato, vendidos separadamente, os trabalhos entram aqui sozinhos.</p></details><details><summary>Como recebo o acesso?</summary><p>Assim que a compra é aprovada, ele aparece liberado no app Base FL e no navegador. É só entrar com o mesmo e-mail da compra.</p></details><details><summary>Quanto tempo de acesso?</summary><p>1 ano, com todas as atualizações desse período. Perto de vencer, o app avisa e você pode renovar.</p></details><details><summary>Tem aula ensinando a usar?</summary><p>Sim. Junto com o acesso vem uma aula mostrando, passo a passo, como usar e tirar o melhor proveito.</p></details><details><summary>E se eu quiser as outras ferramentas depois?</summary><p>Você compra quando quiser, com o mesmo e-mail: o acesso entra na mesma conta, sem novo cadastro. E a qualquer momento você libera todas as que faltam por R$ 97.</p></details><details><summary>E se eu comprar e não gostar?</summary><p>Você tem 7 dias de garantia. Dentro desse prazo é só pedir o reembolso e você recebe o valor de volta.</p></details></div>
+    <div class="faq rv"><details><summary>Meus dados ficam salvos?</summary><p>Sim, na sua conta. Você acessa do celular ou do computador com o mesmo e-mail.</p></details><details><summary>Já uso planilha ou Trello. Por que trocar?</summary><p>Dá para fazer em planilha, sim. A diferença é que aqui já vem pronto para trabalho de vídeo: colunas do orçamento ao pago, contador de revisões, mensagens para o cliente e os números do mês, sem montar nada.</p></details><details><summary>É difícil de usar no celular?</summary><p>Não. No celular você move o trabalho de coluna tocando na seta do card, e os números do mês ficam no topo.</p></details><details><summary>Funciona sozinho?</summary><p>Sim. Você cadastra seus trabalhos direto nele. Se tiver também o Briefing, o Quanto Cobrar? ou o Contrato, vendidos separadamente, os trabalhos entram aqui sozinhos.</p></details><details><summary>Como recebo o acesso?</summary><p>Assim que a compra é aprovada, ele aparece liberado no app Base FL e no navegador. É só entrar com o mesmo e-mail da compra.</p></details><details><summary>Quanto tempo de acesso?</summary><p>1 ano, com todas as atualizações desse período. Perto de vencer, o app avisa e você pode renovar.</p></details><details><summary>Tem aula ensinando a usar?</summary><p>Sim. Junto com o acesso vem uma aula mostrando, passo a passo, como usar e tirar o melhor proveito.</p></details><details><summary>E se eu quiser as outras ferramentas depois?</summary><p>Você compra quando quiser, com o mesmo e-mail: o acesso entra na mesma conta, sem novo cadastro. E a qualquer momento você libera todas as que faltam por R$ 97.</p></details><details><summary>E se eu comprar e não gostar?</summary><p>Você tem 7 dias de garantia. Dentro desse prazo é só pedir o reembolso e você recebe o valor de volta.</p></details></div>
   </section>
 
   <div class="fecho rv">
-    <h2>Feche o mês sabendo exatamente onde está.</h2>
-    <div class="ctas"><button class="btn" data-comprar>Quero organizar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+    <h2>No dia 20, você abre o quadro <em class="ac">e sabe como está o mês.</em></h2>
+    <div class="ctas"><button class="btn" data-comprar>Liberar o Base Demandas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
     <p class="nota"><b class="pcur">R$ 67</b> · acesso de 1 ano · 7 dias de garantia</p>
   </div>
 
@@ -323,6 +406,19 @@ async function demo(){
   }
 }
 demo();
+
+// caos -> organizado: as mesmas seis dúvidas viram resposta
+(function(){
+  const c = $('#caos'), b = $('#caosBt'); if (!c) return;
+  let mexeu = false;
+  function poe(ok){ c.classList.toggle('ok', ok); b.textContent = ok ? 'Bagunçar de novo' : 'Organizar'; b.setAttribute('aria-pressed', ok ? 'true' : 'false'); }
+  b.addEventListener('click', () => { mexeu = true; poe(!c.classList.contains('ok')); });
+  if (calmo) { poe(true); return; }
+  // se a pessoa não tocar, organiza sozinho depois de alguns segundos na tela
+  const io = new IntersectionObserver(e => { if (e[0].isIntersecting){ io.disconnect(); setTimeout(() => { if (!mexeu) poe(true); }, 3200); } }, { threshold: .6 });
+  io.observe(c);
+})();
+(function(){ const k = document.querySelector('.mkp'); if (!k) return; new IntersectionObserver((e, o) => { if (e[0].isIntersecting){ k.classList.add('vis'); o.disconnect(); } }, { threshold: .4 }).observe(k); })();
 
 </script>
 <script src="/catalogo.js" defer></script>
