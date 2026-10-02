@@ -153,6 +153,9 @@ h2{font-family:var(--d);font-weight:800;font-size:clamp(28px,4.6vw,46px);line-he
 .oferta .ou{display:block;margin-top:14px;color:var(--mute);font-size:15px}
 
 .faq{max-width:760px;margin-top:26px}
+.duv .bem h3{font-size:18px}.duv .bem p b{color:var(--ink)}
+.franco{margin-top:18px;max-width:70ch;border-left:3px solid #FF6FAE;padding:4px 0 4px 16px;color:var(--mute);font-size:15.5px}.franco b{color:var(--ink)}
+.oferta .gar{margin:18px auto 0;max-width:460px;color:var(--mute);font-size:14.5px}.oferta .gar b{color:var(--ink)}
 details{border-bottom:1px solid var(--line)}
 summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:18px 0;font-weight:700;font-size:17px}
 summary::-webkit-details-marker{display:none}
@@ -210,10 +213,10 @@ footer a{color:var(--mute)}
     <h1>Copie a cor de <em>qualquer vídeo</em>.</h1>
     <p class="lead">Sabe aquele vídeo com a cor que você queria no seu? Mostre ele para o Mood, mostre o seu vídeo, e baixe a <b>LUT pronta</b>. Leva menos de um minuto.</p>
     <div class="cta">
-      <a class="btn" href="#oferta" data-comprar>Quero o Mood · R$ 97</a>
-      <a class="btn gh" href="https://basefl.com/lut/" data-testar>Testar agora, de graça</a>
+      <a class="btn" href="https://basefl.com/lut/" data-testar>Testar com o meu vídeo, de graça</a>
+      <a class="btn gh" href="#oferta" data-comprar>Já testei, quero o Mood</a>
     </div>
-    <p class="sob">Você testa com o seu próprio vídeo antes de comprar.</p>
+    <p class="sob">Você vê o resultado no seu próprio vídeo antes de pagar. O acesso libera o download da LUT.</p>
 
     <div class="demo" id="demo">
       <div class="tela" id="tela">
@@ -228,6 +231,16 @@ footer a{color:var(--mute)}
     </div>
   </header>
 
+  <section>
+    <span class="mono kick rv">Você já tentou</span>
+    <h2 class="rv">Você salvou o vídeo pela cor. E nunca conseguiu repetir.</h2>
+    <p class="sec-p rv">Abriu as curvas, mexeu na roda de cor, testou três packs de LUT. Chegou perto, mas não era aquilo. O Mood troca tudo isso por uma pergunta só: <b style="color:var(--ink)">qual cor você quer?</b></p>
+    <div class="duo">
+      <div class="cx nao rv"><h3>Sem o Mood</h3><ul><li>Horas mexendo em curva e roda de cor</li><li>Testar pack de LUT atrás de pack, e nenhum fica igual</li><li>A pele fica laranja, o céu fica estranho</li><li>Cada vídeo começa do zero</li></ul></div>
+      <div class="cx sim rv d1"><h3>Com o Mood</h3><ul><li>A cor que você escolheu, em menos de um minuto</li><li>Uma LUT feita para o seu vídeo, não um look genérico</li><li>Pele natural protegida com um botão</li><li>Salvou a LUT, usa em todos os vídeos da série</li></ul></div>
+    </div>
+  </section>
+
   <section id="como">
     <span class="mono kick rv">Como funciona</span>
     <h2 class="rv">Três passos. Nenhum deles é difícil.</h2>
@@ -239,26 +252,18 @@ footer a{color:var(--mute)}
   </section>
 
   <section>
-    <span class="mono kick rv">Feito para quem edita, não para colorista</span>
-    <h2 class="rv">Você não precisa entender de cor.</h2>
-    <p class="sec-p rv">Colorir do jeito tradicional pede curvas, rodas de cor e muita tentativa. O Mood troca tudo isso por uma pergunta só: <b style="color:var(--ink)">qual cor você quer?</b></p>
-    <div class="duo">
-      <div class="cx nao rv"><h3>Sem o Mood</h3><ul><li>Horas mexendo em curva e roda de cor</li><li>Testar pack de LUT atrás de pack, e nenhum fica igual</li><li>A pele fica laranja, o céu fica estranho</li><li>Cada vídeo começa do zero</li></ul></div>
-      <div class="cx sim rv d1"><h3>Com o Mood</h3><ul><li>A cor que você escolheu, em menos de um minuto</li><li>Uma LUT feita para o seu vídeo, não um look genérico</li><li>Pele natural protegida com um botão</li><li>Salvou a LUT, usa em todos os vídeos da série</li></ul></div>
+    <span class="mono kick rv">O que costuma dar errado com LUT</span>
+    <h2 class="rv">“E se a pele ficar laranja?”</h2>
+    <p class="sec-p rv">As dúvidas de quem já baixou LUT pronta e se arrependeu. E o que o Mood faz em cada uma.</p>
+    <div class="bens duv">
+      <div class="bem rv"><h3>E se a pele ficar laranja?</h3><p>Tem um botão de <b>pele natural</b>, que segura os tons de pele para ninguém sair laranja ou esverdeado.</p></div>
+      <div class="bem rv d1"><h3>E se ficar forte demais?</h3><p>Três botões, <b>Suave, Fiel ou Intenso</b>, e um controle de intensidade. O ajuste fino existe, mas fica guardado para quem quiser.</p></div>
+      <div class="bem rv d2"><h3>E se só ficar bom naquela cena?</h3><p>Antes de baixar, você vê a LUT aplicada em <b>outros momentos do mesmo vídeo</b>.</p></div>
+      <div class="bem rv"><h3>Como eu sei se ficou parecido?</h3><p>Um medidor mostra, <b>em porcentagem</b>, o quanto o seu vídeo se aproximou da referência.</p></div>
+      <div class="bem rv d1"><h3>Preciso ficar tirando print?</h3><p>Não. Solte o <b>arquivo de vídeo</b> e o Mood lê vários momentos dele sozinho.</p></div>
+      <div class="bem rv d2"><h3>Vocês ficam com os meus vídeos?</h3><p>Não. Tudo acontece <b>no seu aparelho</b>. Nenhum vídeo ou print é enviado para lugar nenhum.</p></div>
     </div>
-  </section>
-
-  <section>
-    <span class="mono kick rv">O que tem dentro</span>
-    <h2 class="rv">Simples por fora, caprichado por dentro.</h2>
-    <div class="bens">
-      <div class="bem rv"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9.5v5l4.5-2.5z"/></svg></span><h3>Aceita o vídeo direto</h3><p>Não precisa tirar print. Solte o arquivo e o Mood lê vários momentos dele sozinho.</p></div>
-      <div class="bem rv d1"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 12h16M4 6h16M4 18h16"/><circle cx="9" cy="6" r="2" fill="#191C1B"/><circle cx="15" cy="12" r="2" fill="#191C1B"/><circle cx="8" cy="18" r="2" fill="#191C1B"/></svg></span><h3>Suave, Fiel ou Intenso</h3><p>Três botões e um controle de intensidade. O ajuste fino existe, mas fica guardado para quem quiser.</p></div>
-      <div class="bem rv d2"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20c1.2-3.6 4-5.5 7.5-5.5s6.3 1.9 7.5 5.5"/></svg></span><h3>Pele natural</h3><p>Um botão segura os tons de pele para ninguém sair laranja ou esverdeado.</p></div>
-      <div class="bem rv"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 7v5l3 2"/></svg></span><h3>Medidor de semelhança</h3><p>Mostra em porcentagem o quanto o seu vídeo ficou parecido com a referência.</p></div>
-      <div class="bem rv d1"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="8" height="7" rx="1.5"/><rect x="13" y="4" width="8" height="7" rx="1.5"/><rect x="3" y="13" width="8" height="7" rx="1.5"/><rect x="13" y="13" width="8" height="7" rx="1.5"/></svg></span><h3>Confere em outras cenas</h3><p>Antes de baixar, veja a LUT aplicada em outros momentos do mesmo vídeo.</p></div>
-      <div class="bem rv d2"><span class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span><h3>Seus vídeos ficam com você</h3><p>Tudo acontece no seu aparelho. Nenhum vídeo ou print é enviado para lugar nenhum.</p></div>
-    </div>
+    <p class="franco rv"><b>O que o Mood não faz: milagre.</b> Quanto mais parecidas as cenas (pessoa com pessoa, rua com rua, dia com dia), mais igual fica. Com cenas muito diferentes, ele leva o clima da cor. Por isso o teste é grátis.</p>
   </section>
 
   <section>
@@ -276,9 +281,10 @@ footer a{color:var(--mute)}
     <h2>Todas as cores que você quiser copiar.</h2>
     <div class="preco"><small>R$</small>97</div>
     <p class="parc">à vista, ou <b>12x de R$ 9,97</b></p>
-    <div class="inc"><span>7 dias de garantia</span><span>LUTs ilimitadas durante 1 ano</span><span>Funciona no celular e no computador</span><span>Aula ensinando a usar</span><span>Liberado na hora da compra</span><span>Passo a passo para CapCut, Premiere, DaVinci e Final Cut</span><span>Atualizações incluídas no período</span></div>
-    <a class="btn" href="#" data-comprar>Quero o Mood</a>
+    <div class="inc"><span>LUTs ilimitadas durante 1 ano</span><span>Funciona no celular e no computador</span><span>Aula ensinando a usar</span><span>Liberado na hora da compra</span><span>Passo a passo para CapCut, Premiere, DaVinci e Final Cut</span><span>Atualizações incluídas no período</span></div>
+    <a class="btn" href="#" data-comprar>Liberar o Mood por 1 ano</a>
     <a class="ou" href="https://basefl.com/lut/" data-testar>ou teste antes, com o seu vídeo</a>
+    <p class="gar"><b>7 dias de garantia.</b> Criou suas LUTs e não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</p>
   </div></div>
 
   <section>
