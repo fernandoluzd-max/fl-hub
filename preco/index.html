@@ -157,6 +157,7 @@ h2{font-size:16px;font-weight:750;margin:24px 0 10px}
 .sai{animation:sai .18s ease-in forwards}
 @keyframes sai{to{opacity:0;transform:translateY(-6px)}}
 @media (prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
+.link.aula{text-decoration:none;font-weight:700;color:var(--ink,#F4F0E4);border:1px solid var(--line,#2B302E);border-radius:99px;padding:6px 12px;margin-right:6px}
 </style>
 </head>
 <body>
@@ -165,6 +166,7 @@ h2{font-size:16px;font-weight:750;margin:24px 0 10px}
     <img src="/icones/preco.png" alt="">
     <div class="nm">Quanto Cobrar?<small>Base FL</small></div>
     <div class="sp"></div>
+    <button class="link aula" id="aula" hidden>▶ Aula</button>
     <button class="link" id="conta"></button>
   </header>
   <main id="tela"></main>
@@ -177,6 +179,7 @@ h2{font-size:16px;font-weight:750;margin:24px 0 10px}
 </div></div>
 <div class="toast" id="toast"></div>
 
+<script src="/aulas.js"></script>
 <script>
 // ===================== CONFIG =====================
 const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
@@ -504,7 +507,7 @@ function orcamento(c){
     <input class="inp" id="cli" placeholder="Nome do cliente (opcional)" autocomplete="off">
     <div class="chat"><div class="para">Assim o seu cliente vai receber</div><div class="bolha"><textarea id="txt"></textarea><span class="hr">${hora} ✓✓</span></div></div>
     <div class="row"><button class="btn ghost" id="copiar">Copiar</button><button class="btn" id="zap">Enviar no WhatsApp</button></div>
-    <div class="row" style="margin-top:10px"><button class="btn ghost" id="painel">＋ Pôr no Organizador</button><button class="btn ghost" id="contrato">Gerar contrato</button></div>`, 'entra');
+    <div class="row" style="margin-top:10px"><button class="btn ghost" id="painel">＋ Pôr no Base Demandas</button><button class="btn ghost" id="contrato">Gerar contrato</button></div>`, 'entra');
   const monta = () => {
     const nome = $('#cli').value.trim();
     const val = new Date(Date.now() + 7*864e5).toLocaleDateString('pt-BR');
@@ -654,6 +657,9 @@ addEventListener('resize', posicionaAgulha);
 doBriefing();
 botaoConta(); pergunta();
 checaAcesso().then(() => { if ($('#card')) resultado(false); });
+
+// aula da ferramenta: o botão só aparece quando existe aula cadastrada
+if (window.Aulas) Aulas.liga('#aula', ['fl-preco'], { titulo:'Quanto Cobrar?', cor:'123,216,143', dono: () => acesso });
 </script>
 </body>
 </html>

@@ -119,6 +119,8 @@ footer a{color:var(--mute);cursor:pointer;text-decoration:underline;text-underli
 .card.locked{border-color:rgba(var(--c),.45);background:radial-gradient(120% 70% at 100% 0%,rgba(var(--c),.22),transparent 62%),radial-gradient(90% 60% at 0% 100%,rgba(var(--c),.08),transparent 70%),var(--card);box-shadow:0 18px 40px -26px rgba(var(--c),.8)}
 .card.locked .icon{box-shadow:0 12px 28px -12px rgba(var(--c),.95)}
 .card.locked .icon svg{stroke:#141615}
+button.aula{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+button.aula svg{width:15px;height:15px;fill:currentColor;flex:none}
 .card.locked .lock{background:var(--card);border-color:rgba(var(--c),.6)}
 .card.locked .lock svg{stroke:rgb(var(--c))}
 .card.locked::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.07),transparent);transform:skewX(-18deg);animation:brilho 5s ease-in-out infinite;pointer-events:none}
@@ -191,6 +193,7 @@ footer a{color:var(--mute);cursor:pointer;text-decoration:underline;text-underli
   <div class="btns"><button class="primary" id="m-copy">Copiar</button><button class="ghost" id="m-close">Fechar</button></div>
 </div></div>
 
+<script src="aulas.js"></script>
 <script>
 // ===== tema (escuro/claro) e atividade recolhida: lembra a escolha =====
 const pref = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch {} } };
@@ -227,7 +230,7 @@ const PRODUCTS = [
   {sec:'ferramentas', key:'preco', packId:'fl-preco', name:'Quanto Cobrar?', desc:'Descubra quanto cobrar por uma edição ou gravação em 1 minuto e mande o orçamento pronto no WhatsApp.', web:'https://basefl.com/preco/', cor:'123,216,143', preco:'R$ 47', acesso:'1 ano', gancho:'Pare de chutar preço'},
   {sec:'ferramentas', key:'contrato', packId:'fl-contrato', name:'Gerador de Contrato', desc:'Termo rápido para o WhatsApp ou contrato completo em PDF, pronto em poucos toques.', web:'https://basefl.com/contrato/', cor:'169,139,255', preco:'R$ 47', acesso:'1 ano', gancho:'Combinado bom é combinado por escrito'},
   {sec:'ferramentas', key:'briefing', packId:'fl-briefing', name:'Gerador de Briefing', desc:'Perguntas certas para o cliente antes de começar, num link para ele responder.', web:'https://basefl.com/briefing/', cor:'63,208,194', preco:'R$ 47', acesso:'1 ano', gancho:'O cliente responde, você só confere'},
-  {sec:'ferramentas', key:'painel', packId:'fl-painel', name:'Organizador Base', desc:'Seus trabalhos, prazos e pagamentos num só lugar.', web:'https://basefl.com/painel/', cor:'255,179,71', preco:'R$ 67', acesso:'1 ano', gancho:'Saiba o que entregar e o que já entrou'},
+  {sec:'ferramentas', key:'painel', packId:'fl-painel', name:'Base Demandas', desc:'Seus trabalhos, prazos e pagamentos num só lugar.', web:'https://basefl.com/painel/', cor:'255,179,71', preco:'R$ 67', acesso:'1 ano', gancho:'Saiba o que entregar e o que já entrou'},
 ];
 
 // ===== Servidor (chave pública: pode ficar no app) =====
@@ -388,6 +391,12 @@ function render(){
       if (p.inclui && partes.some(x => x.inst)) b.appendChild(btn('Remover', 'ghost', () => doRemoveKit(p)));
       else if (inst) b.appendChild(btn('Remover', 'ghost', () => doRemove(p, inst)));
     }
+    // aula do produto: abre dentro do app, sem sair para outro site
+    const packsAula = p.inclui ? [p.packId, ...p.inclui.map(k => PRODUCTS.find(x => x.key === k).packId)] : [p.packId];
+    if (owned && window.Aulas && Aulas.tem(packsAula)){
+      const ba = btn('Ver aula', 'ghost aula', () => Aulas.abre(packsAula, { titulo: p.name, cor: p.cor, dono: true }));
+      ba.disabled = false; ba.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Ver aula'; b.appendChild(ba);
+    }
     c.appendChild(b); $('#s-' + p.sec + ' .cards').appendChild(c);
   }
 }
@@ -476,6 +485,8 @@ T.event.listen('progress', e => { const t = String(e.payload); step(t, /^aviso/i
   setInterval(() => { if (!busy) refresh(); }, 3000);
   setInterval(() => { if (!busy && sess) loadCatalog(); }, 60000);
 })();
+
+if (window.Aulas){ Aulas.aoCarregar(() => { if (!busy) render(); }); Aulas.carrega(); }
 </script>
 </body>
 </html>

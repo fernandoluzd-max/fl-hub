@@ -137,6 +137,7 @@ textarea{min-height:88px;resize:vertical;line-height:1.4}
   .wrap{max-width:none;padding:0}.papel{box-shadow:none;border-radius:0;padding:0;background:#fff;font-size:11.5pt}
   .papel .cl{filter:none!important;opacity:1!important;transform:none!important}
 }
+.link.aula{text-decoration:none;font-weight:700;color:var(--ink,#F4F0E4);border:1px solid var(--line,#2B302E);border-radius:99px;padding:6px 12px;margin-right:6px}
 </style>
 </head>
 <body>
@@ -145,6 +146,7 @@ textarea{min-height:88px;resize:vertical;line-height:1.4}
     <img src="/icones/contrato.png" alt="">
     <div class="nm">Gerador de Contrato<small>Base FL</small></div>
     <div class="sp"></div>
+    <button class="link aula" id="aula" hidden>▶ Aula</button>
     <button class="link" id="conta"></button>
   </header>
   <main id="tela"></main>
@@ -156,6 +158,7 @@ textarea{min-height:88px;resize:vertical;line-height:1.4}
 </div></div>
 <div class="toast" id="toast"></div>
 
+<script src="/aulas.js"></script>
 <script>
 // ===================== CONFIG =====================
 const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
@@ -627,6 +630,9 @@ function login(depois){
 // ===================== início =====================
 botaoConta(); mostra();
 checaAcesso().then(() => { if (passo >= PASSOS.length) monta(false); });
+
+// aula da ferramenta: o botão só aparece quando existe aula cadastrada
+if (window.Aulas) Aulas.liga('#aula', ['fl-contrato'], { titulo:'Gerador de Contrato', cor:'169,139,255', dono: () => acesso });
 </script>
 </body>
 </html>

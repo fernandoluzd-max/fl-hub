@@ -134,6 +134,7 @@ label{display:block;font-size:13.5px;font-weight:650;color:var(--mute);margin:0 
 .toast{pointer-events:none;position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;transition:all .25s;z-index:30;white-space:nowrap}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.link.aula{text-decoration:none;font-weight:700;color:var(--ink,#F4F0E4);border:1px solid var(--line,#2B302E);border-radius:99px;padding:6px 12px;margin-right:6px}
 </style>
 </head>
 <body>
@@ -144,6 +145,7 @@ label{display:block;font-size:13.5px;font-weight:650;color:var(--mute);margin:0 
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="/aulas.js"></script>
 <script>
 // ===================== CONFIG =====================
 const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
@@ -317,7 +319,7 @@ function respostas(r){
     <div class="card resumo">${linhasResumo(r).map(([k, n, v]) => `<div class="it" style="--cor:var(${COR[k]})"><span>${n}</span><b>${esc(v)}</b></div>`).join('')}
       ${r.ref ? `<div class="it"><span>Referência</span><b><a href="${/^https?:\/\//i.test(r.ref) ? esc(r.ref) : 'https://' + esc(r.ref)}" target="_blank" rel="noopener noreferrer">${esc(r.ref)}</a></b></div>` : ''}${r.obs ? `<div class="it"><span>Detalhes</span><b>${esc(r.obs)}</b></div>` : ''}</div>
     <div class="row" style="margin-top:16px"><button class="btn" id="calc">Calcular no Quanto Cobrar?</button></div>
-    <div class="row"><button class="btn ghost" id="dem">＋ Pôr no Organizador</button><button class="btn ghost" id="cop">Copiar resumo</button></div>
+    <div class="row"><button class="btn ghost" id="dem">＋ Pôr no Base Demandas</button><button class="btn ghost" id="cop">Copiar resumo</button></div>
     ${S.length ? `<h2>O que observar</h2><ul class="sinais">${S.map(([i, t]) => `<li><i>${i}</i><span>${t}</span></li>`).join('')}</ul>` : ''}`);
   $('#calc').onclick = () => {
     const b = { modo:r.s, tipo:r.t !== 'outro' ? r.t : undefined, dur:r.d !== 'ns' ? r.d : undefined, edicao:r.e !== 'ns' ? r.e : undefined,
@@ -341,9 +343,10 @@ try { sess = JSON.parse(store.get('fl_sess') || 'null'); } catch { sess = null; 
 const meu = () => { try { return JSON.parse(store.get('fl_brief_eu') || 'null'); } catch { return null; } };
 const meuLink = e => BASE + '#p=' + enc({ n:e.n, w:e.w });
 function cabecalhoEditor(){
-  $('#topo').innerHTML = `<img src="/icones/briefing.png" alt=""><div class="nm">Gerador de Briefing<small>Base FL</small></div><div class="sp"></div><button class="link" id="conta">${sess ? 'Sair' : 'Entrar'}</button>`;
+  $('#topo').innerHTML = `<img src="/icones/briefing.png" alt=""><div class="nm">Gerador de Briefing<small>Base FL</small></div><div class="sp"></div><button class="link aula" id="aula" hidden>▶ Aula</button><button class="link" id="conta">${sess ? 'Sair' : 'Entrar'}</button>`;
   $('#foot').textContent = 'O cliente não precisa de conta nem de app. Só abre o link e responde.';
   $('#conta').onclick = () => { if (sess){ salva(null); acesso = false; inicioEditor(); } else login(inicioEditor); };
+  if (window.Aulas) Aulas.liga('#aula', ['fl-briefing'], { titulo:'Gerador de Briefing', cor:'63,208,194', dono: () => acesso });
 }
 function inicioEditor(){
   cabecalhoEditor();

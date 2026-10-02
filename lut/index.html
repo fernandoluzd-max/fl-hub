@@ -194,6 +194,7 @@ details.fino[open] summary::after{content:"–"}
 .entra>*{animation:entra .35s cubic-bezier(.2,.8,.2,1) both}
 @keyframes entra{from{opacity:0;transform:translateY(10px)}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.link.aula{text-decoration:none;font-weight:700;color:var(--ink,#F4F0E4);border:1px solid var(--line,#2B302E);border-radius:99px;padding:6px 12px;margin-right:6px}
 </style>
 </head>
 <body>
@@ -202,6 +203,7 @@ details.fino[open] summary::after{content:"–"}
     <span class="mood" aria-label="Mood">M<svg viewBox="0 0 414 231" aria-hidden="true"><defs><linearGradient id="mg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="298" y2="231"><stop offset="0" stop-color="#FFB347"/><stop offset=".38" stop-color="#FF6FAE"/><stop offset=".7" stop-color="#B45CFF"/><stop offset="1" stop-color="#5AB8FF"/></linearGradient></defs><circle cx="115.5" cy="115.5" r="115.5" fill="url(#mg)"/><circle cx="298" cy="115.5" r="99.9" fill="none" stroke="currentColor" stroke-width="31.2"/></svg>d</span>
     <span class="de">Base FL</span>
     <div class="sp"></div>
+    <button class="link aula" id="aula" hidden>▶ Aula</button>
     <button class="link" id="conta"></button>
   </header>
   <div class="passos" id="passos"></div>
@@ -209,6 +211,7 @@ details.fino[open] summary::after{content:"–"}
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="/aulas.js"></script>
 <script>
 // ===================== CONFIG =====================
 const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
@@ -802,6 +805,9 @@ function login(depois){
 // ===================== início =====================
 botaoConta(); passo1();
 checaAcesso().then(() => { if ($('.fim')) passo3(); });
+
+// aula da ferramenta: o botão só aparece quando existe aula cadastrada
+if (window.Aulas) Aulas.liga('#aula', ['fl-lut'], { titulo:'Mood', cor:'180,92,255', dono: () => acesso });
 </script>
 </body>
 </html>
