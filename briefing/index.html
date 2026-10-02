@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Gerador de Briefing — Base FL</title>
 <meta name="description" content="Mande um link, o cliente responde em 1 minuto e as respostas chegam no seu WhatsApp, prontas para calcular o preço.">
-<link rel="icon" href="/favicon.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" href="/icones/briefing-64.png">
+<link rel="apple-touch-icon" href="/icones/briefing.png">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#0D0F0E">
 <meta name="robots" content="noindex">
@@ -29,7 +29,7 @@ button{font:inherit;color:inherit}
 
 .wrap{position:relative;max-width:520px;margin:0 auto;padding:16px 18px 40px}
 header{display:flex;align-items:center;gap:10px;margin-bottom:22px}
-header img,.av{width:32px;height:32px;border-radius:9px;flex:none}
+header img,.av{width:38px;height:38px;border-radius:11px;box-shadow:0 0 0 1px rgba(255,255,255,.10);flex:none}
 .av{display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--accent-ink);font-weight:850;font-stretch:115%;font-size:15px}
 header .nm{font-weight:800;font-stretch:112%;font-size:15px;letter-spacing:-.01em;line-height:1.1}
 header .nm small{display:block;font-weight:500;font-stretch:100%;color:var(--mute);font-size:12px;letter-spacing:0}
@@ -299,7 +299,7 @@ function enviado(txt){
 // 2) EDITOR: abre a mensagem que o cliente mandou (#r=...)
 // =====================================================================
 function respostas(r){
-  $('#topo').innerHTML = `<img src="/logo.png" alt=""><div class="nm">Briefing recebido<small>Base FL</small></div>`;
+  $('#topo').innerHTML = `<img src="/icones/briefing.png" alt=""><div class="nm">Briefing recebido<small>Base FL</small></div>`;
   $('#foot').textContent = 'As respostas ficam só neste link. Nada é salvo em servidor.';
   const quando = r.em ? new Date(r.em).toLocaleDateString('pt-BR', { day:'2-digit', month:'short' }) : '';
   const S = [];
@@ -341,7 +341,7 @@ try { sess = JSON.parse(store.get('fl_sess') || 'null'); } catch { sess = null; 
 const meu = () => { try { return JSON.parse(store.get('fl_brief_eu') || 'null'); } catch { return null; } };
 const meuLink = e => BASE + '#p=' + enc({ n:e.n, w:e.w });
 function cabecalhoEditor(){
-  $('#topo').innerHTML = `<img src="/logo.png" alt=""><div class="nm">Gerador de Briefing<small>Base FL</small></div><div class="sp"></div><button class="link" id="conta">${sess ? 'Sair' : 'Entrar'}</button>`;
+  $('#topo').innerHTML = `<img src="/icones/briefing.png" alt=""><div class="nm">Gerador de Briefing<small>Base FL</small></div><div class="sp"></div><button class="link" id="conta">${sess ? 'Sair' : 'Entrar'}</button>`;
   $('#foot').textContent = 'O cliente não precisa de conta nem de app. Só abre o link e responde.';
   $('#conta').onclick = () => { if (sess){ salva(null); acesso = false; inicioEditor(); } else login(inicioEditor); };
 }

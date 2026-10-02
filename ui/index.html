@@ -55,9 +55,9 @@ main.recolhido{grid-template-columns:52px 1fr}
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;align-content:start}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:12px;transition:transform .15s,border-color .15s}
 .card:hover{transform:translateY(-2px);border-color:var(--hover)}
-.icon{width:62px;height:62px;border-radius:17px;display:grid;place-items:center;background:var(--icon-bg);border:1px solid var(--icon-line)}
+.icon{width:72px;height:72px;border-radius:19px;display:grid;place-items:center;background:#161918}
 .icon svg{width:30px;height:30px;stroke:var(--icon-ink)}
-.card.on .icon{background:linear-gradient(145deg,#f6b862,var(--accent) 60%,#d98a2b);border:none}
+.icon>img{width:100%;height:100%;display:block;border-radius:inherit;object-fit:cover;box-shadow:0 0 0 1px rgba(255,255,255,.10)}
 .card.on .icon svg{stroke:var(--accent-ink)}
 .card h3{font-size:15px}
 .card p{color:var(--mute);font-size:12.5px;min-height:38px}
@@ -113,14 +113,12 @@ footer a{color:var(--mute);cursor:pointer;text-decoration:underline;text-underli
 .lock{position:absolute;right:-7px;bottom:-7px;width:28px;height:28px;border-radius:50%;background:var(--bg2);border:1px solid var(--line);display:grid;place-items:center}
 .lock svg{width:15px;height:15px}
 .card{--c:242,165,65;position:relative;overflow:hidden}
-.card.on .icon{background:linear-gradient(145deg,rgba(var(--c),.75),rgb(var(--c)) 60%,rgba(var(--c),.85))}
+.card.on .icon{box-shadow:0 12px 28px -14px rgba(var(--c),.9)}
 .card.on{border-top:2px solid rgba(var(--c),.55)}
 /* vitrine: o que a pessoa ainda não tem chama para conhecer */
 .card.locked{border-color:rgba(var(--c),.45);background:radial-gradient(120% 70% at 100% 0%,rgba(var(--c),.22),transparent 62%),radial-gradient(90% 60% at 0% 100%,rgba(var(--c),.08),transparent 70%),var(--card);box-shadow:0 18px 40px -26px rgba(var(--c),.8)}
-.card.locked .icon{background:linear-gradient(145deg,rgba(var(--c),.75),rgb(var(--c)) 60%,rgba(var(--c),.85));border:none;box-shadow:0 10px 26px -10px rgba(var(--c),.9)}
+.card.locked .icon{box-shadow:0 12px 28px -12px rgba(var(--c),.95)}
 .card.locked .icon svg{stroke:#141615}
-.card.k-mood .icon,.card.k-mood.on .icon,.card.k-mood.locked .icon{background:#141615;border:1px solid rgba(255,255,255,.14)}
-.card.k-mood .icon>svg{width:38px;height:38px}
 .card.locked .lock{background:var(--card);border-color:rgba(var(--c),.6)}
 .card.locked .lock svg{stroke:rgb(var(--c))}
 .card.locked::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.07),transparent);transform:skewX(-18deg);animation:brilho 5s ease-in-out infinite;pointer-events:none}
@@ -214,17 +212,8 @@ document.getElementById('ativ').onclick = () => { pref.set('fl_ativ', 'aberta');
 const T = window.__TAURI__;
 const invoke = (c, a) => T.core.invoke(c, a);
 
-const ICONS = {
-  legendas:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 13h4M13 13h4M7 16h6"/></svg>',
-  sons:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/></svg>',
-  preco:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8.5 7h7M8.5 11h1.5M12 11h1.5M15.5 11h0M8.5 14.5h1.5M12 14.5h1.5M8.5 18h1.5M12 18h1.5M15.5 14.5V18"/></svg>',
-  contrato:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h3"/><path d="M15.5 16.5l1.2 1.2 2.3-2.4"/></svg>',
-  painel:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M9 4v16M15 4v16"/><path d="M5.5 8h1.5M11 8h2M11 11h2M17 8h1.5"/></svg>',
-  briefing:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>',
-  curso:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="13" rx="2.5"/><path d="M10.5 9.2v5.6l4.6-2.8z"/><path d="M8 21h8"/></svg>',
-  mood:'<svg viewBox="0 0 24 24"><defs><linearGradient id="mdg" x1="3" y1="6" x2="16" y2="18" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFB347"/><stop offset=".38" stop-color="#FF6FAE"/><stop offset=".7" stop-color="#B45CFF"/><stop offset="1" stop-color="#5AB8FF"/></linearGradient></defs><circle cx="8.6" cy="12" r="5.4" style="fill:url(#mdg);stroke:none"/><circle cx="15.6" cy="12" r="4.6" style="fill:none;stroke:#F4F0E4;stroke-width:1.5"/></svg>',
-  luts:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="9" cy="10" r="5"/><circle cx="15" cy="10" r="5"/><circle cx="12" cy="15" r="5"/></svg>'
-};
+// ícone oficial de cada produto: um arquivo por produto em ui/icones/ (gerado por tools/gera_icones.py)
+const icone = key => `<img src="icones/${key}.png" alt="" width="72" height="72" draggable="false">`;
 // catálogo: packId = id do manifest do .flpack
 const PRODUCTS = [
   // KITS: instalam no CapCut (Instalar / Atualizar / Remover)
@@ -232,7 +221,7 @@ const PRODUCTS = [
   {sec:'kits', key:'sons', packId:'fl-sons', name:'Efeitos Sonoros', desc:'65 whooshes, impactos, risers e foleys direto nas suas predefinições do CapCut, organizados por categoria.', cor:'90,184,255', preco:'R$ 19', acesso:'vitalício', gancho:'O som que faltava no seu corte'},
   {sec:'kits', key:'luts', packId:'fl-luts', name:'LUTs', desc:'20 looks de finalização + 3 LUTs de conversão (S-Log2, S-Log3 e Apple Log), direto em Ajuste › LUT.', lut:true, cor:'255,111,174', preco:'R$ 19', acesso:'vitalício', gancho:'Cor de cinema em um clique'},
   // FERRAMENTAS: abrem no navegador e no celular (Abrir)
-  {sec:'ferramentas', key:'mood', packId:'fl-lut', name:'Mood', desc:'Copie a cor de qualquer vídeo: coloque a referência e o seu vídeo e baixe a LUT pronta para o CapCut.', web:'https://basefl.com/lut/', cor:'180,92,255', acesso:'1 ano', gancho:'A cor daquele vídeo, no seu'},
+  {sec:'ferramentas', key:'mood', packId:'fl-lut', name:'Mood', desc:'Copie a cor de qualquer vídeo: coloque a referência e o seu vídeo e baixe a LUT pronta para o CapCut.', web:'https://basefl.com/lut/', cor:'180,92,255', acesso:'1 ano', preco:'R$ 97', gancho:'A cor daquele vídeo, no seu'},
   {sec:'ferramentas', key:'preco', packId:'fl-preco', name:'Quanto Cobrar?', desc:'Descubra quanto cobrar por uma edição ou gravação em 1 minuto e mande o orçamento pronto no WhatsApp.', web:'https://basefl.com/preco/', cor:'123,216,143', preco:'R$ 47', acesso:'1 ano', gancho:'Pare de chutar preço'},
   {sec:'ferramentas', key:'contrato', packId:'fl-contrato', name:'Gerador de Contrato', desc:'Termo rápido para o WhatsApp ou contrato completo em PDF, pronto em poucos toques.', web:'https://basefl.com/contrato/', cor:'169,139,255', preco:'R$ 47', acesso:'1 ano', gancho:'Combinado bom é combinado por escrito'},
   {sec:'ferramentas', key:'briefing', packId:'fl-briefing', name:'Gerador de Briefing', desc:'Perguntas certas para o cliente antes de começar, num link para ele responder.', web:'https://basefl.com/briefing/', cor:'63,208,194', preco:'R$ 47', acesso:'1 ano', gancho:'O cliente responde, você só confere'},
@@ -354,7 +343,7 @@ function render(){
   for (const p of PRODUCTS){
     if (p.emBreve){
       const c = document.createElement('div'); c.className = 'card';
-      c.innerHTML = `<div class="icon">${ICONS[p.key]}</div><h3>${p.name}</h3><p>${p.desc}</p><div class="meta"><span class="dot"></span>Em breve</div><div class="btns"><button class="primary" disabled>Em breve</button></div>`;
+      c.innerHTML = `<div class="icon">${icone(p.key)}</div><h3>${p.name}</h3><p>${p.desc}</p><div class="meta"><span class="dot"></span>Em breve</div><div class="btns"><button class="primary" disabled>Em breve</button></div>`;
       $('#s-' + p.sec + ' .cards').appendChild(c); continue;
     }
     const srv = cat?.packs?.find(x => x.id === p.packId);
@@ -373,7 +362,7 @@ function render(){
     if (vc && owned){ const dias = Math.ceil((vc - Date.now()) / 864e5); meta += dias <= 30 ? ` · <span class="tag">vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}</span>` : ` · válido até ${vc.toLocaleDateString('pt-BR')}`; }
     const cad = (srv && !owned) ? '<span class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>' : '';
     const vitrine = srv && !owned && !cat?.vencidos?.has(p.packId);
-    c.innerHTML = (vitrine ? `<span class="selo">Conheça</span>` : '') + `<div class="icon">${ICONS[p.key]}${cad}</div><h3>${p.name}</h3>` + (vitrine && p.gancho ? `<div class="gancho">${p.gancho}</div>` : '') + `<p>${p.desc}</p><div class="meta">${meta}</div>`;
+    c.innerHTML = (vitrine ? `<span class="selo">Conheça</span>` : '') + `<div class="icon">${icone(p.key)}${cad}</div><h3>${p.name}</h3>` + (vitrine && p.gancho ? `<div class="gancho">${p.gancho}</div>` : '') + `<p>${p.desc}</p><div class="meta">${meta}</div>`;
     if (vitrine && srv.buy_url){ c.classList.add('clica'); c.onclick = e => { if (!e.target.closest('button')) T.opener.openUrl(srv.buy_url); }; }
     const b = document.createElement('div'); b.className = 'btns';
     if (p.web && srv){
