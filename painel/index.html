@@ -36,7 +36,10 @@ header .sp{flex:1}
 .aviso button{flex:none;cursor:pointer;background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:8px 12px;font-weight:750;font-size:13.5px}
 
 /* ---------- mês (assinatura: o tanque da meta) ---------- */
-.mes{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+.mes{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+.mes.quatro{grid-template-columns:1.5fr 1fr 1fr 1fr}
+.k.toca{cursor:pointer;text-align:left;display:flex;flex-direction:column;justify-content:flex-start;font:inherit}
+.k.toca:hover{border-color:#3a443c}
 .k{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 14px;min-width:0}
 .k > span{display:block;color:var(--mute);font-size:12.5px}
 .k b{display:block;font-weight:850;font-stretch:112%;font-size:21px;letter-spacing:-.01em;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -153,8 +156,10 @@ textarea{min-height:70px;resize:vertical}
   .folha.on{transform:translate(0,-50%);opacity:1;pointer-events:auto}
   .folha .pega{display:none}
 }
+@media (max-width:980px){ .mes{grid-template-columns:repeat(4,1fr)} .mes.quatro{grid-template-columns:repeat(3,1fr)} .mes .meta{grid-column:1/-1} }
 @media (max-width:720px){
-  .mes{grid-template-columns:repeat(3,1fr);gap:8px}
+  .mes{grid-template-columns:repeat(2,1fr);gap:8px}
+  .mes.quatro{grid-template-columns:repeat(3,1fr)}
   .mes .meta{grid-column:1/-1}
   .k{padding:10px 11px}
   .k b{font-size:17px}
@@ -163,6 +168,19 @@ textarea{min-height:70px;resize:vertical}
   .meta small{display:block}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.bd.jor{color:var(--ink);border-color:#3a443c}
+.bd.jor.novo{color:var(--accent-ink);background:var(--accent);border-color:var(--accent)}
+.filtro{display:none;align-items:center;gap:8px;max-width:1400px;margin:0 auto 10px;padding:0 18px;font-size:13.5px;color:var(--mute)}
+.filtro.on{display:flex}
+.filtro b{color:var(--ink)}
+.filtro button{cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:4px 9px;font-size:12.5px}
+.jor-cx{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:6px}
+.jor-cx .et{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.jor-cx .et a,.jor-cx .et span{font-size:12.5px;font-weight:650;border-radius:9px;padding:5px 9px;border:1px solid var(--line);color:var(--mute);text-decoration:none}
+.jor-cx .et a.ok{color:var(--ink);border-color:#3a443c}
+.jor-cx .et a.ok::before{content:"✓ ";color:var(--ok)}
+.jor-cx p{font-size:13.5px;color:var(--mute)}
+.jor-cx p b{color:var(--ink)}
 .link.aula{text-decoration:none;font-weight:700;color:var(--ink,#F4F0E4);border:1px solid var(--line,#2B302E);border-radius:99px;padding:6px 12px;margin-right:6px}
 </style>
 </head>
@@ -176,9 +194,10 @@ textarea{min-height:70px;resize:vertical}
     <button class="link" id="conta"></button>
   </header>
   <div class="aviso" id="aviso"><span id="avisoTx"></span><button id="avisoBt"></button></div>
-  <div class="tabs" role="tablist"><button class="tab" data-aba="trab" role="tab">Trabalhos</button><button class="tab" data-aba="ferr" role="tab">Minhas ferramentas</button></div>
+  <div class="tabs" role="tablist"><button class="tab" data-aba="trab" role="tab">Trabalhos</button><button class="tab" data-aba="ferr" role="tab">Custos fixos</button></div>
   <div class="mes" id="mes"></div>
 </div>
+<div class="filtro" id="filtro"></div>
 <div class="board" id="board"></div>
 <div class="ferr hide" id="ferr"></div>
 <button class="fab hide" id="fab">＋ Nova demanda</button>
@@ -187,13 +206,14 @@ textarea{min-height:70px;resize:vertical}
 <div class="toast" id="toast"></div>
 <canvas id="festa"></canvas>
 
+<script src="/catalogo.js"></script>
+<script src="/base.js"></script>
 <script src="/aulas.js"></script>
 <script>
-// ===================== CONFIG =====================
-const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
+/* Base Demandas — o organizador do EDITOR. Tela interna: nada daqui é enviado ao cliente. */
 const PACK = 'fl-painel';
 const COLS = [
-  { id:'orcamento', t:'Orçamento enviado', c:'#9A968A' },
+  { id:'orcamento', t:'Orçamentos',        c:'#9A968A' },
   { id:'fechado',   t:'Fechado',           c:'#5AA9F0' },
   { id:'editando',  t:'Editando',          c:'#9B7BF7' },
   { id:'revisao',   t:'Em revisão',        c:'#F2A541' },
@@ -218,9 +238,10 @@ function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on
 const nomeCurto = s => so(s).split(' ')[0] || 'tudo bem';
 
 // ===================== estado =====================
-let sess = null, acesso = false, vencido = false, BUY_URL = 'https://basefl.com/conheca/financas-e-demandas/?de=ferramenta', modo = 'demo';   // demo | cheio | leitura
-let D = [], META = 3000, F = [], ABA = store.get('fl_aba') === 'ferr' ? 'ferr' : 'trab';
-try { sess = JSON.parse(store.get('fl_sess') || 'null'); } catch { sess = null; }
+let acesso = false, vencido = false, modo = 'demo';   // demo | cheio | leitura
+let D = [], META = 3000, F = [], ABA = store.get('fl_aba') === 'ferr' ? 'ferr' : 'trab', FILTRO = null;
+// T = trabalhos da jornada (briefing, proposta, contrato), por id. Dizem em que pé está cada cartão.
+let T = {};
 
 function exemplo(){
   const d = n => { const x = new Date(); x.setDate(x.getDate() + n); return new Date(x.getTime() - x.getTimezoneOffset()*6e4).toISOString().slice(0,10); };
@@ -236,53 +257,28 @@ function exemplo(){
   ];
 }
 
-// ===================== API =====================
-async function api(path, { method='GET', body, auth=true, prefer } = {}){
-  const h = { apikey:SUPA.key, 'Content-Type':'application/json' };
-  if (auth && sess) h.Authorization = 'Bearer ' + sess.access_token;
-  if (prefer) h.Prefer = prefer;
-  const r = await fetch(SUPA.url + path, { method, headers:h, body: body ? JSON.stringify(body) : undefined });
-  const t = await r.text(); let j; try { j = t ? JSON.parse(t) : {}; } catch { j = t; }
-  if (!r.ok){ const e = new Error(traduz(j?.msg || j?.message || j?.error_description || j?.error || ('Erro ' + r.status))); e.status = r.status; throw e; }
-  return j;
-}
-function traduz(m){
-  m = String(m||'');
-  if (/only request this after (\d+)/i.test(m)) return 'Aguarde ' + m.match(/after (\d+)/i)[1] + ' segundos para pedir outro código.';
-  if (/expired|invalid/i.test(m) && /token|otp/i.test(m)) return 'Código inválido ou expirado. Confira ou peça outro.';
-  if (/rate limit/i.test(m)) return 'Muitas tentativas. Aguarde alguns minutos.';
-  if (/failed to fetch|network|load failed/i.test(m)) return 'Sem conexão com a internet.';
-  if (/row-level security/i.test(m)) return 'Seu acesso ao Base Demandas não está ativo.';
-  return m;
-}
-const fromAuth = r => ({ access_token:r.access_token, refresh_token:r.refresh_token, expires_at:r.expires_at || Math.floor(Date.now()/1000) + (r.expires_in||3600), email:r.user?.email });
-function salvaSess(s){ sess = s; store.set('fl_sess', s ? JSON.stringify(s) : null); }
-async function sessaoValida(){
-  if (!sess) return false;
-  if (sess.expires_at - Date.now()/1000 > 90) return true;
-  try { const r = await api('/auth/v1/token?grant_type=refresh_token', { method:'POST', body:{ refresh_token:sess.refresh_token }, auth:false }); salvaSess({ ...fromAuth(r), email:r.user?.email || sess.email }); return true; }
-  catch(e){ if (e.status >= 400 && e.status < 500){ salvaSess(null); return false; } return true; }
-}
+// ===================== servidor (pelo núcleo: uma sessão só para todas as ferramentas) =====================
+const api = (path, op) => Base.api(path, op);
+function traduz(m){ m = Base.traduz(m); return /não está ativo/.test(m) ? 'Seu acesso ao Base Demandas não está ativo.' : m; }
 
 async function carrega(){
-  modo = 'demo'; acesso = false; vencido = false;
-  if (await sessaoValida()){
+  modo = 'demo'; acesso = false; vencido = false; T = {};
+  $('#aviso').classList.remove('on'); $('#avisoEntrar')?.remove();
+  await Base.pronto; await Base.carrega();
+  if (Base.sessao() && Base.eu.logado){
     try {
-      const [lic, pk] = await Promise.all([ api(`/rest/v1/licenses?select=*&pack_id=eq.${PACK}`), api(`/rest/v1/packs?select=buy_url&id=eq.${PACK}`) ]);
-      /* link de compra: página de vendas (fixo acima) */
-      const agora = Date.now(), ativa = lic.find(l => l.status === 'active');
-      const venc = ativa?.expires_at ? new Date(ativa.expires_at).getTime() : null;
-      acesso = !!ativa && (!venc || venc > agora); vencido = !!ativa && !!venc && venc <= agora;
-      if (acesso && venc){ const dias = Math.ceil((venc - agora)/864e5); if (dias <= 15) aviso(`Seu acesso vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}.`, 'Renovar'); }
-      const linhas = await api('/rest/v1/demandas?select=*&order=criado_em.asc');
-      const cfg = await api('/rest/v1/editor_config?select=meta_mes').catch(() => []);
-      const ferr = await api('/rest/v1/ferramentas?select=*&order=criado_em.asc').catch(() => []);
+      acesso = Base.tem(PACK); vencido = Base.vencido(PACK);
+      const dias = Base.dias(PACK); if (acesso && dias !== null && dias <= 15) aviso(`Seu acesso vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}.`, 'Renovar');
+      // trabalhos que vieram do briefing, da proposta ou do contrato entram sozinhos (inclusive os de antes da compra)
+      if (acesso && Base.eu.jornada && Base.eu.trabalhos.some(t => !t.organizado)){ try { if (await Base.rpc('organizar_pendentes')) await Base.carrega(true); } catch {} }
+      for (const t of Base.eu.trabalhos) T[t.id] = t;
+      const [linhas, cfg, ferr] = await Promise.all([ api('/rest/v1/demandas?select=*&order=criado_em.asc'), api('/rest/v1/editor_config?select=meta_mes').catch(() => []), api('/rest/v1/ferramentas?select=*&order=criado_em.asc').catch(() => []) ]);
       F = Array.isArray(ferr) ? ferr : [];
       if (acesso){ modo = 'cheio'; D = linhas; if (cfg[0]) META = +cfg[0].meta_mes || META; }
       else if (linhas.length){ modo = 'leitura'; D = linhas; if (cfg[0]) META = +cfg[0].meta_mes || META; }
     } catch(e){ toast(traduz(e.message)); }
   }
-  if (modo === 'demo'){ D = exemplo(); F = exemploFerr(); META = 5000; aviso(sess ? 'Você está vendo um exemplo. Desbloqueie Base Demandas para organizar os seus trabalhos.' : 'Este é um exemplo. Desbloqueie para organizar os seus trabalhos de verdade.', 'Desbloquear', !sess); }
+  if (modo === 'demo'){ D = exemplo(); F = exemploFerr(); META = 5000; const logado = !!Base.sessao(); aviso(logado ? 'Você está vendo um exemplo. Libere o Base Demandas para organizar os seus trabalhos.' : 'Este é um exemplo: pode mexer à vontade. Libere para organizar os seus trabalhos de verdade.', 'Liberar · R$ ' + Base.produto('painel').preco, !logado); if (!carrega._demo){ carrega._demo = true; Base.evento('demo_started', PACK); } }
   if (modo === 'leitura') aviso(vencido ? 'Seu acesso de 1 ano terminou. Seus trabalhos estão salvos, mas só para leitura.' : 'Seu acesso ao Base Demandas não está ativo. Seus trabalhos estão salvos, só para leitura.', 'Renovar');
   $('#fab').classList.toggle('hide', modo === 'leitura');
   botaoConta(); desenha();
@@ -293,8 +289,8 @@ async function carrega(){
 }
 function aviso(txt, bt, comEntrar){
   $('#avisoTx').textContent = txt; $('#avisoBt').textContent = bt; $('#aviso').classList.add('on');
-  $('#avisoBt').onclick = () => BUY_URL ? (location.href = BUY_URL) : toast('Link de compra em breve.');
-  if (comEntrar && !$('#avisoEntrar')){ const b = document.createElement('button'); b.id = 'avisoEntrar'; b.textContent = 'Já comprei'; b.style.cssText = 'background:transparent;color:var(--ink);border:1px solid var(--line)'; b.onclick = login; $('#aviso').appendChild(b); }
+  $('#avisoBt').onclick = () => Base.comprar('painel', modo === 'demo' ? 'demo' : 'ferramenta');
+  if (comEntrar && !$('#avisoEntrar')){ const b = document.createElement('button'); b.id = 'avisoEntrar'; b.textContent = 'Já comprei'; b.style.cssText = 'background:transparent;color:var(--ink);border:1px solid var(--line)'; b.onclick = entrar; $('#aviso').appendChild(b); }
 }
 
 // grava (otimista: atualiza a tela na hora; se falhar, avisa e recarrega)
@@ -310,7 +306,9 @@ async function grava(id, campos){
 function numerosMes(){
   const m = new Date(), ini = new Date(m.getFullYear(), m.getMonth(), 1).getTime();
   const pagoMes = D.filter(d => d.coluna === 'pago' && d.pago_em && new Date(d.pago_em).getTime() >= ini).reduce((a, d) => a + (+d.valor || 0), 0);
-  const receber = D.filter(d => [...EM_ANDAMENTO, 'entregue'].includes(d.coluna)).reduce((a, d) => a + (+d.valor || 0), 0);
+  const receber = D.filter(d => d.coluna === 'entregue').reduce((a, d) => a + (+d.valor || 0), 0);          // entregue, falta o cliente pagar
+  const previsto = D.filter(d => EM_ANDAMENTO.includes(d.coluna)).reduce((a, d) => a + (+d.valor || 0), 0);  // fechado e ainda em produção
+  const custo = F.reduce((a, f) => a + mensal(f), 0);
   const atrasos = D.filter(d => EM_ANDAMENTO.includes(d.coluna) && diasAte(d.prazo) !== null && diasAte(d.prazo) < 0).length;
   const entregues = D.filter(d => d.entregue_em).sort((a, b) => new Date(b.entregue_em) - new Date(a.entregue_em));
   let seq = 0; for (const d of entregues){ if (!d.prazo || new Date(d.entregue_em).toISOString().slice(0,10) <= d.prazo) seq++; else break; }
@@ -321,7 +319,7 @@ function numerosMes(){
     meses.push({ nome:new Date(a).toLocaleDateString('pt-BR', { month:'short' }).replace('.',''), v:D.filter(d => d.pago_em && new Date(d.pago_em).getTime() >= a && new Date(d.pago_em).getTime() < b).reduce((s, d) => s + (+d.valor || 0), 0) });
   }
   const pagoAnt = meses[4].v;
-  return { pagoMes, receber, atrasos, seq, pagoAnt, meses };
+  return { pagoMes, receber, previsto, custo, atrasos, seq, pagoAnt, meses };
 }
 let ultimoPct = 0;
 function comparativo(n){
@@ -332,6 +330,7 @@ function comparativo(n){
   return `<span class="cmp ${v > 0 ? 'sobe' : v < 0 ? 'desce' : 'igual'}" title="Comparado com ${ant} inteiro (${brl(n.pagoAnt)})">${v > 0 ? '↑' : v < 0 ? '↓' : '='} ${Math.abs(v)}% vs ${ant.slice(0,3)}</span>`;
 }
 function desenhaMes(){
+  $('#mes').classList.remove('quatro');
   const n = numerosMes(), pct = Math.min(100, META ? n.pagoMes / META * 100 : 0);
   const mesNome = new Date().toLocaleDateString('pt-BR', { month:'long' });
   $('#mes').innerHTML = `
@@ -339,11 +338,13 @@ function desenhaMes(){
       <span>Recebido em ${mesNome}</span><b>${brl(n.pagoMes)} <small style="display:inline;color:var(--mute);font-size:13px;font-weight:600">de ${brl(META)}</small>${comparativo(n)}</b>
       <div class="tq"><i id="tq"></i></div><small>${pct >= 100 ? 'Meta batida! 🏆' : `Faltam ${brl(Math.max(0, META - n.pagoMes))} para a meta`}</small>
       <div class="barras" title="Recebido nos últimos 6 meses">${(() => { const mx = Math.max(1, ...n.meses.map(x => x.v)); return n.meses.map(x => `<div title="${x.nome}: ${brl(x.v)}"><i style="height:${Math.round(x.v / mx * 26) + 2}px"></i><span>${x.nome}</span></div>`).join(''); })()}</div></button>
-    <div class="k"><span>A receber</span><b>${brl(n.receber)}</b><small>trabalhos em aberto</small></div>
-    <div class="k ${n.atrasos ? 'red' : ''}"><span>Atrasados</span><b>${n.atrasos}</b><small>${n.atrasos ? 'prazo já passou' : 'tudo em dia'}</small></div>
-    <div class="k fogo"><span>Entregas no prazo</span><b>${n.seq ? '🔥 ' + n.seq : '0'}</b><small>em sequência</small></div>`;
+    <div class="k"><span>A receber</span><b>${brl(n.receber)}</b><small>entregue, falta pagar</small></div>
+    <div class="k"><span>Previsto</span><b>${brl(n.previsto)}</b><small>fechado, em produção</small></div>
+    <button class="k toca" id="kcusto" title="Ver os custos fixos"><span>Custos fixos</span><b>${brl(n.custo)}</b><small>${n.custo ? 'por mês' : 'toque para cadastrar'}</small></button>
+    <div class="k ${n.atrasos ? 'red' : ''}"><span>Atrasados</span><b>${n.atrasos}</b><small>${n.atrasos ? 'prazo já passou' : n.seq ? '🔥 ' + n.seq + ' no prazo em sequência' : 'tudo em dia'}</small></div>`;
   requestAnimationFrame(() => { $('#tq').style.width = ultimoPct + '%'; requestAnimationFrame(() => { $('#tq').style.width = pct + '%'; ultimoPct = pct; }); });
   $('#kmeta').onclick = folhaMeta;
+  $('#kcusto').onclick = () => { ABA = 'ferr'; store.set('fl_aba', ABA); desenha(); };
 }
 
 // ===================== quadro =====================
@@ -363,10 +364,25 @@ function revs(d, grande){
   if (!tot) return '';
   return `<span class="revs" title="${u} de ${t} revisões usadas">${Array.from({ length:tot }, (_, i) => `<i class="${i < u ? (i >= t ? 'extra' : 'on') : ''}"></i>`).join('')}</span>`;
 }
+// em que pé o trabalho está na jornada (só para cartões que vieram do briefing/proposta/contrato)
+function jornadaDe(d){
+  const t = d.trabalho_id && T[d.trabalho_id]; if (!t) return null;
+  if (t.contrato_status === 'aceito') return ['Contrato aceito', ''];
+  if (t.contrato_status) return ['Contrato enviado', ''];
+  if (t.proposta_status === 'aprovada') return ['Aprovado · falta o contrato', 'novo'];
+  if (t.proposta_status === 'ajuste') return ['Cliente pediu ajuste', 'novo'];
+  if (t.proposta_status) return ['Proposta enviada', ''];
+  if (t.tem_preco) return ['Preço feito · falta enviar', 'novo'];
+  if (t.tem_briefing) return ['Briefing novo · falta o preço', 'novo'];
+  return null;
+}
+const mesmoCliente = (a, b) => (a.cliente_id && a.cliente_id === b.cliente_id) || so(a.cliente).toLowerCase() === so(b.cliente).toLowerCase();
 function desenha(){
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.aba === ABA));
+  const f = $('#filtro'); f.classList.toggle('on', !!FILTRO && ABA === 'trab');
+  if (FILTRO){ f.innerHTML = `Só os trabalhos de <b>${esc(FILTRO.cliente)}</b><button id="semFiltro">mostrar todos</button>`; $('#semFiltro').onclick = () => { FILTRO = null; desenha(); }; }
   $('#board').classList.toggle('hide', ABA !== 'trab'); $('#ferr').classList.toggle('hide', ABA !== 'ferr');
-  $('#fab').textContent = ABA === 'ferr' ? '＋ Adicionar ferramenta' : '＋ Nova demanda';
+  $('#fab').textContent = ABA === 'ferr' ? '＋ Adicionar custo' : '＋ Nova demanda';
   if (ABA === 'ferr') return desenhaFerr();
   desenhaTrab();
 }
@@ -374,20 +390,20 @@ function desenhaTrab(){
   desenhaMes();
   const b = $('#board');
   b.innerHTML = COLS.map((c, ci) => {
-    const lista = D.filter(d => d.coluna === c.id);
+    const lista = D.filter(d => d.coluna === c.id && (!FILTRO || mesmoCliente(d, FILTRO)));
     const soma = lista.reduce((a, d) => a + (+d.valor || 0), 0);
     return `<section class="col" data-col="${c.id}" style="--cor:${c.c}">
       <div class="ch"><b>${c.t}</b><span class="n">${lista.length}</span><span class="sp"></span><span class="soma">${soma ? brl(soma) : ''}</span></div>
-      <div class="cards">${lista.length ? lista.map(d => cardHTML(d, c, ci)).join('') : `<div class="vazio">${ci === 0 ? 'Orçamentos que você mandou aparecem aqui' : c.id === 'pago' ? 'Arraste para cá quando receber 💰' : 'Nada por aqui'}</div>`}</div>
+      <div class="cards">${lista.length ? lista.map(d => cardHTML(d, c, ci)).join('') : `<div class="vazio">${ci === 0 ? 'Briefings e propostas chegam aqui sozinhos' : c.id === 'pago' ? 'Arraste para cá quando receber 💰' : 'Nada por aqui'}</div>`}</div>
     </section>`;
   }).join('');
   b.querySelectorAll('.card').forEach(liga);
 }
 function cardHTML(d, c, ci){
-  const prox = COLS[ci + 1];
+  const prox = COLS[ci + 1], j = ['orcamento','fechado'].includes(d.coluna) ? jornadaDe(d) : null;
   return `<article class="card" data-id="${d.id}" style="--cor:${c.c}" tabindex="0">
     <div class="cl">${esc(d.cliente)}</div>${d.titulo ? `<div class="tt">${esc(d.titulo)}</div>` : ''}
-    <div class="rod"><span class="vl">${brl(d.valor)}</span>${badgePrazo(d)}${d.coluna !== 'orcamento' && d.coluna !== 'pago' ? revs(d) : ''}</div>
+    <div class="rod">${+d.valor ? `<span class="vl">${brl(d.valor)}</span>` : ''}${j ? `<span class="bd jor ${j[1]}">${j[0]}</span>` : ''}${badgePrazo(d)}${d.coluna !== 'orcamento' && d.coluna !== 'pago' ? revs(d) : ''}</div>
     ${prox && modo !== 'leitura' ? `<button class="av" data-av="${prox.id}" title="Mover para ${prox.t}" style="--cor:${prox.c}">→</button>` : ''}
   </article>`;
 }
@@ -478,7 +494,8 @@ $('#veu').onclick = fechaFolha;
 addEventListener('keydown', e => { if (e.key === 'Escape') fechaFolha(); });
 
 function form(d){
-  return `<label for="fc">Cliente</label><input class="inp" id="fc" value="${esc(d.cliente)}" placeholder="Ex.: Studio Ana" autocomplete="off">
+  const nomes = [...new Set(D.map(x => so(x.cliente)).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+  return `<label for="fc">Cliente</label><input class="inp" id="fc" value="${esc(d.cliente)}" placeholder="Ex.: Studio Ana" autocomplete="off" list="clis"><datalist id="clis">${nomes.map(n => `<option value="${esc(n)}">`).join('')}</datalist>
     <label for="ft">O que é o trabalho</label><input class="inp" id="ft" value="${esc(d.titulo)}" placeholder="Ex.: 4 Reels de lançamento" autocomplete="off">
     <div class="duo"><div><label for="fv">Valor</label><input class="inp" id="fv" value="${d.valor ? esc(String(d.valor).replace('.',',')) : ''}" placeholder="R$" inputmode="decimal"></div>
     <div><label for="fp">Prazo de entrega</label><input class="inp" id="fp" type="date" value="${esc(d.prazo || '')}"></div></div>
@@ -503,10 +520,12 @@ function folhaNova(pre = {}){
   ligaChips();
   document.querySelectorAll('#fcol .chip').forEach(b => b.onclick = () => { col = b.dataset.v; document.querySelectorAll('#fcol .chip').forEach(x => x.classList.toggle('on', x === b)); });
   setTimeout(() => !pre.cliente && $('#fc').focus(), 250);
+  $('#fc').addEventListener('change', () => { const a = D.find(x => so(x.cliente).toLowerCase() === so($('#fc').value).toLowerCase() && x.whatsapp); if (a && !so($('#fw').value)) $('#fw').value = a.whatsapp; });
   $('#salvar').onclick = async () => {
     const v = leForm(); if (!v.cliente){ $('#fc').classList.add('erro'); $('#fc').focus(); vibra(30); return; }
     const b = $('#salvar'); b.disabled = true;
-    const nova = { ...v, coluna:col, rev_usadas:0 };
+    const igual = D.find(x => so(x.cliente).toLowerCase() === v.cliente.toLowerCase() && x.cliente_id);
+    const nova = { ...v, coluna:col, rev_usadas:0, ...(modo === 'cheio' && igual ? { cliente_id:igual.cliente_id } : {}) };
     if (modo === 'cheio'){
       try { const [r] = await api('/rest/v1/demandas', { method:'POST', body:nova, prefer:'return=representation' }); D.push(r); }
       catch(e){ toast('Não salvou: ' + traduz(e.message)); b.disabled = false; return; }
@@ -520,7 +539,9 @@ function folhaDetalhe(id){
   const d = D.find(x => x.id === id); if (!d) return;
   const ci = COLS.findIndex(c => c.id === d.coluna), ro = modo === 'leitura';
   const t = +d.rev_total || 0, u = +d.rev_usadas || 0;
-  abreFolha(`<h2>${esc(d.cliente)}</h2><p class="sub">${esc(d.titulo || 'Sem descrição')} · ${brl(d.valor)}${d.prazo ? ' · entrega ' + dataCurta(d.prazo) : ''}</p>
+  const tj = d.trabalho_id && T[d.trabalho_id], outros = D.filter(x => x.id !== d.id && mesmoCliente(x, d)).length;
+  abreFolha(`<h2>${esc(d.cliente)}</h2><p class="sub">${esc(d.titulo || 'Sem descrição')}${+d.valor ? ' · ' + brl(d.valor) : ''}${d.prazo ? ' · entrega ' + dataCurta(d.prazo) : ''}${outros ? ` · <button class="link" id="mais">${outros === 1 ? 'mais 1 trabalho' : 'mais ' + outros + ' trabalhos'} deste cliente</button>` : ''}</p>
+    <div id="jor"></div>
     ${ro ? '' : `<label>Etapa</label><div class="chips" id="dcol">${COLS.map(c => `<button class="chip${c.id === d.coluna ? ' on' : ''}" data-v="${c.id}" style="--cor:${c.c}"><span class="dt"></span>${c.t}</button>`).join('')}</div>`}
     ${d.coluna !== 'orcamento' ? `<label>Revisões</label><div class="revctl">${revs({ rev_total:t, rev_usadas:u })}<span>${u} de ${t} usadas${u > t ? ` · <b style="color:var(--err)">${u - t} extra${u - t > 1 ? 's' : ''}, cobrar à parte</b>` : u === t && t ? ' · <b style="color:var(--accent)">próxima é extra</b>' : ''}</span>${ro ? '' : '<button id="rmenos" aria-label="Tirar uma revisão">−</button><button id="rmais" aria-label="Somar uma revisão">+</button>'}</div>` : ''}
     <div class="sec">Mensagens prontas pro cliente</div>
@@ -544,6 +565,21 @@ function folhaDetalhe(id){
     };
   }
   document.querySelectorAll('.msg').forEach(b => b.onclick = () => mensagem(d, b.dataset.m));
+  if ($('#mais')) $('#mais').onclick = () => { FILTRO = { cliente:d.cliente, cliente_id:d.cliente_id }; fechaFolha(); desenha(); };
+  if (tj && !ro) jornadaNaFolha(tj);
+}
+// o que já foi feito neste trabalho e qual é o próximo passo (briefing → preço → proposta → contrato)
+function jornadaNaFolha(t){
+  const el = $('#jor'), q = '?t=' + t.id, tem = k => Base.tem(Base.produto(k).pack);
+  const feito = [];
+  if (t.tem_briefing && tem('briefing')) feito.push(`<a class="ok" href="/briefing/${q}">Briefing</a>`);
+  if (t.proposta_status && tem('preco')) feito.push(`<a class="ok" href="/preco/${q}">Proposta ${t.proposta_status === 'aprovada' ? 'aprovada' : 'enviada'}</a>`);
+  if (t.contrato_status && tem('contrato')) feito.push(`<a class="ok" href="/contrato/${q}">Contrato ${t.contrato_status === 'aceito' ? 'aceito' : 'enviado'}</a>`);
+  if (feito.length){ const c = document.createElement('div'); c.className = 'jor-cx'; c.innerHTML = `<p>Este trabalho veio da sua jornada. O que já foi feito:</p><div class="et">${feito.join('')}</div>`; el.appendChild(c); }
+  let px = null;
+  if (!t.proposta_status) px = { alvo:'preco', titulo: t.tem_preco ? 'Enviar a proposta' : 'Calcular o valor deste projeto', texto: t.tem_briefing ? 'As respostas do briefing já entram na calculadora.' : 'O preço sai em 1 minuto e vira proposta por link.', botao: t.tem_preco ? 'Abrir o preço' : 'Calcular o preço', abrir:'/preco/' + q };
+  else if (!t.contrato_status && t.proposta_status === 'aprovada') px = { alvo:'contrato', titulo:'Cliente aprovou? Gere o contrato.', texto:'Cliente, serviço, prazo e valor já vão preenchidos.', botao:'Gerar contrato', abrir:'/contrato/' + q };
+  if (px){ const b = Base.proximo({ ...px, origem:'organizador' }); b.style.marginTop = '0'; b.style.marginBottom = '6px'; el.appendChild(b); }
 }
 function mensagem(d, tipo){
   const n = nomeCurto(d.cliente), tr = so(d.titulo) || 'o seu vídeo';
@@ -570,8 +606,8 @@ function folhaMeta(){
   };
 }
 
-// ===================== minhas ferramentas =====================
-const COMUNS = ['CapCut Pro','Adobe Creative Cloud','Premiere Pro','After Effects','Envato Elements','Artlist','Epidemic Sound','Motion Array','Canva Pro','Google One','iCloud+','Dropbox','Frame.io','ChatGPT Plus'];
+// ===================== custos fixos (ferramentas, internet, armazenamento…) =====================
+const COMUNS = ['Internet','CapCut Pro','Adobe Creative Cloud','Armazenamento na nuvem','Banco de vídeos','Trilhas e efeitos','IA (ChatGPT, etc.)','Canva Pro','Coworking','MEI / contador','Celular','Energia'];
 const CORES_F = ['#F2A541','#3FB8AF','#9B7BF7','#5AA9F0','#7fce8f','#E8875F','#C9C2AE'];
 function corF(nome){ let h = 0; for (const ch of so(nome)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return CORES_F[h % CORES_F.length]; }
 function exemploFerr(){
@@ -598,9 +634,10 @@ function desenhaFerr(){
   const ord = F.map(f => ({ ...f, prox:proxima(f) })).sort((a, b) => (a.prox || '9999').localeCompare(b.prox || '9999'));
   const prox = ord.find(f => f.prox);
   const mesNome = new Date().toLocaleDateString('pt-BR', { month:'long' });
+  $('#mes').classList.add('quatro');
   $('#mes').innerHTML = `
-    <div class="k meta" style="cursor:default"><span>Sobrou em ${mesNome}</span><b style="color:${sobra >= 0 ? 'var(--ok)' : 'var(--err)'}">${brl(sobra)}</b><small>recebido ${brl(n.pagoMes)} menos ${brl(custo)} de ferramentas</small></div>
-    <div class="k"><span>Ferramentas por mês</span><b>${brl(custo)}</b><small>${F.length} ${F.length === 1 ? 'assinatura' : 'assinaturas'}</small></div>
+    <div class="k meta" style="cursor:default"><span>Sobrou em ${mesNome}</span><b style="color:${sobra >= 0 ? 'var(--ok)' : 'var(--err)'}">${brl(sobra)}</b><small>recebido ${brl(n.pagoMes)} menos ${brl(custo)} de custos fixos</small></div>
+    <div class="k"><span>Custos fixos por mês</span><b>${brl(custo)}</b><small>${F.length} ${F.length === 1 ? 'item' : 'itens'}</small></div>
     <div class="k ${prox && diasAte(prox.prox) <= 3 ? 'fogo' : ''}"><span>Próxima cobrança</span><b>${prox ? (diasAte(prox.prox) === 0 ? 'Hoje' : diasAte(prox.prox) === 1 ? 'Amanhã' : dataCurta(prox.prox)) : '—'}</b><small>${prox ? esc(prox.nome) : 'nenhuma cadastrada'}</small></div>
     <div class="k ${pct !== null && pct > 30 ? 'red' : ''}"><span>Peso no faturamento</span><b>${pct === null ? '—' : pct + '%'}</b><small>${pct === null ? 'sem recebimentos no mês' : 'do que você recebeu'}</small></div>`;
   const card = f => {
@@ -612,20 +649,20 @@ function desenhaFerr(){
   };
   $('#ferr').innerHTML = F.length
     ? `<div class="fsec">Ordenadas pela próxima cobrança</div><div class="flista">${ord.map(card).join('')}</div>`
-    : `<div class="fvazio">Cadastre as ferramentas que você assina para ver quanto elas custam por mês e não ser pego de surpresa nas renovações.</div>`;
+    : `<div class="fvazio">Cadastre o que você paga todo mês para trabalhar: internet, CapCut, Adobe, armazenamento, trilhas. Você vê quanto custa manter o seu trabalho e a calculadora usa isso como referência.</div>`;
   document.querySelectorAll('.fc').forEach(b => b.onclick = () => folhaFerr(F.find(f => String(f.id) === b.dataset.id)));
 }
 function folhaFerr(f){
   if (modo === 'leitura') return toast('Renove o acesso para editar.');
   const novo = !f; f = f || { nome:'', valor:'', ciclo:'mensal', cobranca:'' };
   let ciclo = f.ciclo || 'mensal';
-  abreFolha(`<h2>${novo ? 'Adicionar ferramenta' : esc(f.nome)}</h2><p class="sub">${novo ? 'Toque numa das comuns ou escreva o nome.' : 'Edite os dados ou remova a assinatura.'}</p>
+  abreFolha(`<h2>${novo ? 'Adicionar custo fixo' : esc(f.nome)}</h2><p class="sub">${novo ? 'Toque num dos comuns ou escreva o nome.' : 'Edite os dados ou remova este custo.'}</p>
     ${novo ? `<div class="chips" id="comuns">${COMUNS.map(n => `<button class="chip" data-v="${esc(n)}">${esc(n)}</button>`).join('')}</div>` : ''}
-    <label for="gn">Nome</label><input class="inp" id="gn" value="${esc(f.nome)}" placeholder="Ex.: CapCut Pro" autocomplete="off">
+    <label for="gn">Nome</label><input class="inp" id="gn" value="${esc(f.nome)}" placeholder="Ex.: Internet, CapCut Pro" autocomplete="off">
     <div class="duo"><div><label for="gv">Valor</label><input class="inp" id="gv" value="${f.valor ? esc(String(f.valor).replace('.',',')) : ''}" placeholder="R$" inputmode="decimal"></div>
     <div><label for="gc">Próxima cobrança</label><input class="inp" id="gc" type="date" value="${esc(proxima(f) || f.cobranca || '')}"></div></div>
     <label>Cobrança</label><div class="chips" id="gciclo"><button class="chip${ciclo === 'mensal' ? ' on' : ''}" data-v="mensal">Mensal</button><button class="chip${ciclo === 'anual' ? ' on' : ''}" data-v="anual">Anual</button></div>
-    <button class="btn" id="gsalvar">${novo ? 'Adicionar' : 'Salvar'}</button>${novo ? '' : '<button class="btn perigo" id="gapagar">Remover ferramenta</button>'}`);
+    <button class="btn" id="gsalvar">${novo ? 'Adicionar' : 'Salvar'}</button>${novo ? '' : '<button class="btn perigo" id="gapagar">Remover este custo</button>'}`);
   document.querySelectorAll('#comuns .chip').forEach(b => b.onclick = () => { $('#gn').value = b.dataset.v; document.querySelectorAll('#comuns .chip').forEach(x => x.classList.toggle('on', x === b)); $('#gv').focus(); });
   document.querySelectorAll('#gciclo .chip').forEach(b => b.onclick = () => { ciclo = b.dataset.v; document.querySelectorAll('#gciclo .chip').forEach(x => x.classList.toggle('on', x === b)); });
   $('#gsalvar').onclick = async () => {
@@ -641,12 +678,12 @@ function folhaFerr(f){
         Object.assign(f, v);
         if (modo === 'cheio') await api(`/rest/v1/ferramentas?id=eq.${f.id}`, { method:'PATCH', body:v });
       }
-      fechaFolha(); desenha(); vibra(8); toast(novo ? (modo === 'demo' ? 'Adicionada no exemplo (não fica salvo)' : 'Ferramenta adicionada') : 'Salvo');
+      fechaFolha(); desenha(); vibra(8); toast(novo ? (modo === 'demo' ? 'Adicionado no exemplo (não fica salvo)' : 'Custo adicionado') : 'Salvo');
     } catch(e){ toast('Não salvou: ' + traduz(e.message)); b.disabled = false; }
   };
   if ($('#gapagar')) $('#gapagar').onclick = async () => {
-    const b = $('#gapagar'); if (!b._conf){ b._conf = true; b.textContent = 'Toque de novo para remover'; setTimeout(() => { b._conf = false; b.textContent = 'Remover ferramenta'; }, 3000); return; }
-    F = F.filter(x => x.id !== f.id); fechaFolha(); desenha(); toast('Ferramenta removida');
+    const b = $('#gapagar'); if (!b._conf){ b._conf = true; b.textContent = 'Toque de novo para remover'; setTimeout(() => { b._conf = false; b.textContent = 'Remover este custo'; }, 3000); return; }
+    F = F.filter(x => x.id !== f.id); fechaFolha(); desenha(); toast('Custo removido');
     if (modo === 'cheio') try { await api(`/rest/v1/ferramentas?id=eq.${f.id}`, { method:'DELETE' }); } catch(e){ toast('Não removeu: ' + traduz(e.message)); carrega(); }
   };
 }
@@ -666,37 +703,15 @@ function festa(){
   requestAnimationFrame(f);
 }
 
-// ===================== login =====================
-function botaoConta(){ const b = $('#conta'); b.textContent = sess ? 'Sair' : 'Entrar'; b.onclick = () => { if (sess){ salvaSess(null); location.reload(); } else login(); }; }
-function login(){
-  let email = '';
-  const etapa = codigo => {
-    abreFolha(`<h2>${codigo ? 'Digite o código' : 'Entre com o e-mail da compra'}</h2>
-      <p class="sub">${codigo ? 'Enviamos um código para ' + esc(email) + '. Confira também o spam.' : 'O mesmo e-mail que você usou para comprar. Vamos mandar um código de acesso.'}</p>
-      <input class="inp" id="campo" ${codigo ? 'inputmode="numeric" autocomplete="one-time-code" placeholder="Código"' : 'type="email" autocomplete="email" placeholder="seu@email.com"'}>
-      <button class="btn" id="ir">${codigo ? 'Entrar' : 'Enviar código'}</button><div class="err" id="erro"></div>`);
-    setTimeout(() => $('#campo').focus(), 250);
-    $('#campo').onkeydown = e => { if (e.key === 'Enter') $('#ir').click(); };
-    $('#ir').onclick = async () => {
-      const b = $('#ir'); b.disabled = true; $('#erro').textContent = '';
-      try {
-        if (!codigo){
-          email = $('#campo').value.trim().toLowerCase();
-          if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new Error('Digite um e-mail válido.');
-          await api('/auth/v1/otp', { method:'POST', body:{ email, create_user:true }, auth:false });
-          etapa(true);
-        } else {
-          const token = $('#campo').value.replace(/\D/g,'');
-          if (token.length < 6) throw new Error('Digite o código que chegou no e-mail.');
-          const r = await api('/auth/v1/verify', { method:'POST', body:{ type:'email', email, token }, auth:false });
-          salvaSess(fromAuth(r)); fechaFolha(); $('#aviso').classList.remove('on'); $('#avisoEntrar')?.remove(); await carrega();
-          toast(modo === 'cheio' ? 'Ferramenta desbloqueada' : 'Entrou, mas Base Demandas não está nas compras deste e-mail');
-        }
-      } catch(e){ $('#erro').textContent = traduz(e.message); b.disabled = false; }
-    };
-  };
-  etapa(false);
+// ===================== conta =====================
+function botaoConta(){ const b = $('#conta'), logado = !!Base.sessao(); b.textContent = logado ? 'Sair' : 'Entrar'; b.onclick = () => { if (Base.sessao()){ Base.sair(); carrega(); } else entrar(); }; }
+async function entrar(){
+  if (!(await Base.login())) return;
+  await carrega();
+  toast(modo === 'cheio' ? 'Ferramenta desbloqueada' : 'Entrou, mas o Base Demandas não está nas compras deste e-mail');
 }
+let logadoAntes = !!Base.sessao();
+Base.aoMudar(() => { const l = !!Base.sessao(); if (l !== logadoAntes){ logadoAntes = l; carrega(); } });
 
 $('#fab').onclick = () => ABA === 'ferr' ? folhaFerr() : folhaNova({});
 document.querySelectorAll('.tab').forEach(t => t.onclick = () => { ABA = t.dataset.aba; store.set('fl_aba', ABA); desenha(); scrollTo({ top:0 }); });

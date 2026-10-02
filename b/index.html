@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Briefing</title>
+<meta name="description" content="Responda algumas perguntas rápidas para receber o seu orçamento.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0D0F0E">
+<link rel="icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0D0F0E; --panel:#151816; --panel2:#1B1F1C; --line:#272D29; --ink:#F4F0E4; --mute:#9A968A; --dim:#5f5c55;
+  --accent:#F2A541; --accent-ink:#17130B;
+  --c-video:#3FB8AF; --c-edit:#9B7BF7; --c-prazo:#F2A541; --c-grav:#5AA9F0; --c-verba:#7BC67E;
+  --zap:#005C4B;
+  --f:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:16px/1.5 var(--f);font-stretch:100%;min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(700px 420px at 85% -8%,rgba(242,165,65,.10),transparent 70%),radial-gradient(600px 400px at -10% 10%,rgba(155,123,247,.07),transparent 70%)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:10px}
+
+.wrap{position:relative;max-width:520px;margin:0 auto;padding:16px 18px 40px}
+header{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+header img,.av{width:38px;height:38px;border-radius:11px;box-shadow:0 0 0 1px rgba(255,255,255,.10);flex:none}
+.av{display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--accent-ink);font-weight:850;font-stretch:115%;font-size:15px}
+header .nm{font-weight:800;font-stretch:112%;font-size:15px;letter-spacing:-.01em;line-height:1.1}
+header .nm small{display:block;font-weight:500;font-stretch:100%;color:var(--mute);font-size:12px;letter-spacing:0}
+header .sp{flex:1}
+.link{background:none;border:0;color:var(--mute);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+/* progresso (segmentos) */
+.prog{display:flex;gap:4px;margin-bottom:18px}
+.prog i{flex:1;height:5px;border-radius:5px;background:var(--line);overflow:hidden;position:relative}
+.prog i.ok{background:var(--cor,var(--accent))}
+.prog i.at::after{content:"";position:absolute;inset:0;width:45%;border-radius:5px;background:var(--cor,var(--accent));animation:pisca 1.4s ease-in-out infinite}
+@keyframes pisca{50%{opacity:.35}}
+.tc{font-variant-numeric:tabular-nums;font-stretch:80%;font-weight:700;color:var(--accent);font-size:13px;letter-spacing:.02em;display:flex;align-items:center;gap:10px;margin-bottom:10px;min-height:22px}
+.tc .back{background:none;border:0;color:var(--mute);font-stretch:100%;font-weight:500;cursor:pointer;padding:2px 0}
+.tc .sp{flex:1}
+
+h1{font-weight:850;font-stretch:118%;font-size:clamp(27px,7.6vw,34px);line-height:1.04;letter-spacing:-.025em;margin-bottom:8px;text-wrap:balance}
+.sub{color:var(--mute);font-size:15px;margin-bottom:22px;max-width:44ch}
+h2{font-size:16px;font-weight:750;margin:24px 0 10px}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{position:relative;display:flex;align-items:center;gap:14px;text-align:left;width:100%;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px 16px 16px 14px;overflow:hidden;transition:transform .12s,border-color .15s,background .15s}
+.opt::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:4px;border-radius:0 4px 4px 0;background:var(--cor,var(--accent));opacity:.9}
+.opt:hover{border-color:#3a443c;background:var(--panel2)}
+.opt:active{transform:scale(.985)}
+.opt .ic{font-size:22px;width:30px;text-align:center;flex:none;margin-left:4px}
+.opt b{display:block;font-size:16.5px;font-weight:700}
+.opt small{display:block;color:var(--mute);font-size:13.5px;line-height:1.35}
+.opt.picked{border-color:var(--cor);background:var(--panel2)}
+.opt.picked::after{content:"✓";position:absolute;right:16px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:var(--cor);color:var(--bg);font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;animation:pop .25s cubic-bezier(.3,1.6,.5,1)}
+.opt.ns{background:transparent;border-style:dashed}
+@keyframes pop{from{transform:translateY(-50%) scale(0)}}
+.entra>*{animation:entra .32s cubic-bezier(.2,.8,.2,1) both}
+.entra .opt{animation:entra .32s cubic-bezier(.2,.8,.2,1) both}
+.entra .opt:nth-child(2){animation-delay:.04s}.entra .opt:nth-child(3){animation-delay:.08s}.entra .opt:nth-child(4){animation-delay:.12s}.entra .opt:nth-child(5){animation-delay:.16s}.entra .opt:nth-child(6){animation-delay:.2s}
+@keyframes entra{from{opacity:0;transform:translateY(10px)}}
+
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;cursor:pointer;font-weight:750;font-size:16px;border-radius:16px;padding:16px 18px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);transition:transform .12s,filter .15s;text-decoration:none}
+.btn:active{transform:scale(.98)}
+.btn:hover{filter:brightness(1.06)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.zap{background:#25D366;border-color:#25D366;color:#06210f}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;margin-top:12px}
+.row .btn{flex:1}
+.inp{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font:inherit;font-size:16px;outline:none;margin-bottom:12px}
+.inp.big{font-size:22px;font-weight:750;font-stretch:108%;padding:16px 18px}
+.inp:focus{border-color:var(--accent)}
+.inp.erro{border-color:#ff8f7a;animation:treme .3s}
+@keyframes treme{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+textarea.inp{min-height:96px;resize:vertical;line-height:1.45}
+label{display:block;font-size:13.5px;font-weight:650;color:var(--mute);margin:0 0 6px 2px}
+.err{color:#ff8f7a;font-size:14px;min-height:20px;margin-top:8px}
+.foot{color:var(--dim);font-size:12px;margin-top:30px;text-align:center}
+.foot a{color:var(--dim)}
+.hide{display:none!important}
+
+/* cartões / listas */
+.card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px;overflow:hidden}
+.resumo{display:flex;flex-direction:column;gap:2px}
+.it{position:relative;display:grid;grid-template-columns:118px 1fr;gap:10px;padding:11px 0 11px 14px;border-bottom:1px solid var(--line);font-size:15px}
+.it:last-child{border-bottom:0}
+.it::before{content:"";position:absolute;left:0;top:13px;bottom:13px;width:3px;border-radius:3px;background:var(--cor,var(--accent))}
+.it span{color:var(--mute);font-size:13.5px;padding-top:1px}
+.it b{font-weight:650;word-break:break-word}
+.it b a{color:var(--accent)}
+.sinais{list-style:none;display:flex;flex-direction:column;gap:8px}
+.sinais li{display:flex;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:14.5px;line-height:1.4}
+.sinais li i{font-style:normal;font-size:18px;line-height:1.1}
+.sinais li b{font-weight:700}
+
+/* fim */
+.fim{text-align:center;padding-top:8vh}
+.fim .selo{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:900;animation:selo .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes selo{from{transform:scale(0) rotate(-30deg)}}
+.fim .sub{margin:0 auto 22px}
+.conf{position:fixed;top:-12px;width:8px;height:14px;border-radius:2px;z-index:40;pointer-events:none;animation:cai linear forwards}
+@keyframes cai{to{transform:translateY(105vh) rotate(720deg)}}
+
+.toast{pointer-events:none;position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;transition:all .25s;z-index:30;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.duo{display:grid;grid-template-columns:1fr;gap:0}
+.opc{color:var(--dim);font-weight:500}
+.aviso{background:rgba(242,165,65,.10);border:1px solid rgba(242,165,65,.35);border-radius:14px;padding:11px 14px;font-size:14px;margin-bottom:16px}
+.gira{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--accent);animation:gira .8s linear infinite;margin:18vh auto 0}
+@keyframes gira{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header id="topo"></header>
+  <main id="tela"><div class="gira" role="status" aria-label="Carregando"></div></main>
+  <p class="foot" id="foot"></p>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* Página do CLIENTE: só pergunta e envia as respostas.
+   Aqui não existe nenhuma ferramenta, tela ou dado interno do editor. */
+const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
+// ===================== PERGUNTAS DO CLIENTE =====================
+const SERV = { editar:['Só a edição','Eu já tenho os vídeos gravados','✂️'], ambos:['Gravação + edição','Preciso que gravem e editem','🎬'], gravar:['Só a gravação','Eu mesmo edito depois','🎥'] };
+const TIPO = { reels:['Reels / TikTok / Shorts','Vídeo curto vertical','📱'], youtube:['YouTube / vídeo longo','Vlog, aula, podcast, tutorial','▶️'], comercial:['Para empresa ou anúncio','Comercial, institucional, tráfego pago','🏢'], evento:['Evento / Casamento','Festa, palestra, cerimônia','💍'], outro:['Outro','Eu explico no final','✳️'] };
+const QTD = { 1:['1 vídeo',''], 4:['2 a 4 vídeos',''], 8:['5 a 8 vídeos',''], 12:['Mais de 8','Um pacote mensal, por exemplo'] };
+const DUR = { d1:['Até 1 minuto',''], d3:['1 a 3 minutos',''], d10:['3 a 10 minutos',''], d30:['10 a 30 minutos',''], d60:['Mais de 30 minutos',''], ns:['Ainda não sei',''] };
+const EDIC = { simples:['Simples e direta','Cortes, limpeza e legenda','✂️'], caprichada:['Dinâmica','Ritmo rápido, zooms, efeitos sonoros e imagens de apoio','⚡'], avancada:['Nível cinema','Animações, motion e cor de filme','🚀'], ns:['Não sei, quero uma sugestão','','💭'] };
+const GRAV = { g2:['Até 2 horas','Uma gravação rápida','⏱️'], g4:['Meio período','Cerca de 4 horas','⏱️'], g8:['Dia inteiro','Cerca de 8 horas','⏱️'], ns:['Ainda não sei','','💭'] };
+const PRAZO = { urgente:['Urgente','Em até 2 dias','🔥'], semana:['Em até 1 semana','','🗓️'], normal:['Sem pressa','Mais de 1 semana está ótimo','🌿'] };
+const VERBA = { a:['Até R$ 300',''], b:['R$ 300 a R$ 800',''], c:['R$ 800 a R$ 2.000',''], d:['Acima de R$ 2.000',''], x:['Prefiro não dizer',''] };
+const COR = { nome:'--accent', s:'--c-grav', t:'--c-video', q:'--c-video', d:'--c-video', e:'--c-edit', g:'--c-grav', p:'--c-prazo', v:'--c-verba', obs:'--accent' };
+const rot = { s:SERV, t:TIPO, q:QTD, d:DUR, e:EDIC, g:GRAV, p:PRAZO, v:VERBA };
+const NOMES = { s:'Serviço', t:'Tipo de vídeo', q:'Quantidade', d:'Duração', e:'Estilo de edição', g:'Gravação', p:'Prazo', v:'Valor em mente' };
+const edita = r => r.s !== 'gravar', grava = r => r.s === 'gravar' || r.s === 'ambos';
+function etapas(r){
+  const f = ['nome','s','t'];
+  if (edita(r)) f.push('q');
+  if (edita(r) && r.t !== 'reels') f.push('d');
+  if (edita(r)) f.push('e');
+  if (grava(r)) f.push('g');
+  f.push('p','v','obs');
+  return f;
+}
+
+
+// ===================== utilidades =====================
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const espera = ms => new Promise(r => setTimeout(r, calmo ? 0 : ms));
+const vibra = p => { try { navigator.vibrate && navigator.vibrate(p); } catch {} };
+const dec = s => { try { return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/'))))); } catch { return null; } };
+const primeiro = n => String(n || '').trim().split(/\s+/)[0] || '';
+function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2600); }
+function tela(html, cls='entra'){ const m = $('#tela'); m.className = cls; m.innerHTML = html; window.scrollTo({ top:0 }); }
+async function copia(t){ try { await navigator.clipboard.writeText(t); } catch { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); } vibra(10); }
+function confete(){
+  if (calmo) return;
+  const cores = ['#F2A541','#3FB8AF','#9B7BF7','#5AA9F0','#F4F0E4'];
+  for (let i = 0; i < 60; i++){
+    const c = document.createElement('i'); c.className = 'conf';
+    c.style.cssText = `left:${Math.random()*100}vw;background:${cores[i % cores.length]};animation-duration:${1.6 + Math.random()*1.4}s;animation-delay:${Math.random()*.4}s;transform:rotate(${Math.random()*180}deg)`;
+    document.body.appendChild(c); setTimeout(() => c.remove(), 3600);
+  }
+}
+const valor = (k, v) => k === 'nome' || k === 'obs' ? v : (rot[k]?.[v]?.[0] || '');
+// conversa só com as funções públicas do briefing (sem login)
+function pub(fn, corpo, manter){
+  return fetch(SUPA.url + '/rest/v1/rpc/' + fn, { method:'POST', keepalive:!!manter, headers:{ apikey:SUPA.key, 'Content-Type':'application/json' }, body:JSON.stringify(corpo) })
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('falhou')));
+}
+
+// ===================== estado =====================
+// ED = quem vai receber: { n: nome, w: WhatsApp, cod: código do link, modo: 'servidor' | 'antigo' | 'exemplo' | 'previa' }
+let ED = null, R = {}, pos = 0, ocupado = false;
+
+function cabecalho(){
+  $('#topo').innerHTML = `<div class="av">${esc(primeiro(ED.n)[0]?.toUpperCase() || 'B')}</div><div class="nm">${esc(ED.n)}<small>Briefing rápido · 1 minuto</small></div>`;
+  $('#foot').innerHTML = ED.modo === 'exemplo' || ED.modo === 'previa' ? 'Prévia: nada do que você responder aqui é enviado.' : 'Suas respostas vão direto para ' + esc(primeiro(ED.n)) + '.';
+}
+function barra(f){
+  return `<div class="prog">${f.map((k, i) => `<i class="${i < pos ? 'ok' : i === pos ? 'at' : ''}" style="--cor:var(${COR[k]})"></i>`).join('')}</div>`;
+}
+function pergunta(){
+  const f = etapas(R);
+  if (pos >= f.length) return revisao();
+  const k = f[pos], ed = primeiro(ED.n);
+  let h = barra(f) + `<div class="tc">${pos > 0 ? '<button class="back" id="voltar">← Voltar</button>' : ''}<span class="sp"></span><span>${String(pos+1).padStart(2,'0')} / ${String(f.length).padStart(2,'0')}</span></div>`;
+  if (k === 'nome'){
+    h += `<h1>Oi! Vamos montar o seu orçamento?</h1><p class="sub">São perguntas rápidas, só de tocar. ${esc(ed)} recebe tudo e te responde com o valor.</p>
+      <label for="nm">Seu nome ou da sua empresa</label><input class="inp big" id="nm" autocomplete="name" placeholder="Ex.: Ana, Studio Ana" value="${esc(R.nome || '')}" maxlength="60">
+      <label for="zp">Seu WhatsApp <span class="opc">(opcional)</span></label><input class="inp" id="zp" inputmode="tel" autocomplete="tel" placeholder="Ex.: 48 99999-8888" value="${esc(R.whatsapp || '')}" maxlength="20">
+      <button class="btn" id="seguir">Começar</button>`;
+  } else if (k === 'obs'){
+    h += `<h1>Quase lá! Mais algum detalhe?</h1><p class="sub">Os dois são opcionais. Uma referência ajuda muito a acertar o estilo.</p>
+      <label for="ref">Link de um vídeo que você gosta</label><input class="inp" id="ref" inputmode="url" placeholder="Cole aqui um link do Instagram, YouTube…" value="${esc(R.ref || '')}" maxlength="300">
+      <label for="obs">Algo mais que ${esc(ed)} precisa saber?</label><textarea class="inp" id="obs" placeholder="Ex.: é para o lançamento de um produto, quero legenda grande…" maxlength="500">${esc(R.obs || '')}</textarea>
+      <button class="btn" id="seguir">Revisar respostas</button>`;
+  } else {
+    const Q = {
+      s:['O que você precisa?', ''],
+      t:['Que tipo de vídeo?', ''],
+      q:['Quantos vídeos?', 'Mais ou menos. Pacotes costumam sair mais em conta.'],
+      d:['Cada vídeo pronto vai ter quanto tempo?', 'A duração final, depois de editado.'],
+      e:['Que estilo de edição você imagina?', ''],
+      g:['Quanto tempo de gravação?', 'Só uma ideia. Ajuda a reservar a agenda.'],
+      p:['Para quando você precisa?', ''],
+      v:['Você já tem um valor em mente?', 'Opcional. Ajuda a montar uma proposta que caiba no seu bolso.'],
+    }[k];
+    h += `<h1>${Q[0]}</h1>` + (Q[1] ? `<p class="sub">${Q[1]}</p>` : '<div style="height:14px"></div>');
+    h += '<div class="opts">' + Object.entries(rot[k]).map(([v, [t, s, ic]]) => `<button class="opt${v === 'ns' || v === 'x' ? ' ns' : ''}${R[k] === v ? ' picked' : ''}" style="--cor:var(${COR[k]})" data-v="${v}">${ic ? `<span class="ic">${ic}</span>` : ''}<span><b>${t}</b>${s ? `<small>${s}</small>` : ''}</span></button>`).join('') + '</div>';
+  }
+  tela(h);
+  if ($('#voltar')) $('#voltar').onclick = () => { pos = Math.max(0, pos - 1); pergunta(); };
+  document.querySelectorAll('.opt').forEach(b => b.onclick = async () => {
+    if (ocupado) return; ocupado = true;
+    document.querySelectorAll('.opt').forEach(x => x.classList.toggle('picked', x === b));
+    R[k] = b.dataset.v; vibra(8);
+    if (k === 's' || k === 't'){ const f2 = etapas(R); for (const c of ['q','d','e','g']) if (!f2.includes(c)) delete R[c]; }
+    await espera(260); pos++; ocupado = false; pergunta();
+  });
+  if (k === 'nome'){
+    const i = $('#nm'); setTimeout(() => i.focus(), 60);
+    i.onkeydown = e => { if (e.key === 'Enter') $('#seguir').click(); };
+    $('#zp').onkeydown = e => { if (e.key === 'Enter') $('#seguir').click(); };
+    $('#seguir').onclick = () => {
+      const v = i.value.trim(); if (!v){ i.classList.remove('erro'); void i.offsetWidth; i.classList.add('erro'); vibra(30); return; }
+      const z = $('#zp'), d = z.value.replace(/\D/g, '').replace(/^55(?=\d{10,11}$)/, '');
+      if (z.value.trim() && (d.length < 10 || d.length > 11)){ z.classList.remove('erro'); void z.offsetWidth; z.classList.add('erro'); toast('Confira o WhatsApp: DDD + número'); vibra(30); return; }
+      R.nome = v; R.whatsapp = d || undefined; pos++; pergunta();
+    };
+  }
+  if (k === 'obs') $('#seguir').onclick = () => { R.ref = $('#ref').value.trim(); R.obs = $('#obs').value.trim(); pos++; pergunta(); };
+}
+function linhasResumo(r){
+  const L = [];
+  for (const k of ['s','t','q','d','e','g','p','v']) if (r[k]) L.push([k, NOMES[k], valor(k, r[k])]);
+  return L;
+}
+// a mensagem leva só as respostas, em texto. Nenhum link interno vai junto.
+function mensagem(r){
+  const L = [`Oi, ${primeiro(ED.n)}! Aqui é ${r.nome}. Respondi o briefing:`, ''];
+  for (const [, n, v] of linhasResumo(r)) L.push(`*${n}:* ${v}`);
+  if (r.ref) L.push(`*Referência:* ${r.ref}`);
+  if (r.obs) L.push(`*Detalhes:* ${r.obs}`);
+  return L.join('\n');
+}
+const zap = txt => 'https://api.whatsapp.com/send?phone=' + ED.w + '&text=' + encodeURIComponent(txt);
+function revisao(){
+  const f = etapas(R), ed = primeiro(ED.n), previa = ED.modo === 'exemplo' || ED.modo === 'previa';
+  tela(`${barra(f).replace(/class="at"/, 'class="ok"')}<div class="tc"><button class="back" id="voltar">← Voltar</button><span class="sp"></span><span>Revisão</span></div>
+    <h1>Tudo certo, ${esc(primeiro(R.nome))}?</h1><p class="sub">${previa ? 'É aqui que o cliente confere e envia.' : ED.w ? 'Confira e envie. Vai abrir o WhatsApp com a mensagem pronta, é só tocar em enviar.' : 'Confira e envie.'}</p>
+    <div class="card resumo">${linhasResumo(R).map(([k, n, v]) => `<div class="it" style="--cor:var(${COR[k]})"><span>${n}</span><b>${esc(v)}</b></div>`).join('')}
+      ${R.ref ? `<div class="it"><span>Referência</span><b>${esc(R.ref)}</b></div>` : ''}${R.obs ? `<div class="it"><span>Detalhes</span><b>${esc(R.obs)}</b></div>` : ''}</div>
+    <div class="row" style="margin-top:18px"><button class="btn ${ED.w && !previa ? 'zap' : ''}" id="enviar">${previa ? 'Concluir a prévia' : ED.w ? `Enviar para ${esc(ed)} no WhatsApp` : `Enviar para ${esc(ed)}`}</button></div>`);
+  $('#voltar').onclick = () => { pos = f.length - 1; pergunta(); };
+  $('#enviar').onclick = () => {
+    const txt = mensagem(R);
+    if (previa) return enviado(txt);
+    // abre o WhatsApp no próprio toque (para o navegador não bloquear) e registra as respostas em paralelo
+    if (ED.w) window.open(zap(txt), '_blank');
+    registra();
+    enviado(txt);
+  };
+}
+let registrado = null;
+function registra(){
+  if (ED.modo !== 'servidor') return;
+  const corpo = { p_codigo:ED.cod, p_respostas:R };
+  const tenta = n => pub('pub_briefing_enviar', corpo, true).catch(() => n > 0 ? espera(1500).then(() => tenta(n - 1)) : null);
+  registrado = tenta(2);
+}
+function enviado(txt){
+  confete(); vibra([10, 40, 18]);
+  const ed = primeiro(ED.n), previa = ED.modo === 'exemplo' || ED.modo === 'previa';
+  if (previa){
+    tela(`<div class="fim"><div class="selo">✓</div><h1>Fim da prévia</h1>
+      <p class="sub">No link de verdade, as respostas chegam para o editor neste momento. Nesta prévia nada foi enviado.</p>
+      <button class="btn ghost" id="fecha">Fechar a prévia</button></div>`);
+    $('#fecha').onclick = () => { try { window.close(); } catch {} history.length > 1 ? history.back() : (location.href = '/briefing/'); };
+    try { if (window.opener) window.opener.postMessage({ fl:'previa-briefing-concluida' }, location.origin); } catch {}
+    return;
+  }
+  tela(`<div class="fim"><div class="selo">✓</div><h1>Prontinho!</h1>
+    <p class="sub">${ED.w ? `Agora é só tocar em <b>enviar</b> no WhatsApp. ${esc(ed)} vai analisar e te responder com o orçamento.` : `${esc(ed)} recebeu as suas respostas e vai te responder com o orçamento.`}</p>
+    ${ED.w ? `<a class="btn ghost" id="denovo" href="${esc(zap(txt))}" target="_blank" rel="noopener">O WhatsApp não abriu? Tentar de novo</a>
+    <div class="row"><button class="btn ghost" id="cop">Copiar a mensagem</button></div>` : ''}</div>`);
+  if ($('#cop')) $('#cop').onclick = async () => { await copia(txt); toast('Copiado. Cole na conversa com ' + ed + '.'); };
+}
+function indisponivel(){
+  $('#topo').innerHTML = ''; $('#foot').textContent = '';
+  tela('<div class="fim"><h1>Link indisponível</h1><p class="sub">Este link de briefing não está ativo. Peça um link novo para quem te mandou.</p></div>');
+}
+
+// ===================== início =====================
+async function inicio(){
+  const h = location.hash.slice(1);
+  const mCod = h.match(/^([0-9a-f]{16})(,ver)?$/), mAnt = h.match(/^p=([\w-]+)/);
+  if (h === 'demo'){ ED = { n:'Seu nome', w:'', modo:'exemplo' }; }
+  else if (mCod){
+    let r = null; try { r = await pub('pub_briefing', { p_codigo:mCod[1] }); } catch {}
+    if (!r || !r.ok) return indisponivel();
+    ED = { n:r.nome || 'Editor', w:String(r.whatsapp || '').replace(/\D/g, ''), cod:mCod[1], modo:mCod[2] ? 'previa' : 'servidor' };
+  }
+  else if (mAnt){
+    // link antigo: nome e WhatsApp do editor vinham no próprio link. Continua funcionando.
+    const a = dec(mAnt[1]);
+    if (!a || !a.n){ $('#topo').innerHTML = ''; return tela('<div class="fim"><h1>Link incompleto</h1><p class="sub">Esse link de briefing parece ter sido cortado. Peça o link de novo para quem te mandou.</p></div>'); }
+    ED = { n:String(a.n).slice(0, 40), w:String(a.w || '').replace(/\D/g, ''), modo: a.w ? 'antigo' : 'exemplo' };
+  }
+  else return indisponivel();
+  document.title = 'Briefing · ' + ED.n;
+  R = {}; pos = 0; cabecalho(); pergunta();
+}
+addEventListener('hashchange', () => location.reload());
+inicio();
+</script>
+</body>
+</html>

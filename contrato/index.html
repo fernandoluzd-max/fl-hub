@@ -137,6 +137,22 @@ textarea{min-height:88px;resize:vertical;line-height:1.4}
   .wrap{max-width:none;padding:0}.papel{box-shadow:none;border-radius:0;padding:0;background:#fff;font-size:11.5pt}
   .papel .cl{filter:none!important;opacity:1!important;transform:none!important}
 }
+.rec{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:8px;transition:border-color .15s}
+.rec:hover{border-color:#3a443c}
+.rec .tx{flex:1;min-width:0}
+.rec b{display:block;font-size:15.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rec small{display:block;color:var(--mute);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rec .st{flex:none;font-size:11.5px;font-weight:750;border-radius:8px;padding:3px 8px;border:1px solid var(--line);color:var(--mute);white-space:nowrap}
+.rec .st.ok{color:#0c1a10;background:#7fce8f;border-color:#7fce8f}
+.rec .st.at{color:var(--accent-ink);background:var(--accent);border-color:var(--accent)}
+.esp{margin-top:22px}.esp h2{margin:0 0 8px;font-size:14px;color:var(--mute);font-weight:700}
+.linkbox{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px dashed rgba(242,165,65,.5);border-radius:14px;padding:12px 14px;margin:14px 0 4px;font-size:14px;overflow:hidden}
+.linkbox code{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:13px/1.4 ui-monospace,Menlo,monospace;color:var(--ink)}
+.feito{display:flex;gap:10px;align-items:flex-start;background:rgba(127,206,143,.08);border:1px solid rgba(127,206,143,.3);border-radius:14px;padding:12px 14px;margin-top:14px;font-size:14px;color:var(--mute)}
+.feito b{color:var(--ink)}.feito a{color:var(--accent)}
+.btn.zap{background:#25D366;border-color:#25D366;color:#06210f}
+.para-quem{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:13.5px;color:var(--mute);margin-bottom:16px}
+.para-quem b{color:var(--ink);font-weight:700}.para-quem button{margin-left:auto}
 .link.aula{text-decoration:none;font-weight:700;color:var(--ink,#F4F0E4);border:1px solid var(--line,#2B302E);border-radius:99px;padding:6px 12px;margin-right:6px}
 </style>
 </head>
@@ -149,6 +165,7 @@ textarea{min-height:88px;resize:vertical;line-height:1.4}
     <button class="link aula" id="aula" hidden>▶ Aula</button>
     <button class="link" id="conta"></button>
   </header>
+  <div id="trilha" class="noprint"></div>
   <main id="tela"></main>
   <p class="foot noprint">Modelo de contrato para a relação entre editor e cliente. Não é consultoria jurídica e não substitui a orientação de um advogado, principalmente em trabalhos de valor alto.</p>
 </div>
@@ -158,13 +175,15 @@ textarea{min-height:88px;resize:vertical;line-height:1.4}
 </div></div>
 <div class="toast" id="toast"></div>
 
+<script src="/catalogo.js"></script>
+<script src="/base.js"></script>
 <script src="/aulas.js"></script>
 <script>
-// ===================== CONFIG =====================
-const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
+/* Gerador de Contrato — tela do EDITOR.
+   O cliente lê e aceita em /c/ (página só do contrato). */
 const PACK = 'fl-contrato';
-let vencido = false;
-let BUY_URL = 'https://basefl.com/conheca/gerador-de-contrato/?de=ferramenta', acesso = false, sess = null;
+let acesso = Base.tem(PACK), vencido = Base.vencido(PACK), TRAB = null, avisouDemo = false;
+function sincAcesso(){ acesso = Base.tem(PACK); vencido = Base.vencido(PACK); botaoConta(); }
 
 // ===================== utilidades =====================
 const $ = s => document.querySelector(s);
@@ -173,13 +192,15 @@ const store = { get(k){ try { return localStorage.getItem(k); } catch { return n
 const lerJ = k => { try { return JSON.parse(store.get(k) || 'null') || {}; } catch { return {}; } };
 const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const vibra = p => { try { navigator.vibrate && navigator.vibrate(p); } catch {} };
-try { sess = JSON.parse(store.get('fl_sess') || 'null'); } catch { sess = null; }
 function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2300); }
 function tela(h, cls='entra'){ const m = $('#tela'); m.className = ''; void m.offsetWidth; m.className = cls; m.innerHTML = h; scrollTo(0,0); }
 async function copia(t){ try { await navigator.clipboard.writeText(t); } catch { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); } }
 async function compartilha(t){ if (navigator.share && /Android|iPhone|iPad/i.test(navigator.userAgent)){ try { await navigator.share({ text:t }); return true; } catch(e){ if (e.name === 'AbortError') return true; } } return false; }
 const dinheiro = v => { const n = parseFloat(String(v).replace(/[^\d,.-]/g,'').replace(/\.(?=\d{3}(\D|$))/g,'').replace(',','.')); return isFinite(n) && n > 0 ? 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits:2 }) : ''; };
 const so = s => String(s || '').trim();
+const numero = v => { const n = parseFloat(String(v ?? '').replace(/[^\d,.-]/g,'').replace(/\.(?=\d{3}(\D|$))/g,'').replace(',','.')); return isFinite(n) && n > 0 ? Math.round(n*100)/100 : 0; };
+const quandoCurto = iso => { if (!iso) return ''; const d = new Date(iso), h = new Date(); return d.toDateString() === h.toDateString() ? 'hoje' : d.toLocaleDateString('pt-BR', { day:'2-digit', month:'short' }).replace('.', ''); };
+function trilha(){ const el = $('#trilha'); el.innerHTML = ''; if (TRAB || Base.jornada.filter(p => Base.tem(p.pack)).length >= 2) el.appendChild(Base.trilha('contrato', TRAB)); }
 
 // ===================== capricho nos dados =====================
 const MINUSC = new Set(['da','de','do','das','dos','e','di','du','del']);
@@ -216,7 +237,24 @@ let D = {
   valor:orc.valor || '', pag:eu.pag || 'meio', dia:eu.dia || '10', parcelas:'2',
   port:true, bruto:false,
 };
-const veioDoOrcamento = !!orc.valor;
+let veioDoOrcamento = !!orc.valor;
+// dados do editor que já estão na conta (não precisa digitar de novo em cada aparelho)
+function doPerfil(){
+  const p = Base.eu.perfil; if (!p) return;
+  D.eu = D.eu || p.nome || ''; D.euDoc = D.euDoc || p.doc || ''; D.cidade = D.cidade || p.cidade || '';
+  if (p.pag && !eu.pag && PAG[p.pag]) D.pag = p.pag; if (p.dia && !eu.dia) D.dia = p.dia;
+}
+// dados do trabalho que veio da proposta (cliente, serviço, prazo, valor): nada para redigitar
+function doTrabalho(t){
+  const pr = t.proposta || {}, c = t.cliente || {};
+  D.cli = c.nome || D.cli; D.cliDoc = c.doc || D.cliDoc || '';
+  if (pr.servico) D.serv = pr.servico; if (pr.entrega) D.ent = pr.entrega;
+  if (pr.prazo) D.prazo = pr.prazo.replace(/\s+após receber o material$/i, '').replace(/^Em /, 'em ');
+  if (pr.revisoes) D.rev = String(Math.min(3, Math.max(1, +pr.revisoes)));
+  if (pr.valor) D.valor = String(pr.valor).replace('.', ',');
+  if (/^50%/.test(pr.pagamento || '')) D.pag = 'meio'; else if (/^100% antes/.test(pr.pagamento || '')) D.pag = 'vista'; else if (/^100% na entrega/.test(pr.pagamento || '')) D.pag = 'entrega';
+  veioDoOrcamento = !!pr.valor;
+}
 
 const PAG = {
   meio:   { t:'50% + 50%',  s:'Metade antes, metade na entrega', txt:() => '50% na aprovação e 50% na entrega final' },
@@ -254,16 +292,26 @@ function exige(ids){
 }
 
 function mostra(){
-  dock();
+  dock(); trilha(); $('#dock').classList.remove('hide');
   if (passo >= PASSOS.length) return monta();
   const p = PASSOS[passo];
   if (p === 'formato'){
-    tela(cab('Que tipo de contrato você precisa?', veioDoOrcamento ? 'Já trouxe os dados do seu último orçamento. É só conferir.' : 'Responda 6 passos rápidos. Seu contrato fica pronto em 2 minutos.') +
+    let listas = '';
+    if (!TRAB && acesso && Base.eu.jornada){
+      const apr = Base.eu.trabalhos.filter(t => t.proposta_status === 'aprovada' && !t.contrato_status).slice(0, 4);
+      const env = Base.eu.trabalhos.filter(t => t.contrato_status).slice(0, 4);
+      if (apr.length) listas += `<div class="esp"><h2>Aprovados, falta o contrato</h2>${apr.map(t => `<button class="rec" data-t="${t.id}"><span class="tx"><b>${esc(t.cliente?.nome || 'Cliente')}</b><small>${Base.brl(t.valor)} · aprovou ${esc(quandoCurto(t.atualizado_em))}</small></span><span class="st at">Gerar</span></button>`).join('')}</div>`;
+      if (env.length) listas += `<div class="esp"><h2>Contratos enviados</h2>${env.map(t => `<button class="rec" data-t="${t.id}"><span class="tx"><b>${esc(t.cliente?.nome || 'Cliente')}</b><small>${t.valor ? Base.brl(t.valor) + ' · ' : ''}${esc(quandoCurto(t.contrato_em))}</small></span><span class="st ${t.contrato_status === 'aceito' ? 'ok' : ''}">${t.contrato_status === 'aceito' ? 'Aceito' : 'Aguardando'}</span></button>`).join('')}</div>`;
+    }
+    tela((TRAB ? `<div class="para-quem">Contrato para <b>${esc(TRAB.cliente?.nome || 'cliente')}</b><button class="link" id="soltar">fazer outro</button></div>` : '') +
+      cab('Que tipo de contrato você precisa?', TRAB ? 'Já trouxe os dados da proposta. É só conferir.' : veioDoOrcamento ? 'Já trouxe os dados do seu último orçamento. É só conferir.' : 'Responda 6 passos rápidos. Seu contrato fica pronto em 2 minutos.') +
       `<div class="opts">
-        <button class="opt" data-v="rapido"><span class="ic">⚡</span><span><b>Termo rápido</b><small>Mensagem curta pro WhatsApp. O cliente responde "De acordo" e pronto. Ideal para trabalhos pequenos.</small></span></button>
-        <button class="opt" data-v="completo"><span class="ic">📄</span><span><b>Contrato completo</b><small>Documento com 8 cláusulas em PDF, para assinar. Ideal para trabalhos maiores ou empresas.</small></span></button>
-      </div>`);
-    document.querySelectorAll('.opt').forEach(b => b.onclick = () => { D.formato = b.dataset.v; vibra(8); avanca(); });
+        <button class="opt" data-v="rapido"><span class="ic">⚡</span><span><b>Termo rápido</b><small>Um acordo curto, direto ao ponto. Ideal para trabalhos pequenos.</small></span></button>
+        <button class="opt" data-v="completo"><span class="ic">📄</span><span><b>Contrato completo</b><small>Documento com 8 cláusulas, também em PDF. Ideal para trabalhos maiores ou empresas.</small></span></button>
+      </div>` + listas);
+    document.querySelectorAll('.opt').forEach(b => b.onclick = () => { D.formato = b.dataset.v; vibra(8); if (!acesso && !avisouDemo){ avisouDemo = true; Base.evento('demo_started', PACK); } avanca(); });
+    document.querySelectorAll('.rec[data-t]').forEach(b => b.onclick = () => abreTrabalho(b.dataset.t));
+    if ($('#soltar')) $('#soltar').onclick = novoContrato;
   }
   if (p === 'partes'){
     const doc = D.formato === 'completo';
@@ -371,19 +419,22 @@ function monta(animar = true){
   dock(); vibra([10, 40, 18]);
   if (D.formato === 'completo') carregaJsPDF().catch(() => {});
   const hoje = new Date().toLocaleDateString('pt-BR', { day:'numeric', month:'long', year:'numeric' });
-  const trava = !acesso;
-  const cad = `<div class="cadeado"><p>${vencido ? 'Seu acesso de 1 ano terminou' : `Seu ${D.formato === 'rapido' ? 'termo' : 'contrato'} está pronto 🔒`}</p><small>${vencido ? 'Renove para voltar a enviar e salvar contratos.' : 'Desbloqueie para enviar, copiar e salvar em PDF. Acesso de 1 ano, use quantas vezes quiser.'}</small>
-      <button class="btn" id="comprar">${vencido ? 'Renovar acesso' : 'Desbloquear o gerador'}</button><button class="link" id="entrar2">Já comprei · entrar</button></div>`;
+  const trava = !acesso, link = Base.eu.jornada;
+  if (trava && !monta._demo){ monta._demo = true; Base.evento('demo_completed', PACK); }
+  if (acesso && Base.eu.jornada) Base.rpc('perfil_salvar', { p:{ nome:D.eu, doc:D.euDoc || null, cidade:D.cidade || null, pag:D.pag, dia:D.dia } }).then(p => { Base.eu.perfil = p; }, () => {});
+  const cad = `<div class="cadeado"><p>${vencido ? 'Seu acesso de 1 ano terminou' : `Seu ${D.formato === 'rapido' ? 'termo' : 'contrato'} está pronto 🔒`}</p><small>${vencido ? 'Renove para voltar a enviar e salvar contratos.' : 'Libere para enviar ao cliente, copiar e salvar em PDF. Acesso de 1 ano, use quantas vezes quiser.'}</small>
+      <button class="btn" id="comprar">${vencido ? 'Renovar acesso' : 'Liberar o gerador · R$ ' + Base.produto('contrato').preco}</button>${Base.sessao() ? '' : '<button class="link" id="entrar2">Já comprei · entrar</button>'}</div>`;
+  const btLink = link ? '<button class="btn" id="publicar">Enviar para o cliente aceitar</button><div class="err" id="erro"></div>' : '';
   let corpo;
   if (D.formato === 'rapido'){
     const hr = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
     corpo = `<div class="chat"><div class="para">Assim o seu cliente vai receber</div>
         <div class="bolha">${zapHtml(textoRapido())}<span class="hr">${hr} ✓✓</span></div>
         <div class="resp${animar ? '' : ' on'}">De acordo 👍</div>${cad}</div>
-      <div class="noprint">${trava ? '' : `<div class="row"><button class="btn ghost" id="copiar">Copiar</button><button class="btn" id="enviar">Enviar no WhatsApp</button></div>
+      <div class="noprint">${trava ? '' : `${btLink}<div class="row"><button class="btn ghost" id="copiar">Copiar o texto</button><button class="btn ${link ? 'ghost' : ''}" id="enviar">${link ? 'Só o texto no WhatsApp' : 'Enviar no WhatsApp'}</button></div>
         <button class="btn ghost" id="trocar">Gerar o contrato completo em PDF</button>`}</div>`;
   } else {
-    corpo = `<div class="noprint" style="margin-bottom:18px">${trava ? '' : `<button class="btn" id="pdfEnviar">📎 Enviar PDF pro cliente</button>
+    corpo = `<div class="noprint" style="margin-bottom:18px">${trava ? '' : `${btLink}<button class="btn ${link ? 'ghost' : ''}" id="pdfEnviar">📎 Enviar o PDF pro cliente</button>
         <div class="row"><button class="btn ghost" id="pdf">Baixar PDF</button><button class="btn ghost" id="copiar">Copiar texto</button></div>`}</div>
       <article class="papel">
         <div class="carimbo">PRONTO</div>
@@ -397,8 +448,8 @@ function monta(animar = true){
         ${cad}
       </article>
       <div class="noprint">${trava ? '' : `
-        <h2 style="font-size:17px;font-weight:800;margin:26px 0 4px">Como assinar online</h2>
-        <p class="sub" style="margin-bottom:6px">Salve o PDF e escolha um caminho. Os dois têm validade jurídica.</p>
+        <h2 style="font-size:17px;font-weight:800;margin:26px 0 4px">Precisa de assinatura com mais peso?</h2>
+        <p class="sub" style="margin-bottom:6px">O aceite pelo link registra nome, data e hora. Em trabalhos de valor alto, salve o PDF e assine também por um destes caminhos.</p>
         <div class="dica"><span>🏛️</span><span><b>Grátis, pelo gov.br:</b> você e o cliente assinam o mesmo PDF pelo celular, um depois do outro, com a conta gov.br. <a href="https://www.gov.br/governodigital/pt-br/identidade/assinatura-eletronica" target="_blank" rel="noopener">Abrir o assinador</a></span></div>
         <div class="dica"><span>📲</span><span><b>Mais prático, por link:</b> envie o PDF numa plataforma de assinatura (como <a href="https://zapsign.com.br" target="_blank" rel="noopener">ZapSign</a> ou <a href="https://www.autentique.com.br" target="_blank" rel="noopener">Autentique</a>). Ela gera um link que o cliente abre no WhatsApp e assina com o dedo. Têm plano gratuito com poucos contratos por mês.</span></div>`}</div>`;
   }
@@ -409,9 +460,10 @@ function monta(animar = true){
   if (animar && D.formato === 'completo') document.querySelectorAll('.monta .cl').forEach((e, i) => e.style.animationDelay = (i * 0.07) + 's');
   if (animar){ const c = $('.monta .carimbo'); if (c) c.style.animationDelay = (document.querySelectorAll('.cl').length * 0.07 + .1) + 's'; }
   $('#voltar').onclick = () => { passo = PASSOS.length - 1; mostra(); };
-  $('#novo').onclick = () => { D = { ...D, formato:'', cli:'', cliDoc:'', serv:'', ent:'', prazo:'', valor:'', rev:'2' }; store.set('fl_ultimo_orc', null); passo = 0; mostra(); };
-  if ($('#comprar')) $('#comprar').onclick = () => BUY_URL ? (location.href = BUY_URL) : toast('Link de compra em breve.');
-  if ($('#entrar2')) $('#entrar2').onclick = () => login(() => monta(false));
+  $('#novo').onclick = novoContrato;
+  if ($('#comprar')) $('#comprar').onclick = () => Base.comprar('contrato', 'ferramenta');
+  if ($('#entrar2')) $('#entrar2').onclick = async () => { if (await Base.login()){ sincAcesso(); toast(acesso ? 'Gerador desbloqueado' : 'Entrou, mas o Gerador de Contrato não está nas compras deste e-mail'); monta(false); } };
+  if ($('#publicar')) $('#publicar').onclick = publica;
   const texto = () => D.formato === 'rapido' ? textoRapido() : textoCompleto();
   if ($('#copiar')) $('#copiar').onclick = async () => { await copia(texto()); vibra(10); toast('Copiado. É só colar na conversa.'); };
   if ($('#enviar')) $('#enviar').onclick = async () => { if (!(await compartilha(texto()))) window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(texto()), '_blank'); };
@@ -430,6 +482,77 @@ function monta(animar = true){
     b.disabled = false; b.textContent = txt;
   };
   if ($('#trocar')) $('#trocar').onclick = () => { D.formato = 'completo'; passo = 1; mostra(); toast('Complete os dados do contrato completo'); };
+}
+
+// ===================== enviar para o cliente aceitar (link) =====================
+function paraCliente(){
+  const rapido = D.formato === 'rapido', hoje = new Date().toLocaleDateString('pt-BR', { day:'numeric', month:'long', year:'numeric' });
+  const rev = D.rev === '1' ? '1 rodada de ajustes incluída' : `${D.rev} rodadas de ajustes incluídas`;
+  const cl = rapido ? [
+      ['Serviço', so(D.serv).replace(/\.$/,'') + '.'], ['Entrega', so(D.ent).replace(/\.$/,'') + '.'],
+      ['Prazo', so(D.prazo).replace(/\.$/,'') + ', contando a partir do recebimento de todo o material.'],
+      ['Revisões', rev + '. Ajustes extras são orçados à parte.'], ['Valor e pagamento', `${dinheiro(D.valor)}, pago ${PAG[D.pag].txt()}.`],
+      ['Uso do vídeo', 'Após o pagamento, o vídeo é do CONTRATANTE para usar onde quiser.' + (D.port ? ' O CONTRATADO pode mostrar o trabalho no seu portfólio.' : '')],
+      ['Cancelamento', 'Se o CONTRATANTE cancelar depois do início, o valor já pago cobre o que foi feito.']]
+    : clausulas();
+  return { formato: D.formato, titulo: rapido ? 'Termo de serviço: edição de vídeo' : 'Contrato de prestação de serviços de edição de vídeo',
+    contratado: { nome:so(D.eu), doc:so(D.euDoc) || null, cidade:so(D.cidade) || null }, contratante: { nome:so(D.cli), doc:so(D.cliDoc) || null },
+    resumo: { servico:so(D.serv), entrega:so(D.ent), prazo:so(D.prazo), revisoes:+D.rev, valor:numero(D.valor), pagamento:PAG[D.pag].txt() },
+    clausulas: cl, local_data: `${so(D.cidade) ? so(D.cidade) + ', ' : ''}${hoje}` };
+}
+async function publica(){
+  const b = $('#publicar'); b.disabled = true; b.textContent = 'Gerando o link…'; $('#erro').textContent = '';
+  try {
+    const r = await Base.rpc('contrato_publicar', { p_id: TRAB?.id || null, p:{ cliente:{ id:TRAB?.cliente?.id, nome:so(D.cli), doc:so(D.cliDoc) || null }, contrato: paraCliente() } });
+    TRAB = await Base.rpc('trabalho', { p_id:r.id });
+    history.replaceState(null, '', '?t=' + r.id); store.set('fl_ultimo_orc', null);
+    Base.carrega(true); enviado(true);
+  } catch(e){ $('#erro').textContent = Base.traduz(e.message); b.disabled = false; b.textContent = 'Enviar para o cliente aceitar'; }
+}
+function enviado(novo){
+  const t = TRAB, nome = t.cliente?.nome || t.contrato?.contratante?.nome || 'cliente', link = location.origin + '/c/#' + t.contrato_token, aceito = t.contrato_status === 'aceito', ac = t.contrato_aceite || {};
+  $('#dock').classList.add('hide'); trilha();
+  const msg = `Olá, ${nome.split(' ')[0]}! Segue o contrato do nosso trabalho. É só abrir, ler e aceitar por aqui:\n${link}`;
+  tela(`<div class="tc noprint"><button class="back" id="voltar">← Início</button><span class="sp"></span><span class="n">${aceito ? 'Aceito' : 'Aguardando o cliente'}</span></div>
+    <h1>${aceito ? `${esc(nome)} aceitou!` : novo ? 'Link do contrato pronto' : `Contrato para ${esc(nome)}`}</h1>
+    <p class="sub">${aceito ? `Aceito por ${esc(ac.nome || nome)}${ac.doc ? ' (' + esc(ac.doc) + ')' : ''} em ${new Date(ac.em).toLocaleDateString('pt-BR')} às ${new Date(ac.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}. Trabalho fechado.` : 'Mande o link. O cliente lê no celular e aceita com o nome dele. Fica registrado com data e hora.'}</p>
+    <div class="linkbox"><code>${esc(link.replace(/^https?:\/\//, ''))}</code></div>
+    ${aceito ? '' : '<div class="row"><button class="btn zap" id="mandar" style="margin-top:8px">Mandar no WhatsApp</button></div>'}
+    <div class="row"><button class="btn ghost" id="cop">Copiar link</button><button class="btn ghost" id="ver">${aceito ? 'Abrir o contrato aceito' : 'Ver como o cliente vê'}</button></div>
+    <div id="prox"></div>
+    <div class="row">${aceito ? '' : '<button class="btn ghost" id="refazer">Mudar o contrato</button>'}<button class="btn ghost" id="novo">Novo contrato</button></div>`);
+  if (Base.tem('fl-painel')){
+    const f = document.createElement('div'); f.className = 'feito';
+    f.innerHTML = t.demanda_feita ? `<span>✓</span><span><b>Já está no seu Base Demandas</b>${aceito ? ', em “Fechado”' : ''}. Prazo, revisões e pagamento ficam lá. <a href="/painel/">Abrir</a></span>` : `<span>→</span><span><b>Organizar este trabalho.</b> <a href="#" id="org">Pôr no Base Demandas</a></span>`;
+    $('#prox').appendChild(f);
+    if ($('#org')) $('#org').onclick = async e => { e.preventDefault(); try { TRAB = await Base.rpc('trabalho_marcar', { p_id:t.id, p_acao:'organizar' }); toast('Adicionado ao Base Demandas'); enviado(); } catch(err){ toast(Base.traduz(err.message)); } };
+  } else $('#prox').appendChild(Base.proximo({ alvo:'painel', titulo:'Organizar este trabalho', texto:'Cliente, valor e prazo deste contrato entram sozinhos no seu quadro. Você só acompanha entrega e pagamento.', origem:'contrato' }));
+  $('#voltar').onclick = novoContrato; $('#novo').onclick = novoContrato;
+  $('#cop').onclick = async () => { await copia(link); vibra(10); toast('Link copiado'); };
+  $('#ver').onclick = () => window.open(link, '_blank');
+  if ($('#mandar')) $('#mandar').onclick = async () => {
+    if (await compartilha(msg)) return;
+    const tel = String(t.cliente?.whatsapp || '').replace(/\D/g, '');
+    window.open('https://api.whatsapp.com/send?' + (tel ? 'phone=' + tel + '&' : '') + 'text=' + encodeURIComponent(msg), '_blank');
+  };
+  if ($('#refazer')) $('#refazer').onclick = () => { $('#dock').classList.remove('hide'); doContratoSalvo(t); passo = PASSOS.length; monta(false); };
+}
+function doContratoSalvo(t){
+  const c = t.contrato || {}, r = c.resumo || {};
+  D.formato = c.formato || 'completo'; D.cli = c.contratante?.nome || D.cli; D.cliDoc = c.contratante?.doc || '';
+  D.serv = r.servico || D.serv; D.ent = r.entrega || D.ent; D.prazo = r.prazo || D.prazo; if (r.revisoes) D.rev = String(r.revisoes); if (r.valor) D.valor = String(r.valor).replace('.', ',');
+}
+function novoContrato(){
+  TRAB = null; history.replaceState(null, '', location.pathname); store.set('fl_ultimo_orc', null); veioDoOrcamento = false;
+  D = { ...D, formato:'', cli:'', cliDoc:'', serv:'', ent:'', prazo:'', valor:'', rev:'2' }; passo = 0; mostra();
+}
+async function abreTrabalho(id){
+  let t = null;
+  try { t = await Base.rpc('trabalho', { p_id:id }); } catch(e){ toast(Base.traduz(e.message)); }
+  if (!t){ history.replaceState(null, '', location.pathname); return mostra(); }
+  TRAB = t; history.replaceState(null, '', '?t=' + t.id);
+  if (t.contrato_token){ doContratoSalvo(t); return enviado(); }
+  doTrabalho(t); passo = 0; mostra();
 }
 
 // ===================== PDF de verdade (jsPDF, texto selecionável) =====================
@@ -550,86 +673,27 @@ async function gerarPDF(){
   return new File([doc.output('blob')], nomeArq, { type:'application/pdf' });
 }
 
-// ===================== login e licença =====================
-async function api(path, { method='GET', body, auth=true } = {}){
-  const h = { apikey:SUPA.key, 'Content-Type':'application/json' };
-  if (auth && sess) h.Authorization = 'Bearer ' + sess.access_token;
-  const r = await fetch(SUPA.url + path, { method, headers:h, body: body ? JSON.stringify(body) : undefined });
-  const t = await r.text(); let j; try { j = t ? JSON.parse(t) : {}; } catch { j = t; }
-  if (!r.ok){ const e = new Error(traduz(j?.msg || j?.message || j?.error_description || j?.error || ('Erro ' + r.status))); e.status = r.status; throw e; }
-  return j;
-}
-function traduz(m){
-  m = String(m||'');
-  if (/only request this after (\d+)/i.test(m)) return 'Aguarde ' + m.match(/after (\d+)/i)[1] + ' segundos para pedir outro código.';
-  if (/expired|invalid/i.test(m) && /token|otp/i.test(m)) return 'Código inválido ou expirado. Confira ou peça outro.';
-  if (/rate limit/i.test(m)) return 'Muitas tentativas. Aguarde alguns minutos.';
-  if (/failed to fetch|network|load failed/i.test(m)) return 'Sem conexão com a internet.';
-  return m;
-}
-const fromAuth = r => ({ access_token:r.access_token, refresh_token:r.refresh_token, expires_at:r.expires_at || Math.floor(Date.now()/1000) + (r.expires_in||3600), email:r.user?.email });
-function salva(s){ sess = s; store.set('fl_sess', s ? JSON.stringify(s) : null); }
-async function sessaoValida(){
-  if (!sess) return false;
-  if (sess.expires_at - Date.now()/1000 > 90) return true;
-  try { const r = await api('/auth/v1/token?grant_type=refresh_token', { method:'POST', body:{ refresh_token:sess.refresh_token }, auth:false }); salva({ ...fromAuth(r), email:r.user?.email || sess.email }); return true; }
-  catch(e){ if (e.status >= 400 && e.status < 500){ salva(null); return false; } return true; }
-}
-async function checaAcesso(){
-  acesso = false;
-  try {
-    if (!(await sessaoValida())) return;
-    const [lic, pk] = await Promise.all([ api(`/rest/v1/licenses?select=*&pack_id=eq.${PACK}`), api(`/rest/v1/packs?select=buy_url&id=eq.${PACK}`) ]);
-    const agora = Date.now(), ativa = lic.find(l => l.status === 'active');
-    const venc = ativa?.expires_at ? new Date(ativa.expires_at).getTime() : null;
-    acesso = !!ativa && (!venc || venc > agora);
-    vencido = !!ativa && !!venc && venc <= agora;
-    if (acesso && venc){ const dias = Math.ceil((venc - agora) / 864e5); if (dias <= 15) setTimeout(() => toast(`Seu acesso vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}. Renove para não perder.`), 1200); }
-    /* link de compra: página de vendas (fixo acima) */
-  } catch {} finally { botaoConta(); }
-}
+// ===================== conta =====================
 function botaoConta(){
-  const b = $('#conta'); b.textContent = sess ? 'Sair' : 'Entrar';
-  b.onclick = () => { if (sess){ salva(null); acesso = false; botaoConta(); passo = 0; mostra(); } else login(() => { passo = Math.min(passo, PASSOS.length); mostra(); }); };
-}
-function login(depois){
-  $('#dock').classList.add('hide');
-  let email = '';
-  const fim = () => { $('#dock').classList.remove('hide'); depois(); };
-  const etapa = codigo => {
-    tela(`<div class="tc"><button class="back" id="voltar">← Voltar</button></div>
-      <h1>${codigo ? 'Digite o código' : 'Entre com o e-mail da compra'}</h1>
-      <p class="sub">${codigo ? 'Enviamos um código para ' + esc(email) + '. Confira também o spam.' : 'O mesmo e-mail que você usou para comprar. Vamos mandar um código de acesso.'}</p>
-      <input class="inp" id="campo" ${codigo ? 'inputmode="numeric" autocomplete="one-time-code" placeholder="Código"' : 'type="email" autocomplete="email" placeholder="seu@email.com"'}>
-      <button class="btn" id="ir">${codigo ? 'Entrar' : 'Enviar código'}</button><div class="err" id="erro"></div>`);
-    $('#campo').focus();
-    $('#campo').onkeydown = e => { if (e.key === 'Enter') $('#ir').click(); };
-    $('#voltar').onclick = () => codigo ? etapa(false) : fim();
-    $('#ir').onclick = async () => {
-      const b = $('#ir'); b.disabled = true; $('#erro').textContent = '';
-      try {
-        if (!codigo){
-          email = $('#campo').value.trim().toLowerCase();
-          if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new Error('Digite um e-mail válido.');
-          await api('/auth/v1/otp', { method:'POST', body:{ email, create_user:true }, auth:false });
-          etapa(true);
-        } else {
-          const token = $('#campo').value.replace(/\D/g,'');
-          if (token.length < 6) throw new Error('Digite o código que chegou no e-mail.');
-          const r = await api('/auth/v1/verify', { method:'POST', body:{ type:'email', email, token }, auth:false });
-          salva(fromAuth(r)); await checaAcesso();
-          if (!acesso){ $('#erro').textContent = 'Não encontramos o Gerador de Contrato nas compras deste e-mail.'; b.disabled = false; return; }
-          vibra([10,30,10]); toast('Gerador desbloqueado'); fim();
-        }
-      } catch(e){ $('#erro').textContent = traduz(e.message); b.disabled = false; }
-    };
+  const b = $('#conta'), logado = !!Base.sessao(); b.textContent = logado ? 'Sair' : 'Entrar';
+  b.onclick = async () => {
+    if (Base.sessao()){ Base.sair(); sincAcesso(); novoContrato(); }
+    else if (await Base.login()){ sincAcesso(); doPerfil(); toast(acesso ? 'Gerador desbloqueado' : 'Entrou, mas o Gerador de Contrato não está nas compras deste e-mail'); passo = Math.min(passo, PASSOS.length); mostra(); }
   };
-  etapa(false);
 }
 
 // ===================== início =====================
-botaoConta(); mostra();
-checaAcesso().then(() => { if (passo >= PASSOS.length) monta(false); });
+botaoConta();
+if (Base.trabalhoDaUrl()){ $('#dock').classList.add('hide'); tela('<p class="sub">Carregando…</p>', ''); } else mostra();
+Base.pronto.then(() => {
+  sincAcesso(); doPerfil();
+  const d = Base.dias(PACK); if (acesso && d !== null && d <= 15) setTimeout(() => toast(`Seu acesso vence em ${d} ${d === 1 ? 'dia' : 'dias'}. Renove para não perder.`), 1200);
+  const id = Base.trabalhoDaUrl();
+  if (id && acesso && Base.eu.jornada) return abreTrabalho(id);
+  if (id) history.replaceState(null, '', location.pathname);
+  if (passo >= PASSOS.length) monta(false); else mostra();
+});
+Base.aoMudar(() => { const era = acesso; sincAcesso(); if (era !== acesso && passo >= PASSOS.length && !$('#prox')) monta(false); });
 
 // aula da ferramenta: o botão só aparece quando existe aula cadastrada
 if (window.Aulas) Aulas.liga('#aula', ['fl-contrato'], { titulo:'Gerador de Contrato', cor:'169,139,255', dono: () => acesso });

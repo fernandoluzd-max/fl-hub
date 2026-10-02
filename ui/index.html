@@ -166,7 +166,7 @@ button.aula svg{width:15px;height:15px;fill:currentColor;flex:none}
         <div class="pill"><span class="dot" id="d-found"></span><span id="t-found">Procurando o CapCut…</span></div>
         <div class="pill"><span class="dot" id="d-run"></span><span id="t-run">…</span></div>
       </div></div><div class="cards"></div></section>
-    <section class="sec" id="s-ferramentas"><div class="sec-h"><div><h2>Ferramentas</h2><p>Para precificar, fechar e organizar seus trabalhos.</p></div></div><div class="cards"></div></section>
+    <section class="sec" id="s-ferramentas"><div class="sec-h"><div><h2>Ferramentas</h2><p id="s-ferr-sub">Para precificar, fechar e organizar seus trabalhos.</p></div></div><div class="cards"></div></section>
     <div class="login" id="login">
       <h2 id="l-title">Entre com o e-mail da compra</h2>
       <p id="l-sub">Use o mesmo e-mail que você usou para comprar. Vamos enviar um código de acesso.</p>
@@ -193,6 +193,7 @@ button.aula svg{width:15px;height:15px;fill:currentColor;flex:none}
   <div class="btns"><button class="primary" id="m-copy">Copiar</button><button class="ghost" id="m-close">Fechar</button></div>
 </div></div>
 
+<script src="catalogo.js"></script>
 <script src="aulas.js"></script>
 <script>
 // ===== tema (escuro/claro) e atividade recolhida: lembra a escolha =====
@@ -217,21 +218,17 @@ const invoke = (c, a) => T.core.invoke(c, a);
 
 // ícone oficial de cada produto: um arquivo por produto em ui/icones/ (gerado por tools/gera_icones.py)
 const icone = key => `<img src="icones/${key}.png" alt="" width="72" height="72" draggable="false">`;
-// catálogo: packId = id do manifest do .flpack
-const PRODUCTS = [
-  // KITS: instalam no CapCut (Instalar / Atualizar / Remover)
-  // Títulos Dinâmicos é o kit completo: instala também os itens de 'inclui'.
+// catálogo: nomes, preços e links vêm de catalogo.js (gerado a partir de catalogo.json, a fonte única).
+// Aqui fica só o que é do app: em que seção o card aparece e como ele instala.
+const CAT = window.CATALOGO, POR_KEY = Object.fromEntries(CAT.produtos.map(p => [p.key, p]));
+const NO_APP = {
+  // KITS: instalam no CapCut. Títulos Dinâmicos é o kit completo: instala também os itens de 'inclui'.
   // 'avulso' = só aparece sozinho para quem comprou esse item separado, antes de ele virar bônus.
-  {sec:'kits', key:'legendas', packId:'fl-legendas', name:'Títulos Dinâmicos', inclui:['sons','luts'], desc:'+70 títulos e legendas dinâmicas, mais 65 efeitos sonoros e 23 LUTs de bônus. Tudo entra no seu CapCut em um clique.', cor:'242,165,65', preco:'R$ 67', acesso:'vitalício', gancho:'Títulos que prendem nos 3 primeiros segundos'},
-  {sec:'kits', key:'sons', packId:'fl-sons', avulso:true, name:'Efeitos Sonoros', desc:'65 whooshes, impactos, risers e foleys direto nas suas predefinições do CapCut, organizados por categoria.', cor:'90,184,255', preco:'R$ 19', acesso:'vitalício', gancho:'O som que faltava no seu corte'},
-  {sec:'kits', key:'luts', packId:'fl-luts', avulso:true, name:'LUTs', desc:'20 looks de finalização + 3 LUTs de conversão (S-Log2, S-Log3 e Apple Log), direto em Ajuste › LUT.', lut:true, cor:'255,111,174', preco:'R$ 19', acesso:'vitalício', gancho:'Cor de cinema em um clique'},
-  // FERRAMENTAS: abrem no navegador e no celular (Abrir)
-  {sec:'ferramentas', key:'mood', packId:'fl-lut', name:'Mood', desc:'Copie a cor de qualquer vídeo: coloque a referência e o seu vídeo e baixe a LUT pronta para o CapCut.', web:'https://basefl.com/lut/', cor:'180,92,255', acesso:'1 ano', preco:'R$ 97', gancho:'A cor daquele vídeo, no seu'},
-  {sec:'ferramentas', key:'preco', packId:'fl-preco', name:'Quanto Cobrar?', desc:'Descubra quanto cobrar por uma edição ou gravação em 1 minuto e mande o orçamento pronto no WhatsApp.', web:'https://basefl.com/preco/', cor:'123,216,143', preco:'R$ 47', acesso:'1 ano', gancho:'Pare de chutar preço'},
-  {sec:'ferramentas', key:'contrato', packId:'fl-contrato', name:'Gerador de Contrato', desc:'Termo rápido para o WhatsApp ou contrato completo em PDF, pronto em poucos toques.', web:'https://basefl.com/contrato/', cor:'169,139,255', preco:'R$ 47', acesso:'1 ano', gancho:'Combinado bom é combinado por escrito'},
-  {sec:'ferramentas', key:'briefing', packId:'fl-briefing', name:'Gerador de Briefing', desc:'Perguntas certas para o cliente antes de começar, num link para ele responder.', web:'https://basefl.com/briefing/', cor:'63,208,194', preco:'R$ 47', acesso:'1 ano', gancho:'O cliente responde, você só confere'},
-  {sec:'ferramentas', key:'painel', packId:'fl-painel', name:'Base Demandas', desc:'Seus trabalhos, prazos e pagamentos num só lugar.', web:'https://basefl.com/painel/', cor:'255,179,71', preco:'R$ 67', acesso:'1 ano', gancho:'Saiba o que entregar e o que já entrou'},
-];
+  legendas:{ sec:'kits' }, sons:{ sec:'kits' }, luts:{ sec:'kits', lut:true },
+  // FERRAMENTAS: abrem no navegador e no celular. As quatro primeiras seguem a ordem da jornada de um trabalho.
+  briefing:{ sec:'ferramentas' }, preco:{ sec:'ferramentas' }, contrato:{ sec:'ferramentas' }, painel:{ sec:'ferramentas' }, mood:{ sec:'ferramentas' },
+};
+const PRODUCTS = Object.keys(NO_APP).map(k => { const c = POR_KEY[k]; return { ...NO_APP[k], key:k, packId:c.pack, name:c.nome, desc:c.desc, cor:c.cor, preco:'R$ ' + c.preco, acesso:c.acesso, gancho:c.gancho, inclui:c.inclui, avulso:c.avulso, web: c.url ? 'https://basefl.com' + c.url : undefined }; });
 
 // ===== Servidor (chave pública: pode ficar no app) =====
 const SUPA = { url: 'https://otlaexuqyavpzxwzcsfo.supabase.co', key: 'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
@@ -304,7 +301,7 @@ $('#l-go').onclick = async () => {
       const token = $('#l-code').value.replace(/\D/g,'');
       if (token.length < 6) throw new Error('Digite o código que chegou no e-mail.');
       const r = await api('/auth/v1/verify', { method:'POST', body:{ type:'email', email: loginEmail, token }, auth:false });
-      await saveSess(fromAuth(r)); showLogin(false); await loadCatalog(); render();
+      await saveSess(fromAuth(r)); showLogin(false); await loadCatalog(); render(); if (window.Aulas) Aulas.recarrega();
       step('Conectado como ' + sess.email, 'ok');
     }
   } catch(e){ $('#l-err').textContent = traduz(e.message); }
@@ -330,6 +327,20 @@ async function loadCatalog(){
   } catch(e){ catErr = traduz(e.message); if (e.status === 401){ await saveSess(null); showLogin(true); } }
 }
 
+// Abre a ferramenta no navegador JÁ LOGADA: pede um passe de uso único e manda junto no endereço.
+// Se o passe não estiver disponível, abre do jeito normal (o navegador lembra do login depois da primeira vez).
+async function abreWeb(url){
+  try {
+    if (await validSess()){
+      const c = new AbortController(); const t = setTimeout(() => c.abort(), 2500);
+      const r = await fetch(SUPA.url + '/functions/v1/passe', { method:'POST', signal:c.signal, headers:{ apikey:SUPA.key, Authorization:'Bearer ' + sess.access_token, 'Content-Type':'application/json' }, body:'{}' });
+      clearTimeout(t);
+      if (r.ok){ const j = await r.json(); if (j && j.token_hash && /^[\w-]+$/.test(j.token_hash)) return T.opener.openUrl(url + '#passe=' + j.token_hash); }
+    }
+  } catch {}
+  T.opener.openUrl(url);
+}
+
 function done(){ document.querySelectorAll('#log .step.run').forEach(d=>{ d.className='step ok'; d.querySelector('i').textContent='✓'; }); }
 function step(txt, kind='ok'){
   if (kind!=='run') done();
@@ -345,6 +356,8 @@ function btn(txt, cls, fn){ const b = document.createElement('button'); b.classN
 function render(){
   document.querySelectorAll('#grid .cards').forEach(c => c.innerHTML = '');
   if (!sess) return;
+  const daJornada = CAT.kit.packs.filter(k => cat?.owned?.has(k)).length;
+  $('#s-ferr-sub').textContent = daJornada >= 2 ? 'A ordem de um trabalho: Briefing → Preço e proposta → Contrato → Organizador. Um passo já preenche o próximo.' : 'Para precificar, fechar e organizar seus trabalhos.';
   for (const p of PRODUCTS){
     if (p.emBreve){
       const c = document.createElement('div'); c.className = 'card';
@@ -374,10 +387,10 @@ function render(){
     if (vitrine && srv.buy_url){ c.classList.add('clica'); c.onclick = e => { if (!e.target.closest('button')) T.opener.openUrl(srv.buy_url); }; }
     const b = document.createElement('div'); b.className = 'btns';
     if (p.web && srv){
-      if (owned) b.appendChild(btn('Abrir', 'primary', () => T.opener.openUrl(p.web)));
+      if (owned) b.appendChild(btn('Abrir', 'primary', () => abreWeb(p.web)));
       else {
         if (srv.buy_url) b.appendChild(btn(cat?.vencidos?.has(p.packId) ? 'Renovar' : 'Conhecer  →', 'primary cta', () => T.opener.openUrl(srv.buy_url)));
-        b.appendChild(btn('Experimentar', srv.buy_url ? 'ghost' : 'primary cta', () => T.opener.openUrl(p.web)));
+        b.appendChild(btn('Experimentar', srv.buy_url ? 'ghost' : 'primary cta', () => abreWeb(p.web)));
       }
     }
     else if (!srv && !inst){ b.innerHTML = '<div class="soon" style="flex:1">' + (catErr ? 'Sem conexão' : 'Em breve') + '</div>'; }
@@ -481,12 +494,14 @@ T.event.listen('progress', e => { const t = String(e.payload); step(t, /^aviso/i
   await loadSess();
   if (sess && await validSess()){ showLogin(false); await loadCatalog(); }
   else { showLogin(true); loginStage(false); }
+  if (window.Aulas) Aulas.recarrega();
   await refresh();
   setInterval(() => { if (!busy) refresh(); }, 3000);
   setInterval(() => { if (!busy && sess) loadCatalog(); }, 60000);
 })();
 
-if (window.Aulas){ Aulas.aoCarregar(() => { if (!busy) render(); }); Aulas.carrega(); }
+// as aulas pedem o acesso da conta: o servidor só entrega o vídeo das aulas dos produtos liberados
+if (window.Aulas){ Aulas.comToken(async () => (sess && await validSess()) ? sess.access_token : null); Aulas.aoCarregar(() => { if (!busy) render(); }); }
 </script>
 </body>
 </html>

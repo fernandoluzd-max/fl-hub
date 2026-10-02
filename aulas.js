@@ -9,14 +9,28 @@
   var mem = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
   var chave = function (a) { return 'fl_aula_' + a.id; };
 
+  // Quem está logado manda o próprio acesso: o servidor só entrega o vídeo das aulas dos produtos que a pessoa tem.
+  // Visitante recebe só as aulas abertas.
+  var fonteToken = null;
+  function token() {
+    try {
+      if (fonteToken) return Promise.resolve(fonteToken()).catch(function () { return null; });
+      if (window.Base) return window.Base.pronto.then(function () { var s = window.Base.sessao(); return s && s.expires_at - Date.now() / 1000 > 5 ? s.access_token : null; }).catch(function () { return null; });
+    } catch (e) {}
+    return Promise.resolve(null);
+  }
+  function busca(tok) {
+    return fetch(SUPA.url + '/rest/v1/aulas?select=id,pack_id,titulo,descricao,url,capa,duracao,ordem,so_cliente&ativo=eq.true&order=ordem.asc', { headers: { apikey: SUPA.key, Authorization: 'Bearer ' + (tok || SUPA.key) } })
+      .then(function (r) { if (r.ok) return r.json(); if (tok) return busca(null); return []; });
+  }
   function carrega() {
     if (pedido) return pedido;
-    pedido = fetch(SUPA.url + '/rest/v1/aulas?select=id,pack_id,titulo,descricao,url,capa,duracao,ordem,so_cliente&ativo=eq.true&order=ordem.asc', { headers: { apikey: SUPA.key, Authorization: 'Bearer ' + SUPA.key } })
-      .then(function (r) { return r.ok ? r.json() : []; })
+    pedido = token().then(busca)
       .then(function (j) { lista = Array.isArray(j) ? j.filter(function (a) { return a.url; }) : []; ouvintes.forEach(function (f) { try { f(); } catch (e) {} }); return lista; })
       .catch(function () { lista = []; return lista; });
     return pedido;
   }
+  function recarrega() { pedido = null; return carrega(); }
   function de(packs) { packs = [].concat(packs); return (lista || []).filter(function (a) { return packs.indexOf(a.pack_id) >= 0; }).sort(function (a, b) { return packs.indexOf(a.pack_id) - packs.indexOf(b.pack_id) || (a.ordem || 0) - (b.ordem || 0); }); }
   function tem(packs) { return de(packs).length > 0; }
   var tempo = function (s) { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
@@ -238,9 +252,12 @@
   // liga um botão já existente na página: ele só aparece se houver aula para o produto
   function liga(sel, packs, op) {
     var b = typeof sel === 'string' ? document.querySelector(sel) : sel; if (!b) return;
-    var poe = function () { if (tem(packs)) { b.hidden = false; b.onclick = function () { abre(packs, op); }; } };
-    if (lista) poe(); else carrega().then(poe);
+    var poe = function () { if (!b.isConnected) return; b.hidden = !tem(packs); b.onclick = function () { abre(packs, op); }; };
+    ouvintes.push(poe);
+    if (lista) poe(); else carrega();
   }
 
-  window.Aulas = { carrega: carrega, tem: tem, de: de, abre: abre, fecha: fecha, liga: liga, aoCarregar: function (f) { if (lista) f(); else ouvintes.push(f); } };
+  window.Aulas = { carrega: carrega, recarrega: recarrega, comToken: function (f) { fonteToken = f; }, tem: tem, de: de, abre: abre, fecha: fecha, liga: liga, aoCarregar: function (f) { ouvintes.push(f); if (lista) f(); } };
+  // entrou ou saiu da conta: as aulas liberadas mudam
+  if (window.Base) { var logado = !!window.Base.sessao(); window.Base.aoMudar(function () { var l = !!window.Base.sessao(); if (l !== logado) { logado = l; recarrega(); } }); }
 })();

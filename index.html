@@ -371,6 +371,7 @@ footer{color:var(--dim);font-size:12.5px;text-align:center;padding:40px 0 34px}
   <footer>Base FL · o ecossistema do editor de vídeo</footer>
 </div>
 
+<script src="/catalogo.js"></script>
 <script>
 // ===== botão do sistema certo em destaque =====
 const ua = navigator.userAgent.toLowerCase();
@@ -405,14 +406,16 @@ setTimeout(() => $('#janela').classList.add('in'), 150);
 
 // ícone oficial de cada produto: um arquivo por produto na pasta /icones/ (gerado por tools/gera_icones.py)
 const icone = k => `<img src="icones/${k}.png" alt="" width="44" height="44" loading="lazy">`;
+// preços vêm do catálogo (catalogo.json → catalogo.js)
+const preco = k => { const p = (window.CATALOGO?.produtos || []).find(x => x.key === k); return p ? 'R$ ' + p.preco : ''; };
 const KITS = [
   { k:'legendas', t:'Títulos Dinâmicos', d:'+70 títulos e legendas, mais 65 efeitos sonoros e 23 LUTs de bônus. Tudo no CapCut em um clique.', on:false, mt:'Liberado · não instalado', id:'c-kit', c:'242,165,65' },
 ];
 const FERR = [
   { k:'preco', t:'Quanto Cobrar?', d:'Seu preço e o orçamento em 1 minuto.', c:'123,216,143' },
-  { k:'contrato', t:'Gerador de Contrato', d:'Termo rápido ou contrato em PDF.', vit:true, g:'Combinado por escrito', pr:'R$ 47', ac:'1 ano', c:'169,139,255', id:'c-contrato' },
+  { k:'contrato', t:'Gerador de Contrato', d:'Contrato que o cliente aceita por link.', vit:true, g:'Combinado por escrito', pr:preco('contrato'), ac:'1 ano', c:'169,139,255', id:'c-contrato' },
   { k:'briefing', t:'Gerador de Briefing', d:'O cliente responde num link.', id:'c-brief', c:'63,208,194' },
-  { k:'painel', t:'Base Demandas', d:'Trabalhos, prazos e pagamentos.', vit:true, g:'O que entregar e o que já entrou', pr:'R$ 67', ac:'1 ano', c:'255,179,71' },
+  { k:'painel', t:'Base Demandas', d:'Trabalhos, prazos e pagamentos.', vit:true, g:'O que entregar e o que já entrou', pr:preco('painel'), ac:'1 ano', c:'255,179,71' },
 ];
 const card = (c, web) => {
   const cls = c.vit ? ' vit' : (c.on || web ? ' on' : '');

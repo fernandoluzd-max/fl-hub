@@ -157,6 +157,41 @@ h2{font-size:16px;font-weight:750;margin:24px 0 10px}
 .sai{animation:sai .18s ease-in forwards}
 @keyframes sai{to{opacity:0;transform:translateY(-6px)}}
 @media (prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
+.esp{margin-top:22px}
+.esp h2{margin:0 0 8px;font-size:14px;color:var(--mute);font-weight:700}
+.rec{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:8px;transition:border-color .15s}
+.rec:hover{border-color:#3a443c}
+.rec .tx{flex:1;min-width:0}
+.rec b{display:block;font-size:15.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rec small{display:block;color:var(--mute);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rec .st{flex:none;font-size:11.5px;font-weight:750;border-radius:8px;padding:3px 8px;border:1px solid var(--line);color:var(--mute);white-space:nowrap}
+.rec .st.ok{color:#0c1a10;background:#7fce8f;border-color:#7fce8f}
+.rec .st.at{color:var(--accent-ink);background:var(--accent);border-color:var(--accent)}
+.para-quem{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:13.5px;color:var(--mute);margin-bottom:16px}
+.para-quem b{color:var(--ink);font-weight:700}
+.para-quem button{margin-left:auto}
+label{display:block;font-size:13.5px;font-weight:650;color:var(--mute);margin:0 0 6px 2px}
+.duo{display:grid;grid-template-columns:1.4fr 1fr;gap:10px}
+.prev{background:#FBF8F1;color:#1d1b16;border-radius:12px;padding:18px 16px 16px;margin:6px 0 4px}
+.prev .olho{font-size:10.5px;font-weight:750;letter-spacing:.09em;text-transform:uppercase;color:#a8772a}
+.prev h3{font-weight:850;font-stretch:112%;font-size:20px;line-height:1.1;margin:4px 0 10px;word-break:break-word}
+.prev .it{padding:8px 0;border-top:1px solid #e4dccb;font-size:14.5px;line-height:1.4}
+.prev .it span{display:block;font-size:10.5px;font-weight:750;letter-spacing:.07em;text-transform:uppercase;color:#6b665a}
+.prev .tt{display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid #e4dccb;padding-top:12px;margin-top:4px}
+.prev .tt span{font-size:10.5px;font-weight:750;letter-spacing:.07em;text-transform:uppercase;color:#6b665a}
+.prev .tt b{font-weight:900;font-stretch:114%;font-size:28px;letter-spacing:-.02em;line-height:1}
+.prev [contenteditable]{outline:none;border-radius:4px}
+.prev [contenteditable]:focus{background:#f1e9d6}
+.dica{color:var(--dim);font-size:12.5px;margin:6px 2px 14px}
+.pchips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.pchip{cursor:pointer;font-weight:650;font-size:13.5px;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:9px 12px}
+.pchip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.linkbox{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px dashed rgba(242,165,65,.5);border-radius:14px;padding:12px 14px;margin:14px 0 4px;font-size:14px;overflow:hidden}
+.linkbox code{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:13px/1.4 ui-monospace,Menlo,monospace;color:var(--ink)}
+.feito{display:flex;gap:10px;align-items:flex-start;background:rgba(127,206,143,.08);border:1px solid rgba(127,206,143,.3);border-radius:14px;padding:12px 14px;margin-top:14px;font-size:14px;color:var(--mute)}
+.feito b{color:var(--ink)}
+.feito a{color:var(--accent)}
+.btn.zap{background:#25D366;border-color:#25D366;color:#06210f}
 .link.aula{text-decoration:none;font-weight:700;color:var(--ink,#F4F0E4);border:1px solid var(--line,#2B302E);border-radius:99px;padding:6px 12px;margin-right:6px}
 </style>
 </head>
@@ -169,6 +204,7 @@ h2{font-size:16px;font-weight:750;margin:24px 0 10px}
     <button class="link aula" id="aula" hidden>▶ Aula</button>
     <button class="link" id="conta"></button>
   </header>
+  <div id="trilha"></div>
   <main id="tela"></main>
   <p class="foot">Valores de referência para te ajudar a decidir. Quem bate o martelo é você.</p>
 </div>
@@ -179,13 +215,13 @@ h2{font-size:16px;font-weight:750;margin:24px 0 10px}
 </div></div>
 <div class="toast" id="toast"></div>
 
+<script src="/catalogo.js"></script>
+<script src="/base.js"></script>
 <script src="/aulas.js"></script>
 <script>
-// ===================== CONFIG =====================
-const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
+/* Quanto Cobrar? — tela do EDITOR (cálculo interno + proposta).
+   O cliente nunca passa por aqui: ele vê a proposta em /p/, só com os dados comerciais. */
 const PACK = 'fl-preco';
-let vencido = false;
-let BUY_URL = 'https://basefl.com/conheca/quanto-cobrar/?de=ferramenta';   // vem do banco (packs.buy_url)
 
 // ===================== REGRAS DE PREÇO (ajuste aqui) =====================
 const NIVEL = {
@@ -235,9 +271,12 @@ const vibra = p => { try { navigator.vibrate && navigator.vibrate(p); } catch {}
 const cor = id => `var(${COR[id] || '--accent'})`;
 function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2200); }
 
+
 // ===================== estado =====================
-let R = {}, fila = [], pos = 0, qtd = 1, acesso = false, sess = null, ocupado = false;
-try { sess = JSON.parse(store.get('fl_sess') || 'null'); } catch { sess = null; }
+// TRAB = trabalho da jornada que está sendo calculado (vem do briefing ou nasce na proposta)
+let R = {}, fila = [], pos = 0, qtd = 1, acesso = Base.tem(PACK), vencido = Base.vencido(PACK), ocupado = false, TRAB = null, gratis = false, avisouDemo = false;
+const esc = Base.esc;
+function sincAcesso(){ acesso = Base.tem(PACK); vencido = Base.vencido(PACK); botaoConta(); }
 
 const Q = {
   modo:   () => ({ h:'Quanto cobrar por esse trabalho?', s:'Monte o trabalho na timeline aqui embaixo. São poucas perguntas e o seu preço sai em 1 minuto.', big:true,
@@ -324,28 +363,43 @@ async function voa(btn, alvo){
   vibra(8);
 }
 
+
 // ===================== telas de pergunta =====================
 function tela(html, cls=''){ const m = $('#tela'); m.className = cls; m.innerHTML = html; window.scrollTo({ top:0 }); }
+function trilha(passo){
+  const el = $('#trilha'); el.innerHTML = '';
+  if (TRAB || Base.jornada.filter(p => Base.tem(p.pack)).length >= 2) el.appendChild(Base.trilha(passo, TRAB));
+}
+const quandoCurto = iso => { if (!iso) return ''; const d = new Date(iso), h = new Date(); return d.toDateString() === h.toDateString() ? 'hoje' : d.toLocaleDateString('pt-BR', { day:'2-digit', month:'short' }).replace('.', ''); };
 function pergunta(){
   fila = montaFila();
   if (pos >= fila.length) return renderiza();
-  $('#dock').classList.remove('hide');
+  $('#dock').classList.remove('hide'); trilha('preco');
   const id = fila[pos], q = Q[id]();
   const tot = totalPrevisto();
-  let h = `<div class="tc">${pos > 0 ? '<button class="back" id="voltar">← Voltar</button>' : ''}<span class="sp"></span><span>${String(pos+1).padStart(2,'0')} / ${String(tot).padStart(2,'0')}</span></div>`;
+  let h = TRAB ? `<div class="para-quem">Preço para <b>${esc(TRAB.cliente?.nome || 'cliente')}</b><button class="link" id="soltar">calcular outro</button></div>` : '';
+  h += `<div class="tc">${pos > 0 ? '<button class="back" id="voltar">← Voltar</button>' : ''}<span class="sp"></span><span>${String(pos+1).padStart(2,'0')} / ${String(tot).padStart(2,'0')}</span></div>`;
   h += `<h1>${q.h}</h1>` + (q.s ? `<p class="sub">${q.s}</p>` : '<div style="height:16px"></div>');
   if (q.input){
-    h += `<div class="field"><span>R$</span><input id="extra" inputmode="decimal" placeholder="0" value="${R.gExtra||''}"></div>
+    h += `<div class="field"><span>R$</span><input id="extra" inputmode="decimal" placeholder="0" value="${+R.gExtra||''}"></div>
           <div class="row"><button class="btn ghost" id="pular">Não tenho</button><button class="btn" id="seguir">Continuar</button></div>`;
   } else {
     h += '<div class="opts">' + q.o.map(([v,t,s,ic]) => `<button class="opt${q.big?' big':''}" style="--cor:${cor(id)}" data-v="${v}">${ic?`<span class="ic">${ic}</span>`:''}<span><b>${t}</b>${s?`<small>${s}</small>`:''}</span></button>`).join('') + '</div>';
   }
   if (id === 'modo' && store.get('fl_nivel')) h += `<p class="nivel">Seu nível: <b>${NIVEL[store.get('fl_nivel')].t}</b> · <button class="link" id="trocaNivel">mudar</button></p>`;
+  // a jornada: briefings esperando preço e propostas já enviadas
+  if (id === 'modo' && pos === 0 && !TRAB && acesso && Base.eu.jornada){
+    const esp = Base.eu.trabalhos.filter(t => t.etapa === 'briefing' && t.tem_briefing).slice(0, 4);
+    const prop = Base.eu.trabalhos.filter(t => t.proposta_status).slice(0, 4);
+    if (esp.length) h += `<div class="esp"><h2>Briefings esperando preço</h2>${esp.map(t => `<button class="rec" data-t="${t.id}"><span class="tx"><b>${esc(t.cliente?.nome || 'Cliente')}</b><small>Respondeu ${esc(quandoCurto(t.briefing_em))}</small></span><span class="st at">Calcular</span></button>`).join('')}</div>`;
+    if (prop.length) h += `<div class="esp"><h2>Propostas enviadas</h2>${prop.map(t => `<button class="rec" data-p="${t.id}"><span class="tx"><b>${esc(t.cliente?.nome || 'Cliente')}</b><small>${Base.brl(t.valor)} · ${esc(quandoCurto(t.proposta_em))}</small></span><span class="st ${t.proposta_status === 'aprovada' ? 'ok' : ''}">${t.proposta_status === 'aprovada' ? 'Aprovada' : t.proposta_status === 'ajuste' ? 'Pediu ajuste' : 'Aguardando'}</span></button>`).join('')}</div>`;
+  }
   tela(h, 'entra');
   desenhaTimeline();
   document.querySelectorAll('.opt').forEach(b => b.onclick = async () => {
     if (ocupado) return; ocupado = true;
     b.classList.add('picked');
+    if (!acesso && !avisouDemo){ avisouDemo = true; Base.evento('demo_started', PACK); }
     if (id === 'modo') R = { modo:b.dataset.v };
     if (id === 'nivel') store.set('fl_nivel', b.dataset.v); else R[id] = b.dataset.v;
     if (id !== 'nivel') pos++;
@@ -357,6 +411,9 @@ function pergunta(){
   });
   if ($('#voltar')) $('#voltar').onclick = () => { pos = Math.max(0, pos-1); pergunta(); };
   if ($('#trocaNivel')) $('#trocaNivel').onclick = () => { store.set('fl_nivel', null); pergunta(); };
+  if ($('#soltar')) $('#soltar').onclick = novoCalculo;
+  document.querySelectorAll('.rec[data-t]').forEach(b => b.onclick = () => abreTrabalho(b.dataset.t));
+  document.querySelectorAll('.rec[data-p]').forEach(b => b.onclick = () => abreTrabalho(b.dataset.p, true));
   if (q.input){
     const go = async (v, btn) => { R.gExtra = v; pos++; fila = montaFila(); const alvo = desenhaTimeline('gExtra'); await voa(btn, alvo); pergunta(); };
     const inp = $('#extra'); setTimeout(() => inp.focus(), 50);
@@ -364,6 +421,10 @@ function pergunta(){
     $('#pular').onclick = e => go(0, e.currentTarget);
     $('#seguir').onclick = e => go(Math.max(0, parseFloat((inp.value||'0').replace(/\./g,'').replace(',','.')) || 0), $('.field'));
   }
+}
+function novoCalculo(){
+  clearInterval(slotTimer); veioDoBriefing = false; BRIEF_CLIENTE = ''; TRAB = null; gratis = false; R = {}; pos = 0; qtd = 1;
+  history.replaceState(null, '', location.pathname); pergunta();
 }
 
 // ===================== cálculo =====================
@@ -399,6 +460,7 @@ function porque(c){
   return `Um ${e.t.nome} ${e.t.nome === 'Reels' ? '' : e.d.nome + ' '}com ${e.e.nome} leva por volta de ${horasTxt(meiaHora(e.horas))} de trabalho. No seu nível (${nv}), isso dá esse valor${e.p.mult > 1 ? ', com acréscimo de urgência' : ''}${R.tipo === 'comercial' ? ' e adicional por ser para marca' : ''}.`;
 }
 
+
 // ===================== render (momento de revelação) =====================
 async function renderiza(){
   const c = calcula();
@@ -424,50 +486,76 @@ async function renderiza(){
   });
   vibra([10, 40, 18]);
   await espera(250);
+  await Base.pronto; sincAcesso();
+  // teste grátis: quem ainda não comprou vê UM resultado de verdade. Depois disso, trava.
+  if (!acesso){
+    if (Base.teste.resta(PACK) > 0){ Base.teste.usar(PACK); gratis = true; Base.evento('demo_completed', PACK); }
+    else gratis = false;
+  } else { Base.evento('price_calculated', PACK); salvaPreco(c); }
   resultado(true);
+}
+// o que fica guardado do cálculo é INTERNO (horas, valor/hora, faixa). Nunca vai para o cliente.
+function interno(c){
+  const t = totais(c, qtd);
+  return { R, qtd, nivel: store.get('fl_nivel') || 'medio', valor_hora: c.vh, horas: t.horas, ref: t.ref, min: t.min, max: t.max, custo_mes: Base.eu.custo_mes || undefined, em: new Date().toISOString() };
+}
+function salvaPreco(c){
+  if (!TRAB || !Base.eu.jornada) return;
+  Base.rpc('trabalho_salvar', { p_id:TRAB.id, p:{ preco: interno(c) } }).then(t => { if (t){ TRAB = { ...TRAB, ...t }; } }, () => {});
 }
 
 // ===================== resultado =====================
 let slotTimer = null;
 function resultado(revelar = false){
   clearInterval(slotTimer);
-  $('#tcB').textContent = 'Renderizado';
+  $('#tcB').textContent = 'Renderizado'; $('#dock').classList.remove('hide'); trilha('preco');
   let c = calcula(); const temPac = R.modo !== 'gravar';
-  const corpo = acesso ? `
+  const livre = acesso || gratis, prod = Base.produto('preco'), usou = Base.teste.usos(PACK) > 0;
+  const corpo = livre ? `
       <div class="lb">Valor de referência</div>
       <div class="preco"><span class="rs">R$</span><span id="vref">0</span></div>
       <div class="faixa">Faixa justa: <b id="vfx"></b></div>
       <div class="stats"><div><b id="vh"></b><span>de trabalho</span></div><div><b id="vcada"></b><span id="vcadal">por vídeo</span></div></div>
-      <p class="pq" id="pq">${porque(c)}</p>` : `
+      <p class="pq" id="pq">${porque(c)}</p><p class="pq" id="custos" style="margin-top:8px"></p>` : `
       <div class="lb">Seu preço está renderizado</div>
       <div class="preco"><span class="rs">R$</span><span class="slot" id="slot"></span></div>
       <div class="faixa">Tempo estimado: <b id="vh"></b></div>
       <div class="lock">
-        <p>${vencido ? 'Seu acesso de 1 ano terminou' : 'Desbloqueie para ver o valor e mandar o orçamento'}</p>
-        <div class="sm">${vencido ? 'Renove para continuar calculando e mandando orçamentos.' : 'Acesso de 1 ano. Use quantas vezes quiser, no celular e no computador.'}</div>
-        <ul><li>Faixa justa e valor de referência para cada trabalho</li><li>Preço de pacotes de 4, 8, 12 e 20 vídeos</li><li>Orçamento pronto para enviar no WhatsApp</li></ul>
-        <button class="btn" id="comprar">${vencido ? 'Renovar meu acesso' : 'Desbloquear meu preço'}</button>
-        <button class="link ja" id="entrar2">Já comprei · entrar</button>
+        <p>${vencido ? 'Seu acesso de 1 ano terminou' : usou ? 'Você já usou o seu cálculo grátis' : 'Desbloqueie para ver o valor e mandar a proposta'}</p>
+        <div class="sm">${vencido ? 'Renove para continuar calculando e mandando propostas.' : 'Libere para calcular todos os seus trabalhos. Acesso de 1 ano, no celular e no computador.'}</div>
+        <ul><li>Faixa justa e valor de referência para cada trabalho</li><li>Preço de pacotes de 4, 8, 12 e 20 vídeos</li><li>Proposta por link para o cliente aprovar</li></ul>
+        <button class="btn" id="comprar">${vencido ? 'Renovar meu acesso' : 'Liberar acesso completo · R$ ' + prod.preco}</button>
+        ${Base.sessao() ? '' : '<button class="link ja" id="entrar2">Já comprei · entrar</button>'}
       </div>`;
-  tela(`<div class="tc"><button class="back" id="voltar">← Ajustar respostas</button><span class="sp"></span><span>Renderizado</span></div>
+  tela(`${TRAB ? `<div class="para-quem">Preço para <b>${esc(TRAB.cliente?.nome || 'cliente')}</b></div>` : ''}<div class="tc"><button class="back" id="voltar">← Ajustar respostas</button><span class="sp"></span><span>Renderizado</span></div>
     <div class="card ${revelar ? 'revela' : ''}" id="card"><div class="glow"></div>${corpo}</div>
     <h2>Seu nível de experiência</h2>
     <div class="nivs">${Object.entries(NIVEL).map(([k,v]) => `<button class="nv${(store.get('fl_nivel')||'medio')===k?' on':''}" data-k="${k}"><b>${v.t}</b><span>R$ ${v.h} por hora</span></button>`).join('')}</div>
     ${temPac ? `<h2>${R.modo === 'ambos' ? 'Quantos vídeos saem dessa gravação?' : 'Quantos vídeos?'}</h2>
       <div class="chips">${Object.keys(PACOTE).map(n => `<button class="chip${+n===qtd?' on':''}" data-n="${n}">${n}</button>`).join('')}</div>
       <div class="pac" id="pac"></div>` : ''}
-    <div class="acoes">${acesso ? '<button class="btn" id="orc">Gerar orçamento</button>' : ''}
+    <div class="acoes">${acesso ? '<button class="btn" id="orc">Montar a proposta</button>' : ''}<div id="prox"></div>
       <div class="row"><button class="btn ghost" id="novo">Novo cálculo</button></div></div>`);
+  // quem está no cálculo grátis: o próximo passo natural é liberar
+  if (!acesso && gratis){
+    const d = document.createElement('div'); d.className = 'lock'; d.style.marginTop = '4px';
+    d.innerHTML = `<p>Quer calcular seus próximos projetos?</p><div class="sm">Este foi o seu cálculo grátis. Libere para calcular sempre e mandar a proposta por link para o cliente aprovar.</div>
+      <button class="btn" id="comprar">Liberar acesso completo · R$ ${prod.preco}</button>${Base.sessao() ? '' : '<button class="link ja" id="entrar2">Já comprei · entrar</button>'}`;
+    $('#prox').appendChild(d);
+  }
   let atual = 0;
   const pinta = anima => {
     const t = totais(c, qtd);
     $('#vh').textContent = '~' + horasTxt(t.horas);
-    if (acesso){
+    if (livre){
       $('#vfx').textContent = `${brl(t.min)} a ${brl(t.max)}`;
       const cada = c.ed ? t.cada : t.ref;
       $('#vcada').textContent = brl(cada); $('#vcadal').textContent = c.ed ? (qtd > 1 ? 'cada vídeo' : 'por vídeo') : 'pela gravação';
       conta($('#vref'), atual, t.ref, anima ? 1100 : 380); atual = t.ref;
       if ($('#pac')) $('#pac').innerHTML = qtd > 1 ? `<b>${qtd} vídeos por ${brl(t.ref)}</b> · ${Math.round(t.desc*100)}% de desconto pelo volume` : 'Escolha uma quantidade para montar um pacote.';
+      // ligação leve com o organizador: só aparece para quem cadastrou custos fixos lá
+      const custo = acesso ? +Base.eu.custo_mes || 0 : 0;
+      $('#custos').textContent = custo > 0 ? `Seus custos fixos somam ${brl(custo)} por mês. Este trabalho cobre ${Math.min(999, Math.round(t.ref / custo * 100))}% deles.` : '';
     } else {
       montaSlot(fmt(t.ref));
       if ($('#pac')) $('#pac').textContent = qtd > 1 ? `Pacote de ${qtd} vídeos com ${Math.round(t.desc*100)}% de desconto pelo volume.` : 'Escolha uma quantidade para montar um pacote.';
@@ -479,11 +567,11 @@ function resultado(revelar = false){
     store.set('fl_nivel', b.dataset.k); document.querySelectorAll('.nv').forEach(x => x.classList.toggle('on', x === b));
     c = calcula(); if ($('#pq')) $('#pq').textContent = porque(c); vibra(6); pinta(true);
   });
-  $('#voltar').onclick = () => { clearInterval(slotTimer); pos = fila.length - 1; pergunta(); };
-  $('#novo').onclick = () => { clearInterval(slotTimer); veioDoBriefing = false; BRIEF_CLIENTE = ''; R = {}; pos = 0; qtd = 1; pergunta(); };
-  if ($('#orc')) $('#orc').onclick = () => orcamento(c);
-  if ($('#comprar')) $('#comprar').onclick = () => { if (BUY_URL) location.href = BUY_URL; else toast('Link de compra em breve.'); };
-  if ($('#entrar2')) $('#entrar2').onclick = () => { clearInterval(slotTimer); login(() => { pergunta(); }); };
+  $('#voltar').onclick = () => { clearInterval(slotTimer); gratis = false; pos = fila.length - 1; pergunta(); };
+  $('#novo').onclick = novoCalculo;
+  if ($('#orc')) $('#orc').onclick = () => { salvaPreco(c); proposta(c); };
+  if ($('#comprar')) $('#comprar').onclick = () => Base.comprar('preco', gratis ? 'teste-gratis' : 'ferramenta');
+  if ($('#entrar2')) $('#entrar2').onclick = async () => { clearInterval(slotTimer); if (await Base.login()){ sincAcesso(); if (acesso) toast('Ferramenta desbloqueada'); else toast('Entrou, mas a calculadora não está nas compras deste e-mail'); resultado(false); } };
 }
 function conta(el, de, ate, ms){
   if (calmo){ el.textContent = fmt(ate); return; }
@@ -497,141 +585,168 @@ function montaSlot(txt){
   roda(); clearInterval(slotTimer); if (!calmo) slotTimer = setInterval(roda, 90);
 }
 
-// ===================== orçamento =====================
-function orcamento(c){
-  const t = totais(c, qtd);
-  $('#tcB').textContent = 'Exportando';
-  const hora = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
-  tela(`<div class="tc"><button class="back" id="voltar">← Voltar ao preço</button><span class="sp"></span><span>Exportar</span></div>
-    <h1>Orçamento pronto pra enviar</h1><p class="sub">Coloque o nome do cliente. Você pode mexer no texto antes de mandar.</p>
-    <input class="inp" id="cli" placeholder="Nome do cliente (opcional)" autocomplete="off">
-    <div class="chat"><div class="para">Assim o seu cliente vai receber</div><div class="bolha"><textarea id="txt"></textarea><span class="hr">${hora} ✓✓</span></div></div>
-    <div class="row"><button class="btn ghost" id="copiar">Copiar</button><button class="btn" id="zap">Enviar no WhatsApp</button></div>
-    <div class="row" style="margin-top:10px"><button class="btn ghost" id="painel">＋ Pôr no Base Demandas</button><button class="btn ghost" id="contrato">Gerar contrato</button></div>`, 'entra');
-  const monta = () => {
-    const nome = $('#cli').value.trim();
-    const val = new Date(Date.now() + 7*864e5).toLocaleDateString('pt-BR');
-    const L = [nome ? `Olá, ${nome}! Tudo bem? Segue o orçamento:` : 'Olá! Tudo bem? Segue o orçamento:', ''];
-    const serv = [], ent = [];
-    if (c.gr) serv.push(`Gravação (${c.gr.g.t.toLowerCase()}, estrutura ${c.gr.s.t.toLowerCase()})`);
-    if (c.ed){
-      serv.push(`${c.ed.e.nome[0].toUpperCase() + c.ed.e.nome.slice(1)} de ${c.ed.t.nome}`);
-      ent.push(`${qtd} ${qtd > 1 ? 'vídeos editados' : 'vídeo editado'} (${R.tipo === 'reels' ? 'até 1 min' : c.ed.d.nome})`);
-    } else ent.push('Material bruto gravado, organizado e entregue');
-    ultimo = { cliente:nome, servico:serv.join(' + '), entrega:ent.join(' + '), revisoes: c.ed ? 2 : 0, valor:fmt(t.ref) };
-    L.push('*Serviço:* ' + serv.join(' + '));
-    L.push('*Entrega:* ' + ent.join(' + '));
-    const hEd = c.ed ? c.ed.horas * qtd : 0;
-    ultimo.prazo = (c.ed ? (R.prazo === 'urgente' ? 'em até 48 horas' : `em até ${Math.max(2, Math.ceil(hEd/6)+1)} dias úteis`) : 'em até 2 dias úteis após a gravação');
-    L.push('*Prazo:* ' + (c.ed ? (R.prazo === 'urgente' ? 'em até 48 horas' : `em até ${Math.max(2, Math.ceil(hEd/6)+1)} dias úteis após receber o material`) : 'material entregue em até 2 dias úteis após a gravação'));
-    if (c.ed) L.push('*Revisões:* 2 rodadas de ajustes incluídas' + (qtd > 1 ? ' por vídeo' : ''));
-    L.push('*Investimento:* ' + brl(t.ref) + (qtd > 1 && c.ed ? ` (${qtd} vídeos)` : ''));
+
+// ===================== proposta =====================
+const PAGS = { meio:['50% + 50%', '50% na aprovação e 50% na entrega'], vista:['100% antes', '100% antes do início do trabalho'], entrega:['Na entrega', '100% na entrega final'], combinar:['A combinar', ''] };
+const isoLocal = d => new Date(d.getTime() - d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const numero = v => { const n = parseFloat(String(v ?? '').replace(/[^\d,.-]/g,'').replace(/\.(?=\d{3}(\D|$))/g,'').replace(',','.')); return isFinite(n) && n > 0 ? Math.round(n*100)/100 : 0; };
+function dadosProposta(c){
+  const t = totais(c, qtd), serv = [], ent = [];
+  if (c.gr) serv.push(`Gravação (${c.gr.g.t.toLowerCase()}, estrutura ${c.gr.s.t.toLowerCase()})`);
+  if (c.ed){
+    serv.push(`${c.ed.e.nome[0].toUpperCase() + c.ed.e.nome.slice(1)} de ${c.ed.t.nome}`);
+    ent.push(`${qtd} ${qtd > 1 ? 'vídeos editados' : 'vídeo editado'} (${R.tipo === 'reels' ? 'até 1 min' : c.ed.d.nome})`);
+  } else ent.push('Material bruto gravado, organizado e entregue');
+  const hEd = c.ed ? c.ed.horas * qtd : 0;
+  const uteis = R.prazo === 'urgente' ? 2 : (c.ed ? Math.max(2, Math.ceil(hEd/6) + 1) : 2);
+  const p = new Date(); let n = 0; while (n < uteis){ p.setDate(p.getDate() + 1); if (p.getDay() % 6) n++; }
+  return { servico: serv.join(' + '), entrega: ent.join(' + '),
+    prazo: c.ed ? (R.prazo === 'urgente' ? 'Em até 48 horas após receber o material' : `Em até ${uteis} dias úteis após receber o material`) : 'Material entregue em até 2 dias úteis após a gravação',
+    prazo_curto: c.ed ? (R.prazo === 'urgente' ? 'em até 48 horas' : `em até ${uteis} dias úteis`) : 'em até 2 dias úteis após a gravação',
+    prazo_data: isoLocal(p), revisoes: c.ed ? 2 : 0, valor: t.ref, validade: isoLocal(new Date(Date.now() + 7*864e5)) };
+}
+function proposta(c){
+  const t = totais(c, qtd), d = dadosProposta(c), jornada = Base.eu.jornada;
+  let pag = Base.eu.perfil?.pag && PAGS[Base.eu.perfil.pag] ? Base.eu.perfil.pag : 'meio';
+  const cliNome = TRAB?.cliente?.nome || BRIEF_CLIENTE || '';
+  $('#dock').classList.add('hide'); trilha('proposta');
+  tela(`<div class="tc"><button class="back" id="voltar">← Voltar ao preço</button><span class="sp"></span><span>Proposta</span></div>
+    <h1>Proposta pronta pra enviar</h1><p class="sub">O cliente recebe só isto. As horas e o seu valor por hora ficam com você.</p>
+    <div class="duo"><div><label for="cli">Cliente</label><input class="inp" id="cli" placeholder="Nome do cliente" autocomplete="off" maxlength="80" value="${esc(cliNome)}"></div>
+      <div><label for="val">Valor</label><input class="inp" id="val" inputmode="decimal" value="${fmt(d.valor)}"></div></div>
+    <p class="dica">Faixa justa para este trabalho: ${brl(t.min)} a ${brl(t.max)}. Só você vê isso.</p>
+    <label>Pagamento</label><div class="pchips" id="pag">${Object.entries(PAGS).map(([k, v]) => `<button class="pchip${k === pag ? ' on' : ''}" data-v="${k}">${v[0]}</button>`).join('')}</div>
+    <label>Assim o cliente vai ver <span style="font-weight:500;color:var(--dim)">(toque num texto para ajustar)</span></label>
+    <div class="prev"><div class="olho">Proposta</div><h3 id="pv-cli"></h3>
+      <div class="it"><span>Serviço</span><div contenteditable="plaintext-only" id="pv-serv">${esc(d.servico)}</div></div>
+      <div class="it"><span>O que você recebe</span><div contenteditable="plaintext-only" id="pv-ent">${esc(d.entrega)}</div></div>
+      <div class="it"><span>Prazo</span><div contenteditable="plaintext-only" id="pv-prazo">${esc(d.prazo)}</div></div>
+      ${d.revisoes ? `<div class="it"><span>Revisões</span><div>${d.revisoes} rodadas de ajustes incluídas</div></div>` : ''}
+      <div class="it" id="pv-pagl"><span>Pagamento</span><div id="pv-pag"></div></div>
+      <div class="tt"><span>Investimento</span><b id="pv-val"></b></div></div>
+    ${jornada ? '<button class="btn" id="enviar" style="margin-top:14px">Gerar o link da proposta</button>' : ''}
+    <div class="row"><button class="btn ghost" id="copiar">Copiar o texto</button><button class="btn ghost" id="zap">Só o texto no WhatsApp</button></div><div class="err" id="erro"></div>`, 'entra');
+  const le = () => ({ cliente: $('#cli').value.trim(), valor: numero($('#val').value), servico: $('#pv-serv').textContent.trim(), entrega: $('#pv-ent').textContent.trim(), prazo: $('#pv-prazo').textContent.trim(), pagamento: PAGS[pag][1] });
+  const pinta = () => { const v = le(); $('#pv-cli').textContent = v.cliente ? 'Para ' + v.cliente : 'Proposta de serviço'; $('#pv-val').textContent = v.valor ? brl(v.valor) : '—'; $('#pv-pag').textContent = v.pagamento; $('#pv-pagl').classList.toggle('hide', !v.pagamento); };
+  pinta(); $('#cli').oninput = pinta; $('#val').oninput = pinta;
+  document.querySelectorAll('#pag .pchip').forEach(b => b.onclick = () => { pag = b.dataset.v; document.querySelectorAll('#pag .pchip').forEach(x => x.classList.toggle('on', x === b)); pinta(); });
+  const texto = () => {
+    const v = le(), val = new Date(d.validade + 'T12:00:00').toLocaleDateString('pt-BR');
+    const L = [v.cliente ? `Olá, ${v.cliente}! Tudo bem? Segue o orçamento:` : 'Olá! Tudo bem? Segue o orçamento:', '', '*Serviço:* ' + v.servico, '*Entrega:* ' + v.entrega, '*Prazo:* ' + v.prazo];
+    if (d.revisoes) L.push('*Revisões:* 2 rodadas de ajustes incluídas' + (qtd > 1 ? ' por vídeo' : ''));
+    L.push('*Investimento:* ' + brl(v.valor) + (qtd > 1 && c.ed ? ` (${qtd} vídeos)` : ''));
+    if (v.pagamento) L.push('*Pagamento:* ' + v.pagamento);
     L.push('*Válido até:* ' + val, '', 'Qualquer dúvida, fico à disposição!');
-    $('#txt').value = L.join('\n');
+    return L.join('\n');
   };
-  let ultimo = {};
-  if (BRIEF_CLIENTE) $('#cli').value = BRIEF_CLIENTE;
-  monta(); $('#cli').oninput = monta;
-  $('#contrato').onclick = () => { store.set('fl_ultimo_orc', JSON.stringify(ultimo)); location.href = '/contrato/'; };
-  $('#painel').onclick = () => {
-    const uteis = R.prazo === 'urgente' ? 2 : (c.ed ? Math.max(2, Math.ceil((c.ed.horas * qtd)/6) + 1) : 2);
-    const p = new Date(); let n = 0; while (n < uteis){ p.setDate(p.getDate() + 1); if (p.getDay() % 6) n++; }
-    const iso = new Date(p.getTime() - p.getTimezoneOffset()*6e4).toISOString().slice(0,10);
-    store.set('fl_nova_demanda', JSON.stringify({ cliente:ultimo.cliente || '', titulo:ultimo.entrega || ultimo.servico || '', valor:t.ref, prazo:iso, rev_total:c.ed ? 2 : 1, coluna:'orcamento' }));
-    location.href = '/painel/';
-  };
+  // sem a jornada no banco (ou para quem prefere): o orçamento em texto continua existindo
+  const passaAdiante = () => { const v = le(); store.set('fl_ultimo_orc', JSON.stringify({ cliente:v.cliente, servico:v.servico, entrega:v.entrega, revisoes:d.revisoes, valor:fmt(v.valor), prazo:d.prazo_curto })); };
   $('#voltar').onclick = () => resultado(false);
-  $('#copiar').onclick = async () => { try { await navigator.clipboard.writeText($('#txt').value); } catch { $('#txt').select(); document.execCommand('copy'); } vibra(10); toast('Copiado. É só colar na conversa.'); };
+  $('#copiar').onclick = async () => { passaAdiante(); try { await navigator.clipboard.writeText(texto()); } catch {} vibra(10); toast('Copiado. É só colar na conversa.'); };
   $('#zap').onclick = async () => {
-    const texto = $('#txt').value;
-    if (navigator.share && /Android|iPhone|iPad/i.test(navigator.userAgent)){ try { await navigator.share({ text:texto }); toast('Orçamento enviado. Boa venda!'); return; } catch(e){ if (e.name === 'AbortError') return; } }
-    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(texto), '_blank');
+    passaAdiante(); const tx = texto();
+    if (navigator.share && /Android|iPhone|iPad/i.test(navigator.userAgent)){ try { await navigator.share({ text:tx }); return; } catch(e){ if (e.name === 'AbortError') return; } }
+    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(tx), '_blank');
+  };
+  if ($('#enviar')) $('#enviar').onclick = async () => {
+    const v = le(), b = $('#enviar'); $('#erro').textContent = '';
+    if (!v.cliente){ $('#cli').focus(); $('#erro').textContent = 'Coloque o nome do cliente.'; return; }
+    if (!v.valor){ $('#val').focus(); $('#erro').textContent = 'Confira o valor.'; return; }
+    b.disabled = true; b.textContent = 'Gerando o link…';
+    try {
+      // só os dados comerciais vão em "proposta". O cálculo interno vai separado e fica guardado só para você.
+      const r = await Base.rpc('proposta_publicar', { p_id: TRAB?.id || null, p: {
+        cliente: { id: TRAB?.cliente?.id, nome: v.cliente }, preco: interno(c),
+        proposta: { servico:v.servico, entrega:v.entrega, prazo:v.prazo, prazo_data:d.prazo_data, revisoes:d.revisoes, valor:v.valor, validade:d.validade, pagamento:v.pagamento || null } } });
+      if (pag !== Base.eu.perfil?.pag && pag !== 'combinar') Base.rpc('perfil_salvar', { p:{ pag } }).then(p => { Base.eu.perfil = p; }, () => {});
+      passaAdiante();
+      TRAB = await Base.rpc('trabalho', { p_id:r.id });
+      history.replaceState(null, '', '?t=' + r.id);
+      Base.carrega(true);
+      enviada(true);
+    } catch(e){ $('#erro').textContent = Base.traduz(e.message); b.disabled = false; b.textContent = 'Gerar o link da proposta'; }
   };
 }
+// proposta publicada: link, situação e o próximo passo
+function enviada(nova){
+  const t = TRAB, p = t.proposta || {}, nome = t.cliente?.nome || 'cliente', link = location.origin + '/p/#' + t.proposta_token;
+  const st = t.proposta_status, aprovada = st === 'aprovada';
+  $('#dock').classList.add('hide'); trilha('proposta');
+  const msg = `Olá, ${nome.split(' ')[0]}! Segue a proposta do seu vídeo. É só abrir, conferir e aprovar por aqui:\n${link}`;
+  tela(`<div class="tc"><button class="back" id="voltar">← Início</button><span class="sp"></span><span>${aprovada ? 'Aprovada' : st === 'ajuste' ? 'Pediu ajuste' : 'Aguardando o cliente'}</span></div>
+    <h1>${aprovada ? `${esc(nome)} aprovou!` : nova ? 'Link da proposta pronto' : `Proposta para ${esc(nome)}`}</h1>
+    <p class="sub">${aprovada ? `${t.proposta_resp?.nome ? 'Aprovada por ' + esc(t.proposta_resp.nome) + '. ' : ''}${Base.brl(p.valor)} fechados. Agora é formalizar.` : st === 'ajuste' ? `${esc(nome)} pediu um ajuste${t.proposta_resp?.msg ? ': “' + esc(t.proposta_resp.msg) + '”' : '.'}` : `${Base.brl(p.valor)} · mande o link. O cliente abre no celular, confere e aprova com um toque.`}</p>
+    ${aprovada ? '' : `<div class="linkbox"><code>${esc(link.replace(/^https?:\/\//, ''))}</code></div>
+    <div class="row"><button class="btn zap" id="mandar">Mandar no WhatsApp</button></div>
+    <div class="row"><button class="btn ghost" id="cop">Copiar link</button><button class="btn ghost" id="ver">Ver como o cliente vê</button></div>`}
+    <div id="prox"></div>
+    ${Base.tem('fl-painel') && t.demanda_feita ? `<div class="feito"><span>✓</span><span><b>Já está no seu Base Demandas</b>, ${aprovada ? 'em “Fechado”' : 'em “Orçamento”'}. <a href="/painel/">Abrir</a></span></div>` : ''}
+    <div class="row" style="margin-top:18px">${aprovada ? '' : '<button class="btn ghost" id="aprovou">Cliente aprovou por fora</button>'}<button class="btn ghost" id="refazer">Mudar a proposta</button></div>
+    <div class="row"><button class="btn ghost" id="novo">Novo cálculo</button></div>`, 'entra');
+  $('#prox').appendChild(Base.proximo({ alvo:'contrato', titulo: aprovada ? 'Gerar o contrato' : 'Cliente aprovou? Gere o contrato.', texto:'Cliente, serviço, prazo e valor desta proposta já vão preenchidos.', botao:'Gerar contrato', abrir:'/contrato/?t=' + t.id, origem:'proposta' }));
+  if (!Base.tem('fl-painel') && Base.tem('fl-contrato')) $('#prox').appendChild(Base.proximo({ alvo:'painel', rotulo:'Depois de fechar', titulo:'Organizar este trabalho', texto:'Prazo, revisões e pagamento num quadro. O trabalho entra sozinho.', origem:'proposta' }));
+  $('#voltar').onclick = novoCalculo; $('#novo').onclick = novoCalculo;
+  if ($('#cop')) $('#cop').onclick = async () => { try { await navigator.clipboard.writeText(link); } catch {} vibra(10); toast('Link copiado'); };
+  if ($('#ver')) $('#ver').onclick = () => window.open(link, '_blank');
+  if ($('#mandar')) $('#mandar').onclick = async () => {
+    if (navigator.share && /Android|iPhone|iPad/i.test(navigator.userAgent)){ try { await navigator.share({ text:msg }); return; } catch(e){ if (e.name === 'AbortError') return; } }
+    const tel = String(t.cliente?.whatsapp || '').replace(/\D/g, '');
+    window.open('https://api.whatsapp.com/send?' + (tel ? 'phone=' + tel + '&' : '') + 'text=' + encodeURIComponent(msg), '_blank');
+  };
+  if ($('#aprovou')) $('#aprovou').onclick = async e => {
+    const b = e.currentTarget; if (!b._c){ b._c = true; b.textContent = 'Toque de novo para confirmar'; setTimeout(() => { b._c = false; b.textContent = 'Cliente aprovou por fora'; }, 3000); return; }
+    try { TRAB = await Base.rpc('trabalho_marcar', { p_id:t.id, p_acao:'aprovar' }); Base.carrega(true); toast('Marcada como aprovada'); enviada(); } catch(err){ toast(Base.traduz(err.message)); }
+  };
+  $('#refazer').onclick = () => { if (carregaDoTrabalho(TRAB)){ $('#dock').classList.remove('hide'); resultado(false); } else { pos = 0; pergunta(); } };
+}
 
-// ===================== login e licença =====================
-async function api(path, { method='GET', body, auth=true } = {}){
-  const h = { apikey:SUPA.key, 'Content-Type':'application/json' };
-  if (auth && sess) h.Authorization = 'Bearer ' + sess.access_token;
-  const r = await fetch(SUPA.url + path, { method, headers:h, body: body ? JSON.stringify(body) : undefined });
-  const t = await r.text(); let j; try { j = t ? JSON.parse(t) : {}; } catch { j = t; }
-  if (!r.ok){ const e = new Error(traduz(j?.msg || j?.message || j?.error_description || j?.error || ('Erro ' + r.status))); e.status = r.status; throw e; }
-  return j;
+// ===================== a jornada: abrir um trabalho que veio do briefing =====================
+// respostas do briefing → respostas da calculadora
+function doBriefingSalvo(b){
+  const ok = (v, T) => v && T[v] ? v : undefined;
+  const r = { modo: MODO[b.s] ? b.s : undefined };
+  if (!r.modo) return null;
+  r.tipo = ok(b.t, TIPO); r.dur = ok(b.d, DUR); r.edicao = ok(b.e, EDICAO); r.prazo = b.p === 'urgente' ? 'urgente' : b.p ? 'normal' : undefined; r.gHoras = ok(b.g, GHORAS);
+  return { r, qtd: PACOTE[+b.q] !== undefined ? +b.q : 1 };
 }
-function traduz(m){
-  m = String(m||'');
-  if (/only request this after (\d+)/i.test(m)) return 'Aguarde ' + m.match(/after (\d+)/i)[1] + ' segundos para pedir outro código.';
-  if (/expired|invalid/i.test(m) && /token|otp/i.test(m)) return 'Código inválido ou expirado. Confira ou peça outro.';
-  if (/rate limit/i.test(m)) return 'Muitas tentativas. Aguarde alguns minutos.';
-  if (/failed to fetch|network|load failed/i.test(m)) return 'Sem conexão com a internet.';
-  return m;
+function carregaDoTrabalho(t){
+  if (t.preco?.R?.modo){
+    // só entram respostas conhecidas (o que está salvo é tratado como dado, nunca como HTML)
+    const s = t.preco.R, ok = (v, T) => v && Object.prototype.hasOwnProperty.call(T, v) ? v : undefined;
+    R = { modo: ok(s.modo, MODO), tipo: ok(s.tipo, TIPO), dur: ok(s.dur, DUR), edicao: ok(s.edicao, EDICAO), prazo: ok(s.prazo, PRAZO), gHoras: ok(s.gHoras, GHORAS), gEstr: ok(s.gEstr, GESTR), gExtra: Math.max(0, +s.gExtra || 0) };
+    for (const k in R) if (R[k] === undefined) delete R[k];
+    if (!R.modo) return false;
+    qtd = PACOTE[t.preco.qtd] !== undefined ? +t.preco.qtd : 1; fila = montaFila(); pos = fila.length; return fila.every(id => id === 'nivel' || id === 'gExtra' || R[id] != null);
+  }
+  return false;
 }
-const fromAuth = r => ({ access_token:r.access_token, refresh_token:r.refresh_token, expires_at:r.expires_at || Math.floor(Date.now()/1000) + (r.expires_in||3600), email:r.user?.email });
-function salva(s){ sess = s; store.set('fl_sess', s ? JSON.stringify(s) : null); }
-async function sessaoValida(){
-  if (!sess) return false;
-  if (sess.expires_at - Date.now()/1000 > 90) return true;
-  try { const r = await api('/auth/v1/token?grant_type=refresh_token', { method:'POST', body:{ refresh_token:sess.refresh_token }, auth:false }); salva({ ...fromAuth(r), email:r.user?.email || sess.email }); return true; }
-  catch(e){ if (e.status >= 400 && e.status < 500){ salva(null); return false; } return true; }
+async function abreTrabalho(id, verProposta){
+  $('#dock').classList.add('hide'); tela('<p class="sub">Carregando…</p>');
+  let t = null;
+  try { t = await Base.rpc('trabalho', { p_id:id }); } catch(e){ toast(Base.traduz(e.message)); }
+  if (!t){ $('#dock').classList.remove('hide'); history.replaceState(null, '', location.pathname); TRAB = null; pos = 0; return pergunta(); }
+  TRAB = t; gratis = false; history.replaceState(null, '', '?t=' + t.id);
+  BRIEF_CLIENTE = t.cliente?.nome || '';
+  if (t.proposta_token && (verProposta || t.proposta_status)){ carregaDoTrabalho(t); return enviada(); }
+  $('#dock').classList.remove('hide');
+  if (carregaDoTrabalho(t)) return resultado(false);
+  const b = t.briefing && doBriefingSalvo(t.briefing);
+  R = {}; qtd = 1; pos = 0;
+  if (b){ R = b.r; qtd = b.qtd; veioDoBriefing = true; pulaPreenchidas(); setTimeout(() => toast(`Respostas de ${BRIEF_CLIENTE || 'cliente'} já preenchidas`), 400); }
+  pergunta();
 }
-async function checaAcesso(){
-  acesso = false;
-  try {
-    if (!(await sessaoValida())) return;
-    const [lic, pk] = await Promise.all([ api(`/rest/v1/licenses?select=*&pack_id=eq.${PACK}`), api(`/rest/v1/packs?select=buy_url&id=eq.${PACK}`) ]);
-    const agora = Date.now(), ativa = lic.find(l => l.status === 'active');
-    const venc = ativa?.expires_at ? new Date(ativa.expires_at).getTime() : null;
-    acesso = !!ativa && (!venc || venc > agora);
-    vencido = !!ativa && !!venc && venc <= agora;
-    if (acesso && venc){ const dias = Math.ceil((venc - agora) / 864e5); if (dias <= 15) setTimeout(() => toast(`Seu acesso vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}. Renove para não perder.`), 1200); }
-    /* link de compra: página de vendas (fixo acima) */
-  } catch {}
-  botaoConta();
-}
+
+// ===================== conta =====================
 function botaoConta(){
-  const b = $('#conta'); b.textContent = sess ? 'Sair' : 'Entrar';
-  b.onclick = () => { clearInterval(slotTimer); if (sess){ salva(null); acesso = false; botaoConta(); R = {}; pos = 0; pergunta(); } else login(() => { R = {}; pos = 0; pergunta(); }); };
-}
-function login(depois){
-  $('#dock').classList.add('hide');
-  let email = '';
-  const etapa = codigo => {
-    tela(`<div class="tc"><button class="back" id="voltar">← Voltar</button></div>
-      <h1>${codigo ? 'Digite o código' : 'Entre com o e-mail da compra'}</h1>
-      <p class="sub">${codigo ? 'Enviamos um código para ' + email + '. Confira também o spam.' : 'O mesmo e-mail que você usou para comprar. Vamos mandar um código de acesso.'}</p>
-      <input class="inp" id="campo" ${codigo ? 'inputmode="numeric" autocomplete="one-time-code" placeholder="Código"' : 'type="email" autocomplete="email" placeholder="seu@email.com"'}>
-      <button class="btn" id="ir">${codigo ? 'Entrar' : 'Enviar código'}</button><div class="err" id="erro"></div>`, 'entra');
-    $('#campo').focus();
-    $('#campo').onkeydown = e => { if (e.key === 'Enter') $('#ir').click(); };
-    $('#voltar').onclick = () => codigo ? etapa(false) : depois();
-    $('#ir').onclick = async () => {
-      const b = $('#ir'); b.disabled = true; $('#erro').textContent = '';
-      try {
-        if (!codigo){
-          email = $('#campo').value.trim().toLowerCase();
-          if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new Error('Digite um e-mail válido.');
-          await api('/auth/v1/otp', { method:'POST', body:{ email, create_user:true }, auth:false });
-          etapa(true);
-        } else {
-          const token = $('#campo').value.replace(/\D/g,'');
-          if (token.length < 6) throw new Error('Digite o código que chegou no e-mail.');
-          const r = await api('/auth/v1/verify', { method:'POST', body:{ type:'email', email, token }, auth:false });
-          salva(fromAuth(r)); await checaAcesso();
-          if (!acesso){
-            tela(`<h1>Quase lá</h1><p class="sub">Não encontramos a calculadora nas compras de <b>${email}</b>. Se comprou com outro e-mail, saia e entre com ele.</p>
-              <button class="btn" id="comprar">Desbloquear agora</button><div class="row"><button class="btn ghost" id="seguir">Continuar sem desbloquear</button></div>`);
-            $('#comprar').onclick = () => { if (BUY_URL) location.href = BUY_URL; else toast('Link de compra em breve.'); };
-            $('#seguir').onclick = depois; return;
-          }
-          vibra([10,30,10]); toast('Ferramenta desbloqueada'); depois();
-        }
-      } catch(e){ $('#erro').textContent = traduz(e.message); b.disabled = false; }
-    };
+  const b = $('#conta'), logado = !!Base.sessao(); b.textContent = logado ? 'Sair' : 'Entrar';
+  b.onclick = async () => {
+    clearInterval(slotTimer);
+    if (Base.sessao()){ Base.sair(); sincAcesso(); novoCalculo(); }
+    else if (await Base.login()){ sincAcesso(); toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas a calculadora não está nas compras deste e-mail'); if ($('#card')) resultado(false); else pergunta(); }
   };
-  etapa(false);
 }
 
-// ===================== vindo do Gerador de Briefing =====================
+// ===================== vindo do Gerador de Briefing (formato antigo, pelo link) =====================
 let BRIEF_CLIENTE = '', veioDoBriefing = false;
 function pulaPreenchidas(){
   fila = montaFila();
@@ -640,7 +755,7 @@ function pulaPreenchidas(){
 }
 function doBriefing(){
   const m = location.hash.match(/^#b=([\w-]+)/); if (!m) return;
-  history.replaceState(null, '', location.pathname);
+  history.replaceState(null, '', location.pathname + location.search);
   let b; try { b = JSON.parse(decodeURIComponent(escape(atob(m[1].replace(/-/g,'+').replace(/_/g,'/'))))); } catch { return; }
   const ok = (v, T) => v && T[v] ? v : undefined;
   R = { modo: MODO[b.modo] ? b.modo : undefined };
@@ -655,8 +770,18 @@ function doBriefing(){
 // ===================== início =====================
 addEventListener('resize', posicionaAgulha);
 doBriefing();
-botaoConta(); pergunta();
-checaAcesso().then(() => { if ($('#card')) resultado(false); });
+botaoConta();
+// chegou com um trabalho no endereço: espera carregar em vez de mostrar a primeira pergunta
+if (Base.trabalhoDaUrl()){ $('#dock').classList.add('hide'); tela('<p class="sub">Carregando…</p>'); } else pergunta();
+Base.pronto.then(() => {
+  sincAcesso();
+  const d = Base.dias(PACK); if (acesso && d !== null && d <= 15) setTimeout(() => toast(`Seu acesso vence em ${d} ${d === 1 ? 'dia' : 'dias'}. Renove para não perder.`), 1200);
+  const id = Base.trabalhoDaUrl();
+  if (id && acesso && Base.eu.jornada) return abreTrabalho(id);
+  if (id){ history.replaceState(null, '', location.pathname); $('#dock').classList.remove('hide'); }
+  if ($('#card')) resultado(false); else if (pos === 0 && !R.modo) pergunta();
+});
+Base.aoMudar(() => { const era = acesso; sincAcesso(); if (era !== acesso && $('#card')) resultado(false); });
 
 // aula da ferramenta: o botão só aparece quando existe aula cadastrada
 if (window.Aulas) Aulas.liga('#aula', ['fl-preco'], { titulo:'Quanto Cobrar?', cor:'123,216,143', dono: () => acesso });

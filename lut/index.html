@@ -211,12 +211,12 @@ details.fino[open] summary::after{content:"–"}
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="/catalogo.js"></script>
+<script src="/base.js"></script>
 <script src="/aulas.js"></script>
 <script>
 // ===================== CONFIG =====================
-const SUPA = { url:'https://otlaexuqyavpzxwzcsfo.supabase.co', key:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
 const PACK = 'fl-lut';
-const BUY_URL = 'https://basefl.com/conheca/mood/?de=ferramenta';   // página de vendas
 const NOME_LUT = 'LUT Base FL';     // nome fixo das LUTs: a pessoa não escolhe nem edita
 const N = 33;                       // tamanho padrão do .cube
 
@@ -539,8 +539,8 @@ function arquivoCube(titulo){
 
 // ===================== estado =====================
 let VIDS = [], iV = 0, REFS = [], iR = 0, CENAS = [null, null, null], NOTAS = { V:'', R:'' };
-let acesso = false, vencido = false, sess = null;
-try { sess = JSON.parse(store.get('fl_sess') || 'null'); } catch { sess = null; }
+let acesso = Base.tem(PACK), vencido = Base.vencido(PACK), avisouDemo = false;
+function sincAcesso(){ acesso = Base.tem(PACK); vencido = Base.vencido(PACK); botaoConta(); }
 
 // ===================== PASSO 1 =====================
 const SETA = '';
@@ -713,7 +713,8 @@ function passo3(){
   montaLUT();
   const { nome } = proximoNome();
   const trava = acesso ? '' : `<div class="lock"><p>${vencido ? 'Seu acesso de 1 ano terminou' : 'Desbloqueie para baixar a sua LUT'}</p><div class="sm">${vencido ? 'Renove para continuar criando LUTs.' : 'Crie quantas LUTs quiser, por 1 ano, no celular e no computador.'}</div>
-      <button class="btn full" id="comprar">${vencido ? 'Renovar meu acesso' : 'Desbloquear o Mood'}</button><button class="link" id="entrar" style="display:block;margin:12px auto 0">Já comprei · entrar</button></div>`;
+      <button class="btn full" id="comprar">${vencido ? 'Renovar meu acesso' : 'Liberar o Mood · R$ ' + Base.produto('mood').preco}</button>${Base.sessao() ? '' : '<button class="link" id="entrar" style="display:block;margin:12px auto 0">Já comprei · entrar</button>'}</div>`;
+  if (!acesso && !avisouDemo){ avisouDemo = true; Base.evento('demo_completed', PACK); }
   tela(`<div class="fim"><div class="sobre-t"><span class="mono">Sua LUT</span></div><h1>O mood está <em>copiado</em>.</h1><p class="sub" style="margin:0 auto">A LUT leva a cor da referência para o seu vídeo, com os ajustes que você fez.</p>
     <div class="arq"><span class="ic">.cube</span><span><b>${nome}</b><small>Arquivo ${nome}.cube · padrão ${N}×${N}×${N} · funciona no CapCut, Premiere, DaVinci e Final Cut</small></span></div>
     ${acesso ? `<button class="btn full" id="baixar">Baixar ${nome}</button>` : trava}
@@ -732,79 +733,23 @@ function passo3(){
     a.href = URL.createObjectURL(blob); a.download = nm + '.cube'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
     store.set('fl_lut_n', String(n)); toast(nm + ' baixada'); $('#baixar').textContent = 'Baixar de novo';
   };
-  if ($('#comprar')) $('#comprar').onclick = () => BUY_URL ? (location.href = BUY_URL) : toast('Link de compra em breve.');
-  if ($('#entrar')) $('#entrar').onclick = () => login(passo3);
+  if ($('#comprar')) $('#comprar').onclick = () => Base.comprar('mood', 'ferramenta');
+  if ($('#entrar')) $('#entrar').onclick = async () => { if (await Base.login()){ sincAcesso(); toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas o Mood não está nas compras deste e-mail'); passo3(); } };
 }
 
-// ===================== login e licença (igual às outras ferramentas) =====================
-async function api(path, { method='GET', body, auth=true } = {}){
-  const h = { apikey:SUPA.key, 'Content-Type':'application/json' };
-  if (auth && sess) h.Authorization = 'Bearer ' + sess.access_token;
-  const r = await fetch(SUPA.url + path, { method, headers:h, body: body ? JSON.stringify(body) : undefined });
-  const t = await r.text(); let j; try { j = t ? JSON.parse(t) : {}; } catch { j = t; }
-  if (!r.ok){ const e = new Error(traduz(j?.msg || j?.message || j?.error_description || j?.error || ('Erro ' + r.status))); e.status = r.status; throw e; }
-  return j;
-}
-function traduz(m){
-  m = String(m||'');
-  if (/only request this after (\d+)/i.test(m)) return 'Aguarde ' + m.match(/after (\d+)/i)[1] + ' segundos para pedir outro código.';
-  if (/expired|invalid/i.test(m) && /token|otp/i.test(m)) return 'Código inválido ou expirado. Confira ou peça outro.';
-  if (/rate limit/i.test(m)) return 'Muitas tentativas. Aguarde alguns minutos.';
-  if (/failed to fetch|network|load failed/i.test(m)) return 'Sem conexão com a internet.';
-  return m;
-}
-const fromAuth = r => ({ access_token:r.access_token, refresh_token:r.refresh_token, expires_at:r.expires_at || Math.floor(Date.now()/1000) + (r.expires_in||3600), email:r.user?.email });
-function salva(s){ sess = s; store.set('fl_sess', s ? JSON.stringify(s) : null); botaoConta(); }
-async function sessaoValida(){
-  if (!sess) return false;
-  if (sess.expires_at - Date.now()/1000 > 90) return true;
-  try { const r = await api('/auth/v1/token?grant_type=refresh_token', { method:'POST', body:{ refresh_token:sess.refresh_token }, auth:false }); salva({ ...fromAuth(r), email:r.user?.email || sess.email }); return true; }
-  catch(e){ if (e.status >= 400 && e.status < 500){ salva(null); return false; } return true; }
-}
-async function checaAcesso(){
-  acesso = false; vencido = false;
-  try {
-    if (!(await sessaoValida())) return;
-    const lic = await api(`/rest/v1/licenses?select=*&pack_id=eq.${PACK}`);
-    const agora = Date.now(), ativa = lic.find(l => l.status === 'active'), venc = ativa?.expires_at ? new Date(ativa.expires_at).getTime() : null;
-    acesso = !!ativa && (!venc || venc > agora); vencido = !!ativa && !!venc && venc <= agora;
-  } catch {}
-}
-function botaoConta(){ const b = $('#conta'); b.textContent = sess ? 'Sair' : 'Entrar'; b.onclick = () => { if (sess){ salva(null); acesso = false; toast('Você saiu.'); } else login(() => (VIDS.length && REFS.length && LUT) ? passo3() : passo1()); }; }
-function login(depois){
-  let email = '';
-  const etapa = codigo => {
-    tela(`<div style="max-width:440px"><button class="link" id="voltar" style="margin-bottom:14px">← Voltar</button>
-      <h1>${codigo ? 'Digite o código' : 'Entre com o e-mail da compra'}</h1>
-      <p class="sub">${codigo ? 'Enviamos um código para ' + email + '. Confira também o spam.' : 'O mesmo e-mail que você usou para comprar. Vamos mandar um código de acesso.'}</p>
-      <input class="inp" id="campo" ${codigo ? 'inputmode="numeric" autocomplete="one-time-code" placeholder="Código"' : 'type="email" autocomplete="email" placeholder="seu@email.com"'}>
-      <button class="btn full" id="vai">${codigo ? 'Entrar' : 'Enviar código'}</button><div class="err" id="erro"></div></div>`);
-    $('#campo').focus(); $('#campo').onkeydown = e => { if (e.key === 'Enter') $('#vai').click(); };
-    $('#voltar').onclick = () => codigo ? etapa(false) : depois();
-    $('#vai').onclick = async () => {
-      const b = $('#vai'); b.disabled = true; $('#erro').textContent = '';
-      try {
-        if (!codigo){
-          email = $('#campo').value.trim().toLowerCase();
-          if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new Error('Digite um e-mail válido.');
-          await api('/auth/v1/otp', { method:'POST', body:{ email, create_user:true }, auth:false }); etapa(true);
-        } else {
-          const token = $('#campo').value.replace(/\D/g,'');
-          if (token.length < 6) throw new Error('Digite o código que chegou no e-mail.');
-          const r = await api('/auth/v1/verify', { method:'POST', body:{ type:'email', email, token }, auth:false });
-          salva(fromAuth(r)); await checaAcesso();
-          toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas o Mood não está nas compras deste e-mail'); depois();
-        }
-      } catch(e){ $('#erro').textContent = traduz(e.message); b.disabled = false; }
-    };
+// ===================== conta (pelo núcleo: a mesma sessão de todas as ferramentas) =====================
+function botaoConta(){
+  const b = $('#conta'); b.textContent = Base.sessao() ? 'Sair' : 'Entrar';
+  b.onclick = async () => {
+    if (Base.sessao()){ Base.sair(); sincAcesso(); toast('Você saiu.'); if ($('.fim')) passo3(); }
+    else if (await Base.login()){ sincAcesso(); toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas o Mood não está nas compras deste e-mail'); if ($('.fim')) passo3(); }
   };
-  etapa(false);
 }
-
 
 // ===================== início =====================
 botaoConta(); passo1();
-checaAcesso().then(() => { if ($('.fim')) passo3(); });
+Base.pronto.then(() => { sincAcesso(); if ($('.fim')) passo3(); });
+Base.aoMudar(() => { const era = acesso; sincAcesso(); if (era !== acesso && $('.fim')) passo3(); });
 
 // aula da ferramenta: o botão só aparece quando existe aula cadastrada
 if (window.Aulas) Aulas.liga('#aula', ['fl-lut'], { titulo:'Mood', cor:'180,92,255', dono: () => acesso });
