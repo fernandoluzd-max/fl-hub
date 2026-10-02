@@ -132,6 +132,8 @@ footer a{color:var(--mute)}
 .kitb .por small{font-size:.36em;color:var(--mute);font-weight:700;letter-spacing:0}
 .kitb a.btn{text-decoration:none;display:inline-flex}
 .kitb .trilho li.meu{color:var(--mute);border-style:dashed}.kitb .trilho li.meu::after{content:" ✓ já é seu";font-weight:500}
+.prova [data-prova]{margin-top:26px}.pvn{margin-top:16px;color:var(--dim);font-size:13.5px;text-align:center}
+:root{--pv-acc:var(--a);--pv-bg:var(--bg);--pv-card:var(--card);--pv-line:var(--line);--pv-ink:var(--ink);--pv-mute:var(--mute);--pv-gut:20px}
 .conta{border:1px solid var(--line);border-left:3px solid var(--a);background:var(--card);border-radius:14px;padding:13px 16px;margin:0 0 18px;font-size:15px;color:var(--mute)}.conta b{color:var(--ink)}.conta a{color:var(--a)}
 @media (max-width:760px){.kitb{grid-template-columns:1fr;text-align:center}.kitb .trilho{justify-content:center}.teste{padding:22px 12px 14px}.teste iframe{height:720px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
@@ -178,7 +180,31 @@ new IntersectionObserver(es => { visivel = es[0].isIntersecting; }, { threshold:
 async function enquantoVisivel(){ while (!visivel) await new Promise(r => setTimeout(r, 300)); }
 """
 
+# PROVA SOCIAL: depoimentos reais de alunos do curso do Fernando (textos em /prova.js).
+# Eles falam do CURSO, não das ferramentas: a página sempre diz isso. Aqui só se escolhe quais combinam com cada produto.
+PROVA = {
+ 'quanto-cobrar':       ('cliente,michelly,iara',      'trabalho,valor,didatica'),
+ 'gerador-de-contrato': ('cliente,dowglas,joaopaulo',  'trabalho,didatica'),
+ 'gerador-de-briefing': ('michelly,isadora,joaopaulo', 'trabalho,didatica'),
+ 'financas-e-demandas': ('dowglas,michelly,isadora',   'trabalho,didatica'),
+ 'kit-freelancer':      ('cliente,michelly,dowglas',   'trabalho,valor,didatica'),
+ 'efeitos-sonoros':     ('anny,lincoln,pumpup',        'capcut,material,didatica'),
+ 'luts':                ('anny,lincoln,jf',            'capcut,material,didatica'),
+}
+def prova(slug, nome_tipo):
+    if slug not in PROVA: return '', ''
+    ids, temas = PROVA[slug]
+    trio = f'''<section class="prova"><span class="kick rv">Quem fez</span><h2 class="rv" style="margin-top:14px">Feito pelo Fernando Luz, <em class="ac">que ensina edição de vídeo.</em></h2>
+    <p class="sub2 rv">{'Este kit' if slug == 'kit-freelancer' else 'Este produto'} é novo. O que dá pra mostrar é o que alunos do curso dele, o Reels Academy, dizem das aulas e do material:</p>
+    <div class="rv" data-prova="trio" data-ids="{ids}"></div>
+    <p class="pvn">Depoimentos reais de alunos do curso, copiados como foram escritos. Eles falam do curso, não {'deste kit' if slug == 'kit-freelancer' else 'deste produto'}.</p></section>'''
+    faixa = f'''<section class="prova"><h2 class="rv">Não conhece o Fernando? <em class="ac">Quem já fez aula com ele conta.</em></h2>
+    <p class="sub2 rv">Mensagens e comentários de alunos do curso Reels Academy.</p>
+    <div data-prova="faixa" data-temas="{temas}" data-sem="{ids}"></div></section>'''
+    return trio, faixa
+
 def pagina(p):
+    ptrio, pfaixa = prova(p['slug'], p.get('prova_nome') or ('O ' + p['nome']))
     bens = ''.join(f'<div class="bem rv{" d"+str(i) if i else ""}"><span class="n">0{i+1}</span><h3>{t}</h3><p>{d}</p></div>' for i,(t,d) in enumerate(p['bens']))
     inclui = ''.join(f'<span>{x}</span>' for x in p['inclui'])
     faq = ''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q,a in p['faq'])
@@ -253,9 +279,13 @@ def pagina(p):
 
   {ad}
 
+  {ptrio}
+
   {combina}
 
   {p.get('kit', '')}
+
+  {pfaixa}
 
   <section>
     <h2 class="rv">Perguntas rápidas</h2>
@@ -280,6 +310,7 @@ def pagina(p):
 <script src="/catalogo.js" defer></script>
 <script src="/base.js" defer></script>
 <script src="/oferta-venda.js" defer></script>
+<script src="/prova.js?v=1" defer></script>
 </body>
 </html>
 """

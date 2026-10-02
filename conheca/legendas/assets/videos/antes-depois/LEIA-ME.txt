@@ -1,0 +1,20 @@
+VÍDEOS DE ANTES E DEPOIS (página dos Títulos Dinâmicos)
+
+Coloque os arquivos NESTA pasta com exatamente estes nomes:
+
+  1-antes.mp4     VIDEO_ANTES_01   o vídeo SEM títulos
+  1-depois.mp4    VIDEO_DEPOIS_01  o MESMO vídeo, COM os títulos do pack
+  2-antes.mp4     VIDEO_ANTES_02
+  2-depois.mp4    VIDEO_DEPOIS_02
+
+Pronto. O comparador de arrastar aparece sozinho na página.
+Enquanto os arquivos não existirem, a seção fica escondida para o público.
+Para ver os espaços marcados antes disso: basefl.com/conheca/legendas/?previa=1
+
+Para ficar bom:
+ - vertical (9:16), 720x1280 já basta
+ - de 6 a 12 segundos cada
+ - o antes e o depois EXPORTADOS DO MESMO PROJETO, com a MESMA duração
+   (eles tocam juntos; se um for mais longo, desencontra)
+ - até uns 3 MB cada (MP4 / H.264)
+ - na página eles tocam sem som

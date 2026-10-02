@@ -18,6 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{
+  --pv-acc:#FF6FAE; --pv-bg:#111312; --pv-card:#191C1B; --pv-line:#2B302E; --pv-ink:#F4F0E4; --pv-mute:#B3B4A2; --pv-gut:20px;
   --bg:#111312; --panel:#191C1B; --panel2:#202423; --line:#2B302E; --ink:#F4F0E4; --mute:#B3B4A2; --dim:#74756a;
   --grad:linear-gradient(125deg,#FFB347,#FF6FAE 38%,#B45CFF 70%,#5AB8FF);
   --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
@@ -280,6 +281,14 @@ footer a{color:var(--mute)}
     <a class="btn" href="#" data-comprar>Quero o Mood</a>
     <a class="ou" href="https://basefl.com/lut/" data-testar>ou teste antes, com o seu vídeo</a>
   </div></div>
+
+  <section class="prova">
+    <span class="mono kick rv">Quem fez</span>
+    <h2 class="rv">Feito pelo Fernando Luz, que ensina edição de vídeo.</h2>
+    <p class="sub2 rv">O Mood é novo. O que dá pra mostrar é o que alunos do curso dele, o Reels Academy, dizem das aulas e do material:</p>
+    <div data-prova="faixa" data-temas="capcut,material,didatica,valor" style="margin-top:26px"></div>
+    <p style="margin-top:16px;color:var(--dim);font-size:13.5px;text-align:center">Depoimentos reais de alunos do curso, copiados como foram escritos. Eles falam do curso, não do Mood.</p>
+  </section>
 
   <section>
     <span class="mono kick rv">Dúvidas</span>
@@ -684,5 +693,6 @@ function foto(id, w, W, H){   // carrega e recorta no formato da tela
   while (!mexeu){ await espera(2200); if (mexeu) break; if (visivel && !ocupado) await escolhe((atual + 1) % REFS.length); }
 })();
 </script>
+<script src="/prova.js?v=1" defer></script>
 </body>
 </html>

@@ -35,6 +35,8 @@
     });
     if (CFG.PRECO) $$("[data-preco]").forEach(function (el) { el.textContent = CFG.PRECO; });
     if (CFG.QUANTIDADE_DE_PRESETS) $$("[data-qtd]").forEach(function (el) { el.textContent = CFG.QUANTIDADE_DE_PRESETS; });
+    var gar = $("#garantia");
+    if (gar && CFG.GARANTIA_DIAS) { $$("[data-garantia]").forEach(function (el) { el.textContent = CFG.GARANTIA_DIAS; }); gar.hidden = false; }
     var ig = $('[data-link="instagram"]'), sp = $('[data-link="suporte"]');
     if (ig) { if (CFG.LINK_INSTAGRAM && CFG.LINK_INSTAGRAM !== "#") ig.href = CFG.LINK_INSTAGRAM; else ig.remove(); }
     if (sp) { if (CFG.LINK_SUPORTE && CFG.LINK_SUPORTE !== "#") sp.href = CFG.LINK_SUPORTE; else sp.remove(); }
@@ -194,10 +196,10 @@
 
   /* ---------- 6. Entrada das seções ao rolar ---------- */
   function reveals() {
-    $$(".chores li, .lane-clips li, .flow li").forEach(function (li) {
+    $$(".lane-clips li, .flow li").forEach(function (li) {
       li.style.setProperty("--i", Array.prototype.indexOf.call(li.parentNode.children, li));
     });
-    var els = $$(".reveal, .chores, .compare, .flow, .laptop");
+    var els = $$(".reveal, .compare, .flow, .laptop");
     if (reduce || !("IntersectionObserver" in window)) { els.forEach(function (e) { e.classList.add("in"); }); return; }
     var io = new IntersectionObserver(function (en) {
       en.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
@@ -273,6 +275,83 @@
     loop();
   }
 
-  function init() { applyConfig(); hero(); library(); calc(); reveals(); chrome(); instalacao(); }
+  /* ---------- Antes e depois: comparador de arrastar com dois vídeos em sincronia ---------- */
+  function existe(url) {
+    return fetch(url, { method: "HEAD" }).then(function (r) {
+      return r.ok && !/text\/html/i.test(r.headers.get("content-type") || "");
+    }).catch(function () { return false; });
+  }
+  function antesDepois() {
+    var sec = $("#antes-depois"), box = $("#ba"), ver = $("[data-ver]");
+    if (ver) ver.setAttribute("href", "#biblioteca");          // até confirmar que há vídeo
+    if (!sec || !box) return;
+    var previa = /[?&]previa=1/.test(location.search);
+    var pares = ["01", "02"].map(function (n) { return { n: n, antes: CFG["VIDEO_ANTES_" + n], depois: CFG["VIDEO_DEPOIS_" + n], legenda: CFG["LEGENDA_" + n] }; })
+      .filter(function (p) { return p.antes && p.depois; });
+    Promise.all(pares.map(function (p) {
+      return Promise.all([existe(p.antes), existe(p.depois)]).then(function (ok) { p.ok = ok[0] && ok[1]; return p; });
+    })).then(function (ps) {
+      ps = ps.filter(function (p) { return p.ok || previa; }); if (!ps.length) return;
+      ps.forEach(function (p) { box.appendChild(comparador(p)); });
+      box.classList.toggle("um", ps.length === 1);
+      sec.hidden = false; if (ver) ver.setAttribute("href", "#antes-depois");
+    });
+  }
+  function comparador(p) {
+    var fig = document.createElement("figure"); fig.className = "cmp";
+    var palco = document.createElement("div"); palco.className = "cmp-palco"; palco.style.setProperty("--x", "50%");
+    function lado(src, cls, rot, marca) {
+      var d = document.createElement("div"); d.className = "cmp-lado " + cls;
+      if (p.ok) {
+        var v = document.createElement("video"); v.muted = true; v.loop = true; v.playsInline = true; v.preload = "metadata"; v.src = src;
+        v.setAttribute("aria-hidden", "true"); v.tabIndex = -1; d.appendChild(v); d._v = v;
+      } else { d.classList.add("vazio"); d.innerHTML = "<code>" + marca + "</code>"; }
+      var t = document.createElement("span"); t.className = "cmp-tag"; t.textContent = rot; d.appendChild(t);
+      return d;
+    }
+    var a = lado(p.antes, "antes", "Antes", "VIDEO_ANTES_" + p.n), d = lado(p.depois, "depois", "Depois", "VIDEO_DEPOIS_" + p.n);
+    var linha = document.createElement("span"); linha.className = "cmp-linha"; linha.innerHTML = '<i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6"/></svg></i>';
+    // o controle de verdade é um range (teclado e leitor de tela); o arrasto com dedo/mouse mexe nele
+    var rng = document.createElement("input"); rng.type = "range"; rng.min = 0; rng.max = 100; rng.value = 50; rng.className = "cmp-rng";
+    rng.setAttribute("aria-label", "Arraste para comparar antes e depois (exemplo " + (+p.n) + ")");
+    var pp = document.createElement("button"); pp.type = "button"; pp.className = "cmp-pp"; pp.setAttribute("aria-label", "Pausar");
+    pp.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path class="pa" d="M8 5v14M16 5v14"/><path class="pl" d="M8 5l11 7-11 7z"/></svg>';
+    palco.appendChild(a); palco.appendChild(d); palco.appendChild(linha); palco.appendChild(rng); palco.appendChild(pp);
+    fig.appendChild(palco);
+    var cap = document.createElement("figcaption"); cap.className = "cmp-cap";
+    cap.innerHTML = '<span class="cmp-dica"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6"/></svg>Arraste a linha</span>' + (p.legenda ? "<span>" + esc(p.legenda) + "</span>" : "");
+    fig.appendChild(cap);
+
+    var mexeu = false;
+    function poe(x) { x = Math.max(0, Math.min(100, x)); rng.value = x; palco.style.setProperty("--x", x + "%"); }
+    rng.addEventListener("input", function () { mexeu = true; fig.classList.add("usado"); poe(+rng.value); });
+    // arrasto direto no palco (o range por cima cuida do toque; isto cobre o clique em qualquer ponto)
+    var arr = false;
+    function pos(e) { var r = palco.getBoundingClientRect(); poe((e.clientX - r.left) / r.width * 100); }
+    palco.addEventListener("pointerdown", function (e) { if (e.target === pp || pp.contains(e.target)) return; arr = true; mexeu = true; fig.classList.add("usado"); try { palco.setPointerCapture(e.pointerId); } catch (x) {} pos(e); });
+    palco.addEventListener("pointermove", function (e) { if (arr) pos(e); });
+    ["pointerup", "pointercancel"].forEach(function (n) { palco.addEventListener(n, function () { arr = false; }); });
+
+    var va = a._v, vd = d._v, pausado = false, visto = false;
+    function toca(f) { if (!va || pausado || (reduce && !f)) return; [vd, va].forEach(function (v) { var q = v.play(); if (q && q.catch) q.catch(function () {}); }); }
+    function para() { if (va) { vd.pause(); va.pause(); } }
+    if (va) {
+      // o "depois" manda; o "antes" acompanha (corrige se desgarrar mais de 2 quadros)
+      vd.addEventListener("timeupdate", function () { if (Math.abs(va.currentTime - vd.currentTime) > .08) { try { va.currentTime = vd.currentTime; } catch (e) {} } });
+      vd.addEventListener("seeked", function () { try { va.currentTime = vd.currentTime; } catch (e) {} });
+      pp.addEventListener("click", function () { pausado = !pausado; fig.classList.toggle("pausado", pausado); pp.setAttribute("aria-label", pausado ? "Tocar" : "Pausar"); if (pausado) para(); else toca(true); });
+      if (reduce) { pausado = true; fig.classList.add("pausado"); pp.setAttribute("aria-label", "Tocar"); }
+    } else pp.hidden = true;
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (en) {
+      if (en[0].isIntersecting) {
+        toca();
+        // na primeira vez, a linha se mexe sozinha para mostrar que dá para arrastar
+        if (!visto && !reduce) { visto = true; var passos = [[400, 32], [1100, 68], [1800, 50]]; passos.forEach(function (s) { setTimeout(function () { if (!mexeu) { palco.classList.add("guia"); poe(s[1]); } }, s[0]); }); setTimeout(function () { palco.classList.remove("guia"); }, 2600); }
+      } else para();
+    }, { threshold: .45 }).observe(palco);
+    return fig;
+  }
+
+  function init() { applyConfig(); hero(); antesDepois(); library(); calc(); reveals(); chrome(); instalacao(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();

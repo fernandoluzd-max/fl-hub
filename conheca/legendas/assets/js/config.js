@@ -17,6 +17,20 @@ window.PACK_CONFIG = {
   LINK_SUPORTE: "mailto:suporte.fltreinamento@gmail.com?subject=Suporte%20Base%20FL",
   LINK_INSTAGRAM: "https://www.instagram.com/fernandoluz.d/",
 
+  // Garantia, em dias. Deixe "" para não mostrar o bloco de garantia na oferta.
+  // Só preencha com o prazo que está configurado no produto, na Greenn.
+  GARANTIA_DIAS: "",
+
+  // ANTES E DEPOIS (2 comparadores de arrastar). Troque só os arquivos; os nomes abaixo já estão certos.
+  // A página confere se os arquivos existem: enquanto faltar algum, o comparador dele não aparece.
+  // Para ver os espaços marcados antes de ter os vídeos: abra a página com ?previa=1
+  VIDEO_ANTES_01:  "assets/videos/antes-depois/1-antes.mp4",
+  VIDEO_DEPOIS_01: "assets/videos/antes-depois/1-depois.mp4",
+  LEGENDA_01: "",   // opcional: uma linha embaixo do comparador (ex.: "Reels de receita · título Bold Template")
+  VIDEO_ANTES_02:  "assets/videos/antes-depois/2-antes.mp4",
+  VIDEO_DEPOIS_02: "assets/videos/antes-depois/2-depois.mp4",
+  LEGENDA_02: "",
+
   // Repassar UTMs/parâmetros da URL para o checkout (útil para Utmify / rastreio)
   REPASSAR_PARAMETROS: true
 };

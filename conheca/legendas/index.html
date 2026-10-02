@@ -21,14 +21,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=7">
+<link rel="stylesheet" href="assets/css/style.css?v=9">
 
 <!-- ============================================================
      Pixel / GTM / métricas: cole aqui, se for usar.
      ============================================================ -->
 
-<script src="assets/js/config.js?v=7"></script>
-<script src="assets/js/main.js?v=6" defer></script>
+<script src="assets/js/config.js?v=9"></script>
+<script src="assets/js/main.js?v=8" defer></script>
+<script src="/prova.js?v=1" defer></script>
 </head>
 <body>
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -42,32 +43,25 @@
       <span class="brand-sep" aria-hidden="true"></span>
       <span class="brand-prod">Títulos Dinâmicos</span>
     </a>
-    <a class="btn btn-sm" data-checkout href="#oferta">Quero o pack</a>
+    <a class="btn btn-sm" href="#oferta">Ver o que vem no pack</a>
   </div>
 </header>
 
 <main id="conteudo">
 
-<!-- ============ 1. HERO ============ -->
+<!-- ============ 1. TOPO — "o que é isso?" em 5 segundos. Sem preço: primeiro a pessoa vê, depois sabe quanto custa. ============ -->
 <section class="hero" aria-labelledby="h-hero">
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <p class="eyebrow"><span>Pack para CapCut Desktop</span><i aria-hidden="true">·</i><span>Windows e Mac</span></p>
       <h1 id="h-hero" class="h-hero">Pare de montar título <span class="strike">do zero</span>.</h1>
-      <p class="lead">Mais de <b data-qtd>70</b> títulos e legendas dinâmicas prontos pro CapCut Desktop. Você escolhe o estilo, troca o texto e volta pra edição, sem montar fonte, animação e timing em todo vídeo.</p>
-
-      <ul class="chips" aria-label="Resumo do pack">
-        <li><b>+<span data-qtd>70</span></b> presets</li>
-        <li>Windows + Mac</li>
-        <li>CapCut Desktop</li>
-        <li>Instala em 1 clique</li>
-      </ul>
+      <p class="lead">Mais de <b data-qtd>70</b> títulos, ganchos e legendas animadas, já dentro do seu CapCut. Você escolhe o estilo, <b>troca o texto</b> e volta pra edição.</p>
 
       <div class="hero-cta">
-        <a class="btn" data-checkout href="#oferta"><span>Quero os +<span data-qtd>70</span> títulos</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <p class="price-line"><b>R$ <span data-preco>67</span></b> · acesso vitalício<br><span class="parc">ou 12x de R$ 6,89 no cartão</span><br><span class="parc bn">+ 2 bônus: Efeitos Sonoros e LUTs</span></p>
+        <a class="btn" href="#antes-depois" data-ver><span>Ver os títulos em ação</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+        <a class="link-cta" data-checkout href="#oferta">Já conheço, quero o pack <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
-      <p class="warn-inline"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>Só funciona no CapCut para computador. Não funciona no celular.</p>
+      <p class="warn-inline"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>Só funciona no CapCut do computador. No celular, não.</p>
     </div>
 
     <!-- Palco: editor com o painel de títulos, a prévia 9:16 e a timeline -->
@@ -99,84 +93,27 @@
   </div>
 </section>
 
-<!-- ============ 2. O PROBLEMA + CONTA DO TEMPO ============ -->
-<section class="sec sec-problem" aria-labelledby="h-problem">
-  <div class="wrap narrow">
-    <p class="eyebrow center"><span>O momento que trava a edição</span></p>
-    <h2 id="h-problem" class="h2 center">Você terminou o corte. Agora precisa parar tudo pra criar o título.</h2>
-    <p class="sub center">E aí começa a mesma sequência de sempre:</p>
-
-    <ol class="chores reveal" aria-label="Etapas para criar um título do zero">
-      <li>Escolher a fonte</li>
-      <li>Acertar tamanho e peso</li>
-      <li>Posicionar na tela</li>
-      <li>Criar a entrada</li>
-      <li>Criar a saída</li>
-      <li>Ajustar o timing</li>
-      <li>Testar</li>
-      <li>Não gostar</li>
-      <li>Refazer</li>
-    </ol>
-    <p class="punch center reveal">No vídeo seguinte, <b>tudo de novo.</b></p>
-  </div>
-
-  <div class="wrap narrow">
-    <div class="calc reveal" aria-labelledby="h-calc">
-      <h3 id="h-calc" class="h3">Faça a conta com os seus números</h3>
-      <p class="calc-sub">Mexa nos controles. A conta é só sua, a gente não chuta nada.</p>
-      <div class="calc-grid">
-        <label class="rng">
-          <span class="rng-top"><span>Vídeos que você edita por semana</span><output id="oV">5</output></span>
-          <input type="range" id="iV" min="1" max="30" value="5">
-        </label>
-        <label class="rng">
-          <span class="rng-top"><span>Títulos por vídeo</span><output id="oT">2</output></span>
-          <input type="range" id="iT" min="1" max="10" value="2">
-        </label>
-        <label class="rng">
-          <span class="rng-top"><span>Minutos pra montar cada título</span><output id="oM">6</output></span>
-          <input type="range" id="iM" min="1" max="30" value="6">
-        </label>
-      </div>
-      <div class="calc-out" role="status">
-        <p>Por mês, você passa cerca de</p>
-        <p class="calc-num"><span id="oH">4h</span></p>
-        <p>só montando título. <span class="muted" id="oN">São 40 títulos criados do zero.</span></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 3. ANTES X DEPOIS ============ -->
-<section class="sec sec-compare" aria-labelledby="h-compare">
+<!-- ============ 2. ANTES E DEPOIS — a demonstração principal: "é isso que estava faltando no meu vídeo".
+     Dois comparadores de arrastar, com os dois vídeos tocando juntos.
+     OS VÍDEOS: veja VIDEO_ANTES_01, VIDEO_DEPOIS_01, VIDEO_ANTES_02 e VIDEO_DEPOIS_02 em assets/js/config.js.
+     Enquanto os arquivos não existirem, a seção não aparece para o público.
+     Para ver a seção com os espaços marcados, abra a página com ?previa=1 no fim do endereço. ============ -->
+<section class="sec sec-ba" id="antes-depois" aria-labelledby="h-ba" hidden>
   <div class="wrap">
-    <p class="eyebrow center"><span>Mesmo vídeo, outro caminho</span></p>
-    <h2 id="h-compare" class="h2 center">O título deixa de ser uma etapa.<br class="br-d"> Vira um detalhe.</h2>
-
-    <div class="compare reveal" id="compare">
-      <div class="lane lane-zero">
-        <div class="lane-h"><span class="lane-t">Do zero</span><span class="lane-n">10 etapas</span></div>
-        <ol class="lane-clips">
-          <li>Abrir projeto</li><li>Criar texto</li><li>Escolher fonte</li><li>Ajustar peso</li><li>Montar layout</li><li>Animar</li><li>Testar timing</li><li>Refazer</li><li>Salvar</li><li>Repetir no próximo vídeo</li>
-        </ol>
-      </div>
-      <div class="lane lane-pack">
-        <div class="lane-h"><span class="lane-t">Com o pack</span><span class="lane-n">4 etapas</span></div>
-        <ol class="lane-clips">
-          <li>Escolher o preset</li><li>Trocar o texto</li><li>Ajustar</li><li class="done">Continuar editando</li>
-        </ol>
-      </div>
-    </div>
-    <p class="note center reveal">Escolher <span class="arrow">→</span> personalizar <span class="arrow">→</span> usar.</p>
+    <p class="eyebrow center"><span>Antes e depois</span></p>
+    <h2 id="h-ba" class="h2 center">Mesmo vídeo. Arraste e compare.</h2>
+    <p class="sub center">O corte, a fala e o áudio são os mesmos dos dois lados. A única diferença é o que aparece escrito na tela.</p>
+    <div class="ba" id="ba"></div>
+    <p class="ba-note center">Do lado direito, só títulos do pack com o texto trocado. Nenhum efeito a mais.</p>
   </div>
 </section>
 
-<!-- ============ 4. BIBLIOTECA ============ -->
+<!-- ============ 3. BIBLIOTECA — "tem estilo pro meu tipo de vídeo?" ============ -->
 <section class="sec sec-lib" id="biblioteca" aria-labelledby="h-lib">
   <div class="wrap">
-    <p class="eyebrow center"><span>Biblioteca</span></p>
-    <h2 id="h-lib" class="h2 center">Mais de <span data-qtd>70</span> estilos prontos pra adaptar ao seu conteúdo.</h2>
-    <p class="sub center">Uma seleção de verdade, gravada direto do pack: títulos, ganchos e legendas do jeito que aparecem no CapCut.</p>
+    <p class="eyebrow center"><span>O que vem no pack</span></p>
+    <h2 id="h-lib" class="h2 center">Mais de <span data-qtd>70</span> estilos. Estes são 12 deles.</h2>
+    <p class="sub center">Gravados direto do CapCut, sem retoque. Tem título pra abrir o vídeo, gancho pra segurar os 3 primeiros segundos e legenda pra destacar a fala.</p>
 
     <div class="tabs" role="tablist" aria-label="Filtrar estilos">
       <button role="tab" aria-selected="true" data-filter="all">Todos</button>
@@ -185,12 +122,6 @@
       <button role="tab" aria-selected="false" data-filter="legenda">Legendas</button>
     </div>
 
-    <!--
-      COMO TROCAR PELOS VÍDEOS REAIS:
-      em cada <article class="preset">, preencha data-video (mp4 ou webm), data-gif ou data-img.
-      Ex.: data-video="assets/videos/preset-01.mp4"
-      Quando tiver mídia, a animação de exemplo some e o vídeo entra no lugar, no mesmo tamanho (9:16).
-    -->
     <div class="lib" id="lib">
       <article class="preset" data-cat="titulo" data-video="assets/videos/titulo-bold-template.mp4" data-poster="assets/images/posters/titulo-bold-template.jpg" data-gif="" data-img="">
         <div class="preset-media"></div>
@@ -242,38 +173,101 @@
       </article>
     </div>
     <div class="lib-more"><button class="btn-ghost" id="libMore" type="button">Ver mais estilos</button></div>
+    <div class="mid-cta reveal"><a class="btn" data-checkout href="#oferta"><span>Quero ter esses títulos no meu CapCut</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><p>Em todos, você troca o texto. Na maioria, também cor e tamanho.</p></div>
   </div>
 </section>
 
-<!-- ============ 5. COMPATIBILIDADE (antes da compra, de propósito) ============ -->
+<!-- ============ 4. QUEM FEZ — prova curta e honesta: alunos do curso do Fernando falando das aulas de legenda.
+     Não são compradores deste pack, e a página diz isso. ============ -->
+<section class="sec sec-autor" aria-labelledby="h-autor">
+  <div class="wrap">
+    <p class="eyebrow center"><span>Quem montou o pack</span></p>
+    <h2 id="h-autor" class="h2 center">Os títulos são do Fernando Luz, que ensina edição no CapCut.</h2>
+    <p class="sub center">O pack é novo. O que dá pra mostrar é o que os alunos do curso dele, o Reels Academy, já disseram das aulas de legenda e título:</p>
+    <div class="reveal" data-prova="trio" data-ids="dm-legendas,falcone,pumpup"></div>
+    <p class="pv-nota center">Depoimentos reais de alunos do curso, copiados como foram escritos. Eles falam do curso, não deste pack.</p>
+  </div>
+</section>
+
+<!-- ============ 5. "EU FAÇO NA MÃO" — a objeção de quem já sabe editar. Não nega: compara o trabalho. ============ -->
+<section class="sec sec-problem" aria-labelledby="h-problem">
+  <div class="wrap">
+    <p class="eyebrow center"><span>Dá pra fazer na mão</span></p>
+    <h2 id="h-problem" class="h2 center">Você sabe montar um título.<br class="br-d"> O problema é montar toda vez.</h2>
+    <p class="sub center">Terminou o corte, parou tudo pra criar o texto. No vídeo seguinte, a mesma coisa.</p>
+
+    <div class="compare reveal" id="compare">
+      <div class="lane lane-zero">
+        <div class="lane-h"><span class="lane-t">Do zero</span><span class="lane-n">9 etapas, todo vídeo</span></div>
+        <ol class="lane-clips">
+          <li>Escolher a fonte</li><li>Acertar tamanho e peso</li><li>Posicionar</li><li>Criar a entrada</li><li>Criar a saída</li><li>Ajustar o timing</li><li>Testar</li><li>Não gostar</li><li>Refazer</li>
+        </ol>
+      </div>
+      <div class="lane lane-pack">
+        <div class="lane-h"><span class="lane-t">Com o pack</span><span class="lane-n">3 etapas</span></div>
+        <ol class="lane-clips">
+          <li>Escolher o estilo</li><li>Trocar o texto</li><li class="done">Continuar editando</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap narrow">
+    <div class="calc reveal" aria-labelledby="h-calc">
+      <h3 id="h-calc" class="h3">Quanto isso custa por mês? Faça a sua conta.</h3>
+      <p class="calc-sub">Os números são seus. Mexa nos controles.</p>
+      <div class="calc-grid">
+        <label class="rng">
+          <span class="rng-top"><span>Vídeos que você edita por semana</span><output id="oV">5</output></span>
+          <input type="range" id="iV" min="1" max="30" value="5">
+        </label>
+        <label class="rng">
+          <span class="rng-top"><span>Títulos por vídeo</span><output id="oT">2</output></span>
+          <input type="range" id="iT" min="1" max="10" value="2">
+        </label>
+        <label class="rng">
+          <span class="rng-top"><span>Minutos pra montar cada título</span><output id="oM">6</output></span>
+          <input type="range" id="iM" min="1" max="30" value="6">
+        </label>
+      </div>
+      <div class="calc-out" role="status">
+        <p>Por mês, você passa cerca de</p>
+        <p class="calc-num"><span id="oH">4h</span></p>
+        <p>só montando título. <span class="muted" id="oN">São 40 títulos criados do zero.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. "VOU CONSEGUIR USAR?" — compatibilidade + instalação + aula, antes do preço ============ -->
 <section class="sec sec-compat" id="compatibilidade" aria-labelledby="h-compat">
   <div class="wrap narrow">
     <p class="eyebrow center"><span>Antes de comprar</span></p>
-    <h2 id="h-compat" class="h2 center">Confira se funciona no seu computador.</h2>
+    <h2 id="h-compat" class="h2 center">Funciona no seu computador?</h2>
     <ul class="compat reveal">
       <li class="ok"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span><b>Windows</b><em>Compatível</em></li>
       <li class="ok"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg></span><b>macOS</b><em>Compatível</em></li>
       <li class="req"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 15h18M8 15v5M14 15v5"/></svg></span><b>CapCut Desktop</b><em>Necessário</em></li>
       <li class="no"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M4 4l16 16"/></svg></span><b>CapCut Mobile</b><em>Não funciona</em></li>
     </ul>
-    <p class="compat-note center reveal">Se você edita só no celular, <b>esse pack não é pra você.</b> Ele foi feito pro CapCut instalado no computador.</p>
+    <p class="compat-note center reveal">Edita só no celular? <b>Então esse pack não é pra você.</b> Ele entra no CapCut instalado no computador.</p>
   </div>
 </section>
 
-<!-- ============ 6. INSTALAÇÃO ============ -->
 <section class="sec sec-install" aria-labelledby="h-install">
   <div class="wrap install-grid">
     <div class="install-copy">
       <p class="eyebrow"><span>Instalação</span></p>
-      <h2 id="h-install" class="h2">Instalar é um clique.</h2>
-      <p class="sub">Sem pasta, sem arrastar arquivo. O app Base FL coloca tudo no lugar certo do seu CapCut, no Windows ou no Mac.</p>
+      <h2 id="h-install" class="h2">Você não mexe em pasta nenhuma.</h2>
+      <p class="sub">Nada de descompactar arquivo e procurar a pasta certa do CapCut. O app Base FL coloca tudo no lugar.</p>
       <ol class="flow reveal">
-        <li><b>Baixe o app Base FL</b><span>É gratuito para quem comprou. Mac ou Windows.</span></li>
-        <li><b>Entre com o e-mail da compra</b><span>Chega um código no seu e-mail. É só digitar.</span></li>
-        <li><b>Clique em Instalar</b><span>O app faz o resto sozinho, em segundos.</span></li>
-        <li><b>Abra o CapCut Desktop</b><span>Os títulos já aparecem, organizados em pastas.</span></li>
-        <li class="last"><b>Escolha e use</b><span>Troque o texto e siga editando.</span></li>
+        <li><b>Baixe o app Base FL</b><span>Gratuito pra quem comprou. Windows ou Mac.</span></li>
+        <li><b>Entre com o e-mail da compra</b><span>Chega um código no seu e-mail. Sem senha pra lembrar.</span></li>
+        <li><b>Clique em Instalar</b><span>Leva alguns segundos.</span></li>
+        <li class="last"><b>Abra o CapCut</b><span>Os títulos já estão lá, separados em pastas.</span></li>
       </ol>
+      <p class="aula reveal"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z"/></svg><span><b>Tem aula.</b> Um vídeo mostra a instalação e como usar cada tipo de título, passo a passo.</span></p>
+      <a class="btn install-cta" data-checkout href="#oferta"><span>Quero instalar no meu CapCut</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
     <div class="laptop reveal" aria-hidden="true">
       <div class="lap-screen">
@@ -308,7 +302,7 @@
   </div>
 </section>
 
-<!-- ============ 7. PARA QUEM É ============ -->
+<!-- ============ 7. PARA QUEM É — dizer para quem NÃO é aumenta a confiança de quem é ============ -->
 <section class="sec sec-who" aria-labelledby="h-who">
   <div class="wrap">
     <h2 id="h-who" class="h2 center">É pra você?</h2>
@@ -316,19 +310,17 @@
       <div class="who-col yes">
         <p class="who-h">É pra você se</p>
         <ul>
-          <li>Edita vídeo com frequência</li>
-          <li>Usa o CapCut no computador</li>
-          <li>Quer ganhar velocidade na edição</li>
-          <li>Cansou de montar cada animação do zero</li>
-          <li>Quer mais opções de título à mão</li>
-          <li>Produz Reels, TikTok ou Shorts toda semana</li>
+          <li>Edita no CapCut do computador</li>
+          <li>Faz Reels, TikTok ou Shorts toda semana, seus ou de clientes</li>
+          <li>Perde tempo montando texto animado em cada projeto</li>
+          <li>Quer mais opções de estilo sem estudar animação</li>
         </ul>
       </div>
       <div class="who-col no">
         <p class="who-h">Não é pra você se</p>
         <ul>
-          <li>Edita só no CapCut do celular</li>
-          <li>Procura um app de legenda automática</li>
+          <li>Edita só no celular</li>
+          <li>Procura legenda automática (isso o CapCut já faz)</li>
           <li>Espera que o pack edite o vídeo sozinho</li>
         </ul>
       </div>
@@ -336,21 +328,18 @@
   </div>
 </section>
 
-<!-- ============ 8. OFERTA ============ -->
+<!-- ============ 8. OFERTA — o que recebo · quanto custa · como acesso · garantia · botão ============ -->
 <section class="sec sec-offer" id="oferta" aria-labelledby="h-offer">
   <div class="wrap narrow">
     <div class="offer reveal">
       <p class="eyebrow center"><span>O que você recebe</span></p>
-      <h2 id="h-offer" class="h2 center">Pack de Títulos Dinâmicos</h2>
+      <h2 id="h-offer" class="h2 center">Pack Títulos Dinâmicos</h2>
       <ul class="get">
-        <li><b>+<span data-qtd>70</span> títulos e legendas dinâmicas</b></li>
-        <li>Instalação em 1 clique pelo app Base FL</li>
-        <li>Versão para usar no CapCut Desktop</li>
-        <li>Compatível com Windows</li>
-        <li>Compatível com macOS</li>
-        <li>Aula ensinando a usar</li>
-        <li>Atualizações pelo app</li>
-        <li>Acesso vitalício</li>
+        <li><b>+<span data-qtd>70</span> títulos, ganchos e legendas animadas</b> pro CapCut Desktop</li>
+        <li>Instalação em 1 clique, Windows e Mac</li>
+        <li>Aula de instalação e uso</li>
+        <li>Atualizações do pack pelo app</li>
+        <li>Acesso vitalício, pagamento único</li>
       </ul>
       <div class="bonus">
         <p class="bonus-t"><span>+ 2 bônus</span> incluídos na compra</p>
@@ -360,51 +349,55 @@
         </div>
       </div>
       <div class="price">
-        <p class="price-de">Tudo isso sairia por <s>R$ 105</s></p>
+        <p class="price-de">Separados, pack e bônus somam <s>R$ 105</s></p>
         <p class="price-v"><small>R$</small><span data-preco>67</span></p>
         <p class="price-s">pagamento único · acesso vitalício</p>
         <p class="price-p">ou <b>12x de R$ 6,89</b> no cartão · ou à vista no Pix</p>
       </div>
-      <a class="btn btn-block" data-checkout href="#oferta"><span>Quero os +<span data-qtd>70</span> títulos</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-block" data-checkout href="#oferta"><span>Liberar o pack completo</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <ol class="acesso" aria-label="Como você recebe o acesso">
+        <li><b>1</b>Pagou</li><li><b>2</b>Baixa o app Base FL</li><li><b>3</b>Entra com o e-mail da compra</li><li><b>4</b>Instalar</li>
+      </ol>
+      <!-- GARANTIA: só aparece se GARANTIA_DIAS estiver preenchido no assets/js/config.js -->
+      <p class="garantia" id="garantia" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.2-2.9 7.6-7 9.5-4.1-1.900-7-5.300-7-9.500V6z"/><path d="M8.800 12.200l2.300 2.300 4.200-4.600"/></svg><span><b><span data-garantia>7</span> dias de garantia.</b> Instalou, testou e não gostou? É só pedir o reembolso dentro desse prazo e você recebe o valor de volta.</span></p>
       <p class="offer-req"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>Requer CapCut Desktop no Windows ou no Mac. Não funciona no celular.</p>
     </div>
   </div>
 </section>
 
-<!-- ============ 9. FAQ ============ -->
+<!-- ============ 8b. MAIS ALUNOS — carrossel contínuo, depois do preço: diminui o medo de comprar de quem não conhece o Fernando ============ -->
+<section class="sec sec-prova" aria-labelledby="h-prova">
+  <div class="wrap">
+    <p class="eyebrow center"><span>Alunos do Fernando</span></p>
+    <h2 id="h-prova" class="h2 center">Não conhece o Fernando? Quem já fez aula com ele conta.</h2>
+    <p class="sub center">Mensagens e comentários de alunos do curso Reels Academy sobre o jeito que ele ensina e o material que entrega.</p>
+  </div>
+  <div class="wrap"><div data-prova="faixa" data-temas="didatica,capcut,material,valor" data-linhas="2" data-sem="dm-legendas,falcone,pumpup"></div></div>
+  <div class="wrap"><p class="pv-nota center">São alunos do curso. Este pack é um produto separado, feito pelo mesmo professor.</p></div>
+</section>
+
+<!-- ============ 9. FAQ — só o que a página ainda não respondeu ============ -->
 <section class="sec sec-faq" aria-labelledby="h-faq">
   <div class="wrap narrow">
-    <h2 id="h-faq" class="h2 center">Dúvidas frequentes</h2>
+    <h2 id="h-faq" class="h2 center">Ainda na dúvida?</h2>
     <div class="faq">
-      <details><summary>Os presets funcionam no celular?</summary><p>Não. O pack foi feito para o CapCut Desktop, o CapCut instalado no computador. Ele não funciona no CapCut Mobile.</p></details>
-      <details><summary>Funciona no Windows?</summary><p>Sim.</p></details>
-      <details><summary>Funciona no MacBook / macOS?</summary><p>Sim.</p></details>
-      <details><summary>Preciso saber editar?</summary><p>Não precisa ser avançado, mas é recomendado ter o básico do CapCut Desktop: abrir um projeto, colocar um vídeo na timeline e mexer em um texto.</p></details>
-      <details><summary>É difícil instalar?</summary><p>Não. Você baixa o app Base FL, entra com o e-mail da compra e clica em Instalar. Os títulos aparecem sozinhos no CapCut. Tem uma aula mostrando como usar.</p></details>
-      <details><summary>Quanto tempo de acesso?</summary><p>Vitalício. Comprou uma vez, fica liberado na sua conta para sempre, no app Base FL.</p></details>
-      <details><summary>São legendas automáticas?</summary><p>Não. São estilos prontos de títulos e legendas dinâmicas. Você escolhe o estilo, coloca o seu texto e ajusta dentro do seu projeto.</p></details>
-      <details><summary>Posso mudar os textos?</summary><p>Sim. Você troca o texto de todos os presets.</p></details>
-      <details><summary>Posso mudar as cores?</summary><p>Quando o preset permite personalização dentro do CapCut, sim.</p></details>
-      <details><summary>Posso usar em vários vídeos?</summary><p>Sim, dentro das condições de uso da licença.</p></details>
-      <details><summary>Posso compartilhar ou revender os arquivos?</summary><p>Não. O pack é de uso do comprador e não pode ser repassado, compartilhado ou revendido.</p></details>
-      <details><summary>O pack edita o vídeo por mim?</summary><p>Não. Ele acelera a parte dos títulos: em vez de montar do zero, você parte de um estilo pronto. O resto da edição continua com você.</p></details>
-      <details><summary>Qual é o valor?</summary><p>R$ <span data-preco>67</span>, pagamento único.</p></details>
+      <details><summary>Preciso saber editar?</summary><p>O básico do CapCut no computador: abrir um projeto, colocar o vídeo na timeline e mexer num texto. Se você faz isso, usa o pack.</p></details>
+      <details><summary>São legendas automáticas?</summary><p>Não. São estilos prontos de título e legenda. Você escolhe o estilo, escreve o seu texto e ajusta no projeto.</p></details>
+      <details><summary>Dá pra mudar texto, cor e tamanho?</summary><p>O texto, sempre. Cor, tamanho e posição, na maioria dos estilos, direto no CapCut, como em qualquer texto.</p></details>
+      <details><summary>Posso usar em vídeos de clientes?</summary><p>Pode. Use em quantos vídeos quiser, seus ou de clientes. O que não pode é repassar ou revender os arquivos do pack.</p></details>
+      <details><summary>Como recebo depois de pagar?</summary><p>Você baixa o app Base FL, entra com o e-mail da compra e clica em Instalar. Os títulos aparecem no CapCut. Pagando por Pix ou cartão, a liberação é na hora.</p></details>
+      <details><summary>Por quanto tempo fico com acesso?</summary><p>Pra sempre. O pagamento é único e o pack fica liberado na sua conta do app Base FL.</p></details>
+      <details><summary>Troquei de computador. E agora?</summary><p>Baixe o app no computador novo, entre com o mesmo e-mail e instale de novo.</p></details>
     </div>
   </div>
 </section>
 
-<!-- ============ 10. CTA FINAL ============ -->
+<!-- ============ 10. FECHAMENTO ============ -->
 <section class="sec sec-final" aria-labelledby="h-final">
   <div class="wrap narrow center">
-    <h2 id="h-final" class="h2 final-h">Você pode continuar criando cada título do zero.<br><span>Ou começar cada edição com mais de <span data-qtd>70</span> opções prontas.</span></h2>
-    <ul class="chips chips-center">
-      <li><b>+<span data-qtd>70</span></b> títulos dinâmicos</li>
-      <li>Windows + Mac</li>
-      <li>CapCut Desktop</li>
-      <li><b>R$ <span data-preco>67</span></b></li>
-    </ul>
-    <a class="btn" data-checkout href="#oferta"><span>Quero os +<span data-qtd>70</span> títulos</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-    <p class="price-line">Pagamento único · Acesso vitalício · Requer CapCut Desktop</p>
+    <h2 id="h-final" class="h2 final-h">No próximo vídeo, você monta o título do zero.<br><span>Ou escolhe um dos <span data-qtd>70</span> e segue editando.</span></h2>
+    <a class="btn" data-checkout href="#oferta"><span>Liberar o pack completo</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <p class="price-line"><b>R$ <span data-preco>67</span></b> · pagamento único · acesso vitalício · requer CapCut Desktop</p>
   </div>
 </section>
 
@@ -426,7 +419,7 @@
 <div class="sticky" id="sticky" aria-hidden="true">
   <div class="sticky-in">
     <p><b>R$ <span data-preco>67</span></b><span>+<span data-qtd>70</span> títulos · CapCut Desktop</span></p>
-    <a class="btn btn-sm" data-checkout href="#oferta" tabindex="-1">Quero o pack</a>
+    <a class="btn btn-sm" data-checkout href="#oferta" tabindex="-1">Liberar o pack</a>
   </div>
 </div>
 </body>
