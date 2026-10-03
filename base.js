@@ -85,6 +85,18 @@
   }
   function valida() { var s = le(); if (!s) return Promise.resolve(false); if (s.expires_at - agora() > 90) return Promise.resolve(true); return renova(false); }
 
+  // ---------- imagens (foto e capas do CaseUp): envia o arquivo para a pasta do próprio usuário ----------
+  function envia(caminho, blob) {
+    return valida().then(function () {
+      var s = le(); if (!s) throw new Error('Entre na sua conta para continuar.');
+      return fetch(SUPA.url + '/storage/v1/object/' + caminho, { method: 'POST', body: blob,
+        headers: { apikey: SUPA.key, Authorization: 'Bearer ' + s.access_token, 'Content-Type': blob.type || 'image/jpeg', 'x-upsert': 'true', 'cache-control': 'max-age=31536000' } })
+        .then(function (r) { if (!r.ok) throw new Error('Não consegui enviar a imagem. Tente de novo.'); return true; },
+              function () { throw new Error('Sem conexão. Tente de novo.'); });
+    });
+  }
+  function arquivo(caminho) { return SUPA.url + '/storage/v1/object/public/' + caminho; }
+
   function api(path, op) {
     op = op || {};
     if (op.auth === false) return cru(path, op);
@@ -373,7 +385,7 @@
     SUPA: SUPA, CAT: CAT, produto: function (k) { return POR_KEY[k] || POR_PACK[k] || null; }, jornada: JORNADA,
     eu: E, sessao: le, email: function () { var s = le(); return s ? s.email : ''; },
     pronto: null, carrega: carrega, tem: tem, vencido: vencido, dias: diasRestantes,
-    api: api, rpc: rpc, traduz: traduz, login: login, sair: sair, aoMudar: function (f) { ouvintes.push(f); },
+    api: api, rpc: rpc, envia: envia, arquivo: arquivo, traduz: traduz, login: login, sair: sair, aoMudar: function (f) { ouvintes.push(f); },
     evento: evento, teste: teste, comprar: comprar, linkCompra: linkCompra, oferta: oferta, calculaOferta: calculaOferta, nomes: nomes, proximo: proximo, trilha: trilha, trabalhoDaUrl: trabalhoDaUrl,
     folha: abreFolha, fechaFolha: fechaFolha, esc: esc, brl: brl, cofre: cofre
   };

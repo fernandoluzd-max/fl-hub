@@ -54,3 +54,7 @@ if __name__ == '__main__':
             caminho = os.path.join(RAIZ, 'tools', g)
             if os.path.exists(caminho):
                 subprocess.check_call([sys.executable, caminho])
+
+# a página 404 do site é a mesma do portfólio: é ela que desenha basefl.com/nome-do-editor
+import shutil
+shutil.copyfile(os.path.join(RAIZ, 'e', 'index.html'), os.path.join(RAIZ, '404.html'))

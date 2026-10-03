@@ -67,8 +67,20 @@ label{display:block;font-size:13px;font-weight:700;color:var(--mute);margin:14px
 .add{display:flex;gap:8px}
 .add .inp{flex:1;min-width:0}
 .add button{flex:none;min-width:54px;border-radius:13px;background:var(--accent);color:var(--accent-ink);border:0;font-weight:800;font-size:22px;cursor:pointer}
+.fotoL{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.fotoV{width:72px;height:72px;border-radius:50%;flex:none;background:var(--accent);color:var(--accent-ink,#171A06);display:grid;place-items:center;font-weight:900;font-size:28px;background-size:cover;background-position:center;overflow:hidden}
+.fotoL .bts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mini{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:8px 12px;font:inherit;font-size:13px;font-weight:650;cursor:pointer}
+.mini:hover{border-color:var(--accent)}.mini.x{color:var(--mute)}.mini[disabled]{opacity:.5}
+.vl .th{cursor:pointer;position:relative;width:54px;aspect-ratio:9/16;height:auto;border-radius:9px;background-color:var(--panel2);background-size:cover;background-position:center;display:grid;place-items:center;font-size:9.5px;font-weight:700;color:var(--mute);text-align:center;border:1px dashed transparent;padding:0;overflow:hidden}
+.vl .th.h{aspect-ratio:16/9;width:72px}.vl .th.sem{border-color:var(--line)}
+.vl .th:hover{border-color:var(--accent)}.vl .th u{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.62);color:#fff;font-size:9px;font-weight:700;text-decoration:none;padding:2px 0;font-style:normal}
+.vl .ops{display:flex;gap:6px;align-items:center;min-width:0;flex-wrap:wrap}
+.trava{border:1px dashed var(--line);border-radius:14px;padding:14px;display:grid;gap:8px;background:var(--bg)}
+.trava b{display:flex;align-items:center;gap:8px;font-size:15px}.trava p{color:var(--mute);font-size:13.5px;line-height:1.45;margin:0}
+.trava .btn{justify-self:start;margin-top:4px}
 .vl{list-style:none;display:grid;gap:8px;margin-top:10px}
-.vl li{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:8px;animation:entra .3s ease both}
+.vl li{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:8px;animation:entra .3s ease both}
 .th{width:44px;height:62px;border-radius:8px;background:linear-gradient(160deg,rgba(212,225,87,.28),#101210) center/cover;display:grid;place-items:center;font-size:9px;font-weight:800;letter-spacing:.04em;color:rgba(255,255,255,.8);text-transform:uppercase;overflow:hidden;text-align:center}
 .vm{min-width:0;display:grid;gap:6px}
 .vm input{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:14.5px;outline:none}
@@ -151,8 +163,8 @@ label{display:block;font-size:13px;font-weight:700;color:var(--mute);margin:14px
 <div class="toast" id="toast"></div>
 
 <script src="/catalogo.js"></script>
-<script src="/base.js"></script>
-<script src="/case/video.js"></script>
+<script src="/base.js?v=3"></script>
+<script src="/case/video.js?v=2"></script>
 <script>
 /* CaseUp — tela do EDITOR. O cliente vê a página em /e/ (pública, sem nada interno). */
 const PACK = 'fl-case';
@@ -188,7 +200,8 @@ function confete(){ if (calmo) return; const cs = Object.values(CORES); for (let
 const semAcento = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
 const paraSlug = s => semAcento(String(s || '').toLowerCase()).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 30);
 const slugOk = s => /^[a-z0-9](?:[a-z0-9-]{1,28})[a-z0-9]$/.test(s);
-const link = s => location.origin + '/e/?' + s;
+const link = s => location.origin + '/' + s;
+const img = n => n && EXTRA.pasta ? Base.arquivo('caseup/' + EXTRA.pasta + '/' + n) : null;
 const svg = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICO[k]}</svg>`;
 
 let P = null, EXTRA = {}, sujo = false, cheio = false;
@@ -235,10 +248,11 @@ function editor(){
       : `<h1>Monte a sua página.</h1><p class="sub">Cinco blocos curtos. A barra lá embaixo mostra o quanto falta, e a prévia muda enquanto você mexe.</p>`}
 
     ${bloco(1, 'Você', '', `
+      <div class="fotoL"><div class="fotoV" id="fotoV"></div><div class="bts"><button type="button" class="mini" id="fotoB">Colocar foto</button><button type="button" class="mini x" id="fotoX" hidden>Tirar</button><input type="file" id="fotoI" accept="image/*" hidden></div></div>
       <label for="nome">Seu nome ou o nome do seu estúdio</label><input class="inp" id="nome" maxlength="60" value="${esc(p.nome)}" placeholder="Ex.: João Editor" autocomplete="name">
       <label for="frase">O que você faz, em uma frase</label><input class="inp" id="frase" maxlength="120" value="${esc(p.frase || '')}" placeholder="Ex.: Edito Reels e anúncios para negócios locais">
       <label for="slug">O final do seu link</label>
-      <div class="lkb" id="lkBox"><span>${esc(location.host)}/e/?</span><input id="slug" maxlength="30" value="${esc(p.slug)}" autocapitalize="none" autocomplete="off" spellcheck="false" placeholder="seu-nome"></div>
+      <div class="lkb" id="lkBox"><span>${esc(location.host)}/</span><input id="slug" maxlength="30" value="${esc(p.slug)}" autocapitalize="none" autocomplete="off" spellcheck="false" placeholder="seu-nome"></div>
       <p class="msg" id="slugMsg"></p>`)}
 
     ${bloco(2, 'Seus botões', 'até ' + MAXL, `
@@ -247,7 +261,7 @@ function editor(){
       <ul class="ll" id="ll"></ul>`)}
 
     ${bloco(3, 'Seus vídeos', 'até ' + MAXV, `
-      <p class="dica">Cole o link de cada vídeo: Instagram, TikTok, YouTube, Vimeo ou Google Drive. Os vídeos continuam onde já estão.</p>
+      <p class="dica">Cole o link de cada vídeo. <b>YouTube, TikTok, Vimeo e Google Drive tocam dentro da sua página.</b> O Instagram não deixa: o vídeo abre lá. Toque na miniatura para colocar a capa.</p><input type="file" id="capaI" accept="image/*" hidden>
       <div class="add"><input class="inp" id="url" inputmode="url" placeholder="Cole o link do vídeo aqui" autocomplete="off"><button id="mais" type="button" aria-label="Adicionar vídeo">+</button></div>
       <p class="msg" id="urlMsg"></p>
       <ul class="vl" id="vl"></ul>`)}
@@ -262,11 +276,9 @@ function editor(){
       <div class="row">${[0,1,2].map(i => `<input class="inp selo" maxlength="28" value="${esc(p.selos[i] || '')}" aria-label="Destaque ${i+1}">`).join('')}</div>`)}
 
     ${bloco(5, 'Botão “Pedir orçamento”', '', `
-      <p class="dica">É o botão colorido, no topo da página. Sem WhatsApp nem briefing, ele não aparece.</p>
-      <label for="zap">Seu WhatsApp, com DDD</label><input class="inp" id="zap" inputmode="tel" maxlength="20" value="${esc(zapBonito(p.whatsapp))}" placeholder="(11) 99999-9999" autocomplete="tel">
       ${EXTRA.tem_briefing
-        ? `<label class="tog"><input type="checkbox" id="brf" ${p.briefing ? 'checked' : ''}><span><b>Abrir o meu briefing</b><small>O cliente responde as perguntas e o pedido chega organizado no Gerador de Briefing. Desmarcado, o botão abre o seu WhatsApp.</small></span></label>`
-        : `<p class="dica" style="margin-top:10px">O botão abre o seu WhatsApp, com a mensagem “vi o seu portfólio e quero um orçamento” já escrita.</p>`}
+        ? `<label class="tog"><input type="checkbox" id="brf" ${p.briefing ? 'checked' : ''}><span><b>Mostrar o botão “Pedir orçamento”</b><small>Fica em destaque no topo da página. O cliente responde o seu briefing e o pedido chega organizado no Gerador de Briefing.</small></span></label>`
+        : `<div class="trava" id="trava"><b><span aria-hidden="true">🔒</span> Botão “Pedir orçamento”</b><p>Um botão em destaque no topo da sua página. O cliente toca, responde o que precisa e o pedido chega organizado para você dar o preço. Ele é liberado com o <b style="display:inline">Gerador de Briefing</b>.</p><p>Só você vê este aviso. Na sua página, o cliente fala com você pelos botões que você colocou.</p><a class="btn ghost" id="travaIr" href="/conheca/gerador-de-briefing/?de=caseup" target="_blank" rel="noopener">Conhecer o Gerador de Briefing</a></div>`}
       ${publicado ? `<label class="tog"><input type="checkbox" id="pub" ${p.publicado ? 'checked' : ''}><span><b>Página no ar</b><small>Desmarque para tirar do ar sem apagar nada.</small></span></label>` : ''}`)}`);
 
   $('#salvar').textContent = publicado ? 'Salvar' : 'Publicar';
@@ -274,7 +286,7 @@ function editor(){
   $('#nome').oninput = e => { p.nome = e.target.value; if (p._novo && !p._slugMexido){ $('#slug').value = p.slug = paraSlug(p.nome); confereSlug(); } mexeu(); };
   $('#frase').oninput = e => { p.frase = e.target.value; mexeu(); };
   $('#slug').oninput = e => { const v = paraSlug(e.target.value.replace(/\s/g, '-')); if (v !== e.target.value) e.target.value = v; p.slug = v; p._slugMexido = true; mexeu(); confereSlug(); };
-  $('#zap').oninput = e => { p.whatsapp = e.target.value; mexeu(); };
+  ligaFoto();
   $$('.selo').forEach((el, i) => el.oninput = () => { p.selos[i] = el.value; mexeu(); });
   $$('.cores button').forEach(b => b.onclick = () => { p.cor = b.dataset.c; $$('.cores button').forEach(x => x.setAttribute('aria-pressed', x === b)); mexeu(); });
   $$('.estilos button').forEach(b => b.onclick = () => { p.estilo = b.dataset.e; $$('.estilos button').forEach(x => x.setAttribute('aria-pressed', x === b)); mexeu(); });
@@ -291,20 +303,54 @@ function mexeu(){ sujo = true; atualiza(true); }
 
 // ---------- progresso (o que falta para a página ficar completa) ----------
 function progresso(){
-  const p = P, z = String(p.whatsapp || '').replace(/\D/g, ''), temContato = /^(55)?\d{10,11}$/.test(z) || (EXTRA.tem_briefing && p.briefing);
+  const p = P;
   const linksOk = p.links.filter(l => l.v).length, itens = [
     [1, !!p.nome.trim() && slugOk(p.slug) && !!(p.frase || '').trim(), !p.nome.trim() ? 'escreva o seu nome' : !(p.frase || '').trim() ? 'conte o que você faz, em uma frase' : 'confira o final do link'],
+    [0, !!p.foto, 'coloque a sua foto'],
     [2, linksOk >= 1, 'coloque pelo menos um botão'],
     [3, p.videos.length >= 3, p.videos.length ? 'coloque mais ' + (3 - p.videos.length) + (3 - p.videos.length === 1 ? ' vídeo' : ' vídeos') : 'cole o link de um vídeo'],
     [4, p.selos.filter(s => s && s.trim()).length >= 1, 'escreva um destaque'],
-    [5, temContato, 'coloque o seu WhatsApp'],
   ];
   const feitos = itens.filter(i => i[1]).length, falta = itens.find(i => !i[1]);
   return { itens, pct: Math.round(feitos / itens.length * 100), falta: falta ? falta[2] : null };
 }
+// ---------- imagens: a foto e as capas são reduzidas aqui mesmo e guardadas na pasta do editor ----------
+function reduz(arq, larg, alt){
+  return new Promise((ok, erro) => {
+    const u = URL.createObjectURL(arq), im = new Image();
+    im.onload = () => {
+      const c = document.createElement('canvas'); c.width = larg; c.height = alt;
+      const e = Math.max(larg / im.naturalWidth, alt / im.naturalHeight), w = im.naturalWidth * e, h = im.naturalHeight * e;     // corta no centro, sem esticar
+      c.getContext('2d').drawImage(im, (larg - w) / 2, (alt - h) / 2, w, h); URL.revokeObjectURL(u);
+      c.toBlob(b => b ? ok(b) : erro(new Error('Não consegui ler essa imagem.')), 'image/jpeg', .84);
+    };
+    im.onerror = () => { URL.revokeObjectURL(u); erro(new Error('Não consegui ler essa imagem. Use uma foto JPG ou PNG.')); };
+    im.src = u;
+  });
+}
+async function guarda(arq, prefixo, larg, alt){
+  if (!EXTRA.pasta) throw new Error('Atualize a página e tente de novo.');
+  const blob = await reduz(arq, larg, alt), nome = prefixo + '-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6) + '.jpg';
+  await Base.envia('caseup/' + EXTRA.pasta + '/' + nome, blob); return nome;
+}
+function pintaFoto(){
+  const v = $('#fotoV'), u = img(P.foto); if (!v) return;
+  v.style.backgroundImage = u ? `url('${u}')` : ''; v.textContent = u ? '' : (P.nome || '?').trim().charAt(0).toUpperCase();
+  $('#fotoB').textContent = u ? 'Trocar foto' : 'Colocar foto'; $('#fotoX').hidden = !u;
+}
+function ligaFoto(){
+  pintaFoto();
+  $('#fotoB').onclick = () => $('#fotoI').click();
+  $('#fotoX').onclick = () => { P.foto = null; pintaFoto(); mexeu(); };
+  $('#fotoI').onchange = async e => { const a = e.target.files[0]; e.target.value = ''; if (!a) return;
+    const b = $('#fotoB'); b.disabled = true; b.textContent = 'Enviando…';
+    try { P.foto = await guarda(a, 'foto', 400, 400); mexeu(); } catch (er){ toast(er.message); }
+    b.disabled = false; pintaFoto(); };
+}
 function atualiza(comemora){
   const g = progresso();
-  g.itens.forEach(([n, ok]) => { const b = $('#b' + n); if (b) b.classList.toggle('feito', ok); });
+  g.itens.forEach(([n, ok]) => { const b = n && $('#b' + n); if (b) b.classList.toggle('feito', ok); });
+  if ($('#fotoV') && !P.foto) $('#fotoV').textContent = (P.nome || '?').trim().charAt(0).toUpperCase();
   $('#pgU').style.width = g.pct + '%';
   $('#pgT').textContent = g.pct === 100 ? 'Página completa 🎉' : g.pct + '% · falta: ' + g.falta;
   if (comemora && g.pct === 100 && !cheio){ confete(); toast('Página completa! Agora é só ' + (P._novo ? 'publicar.' : 'salvar.')); }
@@ -315,9 +361,9 @@ function atualiza(comemora){
 // ---------- prévia ao vivo: a mesma página pública, recebendo o rascunho ----------
 const prontas = new WeakSet();
 function rascunho(){
-  const p = P, z = String(p.whatsapp || '').replace(/\D/g, '');
+  const p = P;
   return { nome: p.nome || 'Seu nome', frase: p.frase, cor: p.cor, estilo: p.estilo || 'cheio', selos: p.selos.filter(s => s && s.trim()),
-    links: p.links.filter(l => l.v), videos: p.videos, whatsapp: /^(55)?\d{10,11}$/.test(z) ? (z.length <= 11 ? '55' + z : z) : null,
+    links: p.links.filter(l => l.v), videos: p.videos, foto: p.foto || null, pasta: EXTRA.pasta || null,
     briefing: EXTRA.tem_briefing && p.briefing ? 'previa' : null };
 }
 function mandaPrevia(){ [$('#fPrev'), $('#fFolha')].forEach(f => { if (f && prontas.has(f)) { try { f.contentWindow.postMessage({ fl:'previa', p: rascunho() }, location.origin); } catch {} } }); }
@@ -363,15 +409,24 @@ function listaLinks(){
 }
 
 // ---------- vídeos ----------
+let capaDe = -1;
+const fmt = v => v.f === 'h' || v.f === 'v' ? v.f : ((CaseVideo.le(v.u) || { vertical:true }).vertical ? 'v' : 'h');
 function listaVideos(){
   const ul = $('#vl'), vs = P.videos;
   if (!vs.length){ ul.outerHTML = '<div class="vazio" id="vl">Nenhum vídeo ainda. Cole o primeiro link ali em cima.</div>'; return; }
   if (ul.tagName !== 'UL'){ ul.outerHTML = '<ul class="vl" id="vl"></ul>'; }
-  $('#vl').innerHTML = vs.map((v, i) => { const inf = CaseVideo.le(v.u) || {}, capa = v.c || inf.capa;
-    return `<li><div class="th"${capa ? ` style="background-image:url('${esc(capa).replace(/'/g, '%27')}')"` : ''}>${capa ? '' : esc(CaseVideo.NOMES[inf.site] || '')}</div>
+  $('#vl').innerHTML = vs.map((v, i) => { const inf = CaseVideo.le(v.u) || {}, capa = img(v.k) || v.c || inf.capa, f = fmt(v);
+    return `<li><button type="button" class="th ${f}${capa ? '' : ' sem'}" data-i="${i}" aria-label="${capa ? 'Trocar' : 'Colocar'} a capa do vídeo ${i+1}"${capa ? ` style="background-image:url('${esc(capa).replace(/'/g, '%27')}')"` : ''}>${capa ? '' : 'sem capa'}<u>${capa ? 'trocar' : 'capa'}</u></button>
       <div class="vm"><input value="${esc(v.n || '')}" maxlength="60" placeholder="Título (opcional). Ex.: Reels de receita" data-i="${i}" class="vn" aria-label="Título do vídeo ${i+1}">
-        <div style="display:flex;gap:8px;align-items:center;min-width:0"><select data-i="${i}" class="vt" aria-label="Tipo do vídeo ${i+1}">${Object.entries(CaseVideo.TIPOS).map(([k, t]) => `<option value="${k}"${v.t === k ? ' selected' : ''}>${t}</option>`).join('')}</select><small>${esc(v.u.replace(/^https:\/\/(www\.)?/, ''))}</small></div></div>
+        <div class="ops"><select data-i="${i}" class="vt" aria-label="Tipo do vídeo ${i+1}">${Object.entries(CaseVideo.TIPOS).map(([k, t]) => `<option value="${k}"${v.t === k ? ' selected' : ''}>${t}</option>`).join('')}</select>
+          <select data-i="${i}" class="vf" aria-label="Formato do vídeo ${i+1}"><option value="v"${f === 'v' ? ' selected' : ''}>Em pé (9:16)</option><option value="h"${f === 'h' ? ' selected' : ''}>Deitado (16:9)</option></select>
+          <small>${esc(CaseVideo.NOMES[inf.site] || '')}${inf.site === 'instagram' ? ' · abre no Instagram' : inf.embed ? ' · toca na página' : ''}</small></div></div>
       <div class="va"><button data-a="cima" data-i="${i}" ${i ? '' : 'disabled'} aria-label="Subir">↑</button><button data-a="baixo" data-i="${i}" ${i < vs.length - 1 ? '' : 'disabled'} aria-label="Descer">↓</button><button class="x" data-a="tira" data-i="${i}" aria-label="Remover">×</button></div></li>`; }).join('');
+  $$('.vf').forEach(el => el.onchange = () => { P.videos[+el.dataset.i].f = el.value; listaVideos(); mexeu(); });
+  $$('#vl .th').forEach(el => el.onclick = () => { capaDe = +el.dataset.i; $('#capaI').click(); });
+  $('#capaI').onchange = async e => { const a = e.target.files[0], v = P.videos[capaDe]; e.target.value = ''; if (!a || !v) return;
+    const h = fmt(v) === 'h'; toast('Enviando a capa…');
+    try { v.k = await guarda(a, 'capa', h ? 960 : 540, h ? 540 : 960); listaVideos(); mexeu(); toast('Capa colocada'); } catch (er){ toast(er.message); } };
   $$('.vn').forEach(el => el.oninput = () => { P.videos[+el.dataset.i].n = el.value; mexeu(); });
   $$('.vt').forEach(el => el.onchange = () => { P.videos[+el.dataset.i].t = el.value; mexeu(); });
   $$('#vl .va button').forEach(b => b.onclick = () => { const i = +b.dataset.i, a = b.dataset.a;
@@ -387,9 +442,9 @@ function adiciona(){
   if (!inf) return diz('ruim', 'Não reconheci esse link. Use o link do vídeo no Instagram, TikTok, YouTube, Vimeo ou Google Drive.');
   if (P.videos.some(v => v.u === limpo)) return diz('ruim', 'Esse vídeo já está na lista.');
   const tipo = inf.site === 'youtube' && !inf.vertical ? 'youtube' : inf.vertical ? 'reels' : 'outro';
-  const v = { u: limpo, t: tipo, n: '', c: inf.capa || null };
+  const v = { u: limpo, t: tipo, n: '', c: inf.capa || null, k: null, f: inf.vertical ? 'v' : 'h' };
   P.videos.push(v); el.value = ''; listaVideos(); mexeu();
-  diz('ok', inf.site === 'drive' ? 'Adicionado. No Drive, deixe o arquivo como “Qualquer pessoa com o link”.' : inf.site === 'tiktok' && !inf.embed ? 'Adicionado. Esse link curto abre no TikTok; o link completo do vídeo toca dentro da página.' : 'Adicionado.');
+  diz('ok', inf.site === 'drive' ? 'Adicionado. No Drive, deixe o arquivo como “Qualquer pessoa com o link”.' : inf.site === 'tiktok' && !inf.embed ? 'Adicionado. Esse link curto abre no TikTok; o link completo do vídeo toca dentro da página.' : inf.site === 'instagram' ? 'Adicionado. O Instagram não mostra a capa sozinho: toque na miniatura para colocar uma.' : 'Adicionado.');
   if (!v.c) CaseVideo.buscaCapa(limpo).then(c => { if (c){ v.c = c; listaVideos(); mandaPrevia(); } });
 }
 
@@ -401,11 +456,9 @@ async function salva(){
   const ruim = p.links.findIndex(l => !l.v);
   if (ruim >= 0) return vai(p.links[ruim]._t ? 'Confira este botão: ' + TIPO[p.links[ruim].k].n : 'Preencha ou remova o botão vazio', '#ll .li:nth-child(' + (ruim + 1) + ') .v');
   if (!p.videos.length && !p.links.length) return vai('Coloque pelo menos um botão ou um vídeo', '#tipos button');
-  const z = String(p.whatsapp || '').replace(/\D/g, '');
-  if (z && !/^(55)?\d{10,11}$/.test(z)) return vai('Confira o WhatsApp, com DDD', '#zap');
   b.disabled = true; b.textContent = 'Salvando…';
   try {
-    const r = await Base.rpc('portfolio_salvar', { p: { slug:p.slug, nome:p.nome, frase:p.frase, whatsapp:p.whatsapp, cor:p.cor, estilo:p.estilo, selos:p.selos.filter(s => s && s.trim()),
+    const r = await Base.rpc('portfolio_salvar', { p: { slug:p.slug, nome:p.nome, frase:p.frase, whatsapp:p.whatsapp, cor:p.cor, estilo:p.estilo, foto:p.foto || null, selos:p.selos.filter(s => s && s.trim()),
       links:p.links.map(l => ({ k:l.k, r:l.r, v:l.v })), videos:p.videos, briefing:!!p.briefing, publicado:p.publicado !== false } });
     const era = p._novo; P = { ...r, selos: r.selos || [], links: r.links || [], videos: r.videos || [] }; sujo = false;
     b.disabled = false; editor(); window.scrollTo({ top:0, behavior: calmo ? 'auto' : 'smooth' });

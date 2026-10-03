@@ -1367,16 +1367,17 @@ PAGINAS.append(dict(
 """,
   js='',
   h2='', bens=[],
-  inclui=['Link com o seu nome','Até 24 vídeos','Até 12 botões de link','Serve de link da bio','Instagram, TikTok, YouTube, Vimeo e Drive','Filtro por tipo de vídeo','Botão de pedir orçamento','6 cores e 3 estilos de botão','Celular e computador'],
+  inclui=['Link curto: basefl.com/seu-nome','Sua foto e capa em cada vídeo','Até 24 vídeos, em pé ou deitados','Até 12 botões de link','Serve de link da bio','Instagram, TikTok, YouTube, Vimeo e Drive','Filtro por tipo de vídeo','6 cores e 3 estilos de botão','Celular e computador'],
   faq=[('Preciso subir os arquivos dos vídeos?','Não. Você só cola o link de onde o vídeo já está: Instagram, TikTok, YouTube, Vimeo ou Google Drive.'),
-       ('O vídeo toca dentro da página?','Na maioria dos casos, sim. Quando o site não deixa tocar fora dele, o cliente toca e o vídeo abre no próprio site. No Instagram, o perfil precisa ser público.'),
+       ('O vídeo toca dentro da página?','Vídeos do YouTube, TikTok, Vimeo e Google Drive tocam dentro da página. O Instagram não permite isso: o cliente toca na capa e o vídeo abre no Instagram. Se quiser que tudo toque na página, use o link do YouTube ou do Drive.'),
+       ('A capa do vídeo aparece sozinha?','No YouTube, sim. Nos outros, você escolhe uma imagem do seu celular ou computador e ela vira a capa.'),
        ('Se eu apagar o vídeo do Instagram, o que acontece?','Ele deixa de abrir no portfólio, porque o CaseUp não guarda o vídeo, só o link. É só tirar da lista ou colar um link novo.'),
        ('Dá para usar como link da bio?','Dá. Você coloca até 12 botões: WhatsApp, Instagram, TikTok, YouTube, e-mail ou qualquer outro link. Se quiser, pode publicar só com os botões, sem vídeo.'),
        ('Posso mudar depois de publicar?','Pode. Troca vídeos, botões, ordem, cor, frase e até o final do link quando quiser. Também dá para tirar a página do ar sem apagar nada.'),
        ('O cliente precisa de conta?','Não. Ele abre o link no celular ou no computador e assiste.'),
        FAQ_ACESSO,
        ('E depois de 1 ano?','O acesso é de 1 ano. Se não renovar, a página sai do ar, e volta como estava quando você renova.')],
-  combina=[('gerador-de-briefing','Gerador de Briefing','#3FD0C2','O botão “Pedir orçamento” abre o seu briefing, e o pedido chega organizado.')],
+  combina=[('gerador-de-briefing','Gerador de Briefing','#3FD0C2','Libera o botão “Pedir orçamento” na sua página: o cliente responde e o pedido chega organizado.')],
   fh2='Na próxima vez que pedirem “manda uns trabalhos seus”, você manda um link.', selo='Celular e computador'))
 
 CU_MIOLO = r"""
@@ -1401,8 +1402,8 @@ CU_MIOLO = r"""
         <div class="zp-h"><b>Com o CaseUp</b><span>1 link</span></div>
         <div class="zp-c">
           <div class="bl in">Você tem portfólio? Queria ver uns trabalhos</div>
-          <div class="bl eu">Tenho! Está tudo aqui 👇<i>basefl.com/e/?joao</i></div>
-          <div class="bl in ok">Gostei! Já pedi o orçamento por lá ✅</div>
+          <div class="bl eu">Tenho! Está tudo aqui 👇<i>basefl.com/joao</i></div>
+          <div class="bl in ok">Gostei! Te chamei pelo botão do WhatsApp ✅</div>
         </div>
       </div>
     </div>
@@ -1421,13 +1422,10 @@ CU_MIOLO = r"""
   <section class="cu3">
     <div class="cu3-g">
       <div>
-        <span class="kick rv">O botão que importa</span>
-        <h2 class="rv" style="margin-top:14px">Um portfólio que <em class="ac">pede o orçamento por você.</em></h2>
-        <p class="sub2 rv">Em cima e embaixo dos vídeos tem um botão “Pedir orçamento”. Você decide o que ele faz:</p>
-        <ul class="cu-l rv">
-          <li><b>Abre o seu WhatsApp</b>, com a mensagem “vi o seu portfólio e quero um orçamento” já escrita.</li>
-          <li><b>Ou abre o seu briefing</b>, se você tem o Gerador de Briefing: o cliente responde o que precisa e o pedido chega organizado, pronto para virar preço.</li>
-        </ul>
+        <span class="kick rv">Para quem tem o Gerador de Briefing</span>
+        <h2 class="rv" style="margin-top:14px">Sua página ganha o botão <em class="ac">“Pedir orçamento”.</em></h2>
+        <p class="sub2 rv">No CaseUp, o cliente fala com você pelos botões que você colocou: WhatsApp, Instagram, e-mail.</p>
+        <p class="sub2 rv">Se você também tem o Gerador de Briefing, aparece um botão em destaque no topo. O cliente toca, responde o que precisa e o pedido chega organizado, pronto para virar preço.</p>
         <p class="cu-n rv">Na sua tela você também vê quantas vezes o portfólio foi aberto.</p>
       </div>
       <div class="cu-b rv" aria-hidden="true">
