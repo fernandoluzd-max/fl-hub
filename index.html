@@ -37,7 +37,8 @@ b,strong{font-weight:700}
 h1,h2,h3{font-family:var(--d);font-stretch:112%;font-weight:850;letter-spacing:-.022em;line-height:1.02;text-wrap:balance}
 h2{font-size:clamp(30px,5.2vw,50px)}
 h3{font-size:20px;font-stretch:104%;letter-spacing:-.01em;line-height:1.2}
-.apoio{color:var(--cinza);max-width:60ch;margin-top:14px;font-size:18px}
+.apoio{color:var(--cinza);max-width:60ch;margin:14px auto 0;font-size:18px}
+.bloco>.larg>h2,.estante>.larg>h2,.bloco>.larg>.apoio,.estante>.larg>.apoio,.fecho h2,.fecho .apoio{text-align:center;margin-left:auto;margin-right:auto}
 .apoio b{color:var(--papel)}
 
 /* topo */
@@ -51,14 +52,14 @@ h3{font-size:20px;font-stretch:104%;letter-spacing:-.01em;line-height:1.2}
 .topo a,.topo .nome{white-space:nowrap}
 @media (max-width:460px){.topo a[href="#instalar"]{display:none}}
 
-/* abertura */
-.abre{padding:clamp(26px,6vw,70px) 0 clamp(34px,6vw,70px)}
-.abre h1{font-size:clamp(46px,10.5vw,118px);font-stretch:118%;line-height:.92;letter-spacing:-.035em;max-width:11ch}
+/* abertura: título, fala, vídeo e botões, centralizados */
+.abre{padding:clamp(14px,2.4vw,28px) 0 clamp(40px,6vw,76px);text-align:center;display:grid;justify-items:center}
+.abre h1{font-size:clamp(38px,6.6vw,72px);font-stretch:118%;line-height:.96;letter-spacing:-.035em;max-width:16ch}
 .abre h1 span{display:block;color:var(--ambar)}
-.abre .conta{margin-top:clamp(22px,3vw,34px);display:grid;gap:26px}
-.abre p.fala{font-size:clamp(18px,2.2vw,21px);color:var(--cinza);max-width:52ch}
+.abre p.fala{margin-top:clamp(16px,2.4vw,24px);font-size:clamp(17px,2vw,20px);color:var(--cinza);max-width:56ch}
 .abre p.fala b{color:var(--papel)}
-.baixar{display:grid;gap:10px;max-width:520px}
+.baixar{display:grid;gap:10px;width:100%;max-width:520px;margin-top:clamp(22px,3vw,30px);text-align:left}
+@media (min-width:760px){.abre .baixar,.fecho .baixar{grid-template-columns:1fr 1fr;max-width:720px}}
 .bt{display:flex;align-items:center;gap:14px;padding:15px 18px;border-radius:16px;text-decoration:none;border:1px solid var(--linha);background:var(--parede);transition:transform .15s,border-color .2s,background .2s}
 .bt:hover{border-color:#3d463f;transform:translateY(-1px)}
 .bt:active{transform:scale(.99)}
@@ -68,17 +69,43 @@ h3{font-size:20px;font-stretch:104%;letter-spacing:-.01em;line-height:1.2}
 .bt.meu{background:var(--ambar);border-color:var(--ambar);color:var(--ambar-tinta)}
 .bt.meu span small{color:rgba(26,18,6,.72)}
 .bt.meu:hover{background:#f6b458}
-.gratis{font-size:15.5px;color:var(--cinza);max-width:52ch;padding-left:14px;border-left:3px solid var(--ambar)}
+.gratis{margin-top:16px;font-size:15.5px;color:var(--cinza);max-width:52ch}
 .gratis b{color:var(--papel)}
-@media (min-width:900px){.abre .conta{grid-template-columns:1.1fr .9fr;align-items:end;gap:56px}}
+
+/* ---------- o player (feito para a página: sem os controles padrão do navegador) ---------- */
+.player{position:relative;width:100%;max-width:840px;margin-top:clamp(24px,4vw,40px);aspect-ratio:16/9;border-radius:clamp(14px,2vw,22px);overflow:hidden;background:#000;
+  box-shadow:0 0 0 1px #2c342e,0 0 0 7px rgba(242,165,65,.07),0 60px 110px -50px rgba(242,165,65,.38),0 40px 80px -40px #000}
+.player video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;cursor:pointer}
+.pl-som{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;display:flex;align-items:center;gap:12px;border:0;cursor:pointer;font:inherit;font-weight:750;font-size:clamp(15px,2vw,18px);
+  color:var(--ambar-tinta);background:var(--ambar);padding:14px 22px 14px 16px;border-radius:99px;white-space:nowrap;box-shadow:0 14px 40px rgba(0,0,0,.6),0 0 0 8px rgba(242,165,65,.22);animation:chama 1.9s ease-in-out infinite}
+.pl-som i{width:34px;height:34px;border-radius:50%;background:rgba(26,18,6,.14);display:grid;place-items:center}
+.pl-som svg,.pl-b svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@keyframes chama{50%{box-shadow:0 14px 40px rgba(0,0,0,.6),0 0 0 16px rgba(242,165,65,0)}}
+.pl-centro{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;width:84px;height:84px;border-radius:50%;border:0;background:var(--ambar);cursor:pointer;display:grid;place-items:center;box-shadow:0 14px 40px rgba(0,0,0,.6)}
+.pl-centro i{border:14px solid transparent;border-left:22px solid var(--ambar-tinta);margin-left:12px}
+.pl-barra{position:absolute;left:0;right:0;bottom:0;z-index:4;display:flex;align-items:center;gap:6px;padding:26px 10px 8px;background:linear-gradient(0deg,rgba(0,0,0,.82),transparent);transition:opacity .25s;color:var(--papel)}
+.player.quieto .pl-barra{opacity:0;pointer-events:none}
+.pl-b{flex:none;width:44px;height:44px;border:0;background:transparent;color:inherit;border-radius:10px;cursor:pointer;display:grid;place-items:center}
+.pl-b:hover{background:rgba(255,255,255,.12)}
+.pl-b .i-toca{display:none;fill:currentColor;stroke:none}
+.player.parado .pl-b .i-toca{display:block}.player.parado .pl-b .i-pausa{display:none}
+.pl-b .i-som{display:none}.player.com-som .i-som{display:block}.player.com-som .i-mudo{display:none}
+.pl-t{flex:none;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;min-width:38px;text-align:center;color:rgba(244,240,228,.86)}
+.pl-linha{flex:1;min-width:0;height:44px;margin:0;background:transparent;cursor:pointer;-webkit-appearance:none;appearance:none;--p:0%}
+.pl-linha::-webkit-slider-runnable-track{height:5px;border-radius:9px;background:linear-gradient(90deg,var(--ambar) var(--p),rgba(255,255,255,.26) var(--p))}
+.pl-linha::-moz-range-track{height:5px;border-radius:9px;background:rgba(255,255,255,.26)}
+.pl-linha::-moz-range-progress{height:5px;border-radius:9px;background:var(--ambar)}
+.pl-linha::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--papel);margin-top:-5px;box-shadow:0 2px 6px rgba(0,0,0,.6)}
+.pl-linha::-moz-range-thumb{width:15px;height:15px;border:0;border-radius:50%;background:var(--papel)}
+@media (max-width:520px){.pl-t#plD{display:none}.pl-barra{gap:2px;padding:22px 4px 4px}}
 
 /* ---------- a prateleira (o elemento da página) ---------- */
-.estante{background:var(--parede);border-top:1px solid var(--linha);border-bottom:1px solid var(--linha);padding:clamp(44px,7vw,84px) 0 clamp(50px,7vw,90px)}
+.estante{background:var(--fundo);border-bottom:1px solid var(--linha);padding:clamp(44px,7vw,84px) 0 clamp(50px,7vw,90px)}
 .nivel{margin-top:clamp(34px,5vw,54px)}
-.nivel .rot{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-bottom:6px}
+.nivel .rot{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;text-align:center;gap:4px 14px;margin-bottom:6px}
 .nivel .rot h3{color:var(--papel)}
 .nivel .rot p{font-size:15px;color:var(--apagado)}
-.objs{display:flex;align-items:flex-end;gap:clamp(6px,2.4vw,28px);padding:26px clamp(4px,2vw,22px) 0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+.objs{display:flex;align-items:flex-end;justify-content:safe center;gap:clamp(6px,2.4vw,28px);padding:26px clamp(4px,2vw,22px) 0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
 .objs::-webkit-scrollbar{display:none}
 .tabua{height:16px;border-radius:3px;background:linear-gradient(180deg,var(--tabua-luz),var(--tabua) 38%,#1c160f);box-shadow:0 18px 30px -12px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.07) inset;position:relative}
 .tabua::before,.tabua::after{content:"";position:absolute;top:100%;width:10px;height:22px;background:linear-gradient(180deg,#1c160f,transparent);opacity:.9}
@@ -88,11 +115,12 @@ h3{font-size:20px;font-stretch:104%;letter-spacing:-.01em;line-height:1.2}
 .obj .cx img{width:100%;height:100%}
 .obj:hover .cx{transform:translateY(-6px) rotate(-2deg)}
 .obj b{font-size:14.5px;font-weight:650;line-height:1.2;color:var(--papel);min-height:2.4em;display:grid;align-items:center}
-.obj .preco{font-size:13px;font-weight:700;color:rgb(var(--k));background:rgba(var(--k),.12);border-radius:7px;padding:2px 8px}
+.obj .preco{font-size:13px;font-weight:700;color:rgb(var(--k));background:rgba(var(--k),.12);border-radius:7px;padding:3px 10px}
+.obj:hover .preco{background:rgba(var(--k),.24)}
 .obj.vago{pointer-events:none}
 .obj.vago .cx{background:transparent;box-shadow:none;border:2px dashed #3a423c;display:grid;place-items:center;color:#56605a;font-family:var(--d);font-weight:800;font-size:26px}
 .obj.vago b{color:var(--apagado);font-weight:500}
-.estante .obs{margin-top:22px;font-size:15.5px;color:var(--cinza);max-width:62ch}
+.estante .obs{margin:26px auto 0;font-size:15.5px;color:var(--cinza);max-width:62ch;text-align:center}
 .estante .obs b{color:var(--papel)}
 /* um único momento de movimento: os objetos são colocados na prateleira quando ela aparece */
 .js .estante:not(.posto) .obj{opacity:0;transform:translateY(-26px)}
@@ -102,34 +130,25 @@ h3{font-size:20px;font-stretch:104%;letter-spacing:-.01em;line-height:1.2}
 /* acesso */
 .bloco{padding:clamp(54px,8vw,100px) 0}
 .passos{margin-top:34px;display:grid;gap:26px;counter-reset:p}
-.passo{counter-increment:p;display:grid;grid-template-columns:auto 1fr;gap:4px 18px;align-items:start}
-.passo::before{content:counter(p);grid-row:span 2;font-family:var(--d);font-stretch:118%;font-weight:900;font-size:52px;line-height:.9;color:var(--ambar);min-width:44px}
-.passo p{color:var(--cinza);grid-column:2}
+.passo{counter-increment:p;display:grid;justify-items:center;text-align:center;gap:8px}
+.passo::before{content:counter(p);font-family:var(--d);font-stretch:118%;font-weight:900;font-size:56px;line-height:.9;color:var(--ambar)}
+.passo p{color:var(--cinza);max-width:34ch}
 .passo p b{color:var(--papel)}
 @media (min-width:860px){.passos{grid-template-columns:repeat(3,1fr);gap:40px}}
 
-/* vídeo de instalação */
+/* primeira vez abrindo o app */
 .inst{background:var(--parede);border-top:1px solid var(--linha);border-bottom:1px solid var(--linha)}
-.inst-g{margin-top:34px;display:grid;gap:30px;align-items:start}
-.tela{position:relative;border-radius:18px;overflow:hidden;background:#000;aspect-ratio:16/9;box-shadow:0 0 0 1px var(--linha),0 40px 70px -40px #000}
-.tela video{width:100%;height:100%;display:block;background:#000}
-.tela .capa{position:absolute;inset:0;border:0;padding:0;cursor:pointer;background:radial-gradient(120% 90% at 20% 10%,#2b2116,#0d0f0e 70%);color:var(--papel);display:grid;place-items:center;font:inherit}
-.tela .capa i{width:84px;height:84px;border-radius:50%;background:var(--ambar);display:grid;place-items:center;transition:transform .2s}
-.tela .capa:hover i{transform:scale(1.06)}
-.tela .capa i::after{content:"";border:14px solid transparent;border-left:22px solid var(--ambar-tinta);margin-left:10px}
-.tela .capa span{position:absolute;left:20px;bottom:16px;font-weight:600;font-size:15px;color:var(--cinza)}
-.aviso h3{margin-bottom:12px}
-.abas{display:inline-flex;gap:4px;padding:4px;border-radius:12px;background:var(--fundo);border:1px solid var(--linha);margin-bottom:14px}
-.aba{border:0;background:transparent;color:var(--cinza);font:inherit;font-weight:650;font-size:15px;padding:9px 16px;border-radius:9px;cursor:pointer;min-height:40px}
+.aviso{max-width:640px;margin:28px auto 0;display:grid;justify-items:center}
+.abas{display:inline-flex;gap:4px;padding:4px;border-radius:12px;background:var(--fundo);border:1px solid var(--linha);margin-bottom:16px}
+.aba{border:0;background:transparent;color:var(--cinza);font:inherit;font-weight:650;font-size:15px;padding:9px 18px;border-radius:9px;cursor:pointer;min-height:44px}
 .aba.on{background:var(--papel);color:#141615}
-.painel{display:none}.painel.on{display:block}
-.painel ol{padding-left:20px;display:grid;gap:8px;color:var(--cinza)}
+.painel{display:none;width:100%}.painel.on{display:block}
+.painel ol{padding-left:22px;display:grid;gap:8px;color:var(--cinza)}
 .painel ol b{color:var(--papel)}
 .painel .nota{margin-top:12px;font-size:14.5px;color:var(--apagado)}
-@media (min-width:940px){.inst-g{grid-template-columns:1.35fr 1fr;gap:48px}.inst-g.sem-video{grid-template-columns:1fr}}
 
 /* dúvidas */
-.duv{margin-top:26px;display:grid;gap:0;border-top:1px solid var(--linha);max-width:820px}
+.duv{margin:26px auto 0;display:grid;gap:0;border-top:1px solid var(--linha);max-width:820px}
 .duv details{border-bottom:1px solid var(--linha)}
 .duv summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:18px 2px;font-weight:650;font-size:17px}
 .duv summary::-webkit-details-marker{display:none}
@@ -140,14 +159,15 @@ h3{font-size:20px;font-stretch:104%;letter-spacing:-.01em;line-height:1.2}
 
 /* fecho */
 .fecho{padding:clamp(60px,9vw,110px) 0 40px}
-.fecho h2{font-size:clamp(36px,7vw,78px);font-stretch:118%;line-height:.95;max-width:12ch}
+.fecho h2{font-size:clamp(34px,6.4vw,70px);font-stretch:118%;line-height:.95;max-width:14ch}
+.fecho .baixar{margin-left:auto;margin-right:auto}
 .fecho .baixar{margin-top:28px}
-.ajuda{margin-top:44px;padding-top:24px;border-top:1px solid var(--linha);display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justify-content:space-between;color:var(--cinza);font-size:15.5px}
+.ajuda{text-align:left;margin-top:44px;padding-top:24px;border-top:1px solid var(--linha);display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justify-content:space-between;color:var(--cinza);font-size:15.5px}
 .ajuda b{color:var(--papel)}
 .ajuda a{font-weight:700;color:var(--ambar);min-height:44px;display:inline-flex;align-items:center}
 footer{padding:26px 0 40px;color:var(--apagado);font-size:13.5px}
 [hidden]{display:none!important}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.js .estante:not(.posto) .obj{opacity:1;transform:none}.estante.posto .obj{animation:none}.obj:hover .cx{transform:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.js .estante:not(.posto) .obj{opacity:1;transform:none}.estante.posto .obj{animation:none}.obj:hover .cx{transform:none}.pl-som{animation:none}}
 </style>
 </head>
 <body>
@@ -157,37 +177,87 @@ footer{padding:26px 0 40px;color:var(--apagado);font-size:13.5px}
     <img src="logo.png" alt="">
     <span class="nome">Base FL<small>por Fernando Luz</small></span>
     <span class="esp"></span>
-    <a href="#instalar">Como instalar</a>
+    <a href="#instalar">Primeira vez</a>
     <a href="#duvidas">Dúvidas</a>
   </div>
 
   <section class="abre">
     <h1>A minha base de trabalho, <span>num app.</span></h1>
-    <div class="conta">
-      <p class="fala">O Base FL junta o que eu uso no dia a dia: os <b>títulos e sons que deixam a edição mais rápida</b> e as <b>ferramentas que organizam o atendimento ao cliente</b>, do primeiro pedido até o pagamento. Estou começando agora, e a prateleira ainda vai crescer.</p>
-      <div>
-        <div class="baixar" id="dl">
-          <a class="bt" id="b-mac" href="https://github.com/fernandoluzd-max/fl-hub/releases/latest/download/Base-FL-Mac.dmg">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.5 2-3.7 2.1-3.8-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.8-4.1zM13.9 5.1c.7-.9 1.2-2 1.1-3.2-1 0-2.3.7-3 1.6-.7.8-1.3 2-1.1 3.1 1.1.1 2.3-.6 3-1.5z"/></svg>
-            <span><b>Baixar para Mac</b><small>macOS 10.15 ou mais novo, Intel e Apple Silicon</small></span>
-          </a>
-          <a class="bt" id="b-win" href="https://github.com/fernandoluzd-max/fl-hub/releases/latest/download/Base-FL-Windows.exe">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5 10.4 4.5v7H3zm8.3-1.1L21 3v8.5h-9.7zM3 12.5h7.4v7L3 18.5zm8.3 0H21V21l-9.7-1.4z"/></svg>
-            <span><b>Baixar para Windows</b><small>Windows 10 ou 11, sem senha de administrador</small></span>
-          </a>
-        </div>
-        <p class="gratis" id="hint" style="margin-top:16px"><b>Baixar o app não custa nada.</b> O que está dentro dele é vendido à parte: você libera só o que quiser usar.</p>
+    <p class="fala">O Base FL junta o que eu uso no dia a dia para <b>editar mais rápido</b> e para <b>atender cliente</b>, do primeiro pedido até o pagamento. O vídeo mostra como instalar e entrar.</p>
+
+    <!-- VÍDEO DE INSTALAÇÃO: o endereço fica em VIDEO_INSTALACAO, no começo do script lá embaixo.
+         Começa sozinho, sem som (os navegadores só deixam assim). O botão grande liga o som e volta ao início. -->
+    <div class="player" id="player" hidden>
+      <video id="vid" playsinline muted preload="metadata" aria-label="Vídeo: instalando o Base FL"></video>
+      <button class="pl-som" id="plSom" type="button"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5zM15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></i><span>Assistir com som</span></button>
+      <button class="pl-centro" id="plCentro" type="button" aria-label="Tocar" hidden><i aria-hidden="true"></i></button>
+      <div class="pl-barra" id="plBarra">
+        <button class="pl-b" id="plPlay" type="button" aria-label="Pausar"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-pausa" d="M8 5v14M16 5v14"/><path class="i-toca" d="M8 5l11 7-11 7z"/></svg></button>
+        <span class="pl-t" id="plT">0:00</span>
+        <input class="pl-linha" id="plLinha" type="range" min="0" max="1000" value="0" step="1" aria-label="Posição do vídeo">
+        <span class="pl-t" id="plD">0:00</span>
+        <button class="pl-b" id="plMudo" type="button" aria-label="Ligar o som"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path class="i-som" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/><path class="i-mudo" d="M16 9.5l5 5M21 9.5l-5 5"/></svg></button>
+        <button class="pl-b" id="plCheia" type="button" aria-label="Tela cheia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
       </div>
     </div>
+
+    <div class="baixar" id="dl">
+      <a class="bt" id="b-mac" href="https://github.com/fernandoluzd-max/fl-hub/releases/latest/download/Base-FL-Mac.dmg">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.5 2-3.7 2.1-3.8-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.8-4.1zM13.9 5.1c.7-.9 1.2-2 1.1-3.2-1 0-2.3.7-3 1.6-.7.8-1.3 2-1.1 3.1 1.1.1 2.3-.6 3-1.5z"/></svg>
+        <span><b>Baixar para Mac</b><small>macOS 10.15 ou mais novo, Intel e Apple Silicon</small></span>
+      </a>
+      <a class="bt" id="b-win" href="https://github.com/fernandoluzd-max/fl-hub/releases/latest/download/Base-FL-Windows.exe">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5 10.4 4.5v7H3zm8.3-1.1L21 3v8.5h-9.7zM3 12.5h7.4v7L3 18.5zm8.3 0H21V21l-9.7-1.4z"/></svg>
+        <span><b>Baixar para Windows</b><small>Windows 10 ou 11, sem senha de administrador</small></span>
+      </a>
+    </div>
+    <p class="gratis" id="hint"><b>Baixar o app não custa nada.</b> O que aparece liberado dentro dele é o que você comprou.</p>
   </section>
 </div>
 
-<!-- ============ A PRATELEIRA: o que existe hoje, quanto custa cada coisa, e o espaço do que ainda vem.
-     Os itens e os preços vêm do catálogo (/catalogo.js). Não precisa mexer aqui quando um produto mudar. ============ -->
+<section class="bloco">
+  <div class="larg">
+    <h2>Comprou? É assim que você entra.</h2>
+    <div class="passos">
+      <div class="passo"><h3>Baixe e instale o app</h3><p>É uma vez só, no Mac ou no Windows. O vídeo lá em cima mostra o caminho.</p></div>
+      <div class="passo"><h3>Entre com o seu e-mail</h3><p>Use o <b>mesmo e-mail da compra</b>. Chega um código no e-mail; não tem senha para lembrar.</p></div>
+      <div class="passo"><h3>Use o que é seu</h3><p>O que você comprou aparece com <b>Instalar</b> ou <b>Abrir</b>. O resto aparece com <b>Conhecer</b>, e leva para a página do produto.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloco inst" id="instalar">
+  <div class="larg">
+    <h2>Na primeira vez que abrir.</h2>
+    <p class="apoio">O Mac e o Windows mostram um aviso antes de abrir um app novo. É esperado, e passa assim:</p>
+    <div class="aviso">
+      <div class="abas" role="tablist"><button class="aba" data-os="mac" role="tab">Mac</button><button class="aba" data-os="win" role="tab">Windows</button></div>
+      <div class="painel" id="p-mac">
+        <ol>
+          <li>Abra o arquivo <b>Base-FL-Mac.dmg</b> e arraste o app para a pasta <b>Aplicativos</b>.</li>
+          <li>Na pasta Aplicativos, clique com o <b>botão direito</b> no Base FL e escolha <b>Abrir</b>.</li>
+          <li>Na janela de aviso, clique em <b>Abrir</b> de novo.</li>
+        </ol>
+        <p class="nota">Esse aviso aparece só na primeira vez. Depois é só abrir normalmente pelo Launchpad ou pela pasta Aplicativos.</p>
+      </div>
+      <div class="painel" id="p-win">
+        <ol>
+          <li>Abra o arquivo <b>Base-FL-Windows.exe</b>.</li>
+          <li>Se aparecer a tela azul <b>"O Windows protegeu o computador"</b>, clique em <b>Mais informações</b>.</li>
+          <li>Clique em <b>Executar assim mesmo</b> e siga a instalação.</li>
+        </ol>
+        <p class="nota">Esse aviso aparece só na instalação. Depois o app fica no Menu Iniciar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ A PRATELEIRA: o que existe dentro do app. Sem preço: cada item leva para a página dele.
+     Os itens vêm do catálogo (/catalogo.js). Não precisa mexer aqui quando um produto mudar. ============ -->
 <section class="estante" id="prateleira">
   <div class="larg">
-    <h2>O que tem na prateleira hoje.</h2>
-    <p class="apoio">Cada item é um produto separado, com o preço na etiqueta. Toque em um para ver o que ele faz. Dentro do app, o que você comprou aparece liberado e o resto fica com cadeado.</p>
+    <h2>O que tem dentro do app.</h2>
+    <p class="apoio">Cada item é um produto separado. Dentro do app, o que você comprou aparece liberado. Toque em qualquer um para conhecer.</p>
 
     <div class="nivel">
       <div class="rot"><h3>Para editar</h3><p>Títulos, sons e cor para deixar a edição mais rápida.</p></div>
@@ -199,62 +269,7 @@ footer{padding:26px 0 40px;color:var(--apagado);font-size:13.5px}
       <div class="objs" id="n-cliente"></div>
       <div class="tabua"></div>
     </div>
-    <div class="nivel">
-      <div class="rot"><h3>Em construção</h3><p>O espaço das próximas.</p></div>
-      <div class="objs" id="n-vago">
-        <span class="obj vago" style="--i:0"><span class="cx">?</span><b>em breve</b></span>
-        <span class="obj vago" style="--i:1"><span class="cx">?</span><b>em breve</b></span>
-        <span class="obj vago" style="--i:2"><span class="cx">?</span><b>em breve</b></span>
-      </div>
-      <div class="tabua"></div>
-    </div>
-    <p class="obs">Quando uma ferramenta nova fica pronta, ela aparece na prateleira e <b>o app avisa que tem versão nova</b>. Ninguém é cobrado por isso: só entra na sua conta o que você decidir comprar.</p>
-  </div>
-</section>
-
-<section class="bloco">
-  <div class="larg">
-    <h2>Como o acesso funciona.</h2>
-    <div class="passos">
-      <div class="passo"><h3>Você baixa e instala</h3><p>É grátis e é uma vez só. O app serve para Mac e para Windows.</p></div>
-      <div class="passo"><h3>Entra com o seu e-mail</h3><p>Use o <b>mesmo e-mail da compra</b>. Chega um código no e-mail; não tem senha para lembrar.</p></div>
-      <div class="passo"><h3>Usa o que é seu</h3><p>O que você comprou aparece com <b>Instalar</b> ou <b>Abrir</b>. O que não comprou aparece com <b>Conhecer</b>, e leva para a página do produto.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ VÍDEO DE INSTALAÇÃO
-     O endereço do vídeo fica em VIDEO_INSTALACAO, no começo do script lá embaixo.
-     Enquanto estiver vazio, o vídeo não aparece e ficam só os passos escritos. ============ -->
-<section class="bloco inst" id="instalar">
-  <div class="larg">
-    <h2>Instalando do jeito certo.</h2>
-    <p class="apoio" id="inst-apoio">Na primeira vez, o Mac e o Windows mostram um aviso antes de abrir o app. É esperado: o caminho está aqui embaixo.</p>
-    <div class="inst-g sem-video" id="inst-g">
-      <div class="tela" id="tela" hidden>
-        <button class="capa" id="capa" type="button" aria-label="Assistir ao vídeo de instalação"><i aria-hidden="true"></i><span>Vídeo: instalando o Base FL</span></button>
-      </div>
-      <div class="aviso" id="duvidas-inst">
-        <h3>Primeira vez abrindo o app</h3>
-        <div class="abas" role="tablist"><button class="aba" data-os="mac" role="tab">Mac</button><button class="aba" data-os="win" role="tab">Windows</button></div>
-        <div class="painel" id="p-mac">
-          <ol>
-            <li>Abra o arquivo <b>Base-FL-Mac.dmg</b> e arraste o app para a pasta <b>Aplicativos</b>.</li>
-            <li>Na pasta Aplicativos, clique com o <b>botão direito</b> no Base FL e escolha <b>Abrir</b>.</li>
-            <li>Na janela de aviso, clique em <b>Abrir</b> de novo.</li>
-          </ol>
-          <p class="nota">Esse aviso aparece só na primeira vez. Depois é só abrir normalmente pelo Launchpad ou pela pasta Aplicativos.</p>
-        </div>
-        <div class="painel" id="p-win">
-          <ol>
-            <li>Abra o arquivo <b>Base-FL-Windows.exe</b>.</li>
-            <li>Se aparecer a tela azul <b>"O Windows protegeu o computador"</b>, clique em <b>Mais informações</b>.</li>
-            <li>Clique em <b>Executar assim mesmo</b> e siga a instalação.</li>
-          </ol>
-          <p class="nota">Esse aviso aparece só na instalação. Depois o app fica no Menu Iniciar.</p>
-        </div>
-      </div>
-    </div>
+    <p class="obs">Quando entra uma ferramenta nova, <b>o app avisa que tem versão nova</b>. Só fica liberado na sua conta o que você decidir comprar.</p>
   </div>
 </section>
 
@@ -276,8 +291,8 @@ footer{padding:26px 0 40px;color:var(--apagado);font-size:13.5px}
 
 <div class="larg">
   <section class="fecho">
-    <h2>Entra e dá uma olhada.</h2>
-    <p class="apoio">Baixar é grátis. Você vê tudo o que tem na prateleira e decide com calma o que faz sentido para o seu trabalho.</p>
+    <h2>Tudo pronto para instalar.</h2>
+    <p class="apoio">Baixe, entre com o e-mail da compra e comece a usar.</p>
     <div class="baixar" id="dl2"></div>
     <div class="ajuda">
       <span><b>Travou em alguma parte?</b> No app, clique em <b>Diagnóstico para suporte</b>, copie e mande pra gente.</span>
@@ -304,7 +319,7 @@ const isWin = ua.includes('windows'), isMac = ua.includes('mac os') || ua.includ
 const celular = /iphone|ipad|android/.test(ua);
 document.getElementById(isWin ? 'b-win' : 'b-mac').classList.add('meu');
 if (isWin) document.getElementById('dl').prepend(document.getElementById('b-win'));
-if (celular || (!isWin && !isMac)) document.getElementById('hint').innerHTML = '<b>O app é para computador (Mac ou Windows).</b> Abra esta página nele para baixar. Baixar não custa nada; o que está dentro é vendido à parte.';
+if (celular || (!isWin && !isMac)) document.getElementById('hint').innerHTML = '<b>O app é para computador (Mac ou Windows).</b> Abra esta página nele para baixar. As ferramentas você também usa pelo celular, no navegador.';
 document.querySelectorAll('#dl .bt').forEach(b => { const c = b.cloneNode(true); c.removeAttribute('id'); document.getElementById('dl2').appendChild(c); });
 
 // ----- Mac / Windows -----
@@ -320,12 +335,11 @@ aba(isWin ? 'win' : 'mac');
 (function(){
   const C = window.CATALOGO; if (!C || !C.produtos) return;
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
-  const item = (p, i) => `<a class="obj" style="--k:${esc(p.cor || '242,165,65')};--i:${i}" href="/conheca/${esc(p.slug)}/?de=inicio"><span class="cx"><img src="/icones/${esc(p.key)}.png" alt="" width="100" height="100" loading="lazy"></span><b>${esc(p.nome)}</b><span class="preco">R$ ${esc(p.preco)}</span></a>`;
+  const item = (p, i) => `<a class="obj" style="--k:${esc(p.cor || '242,165,65')};--i:${i}" href="/conheca/${esc(p.slug)}/?de=inicio"><span class="cx"><img src="/icones/${esc(p.key)}.png" alt="" width="100" height="100" loading="lazy"></span><b>${esc(p.nome)}</b><span class="preco">Conhecer</span></a>`;
   const edita = p => p.tipo === 'kit' || p.key === 'mood';       // o Mood é ferramenta de cor: fica com as coisas de edição
   const editar = C.produtos.filter(edita).sort((a, b) => (a.tipo === 'kit' ? 0 : 1) - (b.tipo === 'kit' ? 0 : 1)), cliente = C.produtos.filter(p => !edita(p));
   document.getElementById('n-editar').innerHTML = editar.map(item).join('');
   document.getElementById('n-cliente').innerHTML = cliente.map((p, i) => item(p, i + editar.length)).join('');
-  document.querySelectorAll('#n-vago .obj').forEach((o, i) => o.style.setProperty('--i', i + editar.length + cliente.length));
 })();
 // os objetos são colocados na prateleira uma vez, quando ela entra na tela
 (function(){
@@ -335,18 +349,42 @@ aba(isWin ? 'win' : 'mac');
   io.observe(e);
 })();
 
-// ----- vídeo de instalação: só carrega quando a pessoa aperta o play -----
+// ----- player do vídeo de instalação -----
+// Começa sozinho e sem som (regra dos navegadores). "Assistir com som" liga o som e volta para o começo.
 (function(){
   if (!/^https:\/\//.test(VIDEO_INSTALACAO)) return;
-  const tela = document.getElementById('tela'), capa = document.getElementById('capa');
-  tela.hidden = false; document.getElementById('inst-g').classList.remove('sem-video');
-  document.getElementById('inst-apoio').textContent = 'Um vídeo curto mostra a instalação do começo ao fim. Na primeira vez, o Mac e o Windows mostram um aviso antes de abrir o app: é esperado, e o caminho está ao lado.';
-  if (/^https:\/\//.test(CAPA_DO_VIDEO)) capa.style.background = `center/cover no-repeat url("${CAPA_DO_VIDEO.replace(/"/g, '%22')}")`;
-  capa.onclick = () => {
-    const v = document.createElement('video'); v.controls = true; v.playsInline = true; v.preload = 'auto'; v.src = VIDEO_INSTALACAO;
-    v.setAttribute('aria-label', 'Vídeo: instalando o Base FL');
-    capa.replaceWith(v); const p = v.play(); if (p && p.catch) p.catch(() => {});
-  };
+  const box = document.getElementById('player'), v = document.getElementById('vid'), $ = id => document.getElementById(id);
+  const som = $('plSom'), centro = $('plCentro'), play = $('plPlay'), mudo = $('plMudo'), linha = $('plLinha'), cheia = $('plCheia');
+  const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  box.hidden = false;
+  if (/^https:\/\//.test(CAPA_DO_VIDEO)) v.poster = CAPA_DO_VIDEO;
+  v.src = VIDEO_INSTALACAO; v.muted = true;
+  const tempo = s => { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+  const toca = () => { const p = v.play(); if (p && p.catch) p.catch(() => estado()); };
+  let arrastando = false, escolheu = false, tQuieto;
+  function estado(){
+    box.classList.toggle('parado', v.paused); box.classList.toggle('com-som', !v.muted);
+    play.setAttribute('aria-label', v.paused ? 'Tocar' : 'Pausar'); mudo.setAttribute('aria-label', v.muted ? 'Ligar o som' : 'Tirar o som');
+    som.hidden = !v.muted || (v.paused && escolheu);            // o convite ao som some depois que o som foi ligado
+    centro.hidden = !(v.paused && som.hidden);
+  }
+  function mexeu(){ box.classList.remove('quieto'); clearTimeout(tQuieto); if (!v.paused) tQuieto = setTimeout(() => box.classList.add('quieto'), 2600); }
+  som.onclick = () => { escolheu = true; v.muted = false; try { v.currentTime = 0; } catch (e) {} toca(); estado(); mexeu(); };
+  const alterna = () => { escolheu = true; if (v.paused) toca(); else v.pause(); };
+  v.onclick = alterna; play.onclick = alterna; centro.onclick = alterna;
+  mudo.onclick = () => { escolheu = true; v.muted = !v.muted; estado(); };
+  cheia.onclick = () => { const f = box.requestFullscreen || box.webkitRequestFullscreen; if (document.fullscreenElement) document.exitFullscreen(); else if (f) f.call(box); else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen(); };
+  linha.oninput = () => { arrastando = true; linha.style.setProperty('--p', linha.value / 10 + '%'); if (v.duration) $('plT').textContent = tempo(v.duration * linha.value / 1000); };
+  linha.onchange = () => { if (v.duration) v.currentTime = v.duration * linha.value / 1000; arrastando = false; };
+  v.addEventListener('timeupdate', () => { if (arrastando || !v.duration) return; const p = v.currentTime / v.duration * 1000; linha.value = p; linha.style.setProperty('--p', p / 10 + '%'); $('plT').textContent = tempo(v.currentTime); });
+  v.addEventListener('loadedmetadata', () => { $('plD').textContent = tempo(v.duration); if (v.videoWidth && v.videoHeight) box.style.aspectRatio = v.videoWidth + ' / ' + v.videoHeight; });
+  ['play','pause','volumechange','ended'].forEach(n => v.addEventListener(n, () => { estado(); mexeu(); }));
+  ['pointermove','pointerdown','focusin'].forEach(n => box.addEventListener(n, mexeu));
+  box.addEventListener('keydown', e => { if (e.target === linha) return; if (e.key === ' ' || e.key === 'k'){ e.preventDefault(); alterna(); } if (e.key === 'ArrowRight') v.currentTime += 5; if (e.key === 'ArrowLeft') v.currentTime -= 5; });
+  estado();
+  // toca sozinho quando está na tela; pausa quando sai (se a pessoa não tiver assumido o controle)
+  if (calmo || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(x => { if (x[0].isIntersecting){ if (!escolheu || !v.paused) toca(); } else if (!v.paused && v.muted) v.pause(); }, { threshold:.4 }).observe(box);
 })();
 </script>
 </body>
