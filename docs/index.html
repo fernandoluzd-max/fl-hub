@@ -3,473 +3,351 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Base FL — o ecossistema do editor de vídeo</title>
-<meta name="description" content="Kits que instalam no CapCut com um clique, ferramentas para cobrar, fechar e organizar seus trabalhos, num app só. Baixe para Mac ou Windows.">
+<title>Base FL — a base de trabalho do editor de vídeo</title>
+<meta name="description" content="O app que junta os títulos, sons e ferramentas que o Fernando Luz usa para editar e atender clientes. Baixar é grátis; cada item é liberado à parte. Mac e Windows.">
 <link rel="icon" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#0D0F0E">
-<meta property="og:title" content="Base FL — o ecossistema do editor de vídeo">
-<meta property="og:description" content="Kits no CapCut com um clique e ferramentas para cobrar, fechar e organizar trabalhos. Num app só.">
+<meta property="og:title" content="Base FL — a base de trabalho do editor de vídeo">
+<meta property="og:description" content="Títulos para o CapCut e ferramentas para atender clientes, num app só. Baixar é grátis; cada item é liberado à parte.">
 <meta property="og:image" content="https://basefl.com/icon-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+/* Base FL · página do app
+   Ideia da página: uma PRATELEIRA. O app é o móvel; cada produto é um objeto em cima da tábua, com a etiqueta de preço.
+   A última tábua está vazia de propósito: é o que ainda está sendo construído. */
 :root{
-  --bg:#0D0F0E; --bg2:#141615; --card:#171A18; --card2:#1D201E; --line:#262D28; --ink:#F4F0E4; --mute:#B3B4A2; --dim:#6f6d63;
-  --accent:#F2A541; --accent2:#E8923A; --accent-ink:#141615; --ok:#7fce8f;
-  --c-kit:#F2A541; --c-ferr:#3FB8AF; --c-curso:#9B7BF7;
+  --fundo:#0D0F0E; --parede:#121413; --tabua:#2a2118; --tabua-luz:#4a3a26; --linha:#262D28;
+  --papel:#F4F0E4; --cinza:#B3B4A2; --apagado:#77766b;
+  --ambar:#F2A541; --ambar-tinta:#1a1206; --agua:#3FB8AF;
   --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   --f:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --lado:clamp(20px,5vw,56px);
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-html,body{background:var(--bg)}
-body{color:var(--ink);font:16px/1.55 var(--f);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--fundo);color:var(--papel);font-family:var(--f);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
 a{color:inherit}
-b{font-weight:700}
-.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
-.bgfx{position:absolute;inset:0 0 auto;height:1100px;pointer-events:none;overflow:hidden;z-index:0}
-.bgfx::before{content:"";position:absolute;width:1100px;height:700px;left:50%;top:-260px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(242,165,65,.20),transparent 70%);filter:blur(10px)}
-.bgfx::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(244,240,228,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(244,240,228,.035) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 70% 60% at 50% 20%,#000 30%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 20%,#000 30%,transparent 75%)}
-.rel{position:relative;z-index:1}
+b,strong{font-weight:700}
+:focus-visible{outline:2px solid var(--ambar);outline-offset:3px;border-radius:6px}
+.larg{max-width:1120px;margin:0 auto;padding:0 var(--lado)}
+h1,h2,h3{font-family:var(--d);font-stretch:112%;font-weight:850;letter-spacing:-.022em;line-height:1.02;text-wrap:balance}
+h2{font-size:clamp(30px,5.2vw,50px)}
+h3{font-size:20px;font-stretch:104%;letter-spacing:-.01em;line-height:1.2}
+.apoio{color:var(--cinza);max-width:60ch;margin-top:14px;font-size:18px}
+.apoio b{color:var(--papel)}
 
 /* topo */
-.top{display:flex;align-items:center;gap:12px;padding:22px 0}
-.top img{width:40px;height:40px;border-radius:11px}
-.top b{font-family:var(--d);font-weight:800;font-size:17px;line-height:1.1;display:block}
-.top small{display:block;color:var(--mute);font-size:12.5px}
-.top .sp{flex:1}
-.top a.lk{color:var(--mute);font-size:14px;text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:8px 14px;transition:border-color .2s,color .2s}
-.top a.lk:hover{color:var(--ink);border-color:#3a403b}
+.topo{display:flex;align-items:center;gap:12px;padding:20px 0}
+.topo img{width:36px;height:36px;border-radius:9px}
+.topo .nome{font-family:var(--d);font-weight:850;font-stretch:112%;font-size:18px;line-height:1.1}
+.topo .nome small{display:block;font-family:var(--f);font-weight:500;font-stretch:100%;font-size:12.5px;color:var(--apagado)}
+.topo .esp{flex:1}
+.topo a{font-size:15px;font-weight:600;color:var(--cinza);text-decoration:none;min-height:44px;display:inline-flex;align-items:center;padding:0 6px}
+.topo a:hover{color:var(--papel)}
+.topo a,.topo .nome{white-space:nowrap}
+@media (max-width:460px){.topo a[href="#instalar"]{display:none}}
 
-/* hero */
-.hero{text-align:center;padding:30px 0 34px}
-.tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--d);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);background:rgba(242,165,65,.10);border:1px solid rgba(242,165,65,.35);border-radius:99px;padding:7px 14px}
-.tag i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(242,165,65,.6);animation:ping 2s infinite}
-@keyframes ping{70%{box-shadow:0 0 0 9px rgba(242,165,65,0)}100%{box-shadow:0 0 0 0 rgba(242,165,65,0)}}
-h1{font-family:var(--d);font-weight:850;font-stretch:112%;font-size:clamp(38px,6.4vw,70px);line-height:.98;letter-spacing:-.035em;margin:22px auto 18px;max-width:17ch;text-wrap:balance}
-h1 em{font-style:normal;background:linear-gradient(90deg,#F6B356,#E8923A);-webkit-background-clip:text;background-clip:text;color:transparent}
-.lead{color:var(--mute);font-size:clamp(16px,2.1vw,19px);max-width:600px;margin:0 auto}
-.lead b{color:var(--ink);font-weight:600}
-.dl{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:30px auto 12px}
-.btn{display:flex;align-items:center;gap:14px;text-align:left;text-decoration:none;border-radius:16px;padding:14px 22px 14px 18px;border:1px solid var(--line);background:var(--card);min-width:260px;transition:transform .15s,border-color .2s,box-shadow .2s}
-.btn:hover{transform:translateY(-2px);border-color:#3a403b}
-.btn svg{width:26px;height:26px;fill:currentColor;flex:none}
-.btn b{display:block;font-size:16.5px;font-weight:700}
-.btn small{display:block;font-size:12.5px;opacity:.75}
-.btn.main{background:linear-gradient(135deg,#F6B356,#E8923A);color:var(--accent-ink);border-color:transparent;box-shadow:0 10px 40px -10px rgba(242,165,65,.55)}
-.btn.main:hover{box-shadow:0 16px 50px -10px rgba(242,165,65,.7)}
-.hint{color:var(--dim);font-size:13px}
+/* abertura */
+.abre{padding:clamp(26px,6vw,70px) 0 clamp(34px,6vw,70px)}
+.abre h1{font-size:clamp(46px,10.5vw,118px);font-stretch:118%;line-height:.92;letter-spacing:-.035em;max-width:11ch}
+.abre h1 span{display:block;color:var(--ambar)}
+.abre .conta{margin-top:clamp(22px,3vw,34px);display:grid;gap:26px}
+.abre p.fala{font-size:clamp(18px,2.2vw,21px);color:var(--cinza);max-width:52ch}
+.abre p.fala b{color:var(--papel)}
+.baixar{display:grid;gap:10px;max-width:520px}
+.bt{display:flex;align-items:center;gap:14px;padding:15px 18px;border-radius:16px;text-decoration:none;border:1px solid var(--linha);background:var(--parede);transition:transform .15s,border-color .2s,background .2s}
+.bt:hover{border-color:#3d463f;transform:translateY(-1px)}
+.bt:active{transform:scale(.99)}
+.bt svg{flex:none;width:26px;height:26px;fill:currentColor}
+.bt span b{display:block;font-family:var(--d);font-stretch:108%;font-weight:800;font-size:17.5px;line-height:1.2}
+.bt span small{display:block;font-size:13px;color:var(--apagado);margin-top:2px}
+.bt.meu{background:var(--ambar);border-color:var(--ambar);color:var(--ambar-tinta)}
+.bt.meu span small{color:rgba(26,18,6,.72)}
+.bt.meu:hover{background:#f6b458}
+.gratis{font-size:15.5px;color:var(--cinza);max-width:52ch;padding-left:14px;border-left:3px solid var(--ambar)}
+.gratis b{color:var(--papel)}
+@media (min-width:900px){.abre .conta{grid-template-columns:1.1fr .9fr;align-items:end;gap:56px}}
 
-/* palco do app (demonstração animada) */
-.palco{position:relative;text-align:left;margin:44px auto 0;max-width:1080px;perspective:1600px}
-.palco::before{content:"";position:absolute;inset:8% 6% -4%;background:radial-gradient(closest-side,rgba(242,165,65,.28),transparent 75%);filter:blur(40px);z-index:-1}
-.janela{transform-origin:50% 0;transform:rotateX(14deg) translateY(30px) scale(.96);opacity:0;transition:transform 1.1s cubic-bezier(.2,.8,.2,1),opacity .9s}
-.janela.in{transform:none;opacity:1}
-.moldura{position:relative;border-radius:16px;border:1px solid #2c332e;background:#0f1110;box-shadow:0 40px 120px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.03) inset;overflow:hidden}
-.barra{display:flex;align-items:center;gap:7px;height:34px;padding:0 14px;background:#151816;border-bottom:1px solid #222824}
-.barra i{width:11px;height:11px;border-radius:50%;background:#3a3f3b}
-.barra i:nth-child(1){background:#ff5f57}.barra i:nth-child(2){background:#febc2e}.barra i:nth-child(3){background:#28c840}
-.barra span{flex:1;text-align:center;color:#7d7b72;font-size:12px;margin-right:48px}
-.escala{position:relative;overflow:hidden}
-.st{position:absolute;left:0;top:0;width:1080px;height:640px;transform-origin:0 0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;font-size:13px;background:radial-gradient(900px 520px at 12% -12%,#27352C 0%,#171A18 45%,transparent 75%),#0D0F0E}
-.st-h{display:flex;align-items:center;gap:11px;padding:16px 22px 8px}
-.st-h img{width:34px;height:34px;border-radius:9px}
-.st-h b{font-size:15px;display:block;line-height:1.1}
-.st-h small{color:#9d998c;font-size:11px}
-.st-h .tm{margin-left:auto;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:#9d998c}
-.st-b{display:grid;grid-template-columns:210px 1fr;gap:16px;padding:8px 22px 18px;height:572px}
-.st-side{background:#141615;border:1px solid #262d28;border-radius:14px;padding:12px 14px;overflow:hidden}
-.st-side h6{font-size:11px;color:#9d998c;letter-spacing:.04em;font-weight:600;margin-bottom:10px}
-.lg{display:flex;flex-direction:column;gap:7px;font-size:11.5px;color:#d9d5c8}
-.lg .vz{color:#9d998c}
-.lg div{display:flex;gap:7px;align-items:flex-start;animation:lgin .3s ease both}
-.lg i{flex:none;width:15px;height:15px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:9px;background:#23232a;color:#9d998c}
-.lg .ok i{background:rgba(61,220,132,.15);color:#7fce8f}
-.lg .run i{background:rgba(242,165,65,.15);color:#F2A541;animation:gira 1s linear infinite}
-@keyframes gira{to{transform:rotate(360deg)}}
-@keyframes lgin{from{opacity:0;transform:translateY(4px)}}
-.st-m{display:flex;flex-direction:column;gap:14px;min-width:0}
-.st-s h5{font-family:var(--d);font-weight:800;font-size:15px;line-height:1.1}
-.st-s p.sp{color:#B3B4A2;font-size:11px;margin:2px 0 8px}
-.sh{display:flex;align-items:flex-end}
-.sh .pl{margin-left:auto;display:flex;gap:6px}
-.pl span{display:flex;align-items:center;gap:5px;border:1px solid #262d28;background:#141615;border-radius:99px;padding:3px 9px;font-size:10px;color:#9d998c}
-.pl span::before{content:"";width:6px;height:6px;border-radius:50%;background:#7fce8f}
-.cs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.c{--c:242,165,65;position:relative;overflow:hidden;background:#171A18;border:1px solid #262d28;border-radius:13px;padding:11px;display:flex;flex-direction:column;gap:6px;transition:border-color .3s,transform .3s}
-.c .ic{width:42px;height:42px;border-radius:12px;display:block;overflow:hidden;background:#161918;box-shadow:0 0 0 1px rgba(255,255,255,.10);transition:box-shadow .4s}
-.c .ic img,.pt li .ic img{width:100%;height:100%;display:block;object-fit:cover}
-.c.on .ic{box-shadow:0 0 0 1px rgba(255,255,255,.10),0 8px 18px -10px rgba(var(--c),.9)}
-.c.on{border-top:2px solid rgba(var(--c),.55)}
-.c h4{font-size:12.5px;font-weight:700}
-.c p{color:#9d998c;font-size:10.5px;line-height:1.35;min-height:28px}
-.c .mt{font-size:9.5px;color:#9d998c;display:flex;align-items:center;gap:5px}
-.c .mt::before{content:"";width:6px;height:6px;border-radius:50%;background:#9d998c}
-.c.on .mt::before{background:#7fce8f}
-.c .bs{display:flex;gap:6px;margin-top:2px}
-.c .bs span{position:relative;flex:1;text-align:center;border-radius:8px;padding:6px 4px;font-size:10.5px;font-weight:650;background:#F2A541;color:#141615;overflow:hidden}
-.c .bs span.gh{flex:none;background:transparent;color:#F4F0E4;border:1px solid #262d28;padding:6px 8px}
-.c .bs span .fill{position:absolute;inset:0 auto 0 0;width:0;background:rgba(20,22,21,.25)}
-.c .bs span em{position:relative;font-style:normal}
-.c.alvo{border-color:rgb(var(--c));transform:translateY(-2px)}
-.c.vit{border-color:rgba(var(--c),.45);background:radial-gradient(120% 70% at 100% 0%,rgba(var(--c),.22),transparent 62%),#171A18;box-shadow:0 14px 30px -20px rgba(var(--c),.8)}
-.c.vit .ic{box-shadow:0 0 0 1px rgba(255,255,255,.10),0 8px 18px -10px rgba(var(--c),.9)}
-.c.vit::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.07),transparent);transform:skewX(-18deg);animation:brilho 5s ease-in-out infinite}
-@keyframes brilho{0%,62%{left:-60%}100%{left:130%}}
-.c .sl{position:absolute;top:10px;right:10px;font-size:8px;font-weight:800;letter-spacing:.08em;color:rgb(var(--c));background:rgba(var(--c),.14);border:1px solid rgba(var(--c),.45);border-radius:99px;padding:2px 6px}
-.c .gc{font-weight:800;font-size:11.5px;line-height:1.2;color:rgb(var(--c));margin-top:-2px}
-.c .pr{font-size:9.5px;color:#9d998c}.c .pr b{color:#F4F0E4;font-size:11px}
-.c .bs span.cta{background:rgb(var(--c));box-shadow:0 8px 18px -8px rgba(var(--c),.9)}
-.c.vit p{min-height:0}
-.cur{position:absolute;left:900px;top:560px;width:22px;height:22px;z-index:5;transition:left .7s cubic-bezier(.5,0,.2,1),top .7s cubic-bezier(.5,0,.2,1);filter:drop-shadow(0 2px 4px rgba(0,0,0,.6));pointer-events:none}
-.cur.clk{animation:clk .25s}
-@keyframes clk{50%{transform:scale(.8)}}
-.toastm{position:absolute;left:50%;bottom:18px;transform:translate(-50%,16px);opacity:0;background:#F4F0E4;color:#141615;font-weight:700;font-size:12px;padding:9px 14px;border-radius:10px;transition:all .3s;z-index:4;white-space:nowrap}
-.toastm.on{opacity:1;transform:translate(-50%,0)}
+/* ---------- a prateleira (o elemento da página) ---------- */
+.estante{background:var(--parede);border-top:1px solid var(--linha);border-bottom:1px solid var(--linha);padding:clamp(44px,7vw,84px) 0 clamp(50px,7vw,90px)}
+.nivel{margin-top:clamp(34px,5vw,54px)}
+.nivel .rot{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-bottom:6px}
+.nivel .rot h3{color:var(--papel)}
+.nivel .rot p{font-size:15px;color:var(--apagado)}
+.objs{display:flex;align-items:flex-end;gap:clamp(6px,2.4vw,28px);padding:26px clamp(4px,2vw,22px) 0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+.objs::-webkit-scrollbar{display:none}
+.tabua{height:16px;border-radius:3px;background:linear-gradient(180deg,var(--tabua-luz),var(--tabua) 38%,#1c160f);box-shadow:0 18px 30px -12px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.07) inset;position:relative}
+.tabua::before,.tabua::after{content:"";position:absolute;top:100%;width:10px;height:22px;background:linear-gradient(180deg,#1c160f,transparent);opacity:.9}
+.tabua::before{left:9%}.tabua::after{right:9%}
+.obj{--k:242,165,65;flex:none;width:clamp(92px,25vw,132px);text-decoration:none;display:grid;justify-items:center;gap:9px;padding-bottom:10px;scroll-snap-align:center;text-align:center;position:relative}
+.obj .cx{position:relative;width:clamp(78px,11vw,100px);aspect-ratio:1;border-radius:22%;overflow:hidden;background:#161918;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 16px 26px -14px rgba(var(--k),.85);transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.obj .cx img{width:100%;height:100%}
+.obj:hover .cx{transform:translateY(-6px) rotate(-2deg)}
+.obj b{font-size:14.5px;font-weight:650;line-height:1.2;color:var(--papel);min-height:2.4em;display:grid;align-items:center}
+.obj .preco{font-size:13px;font-weight:700;color:rgb(var(--k));background:rgba(var(--k),.12);border-radius:7px;padding:2px 8px}
+.obj.vago{pointer-events:none}
+.obj.vago .cx{background:transparent;box-shadow:none;border:2px dashed #3a423c;display:grid;place-items:center;color:#56605a;font-family:var(--d);font-weight:800;font-size:26px}
+.obj.vago b{color:var(--apagado);font-weight:500}
+.estante .obs{margin-top:22px;font-size:15.5px;color:var(--cinza);max-width:62ch}
+.estante .obs b{color:var(--papel)}
+/* um único momento de movimento: os objetos são colocados na prateleira quando ela aparece */
+.js .estante:not(.posto) .obj{opacity:0;transform:translateY(-26px)}
+.estante.posto .obj{animation:pousa .55s cubic-bezier(.2,.9,.3,1.25) both;animation-delay:calc(var(--i,0)*70ms)}
+@keyframes pousa{from{opacity:0;transform:translateY(-26px)}to{opacity:1;transform:none}}
 
-/* seções */
-section.blk{padding:110px 0 0}
-.kick{font-family:var(--d);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
-h2{font-family:var(--d);font-weight:850;font-stretch:108%;font-size:clamp(28px,4.4vw,46px);line-height:1.02;letter-spacing:-.03em;max-width:18ch;text-wrap:balance}
-.h2sub{color:var(--mute);font-size:17px;max-width:560px;margin-top:12px}
-.rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
-.rv.vis{opacity:1;transform:none}
-.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+/* acesso */
+.bloco{padding:clamp(54px,8vw,100px) 0}
+.passos{margin-top:34px;display:grid;gap:26px;counter-reset:p}
+.passo{counter-increment:p;display:grid;grid-template-columns:auto 1fr;gap:4px 18px;align-items:start}
+.passo::before{content:counter(p);grid-row:span 2;font-family:var(--d);font-stretch:118%;font-weight:900;font-size:52px;line-height:.9;color:var(--ambar);min-width:44px}
+.passo p{color:var(--cinza);grid-column:2}
+.passo p b{color:var(--papel)}
+@media (min-width:860px){.passos{grid-template-columns:repeat(3,1fr);gap:40px}}
 
-/* três partes */
-.tres{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:36px}
-.pt{position:relative;background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:22px;padding:24px 22px 22px;overflow:hidden}
-.pt::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:var(--cor)}
-.pt::after{content:"";position:absolute;width:260px;height:260px;right:-120px;top:-120px;background:radial-gradient(closest-side,color-mix(in srgb,var(--cor) 22%,transparent),transparent);pointer-events:none}
-.pt .lb{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
-.pt h3{font-family:var(--d);font-weight:850;font-size:26px;letter-spacing:-.02em}
-.pt .onde{font-size:11.5px;font-weight:600;color:var(--cor);border:1px solid color-mix(in srgb,var(--cor) 45%,transparent);border-radius:99px;padding:3px 10px;white-space:nowrap}
-.pt>p{color:var(--mute);font-size:14.5px;margin-bottom:18px}
-.pt ul{list-style:none;display:flex;flex-direction:column;gap:9px}
-.pt li{display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
-.pt li .ic{--k:242,165,65;flex:none;width:44px;height:44px;border-radius:12px;display:block;overflow:hidden;background:#161918;box-shadow:0 0 0 1px rgba(255,255,255,.10),0 10px 22px -12px rgba(var(--k),.9)}
-.pt li b{display:block;font-size:14.5px}
-.pt li small{display:block;color:var(--mute);font-size:12.5px;line-height:1.35}
-.pt .bt{margin-top:14px;font-size:12.5px;color:var(--dim)}
+/* vídeo de instalação */
+.inst{background:var(--parede);border-top:1px solid var(--linha);border-bottom:1px solid var(--linha)}
+.inst-g{margin-top:34px;display:grid;gap:30px;align-items:start}
+.tela{position:relative;border-radius:18px;overflow:hidden;background:#000;aspect-ratio:16/9;box-shadow:0 0 0 1px var(--linha),0 40px 70px -40px #000}
+.tela video{width:100%;height:100%;display:block;background:#000}
+.tela .capa{position:absolute;inset:0;border:0;padding:0;cursor:pointer;background:radial-gradient(120% 90% at 20% 10%,#2b2116,#0d0f0e 70%);color:var(--papel);display:grid;place-items:center;font:inherit}
+.tela .capa i{width:84px;height:84px;border-radius:50%;background:var(--ambar);display:grid;place-items:center;transition:transform .2s}
+.tela .capa:hover i{transform:scale(1.06)}
+.tela .capa i::after{content:"";border:14px solid transparent;border-left:22px solid var(--ambar-tinta);margin-left:10px}
+.tela .capa span{position:absolute;left:20px;bottom:16px;font-weight:600;font-size:15px;color:var(--cinza)}
+.aviso h3{margin-bottom:12px}
+.abas{display:inline-flex;gap:4px;padding:4px;border-radius:12px;background:var(--fundo);border:1px solid var(--linha);margin-bottom:14px}
+.aba{border:0;background:transparent;color:var(--cinza);font:inherit;font-weight:650;font-size:15px;padding:9px 16px;border-radius:9px;cursor:pointer;min-height:40px}
+.aba.on{background:var(--papel);color:#141615}
+.painel{display:none}.painel.on{display:block}
+.painel ol{padding-left:20px;display:grid;gap:8px;color:var(--cinza)}
+.painel ol b{color:var(--papel)}
+.painel .nota{margin-top:12px;font-size:14.5px;color:var(--apagado)}
+@media (min-width:940px){.inst-g{grid-template-columns:1.35fr 1fr;gap:48px}.inst-g.sem-video{grid-template-columns:1fr}}
 
-/* fluxo das ferramentas */
-.fluxo{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:stretch;gap:0;margin-top:40px}
-.nd{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 16px;text-align:left}
-.nd .n{font-family:var(--d);font-weight:800;font-size:12px;color:var(--c-ferr);letter-spacing:.08em}
-.nd b{display:block;font-size:16.5px;margin:4px 0 4px}
-.nd small{display:block;color:var(--mute);font-size:13px;line-height:1.4}
-.lig{position:relative;width:44px;align-self:center;height:2px;background:linear-gradient(90deg,var(--line),var(--line))}
-.lig::after{content:"";position:absolute;top:-3px;left:0;width:8px;height:8px;border-radius:50%;background:var(--c-ferr);box-shadow:0 0 12px var(--c-ferr);animation:corre 1.8s linear infinite}
-.lig:nth-of-type(2)::after{animation-delay:.6s}.lig:nth-of-type(3)::after{animation-delay:1.2s}
-@keyframes corre{from{left:0;opacity:0}15%{opacity:1}85%{opacity:1}to{left:calc(100% - 8px);opacity:0}}
+/* dúvidas */
+.duv{margin-top:26px;display:grid;gap:0;border-top:1px solid var(--linha);max-width:820px}
+.duv details{border-bottom:1px solid var(--linha)}
+.duv summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:18px 2px;font-weight:650;font-size:17px}
+.duv summary::-webkit-details-marker{display:none}
+.duv summary::after{content:"+";flex:none;font-family:var(--d);font-weight:800;font-size:22px;color:var(--ambar);transition:transform .2s}
+.duv details[open] summary::after{transform:rotate(45deg)}
+.duv details p{padding:0 2px 20px;color:var(--cinza);max-width:66ch}
+.duv details p b{color:var(--papel)}
 
-/* passos */
-.passos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
-.ps{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px}
-.ps .num{font-family:var(--d);font-weight:900;font-size:44px;line-height:1;background:linear-gradient(180deg,#F6B356,rgba(232,146,58,.25));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:12px}
-.ps h3{font-size:18px;margin-bottom:6px}
-.ps p{color:var(--mute);font-size:14.5px}
-.ps p b{color:var(--ink)}
-
-/* primeira vez + dúvidas */
-.duas{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;margin-top:36px}
-.tabs{display:flex;gap:8px;margin-bottom:12px}
-.tab{cursor:pointer;font:inherit;font-weight:700;font-size:14px;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:8px 18px}
-.tab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.panel{display:none;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 22px}
-.panel.on{display:block;animation:lgin .3s ease}
-.panel ol{padding-left:20px;display:flex;flex-direction:column;gap:9px}
-.panel li b{color:var(--accent)}
-.note{color:var(--mute);font-size:13px;border-top:1px solid var(--line);margin-top:16px;padding-top:12px}
-details{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:8px;overflow:hidden}
-summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;font-weight:650;font-size:15px}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"+";color:var(--accent);font-size:20px;font-weight:600;transition:transform .2s}
-details[open] summary::after{transform:rotate(45deg)}
-details p{padding:0 18px 16px;color:var(--mute);font-size:14.5px}
-details p b{color:var(--ink)}
-h3.mini{font-family:var(--d);font-weight:800;font-size:20px;margin-bottom:14px}
-
-/* fim */
-.final{position:relative;margin:110px 0 0;border-radius:28px;padding:54px 28px;text-align:center;overflow:hidden;background:linear-gradient(180deg,#1a1d1b,#121413);border:1px solid var(--line)}
-.final::before{content:"";position:absolute;inset:auto -10% -60% -10%;height:120%;background:radial-gradient(closest-side,rgba(242,165,65,.22),transparent 70%)}
-.final>*{position:relative}
-.final img{width:72px;height:72px;border-radius:18px;margin-bottom:18px;box-shadow:0 16px 40px -12px rgba(242,165,65,.45)}
-.final h2{margin:0 auto 10px}
-.final .dl{margin-top:24px}
-.help{display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap;margin-top:28px;background:linear-gradient(90deg,rgba(242,165,65,.10),transparent);border:1px solid rgba(242,165,65,.3);border-radius:18px;padding:18px 22px}
-.help span{color:var(--mute);font-size:14px}
-.help a{background:var(--accent);color:var(--accent-ink);font-weight:700;text-decoration:none;border-radius:12px;padding:11px 18px;white-space:nowrap}
-footer{color:var(--dim);font-size:12.5px;text-align:center;padding:40px 0 34px}
-
-@media (max-width:900px){
-  .tres,.passos,.duas{grid-template-columns:1fr}
-  .fluxo{grid-template-columns:1fr;gap:0}
-  .lig{width:2px;height:28px;justify-self:center;background:var(--line)}
-  .lig::after{left:-3px;animation-name:desce}
-  section.blk{padding-top:80px}
-}
-@keyframes desce{from{top:0;opacity:0}15%{opacity:1}85%{opacity:1}to{top:calc(100% - 8px);opacity:0}}
-@media (max-width:560px){ .btn{min-width:0;width:100%} .hero{padding-top:28px} .top a.lk{display:none} }
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv,.janela{opacity:1;transform:none}}
+/* fecho */
+.fecho{padding:clamp(60px,9vw,110px) 0 40px}
+.fecho h2{font-size:clamp(36px,7vw,78px);font-stretch:118%;line-height:.95;max-width:12ch}
+.fecho .baixar{margin-top:28px}
+.ajuda{margin-top:44px;padding-top:24px;border-top:1px solid var(--linha);display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justify-content:space-between;color:var(--cinza);font-size:15.5px}
+.ajuda b{color:var(--papel)}
+.ajuda a{font-weight:700;color:var(--ambar);min-height:44px;display:inline-flex;align-items:center}
+footer{padding:26px 0 40px;color:var(--apagado);font-size:13.5px}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.js .estante:not(.posto) .obj{opacity:1;transform:none}.estante.posto .obj{animation:none}.obj:hover .cx{transform:none}}
 </style>
 </head>
 <body>
 
-<div class="bgfx"></div>
-<div class="wrap rel">
-  <div class="top">
+<div class="larg">
+  <div class="topo">
     <img src="logo.png" alt="">
-    <div><b>Base FL</b><small>o ecossistema do editor de vídeo</small></div>
-    <span class="sp"></span>
-    <a class="lk" href="#duvidas">Dúvidas</a>
+    <span class="nome">Base FL<small>por Fernando Luz</small></span>
+    <span class="esp"></span>
+    <a href="#instalar">Como instalar</a>
+    <a href="#duvidas">Dúvidas</a>
   </div>
 
-  <section class="hero">
-    <span class="tag"><i></i>Comece aqui</span>
-    <h1>Tudo do editor de vídeo, <em>num app só.</em></h1>
-    <p class="lead">Kits que entram no seu <b>CapCut com um clique</b> e ferramentas para <b>cobrar, fechar e organizar</b> seus trabalhos. Baixe, entre com o e-mail da compra e pronto.</p>
-    <div class="dl" id="dl">
-      <a class="btn" id="b-mac" href="https://github.com/fernandoluzd-max/fl-hub/releases/latest/download/Base-FL-Mac.dmg">
-        <svg viewBox="0 0 24 24"><path d="M16.4 12.6c0-2.5 2-3.7 2.1-3.8-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.8-4.1zM13.9 5.1c.7-.9 1.2-2 1.1-3.2-1 0-2.3.7-3 1.6-.7.8-1.3 2-1.1 3.1 1.1.1 2.3-.6 3-1.5z"/></svg>
-        <span><b>Baixar para Mac</b><small>macOS 10.15 ou mais novo · Intel e Apple Silicon</small></span>
-      </a>
-      <a class="btn" id="b-win" href="https://github.com/fernandoluzd-max/fl-hub/releases/latest/download/Base-FL-Windows.exe">
-        <svg viewBox="0 0 24 24"><path d="M3 5.5 10.4 4.5v7H3zm8.3-1.1L21 3v8.5h-9.7zM3 12.5h7.4v7L3 18.5zm8.3 0H21V21l-9.7-1.4z"/></svg>
-        <span><b>Baixar para Windows</b><small>Windows 10 ou 11 · não pede senha de administrador</small></span>
-      </a>
-    </div>
-    <p class="hint" id="hint">O download começa na hora. O app é gratuito para quem comprou; o que aparece liberado depende da sua compra.</p>
-
-    <!-- demonstração animada do app -->
-    <div class="palco" aria-label="Demonstração do app Base FL">
-      <div class="janela" id="janela">
-        <div class="moldura">
-          <div class="barra"><i></i><i></i><i></i><span>Base FL</span></div>
-          <div class="escala" id="escala">
-            <div class="st" id="st">
-              <div class="st-h"><img src="logo.png" alt=""><div><b>Base FL</b><small>o ecossistema do editor de vídeo</small></div>
-                <span class="tm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></span></div>
-              <div class="st-b">
-                <div class="st-side"><h6>ATIVIDADE</h6><div class="lg" id="lg"></div></div>
-                <div class="st-m">
-                  <div class="st-s"><div class="sh"><div><h5>Kits</h5><p class="sp">Materiais prontos que instalam direto no seu CapCut.</p></div><div class="pl"><span>CapCut encontrado</span><span>CapCut fechado</span></div></div>
-                    <div class="cs" id="kits"></div></div>
-                  <div class="st-s"><h5>Ferramentas</h5><p class="sp">Para precificar, fechar e organizar seus trabalhos.</p><div class="cs" id="ferr"></div></div>
-                </div>
-              </div>
-              <svg class="cur" id="cur" viewBox="0 0 24 24"><path d="M4 2l15 10.5-6.6 1.2 3.9 7.4-2.9 1.5-3.9-7.4L4 20z" fill="#fff" stroke="#141615" stroke-width="1.2" stroke-linejoin="round"/></svg>
-              <div class="toastm" id="toastm"></div>
-            </div>
-          </div>
+  <section class="abre">
+    <h1>A minha base de trabalho, <span>num app.</span></h1>
+    <div class="conta">
+      <p class="fala">O Base FL junta o que eu uso no dia a dia: os <b>títulos e sons que deixam a edição mais rápida</b> e as <b>ferramentas que organizam o atendimento ao cliente</b>, do primeiro pedido até o pagamento. Estou começando agora, e a prateleira ainda vai crescer.</p>
+      <div>
+        <div class="baixar" id="dl">
+          <a class="bt" id="b-mac" href="https://github.com/fernandoluzd-max/fl-hub/releases/latest/download/Base-FL-Mac.dmg">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.5 2-3.7 2.1-3.8-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.8-4.1zM13.9 5.1c.7-.9 1.2-2 1.1-3.2-1 0-2.3.7-3 1.6-.7.8-1.3 2-1.1 3.1 1.1.1 2.3-.6 3-1.5z"/></svg>
+            <span><b>Baixar para Mac</b><small>macOS 10.15 ou mais novo, Intel e Apple Silicon</small></span>
+          </a>
+          <a class="bt" id="b-win" href="https://github.com/fernandoluzd-max/fl-hub/releases/latest/download/Base-FL-Windows.exe">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5 10.4 4.5v7H3zm8.3-1.1L21 3v8.5h-9.7zM3 12.5h7.4v7L3 18.5zm8.3 0H21V21l-9.7-1.4z"/></svg>
+            <span><b>Baixar para Windows</b><small>Windows 10 ou 11, sem senha de administrador</small></span>
+          </a>
         </div>
+        <p class="gratis" id="hint" style="margin-top:16px"><b>Baixar o app não custa nada.</b> O que está dentro dele é vendido à parte: você libera só o que quiser usar.</p>
       </div>
     </div>
   </section>
+</div>
 
-  <section class="blk">
-    <div class="kick rv">O que tem dentro</div>
-    <h2 class="rv d1">Kits e ferramentas, num lugar só.</h2>
-    <p class="h2sub rv d2">Cada compra libera a sua parte no mesmo app. Comprou algo novo? Aparece liberado na hora, sem baixar nada de novo.</p>
-    <div class="tres">
-      <div class="pt rv" style="--cor:var(--c-kit)">
-        <div class="lb"><h3>Kits</h3><span class="onde">CapCut no computador</span></div>
-        <p>Materiais prontos que instalam direto no seu CapCut.</p>
-        <ul>
-          <li><span class="ic"><img src="icones/legendas.png" alt="" width="44" height="44" loading="lazy"></span><span><b>Títulos Dinâmicos</b><small>+70 títulos e legendas, em pastas no CapCut</small></span></li>
-          <li><span class="ic" style="--k:90,184,255"><img src="icones/sons.png" alt="" width="44" height="44" loading="lazy"></span><span><b>Efeitos Sonoros</b><small>Bônus dos Títulos · 65 whooshes, impactos e risers</small></span></li>
-          <li><span class="ic" style="--k:255,111,174"><img src="icones/luts.png" alt="" width="44" height="44" loading="lazy"></span><span><b>LUTs</b><small>Bônus dos Títulos · 20 looks + 3 de conversão</small></span></li>
-        </ul>
-        <p class="bt">Botões: Instalar, Atualizar e Remover.</p>
-      </div>
-      <div class="pt rv d1" style="--cor:var(--c-ferr)">
-        <div class="lb"><h3>Ferramentas</h3><span class="onde">Navegador e celular</span></div>
-        <p>Para precificar, fechar e organizar seus trabalhos.</p>
-        <ul>
-          <li><span class="ic" style="--k:212,225,87"><img src="icones/case.png" alt="" width="44" height="44" loading="lazy"></span><span><b>CaseUp</b><small>Portfólio e link da bio</small></span></li>
-          <li><span class="ic" style="--k:180,92,255"><img src="icones/mood.png" alt="" width="44" height="44" loading="lazy"></span><span><b>Mood</b><small>Copie a cor de qualquer vídeo</small></span></li>
-          <li><span class="ic" style="--k:63,208,194"><img src="icones/briefing.png" alt="" width="44" height="44" loading="lazy"></span><span><b>Gerador de Briefing</b><small>O cliente responde num link</small></span></li>
-          <li><span class="ic" style="--k:123,216,143"><img src="icones/preco.png" alt="" width="44" height="44" loading="lazy"></span><span><b>Quanto Cobrar?</b><small>Seu preço e o orçamento em 1 minuto</small></span></li>
-          <li><span class="ic" style="--k:169,139,255"><img src="icones/contrato.png" alt="" width="44" height="44" loading="lazy"></span><span><b>Gerador de Contrato</b><small>Termo rápido ou contrato em PDF</small></span></li>
-          <li><span class="ic" style="--k:255,179,71"><img src="icones/painel.png" alt="" width="44" height="44" loading="lazy"></span><span><b>Base Demandas</b><small>Trabalhos, prazos e pagamentos</small></span></li>
-        </ul>
-        <p class="bt">Botão: Abrir.</p>
-      </div>
+<!-- ============ A PRATELEIRA: o que existe hoje, quanto custa cada coisa, e o espaço do que ainda vem.
+     Os itens e os preços vêm do catálogo (/catalogo.js). Não precisa mexer aqui quando um produto mudar. ============ -->
+<section class="estante" id="prateleira">
+  <div class="larg">
+    <h2>O que tem na prateleira hoje.</h2>
+    <p class="apoio">Cada item é um produto separado, com o preço na etiqueta. Toque em um para ver o que ele faz. Dentro do app, o que você comprou aparece liberado e o resto fica com cadeado.</p>
+
+    <div class="nivel">
+      <div class="rot"><h3>Para editar</h3><p>Títulos, sons e cor para deixar a edição mais rápida.</p></div>
+      <div class="objs" id="n-editar"></div>
+      <div class="tabua"></div>
     </div>
-  </section>
-
-  <section class="blk">
-    <div class="kick rv">Do primeiro contato ao pagamento</div>
-    <h2 class="rv d1">As ferramentas passam a bola uma para a outra.</h2>
-    <p class="h2sub rv d2">Cada ferramenta é vendida separadamente. Se você tiver mais de uma, o que preenche numa já chega pronto na outra.</p>
-    <div class="fluxo rv d2">
-      <div class="nd"><span class="n">01</span><b>Briefing</b><small>O cliente conta o que precisa</small></div><span class="lig"></span>
-      <div class="nd"><span class="n">02</span><b>Quanto Cobrar?</b><small>Abre já preenchido e dá o seu preço</small></div><span class="lig"></span>
-      <div class="nd"><span class="n">03</span><b>Contrato</b><small>Gerado com os dados do orçamento</small></div><span class="lig"></span>
-      <div class="nd"><span class="n">04</span><b>Base Demandas</b><small>Acompanha até o pagamento</small></div>
+    <div class="nivel">
+      <div class="rot"><h3>Para atender cliente</h3><p>Abrem no navegador, no computador ou no celular.</p></div>
+      <div class="objs" id="n-cliente"></div>
+      <div class="tabua"></div>
     </div>
-  </section>
+    <div class="nivel">
+      <div class="rot"><h3>Em construção</h3><p>O espaço das próximas.</p></div>
+      <div class="objs" id="n-vago">
+        <span class="obj vago" style="--i:0"><span class="cx">?</span><b>em breve</b></span>
+        <span class="obj vago" style="--i:1"><span class="cx">?</span><b>em breve</b></span>
+        <span class="obj vago" style="--i:2"><span class="cx">?</span><b>em breve</b></span>
+      </div>
+      <div class="tabua"></div>
+    </div>
+    <p class="obs">Quando uma ferramenta nova fica pronta, ela aparece na prateleira e <b>o app avisa que tem versão nova</b>. Ninguém é cobrado por isso: só entra na sua conta o que você decidir comprar.</p>
+  </div>
+</section>
 
-  <section class="blk">
-    <div class="kick rv">Em 2 minutos</div>
-    <h2 class="rv d1">Como começar.</h2>
+<section class="bloco">
+  <div class="larg">
+    <h2>Como o acesso funciona.</h2>
     <div class="passos">
-      <div class="ps rv"><div class="num">1</div><h3>Instale o app</h3><p>Abra o arquivo baixado e instale como qualquer programa. É só uma vez.</p></div>
-      <div class="ps rv d1"><div class="num">2</div><h3>Entre com seu e-mail</h3><p>Use o <b>mesmo e-mail da compra</b>. Chega um código no seu e-mail; é só digitar no app.</p></div>
-      <div class="ps rv d2"><div class="num">3</div><h3>Instale ou abra</h3><p>Nos Kits, feche o CapCut e clique em <b>Instalar</b>. Nas Ferramentas, clique em <b>Abrir</b>.</p></div>
+      <div class="passo"><h3>Você baixa e instala</h3><p>É grátis e é uma vez só. O app serve para Mac e para Windows.</p></div>
+      <div class="passo"><h3>Entra com o seu e-mail</h3><p>Use o <b>mesmo e-mail da compra</b>. Chega um código no e-mail; não tem senha para lembrar.</p></div>
+      <div class="passo"><h3>Usa o que é seu</h3><p>O que você comprou aparece com <b>Instalar</b> ou <b>Abrir</b>. O que não comprou aparece com <b>Conhecer</b>, e leva para a página do produto.</p></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="blk" id="duvidas">
-    <div class="duas">
-      <div class="rv">
-        <h3 class="mini">Primeira vez abrindo o app</h3>
-        <div class="tabs"><button class="tab" data-os="mac">Mac</button><button class="tab" data-os="win">Windows</button></div>
-        <div class="panel" id="p-mac">
+<!-- ============ VÍDEO DE INSTALAÇÃO
+     O endereço do vídeo fica em VIDEO_INSTALACAO, no começo do script lá embaixo.
+     Enquanto estiver vazio, o vídeo não aparece e ficam só os passos escritos. ============ -->
+<section class="bloco inst" id="instalar">
+  <div class="larg">
+    <h2>Instalando do jeito certo.</h2>
+    <p class="apoio" id="inst-apoio">Na primeira vez, o Mac e o Windows mostram um aviso antes de abrir o app. É esperado: o caminho está aqui embaixo.</p>
+    <div class="inst-g sem-video" id="inst-g">
+      <div class="tela" id="tela" hidden>
+        <button class="capa" id="capa" type="button" aria-label="Assistir ao vídeo de instalação"><i aria-hidden="true"></i><span>Vídeo: instalando o Base FL</span></button>
+      </div>
+      <div class="aviso" id="duvidas-inst">
+        <h3>Primeira vez abrindo o app</h3>
+        <div class="abas" role="tablist"><button class="aba" data-os="mac" role="tab">Mac</button><button class="aba" data-os="win" role="tab">Windows</button></div>
+        <div class="painel" id="p-mac">
           <ol>
             <li>Abra o arquivo <b>Base-FL-Mac.dmg</b> e arraste o app para a pasta <b>Aplicativos</b>.</li>
             <li>Na pasta Aplicativos, clique com o <b>botão direito</b> no Base FL e escolha <b>Abrir</b>.</li>
             <li>Na janela de aviso, clique em <b>Abrir</b> de novo.</li>
           </ol>
-          <p class="note">Esse aviso aparece só na primeira vez. Depois é só abrir normalmente pelo Launchpad ou pela pasta Aplicativos.</p>
+          <p class="nota">Esse aviso aparece só na primeira vez. Depois é só abrir normalmente pelo Launchpad ou pela pasta Aplicativos.</p>
         </div>
-        <div class="panel" id="p-win">
+        <div class="painel" id="p-win">
           <ol>
             <li>Abra o arquivo <b>Base-FL-Windows.exe</b>.</li>
             <li>Se aparecer a tela azul <b>"O Windows protegeu o computador"</b>, clique em <b>Mais informações</b>.</li>
             <li>Clique em <b>Executar assim mesmo</b> e siga a instalação.</li>
           </ol>
-          <p class="note">Esse aviso aparece só na instalação. Depois o app fica no Menu Iniciar.</p>
+          <p class="nota">Esse aviso aparece só na instalação. Depois o app fica no Menu Iniciar.</p>
         </div>
       </div>
-      <div class="rv d1">
-        <h3 class="mini">Dúvidas rápidas</h3>
-        <details><summary>O código não chegou no meu e-mail</summary><p>Confira as pastas <b>Spam</b> e <b>Promoções</b>. Procure por "Base FL". Se pedir de novo, espere 1 minuto entre um pedido e outro.</p></details>
-        <details><summary>Entrei, mas algo aparece bloqueado 🔒</summary><p>Você precisa entrar com o <b>mesmo e-mail usado na compra</b>. Clique em <b>Sair</b> (canto de baixo do app) e entre com o e-mail certo. Compras aprovadas aparecem em até 1 minuto.</p></details>
-        <details><summary>O app diz que o CapCut está aberto</summary><p>Feche o CapCut completamente (no Mac: <b>⌘ + Q</b>). O app percebe sozinho quando ele fechar.</p></details>
-        <details><summary>O app diz "CapCut não encontrado"</summary><p>Abra o CapCut uma vez, crie um projeto qualquer e feche. Depois volte ao app.</p></details>
-        <details><summary>As ferramentas funcionam no celular?</summary><p>Sim. As ferramentas abrem no navegador, no computador ou no celular. Entre com o <b>mesmo e-mail da compra</b>.</p></details>
-        <details><summary>Posso usar no Mac e no Windows?</summary><p>Sim. Instale o app nos dois e entre com o mesmo e-mail da compra.</p></details>
-        <details><summary>Comprei algo novo. Preciso baixar de novo?</summary><p>Não. O que você comprou aparece liberado no mesmo app. É só clicar em Instalar ou Abrir.</p></details>
-      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloco" id="duvidas">
+  <div class="larg">
+    <h2>Dúvidas rápidas.</h2>
+    <div class="duv">
+      <details><summary>O app é grátis mesmo?</summary><p>O app, sim: baixar e instalar não custa nada. Os kits e as ferramentas que aparecem dentro dele são produtos pagos, vendidos um a um. Você só paga pelo que escolher.</p></details>
+      <details><summary>Baixei e está tudo com cadeado</summary><p>É assim para quem ainda não comprou nada. Se você já comprou, entre com o <b>mesmo e-mail usado na compra</b>: clique em <b>Sair</b> (canto de baixo do app) e entre com o e-mail certo. Compras aprovadas aparecem em até 1 minuto.</p></details>
+      <details><summary>O código não chegou no meu e-mail</summary><p>Confira as pastas <b>Spam</b> e <b>Promoções</b>. Procure por "Base FL". Se pedir de novo, espere 1 minuto entre um pedido e outro.</p></details>
+      <details><summary>O app diz que o CapCut está aberto</summary><p>Feche o CapCut completamente (no Mac: <b>⌘ + Q</b>). O app percebe sozinho quando ele fechar.</p></details>
+      <details><summary>O app diz "CapCut não encontrado"</summary><p>Abra o CapCut uma vez, crie um projeto qualquer e feche. Depois volte ao app.</p></details>
+      <details><summary>As ferramentas funcionam no celular?</summary><p>Sim. As ferramentas abrem no navegador, no computador ou no celular. Entre com o <b>mesmo e-mail da compra</b>. Já os kits do CapCut são só para o computador.</p></details>
+      <details><summary>Posso usar no Mac e no Windows?</summary><p>Sim. Instale o app nos dois e entre com o mesmo e-mail da compra.</p></details>
+      <details><summary>Comprei algo novo. Preciso baixar de novo?</summary><p>Não. O que você comprou aparece liberado no mesmo app. É só clicar em Instalar ou Abrir.</p></details>
+    </div>
+  </div>
+</section>
+
+<div class="larg">
+  <section class="fecho">
+    <h2>Entra e dá uma olhada.</h2>
+    <p class="apoio">Baixar é grátis. Você vê tudo o que tem na prateleira e decide com calma o que faz sentido para o seu trabalho.</p>
+    <div class="baixar" id="dl2"></div>
+    <div class="ajuda">
+      <span><b>Travou em alguma parte?</b> No app, clique em <b>Diagnóstico para suporte</b>, copie e mande pra gente.</span>
+      <a href="https://wa.me/5548999642195?text=Oi!%20Preciso%20de%20ajuda%20com%20o%20Base%20FL." target="_blank" rel="noopener">Falar com o suporte</a>
     </div>
   </section>
-
-  <div class="final rv">
-    <img src="icon-192.png" alt="">
-    <h2>Seu próximo trabalho começa aqui.</h2>
-    <p class="h2sub" style="margin:0 auto">Baixe o Base FL e entre com o e-mail da sua compra.</p>
-    <div class="dl" id="dl2"></div>
-  </div>
-
-  <div class="help rv">
-    <div><b>Ainda com dúvida?</b><br><span>No app, clique em <b>Diagnóstico para suporte</b>, copie e envie pra gente.</span></div>
-    <a href="https://wa.me/5548999642195?text=Oi!%20Preciso%20de%20ajuda%20com%20o%20Base%20FL." target="_blank" rel="noopener">Falar com o suporte</a>
-  </div>
-
-  <footer>Base FL · o ecossistema do editor de vídeo</footer>
+  <footer>Base FL, por Fernando Luz. CapCut é marca de seus respectivos donos; este app não tem vínculo com o CapCut.</footer>
 </div>
 
 <script src="/catalogo.js"></script>
 <script>
-// ===== botão do sistema certo em destaque =====
+// ============================================================
+// VÍDEO DE INSTALAÇÃO: cole o endereço do vídeo entre as aspas.
+// (No Cloudflare R2: abra o arquivo "instalando" e copie o endereço público dele.)
+// Vazio = o vídeo não aparece na página.
+const VIDEO_INSTALACAO = 'https://aulas.basefl.com/instalando.mp4';
+const CAPA_DO_VIDEO = '';       // opcional: endereço de uma imagem para aparecer antes do play
+// ============================================================
+document.documentElement.classList.add('js');
+
+// ----- botão do sistema certo em destaque -----
 const ua = navigator.userAgent.toLowerCase();
-const isWin = ua.includes('windows');
-const isMac = ua.includes('mac os') || ua.includes('macintosh');
-document.getElementById(isWin ? 'b-win' : 'b-mac').classList.add('main');
+const isWin = ua.includes('windows'), isMac = ua.includes('mac os') || ua.includes('macintosh');
+const celular = /iphone|ipad|android/.test(ua);
+document.getElementById(isWin ? 'b-win' : 'b-mac').classList.add('meu');
 if (isWin) document.getElementById('dl').prepend(document.getElementById('b-win'));
-if (!isWin && !isMac) document.getElementById('hint').textContent = 'Abra esta página no computador (Mac ou Windows) para baixar o app. O download começa na hora.';
-document.querySelectorAll('#dl .btn').forEach(b => document.getElementById('dl2').appendChild(b.cloneNode(true)));
+if (celular || (!isWin && !isMac)) document.getElementById('hint').innerHTML = '<b>O app é para computador (Mac ou Windows).</b> Abra esta página nele para baixar. Baixar não custa nada; o que está dentro é vendido à parte.';
+document.querySelectorAll('#dl .bt').forEach(b => { const c = b.cloneNode(true); c.removeAttribute('id'); document.getElementById('dl2').appendChild(c); });
+
+// ----- Mac / Windows -----
 function aba(os){
-  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.os === os));
+  document.querySelectorAll('.aba').forEach(t => { const on = t.dataset.os === os; t.classList.toggle('on', on); t.setAttribute('aria-selected', on); });
   document.getElementById('p-mac').classList.toggle('on', os === 'mac');
   document.getElementById('p-win').classList.toggle('on', os === 'win');
 }
-document.querySelectorAll('.tab').forEach(t => t.onclick = () => aba(t.dataset.os));
+document.querySelectorAll('.aba').forEach(t => t.onclick = () => aba(t.dataset.os));
 aba(isWin ? 'win' : 'mac');
 
-// ===== aparecer ao rolar =====
-const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); } }), { threshold:.15 });
-document.querySelectorAll('.rv').forEach(el => io.observe(el));
+// ----- a prateleira, montada a partir do catálogo -----
+(function(){
+  const C = window.CATALOGO; if (!C || !C.produtos) return;
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+  const item = (p, i) => `<a class="obj" style="--k:${esc(p.cor || '242,165,65')};--i:${i}" href="/conheca/${esc(p.slug)}/?de=inicio"><span class="cx"><img src="/icones/${esc(p.key)}.png" alt="" width="100" height="100" loading="lazy"></span><b>${esc(p.nome)}</b><span class="preco">R$ ${esc(p.preco)}</span></a>`;
+  const edita = p => p.tipo === 'kit' || p.key === 'mood';       // o Mood é ferramenta de cor: fica com as coisas de edição
+  const editar = C.produtos.filter(edita).sort((a, b) => (a.tipo === 'kit' ? 0 : 1) - (b.tipo === 'kit' ? 0 : 1)), cliente = C.produtos.filter(p => !edita(p));
+  document.getElementById('n-editar').innerHTML = editar.map(item).join('');
+  document.getElementById('n-cliente').innerHTML = cliente.map((p, i) => item(p, i + editar.length)).join('');
+  document.querySelectorAll('#n-vago .obj').forEach((o, i) => o.style.setProperty('--i', i + editar.length + cliente.length));
+})();
+// os objetos são colocados na prateleira uma vez, quando ela entra na tela
+(function(){
+  const e = document.getElementById('prateleira');
+  if (!('IntersectionObserver' in window)) return e.classList.add('posto');
+  const io = new IntersectionObserver(x => { if (x[0].isIntersecting){ e.classList.add('posto'); io.disconnect(); } }, { threshold:.12 });
+  io.observe(e);
+})();
 
-// ===== demonstração animada do app =====
-const $ = s => document.querySelector(s);
-const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const W = 1080, H = 640;
-function ajusta(){
-  const e = $('#escala'), s = e.clientWidth / W;
-  $('#st').style.transform = `scale(${s})`; e.style.height = (H * s) + 'px';
-}
-addEventListener('resize', ajusta); ajusta();
-setTimeout(() => $('#janela').classList.add('in'), 150);
-
-// ícone oficial de cada produto: um arquivo por produto na pasta /icones/ (gerado por tools/gera_icones.py)
-const icone = k => `<img src="icones/${k}.png" alt="" width="44" height="44" loading="lazy">`;
-// preços vêm do catálogo (catalogo.json → catalogo.js)
-const preco = k => { const p = (window.CATALOGO?.produtos || []).find(x => x.key === k); return p ? 'R$ ' + p.preco : ''; };
-const KITS = [
-  { k:'legendas', t:'Títulos Dinâmicos', d:'+70 títulos e legendas, mais 65 efeitos sonoros e 23 LUTs de bônus. Tudo no CapCut em um clique.', on:false, mt:'Liberado · não instalado', id:'c-kit', c:'242,165,65' },
-];
-const FERR = [
-  { k:'preco', t:'Quanto Cobrar?', d:'Seu preço e o orçamento em 1 minuto.', c:'123,216,143' },
-  { k:'contrato', t:'Gerador de Contrato', d:'Contrato que o cliente aceita por link.', vit:true, g:'Combinado por escrito', pr:preco('contrato'), ac:'1 ano', c:'169,139,255', id:'c-contrato' },
-  { k:'briefing', t:'Gerador de Briefing', d:'O cliente responde num link.', id:'c-brief', c:'63,208,194' },
-  { k:'painel', t:'Base Demandas', d:'Trabalhos, prazos e pagamentos.', vit:true, g:'O que entregar e o que já entrou', pr:preco('painel'), ac:'1 ano', c:'255,179,71' },
-];
-const card = (c, web) => {
-  const cls = c.vit ? ' vit' : (c.on || web ? ' on' : '');
-  const bs = c.vit ? '<span class="cta"><em>Conhecer →</em></span>' : web ? '<span><em>Abrir</em></span>' : c.on ? '<span><em>Atualizar</em></span><span class="gh">Remover</span>' : '<span><span class="fill"></span><em>Instalar</em></span>';
-  const mt = c.vit ? `<span class="pr"><b>${c.pr}</b> · acesso ${c.ac}</span>` : `<span class="mt">${web ? 'Liberado · navegador e celular' : c.mt}</span>`;
-  return `<div class="c${cls}" style="--c:${c.c}"${c.id ? ` id="${c.id}"` : ''}>${c.vit ? '<span class="sl">CONHEÇA</span>' : ''}<span class="ic">${icone(c.k)}</span><h4>${c.t}</h4>${c.vit ? `<div class="gc">${c.g}</div>` : ''}<p>${c.d}</p>${mt}<div class="bs">${bs}</div></div>`;
-};
-function monta(){
-  $('#kits').innerHTML = KITS.map(c => card(c)).join('');
-  $('#kits').style.gridTemplateColumns = 'repeat(3,1fr)';
-  $('#ferr').innerHTML = FERR.map(c => card(c, true)).join('');
-  $('#lg').innerHTML = '<span class="vz">O que o app fizer aparece aqui.</span>';
-}
-const dorme = ms => new Promise(r => setTimeout(r, ms));
-function log(txt, tipo){
-  const lg = $('#lg'); lg.querySelector('.vz')?.remove();
-  lg.querySelectorAll('.run').forEach(d => { d.className = 'ok'; d.querySelector('i').textContent = '✓'; });
-  const d = document.createElement('div'); d.className = tipo; d.innerHTML = `<i>${tipo === 'ok' ? '✓' : '◌'}</i><span></span>`; d.querySelector('span').textContent = txt; lg.appendChild(d);
-}
-function pos(el){ const a = el.getBoundingClientRect(), b = $('#st').getBoundingClientRect(), s = b.width / W; return { x:(a.left - b.left + a.width * .55) / s, y:(a.top - b.top + a.height * .55) / s }; }
-async function vaiPara(el){ const p = pos(el), c = $('#cur'); c.style.left = p.x + 'px'; c.style.top = p.y + 'px'; await dorme(750); }
-async function clica(){ const c = $('#cur'); c.classList.remove('clk'); void c.getBoundingClientRect(); c.classList.add('clk'); await dorme(260); }
-function toastm(t){ const e = $('#toastm'); e.textContent = t; e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 1800); }
-let rodando = false, visivel = true;
-new IntersectionObserver(es => { visivel = es[0].isIntersecting; if (visivel && !rodando) roda(); }, { threshold:.2 }).observe($('#janela'));
-async function roda(){
-  rodando = true;
-  while (visivel){
-    monta(); const cur = $('#cur'); cur.style.left = '940px'; cur.style.top = '600px';
-    await dorme(900);
-    const sons = $('#c-kit'), bt = sons.querySelector('.bs span');
-    sons.classList.add('alvo'); await vaiPara(bt); await clica();
-    bt.querySelector('em').textContent = 'Instalando…'; log('Instalando Títulos Dinâmicos', 'run');
-    const fill = bt.querySelector('.fill'); fill.style.transition = 'width 2.2s linear'; requestAnimationFrame(() => fill.style.width = '100%');
-    await dorme(1000); log('Colocando títulos, sons e LUTs no CapCut', 'run');
-    await dorme(1250);
-    log('Tudo instalado. Abra o CapCut.', 'ok');
-    sons.classList.remove('alvo'); sons.classList.add('on');
-    sons.querySelector('.mt').textContent = 'Instalado · 65 sons · 23 LUTs';
-    sons.querySelector('.bs').innerHTML = '<span><em>Atualizar</em></span><span class="gh">Remover</span>';
-    await dorme(1400);
-    const br = $('#c-brief'); br.classList.add('alvo'); await vaiPara(br.querySelector('.bs span')); await clica();
-    log('Abrindo Gerador de Briefing no navegador', 'ok'); toastm('Abrindo no navegador…');
-    await dorme(700); br.classList.remove('alvo');
-    await dorme(1200);
-    const ct = $('#c-contrato'); await vaiPara(ct.querySelector('.bs span')); await clica();
-    log('Abrindo a página do Gerador de Contrato', 'ok'); toastm('Conhecendo o Gerador de Contrato…');
-    await dorme(2600);
-    if (calmo) break;
-  }
-  rodando = false;
-}
-monta();
+// ----- vídeo de instalação: só carrega quando a pessoa aperta o play -----
+(function(){
+  if (!/^https:\/\//.test(VIDEO_INSTALACAO)) return;
+  const tela = document.getElementById('tela'), capa = document.getElementById('capa');
+  tela.hidden = false; document.getElementById('inst-g').classList.remove('sem-video');
+  document.getElementById('inst-apoio').textContent = 'Um vídeo curto mostra a instalação do começo ao fim. Na primeira vez, o Mac e o Windows mostram um aviso antes de abrir o app: é esperado, e o caminho está ao lado.';
+  if (/^https:\/\//.test(CAPA_DO_VIDEO)) capa.style.background = `center/cover no-repeat url("${CAPA_DO_VIDEO.replace(/"/g, '%22')}")`;
+  capa.onclick = () => {
+    const v = document.createElement('video'); v.controls = true; v.playsInline = true; v.preload = 'auto'; v.src = VIDEO_INSTALACAO;
+    v.setAttribute('aria-label', 'Vídeo: instalando o Base FL');
+    capa.replaceWith(v); const p = v.play(); if (p && p.catch) p.catch(() => {});
+  };
+})();
 </script>
 </body>
 </html>
