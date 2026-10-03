@@ -16,7 +16,7 @@
     try {
       var u = new URL(url), inc = new URLSearchParams(location.search);
       // origem Base FL: ?de=app quando vem do app; senão "pagina"
-      var de = inc.get("de") || "pagina"; inc.delete("de");
+      var de = inc.get("de") || "pagina"; inc.delete("de"); inc.delete("previa");      // "previa" é só da página: não vai para o checkout
       if (CFG.REPASSAR_PARAMETROS) inc.forEach(function (v, k) { if (!u.searchParams.has(k)) u.searchParams.set(k, v); });
       if (!u.searchParams.has("utm_source")) u.searchParams.set("utm_source", "basefl");
       if (!u.searchParams.has("utm_medium")) u.searchParams.set("utm_medium", de);
@@ -38,14 +38,15 @@
     if (CFG.QUANTIDADE_EXATA) $$("[data-mais]").forEach(function (el) { el.remove(); });      // número exato: sai o "mais de" / "+"
     var gar = $("#garantia");
     if (gar && CFG.GARANTIA_DIAS) { $$("[data-garantia]").forEach(function (el) { el.textContent = CFG.GARANTIA_DIAS; }); gar.hidden = false; }
-    else $$("details").forEach(function (d) { if ($("[data-garantia]", d)) d.remove(); });       // sem prazo configurado, a pergunta da garantia sai
+    else if (gar) gar.hidden = true;
+    if (!CFG.GARANTIA_DIAS) $$("details").forEach(function (d) { if ($("[data-garantia]", d)) d.remove(); });       // sem prazo configurado, a pergunta da garantia sai
     var cr = $("#credencial");
     if (cr && CFG.CREDENCIAL_FERNANDO) { cr.textContent = CFG.CREDENCIAL_FERNANDO; cr.hidden = false; }
     var fx = $("#faqExtra");
     if (fx) (CFG.FAQ_EXTRA || []).forEach(function (q) {
       if (!q || !q.p || !q.r) return;
       var d = document.createElement("details"), sm = document.createElement("summary"), p = document.createElement("p");
-      sm.textContent = q.p; p.textContent = q.r; d.appendChild(sm); d.appendChild(p); fx.appendChild(d);
+      sm.textContent = q.p; p.textContent = q.r; d.appendChild(sm); d.appendChild(p); (q.segunda && $("#faqSegunda") || fx).appendChild(d);
     });
     var ig = $('[data-link="instagram"]'), sp = $('[data-link="suporte"]');
     if (ig) { if (CFG.LINK_INSTAGRAM && CFG.LINK_INSTAGRAM !== "#") ig.href = CFG.LINK_INSTAGRAM; else ig.remove(); }
@@ -160,6 +161,11 @@
     // mostra 12 por vez; o botão carrega os próximos (os vídeos só tocam quando aparecem)
     var POR = 12, vistos = POR, filtro = "all", more = $("#libMore"), nEl = $("#libN");
     if (nEl) nEl.textContent = cards.length;
+    // contagem em cada filtro ("Títulos · 6")
+    var completa = !!CFG.QUANTIDADE_EXATA && cards.length === +CFG.QUANTIDADE_DE_PRESETS;      // só conta quando a galeria tem o pack inteiro
+    var hLib = $("#h-lib"); if (completa && hLib) hLib.textContent = "Os " + cards.length + " estilos do pack, em movimento.";
+    $$(".tabs button").forEach(function (b) { var i = $("[data-n]", b); if (!i) return; if (!completa) { i.remove(); return; } var f = b.dataset.filter;
+      i.textContent = " · " + cards.filter(function (c) { return f === "all" || c.dataset.cat === f; }).length; });
     function pinta() {
       var n = 0;
       cards.forEach(function (c) { var ok = filtro === "all" || c.dataset.cat === filtro; if (ok) n++; c.hidden = !ok || (filtro === "all" && n > vistos); });
@@ -197,7 +203,14 @@
       var titulos = Math.round(v * t * 52 / 12), min = titulos * m, h = Math.floor(min / 60), r = min % 60;
       var txt = h ? h + "h" + (r ? String(r).padStart(2, "0") : "") : r + " min";
       $("#oH").textContent = txt;
-      var eco = $("#calcEco"); if (eco && mexeu) { $("#calcEcoH").textContent = txt; eco.hidden = false; }
+      // na oferta, o número vai arredondado: meia hora mais próxima; abaixo de 1h, de 10 em 10 minutos
+      var eco = $("#calcEco");
+      if (eco && mexeu) {
+        var red;
+        if (min < 60) { red = Math.max(10, Math.round(min / 10) * 10); red = red >= 60 ? "1h" : red + " min"; }
+        else { var meias = Math.round(min / 30); red = Math.floor(meias / 2) + "h" + (meias % 2 ? "30" : ""); }
+        $("#calcEcoH").textContent = red; eco.hidden = false;
+      }
       $("#oN").textContent = "São cerca de " + titulos + " títulos criados do zero.";
       [iV, iT, iM].forEach(fill);
     }
@@ -375,6 +388,14 @@
     return fig;
   }
 
-  function init() { applyConfig(); hero(); antesDepois(); library(); calc(); reveals(); chrome(); instalacao(); }
+  /* ---------- Quem fez: se os prints não carregarem, não sobra título sem conteúdo ---------- */
+  function semPrints() {
+    var faixa = $(".sec-prova [data-prova]"); if (!faixa) return;
+    function confere() { var tem = $$(".pv-print img", faixa).length > 0; $$("[data-so-com-prints]").forEach(function (e) { e.hidden = !tem; }); faixa.hidden = !tem; return tem; }
+    if (confere()) return;
+    var n = 0, t = setInterval(function () { if (confere() || ++n > 10) clearInterval(t); }, 500);
+  }
+
+  function init() { applyConfig(); semPrints(); hero(); antesDepois(); library(); calc(); reveals(); chrome(); instalacao(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();
