@@ -10,8 +10,11 @@ window.PACK_CONFIG = {
   // Preço (só o número, sem "R$")
   PRECO: "67",
 
-  // Quantidade de presets (aparece como "+70")
+  // Quantidade de estilos do pack.
+  // Enquanto QUANTIDADE_EXATA for false, a página escreve "Mais de 70" / "+70".
+  // Quando você confirmar o número exato, troque o número e mude para true: a página passa a escrever só o número.
   QUANTIDADE_DE_PRESETS: "70",
+  QUANTIDADE_EXATA: false,
 
   // Links do rodapé
   LINK_SUPORTE: "https://wa.me/5548999642195?text=Oi!%20Preciso%20de%20ajuda%20com%20o%20Base%20FL.",
@@ -21,15 +24,28 @@ window.PACK_CONFIG = {
   // Só preencha com o prazo que está configurado no produto, na Greenn.
   GARANTIA_DIAS: "7",
 
-  // ANTES E DEPOIS (2 comparadores de arrastar). Troque só os arquivos; os nomes abaixo já estão certos.
-  // A página confere se os arquivos existem: enquanto faltar algum, o comparador dele não aparece.
-  // Para ver os espaços marcados antes de ter os vídeos: abra a página com ?previa=1
-  VIDEO_ANTES_01:  "assets/videos/antes-depois/1-antes.mp4",
-  VIDEO_DEPOIS_01: "assets/videos/antes-depois/1-depois.mp4",
-  LEGENDA_01: "",   // opcional: uma linha embaixo do comparador (ex.: "Reels de receita · título Bold Template")
-  VIDEO_ANTES_02:  "assets/videos/antes-depois/2-antes.mp4",
-  VIDEO_DEPOIS_02: "assets/videos/antes-depois/2-depois.mp4",
-  LEGENDA_02: "",
+  // SEM O PACK x COM O PACK (o comparador de arrastar, logo abaixo do topo).
+  // Coloque os dois arquivos em assets/videos/ com estes nomes. A página confere se eles existem:
+  // enquanto faltar algum, a seção não aparece. Para ver o espaço marcado antes disso: ?previa=1
+  VIDEO_SEM_PACK: "assets/videos/sem-pack.mp4",
+  VIDEO_COM_PACK: "assets/videos/com-pack.mp4",
+  // Capas (a imagem parada que aparece antes do vídeo carregar). Opcional: sem o arquivo, fica um fundo escuro.
+  CAPA_SEM_PACK: "assets/images/posters/sem-pack.jpg",
+  CAPA_COM_PACK: "assets/images/posters/com-pack.jpg",
+  LEGENDA_COMPARADOR: "",   // opcional: uma linha embaixo do comparador
+
+  // QUEM FEZ: uma linha a mais sobre o Fernando (só fatos). Vazia, não aparece.
+  // Ex.: "Mais de X alunos no curso." ou "Edita para clientes desde 20XX."
+  CREDENCIAL_FERNANDO: "",
+
+  // PERGUNTAS EXTRAS DO FAQ: escreva a resposta entre as aspas de "r". Pergunta com resposta vazia não aparece.
+  FAQ_EXTRA: [
+    { p: "Funciona no CapCut gratuito ou precisa do Pro?", r: "" },
+    { p: "As fontes aceitam acentos do português?", r: "" },
+    { p: "Funciona em vídeo horizontal?", r: "" },
+    { p: "O app Base FL é seguro? Aparece aviso do Windows ou do Mac?", r: "" },
+    { p: "Se o CapCut atualizar, os títulos continuam funcionando?", r: "" }
+  ],
 
   // Repassar UTMs/parâmetros da URL para o checkout (útil para Utmify / rastreio)
   REPASSAR_PARAMETROS: true

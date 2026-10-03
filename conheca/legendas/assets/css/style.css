@@ -666,3 +666,29 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 /* v10 */
 .cmp-pp[hidden]{display:none}
 .pv-linha+.pv-linha{margin-top:0}
+
+/* ==========================================================================
+   v11 · reorganização da página (comparador único, quem fez, oferta, FAQ)
+   ========================================================================== */
+.preset[hidden],.calc-eco[hidden],#credencial[hidden]{display:none}
+.faq-extra{display:contents}
+/* instalação + onde funciona, na mesma seção */
+.compat-in{margin-top:56px}
+.compat-in .h3{margin-bottom:0}
+.compat-in .compat{margin-top:20px}
+@media (min-width:760px){.compat.compat-4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* quem fez */
+.autor{margin-top:22px;display:flex;gap:18px;align-items:center;padding:20px;border-radius:var(--r,18px);background:var(--panel);border:1px solid var(--line)}
+.autor-foto{flex:none;width:96px;height:96px;border-radius:50%;object-fit:cover;border:2px solid var(--line-2)}
+.autor .h3{margin:0 0 6px}
+.autor p{color:var(--muted);font-size:16px;margin:0}
+.autor-sub{margin-top:30px}
+@media (max-width:520px){.autor{flex-direction:column;text-align:center}.autor-foto{width:84px;height:84px}}
+/* oferta: a conta da calculadora, a garantia logo abaixo do botão, e uma linha de "como recebo" */
+.calc-eco{margin:18px 0 0;padding:12px 14px;border-radius:12px;border:1px dashed var(--line-2);color:var(--muted);font-size:15px;text-align:center}
+.calc-eco b{color:var(--text)}
+.calc-eco+.btn-block{margin-top:14px}
+.garantia p{margin:0}
+.offer-como{margin-top:16px;color:var(--muted);font-size:14.5px;text-align:center}
+/* comparador: capa parada enquanto o vídeo não carrega */
+.cmp-lado video{background:#15110e}

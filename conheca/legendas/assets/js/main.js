@@ -35,8 +35,18 @@
     });
     if (CFG.PRECO) $$("[data-preco]").forEach(function (el) { el.textContent = CFG.PRECO; });
     if (CFG.QUANTIDADE_DE_PRESETS) $$("[data-qtd]").forEach(function (el) { el.textContent = CFG.QUANTIDADE_DE_PRESETS; });
+    if (CFG.QUANTIDADE_EXATA) $$("[data-mais]").forEach(function (el) { el.remove(); });      // número exato: sai o "mais de" / "+"
     var gar = $("#garantia");
     if (gar && CFG.GARANTIA_DIAS) { $$("[data-garantia]").forEach(function (el) { el.textContent = CFG.GARANTIA_DIAS; }); gar.hidden = false; }
+    else $$("details").forEach(function (d) { if ($("[data-garantia]", d)) d.remove(); });       // sem prazo configurado, a pergunta da garantia sai
+    var cr = $("#credencial");
+    if (cr && CFG.CREDENCIAL_FERNANDO) { cr.textContent = CFG.CREDENCIAL_FERNANDO; cr.hidden = false; }
+    var fx = $("#faqExtra");
+    if (fx) (CFG.FAQ_EXTRA || []).forEach(function (q) {
+      if (!q || !q.p || !q.r) return;
+      var d = document.createElement("details"), sm = document.createElement("summary"), p = document.createElement("p");
+      sm.textContent = q.p; p.textContent = q.r; d.appendChild(sm); d.appendChild(p); fx.appendChild(d);
+    });
     var ig = $('[data-link="instagram"]'), sp = $('[data-link="suporte"]');
     if (ig) { if (CFG.LINK_INSTAGRAM && CFG.LINK_INSTAGRAM !== "#") ig.href = CFG.LINK_INSTAGRAM; else ig.remove(); }
     if (sp) { if (CFG.LINK_SUPORTE && CFG.LINK_SUPORTE !== "#") sp.href = CFG.LINK_SUPORTE; else sp.remove(); }
@@ -146,9 +156,16 @@
       } else if (kt) {
         build(kt, kt.dataset.style, kt.dataset.text);
       }
-      if (i >= 6) card.classList.add("extra");
     });
-    lib.classList.add("collapsed");
+    // mostra 12 por vez; o botão carrega os próximos (os vídeos só tocam quando aparecem)
+    var POR = 12, vistos = POR, filtro = "all", more = $("#libMore"), nEl = $("#libN");
+    if (nEl) nEl.textContent = cards.length;
+    function pinta() {
+      var n = 0;
+      cards.forEach(function (c) { var ok = filtro === "all" || c.dataset.cat === filtro; if (ok) n++; c.hidden = !ok || (filtro === "all" && n > vistos); });
+      if (more) more.parentNode.style.display = filtro === "all" && cards.length > vistos ? "" : "none";
+    }
+    pinta();
     // anima só o que está na tela
     var io = new IntersectionObserver(function (en) {
       en.forEach(function (e) {
@@ -161,19 +178,11 @@
     }, { threshold: .35 });
     cards.forEach(function (c) { io.observe(c); });
 
-    var more = $("#libMore");
-    if (more) more.addEventListener("click", function () {
-      var open = lib.classList.toggle("collapsed");
-      more.textContent = open ? "Ver mais estilos" : "Ver menos";
-    });
+    if (more) more.addEventListener("click", function () { vistos += POR; pinta(); });
     $$(".tabs button").forEach(function (b) {
       b.addEventListener("click", function () {
         $$(".tabs button").forEach(function (x) { x.setAttribute("aria-selected", x === b ? "true" : "false"); });
-        var f = b.dataset.filter;
-        cards.forEach(function (c) { c.hidden = !(f === "all" || c.dataset.cat === f); });
-        // filtrado: mostra todos os daquela categoria
-        if (f !== "all") lib.classList.remove("collapsed");
-        if (more) more.parentNode.style.display = f === "all" ? "" : "none";
+        filtro = b.dataset.filter; pinta();
       });
     });
   }
@@ -186,11 +195,14 @@
       var v = +iV.value, t = +iT.value, m = +iM.value;
       $("#oV").textContent = v; $("#oT").textContent = t; $("#oM").textContent = m;
       var titulos = Math.round(v * t * 52 / 12), min = titulos * m, h = Math.floor(min / 60), r = min % 60;
-      $("#oH").textContent = h ? h + "h" + (r ? String(r).padStart(2, "0") : "") : r + " min";
+      var txt = h ? h + "h" + (r ? String(r).padStart(2, "0") : "") : r + " min";
+      $("#oH").textContent = txt;
+      var eco = $("#calcEco"); if (eco && mexeu) { $("#calcEcoH").textContent = txt; eco.hidden = false; }
       $("#oN").textContent = "São cerca de " + titulos + " títulos criados do zero.";
       [iV, iT, iM].forEach(fill);
     }
-    [iV, iT, iM].forEach(function (r) { r.addEventListener("input", upd); });
+    var mexeu = false;
+    [iV, iT, iM].forEach(function (r) { r.addEventListener("input", function () { mexeu = true; upd(); }); });
     upd();
   }
 
@@ -207,34 +219,44 @@
     els.forEach(function (e) { io.observe(e); });
   }
 
-  /* ---------- 7. Topo e barra fixa de compra ---------- */
+  /* ---------- 7. Topo e barra fixa de compra ----------
+     A barra só aparece depois que o comparador saiu da tela (ou o topo, se o comparador ainda não tem vídeo).
+     O botão dela leva para a oferta; depois que a oferta já foi vista, leva direto para o checkout. */
   function chrome() {
-    var top = $(".top"), sticky = $("#sticky"), heroEl = $(".hero"), offer = $("#oferta"), fin = $(".sec-final");
-    window.addEventListener("scroll", function () { top.classList.toggle("scrolled", window.scrollY > 8); }, { passive: true });
-    if (!sticky || !("IntersectionObserver" in window)) return;
-    var state = { hero: true, offer: false, fin: false };
+    var top = $(".top"), sticky = $("#sticky"), heroEl = $(".hero"), cmp = $("#comparar"), offer = $("#oferta"), fin = $(".sec-final");
+    var a = sticky && $("a", sticky), viuOferta = false, state = { offer: false, fin: false };
     function upd() {
-      var show = !state.hero && !state.offer && !state.fin;
+      top.classList.toggle("scrolled", window.scrollY > 8);
+      if (!sticky) return;
+      var ref = cmp && !cmp.hidden ? cmp : heroEl;
+      var show = ref.getBoundingClientRect().bottom < 0 && !state.offer && !state.fin;
       sticky.classList.toggle("show", show);
       sticky.setAttribute("aria-hidden", show ? "false" : "true");
-      var a = $("a", sticky); if (a) a.tabIndex = show ? 0 : -1;
+      if (a) a.tabIndex = show ? 0 : -1;
     }
+    window.addEventListener("scroll", upd, { passive: true });
+    if (!sticky || !("IntersectionObserver" in window)) return;
     var io = new IntersectionObserver(function (en) {
       en.forEach(function (e) {
-        if (e.target === heroEl) state.hero = e.isIntersecting;
-        else if (e.target === offer) state.offer = e.isIntersecting;
-        else state.fin = e.isIntersecting;
+        if (e.target === offer) {
+          state.offer = e.isIntersecting;
+          if (e.isIntersecting && !viuOferta && a) {
+            viuOferta = true; a.setAttribute("href", checkoutHref()); a.textContent = "Liberar o pack";
+            a.addEventListener("click", function () { try { (window.dataLayer = window.dataLayer || []).push({ event: "cta_checkout", produto: "titulos_dinamicos", origem: "barra" }); } catch (x) {} });
+          }
+        } else state.fin = e.isIntersecting;
       });
       upd();
     }, { threshold: 0 });
-    [heroEl, offer, fin].forEach(function (el) { if (el) io.observe(el); });
+    [offer, fin].forEach(function (el) { if (el) io.observe(el); });
+    upd();
   }
 
   /* ---------- Instalação: app Base FL instala e os títulos aparecem no CapCut ---------- */
   function instalacao() {
     var box = $("#inst"); if (!box) return;
     var app = $("#instApp"), cc = $("#instCC"), cur = $("#instCur"), tag = $("#instTag");
-    var PASTAS = ["FL Títulos", "FL Ganchos", "FL Legendas"];
+    var PASTAS = ["Títulos - Ganchos", "Bold - Presets", "Clássico", "Divertido"];      // nomes reais das pastas do pack
     var TILES = ["Bold", "Neon", "Itálico", "Script", "Clássico", "Riscado"];
     var wait = function (ms) { return new Promise(function (r) { setTimeout(r, reduce ? Math.min(ms, 80) : ms); }); };
     var visible = true;
@@ -282,38 +304,37 @@
     }).catch(function () { return false; });
   }
   function antesDepois() {
-    var sec = $("#antes-depois"), box = $("#ba"), ver = $("[data-ver]");
+    var sec = $("#comparar"), box = $("#ba"), ver = $("[data-ver]");
     if (ver) ver.setAttribute("href", "#biblioteca");          // até confirmar que há vídeo
-    if (!sec || !box) return;
+    if (!sec || !box || !CFG.VIDEO_SEM_PACK || !CFG.VIDEO_COM_PACK) return;
     var previa = /[?&]previa=1/.test(location.search);
-    var pares = ["01", "02"].map(function (n) { return { n: n, antes: CFG["VIDEO_ANTES_" + n], depois: CFG["VIDEO_DEPOIS_" + n], legenda: CFG["LEGENDA_" + n] }; })
-      .filter(function (p) { return p.antes && p.depois; });
-    Promise.all(pares.map(function (p) {
-      return Promise.all([existe(p.antes), existe(p.depois)]).then(function (ok) { p.ok = ok[0] && ok[1]; return p; });
-    })).then(function (ps) {
-      ps = ps.filter(function (p) { return p.ok || previa; }); if (!ps.length) return;
-      ps.forEach(function (p) { box.appendChild(comparador(p)); });
-      box.classList.toggle("um", ps.length === 1);
-      sec.hidden = false; if (ver) ver.setAttribute("href", "#antes-depois");
+    var p = { antes: CFG.VIDEO_SEM_PACK, depois: CFG.VIDEO_COM_PACK, capaA: CFG.CAPA_SEM_PACK, capaD: CFG.CAPA_COM_PACK, legenda: CFG.LEGENDA_COMPARADOR };
+    Promise.all([existe(p.antes), existe(p.depois), p.capaA ? existe(p.capaA) : false, p.capaD ? existe(p.capaD) : false]).then(function (ok) {
+      p.ok = ok[0] && ok[1]; if (!ok[2]) p.capaA = ""; if (!ok[3]) p.capaD = "";
+      if (!p.ok && !previa) return;
+      box.appendChild(comparador(p));
+      sec.hidden = false; if (ver) ver.setAttribute("href", "#comparar");
     });
   }
   function comparador(p) {
     var fig = document.createElement("figure"); fig.className = "cmp";
     var palco = document.createElement("div"); palco.className = "cmp-palco"; palco.style.setProperty("--x", "50%");
-    function lado(src, cls, rot, marca) {
+    function lado(src, cls, rot, marca, capa) {
       var d = document.createElement("div"); d.className = "cmp-lado " + cls;
       if (p.ok) {
-        var v = document.createElement("video"); v.muted = true; v.loop = true; v.playsInline = true; v.preload = "metadata"; v.src = src;
+        // o arquivo só começa a baixar quando a seção chega perto da tela (ver "carrega" abaixo)
+        var v = document.createElement("video"); v.muted = true; v.loop = true; v.playsInline = true; v.preload = "none"; v.dataset.src = src; if (capa) v.poster = capa;
+        v.setAttribute("muted", ""); v.setAttribute("playsinline", "");
         v.setAttribute("aria-hidden", "true"); v.tabIndex = -1; d.appendChild(v); d._v = v;
       } else { d.classList.add("vazio"); d.innerHTML = "<code>" + marca + "</code>"; }
       var t = document.createElement("span"); t.className = "cmp-tag"; t.textContent = rot; d.appendChild(t);
       return d;
     }
-    var a = lado(p.antes, "antes", "Antes", "VIDEO_ANTES_" + p.n), d = lado(p.depois, "depois", "Depois", "VIDEO_DEPOIS_" + p.n);
+    var a = lado(p.antes, "antes", "Sem o pack", "sem-pack.mp4", p.capaA), d = lado(p.depois, "depois", "Com o pack", "com-pack.mp4", p.capaD);
     var linha = document.createElement("span"); linha.className = "cmp-linha"; linha.innerHTML = '<i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6"/></svg></i>';
     // o controle de verdade é um range (teclado e leitor de tela); o arrasto com dedo/mouse mexe nele
     var rng = document.createElement("input"); rng.type = "range"; rng.min = 0; rng.max = 100; rng.value = 50; rng.className = "cmp-rng";
-    rng.setAttribute("aria-label", "Arraste para comparar antes e depois (exemplo " + (+p.n) + ")");
+    rng.setAttribute("aria-label", "Arraste para comparar o vídeo sem o pack e com o pack");
     var pp = document.createElement("button"); pp.type = "button"; pp.className = "cmp-pp"; pp.setAttribute("aria-label", "Pausar");
     pp.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path class="pa" d="M8 5v14M16 5v14"/><path class="pl" d="M8 5l11 7-11 7z"/></svg>';
     palco.appendChild(a); palco.appendChild(d); palco.appendChild(linha); palco.appendChild(rng); palco.appendChild(pp);
@@ -332,8 +353,10 @@
     palco.addEventListener("pointermove", function (e) { if (arr) pos(e); });
     ["pointerup", "pointercancel"].forEach(function (n) { palco.addEventListener(n, function () { arr = false; }); });
 
-    var va = a._v, vd = d._v, pausado = false, visto = false;
-    function toca(f) { if (!va || pausado || (reduce && !f)) return; [vd, va].forEach(function (v) { var q = v.play(); if (q && q.catch) q.catch(function () {}); }); }
+    var va = a._v, vd = d._v, pausado = false, visto = false, carregado = false;
+    function carrega() { if (carregado || !va) return; carregado = true; [va, vd].forEach(function (v) { v.src = v.dataset.src; v.preload = "auto"; v.load(); }); }
+    if (va && "IntersectionObserver" in window) { var pre = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { carrega(); pre.disconnect(); } }, { rootMargin: "700px 0px" }); pre.observe(palco); } else carrega();
+    function toca(f) { if (!va || pausado || (reduce && !f)) return; carrega(); [vd, va].forEach(function (v) { var q = v.play(); if (q && q.catch) q.catch(function () {}); }); }
     function para() { if (va) { vd.pause(); va.pause(); } }
     if (va) {
       // o "depois" manda; o "antes" acompanha (corrige se desgarrar mais de 2 quadros)
