@@ -99,4 +99,8 @@ revoke all on function public._links_ok(jsonb), public.portfolio_salvar(jsonb), 
 grant execute on function public.portfolio_salvar(jsonb), public.portfolio_livre(text) to authenticated;
 grant execute on function public.pub_portfolio(text) to anon, authenticated;
 
+-- Produto do CaseUp na Greenn (#196127): quem compra recebe o acesso sozinho
+insert into public.products (greenn_product_id, name, pack_ids) values ('196127', 'CaseUp', '{fl-case}')
+on conflict (greenn_product_id) do update set name = excluded.name, pack_ids = excluded.pack_ids;
+
 select 'caseup com botões pronto' as resultado;
