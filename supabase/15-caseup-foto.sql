@@ -41,7 +41,7 @@ language sql immutable as $$ select case when t ~ '^[a-z0-9-]{1,40}\.jpg$' then 
 create or replace function public._slug_reservado(s text) returns boolean
 language sql immutable as $$
   select s in ('demo','exemplo','previa','admin','basefl','base-fl','caseup','suporte','ajuda','teste',
-               'app','b','c','e','p','case','capas','conheca','contrato','briefing','core','docs','icones','kit','lut','luts','mood',
+               'app','b','c','e','p','case','instalar','capas','conheca','contrato','briefing','core','docs','icones','kit','lut','luts','mood',
                'oferta','packs','painel','preco','supabase','tools','ui','index','404','home','login','entrar','conta',
                'termos','privacidade','politica','blog','api','assets','static','www','loja','comprar','checkout')
 $$;

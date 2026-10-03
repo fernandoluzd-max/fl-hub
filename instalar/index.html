@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Base FL — a base de trabalho do editor de vídeo</title>
-<meta name="description" content="Os títulos, sons e ferramentas que o Fernando Luz usa para editar mais rápido e atender clientes, do primeiro pedido até o pagamento.">
-<link rel="icon" href="favicon.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="manifest" href="site.webmanifest">
+<title>Instalar o Base FL — Mac e Windows</title>
+<meta name="description" content="Baixe o app Base FL, entre com o e-mail da compra e comece a usar. Vídeo com o passo a passo, para Mac e Windows.">
+<link rel="icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#0D0F0E">
-<meta property="og:title" content="Base FL — a base de trabalho do editor de vídeo">
-<meta property="og:description" content="O que eu uso para editar mais rápido e atender cliente, num app só.">
+<meta property="og:title" content="Instalar o Base FL">
+<meta property="og:description" content="Baixe o app, entre com o e-mail da compra e comece a usar.">
 <meta property="og:image" content="https://basefl.com/icon-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -50,11 +50,11 @@ h3{font-size:20px;font-stretch:104%;letter-spacing:-.01em;line-height:1.2}
 .topo a{font-size:15px;font-weight:600;color:var(--cinza);text-decoration:none;min-height:44px;display:inline-flex;align-items:center;padding:0 6px}
 .topo a:hover{color:var(--papel)}
 .topo a,.topo .nome{white-space:nowrap}
-@media (max-width:460px){.topo a[href="#instalar"],.topo a[href="#duvidas"]{display:none}}
+@media (max-width:460px){.topo a[href="#instalar"]{display:none}}
 
 /* abertura: título, fala, vídeo e botões, centralizados */
-.abre{padding:clamp(30px,6vw,84px) 0 clamp(44px,7vw,90px);text-align:center;display:grid;justify-items:center}
-.abre h1{font-size:clamp(42px,8.4vw,96px);font-stretch:118%;line-height:.96;letter-spacing:-.035em;max-width:16ch}
+.abre{padding:clamp(14px,2.4vw,28px) 0 clamp(40px,6vw,76px);text-align:center;display:grid;justify-items:center}
+.abre h1{font-size:clamp(38px,6.6vw,72px);font-stretch:118%;line-height:.96;letter-spacing:-.035em;max-width:16ch}
 .abre h1 span{display:block;color:var(--ambar)}
 .abre p.fala{margin-top:clamp(16px,2.4vw,24px);font-size:clamp(17px,2vw,20px);color:var(--cinza);max-width:56ch}
 .abre p.fala b{color:var(--papel)}
@@ -99,15 +99,6 @@ h3{font-size:20px;font-stretch:104%;letter-spacing:-.01em;line-height:1.2}
 .pl-linha::-moz-range-thumb{width:15px;height:15px;border:0;border-radius:50%;background:var(--papel)}
 @media (max-width:520px){.pl-t#plD{display:none}.pl-barra{gap:2px;padding:22px 4px 4px}}
 
-.topo a.ja{color:var(--ambar-tinta);background:var(--ambar);border-radius:99px;padding:0 16px;font-weight:700;min-height:40px}
-.topo a.ja:hover{color:var(--ambar-tinta);background:#f6b458}
-.desce{display:inline-flex;align-items:center;gap:10px;margin-top:clamp(22px,3vw,30px);min-height:52px;padding:0 26px;border-radius:99px;background:var(--ambar);color:var(--ambar-tinta);font-family:var(--d);font-stretch:108%;font-weight:800;font-size:17px;text-decoration:none;transition:transform .15s,background .2s}
-.desce:hover{background:#f6b458;transform:translateY(-1px)}
-.desce::after{content:"";width:9px;height:9px;border-right:2.5px solid currentColor;border-bottom:2.5px solid currentColor;transform:rotate(45deg) translate(-2px,-2px)}
-.fecho{text-align:center}
-.ja-cx{display:grid;gap:22px;justify-items:center;text-align:center;padding:clamp(26px,4vw,44px);border:1px solid var(--linha);border-radius:24px;background:var(--parede)}
-.ja-cx h2{font-size:clamp(26px,4vw,38px)}
-.ja-cx .bt{min-width:260px}
 /* ---------- a prateleira (o elemento da página) ---------- */
 .estante{background:var(--fundo);border-bottom:1px solid var(--linha);padding:clamp(44px,7vw,84px) 0 clamp(50px,7vw,90px)}
 .nivel{margin-top:clamp(34px,5vw,54px)}
@@ -183,57 +174,80 @@ footer{padding:26px 0 40px;color:var(--apagado);font-size:13.5px}
 
 <div class="larg">
   <div class="topo">
-    <img src="logo.png" alt="">
-    <span class="nome">Base FL<small>por Fernando Luz</small></span>
+    <img src="/logo.png" alt="">
+    <a class="nome" href="/" style="text-decoration:none;color:inherit;padding:0;min-height:0;display:block">Base FL<small>por Fernando Luz</small></a>
     <span class="esp"></span>
+    <a href="#instalar">Primeira vez</a>
     <a href="#duvidas">Dúvidas</a>
-    <a class="ja" href="/instalar/">Já comprei</a>
   </div>
 
   <section class="abre">
-    <h1>A minha base de trabalho, <span>num app.</span></h1>
-    <p class="fala">O Base FL junta o que eu uso no dia a dia para <b>editar mais rápido</b> e para <b>atender cliente</b>, do primeiro pedido até o pagamento.</p>
-    <a class="desce" href="#prateleira">Ver o que tem dentro</a>
+    <h1>Agora é só <span>instalar.</span></h1>
+    <p class="fala">O que você comprou fica dentro do app Base FL. Assista ao vídeo, baixe o app e entre com o <b>mesmo e-mail da compra</b>.</p>
+
+    <!-- VÍDEO DE INSTALAÇÃO: o endereço fica em VIDEO_INSTALACAO, no começo do script lá embaixo.
+         Começa sozinho, sem som (os navegadores só deixam assim). O botão grande liga o som e volta ao início. -->
+    <div class="player" id="player" hidden>
+      <video id="vid" playsinline muted preload="metadata" aria-label="Vídeo: instalando o Base FL"></video>
+      <button class="pl-som" id="plSom" type="button"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5zM15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></i><span>Assistir com som</span></button>
+      <button class="pl-centro" id="plCentro" type="button" aria-label="Tocar" hidden><i aria-hidden="true"></i></button>
+      <div class="pl-barra" id="plBarra">
+        <button class="pl-b" id="plPlay" type="button" aria-label="Pausar"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-pausa" d="M8 5v14M16 5v14"/><path class="i-toca" d="M8 5l11 7-11 7z"/></svg></button>
+        <span class="pl-t" id="plT">0:00</span>
+        <input class="pl-linha" id="plLinha" type="range" min="0" max="1000" value="0" step="1" aria-label="Posição do vídeo">
+        <span class="pl-t" id="plD">0:00</span>
+        <button class="pl-b" id="plMudo" type="button" aria-label="Ligar o som"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path class="i-som" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/><path class="i-mudo" d="M16 9.5l5 5M21 9.5l-5 5"/></svg></button>
+        <button class="pl-b" id="plCheia" type="button" aria-label="Tela cheia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+      </div>
+    </div>
+
+    <div class="baixar" id="dl">
+      <a class="bt" id="b-mac" href="https://github.com/fernandoluzd-max/fl-hub/releases/latest/download/Base-FL-Mac.dmg">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.5 2-3.7 2.1-3.8-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.8-4.1zM13.9 5.1c.7-.9 1.2-2 1.1-3.2-1 0-2.3.7-3 1.6-.7.8-1.3 2-1.1 3.1 1.1.1 2.3-.6 3-1.5z"/></svg>
+        <span><b>Baixar para Mac</b><small>macOS 10.15 ou mais novo, Intel e Apple Silicon</small></span>
+      </a>
+      <a class="bt" id="b-win" href="https://github.com/fernandoluzd-max/fl-hub/releases/latest/download/Base-FL-Windows.exe">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5 10.4 4.5v7H3zm8.3-1.1L21 3v8.5h-9.7zM3 12.5h7.4v7L3 18.5zm8.3 0H21V21l-9.7-1.4z"/></svg>
+        <span><b>Baixar para Windows</b><small>Windows 10 ou 11, sem senha de administrador</small></span>
+      </a>
+    </div>
+    <p class="gratis" id="hint">O app é gratuito. Dentro dele aparece tudo o que você já liberou.</p>
   </section>
 </div>
 
-<!-- ============ A PRATELEIRA: o que existe dentro do app. Sem preço: cada item leva para a página dele.
-     Os itens vêm do catálogo (/catalogo.js). Não precisa mexer aqui quando um produto mudar. ============ -->
-<section class="estante" id="prateleira">
+<section class="bloco">
   <div class="larg">
-    <h2>Escolha por onde começar.</h2>
-    <p class="apoio">Cada item resolve uma parte do trabalho e pode ser usado sozinho. Toque em um para ver como funciona.</p>
-
-    <div class="nivel">
-      <div class="rot"><h3>Para editar</h3><p>Títulos, sons e cor para deixar a edição mais rápida.</p></div>
-      <div class="objs" id="n-editar"></div>
-      <div class="tabua"></div>
-    </div>
-    <div class="nivel">
-      <div class="rot"><h3>Para atender cliente</h3><p>Abrem no navegador, no computador ou no celular.</p></div>
-      <div class="objs" id="n-cliente"></div>
-      <div class="tabua"></div>
-    </div>
-    
-  </div>
-</section>
-
-<section class="bloco inst">
-  <div class="larg">
-    <h2>Como funciona.</h2>
+    <h2>São três passos.</h2>
     <div class="passos">
-      <div class="passo"><h3>Escolha o que faz sentido</h3><p>Cada produto tem a própria página, mostrando o que ele faz. Você leva só o que for usar.</p></div>
-      <div class="passo"><h3>Instale o app Base FL</h3><p>O app é gratuito, para Mac e Windows. Você entra com o <b>e-mail da compra</b>, sem senha.</p></div>
-      <div class="passo"><h3>Use no seu dia a dia</h3><p>Os kits entram no seu CapCut com um clique. As ferramentas abrem no navegador, também no celular.</p></div>
+      <div class="passo"><h3>Baixe e instale o app</h3><p>É uma vez só, no Mac ou no Windows. O vídeo lá em cima mostra o caminho.</p></div>
+      <div class="passo"><h3>Entre com o seu e-mail</h3><p>Use o <b>mesmo e-mail da compra</b>. Chega um código no e-mail; não tem senha para lembrar.</p></div>
+      <div class="passo"><h3>Use o que é seu</h3><p>O que você comprou aparece com <b>Instalar</b> ou <b>Abrir</b>. O resto aparece com <b>Conhecer</b>, e leva para a página do produto.</p></div>
     </div>
   </div>
 </section>
 
-<section class="bloco" id="ja-comprei">
+<section class="bloco inst" id="instalar">
   <div class="larg">
-    <div class="ja-cx">
-      <div><h2>Já comprou?</h2><p class="apoio">O vídeo de instalação e os botões para baixar o app estão numa página só.</p></div>
-      <a class="bt meu" href="/instalar/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6.5 10l5.5 5.5L17.5 10M4 20h16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Instalar o app</b><small>Mac e Windows</small></span></a>
+    <h2>Na primeira vez que abrir.</h2>
+    <p class="apoio">O Mac e o Windows mostram um aviso antes de abrir um app novo. É esperado, e passa assim:</p>
+    <div class="aviso">
+      <div class="abas" role="tablist"><button class="aba" data-os="mac" role="tab">Mac</button><button class="aba" data-os="win" role="tab">Windows</button></div>
+      <div class="painel" id="p-mac">
+        <ol>
+          <li>Abra o arquivo <b>Base-FL-Mac.dmg</b> e arraste o app para a pasta <b>Aplicativos</b>.</li>
+          <li>Na pasta Aplicativos, clique com o <b>botão direito</b> no Base FL e escolha <b>Abrir</b>.</li>
+          <li>Na janela de aviso, clique em <b>Abrir</b> de novo.</li>
+        </ol>
+        <p class="nota">Esse aviso aparece só na primeira vez. Depois é só abrir normalmente pelo Launchpad ou pela pasta Aplicativos.</p>
+      </div>
+      <div class="painel" id="p-win">
+        <ol>
+          <li>Abra o arquivo <b>Base-FL-Windows.exe</b>.</li>
+          <li>Se aparecer a tela azul <b>"O Windows protegeu o computador"</b>, clique em <b>Mais informações</b>.</li>
+          <li>Clique em <b>Executar assim mesmo</b> e siga a instalação.</li>
+        </ol>
+        <p class="nota">Esse aviso aparece só na instalação. Depois o app fica no Menu Iniciar.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -242,50 +256,96 @@ footer{padding:26px 0 40px;color:var(--apagado);font-size:13.5px}
   <div class="larg">
     <h2>Dúvidas rápidas.</h2>
     <div class="duv">
-      <details><summary>O que é o Base FL?</summary><p>É um app para computador que reúne os meus kits para o CapCut e as minhas ferramentas para atender cliente. Você instala uma vez e tudo o que comprar aparece ali.</p></details>
-      <details><summary>Preciso comprar tudo?</summary><p>Não. Cada produto é vendido separado e funciona sozinho. Quem quer as ferramentas de atendimento juntas tem o Kit Freelancer.</p></details>
-      <details><summary>O app é pago?</summary><p>Não. O app é gratuito. Os kits e as ferramentas que ficam dentro dele é que são comprados, um a um.</p></details>
-      <details><summary>Funciona no celular?</summary><p>As ferramentas abrem no navegador, no computador ou no celular. Os kits para o CapCut são só para o CapCut do computador (Windows e Mac).</p></details>
-      <details><summary>Já comprei. Onde eu instalo?</summary><p>Na <a href="/instalar/">página de instalação</a>, com o vídeo do passo a passo.</p></details>
+      <details><summary>O app é grátis mesmo?</summary><p>O app, sim: baixar e instalar não custa nada. Os kits e as ferramentas que aparecem dentro dele são produtos pagos, vendidos um a um. Você só paga pelo que escolher.</p></details>
+      <details><summary>Baixei e está tudo com cadeado</summary><p>É assim para quem ainda não comprou nada. Se você já comprou, entre com o <b>mesmo e-mail usado na compra</b>: clique em <b>Sair</b> (canto de baixo do app) e entre com o e-mail certo. Compras aprovadas aparecem em até 1 minuto.</p></details>
+      <details><summary>O código não chegou no meu e-mail</summary><p>Confira as pastas <b>Spam</b> e <b>Promoções</b>. Procure por "Base FL". Se pedir de novo, espere 1 minuto entre um pedido e outro.</p></details>
+      <details><summary>O app diz que o CapCut está aberto</summary><p>Feche o CapCut completamente (no Mac: <b>⌘ + Q</b>). O app percebe sozinho quando ele fechar.</p></details>
+      <details><summary>O app diz "CapCut não encontrado"</summary><p>Abra o CapCut uma vez, crie um projeto qualquer e feche. Depois volte ao app.</p></details>
+      <details><summary>As ferramentas funcionam no celular?</summary><p>Sim. As ferramentas abrem no navegador, no computador ou no celular. Entre com o <b>mesmo e-mail da compra</b>. Já os kits do CapCut são só para o computador.</p></details>
+      <details><summary>Posso usar no Mac e no Windows?</summary><p>Sim. Instale o app nos dois e entre com o mesmo e-mail da compra.</p></details>
+      <details><summary>Comprei algo novo. Preciso baixar de novo?</summary><p>Não. O que você comprou aparece liberado no mesmo app. É só clicar em Instalar ou Abrir.</p></details>
     </div>
   </div>
 </section>
 
 <div class="larg">
   <section class="fecho">
-    <h2>Comece por um.</h2>
-    <p class="apoio">Escolha o produto que resolve o que mais te toma tempo hoje.</p>
-    <a class="desce" href="#prateleira" style="margin-top:26px">Voltar para os produtos</a>
+    <h2>Tudo pronto para instalar.</h2>
+    <p class="apoio">Baixe, entre com o e-mail da compra e comece a usar. Quer ver o que mais tem no Base FL? <a href="/">Conheça as outras ferramentas</a>.</p>
+    <div class="baixar" id="dl2"></div>
     <div class="ajuda">
-      <span><b>Ficou com dúvida?</b> Fale com a gente no WhatsApp.</span>
+      <span><b>Travou em alguma parte?</b> No app, clique em <b>Diagnóstico para suporte</b>, copie e mande pra gente.</span>
       <a href="https://wa.me/5548999642195?text=Oi!%20Preciso%20de%20ajuda%20com%20o%20Base%20FL." target="_blank" rel="noopener">Falar com o suporte</a>
     </div>
   </section>
   <footer>Base FL, por Fernando Luz. CapCut é marca de seus respectivos donos; este app não tem vínculo com o CapCut.</footer>
 </div>
 
-<script src="/catalogo.js"></script>
 <script>
+// ============================================================
+// VÍDEO DE INSTALAÇÃO: cole o endereço do vídeo entre as aspas.
+// (No Cloudflare R2: abra o arquivo "instalando" e copie o endereço público dele.)
+// Vazio = o vídeo não aparece na página.
+const VIDEO_INSTALACAO = 'https://aulas.basefl.com/instalando.mp4';
+const CAPA_DO_VIDEO = '';       // opcional: endereço de uma imagem para aparecer antes do play
+// ============================================================
 document.documentElement.classList.add('js');
 
-// ----- a prateleira, montada a partir do catálogo -----
-(function(){
-  const C = window.CATALOGO; if (!C || !C.produtos) return;
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
-  const item = (p, i) => `<a class="obj" style="--k:${esc(p.cor || '242,165,65')};--i:${i}" href="/conheca/${esc(p.slug)}/?de=inicio"><span class="cx"><img src="/icones/${esc(p.key)}.png" alt="" width="100" height="100" loading="lazy"></span><b>${esc(p.nome)}</b><span class="preco">Conhecer</span></a>`;
-  const edita = p => p.tipo === 'kit' || p.key === 'mood';       // o Mood é ferramenta de cor: fica com as coisas de edição
-  const editar = C.produtos.filter(edita).sort((a, b) => (a.tipo === 'kit' ? 0 : 1) - (b.tipo === 'kit' ? 0 : 1)), cliente = C.produtos.filter(p => !edita(p));
-  document.getElementById('n-editar').innerHTML = editar.map(item).join('');
-  document.getElementById('n-cliente').innerHTML = cliente.map((p, i) => item(p, i + editar.length)).join('');
-})();
-// os objetos são colocados na prateleira uma vez, quando ela entra na tela
-(function(){
-  const e = document.getElementById('prateleira');
-  if (!('IntersectionObserver' in window)) return e.classList.add('posto');
-  const io = new IntersectionObserver(x => { if (x[0].isIntersecting){ e.classList.add('posto'); io.disconnect(); } }, { threshold:.12 });
-  io.observe(e);
-})();
+// ----- botão do sistema certo em destaque -----
+const ua = navigator.userAgent.toLowerCase();
+const isWin = ua.includes('windows'), isMac = ua.includes('mac os') || ua.includes('macintosh');
+const celular = /iphone|ipad|android/.test(ua);
+document.getElementById(isWin ? 'b-win' : 'b-mac').classList.add('meu');
+if (isWin) document.getElementById('dl').prepend(document.getElementById('b-win'));
+if (celular || (!isWin && !isMac)) document.getElementById('hint').innerHTML = '<b>O app é para computador (Mac ou Windows).</b> Abra esta página nele para baixar. As ferramentas de navegador você já pode usar pelo celular, entrando com o e-mail da compra.';
+document.querySelectorAll('#dl .bt').forEach(b => { const c = b.cloneNode(true); c.removeAttribute('id'); document.getElementById('dl2').appendChild(c); });
 
+// ----- Mac / Windows -----
+function aba(os){
+  document.querySelectorAll('.aba').forEach(t => { const on = t.dataset.os === os; t.classList.toggle('on', on); t.setAttribute('aria-selected', on); });
+  document.getElementById('p-mac').classList.toggle('on', os === 'mac');
+  document.getElementById('p-win').classList.toggle('on', os === 'win');
+}
+document.querySelectorAll('.aba').forEach(t => t.onclick = () => aba(t.dataset.os));
+aba(isWin ? 'win' : 'mac');
+
+// ----- player do vídeo de instalação -----
+// Começa sozinho e sem som (regra dos navegadores). "Assistir com som" liga o som e volta para o começo.
+(function(){
+  if (!/^https:\/\//.test(VIDEO_INSTALACAO)) return;
+  const box = document.getElementById('player'), v = document.getElementById('vid'), $ = id => document.getElementById(id);
+  const som = $('plSom'), centro = $('plCentro'), play = $('plPlay'), mudo = $('plMudo'), linha = $('plLinha'), cheia = $('plCheia');
+  const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  box.hidden = false;
+  if (/^https:\/\//.test(CAPA_DO_VIDEO)) v.poster = CAPA_DO_VIDEO;
+  v.src = VIDEO_INSTALACAO; v.muted = true;
+  const tempo = s => { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+  const toca = () => { const p = v.play(); if (p && p.catch) p.catch(() => estado()); };
+  let arrastando = false, escolheu = false, tQuieto;
+  function estado(){
+    box.classList.toggle('parado', v.paused); box.classList.toggle('com-som', !v.muted);
+    play.setAttribute('aria-label', v.paused ? 'Tocar' : 'Pausar'); mudo.setAttribute('aria-label', v.muted ? 'Ligar o som' : 'Tirar o som');
+    som.hidden = !v.muted || (v.paused && escolheu);            // o convite ao som some depois que o som foi ligado
+    centro.hidden = !(v.paused && som.hidden);
+  }
+  function mexeu(){ box.classList.remove('quieto'); clearTimeout(tQuieto); if (!v.paused) tQuieto = setTimeout(() => box.classList.add('quieto'), 2600); }
+  som.onclick = () => { escolheu = true; v.muted = false; try { v.currentTime = 0; } catch (e) {} toca(); estado(); mexeu(); };
+  const alterna = () => { escolheu = true; if (v.paused) toca(); else v.pause(); };
+  v.onclick = alterna; play.onclick = alterna; centro.onclick = alterna;
+  mudo.onclick = () => { escolheu = true; v.muted = !v.muted; estado(); };
+  cheia.onclick = () => { const f = box.requestFullscreen || box.webkitRequestFullscreen; if (document.fullscreenElement) document.exitFullscreen(); else if (f) f.call(box); else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen(); };
+  linha.oninput = () => { arrastando = true; linha.style.setProperty('--p', linha.value / 10 + '%'); if (v.duration) $('plT').textContent = tempo(v.duration * linha.value / 1000); };
+  linha.onchange = () => { if (v.duration) v.currentTime = v.duration * linha.value / 1000; arrastando = false; };
+  v.addEventListener('timeupdate', () => { if (arrastando || !v.duration) return; const p = v.currentTime / v.duration * 1000; linha.value = p; linha.style.setProperty('--p', p / 10 + '%'); $('plT').textContent = tempo(v.currentTime); });
+  v.addEventListener('loadedmetadata', () => { $('plD').textContent = tempo(v.duration); if (v.videoWidth && v.videoHeight) box.style.aspectRatio = v.videoWidth + ' / ' + v.videoHeight; });
+  ['play','pause','volumechange','ended'].forEach(n => v.addEventListener(n, () => { estado(); mexeu(); }));
+  ['pointermove','pointerdown','focusin'].forEach(n => box.addEventListener(n, mexeu));
+  box.addEventListener('keydown', e => { if (e.target === linha) return; if (e.key === ' ' || e.key === 'k'){ e.preventDefault(); alterna(); } if (e.key === 'ArrowRight') v.currentTime += 5; if (e.key === 'ArrowLeft') v.currentTime -= 5; });
+  estado();
+  // toca sozinho quando está na tela; pausa quando sai (se a pessoa não tiver assumido o controle)
+  if (calmo || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(x => { if (x[0].isIntersecting){ if (!escolheu || !v.paused) toca(); } else if (!v.paused && v.muted) v.pause(); }, { threshold:.4 }).observe(box);
+})();
 </script>
 </body>
 </html>

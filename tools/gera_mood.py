@@ -419,7 +419,7 @@ print('ok', len(out), '12x de', PARC)
 # ===== página curta de UPSELL (aparece depois da compra das Legendas) =====
 CHECKOUT_UPSELL = ''                    # vazio de propósito: o botão de compra desta página é o upsell de 1 clique da Greenn (abaixo)
 UPSELL_ID = '6786'                      # número do upsell 'Upsell Mood' criado na Greenn
-RECUSA = 'https://basefl.com/'          # para onde vai quem recusa: a página de baixar o app
+RECUSA = 'https://basefl.com/instalar/' # para onde vai quem recusa: a página de instalar o app
 cab = out[:out.index('<body>')].replace('<title>Mood — copie a cor de qualquer vídeo | Base FL</title>', '<title>Uma oferta antes de continuar — Mood</title>\n<meta name="robots" content="noindex">')
 demo = out[out.index('    <div class="demo" id="demo">'):out.index('  </header>')]
 script = out[out.index('<script>'):out.index('</body>')]
