@@ -305,7 +305,7 @@ function vitrine(){
       <p>Que tipo de vídeo?</p><div class="o on">📱 Reels / TikTok / Shorts</div><div class="o">▶️ YouTube / vídeo longo</div><div class="o">🏢 Para empresa ou anúncio</div></div>
     <div class="row" style="margin-top:0"><button class="btn ghost" id="demo">Testar como o cliente responde</button></div>
     <div class="row"><button class="btn ghost" id="exemplo">Ver um briefing recebido</button></div>
-    <div class="lock"><ul><li>Seu link pessoal, com o seu nome</li><li>Briefings salvos na sua conta, com os pontos de atenção</li><li>Respostas prontas para virar preço, proposta e contrato</li></ul>
+    <div class="lock"><ul><li>Seu link de briefing, para mandar ao cliente</li><li>Briefings salvos na sua conta, com os pontos de atenção</li><li>Respostas prontas para virar preço, proposta e contrato</li></ul>
       <button class="btn" id="comprar">${venc ? 'Renovar meu acesso' : 'Liberar com o Kit Freelancer · R$ ' + p.preco}</button>
       ${Base.sessao() ? '' : '<button class="link ja" id="entrar">Já comprei · entrar</button>'}</div>`);
   $('#comprar').onclick = () => Base.comprar('briefing', 'ferramenta');

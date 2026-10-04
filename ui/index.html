@@ -109,6 +109,15 @@ footer a{color:var(--mute);cursor:pointer;text-decoration:underline;text-underli
 .modal.show{display:grid}
 .box{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);width:min(620px,100%);padding:20px;display:flex;flex-direction:column;gap:12px}
 .box pre{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;max-height:340px;overflow:auto;font-size:12px;white-space:pre-wrap;-webkit-user-select:text;user-select:text}
+.termo{width:min(520px,100%);gap:14px}
+.termo-s{font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#F2A541}
+.termo h3{font-family:"Archivo",var(--font);font-weight:800;font-size:21px;margin-top:-8px}
+.termo p,.termo li{font-family:"Figtree",var(--font);font-size:14px;line-height:1.5;color:var(--sub)}
+.termo p b,.termo li b{color:var(--ink)}
+.termo ul{margin:0;padding-left:18px;display:grid;gap:7px}
+.termo-c{display:flex;gap:11px;align-items:flex-start;border:1px solid rgba(242,165,65,.5);background:rgba(242,165,65,.08);border-radius:12px;padding:12px;font-size:14px;font-weight:600;cursor:pointer}
+.termo-c input{width:19px;height:19px;flex:none;margin-top:1px;accent-color:#F2A541}
+.termo .btns button:disabled{opacity:.4;cursor:not-allowed}
 .banner{background:linear-gradient(90deg,rgba(242,165,65,.14),transparent);border:1px solid rgba(242,165,65,.3);border-radius:14px;padding:12px 16px;font-size:13px;display:none}
 .banner.show{display:block}
 .banner.nova{background:linear-gradient(90deg,rgba(123,216,143,.16),transparent);border-color:rgba(123,216,143,.4);margin-bottom:10px}
@@ -245,6 +254,20 @@ button.aula svg{width:15px;height:15px;fill:currentColor;flex:none}
   <div class="btns"><button class="primary" id="m-copy">Copiar</button><button class="ghost" id="m-close">Fechar</button></div>
 </div></div>
 
+<!-- condições de uso: aparece ao clicar em Instalar, uma vez por produto e por versão do texto -->
+<div class="modal" id="termo"><div class="box termo" role="dialog" aria-modal="true" aria-labelledby="t-title">
+  <span class="termo-s">Antes de instalar</span>
+  <h3 id="t-title">Condições de uso</h3>
+  <p>Os materiais do Base FL são <b>licenciados para o seu uso</b> enquanto o seu acesso a este produto estiver ativo.</p>
+  <ul>
+    <li>São para uso de quem comprou. Não podem ser <b>revendidos, redistribuídos nem compartilhados</b>.</li>
+    <li>O acesso está ligado à licença da sua compra.</li>
+    <li>Em caso de <b>reembolso, cancelamento ou perda do acesso</b>, a licença termina: os materiais devem ser removidos do computador e não podem mais ser usados.</li>
+  </ul>
+  <label class="termo-c"><input type="checkbox" id="t-ok"><span>Li e concordo com as condições de uso e acesso aos materiais.</span></label>
+  <div class="btns"><button class="primary" id="t-vai" disabled>Instalar</button><button class="ghost" id="t-nao">Cancelar</button></div>
+</div></div>
+
 <script src="catalogo.js"></script>
 <script src="aulas.js"></script>
 <script>
@@ -377,6 +400,7 @@ async function loadCatalog(){
       api('/rest/v1/licenses?select=*'),
     ]);
     const agora = Date.now(), valida = l => l.status === 'active' && (!l.expires_at || new Date(l.expires_at).getTime() > agora);
+    aceitos = new Set(); try { (await api('/rest/v1/rpc/aceites_meus', { method:'POST', body:{ p_versao: TERMO } }) || []).forEach(x => aceitos.add(x)); } catch {}
     cat = { packs, owned: new Set(lic.filter(valida).map(l => l.pack_id)),
             vencidos: new Set(lic.filter(l => l.status === 'active' && !valida(l)).map(l => l.pack_id)),
             vence: Object.fromEntries(lic.filter(l => valida(l) && l.expires_at).map(l => [l.pack_id, new Date(l.expires_at)])) };
@@ -579,8 +603,29 @@ async function baixaEInstala(p, srv){
   return invoke('install_remote', { url: SUPA.url + '/storage/v1' + (s.signedURL || s.signedUrl), packId: p.packId });
 }
 const erroInstala = e => { const m = String(e.message || e); return /not found|object not found|400|403/i.test(m) ? 'Este pack não está liberado para ' + (sess?.email||'este e-mail') + '.' : traduz(m); };
+// ----- condições de uso: lê, marca a caixa e confirma. Vale por produto e por versão do texto; fica registrado no servidor. -----
+const TERMO = '2026-10';          // mude só quando o texto das condições mudar de verdade: todo mundo aceita de novo
+let aceitos = new Set();
+function pedeAceite(p){
+  if (aceitos.has(p.packId)) return Promise.resolve(true);
+  return new Promise(fim => {
+    const m = $('#termo'), ok = $('#t-ok'), vai = $('#t-vai');
+    $('#t-title').textContent = 'Condições de uso · ' + p.name; ok.checked = false; vai.disabled = true; m.classList.add('show'); ok.focus();
+    const fecha = r => { m.classList.remove('show'); ok.onchange = vai.onclick = $('#t-nao').onclick = null; fim(r); };
+    ok.onchange = () => { vai.disabled = !ok.checked; };
+    $('#t-nao').onclick = () => fecha(false);
+    vai.onclick = async () => {
+      if (!ok.checked) return; vai.disabled = true;
+      // o registro vai para o servidor (quem, o quê, quando, qual versão). Se o servidor ainda não tiver a tabela, a instalação segue e o aceite vale nesta sessão.
+      try { await api('/rest/v1/rpc/aceite_registrar', { method:'POST', body:{ p_pack: p.packId, p_versao: TERMO, p_app: state?.version || '' } }); }
+      catch(e){ if (e.status === 401 || e.status === 403){ step(traduz(e.message), 'err'); return fecha(false); } }
+      aceitos.add(p.packId); fecha(true);
+    };
+  });
+}
 async function doInstallKit(p){   // um clique: títulos + efeitos sonoros + LUTs
   if (state.capcut_running){ step('Feche o CapCut antes de instalar.', 'warn'); return; }
+  for (const x of partesDoKit(p)) if (!(await pedeAceite(x.p))) return;
   busy = true; render();
   const partes = partesDoKit(p); let ok = 0;
   try {
@@ -599,6 +644,7 @@ async function doRemoveKit(p){
 }
 async function doInstall(p, srv){
   if (!p.media && state.capcut_running){ step('Feche o CapCut antes de instalar.', 'warn'); return; }
+  if (!(await pedeAceite(p))) return;
   busy = true; render(); step('Instalando ' + p.name + '…', 'run');
   try {
     if (!(await validSess())) throw new Error('Sua sessão expirou. Entre de novo.');
