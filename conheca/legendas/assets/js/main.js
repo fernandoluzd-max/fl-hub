@@ -271,7 +271,7 @@
     var app = $("#instApp"), cc = $("#instCC"), cur = $("#instCur"), tag = $("#instTag");
     var PASTAS = ["Títulos - Ganchos", "Bold - Presets", "Clássico", "Divertido"];      // nomes reais das pastas do pack
     var TILES = ["Bold", "Neon", "Itálico", "Script", "Clássico", "Riscado"];
-    var wait = function (ms) { return new Promise(function (r) { setTimeout(r, reduce ? Math.min(ms, 80) : ms); }); };
+    var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };   // a espera é sempre a real: com "Reduzir movimento" a demonstração roda uma vez, no ritmo normal, e para
     var visible = true;
     if ("IntersectionObserver" in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }, { threshold: .15 }).observe(box);
     function log(t, ok) { var d = document.createElement("div"); d.className = ok ? "ok" : "run"; d.innerHTML = "<i>" + (ok ? "✓" : "◌") + "</i><span></span>"; d.lastChild.textContent = t;

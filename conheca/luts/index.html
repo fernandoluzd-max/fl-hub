@@ -254,7 +254,9 @@ const PACK = 'fl-luts';
 // ============================================================================
 const $ = s => document.querySelector(s);
 const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const dorme = ms => new Promise(r => setTimeout(r, calmo ? Math.min(ms, 60) : ms));
+// A espera é SEMPRE a real. (Antes, com "Reduzir movimento" ligado no celular, ela caía para 60 ms
+// e as demonstrações trocavam de estado em rajada, parecendo a página acelerada.)
+const dorme = ms => new Promise(r => setTimeout(r, ms));
 function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2400); }
 // link de compra com a origem Base FL (utm) — ?de=app quando vem do app
 function linkCompra(){

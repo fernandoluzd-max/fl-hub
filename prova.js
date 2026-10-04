@@ -57,7 +57,7 @@
   function anda(linha, dir) {
     // rolagem contínua por scrollLeft: o dedo (ou o mouse) pode arrastar a qualquer momento
     var meio, parado = false, visivel = false, x = 0, ult = 0, vel = 28 * dir, arrastou = false;
-    function mede() { var c = linha.querySelectorAll('.pv-print'); meio = c.length > 1 ? c[c.length / 2].offsetLeft - c[0].offsetLeft : linha.scrollWidth / 2; if (dir < 0 && !linha.scrollLeft) linha.scrollLeft = meio; x = linha.scrollLeft; }
+    function mede() { var c = linha.querySelectorAll('.pv-print'); var m = c[Math.floor(c.length / 2)]; meio = c.length > 1 && m ? m.offsetLeft - c[0].offsetLeft : linha.scrollWidth / 2; if (dir < 0 && !linha.scrollLeft) linha.scrollLeft = meio; x = linha.scrollLeft; }
     function passo(t) {
       if (!visivel) { ult = 0; return; }
       if (ult && !parado && meio > 0) {

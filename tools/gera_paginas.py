@@ -1,3 +1,4 @@
+import json
 # Gera as páginas de vendas em conheca/<slug>/index.html
 # Cada página tem uma cor, uma demonstração animada e o mesmo esqueleto curto.
 import os, sys, html
@@ -157,7 +158,9 @@ const PACK = '__PACK__';
 // ============================================================================
 const $ = s => document.querySelector(s);
 const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const dorme = ms => new Promise(r => setTimeout(r, calmo ? Math.min(ms, 60) : ms));
+// A espera é SEMPRE a real. (Antes, com "Reduzir movimento" ligado no celular, ela caía para 60 ms
+// e as demonstrações trocavam de estado em rajada, parecendo a página acelerada.)
+const dorme = ms => new Promise(r => setTimeout(r, ms));
 function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2400); }
 // link de compra com a origem Base FL (utm) — ?de=app quando vem do app
 function linkCompra(){
@@ -1472,21 +1475,24 @@ KT_VIDEO = r'''
     <video class="rv" src="__V__" controls playsinline preload="metadata"></video></section>
 '''
 KT_MIOLO = r'''
-  <section class="jor" id="jornada">
-    <span class="kick rv">Um trabalho, do começo ao fim</span>
-    <h2 class="rv" style="margin-top:14px">Cinco passos. <em class="ac">Você digita uma vez só.</em></h2>
-    <p class="sub2 rv">Acompanhe o mesmo trabalho passando pelas quatro ferramentas. Repare no que já chega preenchido em cada passo.</p>
-    <div class="jx rv" id="jx">
-      <div class="jx-t" role="tablist" aria-label="Passos do trabalho">
-        <button role="tab" aria-selected="true" data-i="0"><i>1</i>Briefing</button>
-        <button role="tab" aria-selected="false" data-i="1"><i>2</i>Preço</button>
-        <button role="tab" aria-selected="false" data-i="2"><i>3</i>Proposta</button>
-        <button role="tab" aria-selected="false" data-i="3"><i>4</i>Contrato</button>
-        <button role="tab" aria-selected="false" data-i="4"><i>5</i>Organizador</button>
+  <section class="fx-s" id="jornada">
+    <span class="kick rv">O sistema funcionando</span>
+    <h2 class="rv" style="margin-top:14px">Um cliente novo, <em class="ac">do primeiro oi ao projeto em andamento.</em></h2>
+    <p class="sub2 rv">Acompanhe o mesmo trabalho passando pelas quatro ferramentas. O que aparece colorido você não digitou: veio do passo anterior.</p>
+    <div class="fluxo rv" id="fluxo">
+      <ol class="fl-t" id="flT" aria-label="As quatro ferramentas, em ordem"></ol>
+      <div class="fl-p">
+        <div class="fl-c" id="flC" aria-hidden="true"></div>
+        <div class="fl-d" aria-live="polite">
+          <small id="flF"></small><b id="flH"></b><p id="flP"></p>
+          <span class="fl-v" id="flV"></span>
+        </div>
       </div>
-      <div class="jx-p" role="tabpanel" aria-live="polite">
-        <div class="jx-c" id="jxC"></div>
-        <div class="jx-d"><small id="jxF"></small><b id="jxH"></b><p id="jxP"></p><span class="jx-v" id="jxV"></span></div>
+      <div class="fl-n">
+        <button type="button" id="flVolta" aria-label="Passo anterior">‹</button>
+        <span class="fl-b" id="flB" aria-hidden="true"></span>
+        <button type="button" id="flVai" aria-label="Próximo passo">›</button>
+        <button type="button" class="fl-play" id="flPlay">Pausar</button>
       </div>
     </div>
   </section>
@@ -1509,29 +1515,76 @@ KT_MIOLO = r'''
 '''
 KT_CSS = r'''
 .kv video{display:block;width:100%;max-width:900px;margin:26px auto 0;border-radius:22px;border:1px solid var(--line);background:#000;aspect-ratio:16/9}
-.jx{margin-top:26px;border:1px solid var(--line);border-radius:24px;background:var(--card);overflow:hidden}
-.jx-t{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--line)}
-.jx-t button{font:inherit;font-weight:700;font-size:14.5px;color:var(--mute);background:none;border:0;border-right:1px solid var(--line);padding:14px 8px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;transition:color .2s,background .2s}
-.jx-t button:last-child{border-right:0}
-.jx-t button i{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:800;border:1px solid var(--line);flex:none}
-.jx-t button[aria-selected=true]{color:var(--ink);background:var(--bg2)}
-.jx-t button[aria-selected=true] i{background:var(--a);color:var(--ai);border-color:transparent}
-.jx-t button.feito i{border-color:var(--a);color:var(--a)}
-.jx-p{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;padding:28px}
-.jx-c{background:#0D0F0E;border:1px solid var(--line);border-radius:18px;padding:18px;min-height:250px;display:flex;flex-direction:column;justify-content:center;gap:0}
-.jx-c .tt{font-family:var(--d);font-weight:850;font-size:19px;letter-spacing:-.02em;margin-bottom:8px}
-.jx-c .ln{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:14.5px}
-.jx-c .ln span{color:var(--mute)}.jx-c .ln b{text-align:right}
-.jx-c .ln.veio b{color:var(--a)}
-.jx-c .big{font-family:var(--d);font-weight:900;font-size:40px;letter-spacing:-.03em;color:var(--a);line-height:1;margin:6px 0 10px}
-.jx-c .bt{margin-top:12px;border-radius:12px;padding:12px;text-align:center;font-weight:800;font-size:14.5px;background:var(--a);color:var(--ai)}
-.jx-c .bt.ok{background:transparent;border:1px solid var(--a);color:var(--a)}
-.jx-d small{font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--a)}
-.jx-d b{display:block;font-family:var(--d);font-weight:850;font-size:26px;letter-spacing:-.02em;line-height:1.1;margin:6px 0 8px}
-.jx-d p{color:var(--mute);font-size:16px}
-.jx-v{display:inline-block;margin-top:14px;font-size:13.5px;font-weight:650;border:1px dashed color-mix(in srgb,var(--a) 60%,transparent);border-radius:10px;padding:8px 12px;color:var(--ink)}
-.jx-p.troca .jx-c,.jx-p.troca .jx-d{animation:jxin .4s cubic-bezier(.2,.8,.2,1) both}
-@keyframes jxin{from{opacity:0;transform:translateY(10px)}}
+.fluxo{margin-top:26px;border:1px solid var(--line);border-radius:26px;background:var(--card);overflow:hidden}
+/* trilho: as quatro ferramentas ligadas por uma linha que vai enchendo */
+.fl-t{list-style:none;margin:0;padding:20px 22px 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-bottom:1px solid var(--line);background:var(--bg2)}
+.fl-t li{--c:242,165,65;position:relative;display:grid;justify-items:center;gap:8px;text-align:center;cursor:pointer;padding:0 6px;-webkit-tap-highlight-color:transparent}
+.fl-t li::before{content:"";position:absolute;top:27px;left:-50%;right:50%;height:3px;border-radius:9px;background:var(--line)}
+.fl-t li::after{content:"";position:absolute;top:27px;left:-50%;right:50%;height:3px;border-radius:9px;background:linear-gradient(90deg,rgb(var(--p)),rgb(var(--c)));transform:scaleX(0);transform-origin:left;transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+.fl-t li:first-child::before,.fl-t li:first-child::after{display:none}
+.fl-t li.feito::after,.fl-t li.agora::after{transform:scaleX(1)}
+.fl-t .ic{position:relative;z-index:1;width:56px;height:56px;border-radius:17px;background:var(--card);border:2px solid var(--line);display:grid;place-items:center;transition:border-color .4s,box-shadow .4s,transform .4s}
+.fl-t .ic img{width:44px;height:44px;border-radius:12px;display:block;filter:saturate(.35) brightness(.7);transition:filter .4s}
+.fl-t li.agora .ic{border-color:rgb(var(--c));box-shadow:0 0 0 6px rgba(var(--c),.14),0 14px 30px -12px rgba(var(--c),.9);transform:translateY(-2px)}
+.fl-t li.agora .ic img,.fl-t li.feito .ic img{filter:none}
+.fl-t li.feito .ic{border-color:rgba(var(--c),.6)}
+.fl-t .ok{position:absolute;z-index:2;top:-5px;left:calc(50% + 16px);width:22px;height:22px;border-radius:50%;background:rgb(var(--c));color:#0d100e;font-size:13px;font-weight:900;display:grid;place-items:center;transform:scale(0);transition:transform .35s cubic-bezier(.2,1.5,.4,1)}
+.fl-t li.feito .ok{transform:scale(1)}
+.fl-t b{font-family:var(--d);font-weight:800;font-size:15px;line-height:1.15;color:var(--mute);transition:color .4s}
+.fl-t li.agora b,.fl-t li.feito b{color:var(--ink)}
+.fl-t .pts{display:flex;gap:5px;height:6px}
+.fl-t .pts i{width:6px;height:6px;border-radius:50%;background:var(--line);transition:background .35s,transform .35s}
+.fl-t .pts i.on{background:rgb(var(--c))}
+.fl-t .pts i.vez{transform:scale(1.5)}
+/* palco: à esquerda a tela da ferramenta, à direita o que está acontecendo */
+.fl-p{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;padding:28px}
+.fl-c{--c:242,165,65;background:#0D0F0E;border:1px solid var(--line);border-top:3px solid rgb(var(--c));border-radius:18px;padding:18px;min-height:292px;display:flex;flex-direction:column;justify-content:center;transition:border-color .4s}
+.fl-c .tt{font-family:var(--d);font-weight:850;font-size:19px;letter-spacing:-.02em;margin-bottom:8px}
+.fl-c .ln{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:14.5px}
+.fl-c .ln span{color:var(--mute)}.fl-c .ln b{text-align:right}
+.fl-c .ln.veio b{color:rgb(var(--c))}
+.fl-c .big{font-family:var(--d);font-weight:900;font-size:40px;letter-spacing:-.03em;color:rgb(var(--c));line-height:1;margin:6px 0 10px}
+.fl-c .bt{margin-top:12px;border-radius:12px;padding:12px;text-align:center;font-weight:800;font-size:14.5px;background:rgb(var(--c));color:#0d100e}
+.fl-c .bt.ok{background:rgba(var(--c),.12);border:1px solid rgb(var(--c));color:rgb(var(--c))}
+.fl-c .zp{display:flex;flex-direction:column;gap:7px}
+.fl-c .bl{max-width:86%;padding:9px 12px;border-radius:12px;font-size:14.5px;line-height:1.4;color:#e9edef}
+.fl-c .bl.in{background:#202c33;border-top-left-radius:3px;align-self:flex-start}
+.fl-c .bl.eu{background:#005c4b;border-top-right-radius:3px;align-self:flex-end}
+.fl-c .bl i{display:block;font-style:normal;color:#7ad8cc;text-decoration:underline;margin-top:2px;font-size:13.5px}
+.fl-c .col{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+.fl-c .col>div{border:1px dashed var(--line);border-radius:12px;padding:8px;min-height:128px}
+.fl-c .col small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:8px}
+.fl-c .cd{background:var(--card);border:1px solid rgba(var(--c),.6);border-left:3px solid rgb(var(--c));border-radius:10px;padding:8px;font-size:12.5px;line-height:1.35}
+.fl-c .cd b{display:block;font-size:13.5px}.fl-c .cd span{color:var(--mute)}
+.fl-d small{font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:rgb(var(--c,242,165,65))}
+.fl-d b{display:block;font-family:var(--d);font-weight:850;font-size:clamp(22px,2.6vw,28px);letter-spacing:-.02em;line-height:1.1;margin:6px 0 8px}
+.fl-d p{color:var(--mute);font-size:16px;min-height:72px}
+.fl-v{display:inline-block;margin-top:12px;font-size:13.5px;font-weight:650;border:1px dashed rgba(var(--c,242,165,65),.6);border-radius:10px;padding:8px 12px;color:var(--ink)}
+.fl-v:empty{display:none}
+.fluxo.troca .fl-c>*,.fluxo.troca .fl-d>*{animation:flin .5s cubic-bezier(.2,.8,.2,1) both}
+.fluxo.troca .fl-d>*{animation-delay:.08s}
+@keyframes flin{from{opacity:0;transform:translateY(10px)}}
+/* rodapé: andar pelos passos e a barra do tempo */
+.fl-n{display:flex;align-items:center;gap:10px;padding:14px 22px 18px;border-top:1px solid var(--line)}
+.fl-n button{font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:12px;min-width:46px;min-height:46px;font-size:22px;line-height:1;cursor:pointer}
+.fl-n button:disabled{opacity:.3}
+.fl-n .fl-play{font-size:14px;font-weight:700;padding:0 16px}
+.fl-b{flex:1;display:flex;gap:5px}
+.fl-b i{flex:1;height:4px;border-radius:9px;background:var(--line);overflow:hidden;position:relative}
+.fl-b i.on{background:var(--a)}
+.fl-b i.vez::after{content:"";position:absolute;inset:0;background:var(--a);transform-origin:left;animation:flb var(--t,3.4s) linear both}
+.fluxo.parado .fl-b i.vez::after{animation:none}
+@keyframes flb{from{transform:scaleX(0)}}
+@media (max-width:900px){
+  .fl-t{padding:16px 8px 14px}
+  .fl-t .ic{width:48px;height:48px;border-radius:15px}.fl-t .ic img{width:36px;height:36px;border-radius:10px}
+  .fl-t li::before,.fl-t li::after{top:23px}
+  .fl-t b{font-size:12px}.fl-t .ok{left:calc(50% + 12px);width:20px;height:20px;font-size:12px}
+  .fl-p{grid-template-columns:1fr;gap:16px;padding:16px}
+  .fl-d{order:-1}.fl-d p{min-height:92px}
+  .fl-c{min-height:268px;padding:14px}
+  .fl-n{padding:12px 14px 14px}
+}
 .sj-g{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
 .sj-c{border:1px solid var(--line);border-radius:22px;background:var(--card);padding:22px}
 .sj-c.dest{border-color:color-mix(in srgb,var(--a) 55%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--a) 9%,var(--card)),var(--card))}
@@ -1540,34 +1593,66 @@ KT_CSS = r'''
 .sj-c li{position:relative;padding-left:22px;color:var(--mute)}.sj-c li::before{content:"·";position:absolute;left:6px;color:var(--dim);font-weight:900}
 .sj-c.dest li{color:var(--ink)}.sj-c.dest li::before{content:"✓";left:0;color:var(--a)}
 .sj-n{margin-top:16px;color:var(--mute);font-size:15px;max-width:70ch}
-@media (max-width:900px){.jx-p{grid-template-columns:1fr;gap:18px;padding:18px}.jx-d{order:-1}.sj-g{grid-template-columns:1fr}
-  .jx-t button{flex-direction:column;gap:4px;font-size:11.5px;padding:10px 2px}.jx-c{min-height:0}}
+@media (max-width:900px){.sj-g{grid-template-columns:1fr}}
 '''
 KT_JS = r'''
-// um trabalho só passando pelas quatro ferramentas (o que aparece em destaque veio do passo anterior)
+// O FLUXO: um trabalho só, passando pelas quatro ferramentas. O que aparece colorido veio do passo anterior.
+// Regras para não virar bagunça no celular: UM relógio só, que só anda com a seção na tela; nada reinicia ao rolar;
+// tocou em qualquer controle, o automático para; com "Reduzir movimento" ligado, não anda sozinho.
 (function(){
-  const ln = (a, b, v) => `<div class="ln${v ? ' veio' : ''}"><span>${a}</span><b>${b}</b></div>`;
+  const raiz = document.getElementById('fluxo'); if (!raiz) return;
+  const F = (window.FL_FERR || []), ln = (a, b, v) => `<div class="ln${v ? ' veio' : ''}"><span>${a}</span><b>${b}</b></div>`;
+  const quadro = (col, txt) => `<div class="tt">Seus trabalhos</div><div class="col">${['Fechado', 'Editando', 'Entregue'].map((c, i) => `<div><small>${c}</small>${i === col ? `<div class="cd"><b>Studio Zeta</b><span>8 Reels · R$ 1.350<br>${txt}</span></div>` : ''}</div>`).join('')}</div>`;
+  // [ferramenta, etapa dentro dela, selo, título, texto, "o que veio pronto", tela]
   const P = [
-    ['Gerador de Briefing', 'O cliente responde o seu link.', 'Em 1 minuto, pelo celular, tocando nas opções. O pedido chega organizado na sua conta.', 'Você digitou: nada',
-      '<div class="tt">Studio Zeta</div>' + ln('Serviço', 'Só a edição') + ln('Tipo de vídeo', 'Reels / TikTok / Shorts') + ln('Quantidade', '5 a 8 vídeos') + ln('Prazo', 'Em até 1 semana')],
-    ['Quanto Cobrar?', 'As respostas abrem a calculadora.', 'Tipo de vídeo, quantidade e prazo já vêm do briefing. Você só confere o estilo da edição e vê o valor para o seu nível.', 'Veio do briefing: tipo, quantidade e prazo',
+    [0, 0, 'Novo cliente', 'Chegou um cliente novo.', 'Em vez de dez mensagens para entender o pedido, você responde com um link.', '',
+      '<div class="zp"><div class="bl in">Oi! Vi seus vídeos. Quanto fica pra editar uns Reels pra mim?</div><div class="bl eu">Oi! Me conta o que você precisa por aqui, leva 1 minuto:<i>basefl.com/b/ana-editora</i></div></div>'],
+    [0, 1, 'Briefing respondido', 'O cliente responde pelo celular.', 'Tocando nas opções, sem criar conta. O pedido chega organizado para você.', 'Você digitou: nada',
+      '<div class="tt">Briefing · Studio Zeta</div>' + ln('Serviço', 'Só a edição') + ln('Tipo de vídeo', 'Reels / TikTok / Shorts') + ln('Quantidade', '5 a 8 vídeos') + ln('Prazo', 'Em até 1 semana') + '<div class="bt ok">✓ Respondido pelo cliente</div>'],
+    [1, 0, 'Preço', 'As respostas viram o preço.', 'Tipo de vídeo, quantidade e prazo já entram na calculadora. Você confere o estilo da edição e vê quanto cobrar.', 'Veio do briefing: tipo, quantidade e prazo',
       '<div class="tt">Valor de referência</div><div class="big">R$ 1.350</div>' + ln('Tipo de vídeo', 'Reels', 1) + ln('Quantidade', '8 vídeos', 1) + ln('Edição', 'Caprichada')],
-    ['Quanto Cobrar? · proposta', 'O preço vira proposta por link.', 'Serviço, entrega, prazo e valor já estão montados. O cliente abre no celular e aprova com um toque.', 'Veio do preço: serviço, entrega e valor',
+    [1, 1, 'Proposta enviada', 'O preço vira proposta por link.', 'Serviço, entrega, prazo e valor já montados. O cliente abre no celular.', 'Veio do preço: serviço, entrega e valor',
       '<div class="tt">Proposta para Studio Zeta</div>' + ln('Serviço', 'Edição caprichada de Reels', 1) + ln('Entrega', '8 vídeos editados', 1) + ln('Investimento', 'R$ 1.350', 1) + '<div class="bt">Aprovar proposta</div>'],
-    ['Gerador de Contrato', 'A proposta aprovada vira contrato.', 'Cliente, serviço, prazo, revisões e valor entram sozinhos nas cláusulas. O cliente lê e aceita pelo celular.', 'Veio da proposta: cliente, serviço, prazo e valor',
+    [1, 2, 'Proposta aprovada', 'O cliente aprova com um toque.', 'Sem áudio de “pode fazer”. Fica registrado o que ele aprovou e por quanto.', '',
+      '<div class="tt">Proposta para Studio Zeta</div>' + ln('Serviço', 'Edição caprichada de Reels', 1) + ln('Entrega', '8 vídeos editados', 1) + ln('Investimento', 'R$ 1.350', 1) + '<div class="bt ok">✓ Aprovada pelo cliente</div>'],
+    [2, 0, 'Contrato', 'A proposta aprovada vira contrato.', 'Cliente, serviço, prazo, revisões e valor entram sozinhos nas cláusulas.', 'Veio da proposta: cliente, serviço, prazo e valor',
+      '<div class="tt">Contrato · Studio Zeta</div>' + ln('Serviço', 'Edição caprichada de Reels', 1) + ln('Revisões', '2 rodadas incluídas') + ln('Valor total', 'R$ 1.350', 1) + '<div class="bt">Ler e aceitar</div>'],
+    [2, 1, 'Contrato aceito', 'O cliente lê e aceita pelo celular.', 'Número de revisões, prazo e pagamento combinados por escrito, antes de você começar.', '',
       '<div class="tt">Contrato · Studio Zeta</div>' + ln('Serviço', 'Edição caprichada de Reels', 1) + ln('Revisões', '2 rodadas incluídas') + ln('Valor total', 'R$ 1.350', 1) + '<div class="bt ok">✓ Aceito pelo cliente</div>'],
-    ['Base Demandas', 'O trabalho entra no quadro sozinho.', 'Assim que o cliente aceita, o card aparece em “Fechado”, com valor e prazo. Você só move de coluna e acompanha o pagamento.', 'Entrou sozinho: cliente, valor e prazo',
-      '<div class="tt">Fechado</div>' + ln('Cliente', 'Studio Zeta', 1) + ln('Trabalho', '8 Reels', 1) + ln('Valor', 'R$ 1.350', 1) + ln('Revisões', '0 de 2 usadas')],
+    [3, 0, 'No seu quadro', 'O trabalho entra sozinho no seu quadro.', 'Assim que o contrato é aceito, o card aparece em “Fechado”, com valor e prazo.', 'Entrou sozinho: cliente, valor e prazo', quadro(0, 'entrega em 5 dias')],
+    [3, 1, 'Até a entrega', 'Você acompanha até entregar e receber.', 'Move o card de coluna, conta as revisões e vê o que ainda falta entrar no mês.', '', quadro(2, 'falta receber')],
   ];
-  const bs = [...document.querySelectorAll('.jx-t button')], pn = document.querySelector('.jx-p'); if (!pn) return;
-  let at = 0, mexeu = false, vis = false;
-  function mostra(i){ at = i; bs.forEach((b, k) => { b.setAttribute('aria-selected', k === i ? 'true' : 'false'); b.classList.toggle('feito', k < i); });
-    $('#jxF').textContent = P[i][0]; $('#jxH').textContent = P[i][1]; $('#jxP').textContent = P[i][2]; $('#jxV').textContent = P[i][3]; $('#jxC').innerHTML = P[i][4];
-    pn.classList.remove('troca'); void pn.offsetWidth; pn.classList.add('troca'); }
-  bs.forEach((b, i) => b.addEventListener('click', () => { mexeu = true; mostra(i); }));
+  const T = 3400, $$ = id => document.getElementById(id);
+  const etapas = F.map((_, k) => P.filter(p => p[0] === k).length);
+  $$('flT').innerHTML = F.map((f, k) => `<li data-k="${k}" style="--c:${f.cor};--p:${(F[k - 1] || f).cor}" tabindex="0" role="button" aria-label="${f.nome}"><span class="ic"><img src="https://basefl.com/icones/${f.key}-64.png" alt="" width="44" height="44" loading="lazy"><span class="ok">✓</span></span><b>${f.nome}</b><span class="pts">${'<i></i>'.repeat(etapas[k])}</span></li>`).join('');
+  $$('flB').innerHTML = P.map(() => '<i></i>').join('');
+  const nos = [...document.querySelectorAll('#flT li')], barras = [...$$('flB').children];
+  let at = -1, tocando = !calmo, visto = false, relogio = null;
+  function mostra(i){
+    at = (i + P.length) % P.length; const p = P[at], f = F[p[0]];
+    nos.forEach((n, k) => { n.classList.toggle('agora', k === p[0]); n.classList.toggle('feito', k < p[0]);
+      [...n.querySelectorAll('.pts i')].forEach((d, e) => { d.classList.toggle('on', k < p[0] || (k === p[0] && e <= p[1])); d.classList.toggle('vez', k === p[0] && e === p[1]); }); });
+    barras.forEach((b, k) => { b.classList.toggle('on', k < at); b.classList.toggle('vez', k === at); });
+    raiz.style.setProperty('--c', f.cor); $$('flC').style.setProperty('--c', f.cor);
+    $$('flF').textContent = (p[0] + 1) + ' · ' + f.nome; $$('flH').textContent = p[3]; $$('flP').textContent = p[4]; $$('flV').textContent = p[5]; $$('flC').innerHTML = p[6];
+    $$('flVolta').disabled = at === 0;
+    raiz.classList.remove('troca'); void raiz.offsetWidth; raiz.classList.add('troca');
+  }
+  function agenda(){
+    clearTimeout(relogio); raiz.classList.toggle('parado', !tocando || !visto);
+    $$('flPlay').textContent = tocando ? 'Pausar' : (at === P.length - 1 ? 'Ver de novo' : 'Continuar');
+    if (tocando && visto) relogio = setTimeout(() => { mostra(at + 1); agenda(); }, at === P.length - 1 ? T + 1800 : T);
+  }
+  const para = () => { tocando = false; agenda(); };
+  $$('flVolta').onclick = () => { para(); mostra(at - 1); agenda(); };
+  $$('flVai').onclick = () => { para(); mostra(at + 1); agenda(); };
+  $$('flPlay').onclick = () => { tocando = !tocando; if (tocando && at === P.length - 1) mostra(0); agenda(); };
+  nos.forEach(n => { const vai = () => { para(); mostra(P.findIndex(p => p[0] === +n.dataset.k)); agenda(); }; n.onclick = vai; n.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); vai(); } }; });
+  raiz.style.setProperty('--t', T + 'ms');
   mostra(0);
-  new IntersectionObserver(e => { vis = e[0].isIntersecting; }, { threshold: .35 }).observe(pn);
-  if (!calmo) (async () => { while (!mexeu){ await dorme(4200); if (vis && !mexeu) mostra((at + 1) % P.length); } })();
+  // um observador só: o relógio anda apenas com a seção na tela, e continua de onde parou (não recomeça ao rolar)
+  new IntersectionObserver(e => { visto = e[0].isIntersecting; agenda(); }, { threshold: .3 }).observe(raiz);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) clearTimeout(relogio); else agenda(); });
 })();
 '''
 EXTRA = {
@@ -1693,7 +1778,8 @@ def pagina_kit():
       kick='Kit Freelancer · preço de lançamento', desc=f'Um sistema de trabalho para o editor freelancer: briefing, preço, proposta, contrato e organizador trabalhando juntos. Preço de lançamento: {brl(k["preco"])}.',
       h1='Do primeiro contato ao pagamento. <em>Sem retrabalho.</em>',
       lead='Não são quatro ferramentas soltas. É <b>um sistema de trabalho</b>, em ordem: o cliente responde o briefing, você calcula, manda a proposta, fecha o contrato e o trabalho <b>entra sozinho no organizador</b>. Nada é digitado duas vezes.',
-      cta='Quero o Kit Freelancer', nota='Funciona no <b>celular e no computador</b>', rot='O que vem no kit', demo=demo, css=css + KT_CSS, js=KT_JS,
+      cta='Quero o Kit Freelancer', nota='Funciona no <b>celular e no computador</b>', rot='O que vem no kit', demo=demo, css=css + KT_CSS,
+      js='window.FL_FERR = ' + json.dumps([dict(key=j['key'], nome=j['nome'], cor=j['cor']) for j in JORNADA], ensure_ascii=False) + ';\n' + KT_JS,
       miolo=(KT_VIDEO.replace('__V__', k['video']) if k.get('video') else '') + KT_MIOLO, ver=('#jornada', 'Ver um trabalho do começo ao fim ↓'), cta_oferta='Liberar as quatro ferramentas', fecho='Seu próximo trabalho, do pedido ao pagamento, <em class="ac">sem digitar duas vezes.</em>',
       checkout=k['checkout'], preco=brl(k['preco']), parc6=brl(parcela(k['preco'], CAT), 2),
       acesso_txt='acesso de 1 ano · preço de lançamento', acesso_selo='Acesso de 1 ano', acesso_curto='1 ano de acesso',
