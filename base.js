@@ -90,7 +90,7 @@
     return valida().then(function () {
       var s = le(); if (!s) throw new Error('Entre na sua conta para continuar.');
       return fetch(SUPA.url + '/storage/v1/object/' + caminho, { method: 'POST', body: blob,
-        headers: { apikey: SUPA.key, Authorization: 'Bearer ' + s.access_token, 'Content-Type': blob.type || 'image/jpeg', 'x-upsert': 'true', 'cache-control': 'max-age=31536000' } })
+        headers: { apikey: SUPA.key, Authorization: 'Bearer ' + s.access_token, 'Content-Type': blob.type || 'image/jpeg', 'cache-control': 'max-age=31536000' } })      // sem "x-upsert": cada imagem tem nome próprio, e o upsert exigia uma permissão a mais e era recusado
         .then(function (r) { if (!r.ok) throw new Error('Não consegui enviar a imagem. Tente de novo.'); return true; },
               function () { throw new Error('Sem conexão. Tente de novo.'); });
     });
