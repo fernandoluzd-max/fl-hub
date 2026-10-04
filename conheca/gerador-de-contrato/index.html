@@ -156,7 +156,8 @@ a.btn{text-decoration:none}
 .fecho{margin:90px 0 0;text-align:center}.fecho h2{margin:0 auto}.fecho .ctas{justify-content:center}.fecho .nota{margin-top:14px}
 .conta{border:1px solid var(--line);border-left:3px solid var(--a);background:var(--card);border-radius:14px;padding:13px 16px;margin:0 0 18px;font-size:15px;color:var(--mute)}.conta b{color:var(--ink)}.conta a{color:var(--a)}
 @media (max-width:760px){.kitb{grid-template-columns:1fr;text-align:center}.kitb .trilho{justify-content:center}.teste{padding:22px 12px 14px}.teste iframe{height:720px}}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+/* "Reduzir movimento" ligado no aparelho: as demonstrações continuam (são pequenas e lentas); só tiramos o deslocamento dos blocos ao rolar. */
+@media (prefers-reduced-motion:reduce){.rv{transform:none}}
 
 .palco{min-height:480px;background:radial-gradient(500px 300px at 70% 0%,color-mix(in srgb,var(--a) 18%,transparent),transparent),#121216}
 .pp{position:absolute;left:50%;top:22px;width:min(86%,400px);transform:translateX(-50%) rotate(-1.5deg);background:#FBF9F4;color:#1d1d24;border-radius:6px;padding:22px 22px 18px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
@@ -375,7 +376,9 @@ const ACESSO = '1 ano · as 4 ferramentas do Kit';
 const PACK = 'fl-contrato';
 // ============================================================================
 const $ = s => document.querySelector(s);
-const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Decisão do produto: as demonstrações SEMPRE rodam, no ritmo normal. Antes, com "Reduzir movimento" ligado no celular,
+// elas ficavam paradas (parecia travado) e alguns blocos nem apareciam. O que respeita essa opção é só o CSS acima.
+const calmo = false;
 // A espera é SEMPRE a real. (Antes, com "Reduzir movimento" ligado no celular, ela caía para 60 ms
 // e as demonstrações trocavam de estado em rajada, parecendo a página acelerada.)
 const dorme = ms => new Promise(r => setTimeout(r, ms));

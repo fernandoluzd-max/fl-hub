@@ -156,12 +156,14 @@ a.btn{text-decoration:none}
 .fecho{margin:90px 0 0;text-align:center}.fecho h2{margin:0 auto}.fecho .ctas{justify-content:center}.fecho .nota{margin-top:14px}
 .conta{border:1px solid var(--line);border-left:3px solid var(--a);background:var(--card);border-radius:14px;padding:13px 16px;margin:0 0 18px;font-size:15px;color:var(--mute)}.conta b{color:var(--ink)}.conta a{color:var(--a)}
 @media (max-width:760px){.kitb{grid-template-columns:1fr;text-align:center}.kitb .trilho{justify-content:center}.teste{padding:22px 12px 14px}.teste iframe{height:720px}}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+/* "Reduzir movimento" ligado no aparelho: as demonstrações continuam (são pequenas e lentas); só tiramos o deslocamento dos blocos ao rolar. */
+@media (prefers-reduced-motion:reduce){.rv{transform:none}}
 
-.palco{min-height:470px;display:flex;flex-direction:column;padding:16px 16px 40px}
-.cena{position:relative;flex:1;min-height:320px;border-radius:14px;overflow:hidden;border:1px solid #2a2a30;background:#1a1a1f}
+.palco{min-height:0;display:flex;flex-direction:column;padding:16px 16px 40px}
+.cena{position:relative;flex:none;aspect-ratio:16/9;touch-action:pan-y;cursor:ew-resize;-webkit-user-select:none;user-select:none;border-radius:14px;overflow:hidden;border:1px solid #2a2a30;background:#1a1a1f}
 .img{position:absolute;inset:0}
-.img img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
+.img video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.depois video{opacity:0;transition:opacity .35s}.depois video.on{opacity:1}
 .depois{clip-path:inset(0 0 0 50%)}
 .corte{position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;box-shadow:0 0 14px rgba(255,255,255,.7);z-index:2}
 .corte span{position:absolute;top:50%;left:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.4)}
@@ -171,7 +173,7 @@ a.btn{text-decoration:none}
 .lutbar{margin-top:12px}
 .lutbar small{font-size:10.5px;color:#7a7980;letter-spacing:.06em}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-.chip{font-size:12px;font-weight:600;padding:7px 11px;border-radius:9px;background:#1b1a1f;border:1px solid #2b2a31;color:#bdbbc4;transition:all .25s}
+.chip{font:inherit;font-size:12.5px;font-weight:650;padding:9px 12px;border-radius:10px;background:#1b1a1f;border:1px solid #2b2a31;color:#bdbbc4;transition:all .25s;cursor:pointer}
 .chip.on{background:linear-gradient(135deg,var(--a),var(--a2));border-color:transparent;color:#fff;transform:translateY(-2px)}
 .chip.cv{border-style:dashed}
 
@@ -194,13 +196,13 @@ a.btn{text-decoration:none}
       <p class="lead">Dois tipos de LUT no mesmo pack, direto em Ajuste › LUT no CapCut. <b>3 técnicos</b>, que convertem o vídeo gravado em Log para a cor normal (Rec.709). E <b>20 criativos</b>, que dão o clima do vídeo.</p>
       <div class="ctas"><button class="btn" data-comprar>Quero as LUTs <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="nota"><b class="pcur">R$ 17</b> · acesso vitalício<br><span class="parc">ou 12x de R$ 1,75 no cartão · <b>7 dias de garantia</b></span><br>Precisa do <b>CapCut para computador</b><br>Mac ou Windows</span></div>
     </div>
-    <div class="palco" aria-label="Demonstração de LUTs"><div class="cena">
-    <div class="img antes" id="antes"><img src="https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="" loading="eager"></div>
-    <div class="img depois" id="depois"><img src="https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=1400" alt=""></div>
+    <div class="palco" aria-label="Demonstração de LUTs"><div class="cena" id="cena">
+    <div class="img antes"><video id="vA" muted loop playsinline preload="auto" poster="demo/lut-demo-slog2.jpg" src="demo/lut-demo-slog2.mp4"></video></div>
+    <div class="img depois" id="depois"><video id="vB1" class="on" muted loop playsinline preload="auto" poster="demo/lut-demo-rec709.jpg" src="demo/lut-demo-rec709.mp4"></video><video id="vB2" muted loop playsinline preload="none"></video></div>
     <div class="corte" id="corte"><span></span></div>
-    <span class="tg l" id="tgl">Antes · Rec.709</span><span class="tg r" id="tgr">Depois</span>
+    <span class="tg l" id="tgl">S-Log2 · como sai da câmera</span><span class="tg r" id="tgr">Rec.709</span>
   </div>
-  <div class="lutbar"><small>Ajuste › LUT</small><div class="chips" id="chips"></div></div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="lut-teal" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.95"/><feComponentTransfer><feFuncR type="table" tableValues="0.03 0.21 0.50 0.80 0.97"/><feFuncG type="table" tableValues="0.06 0.26 0.51 0.77 0.95"/><feFuncB type="table" tableValues="0.11 0.31 0.49 0.68 0.86"/></feComponentTransfer></filter><filter id="lut-quente" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.85"/><feComponentTransfer><feFuncR type="table" tableValues="0.07 0.30 0.58 0.84 0.98"/><feFuncG type="table" tableValues="0.05 0.26 0.52 0.78 0.94"/><feFuncB type="table" tableValues="0.04 0.20 0.44 0.70 0.86"/></feComponentTransfer></filter><filter id="lut-frio" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.8"/><feComponentTransfer><feFuncR type="table" tableValues="0.03 0.21 0.48 0.76 0.96"/><feFuncG type="table" tableValues="0.05 0.24 0.50 0.77 0.96"/><feFuncB type="table" tableValues="0.10 0.31 0.54 0.78 0.94"/></feComponentTransfer></filter><filter id="lut-pastel" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.62"/><feComponentTransfer><feFuncR type="table" tableValues="0.10 0.30 0.55 0.80 0.97"/><feFuncG type="table" tableValues="0.10 0.30 0.54 0.79 0.96"/><feFuncB type="table" tableValues="0.12 0.31 0.53 0.77 0.94"/></feComponentTransfer></filter><filter id="lut-pb" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues="0.06 0.22 0.50 0.78 0.96"/><feFuncG type="table" tableValues="0.06 0.22 0.50 0.78 0.96"/><feFuncB type="table" tableValues="0.06 0.22 0.50 0.78 0.96"/></feComponentTransfer></filter><filter id="lut-flat" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.42"/><feComponentTransfer><feFuncR type="table" tableValues="0.10 0.30 0.50 0.70 0.88"/><feFuncG type="table" tableValues="0.10 0.30 0.50 0.70 0.88"/><feFuncB type="table" tableValues="0.11 0.31 0.51 0.70 0.88"/></feComponentTransfer></filter><filter id="lut-log" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.3"/><feComponentTransfer><feFuncR type="table" tableValues="0.20 0.36 0.50 0.63 0.76"/><feFuncG type="table" tableValues="0.20 0.36 0.50 0.63 0.76"/><feFuncB type="table" tableValues="0.20 0.36 0.50 0.63 0.76"/></feComponentTransfer></filter></defs></svg><span class="rot">Demonstração · foto: Pexels</span></div>
+  <div class="lutbar"><small>Toque num LUT · arraste a linha para comparar</small><div class="chips" id="chips"></div></div><span class="rot"></span></div>
   </div>
 
   
@@ -253,7 +255,9 @@ const ACESSO = 'acesso vitalício';
 const PACK = 'fl-luts';
 // ============================================================================
 const $ = s => document.querySelector(s);
-const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Decisão do produto: as demonstrações SEMPRE rodam, no ritmo normal. Antes, com "Reduzir movimento" ligado no celular,
+// elas ficavam paradas (parecia travado) e alguns blocos nem apareciam. O que respeita essa opção é só o CSS acima.
+const calmo = false;
 // A espera é SEMPRE a real. (Antes, com "Reduzir movimento" ligado no celular, ela caía para 60 ms
 // e as demonstrações trocavam de estado em rajada, parecendo a página acelerada.)
 const dorme = ms => new Promise(r => setTimeout(r, ms));
@@ -286,34 +290,59 @@ let visivel = true;
 new IntersectionObserver(es => { visivel = es[0].isIntersecting; }, { threshold:.1 }).observe($('.palco'));
 async function enquantoVisivel(){ while (!visivel) await new Promise(r => setTimeout(r, 300)); }
 
-// [perfil do "antes", filtro do antes, nome do look, filtro do depois]
+// VÍDEO DE VERDADE: o mesmo take em cada etapa. À esquerda fica sempre o S-Log2; à direita, a etapa escolhida.
+// [nome no botão, arquivo, é conversão técnica?]  A ordem alterna looks bem diferentes entre si.
 const LOOKS = [
-  ['Rec.709', 'url(#lut-flat)', 'Teal & Orange', 'url(#lut-teal)'],
-  ['Rec.709', 'url(#lut-flat)', 'Filme quente', 'url(#lut-quente)'],
-  ['Rec.709', 'url(#lut-flat)', 'Frio suave', 'url(#lut-frio)'],
-  ['Rec.709', 'url(#lut-flat)', 'Pastel', 'url(#lut-pastel)'],
-  ['Rec.709', 'url(#lut-flat)', 'P&B filme', 'url(#lut-pb)'],
-  ['S-Log3', 'url(#lut-log)', 'Conversão S-Log3 → Rec.709', 'none'],
+  ['Rec.709', 'rec709', 1],
+  ['Hora Dourada', 'hora-dourada'],
+  ['Fim de Tarde', 'fim-de-tarde'],
+  ['Maresia', 'maresia'],
+  ['Golden', 'golden'],
+  ['Cinemateca', 'cinemateca'],
 ];
-$('#chips').innerHTML = LOOKS.map(([, , n]) => `<span class="chip${n.startsWith('Conversão') ? ' cv' : ''}">${n}</span>`).join('');
-const chips = [...document.querySelectorAll('.chip')];
-let x = 50;
+$('#chips').innerHTML = LOOKS.map(([n, , cv], k) => `<button type="button" class="chip${cv ? ' cv' : ''}" data-k="${k}">${cv ? 'Conversão · ' : ''}${n}</button>`).join('');
+const chips = [...document.querySelectorAll('.chip')], vA = $('#vA'), vBs = [$('#vB1'), $('#vB2')];
+let x = 50, atual = 0, frente = 0, mao = 0, escolheu = 0, vez = 0;
 function corte(v){ x = v; $('#depois').style.clipPath = `inset(0 0 0 ${v}%)`; $('#corte').style.left = v + '%'; }
+const toca = v => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+// troca a etapa sem piscar: carrega no vídeo de trás, acerta o tempo e só então mostra
+function etapa(k){
+  atual = k; chips.forEach((c, i) => c.classList.toggle('on', i === k));
+  $('#tgr').textContent = LOOKS[k][0];
+  const nome = 'demo/lut-demo-' + LOOKS[k][1], novo = vBs[1 - frente], velho = vBs[frente];
+  if (velho.getAttribute('src') === nome + '.mp4'){ vez++; return Promise.resolve(); }
+  const minha = ++vez;
+  return new Promise(fim => {
+    // 'minha' garante que só a ÚLTIMA escolha entra em cena (tocar rápido em dois LUTs não embaralha)
+    let foi = false; const pronto = () => { if (foi) return; foi = true; if (minha !== vez) return fim(); try { novo.currentTime = vA.currentTime || 0; } catch {} toca(novo); novo.classList.add('on'); velho.classList.remove('on'); frente = 1 - frente; setTimeout(() => { if (minha === vez) velho.pause(); }, 400); fim(); };
+    novo.poster = nome + '.jpg'; novo.preload = 'auto'; novo.src = nome + '.mp4';
+    novo.addEventListener('loadeddata', pronto, { once: true }); setTimeout(pronto, 2500); novo.load();
+  });
+}
+// mantém os dois vídeos no mesmo quadro
+setInterval(() => { const b = vBs[frente]; if (!vA.paused && b.readyState > 1 && Math.abs(b.currentTime - vA.currentTime) > 0.12){ try { b.currentTime = vA.currentTime; } catch {} } if (!vA.paused && b.paused) toca(b); }, 600);
 async function varre(de, ate, ms){
   const t0 = performance.now();
-  await new Promise(fim => { const f = now => { const k = Math.min(1, (now - t0) / ms), e = k < .5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2)/2; corte(de + (ate - de) * e); k < 1 ? requestAnimationFrame(f) : fim(); }; requestAnimationFrame(f); });
+  await new Promise(fim => { const f = now => { if (Date.now() - mao < 3500) return fim(); const k = Math.min(1, (now - t0) / ms), e = k < .5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2)/2; corte(de + (ate - de) * e); k < 1 ? requestAnimationFrame(f) : fim(); }; requestAnimationFrame(f); });
 }
+// arrastar com o dedo (ou o mouse) para comparar: enquanto a pessoa mexe, o automático espera
+(function(){
+  const c = $('#cena'); let pego = false;
+  const leva = e => { const r = c.getBoundingClientRect(); mao = Date.now(); corte(Math.max(2, Math.min(98, (e.clientX - r.left) / r.width * 100))); };
+  c.addEventListener('pointerdown', e => { pego = true; try { c.setPointerCapture(e.pointerId); } catch {} leva(e); });
+  c.addEventListener('pointermove', e => { if (pego) leva(e); });
+  ['pointerup', 'pointercancel'].forEach(t => c.addEventListener(t, () => { pego = false; }));
+  chips.forEach(b => b.addEventListener('click', () => { escolheu = Date.now(); etapa(+b.dataset.k); }));
+})();
 async function demo(){
+  toca(vA); toca(vBs[0]); chips[0].classList.add('on');
   let i = 0;
   while (true){
-    await enquantoVisivel();
-    const [pa, fa, n, fd] = LOOKS[i % LOOKS.length];
-    chips.forEach((c, k) => c.classList.toggle('on', k === i % LOOKS.length));
-    $('#antes').style.filter = fa; $('#depois').style.filter = fd;
-    $('#tgl').textContent = 'Antes · ' + pa; $('#tgr').textContent = n;
-    if (calmo){ corte(50); await dorme(2500); i++; continue; }
-    await varre(x, 15, 900); await varre(15, 85, 1500); await varre(85, 45, 900);
-    await dorme(700); i++;
+    await enquantoVisivel(); toca(vA);
+    while (Date.now() - mao < 3500 || Date.now() - escolheu < 9000) await dorme(250);      // a pessoa está mexendo: espera
+    await etapa(i % LOOKS.length);
+    await varre(x, 12, 900); await varre(12, 88, 1700); await varre(88, 40, 900);
+    await dorme(1400); i++;
   }
 }
 demo();

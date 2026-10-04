@@ -145,7 +145,8 @@ a.btn{text-decoration:none}
 .fecho{margin:90px 0 0;text-align:center}.fecho h2{margin:0 auto}.fecho .ctas{justify-content:center}.fecho .nota{margin-top:14px}
 .conta{border:1px solid var(--line);border-left:3px solid var(--a);background:var(--card);border-radius:14px;padding:13px 16px;margin:0 0 18px;font-size:15px;color:var(--mute)}.conta b{color:var(--ink)}.conta a{color:var(--a)}
 @media (max-width:760px){.kitb{grid-template-columns:1fr;text-align:center}.kitb .trilho{justify-content:center}.teste{padding:22px 12px 14px}.teste iframe{height:720px}}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+/* "Reduzir movimento" ligado no aparelho: as demonstrações continuam (são pequenas e lentas); só tiramos o deslocamento dos blocos ao rolar. */
+@media (prefers-reduced-motion:reduce){.rv{transform:none}}
 """
 
 JS_BASE = r"""
@@ -157,7 +158,9 @@ const ACESSO = '__ACESSO__';
 const PACK = '__PACK__';
 // ============================================================================
 const $ = s => document.querySelector(s);
-const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Decisão do produto: as demonstrações SEMPRE rodam, no ritmo normal. Antes, com "Reduzir movimento" ligado no celular,
+// elas ficavam paradas (parecia travado) e alguns blocos nem apareciam. O que respeita essa opção é só o CSS acima.
+const calmo = false;
 // A espera é SEMPRE a real. (Antes, com "Reduzir movimento" ligado no celular, ela caía para 60 ms
 // e as demonstrações trocavam de estado em rajada, parecendo a página acelerada.)
 const dorme = ms => new Promise(r => setTimeout(r, ms));
@@ -213,7 +216,9 @@ def pagina(p):
     inclui_li = ''.join(f'<li>{x}</li>' for x in p['inclui'])
     # TOPO: quando a página tem algo para a pessoa VER ou TESTAR de verdade, esse é o botão principal
     # (o preço fica para a oferta, depois de ela entender o que recebe). Quem já decidiu tem o atalho ao lado.
-    if p.get('ver'):
+    if p.get('hero_cta_html'):
+        hero_cta = p['hero_cta_html']
+    elif p.get('ver'):
         url, rot = p['ver']
         hero_cta = f'''<div class="ctas"><a class="btn" href="{url}">{rot}</a><button class="link-c" data-comprar>Já conheço, quero liberar {seta}</button></div>
       <p class="nota" style="margin-top:14px">{p['nota']} · {CAT['garantia_dias']} dias de garantia</p>'''
@@ -420,19 +425,20 @@ PAGINAS.append(dict(
   h1='Transforme a imagem do seu vídeo <em>com um clique.</em>',
   lead='Dois tipos de LUT no mesmo pack, direto em Ajuste › LUT no CapCut. <b>3 técnicos</b>, que convertem o vídeo gravado em Log para a cor normal (Rec.709). E <b>20 criativos</b>, que dão o clima do vídeo.',
   cta='Quero as LUTs', nota='Precisa do <b>CapCut para computador</b><br>Mac ou Windows',
-  rot='Demonstração · foto: Pexels',
-  demo='''<div class="cena">
-    <div class="img antes" id="antes"><img src="https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="" loading="eager"></div>
-    <div class="img depois" id="depois"><img src="https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=1400" alt=""></div>
+  rot='',
+  demo='''<div class="cena" id="cena">
+    <div class="img antes"><video id="vA" muted loop playsinline preload="auto" poster="demo/lut-demo-slog2.jpg" src="demo/lut-demo-slog2.mp4"></video></div>
+    <div class="img depois" id="depois"><video id="vB1" class="on" muted loop playsinline preload="auto" poster="demo/lut-demo-rec709.jpg" src="demo/lut-demo-rec709.mp4"></video><video id="vB2" muted loop playsinline preload="none"></video></div>
     <div class="corte" id="corte"><span></span></div>
-    <span class="tg l" id="tgl">Antes · Rec.709</span><span class="tg r" id="tgr">Depois</span>
+    <span class="tg l" id="tgl">S-Log2 · como sai da câmera</span><span class="tg r" id="tgr">Rec.709</span>
   </div>
-  <div class="lutbar"><small>Ajuste › LUT</small><div class="chips" id="chips"></div></div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="lut-teal" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.95"/><feComponentTransfer><feFuncR type="table" tableValues="0.03 0.21 0.50 0.80 0.97"/><feFuncG type="table" tableValues="0.06 0.26 0.51 0.77 0.95"/><feFuncB type="table" tableValues="0.11 0.31 0.49 0.68 0.86"/></feComponentTransfer></filter><filter id="lut-quente" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.85"/><feComponentTransfer><feFuncR type="table" tableValues="0.07 0.30 0.58 0.84 0.98"/><feFuncG type="table" tableValues="0.05 0.26 0.52 0.78 0.94"/><feFuncB type="table" tableValues="0.04 0.20 0.44 0.70 0.86"/></feComponentTransfer></filter><filter id="lut-frio" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.8"/><feComponentTransfer><feFuncR type="table" tableValues="0.03 0.21 0.48 0.76 0.96"/><feFuncG type="table" tableValues="0.05 0.24 0.50 0.77 0.96"/><feFuncB type="table" tableValues="0.10 0.31 0.54 0.78 0.94"/></feComponentTransfer></filter><filter id="lut-pastel" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.62"/><feComponentTransfer><feFuncR type="table" tableValues="0.10 0.30 0.55 0.80 0.97"/><feFuncG type="table" tableValues="0.10 0.30 0.54 0.79 0.96"/><feFuncB type="table" tableValues="0.12 0.31 0.53 0.77 0.94"/></feComponentTransfer></filter><filter id="lut-pb" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues="0.06 0.22 0.50 0.78 0.96"/><feFuncG type="table" tableValues="0.06 0.22 0.50 0.78 0.96"/><feFuncB type="table" tableValues="0.06 0.22 0.50 0.78 0.96"/></feComponentTransfer></filter><filter id="lut-flat" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.42"/><feComponentTransfer><feFuncR type="table" tableValues="0.10 0.30 0.50 0.70 0.88"/><feFuncG type="table" tableValues="0.10 0.30 0.50 0.70 0.88"/><feFuncB type="table" tableValues="0.11 0.31 0.51 0.70 0.88"/></feComponentTransfer></filter><filter id="lut-log" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.3"/><feComponentTransfer><feFuncR type="table" tableValues="0.20 0.36 0.50 0.63 0.76"/><feFuncG type="table" tableValues="0.20 0.36 0.50 0.63 0.76"/><feFuncB type="table" tableValues="0.20 0.36 0.50 0.63 0.76"/></feComponentTransfer></filter></defs></svg>''',
+  <div class="lutbar"><small>Toque num LUT · arraste a linha para comparar</small><div class="chips" id="chips"></div></div>''',
   css=r'''
-.palco{min-height:470px;display:flex;flex-direction:column;padding:16px 16px 40px}
-.cena{position:relative;flex:1;min-height:320px;border-radius:14px;overflow:hidden;border:1px solid #2a2a30;background:#1a1a1f}
+.palco{min-height:0;display:flex;flex-direction:column;padding:16px 16px 40px}
+.cena{position:relative;flex:none;aspect-ratio:16/9;touch-action:pan-y;cursor:ew-resize;-webkit-user-select:none;user-select:none;border-radius:14px;overflow:hidden;border:1px solid #2a2a30;background:#1a1a1f}
 .img{position:absolute;inset:0}
-.img img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
+.img video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.depois video{opacity:0;transition:opacity .35s}.depois video.on{opacity:1}
 .depois{clip-path:inset(0 0 0 50%)}
 .corte{position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;box-shadow:0 0 14px rgba(255,255,255,.7);z-index:2}
 .corte span{position:absolute;top:50%;left:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.4)}
@@ -442,39 +448,64 @@ PAGINAS.append(dict(
 .lutbar{margin-top:12px}
 .lutbar small{font-size:10.5px;color:#7a7980;letter-spacing:.06em}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-.chip{font-size:12px;font-weight:600;padding:7px 11px;border-radius:9px;background:#1b1a1f;border:1px solid #2b2a31;color:#bdbbc4;transition:all .25s}
+.chip{font:inherit;font-size:12.5px;font-weight:650;padding:9px 12px;border-radius:10px;background:#1b1a1f;border:1px solid #2b2a31;color:#bdbbc4;transition:all .25s;cursor:pointer}
 .chip.on{background:linear-gradient(135deg,var(--a),var(--a2));border-color:transparent;color:#fff;transform:translateY(-2px)}
 .chip.cv{border-style:dashed}
 ''',
   js=r'''
-// [perfil do "antes", filtro do antes, nome do look, filtro do depois]
+// VÍDEO DE VERDADE: o mesmo take em cada etapa. À esquerda fica sempre o S-Log2; à direita, a etapa escolhida.
+// [nome no botão, arquivo, é conversão técnica?]  A ordem alterna looks bem diferentes entre si.
 const LOOKS = [
-  ['Rec.709', 'url(#lut-flat)', 'Teal & Orange', 'url(#lut-teal)'],
-  ['Rec.709', 'url(#lut-flat)', 'Filme quente', 'url(#lut-quente)'],
-  ['Rec.709', 'url(#lut-flat)', 'Frio suave', 'url(#lut-frio)'],
-  ['Rec.709', 'url(#lut-flat)', 'Pastel', 'url(#lut-pastel)'],
-  ['Rec.709', 'url(#lut-flat)', 'P&B filme', 'url(#lut-pb)'],
-  ['S-Log3', 'url(#lut-log)', 'Conversão S-Log3 → Rec.709', 'none'],
+  ['Rec.709', 'rec709', 1],
+  ['Hora Dourada', 'hora-dourada'],
+  ['Fim de Tarde', 'fim-de-tarde'],
+  ['Maresia', 'maresia'],
+  ['Golden', 'golden'],
+  ['Cinemateca', 'cinemateca'],
 ];
-$('#chips').innerHTML = LOOKS.map(([, , n]) => `<span class="chip${n.startsWith('Conversão') ? ' cv' : ''}">${n}</span>`).join('');
-const chips = [...document.querySelectorAll('.chip')];
-let x = 50;
+$('#chips').innerHTML = LOOKS.map(([n, , cv], k) => `<button type="button" class="chip${cv ? ' cv' : ''}" data-k="${k}">${cv ? 'Conversão · ' : ''}${n}</button>`).join('');
+const chips = [...document.querySelectorAll('.chip')], vA = $('#vA'), vBs = [$('#vB1'), $('#vB2')];
+let x = 50, atual = 0, frente = 0, mao = 0, escolheu = 0, vez = 0;
 function corte(v){ x = v; $('#depois').style.clipPath = `inset(0 0 0 ${v}%)`; $('#corte').style.left = v + '%'; }
+const toca = v => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+// troca a etapa sem piscar: carrega no vídeo de trás, acerta o tempo e só então mostra
+function etapa(k){
+  atual = k; chips.forEach((c, i) => c.classList.toggle('on', i === k));
+  $('#tgr').textContent = LOOKS[k][0];
+  const nome = 'demo/lut-demo-' + LOOKS[k][1], novo = vBs[1 - frente], velho = vBs[frente];
+  if (velho.getAttribute('src') === nome + '.mp4'){ vez++; return Promise.resolve(); }
+  const minha = ++vez;
+  return new Promise(fim => {
+    // 'minha' garante que só a ÚLTIMA escolha entra em cena (tocar rápido em dois LUTs não embaralha)
+    let foi = false; const pronto = () => { if (foi) return; foi = true; if (minha !== vez) return fim(); try { novo.currentTime = vA.currentTime || 0; } catch {} toca(novo); novo.classList.add('on'); velho.classList.remove('on'); frente = 1 - frente; setTimeout(() => { if (minha === vez) velho.pause(); }, 400); fim(); };
+    novo.poster = nome + '.jpg'; novo.preload = 'auto'; novo.src = nome + '.mp4';
+    novo.addEventListener('loadeddata', pronto, { once: true }); setTimeout(pronto, 2500); novo.load();
+  });
+}
+// mantém os dois vídeos no mesmo quadro
+setInterval(() => { const b = vBs[frente]; if (!vA.paused && b.readyState > 1 && Math.abs(b.currentTime - vA.currentTime) > 0.12){ try { b.currentTime = vA.currentTime; } catch {} } if (!vA.paused && b.paused) toca(b); }, 600);
 async function varre(de, ate, ms){
   const t0 = performance.now();
-  await new Promise(fim => { const f = now => { const k = Math.min(1, (now - t0) / ms), e = k < .5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2)/2; corte(de + (ate - de) * e); k < 1 ? requestAnimationFrame(f) : fim(); }; requestAnimationFrame(f); });
+  await new Promise(fim => { const f = now => { if (Date.now() - mao < 3500) return fim(); const k = Math.min(1, (now - t0) / ms), e = k < .5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2)/2; corte(de + (ate - de) * e); k < 1 ? requestAnimationFrame(f) : fim(); }; requestAnimationFrame(f); });
 }
+// arrastar com o dedo (ou o mouse) para comparar: enquanto a pessoa mexe, o automático espera
+(function(){
+  const c = $('#cena'); let pego = false;
+  const leva = e => { const r = c.getBoundingClientRect(); mao = Date.now(); corte(Math.max(2, Math.min(98, (e.clientX - r.left) / r.width * 100))); };
+  c.addEventListener('pointerdown', e => { pego = true; try { c.setPointerCapture(e.pointerId); } catch {} leva(e); });
+  c.addEventListener('pointermove', e => { if (pego) leva(e); });
+  ['pointerup', 'pointercancel'].forEach(t => c.addEventListener(t, () => { pego = false; }));
+  chips.forEach(b => b.addEventListener('click', () => { escolheu = Date.now(); etapa(+b.dataset.k); }));
+})();
 async function demo(){
+  toca(vA); toca(vBs[0]); chips[0].classList.add('on');
   let i = 0;
   while (true){
-    await enquantoVisivel();
-    const [pa, fa, n, fd] = LOOKS[i % LOOKS.length];
-    chips.forEach((c, k) => c.classList.toggle('on', k === i % LOOKS.length));
-    $('#antes').style.filter = fa; $('#depois').style.filter = fd;
-    $('#tgl').textContent = 'Antes · ' + pa; $('#tgr').textContent = n;
-    if (calmo){ corte(50); await dorme(2500); i++; continue; }
-    await varre(x, 15, 900); await varre(15, 85, 1500); await varre(85, 45, 900);
-    await dorme(700); i++;
+    await enquantoVisivel(); toca(vA);
+    while (Date.now() - mao < 3500 || Date.now() - escolheu < 9000) await dorme(250);      // a pessoa está mexendo: espera
+    await etapa(i % LOOKS.length);
+    await varre(x, 12, 900); await varre(12, 88, 1700); await varre(88, 40, 900);
+    await dorme(1400); i++;
   }
 }
 demo();
@@ -1470,6 +1501,23 @@ CU_CSS = r"""
 @media (max-width:900px){.vv,.cu3-g{grid-template-columns:1fr}.cu3-g{gap:26px}.cu-b{margin:0 auto}}
 """
 
+KT_SELOS = ['Respondido ✓', 'R$ 1.350', 'Aceito ✓', 'No quadro ✓']
+KT_DOR = r'''
+  <section class="dor">
+    <span class="kick rv">Reconhece?</span>
+    <h2 class="rv" style="margin-top:14px">O trabalho é bom. <em class="ac">O que cansa é o resto.</em></h2>
+    <div class="dor-g">
+      <div class="dor-c rv"><b>“Quanto fica?”</b><p>E você chuta um valor, torcendo para não ser caro nem barato demais.</p></div>
+      <div class="dor-c rv d1"><b>“Quero uns vídeos.”</b><p>E lá se vão dez mensagens até entender o que o cliente quer de verdade.</p></div>
+      <div class="dor-c rv d2"><b>“Só mais um ajustezinho.”</b><p>Pela quinta vez, porque nada ficou combinado por escrito.</p></div>
+      <div class="dor-c rv d3"><b>“Te pago semana que vem.”</b><p>E no dia 20 você não lembra quem pagou, quem falta e quanto entrou.</p></div>
+    </div>
+    <p class="dor-f rv">Nada disso é falta de talento. <b>É falta de sistema.</b></p>
+  </section>
+'''
+KT_BARRA = r'''
+  <div class="kbar" id="kbar" aria-hidden="true"><span><b>Kit Freelancer</b><small>__P__ · preço de lançamento</small></span><button class="btn" data-comprar tabindex="-1">Quero o Kit</button></div>
+'''
 KT_VIDEO = r'''
   <section class="kv"><span class="kick rv">Por dentro do kit</span><h2 class="rv" style="margin-top:14px">Eu mostro <em class="ac">funcionando.</em></h2>
     <video class="rv" src="__V__" controls playsinline preload="metadata"></video></section>
@@ -1497,6 +1545,7 @@ KT_MIOLO = r'''
     </div>
   </section>
 
+<!--FERR-->
   <section class="sj">
     <span class="kick rv">Um sistema, não quatro apps</span>
     <h2 class="rv" style="margin-top:14px">Cada parte num lugar dá retrabalho. <em class="ac">Aqui, uma preenche a outra.</em></h2>
@@ -1514,6 +1563,25 @@ KT_MIOLO = r'''
   </section>
 '''
 KT_CSS = r'''
+.dor-g{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+.dor-c{border:1px solid var(--line);border-radius:20px;background:var(--card);padding:20px}
+.dor-c b{display:block;font-family:var(--d);font-weight:850;font-size:20px;letter-spacing:-.02em;line-height:1.15;color:var(--ink)}
+.dor-c p{color:var(--mute);font-size:15px;margin-top:8px}
+.dor-f{margin-top:22px;font-size:clamp(18px,2.2vw,22px);color:var(--mute)}.dor-f b{color:var(--a)}
+.kf{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+.kf-c{--k:242,165,65;border:1px solid rgba(var(--k),.4);border-top:3px solid rgb(var(--k));border-radius:20px;background:linear-gradient(180deg,rgba(var(--k),.09),transparent 45%),var(--card);padding:18px;display:flex;flex-direction:column;gap:14px}
+.kf-h{display:flex;align-items:center;gap:12px}.kf-h img{border-radius:15px;flex:none}
+.kf-h small{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgb(var(--k))}
+.kf-h b{display:block;font-family:var(--d);font-weight:850;font-size:18px;line-height:1.15}
+.kf-c ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:15px;color:var(--mute)}
+.kf-c li{position:relative;padding-left:22px}.kf-c li::before{content:"✓";position:absolute;left:0;color:rgb(var(--k));font-weight:900}
+.kf-c a{margin-top:auto;text-decoration:none;text-align:center;font-weight:750;font-size:14.5px;color:rgb(var(--k));border:1px solid rgba(var(--k),.55);background:rgba(var(--k),.1);border-radius:12px;padding:12px}
+.kbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;align-items:center;gap:12px;padding:10px 14px calc(env(safe-area-inset-bottom) + 10px);background:rgba(13,15,14,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.kbar span{flex:1;min-width:0}.kbar b{display:block;font-family:var(--d);font-weight:800;font-size:15.5px}.kbar small{display:block;color:var(--mute);font-size:12.5px}
+.kbar .btn{padding:13px 18px;font-size:15px;border-radius:13px;box-shadow:none}
+.kbar.on{transform:none}
+@media (max-width:900px){.dor-g{grid-template-columns:1fr 1fr}.kf{grid-template-columns:1fr 1fr}.kbar{display:flex}body{padding-bottom:78px}}
+@media (max-width:560px){.dor-g,.kf{grid-template-columns:1fr}.dor-c{padding:16px}.dor-c b{font-size:18px}}
 .kv video{display:block;width:100%;max-width:900px;margin:26px auto 0;border-radius:22px;border:1px solid var(--line);background:#000;aspect-ratio:16/9}
 .fluxo{margin-top:26px;border:1px solid var(--line);border-radius:26px;background:var(--card);overflow:hidden}
 /* trilho: as quatro ferramentas ligadas por uma linha que vai enchendo */
@@ -1596,6 +1664,26 @@ KT_CSS = r'''
 @media (max-width:900px){.sj-g{grid-template-columns:1fr}}
 '''
 KT_JS = r'''
+// TOPO: as quatro ferramentas acendem em ordem, cada uma deixando o seu resultado. Um relógio só, que para fora da tela.
+(function(){
+  const ls = [...document.querySelectorAll('.kd .kl')]; if (!ls.length) return;
+  let i = -1;
+  (async () => { while (true){
+    await enquantoVisivel();
+    i++;
+    if (i >= ls.length){ await dorme(2600); ls.forEach(l => l.classList.remove('vez', 'ok')); i = -1; await dorme(700); continue; }
+    ls.forEach((l, k) => { l.classList.toggle('vez', k === i); if (k < i) l.classList.add('ok'); });
+    await dorme(1500);
+  } })();
+})();
+// CELULAR: barra de compra que aparece depois do topo e some quando a oferta já está na tela
+(function(){
+  const b = document.getElementById('kbar'), topo = document.querySelector('.hero'), of = document.getElementById('oferta'); if (!b || !topo || !of || !('IntersectionObserver' in window)) return;
+  let passou = false, naOferta = false; const poe = () => { const on = passou && !naOferta; b.classList.toggle('on', on); b.setAttribute('aria-hidden', on ? 'false' : 'true'); b.querySelector('button').tabIndex = on ? 0 : -1; };
+  new IntersectionObserver(e => { passou = !e[0].isIntersecting && e[0].boundingClientRect.top < 0; poe(); }, { threshold: 0 }).observe(topo);
+  new IntersectionObserver(e => { naOferta = e[0].isIntersecting; poe(); }, { threshold: .15 }).observe(of);
+})();
+
 // O FLUXO: um trabalho só, passando pelas quatro ferramentas. O que aparece colorido veio do passo anterior.
 // Regras para não virar bagunça no celular: UM relógio só, que só anda com a seção na tela; nada reinicia ao rolar;
 // tocou em qualquer controle, o automático para; com "Reduzir movimento" ligado, não anda sozinho.
@@ -1755,12 +1843,17 @@ def pagina_kit():
                 ('Manda a proposta', 'Um link com serviço, prazo e valor. O cliente aprova com um toque. Suas horas ficam só com você.'),
                 ('Fecha o contrato', 'Cliente, serviço, prazo e valor já vêm preenchidos. Ele lê e aceita pelo celular.'),
                 ('O trabalho entra no organizador', 'Prazo, revisões e pagamento num quadro. Você só acompanha e entrega.')]
-    linhas = ''.join(f'<div class="kl" data-k="{j["key"]}" style="--c:rgb({j["cor"]})"><img src="https://basefl.com/icones/{j["key"]}.png" alt="" width="44" height="44"><span><b>{j["nome"]}</b><small>{j["passo"]}</small></span><i>{i+1}</i></div>' for i, j in enumerate(JORNADA))
+    linhas = ''.join(f'<div class="kl" data-k="{j["key"]}" style="--k:{j["cor"]}"><img src="https://basefl.com/icones/{j["key"]}.png" alt="" width="44" height="44"><span><b>{j["nome"]}</b><small>{j["passo"]}</small></span><i>{i+1}</i><em>{KT_SELOS[i]}</em></div>' for i, j in enumerate(JORNADA))
     demo = f'<div class="kd">{linhas}<div class="kt tot"><span>Preço de lançamento</span><b>{brl(k["preco"])}</b></div></div>'
     css = """
 .kd{width:100%;max-width:420px;display:flex;flex-direction:column;gap:8px}
-.kl{display:flex;align-items:center;gap:12px;background:#171a19;border:1px solid #252a27;border-left:3px solid var(--c);border-radius:14px;padding:10px 14px 10px 12px;opacity:0;transform:translateY(8px);animation:kl .5s cubic-bezier(.2,.8,.2,1) forwards}
-.kl:nth-child(2){animation-delay:.12s}.kl:nth-child(3){animation-delay:.24s}.kl:nth-child(4){animation-delay:.36s}
+.kl{position:relative;display:flex;align-items:center;gap:12px;background:#171a19;border:1px solid #252a27;border-left:3px solid rgba(var(--k),.45);border-radius:14px;padding:10px 12px;transition:border-color .45s,background .45s,transform .45s,box-shadow .45s}
+.kl.vez{border-color:rgb(var(--k));background:linear-gradient(90deg,rgba(var(--k),.16),#171a19 70%);transform:translateX(4px);box-shadow:0 12px 30px -16px rgba(var(--k),.9)}
+.kl.ok{border-left-color:rgb(var(--k))}
+.kl em{font-style:normal;flex:none;font-size:11.5px;font-weight:800;border-radius:99px;padding:5px 9px;white-space:nowrap;background:rgba(var(--k),.16);color:rgb(var(--k));border:1px solid rgba(var(--k),.5);opacity:0;transform:scale(.7);transition:opacity .35s,transform .45s cubic-bezier(.2,1.5,.4,1)}
+.kl.vez em,.kl.ok em{opacity:1;transform:none}
+.kl.vez i,.kl.ok i{display:none}
+.kd .liga{width:2px;height:8px;margin:-8px 0 -8px 33px;background:#252a27;position:relative;z-index:1}
 .kl img{border-radius:11px;flex:none}
 .kl span{flex:1;min-width:0;text-align:left}
 .kl b{display:block;font-family:var(--d);font-weight:800;font-size:15.5px}
@@ -1773,14 +1866,24 @@ def pagina_kit():
 .kt.tot b{font-family:var(--d);font-weight:900;font-size:34px;letter-spacing:-.03em;color:var(--a)}
 @keyframes kl{to{opacity:1;transform:none}}
 """
+    seta_b = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
+    hero_cta = f'''<div class="ctas"><button class="btn" data-comprar>Quero o Kit Freelancer · {brl(k["preco"])} {seta_b}</button><a class="link-c" href="#jornada">Ver funcionando ↓</a></div>
+      <p class="nota" style="margin-top:14px">ou <b>12x de {brl(parcela(k["preco"], CAT), 2)}</b> · {CAT["garantia_dias"]} dias de garantia · 1 ano de acesso<br>Funciona no <b>celular e no computador</b></p>'''
+    # o que cada ferramenta resolve, com o teste de verdade de cada uma
+    resolve = {'briefing': ['O cliente responde por um link, em 1 minuto', 'O pedido chega organizado na sua conta', 'Avisa o que observar antes de dar o preço'],
+               'preco': ['Preço calculado para o seu nível, sem chute', 'Faixa justa para negociar', 'Proposta por link, que o cliente aprova'],
+               'contrato': ['Prazo, revisões e pagamento por escrito', 'O cliente lê e aceita pelo celular', 'Termo rápido ou contrato em PDF'],
+               'painel': ['Todos os trabalhos num quadro', 'Quem ainda não pagou, à vista', 'Meta do mês e contador de revisões']}
+    ferr = '<section class="kf-s"><span class="kick rv">O que tem dentro</span><h2 class="rv" style="margin-top:14px">Quatro ferramentas. <em class="ac">Você pode testar cada uma agora.</em></h2><div class="kf rv">' + ''.join(
+        f'<div class="kf-c" style="--k:{j["cor"]}"><div class="kf-h"><img src="https://basefl.com/icones/{j["key"]}.png" alt="" width="56" height="56" loading="lazy"><span><small>{i+1} · {j["passo"]}</small><b>{j["nome"]}</b></span></div><ul>' + ''.join(f'<li>{x}</li>' for x in resolve[j['key']]) + f'</ul><a href="https://basefl.com{j["url"]}?de=kit">Testar {j["nome"]} →</a></div>' for i, j in enumerate(JORNADA)) + '</div></section>'
     p = dict(slug=k['slug'], pack='kit', nome=k['nome'], secao='Kit · 4 ferramentas', cor='#F2A541', cor2='#FF7A45',
       pattern='linear-gradient(rgba(242,165,65,.05) 1px,transparent 1px) 0 0/100% 40px', fxx='70%', capa='https://basefl.com/icon-512.png',
       kick='Kit Freelancer · preço de lançamento', desc=f'Um sistema de trabalho para o editor freelancer: briefing, preço, proposta, contrato e organizador trabalhando juntos. Preço de lançamento: {brl(k["preco"])}.',
-      h1='Do primeiro contato ao pagamento. <em>Sem retrabalho.</em>',
-      lead='Não são quatro ferramentas soltas. É <b>um sistema de trabalho</b>, em ordem: o cliente responde o briefing, você calcula, manda a proposta, fecha o contrato e o trabalho <b>entra sozinho no organizador</b>. Nada é digitado duas vezes.',
-      cta='Quero o Kit Freelancer', nota='Funciona no <b>celular e no computador</b>', rot='O que vem no kit', demo=demo, css=css + KT_CSS,
+      h1='Do “quanto fica?” ao “pago”. <em>Num sistema só.</em>', hero_cta_html=hero_cta,
+      lead='Pare de perder tempo e cliente na bagunça do WhatsApp. Aqui é <b>um sistema de trabalho</b>: o cliente responde o briefing por link, o preço sai calculado, a proposta e o contrato são aceitos pelo celular e o trabalho <b>entra sozinho no seu quadro</b>.',
+      cta='Quero o Kit Freelancer', nota='Funciona no <b>celular e no computador</b>', rot='', demo=demo, css=css + KT_CSS,
       js='window.FL_FERR = ' + json.dumps([dict(key=j['key'], nome=j['nome'], cor=j['cor']) for j in JORNADA], ensure_ascii=False) + ';\n' + KT_JS,
-      miolo=(KT_VIDEO.replace('__V__', k['video']) if k.get('video') else '') + KT_MIOLO, ver=('#jornada', 'Ver um trabalho do começo ao fim ↓'), cta_oferta='Liberar as quatro ferramentas', fecho='Seu próximo trabalho, do pedido ao pagamento, <em class="ac">sem digitar duas vezes.</em>',
+      miolo=KT_DOR + (KT_VIDEO.replace('__V__', k['video']) if k.get('video') else '') + KT_MIOLO.replace('<!--FERR-->', ferr) + KT_BARRA.replace('__P__', brl(k['preco'])), ver=('#jornada', 'Ver um trabalho do começo ao fim ↓'), cta_oferta='Liberar as quatro ferramentas', fecho='Seu próximo trabalho, do pedido ao pagamento, <em class="ac">sem digitar duas vezes.</em>',
       checkout=k['checkout'], preco=brl(k['preco']), parc6=brl(parcela(k['preco'], CAT), 2),
       acesso_txt='acesso de 1 ano · preço de lançamento', acesso_selo='Acesso de 1 ano', acesso_curto='1 ano de acesso',
       passos_h2='Um trabalho inteiro, do pedido ao pagamento.', passos=passos_j,

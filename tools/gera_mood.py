@@ -216,7 +216,7 @@ footer a{color:var(--mute)}
   .oferta .in{padding:30px 18px}
 }
 @media (min-width:821px){.fixo{display:none}}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.rv{transform:none}}
 </style>
 </head>
 <body>
@@ -339,7 +339,7 @@ const CHECKOUT = '__CHECKOUT__';
 const PRODUTO = 'mood';
 // ====================================================
 const $ = s => document.querySelector(s);
-const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const calmo = false;   // as demonstrações sempre rodam, no ritmo normal (ver gera_paginas.py)
 const espera = ms => new Promise(r => setTimeout(r, ms));
 function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2400); }
 const DE = new URLSearchParams(location.search).get('de') || 'pagina';

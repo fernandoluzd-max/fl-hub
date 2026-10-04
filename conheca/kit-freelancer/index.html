@@ -156,11 +156,17 @@ a.btn{text-decoration:none}
 .fecho{margin:90px 0 0;text-align:center}.fecho h2{margin:0 auto}.fecho .ctas{justify-content:center}.fecho .nota{margin-top:14px}
 .conta{border:1px solid var(--line);border-left:3px solid var(--a);background:var(--card);border-radius:14px;padding:13px 16px;margin:0 0 18px;font-size:15px;color:var(--mute)}.conta b{color:var(--ink)}.conta a{color:var(--a)}
 @media (max-width:760px){.kitb{grid-template-columns:1fr;text-align:center}.kitb .trilho{justify-content:center}.teste{padding:22px 12px 14px}.teste iframe{height:720px}}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+/* "Reduzir movimento" ligado no aparelho: as demonstrações continuam (são pequenas e lentas); só tiramos o deslocamento dos blocos ao rolar. */
+@media (prefers-reduced-motion:reduce){.rv{transform:none}}
 
 .kd{width:100%;max-width:420px;display:flex;flex-direction:column;gap:8px}
-.kl{display:flex;align-items:center;gap:12px;background:#171a19;border:1px solid #252a27;border-left:3px solid var(--c);border-radius:14px;padding:10px 14px 10px 12px;opacity:0;transform:translateY(8px);animation:kl .5s cubic-bezier(.2,.8,.2,1) forwards}
-.kl:nth-child(2){animation-delay:.12s}.kl:nth-child(3){animation-delay:.24s}.kl:nth-child(4){animation-delay:.36s}
+.kl{position:relative;display:flex;align-items:center;gap:12px;background:#171a19;border:1px solid #252a27;border-left:3px solid rgba(var(--k),.45);border-radius:14px;padding:10px 12px;transition:border-color .45s,background .45s,transform .45s,box-shadow .45s}
+.kl.vez{border-color:rgb(var(--k));background:linear-gradient(90deg,rgba(var(--k),.16),#171a19 70%);transform:translateX(4px);box-shadow:0 12px 30px -16px rgba(var(--k),.9)}
+.kl.ok{border-left-color:rgb(var(--k))}
+.kl em{font-style:normal;flex:none;font-size:11.5px;font-weight:800;border-radius:99px;padding:5px 9px;white-space:nowrap;background:rgba(var(--k),.16);color:rgb(var(--k));border:1px solid rgba(var(--k),.5);opacity:0;transform:scale(.7);transition:opacity .35s,transform .45s cubic-bezier(.2,1.5,.4,1)}
+.kl.vez em,.kl.ok em{opacity:1;transform:none}
+.kl.vez i,.kl.ok i{display:none}
+.kd .liga{width:2px;height:8px;margin:-8px 0 -8px 33px;background:#252a27;position:relative;z-index:1}
 .kl img{border-radius:11px;flex:none}
 .kl span{flex:1;min-width:0;text-align:left}
 .kl b{display:block;font-family:var(--d);font-weight:800;font-size:15.5px}
@@ -173,6 +179,25 @@ a.btn{text-decoration:none}
 .kt.tot b{font-family:var(--d);font-weight:900;font-size:34px;letter-spacing:-.03em;color:var(--a)}
 @keyframes kl{to{opacity:1;transform:none}}
 
+.dor-g{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+.dor-c{border:1px solid var(--line);border-radius:20px;background:var(--card);padding:20px}
+.dor-c b{display:block;font-family:var(--d);font-weight:850;font-size:20px;letter-spacing:-.02em;line-height:1.15;color:var(--ink)}
+.dor-c p{color:var(--mute);font-size:15px;margin-top:8px}
+.dor-f{margin-top:22px;font-size:clamp(18px,2.2vw,22px);color:var(--mute)}.dor-f b{color:var(--a)}
+.kf{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+.kf-c{--k:242,165,65;border:1px solid rgba(var(--k),.4);border-top:3px solid rgb(var(--k));border-radius:20px;background:linear-gradient(180deg,rgba(var(--k),.09),transparent 45%),var(--card);padding:18px;display:flex;flex-direction:column;gap:14px}
+.kf-h{display:flex;align-items:center;gap:12px}.kf-h img{border-radius:15px;flex:none}
+.kf-h small{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgb(var(--k))}
+.kf-h b{display:block;font-family:var(--d);font-weight:850;font-size:18px;line-height:1.15}
+.kf-c ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:15px;color:var(--mute)}
+.kf-c li{position:relative;padding-left:22px}.kf-c li::before{content:"✓";position:absolute;left:0;color:rgb(var(--k));font-weight:900}
+.kf-c a{margin-top:auto;text-decoration:none;text-align:center;font-weight:750;font-size:14.5px;color:rgb(var(--k));border:1px solid rgba(var(--k),.55);background:rgba(var(--k),.1);border-radius:12px;padding:12px}
+.kbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;align-items:center;gap:12px;padding:10px 14px calc(env(safe-area-inset-bottom) + 10px);background:rgba(13,15,14,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.kbar span{flex:1;min-width:0}.kbar b{display:block;font-family:var(--d);font-weight:800;font-size:15.5px}.kbar small{display:block;color:var(--mute);font-size:12.5px}
+.kbar .btn{padding:13px 18px;font-size:15px;border-radius:13px;box-shadow:none}
+.kbar.on{transform:none}
+@media (max-width:900px){.dor-g{grid-template-columns:1fr 1fr}.kf{grid-template-columns:1fr 1fr}.kbar{display:flex}body{padding-bottom:78px}}
+@media (max-width:560px){.dor-g,.kf{grid-template-columns:1fr}.dor-c{padding:16px}.dor-c b{font-size:18px}}
 .kv video{display:block;width:100%;max-width:900px;margin:26px auto 0;border-radius:22px;border:1px solid var(--line);background:#000;aspect-ratio:16/9}
 .fluxo{margin-top:26px;border:1px solid var(--line);border-radius:26px;background:var(--card);overflow:hidden}
 /* trilho: as quatro ferramentas ligadas por uma linha que vai enchendo */
@@ -269,15 +294,27 @@ a.btn{text-decoration:none}
   <div class="hero">
     <div>
       <span class="kick">Kit Freelancer · preço de lançamento</span>
-      <h1>Do primeiro contato ao pagamento. <em>Sem retrabalho.</em></h1>
-      <p class="lead">Não são quatro ferramentas soltas. É <b>um sistema de trabalho</b>, em ordem: o cliente responde o briefing, você calcula, manda a proposta, fecha o contrato e o trabalho <b>entra sozinho no organizador</b>. Nada é digitado duas vezes.</p>
-      <div class="ctas"><a class="btn" href="#jornada">Ver um trabalho do começo ao fim ↓</a><button class="link-c" data-comprar>Já conheço, quero liberar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
-      <p class="nota" style="margin-top:14px">Funciona no <b>celular e no computador</b> · 7 dias de garantia</p>
+      <h1>Do “quanto fica?” ao “pago”. <em>Num sistema só.</em></h1>
+      <p class="lead">Pare de perder tempo e cliente na bagunça do WhatsApp. Aqui é <b>um sistema de trabalho</b>: o cliente responde o briefing por link, o preço sai calculado, a proposta e o contrato são aceitos pelo celular e o trabalho <b>entra sozinho no seu quadro</b>.</p>
+      <div class="ctas"><button class="btn" data-comprar>Quero o Kit Freelancer · R$ 97 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><a class="link-c" href="#jornada">Ver funcionando ↓</a></div>
+      <p class="nota" style="margin-top:14px">ou <b>12x de R$ 9,97</b> · 7 dias de garantia · 1 ano de acesso<br>Funciona no <b>celular e no computador</b></p>
     </div>
-    <div class="palco" aria-label="Demonstração de Kit Freelancer"><div class="kd"><div class="kl" data-k="briefing" style="--c:rgb(63,208,194)"><img src="https://basefl.com/icones/briefing.png" alt="" width="44" height="44"><span><b>Gerador de Briefing</b><small>Entender o trabalho</small></span><i>1</i></div><div class="kl" data-k="preco" style="--c:rgb(123,216,143)"><img src="https://basefl.com/icones/preco.png" alt="" width="44" height="44"><span><b>Quanto Cobrar?</b><small>Saber quanto cobrar</small></span><i>2</i></div><div class="kl" data-k="contrato" style="--c:rgb(169,139,255)"><img src="https://basefl.com/icones/contrato.png" alt="" width="44" height="44"><span><b>Gerador de Contrato</b><small>Formalizar</small></span><i>3</i></div><div class="kl" data-k="painel" style="--c:rgb(255,179,71)"><img src="https://basefl.com/icones/painel.png" alt="" width="44" height="44"><span><b>Base Demandas</b><small>Executar e organizar</small></span><i>4</i></div><div class="kt tot"><span>Preço de lançamento</span><b>R$ 97</b></div></div><span class="rot">O que vem no kit</span></div>
+    <div class="palco" aria-label="Demonstração de Kit Freelancer"><div class="kd"><div class="kl" data-k="briefing" style="--k:63,208,194"><img src="https://basefl.com/icones/briefing.png" alt="" width="44" height="44"><span><b>Gerador de Briefing</b><small>Entender o trabalho</small></span><i>1</i><em>Respondido ✓</em></div><div class="kl" data-k="preco" style="--k:123,216,143"><img src="https://basefl.com/icones/preco.png" alt="" width="44" height="44"><span><b>Quanto Cobrar?</b><small>Saber quanto cobrar</small></span><i>2</i><em>R$ 1.350</em></div><div class="kl" data-k="contrato" style="--k:169,139,255"><img src="https://basefl.com/icones/contrato.png" alt="" width="44" height="44"><span><b>Gerador de Contrato</b><small>Formalizar</small></span><i>3</i><em>Aceito ✓</em></div><div class="kl" data-k="painel" style="--k:255,179,71"><img src="https://basefl.com/icones/painel.png" alt="" width="44" height="44"><span><b>Base Demandas</b><small>Executar e organizar</small></span><i>4</i><em>No quadro ✓</em></div><div class="kt tot"><span>Preço de lançamento</span><b>R$ 97</b></div></div><span class="rot"></span></div>
   </div>
 
   
+  <section class="dor">
+    <span class="kick rv">Reconhece?</span>
+    <h2 class="rv" style="margin-top:14px">O trabalho é bom. <em class="ac">O que cansa é o resto.</em></h2>
+    <div class="dor-g">
+      <div class="dor-c rv"><b>“Quanto fica?”</b><p>E você chuta um valor, torcendo para não ser caro nem barato demais.</p></div>
+      <div class="dor-c rv d1"><b>“Quero uns vídeos.”</b><p>E lá se vão dez mensagens até entender o que o cliente quer de verdade.</p></div>
+      <div class="dor-c rv d2"><b>“Só mais um ajustezinho.”</b><p>Pela quinta vez, porque nada ficou combinado por escrito.</p></div>
+      <div class="dor-c rv d3"><b>“Te pago semana que vem.”</b><p>E no dia 20 você não lembra quem pagou, quem falta e quanto entrou.</p></div>
+    </div>
+    <p class="dor-f rv">Nada disso é falta de talento. <b>É falta de sistema.</b></p>
+  </section>
+
   <section class="fx-s" id="jornada">
     <span class="kick rv">O sistema funcionando</span>
     <h2 class="rv" style="margin-top:14px">Um cliente novo, <em class="ac">do primeiro oi ao projeto em andamento.</em></h2>
@@ -300,6 +337,7 @@ a.btn{text-decoration:none}
     </div>
   </section>
 
+<section class="kf-s"><span class="kick rv">O que tem dentro</span><h2 class="rv" style="margin-top:14px">Quatro ferramentas. <em class="ac">Você pode testar cada uma agora.</em></h2><div class="kf rv"><div class="kf-c" style="--k:63,208,194"><div class="kf-h"><img src="https://basefl.com/icones/briefing.png" alt="" width="56" height="56" loading="lazy"><span><small>1 · Entender o trabalho</small><b>Gerador de Briefing</b></span></div><ul><li>O cliente responde por um link, em 1 minuto</li><li>O pedido chega organizado na sua conta</li><li>Avisa o que observar antes de dar o preço</li></ul><a href="https://basefl.com/briefing/?de=kit">Testar Gerador de Briefing →</a></div><div class="kf-c" style="--k:123,216,143"><div class="kf-h"><img src="https://basefl.com/icones/preco.png" alt="" width="56" height="56" loading="lazy"><span><small>2 · Saber quanto cobrar</small><b>Quanto Cobrar?</b></span></div><ul><li>Preço calculado para o seu nível, sem chute</li><li>Faixa justa para negociar</li><li>Proposta por link, que o cliente aprova</li></ul><a href="https://basefl.com/preco/?de=kit">Testar Quanto Cobrar? →</a></div><div class="kf-c" style="--k:169,139,255"><div class="kf-h"><img src="https://basefl.com/icones/contrato.png" alt="" width="56" height="56" loading="lazy"><span><small>3 · Formalizar</small><b>Gerador de Contrato</b></span></div><ul><li>Prazo, revisões e pagamento por escrito</li><li>O cliente lê e aceita pelo celular</li><li>Termo rápido ou contrato em PDF</li></ul><a href="https://basefl.com/contrato/?de=kit">Testar Gerador de Contrato →</a></div><div class="kf-c" style="--k:255,179,71"><div class="kf-h"><img src="https://basefl.com/icones/painel.png" alt="" width="56" height="56" loading="lazy"><span><small>4 · Executar e organizar</small><b>Base Demandas</b></span></div><ul><li>Todos os trabalhos num quadro</li><li>Quem ainda não pagou, à vista</li><li>Meta do mês e contador de revisões</li></ul><a href="https://basefl.com/painel/?de=kit">Testar Base Demandas →</a></div></div></section>
   <section class="sj">
     <span class="kick rv">Um sistema, não quatro apps</span>
     <h2 class="rv" style="margin-top:14px">Cada parte num lugar dá retrabalho. <em class="ac">Aqui, uma preenche a outra.</em></h2>
@@ -315,6 +353,8 @@ a.btn{text-decoration:none}
     </div>
     <p class="sj-n rv">Não precisa usar todas em todo trabalho. Trabalho pequeno? Às vezes é só preço e termo rápido. Elas estão lá quando você precisar.</p>
   </section>
+
+  <div class="kbar" id="kbar" aria-hidden="true"><span><b>Kit Freelancer</b><small>R$ 97 · preço de lançamento</small></span><button class="btn" data-comprar tabindex="-1">Quero o Kit</button></div>
 
 
   
@@ -356,7 +396,9 @@ const ACESSO = '1 ano de acesso';
 const PACK = 'kit';
 // ============================================================================
 const $ = s => document.querySelector(s);
-const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Decisão do produto: as demonstrações SEMPRE rodam, no ritmo normal. Antes, com "Reduzir movimento" ligado no celular,
+// elas ficavam paradas (parecia travado) e alguns blocos nem apareciam. O que respeita essa opção é só o CSS acima.
+const calmo = false;
 // A espera é SEMPRE a real. (Antes, com "Reduzir movimento" ligado no celular, ela caía para 60 ms
 // e as demonstrações trocavam de estado em rajada, parecendo a página acelerada.)
 const dorme = ms => new Promise(r => setTimeout(r, ms));
@@ -389,6 +431,26 @@ let visivel = true;
 new IntersectionObserver(es => { visivel = es[0].isIntersecting; }, { threshold:.1 }).observe($('.palco'));
 async function enquantoVisivel(){ while (!visivel) await new Promise(r => setTimeout(r, 300)); }
 window.FL_FERR = [{"key": "briefing", "nome": "Gerador de Briefing", "cor": "63,208,194"}, {"key": "preco", "nome": "Quanto Cobrar?", "cor": "123,216,143"}, {"key": "contrato", "nome": "Gerador de Contrato", "cor": "169,139,255"}, {"key": "painel", "nome": "Base Demandas", "cor": "255,179,71"}];
+
+// TOPO: as quatro ferramentas acendem em ordem, cada uma deixando o seu resultado. Um relógio só, que para fora da tela.
+(function(){
+  const ls = [...document.querySelectorAll('.kd .kl')]; if (!ls.length) return;
+  let i = -1;
+  (async () => { while (true){
+    await enquantoVisivel();
+    i++;
+    if (i >= ls.length){ await dorme(2600); ls.forEach(l => l.classList.remove('vez', 'ok')); i = -1; await dorme(700); continue; }
+    ls.forEach((l, k) => { l.classList.toggle('vez', k === i); if (k < i) l.classList.add('ok'); });
+    await dorme(1500);
+  } })();
+})();
+// CELULAR: barra de compra que aparece depois do topo e some quando a oferta já está na tela
+(function(){
+  const b = document.getElementById('kbar'), topo = document.querySelector('.hero'), of = document.getElementById('oferta'); if (!b || !topo || !of || !('IntersectionObserver' in window)) return;
+  let passou = false, naOferta = false; const poe = () => { const on = passou && !naOferta; b.classList.toggle('on', on); b.setAttribute('aria-hidden', on ? 'false' : 'true'); b.querySelector('button').tabIndex = on ? 0 : -1; };
+  new IntersectionObserver(e => { passou = !e[0].isIntersecting && e[0].boundingClientRect.top < 0; poe(); }, { threshold: 0 }).observe(topo);
+  new IntersectionObserver(e => { naOferta = e[0].isIntersecting; poe(); }, { threshold: .15 }).observe(of);
+})();
 
 // O FLUXO: um trabalho só, passando pelas quatro ferramentas. O que aparece colorido veio do passo anterior.
 // Regras para não virar bagunça no celular: UM relógio só, que só anda com a seção na tela; nada reinicia ao rolar;

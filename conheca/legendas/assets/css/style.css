@@ -522,8 +522,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 
 /* ---------- 21. Movimento reduzido ---------- */
 @media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
-  .reveal,.chores li,.lane-clips li,.flow li{opacity:1!important;transform:none!important}
+  /* as demonstrações continuam rodando no ritmo normal; só tiramos a rolagem suave e o deslocamento dos blocos ao rolar */
+  html{scroll-behavior:auto!important}
+  .reveal{transform:none!important}
 }
 
 /* ---------- bônus na oferta ---------- */

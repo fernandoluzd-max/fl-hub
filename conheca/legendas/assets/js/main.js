@@ -7,7 +7,7 @@
   var CFG = window.PACK_CONFIG || {};
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var reduce = false;   // decisão do produto: as demonstrações sempre rodam, no ritmo normal (antes ficavam paradas com "Reduzir movimento" ligado)
 
   /* ---------- 1. Configuração: preço, quantidade, links, checkout ---------- */
   function checkoutHref() {
