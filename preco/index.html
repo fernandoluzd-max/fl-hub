@@ -524,7 +524,7 @@ function resultado(revelar = false){
         <p>${vencido ? 'Seu acesso de 1 ano terminou' : usou ? 'Você já usou o seu cálculo grátis' : 'Desbloqueie para ver o valor e mandar a proposta'}</p>
         <div class="sm">${vencido ? 'Renove para continuar calculando e mandando propostas.' : 'Libere para calcular todos os seus trabalhos. Acesso de 1 ano, no celular e no computador.'}</div>
         <ul><li>Faixa justa e valor de referência para cada trabalho</li><li>Preço de pacotes de 4, 8, 12 e 20 vídeos</li><li>Proposta por link para o cliente aprovar</li></ul>
-        <button class="btn" id="comprar">${vencido ? 'Renovar meu acesso' : 'Liberar acesso completo · R$ ' + prod.preco}</button>
+        <button class="btn" id="comprar">${vencido ? 'Renovar meu acesso' : 'Liberar com o Kit Freelancer · R$ ' + prod.preco}</button>
         ${Base.sessao() ? '' : '<button class="link ja" id="entrar2">Já comprei · entrar</button>'}
       </div>`;
   tela(`${TRAB ? `<div class="para-quem">Preço para <b>${esc(TRAB.cliente?.nome || 'cliente')}</b></div>` : ''}<div class="tc"><button class="back" id="voltar">← Ajustar respostas</button><span class="sp"></span><span>Renderizado</span></div>
@@ -540,7 +540,7 @@ function resultado(revelar = false){
   if (!acesso && gratis){
     const d = document.createElement('div'); d.className = 'lock'; d.style.marginTop = '4px';
     d.innerHTML = `<p>Quer calcular seus próximos projetos?</p><div class="sm">Este foi o seu cálculo grátis. Libere para calcular sempre e mandar a proposta por link para o cliente aprovar.</div>
-      <button class="btn" id="comprar">Liberar acesso completo · R$ ${prod.preco}</button>${Base.sessao() ? '' : '<button class="link ja" id="entrar2">Já comprei · entrar</button>'}`;
+      <button class="btn" id="comprar">Liberar com o Kit Freelancer · R$ ${prod.preco}</button>${Base.sessao() ? '' : '<button class="link ja" id="entrar2">Já comprei · entrar</button>'}`;
     $('#prox').appendChild(d);
   }
   desenhaTimeline();

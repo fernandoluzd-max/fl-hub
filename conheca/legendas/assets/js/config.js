@@ -5,10 +5,10 @@
    ========================================================================== */
 window.PACK_CONFIG = {
   // Link do checkout. Enquanto for "#", os botões levam até a oferta na própria página.
-  CHECKOUT_URL: "https://payfast.greenn.com.br/kpw6g37?b_id_1=jpn7ewp&b_offer_1=0E4WBY&b_id_2=yr2m2me&b_offer_2=E8jUkj",
+  CHECKOUT_URL: "https://payfast.greenn.com.br/kpw6g37?b_id_1=38puzs5&b_offer_1=ZxTsRT&b_id_2=qujz4kq&b_offer_2=DsUFBA",
 
   // Preço (só o número, sem "R$")
-  PRECO: "67",
+  PRECO: "47",
 
   // Quantidade de estilos do pack.
   // Enquanto QUANTIDADE_EXATA for false, a página escreve "Mais de 70" / "+70".
@@ -40,13 +40,12 @@ window.PACK_CONFIG = {
 
   // PERGUNTAS EXTRAS DO FAQ: escreva a resposta entre as aspas de "r". Pergunta com resposta vazia não aparece.
   FAQ_EXTRA: [
-    { p: "Funciona no CapCut gratuito ou precisa do Pro?", r: "" },
-    { p: "As fontes aceitam acentos do português?", r: "" },
+    { p: "Funciona no CapCut gratuito?", r: "", segunda: true },     // esta entra como 2ª pergunta do FAQ
+    { p: "As fontes têm acento?", r: "" },
     { p: "Funciona em vídeo horizontal?", r: "" },
-    { p: "O app Base FL é seguro? Aparece aviso do Windows ou do Mac?", r: "" },
-    { p: "Se o CapCut atualizar, os títulos continuam funcionando?", r: "" }
+    { p: "O app Base FL é seguro?", r: "" },
+    { p: "E se o CapCut atualizar?", r: "" }
   ],
-
   // Repassar UTMs/parâmetros da URL para o checkout (útil para Utmify / rastreio)
   REPASSAR_PARAMETROS: true
 };

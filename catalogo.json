@@ -20,7 +20,8 @@
       "tipo": "ferramenta",
       "jornada": 1,
       "gancho": "O cliente responde, você só confere",
-      "desc": "Um link com as perguntas certas. O cliente responde em 1 minuto e o trabalho já chega pronto para calcular."
+      "desc": "Um link com as perguntas certas. O cliente responde em 1 minuto e o trabalho já chega pronto para calcular.",
+      "so_no_kit": true
     },
     {
       "key": "preco",
@@ -39,7 +40,8 @@
       "jornada": 2,
       "teste_gratis": 1,
       "gancho": "Pare de chutar preço",
-      "desc": "Descubra quanto cobrar em 1 minuto e mande a proposta por link para o cliente aprovar."
+      "desc": "Descubra quanto cobrar em 1 minuto e mande a proposta por link para o cliente aprovar.",
+      "so_no_kit": true
     },
     {
       "key": "contrato",
@@ -57,7 +59,8 @@
       "tipo": "ferramenta",
       "jornada": 3,
       "gancho": "Combinado bom é combinado por escrito",
-      "desc": "Contrato pronto em 2 minutos. O cliente lê e aceita pelo celular, por um link."
+      "desc": "Contrato pronto em 2 minutos. O cliente lê e aceita pelo celular, por um link.",
+      "so_no_kit": true
     },
     {
       "key": "painel",
@@ -75,7 +78,8 @@
       "tipo": "ferramenta",
       "jornada": 4,
       "gancho": "Saiba o que entregar e o que já entrou",
-      "desc": "Seus trabalhos, prazos, pagamentos e custos fixos num só lugar. Os trabalhos entram sozinhos."
+      "desc": "Seus trabalhos, prazos, pagamentos e custos fixos num só lugar. Os trabalhos entram sozinhos.",
+      "so_no_kit": true
     },
     {
       "key": "mood",
@@ -98,17 +102,19 @@
       "pack": "fl-case",
       "nome": "CaseUp",
       "curto": "Portfólio",
-      "preco": 47,
-      "_preco": "PROVISÓRIO: o Fernando ainda vai definir o preço e criar o produto na Greenn. Enquanto 'checkout' estiver vazio, o botão de compra avisa 'Link de compra em breve'.",
-      "acesso": "1 ano",
+      "preco": 0,
+      "acesso": "junto com os Títulos Dinâmicos",
       "slug": "caseup",
       "url": "/case/",
       "cor": "212,225,87",
-      "checkout": "https://payfast.greenn.com.br/xfu7y55",
+      "checkout": "",
       "greenn": "196127",
       "tipo": "ferramenta",
       "gancho": "Portfólio e link da bio",
-      "desc": "Seus melhores vídeos e os seus links numa página só. Serve de portfólio para o cliente e de link da bio."
+      "desc": "Seus melhores vídeos e os seus links numa página só. Serve de portfólio para o cliente e de link da bio.",
+      "bonus": true,
+      "_bonus": "Não é vendido: é bônus dos Títulos Dinâmicos. O produto 196127 continua cadastrado na Greenn só para não quebrar quem já tinha.",
+      "bonus_txt": "Portfólio e link da bio"
     },
     {
       "key": "timer",
@@ -117,8 +123,8 @@
       "curto": "Timer",
       "preco": 0,
       "bonus": true,
-      "_bonus": "Não é vendido: é liberado como bônus. Quais produtos dão direito a ele ainda está por definir (ver supabase/18-chronocut.sql, item 6).",
-      "acesso": "junto com a oferta",
+      "_bonus": "Não é vendido: é bônus dos Títulos Dinâmicos.",
+      "acesso": "junto com os Títulos Dinâmicos",
       "slug": "",
       "url": "/timer/",
       "cor": "255,90,95",
@@ -126,34 +132,35 @@
       "greenn": "",
       "tipo": "ferramenta",
       "gancho": "Quanto tempo esse vídeo leva de verdade?",
-      "desc": "O timer do editor: tempo por projeto e por etapa, revisões e exportações à parte, e o seu valor por hora."
+      "desc": "O timer do editor: tempo por projeto e por etapa, revisões e exportações à parte, e o seu valor por hora.",
+      "bonus_txt": "Timer do editor, por projeto"
     },
     {
       "key": "legendas",
       "pack": "fl-legendas",
       "nome": "Títulos Dinâmicos",
       "curto": "Títulos",
-      "inclui": [
-        "sons",
-        "luts"
-      ],
-      "preco": 67,
+      "preco": 47,
       "acesso": "vitalício",
       "slug": "legendas",
       "cor": "242,165,65",
-      "checkout": "https://payfast.greenn.com.br/kpw6g37?b_id_1=jpn7ewp&b_offer_1=0E4WBY&b_id_2=yr2m2me&b_offer_2=E8jUkj",
+      "checkout": "https://payfast.greenn.com.br/kpw6g37?b_id_1=38puzs5&b_offer_1=ZxTsRT&b_id_2=qujz4kq&b_offer_2=DsUFBA",
       "greenn": "195639",
       "tipo": "kit",
       "gancho": "Títulos que prendem nos 3 primeiros segundos",
-      "desc": "+70 títulos e legendas dinâmicas, mais 65 efeitos sonoros e 23 LUTs de bônus. Tudo entra no seu CapCut em um clique."
+      "desc": "Títulos e ganchos animados que entram no seu CapCut em um clique. Com o CaseUp e o ChronoCut de bônus.",
+      "bonus_inclusos": [
+        "case",
+        "timer"
+      ],
+      "_checkout": "Order bumps no link: Efeitos Sonoros (38puzs5, oferta ZxTsRT) e LUTs (qujz4kq, oferta DsUFBA), os dois a R$ 17."
     },
     {
       "key": "sons",
       "pack": "fl-sons",
       "nome": "Efeitos Sonoros",
       "curto": "Sons",
-      "avulso": true,
-      "preco": 19,
+      "preco": 17,
       "acesso": "vitalício",
       "slug": "efeitos-sonoros",
       "cor": "90,184,255",
@@ -161,15 +168,14 @@
       "greenn": "195814",
       "tipo": "kit",
       "gancho": "O som que faltava no seu corte",
-      "desc": "65 whooshes, impactos, risers e foleys direto nas suas predefinições do CapCut, organizados por categoria."
+      "desc": "65 efeitos organizados por categoria, instalados direto no seu CapCut. Instalou, abriu, usou."
     },
     {
       "key": "luts",
       "pack": "fl-luts",
       "nome": "LUTs",
       "curto": "LUTs",
-      "avulso": true,
-      "preco": 19,
+      "preco": 17,
       "acesso": "vitalício",
       "slug": "luts",
       "cor": "255,111,174",
@@ -177,7 +183,7 @@
       "greenn": "195812",
       "tipo": "kit",
       "gancho": "Cor de cinema em um clique",
-      "desc": "20 looks de finalização + 3 LUTs de conversão (S-Log2, S-Log3 e Apple Log), direto em Ajuste › LUT."
+      "desc": "3 LUTs técnicos de conversão (Apple Log, S-Log2 e S-Log3 para Rec.709) e 20 LUTs criativos de colorização."
     }
   ],
   "kit": {

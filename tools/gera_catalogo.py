@@ -9,11 +9,16 @@ def carrega():
     with open(os.path.join(RAIZ, 'catalogo.json'), encoding='utf-8') as f:
         c = json.load(f)
     c.pop('_leia', None)
-    for p in c['produtos']: p.pop('_preco', None); p.pop('_bonus', None)
+    for p in c['produtos']: p.pop('_preco', None); p.pop('_bonus', None); p.pop('_checkout', None)
     por = {p['key']: p for p in c['produtos']}
     k = c['kit']; k.pop('_preco', None)
-    k['de'] = sum(por[x]['preco'] for x in k['inclui'])          # soma dos avulsos (ex.: 128)
     k['packs'] = [por[x]['pack'] for x in k['inclui']]
+    # ferramentas vendidas só no kit: o preço que a pessoa vê em qualquer tela é o do kit
+    for x in k['inclui']:
+        if por[x].get('so_no_kit'): por[x]['preco'] = k['preco']; por[x]['acesso'] = k['acesso']
+    # bônus: aponta para o produto que entrega (ex.: CaseUp -> Títulos)
+    for p in c['produtos']:
+        for b in p.get('bonus_inclusos', []): por[b]['bonus_de'] = p['key']
     return c
 
 def parcela(valor, c):
@@ -32,11 +37,12 @@ REGRA = r"""window.CATALOGO_OFERTA = function (tem) {
   var C = window.CATALOGO, kit = C.kit, por = {}; C.produtos.forEach(function (p) { por[p.key] = p; });
   var J = kit ? kit.inclui.map(function (k) { return por[k]; }) : [];
   var tenho = J.filter(function (p) { return tem(p.pack); }), faltam = J.filter(function (p) { return !tem(p.pack); });
-  var soma = faltam.reduce(function (n, p) { return n + p.preco; }, 0), todas = null, rs = 'R$ ' + (kit ? kit.preco : 0);
-  if (kit && faltam.length >= 2 && kit.preco < soma) todas = {
-    preco: kit.preco, de: soma, economia: soma - kit.preco, n: faltam.length,
-    titulo: tenho.length ? 'Libere as outras ' + faltam.length + ' ferramentas' : 'As ' + J.length + ' ferramentas',
-    rotulo: (tenho.length ? 'Liberar as outras ' + faltam.length + ' ferramentas' : 'Liberar as ' + J.length + ' ferramentas') + ' · ' + rs
+  var todas = null, rs = 'R$ ' + (kit ? kit.preco : 0);
+  // as ferramentas só são vendidas juntas, no kit: quem já tem alguma libera as que faltam pelo mesmo preço
+  if (kit && faltam.length >= 1) todas = {
+    preco: kit.preco, n: faltam.length,
+    titulo: tenho.length ? (faltam.length > 1 ? 'Libere as outras ' + faltam.length + ' ferramentas' : 'Libere ' + faltam[0].nome) : 'As ' + J.length + ' ferramentas',
+    rotulo: (tenho.length ? (faltam.length > 1 ? 'Liberar as outras ' + faltam.length + ' ferramentas' : 'Liberar ' + faltam[0].nome) : 'Liberar as ' + J.length + ' ferramentas') + ' · ' + rs
   };
   return { tenho: tenho, faltam: faltam, todas: todas, completo: J.length > 0 && !faltam.length };
 };

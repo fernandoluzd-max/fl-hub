@@ -260,7 +260,7 @@ def pagina(p):
   <div class="top">
     <a class="mk" href="https://basefl.com/"><img src="https://basefl.com/logo.png" alt=""><span><b>Base FL</b><small>{p['secao']}</small></span></a>
     <span class="sp"></span>
-    <button class="cta-s" data-comprar>Comprar</button>
+    <button class="cta-s" data-comprar>{p.get('cta_topo','Comprar')}</button>
   </div>
   <div class="conta" id="conta" hidden></div>
 
@@ -283,7 +283,7 @@ def pagina(p):
     <h2 style="margin-top:16px">{p['fh2']}</h2>
     <ul class="of-inc">{inclui_li}</ul>
     <div class="preco vpreco" hidden></div>
-    <div class="parcf">ou <b>12x de {p['parc6']}</b> no cartão · ou à vista no Pix</div>
+    <div class="parcf">{p.get('parc_html') or f"ou <b>12x de {p['parc6']}</b> no cartão · ou à vista no Pix"}</div>
     <div class="ctas"><button class="btn" data-comprar>{p.get('cta_oferta') or p['cta']} {seta}</button></div>
     <p class="of-gar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.2-2.9 7.6-7 9.5-4.1-1.9-7-5.3-7-9.5V6z"/><path d="M8.800 12.200l2.300 2.300 4.200-4.600"/></svg><span><b>{G} dias de garantia.</b> Usou e não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</span></p>
     <div class="selos"><span>{p['acesso_selo']}</span><span>Liberado na hora da compra</span>{'' if p.get('sem_aula') else '<span>Aula ensinando a usar</span>'}<span>{p['selo']}</span></div>
@@ -326,9 +326,9 @@ PAGINAS = []
 PAGINAS.append(dict(
   slug='efeitos-sonoros', nome='Efeitos Sonoros', secao='Kits · CapCut', cor='#5AB8FF', cor2='#2E7CF6',
   pattern='radial-gradient(rgba(90,184,255,.10) 1px,transparent 1.4px) 0 0/22px 22px', empilha=True, fxx='50%',
-  kick='Kit para o CapCut', desc='65 efeitos sonoros organizados por categoria, direto nas predefinições do CapCut com um clique.',
+  kick='Plug &amp; Play · CapCut', desc='65 efeitos sonoros organizados por categoria, direto nas predefinições do CapCut com um clique.',
   h1='O som que faltava no seu corte, <em>a um clique.</em>',
-  lead='<b>65 whooshes, impactos, risers e foleys</b> organizados por categoria e instalados direto nas predefinições do seu CapCut. Sem baixar pasta, sem arrastar arquivo.',
+  lead='<b>Instalou, abriu, usou.</b> 65 efeitos em 11 categorias (whooshes, impactos, risers, foleys e mais), instalados direto nas predefinições do seu CapCut. Sem baixar pasta, sem arrastar arquivo.',
   cta='Quero os efeitos', nota='Precisa do <b>CapCut para computador</b><br>Mac ou Windows',
   rot='Demonstração · predefinições do CapCut',
   demo='''<div class="cc">
@@ -402,10 +402,10 @@ async function demo(){
 demo();
 ''',
   h2='Efeitos certos, achados em segundos.',
-  bens=[('Organizados por categoria','Pastas de whooshes, impactos, risers e foleys. Você acha o som pelo nome, sem ouvir 50 arquivos.'),
+  bens=[('Organizados por categoria','11 pastas: whooshes, impactos, risers, foleys, beeps e mais. Você acha o som pelo nome, sem ouvir 50 arquivos.'),
         ('Direto no CapCut','Ficam nas predefinições de áudio do CapCut. É só arrastar para a timeline do seu projeto.'),
         ('Instala e atualiza num clique','O app Base FL coloca tudo no lugar. Quando sair efeito novo, é só clicar em Atualizar.')],
-  inclui=['65 efeitos sonoros','Whooshes','Impactos','Risers','Foleys','Acesso vitalício'],
+  inclui=['65 efeitos sonoros','11 categorias','Whooshes, impactos e risers','Foleys, beeps e cliques','Instalação em 1 clique','Acesso vitalício'],
   faq=[('Funciona em qual CapCut?','No CapCut para computador, no Mac ou no Windows. O app Base FL encontra o CapCut sozinho.'), FAQ_ACESSO, FAQ_VIT, FAQ_APP],
   fh2='Dê ritmo aos seus cortes hoje.', selo='Mac e Windows'))
 
@@ -413,9 +413,9 @@ demo();
 PAGINAS.append(dict(
   slug='luts', nome='LUTs', secao='Kits · CapCut', cor='#FF6FAE', cor2='#B45CFF',
   pattern='linear-gradient(115deg,rgba(255,111,174,.06),transparent 40%),repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 64px)',
-  kick='Kit para o CapCut', desc='20 looks de finalização e 3 LUTs de conversão (Sony S-Log2, S-Log3 e Apple Log), direto em Ajuste › LUT no CapCut.',
+  kick='Pack de LUTs · CapCut', desc='20 LUTs criativos e 3 LUTs técnicos de conversão (Sony S-Log2, S-Log3 e Apple Log), direto em Ajuste › LUT no CapCut.',
   h1='Transforme a imagem do seu vídeo <em>com um clique.</em>',
-  lead='<b>20 looks de cinema</b> para o seu vídeo de sempre, direto em Ajuste › LUT no CapCut. E, para quem grava em Log, <b>3 LUTs de conversão</b> que devolvem a cor certa na hora.',
+  lead='Dois tipos de LUT no mesmo pack, direto em Ajuste › LUT no CapCut. <b>3 técnicos</b>, que convertem o vídeo gravado em Log para a cor normal (Rec.709). E <b>20 criativos</b>, que dão o clima do vídeo.',
   cta='Quero as LUTs', nota='Precisa do <b>CapCut para computador</b><br>Mac ou Windows',
   rot='Demonstração · foto: Pexels',
   demo='''<div class="cena">
@@ -477,11 +477,11 @@ async function demo(){
 demo();
 ''',
   h2='Cor bonita sem virar colorista.',
-  bens=[('20 looks de finalização','Do quente ao frio, do filme ao preto e branco. Escolha o clima do vídeo e ajuste a intensidade.'),
+  bens=[('20 LUTs criativos','Do quente ao frio, do filme ao preto e branco. Escolha o clima do vídeo e ajuste a intensidade.'),
         ('Feitos para o vídeo de sempre','A maioria dos vídeos sai em Rec.709, o padrão do celular e da câmera. Os looks foram feitos para ele.'),
-        ('3 LUTs de conversão','Grava em Log? Sony S-Log2 e S-Log3 (como na ZV-E10) e Apple Log (iPhone em ProRes Log) voltam para a cor normal num clique.')],
-  inclui=['20 looks de finalização','Conversão Sony S-Log2','Conversão Sony S-Log3','Conversão Apple Log','Acesso vitalício'],
-  faq=[('Funciona se eu não gravo em Log?','Sim. Os 20 looks são para vídeo comum (Rec.709), que é o padrão do celular e da maioria das câmeras. As 3 de conversão são só para quem grava em Log.'),
+        ('3 LUTs técnicos','Grava em Log? Sony S-Log2 e S-Log3 (como na ZV-E10) e Apple Log (iPhone em ProRes Log) voltam para a cor normal num clique.')],
+  inclui=['20 LUTs criativos','3 LUTs técnicos (Log → Rec.709)','Sony S-Log2 e S-Log3','Apple Log','Instalação em 1 clique','Acesso vitalício'],
+  faq=[('Funciona se eu não gravo em Log?','Sim. Os 20 criativos são para vídeo comum (Rec.709), que é o padrão do celular e da maioria das câmeras. Os 3 técnicos são só para quem grava em Log.'),
        ('O que é Rec.709?','É o perfil de cor padrão dos vídeos. Se você grava sem mexer em nada no celular ou na câmera, seu vídeo já está em Rec.709.'),
        ('Funciona em qual CapCut?','No CapCut para computador, no Mac ou no Windows.'), FAQ_ACESSO, FAQ_VIT],
   fh2='Dê cara de cinema ao seu próximo vídeo.', selo='Mac e Windows'))
@@ -711,7 +711,7 @@ demo();
         ('Só as perguntas que mudam o preço','Serviço, tipo, quantidade, duração, estilo, prazo e valor em mente. Nada de formulário cansativo.'),
         ('Avisos do que observar','Pedido urgente, pacote de vídeos, cliente que não soube responder, valor em mente: você vê tudo antes de responder.')],
   inclui=['Link com o seu nome','Briefings salvos na sua conta','Aviso no seu WhatsApp','Avisos do que observar','Resumo para copiar','Celular e computador'],
-  faq=[('O cliente precisa baixar algo?','Não. Ele abre o link no celular, responde tocando nas opções e envia. Sem conta e sem app.'), ('E se o cliente não gostar de formulário?','São poucas perguntas, todas de tocar, e leva cerca de 1 minuto. No final ele pode escrever o que quiser e mandar um link de referência. Você pode testar como ele vê antes de mandar.'), ('Dá para mudar as perguntas?','As perguntas são fixas: são as que mudam o preço de um trabalho de vídeo. O campo de detalhes, no final, fica livre para o cliente escrever o resto.'), ('Preciso ter outra ferramenta?','Não. O briefing funciona sozinho. Se você também tiver o Quanto Cobrar?, que é vendido separadamente, as respostas abrem o cálculo já preenchido.'), FAQ_ACESSO, FAQ_ANO],
+  faq=[('O cliente precisa baixar algo?','Não. Ele abre o link no celular, responde tocando nas opções e envia. Sem conta e sem app.'), ('E se o cliente não gostar de formulário?','São poucas perguntas, todas de tocar, e leva cerca de 1 minuto. No final ele pode escrever o que quiser e mandar um link de referência. Você pode testar como ele vê antes de mandar.'), ('Dá para mudar as perguntas?','As perguntas são fixas: são as que mudam o preço de um trabalho de vídeo. O campo de detalhes, no final, fica livre para o cliente escrever o resto.'), ('Preciso ter outra ferramenta?','Não. O briefing funciona sozinho. Se você também tiver o Quanto Cobrar?, que também vem no Kit, as respostas abrem o cálculo já preenchido.'), FAQ_ACESSO, FAQ_ANO],
   combina=[('quanto-cobrar','Quanto Cobrar?','#7BD88F','As respostas do cliente abrem o cálculo do preço já preenchido.'),('financas-e-demandas','Base Demandas','#FFB347','O pedido entra direto no seu quadro de trabalhos.')],
   fh2='Receba o próximo pedido já organizado.', selo='Celular e computador'))
 
@@ -792,7 +792,7 @@ demo();
         ('Meta e comparativo','Defina sua meta do mês e compare com o mês passado. Você sabe se está crescendo ou não.'),
         ('Custos fixos','Internet, CapCut, Adobe, armazenamento, trilhas. Anote o que você paga todo mês e veja quanto isso pesa no que entrou.')],
   inclui=['Quadro de trabalhos','Contador de revisões','Mensagens prontas para o cliente','Meta do mês','A receber e previsto','Custos fixos'],
-  faq=[('Meus dados ficam salvos?','Sim, na sua conta. Você acessa do celular ou do computador com o mesmo e-mail.'), ('Já uso planilha ou Trello. Por que trocar?','Dá para fazer em planilha, sim. A diferença é que aqui já vem pronto para trabalho de vídeo: colunas do orçamento ao pago, contador de revisões, mensagens para o cliente e os números do mês, sem montar nada.'), ('É difícil de usar no celular?','Não. No celular você move o trabalho de coluna tocando na seta do card, e os números do mês ficam no topo.'), ('Funciona sozinho?','Sim. Você cadastra seus trabalhos direto nele. Se tiver também o Briefing, o Quanto Cobrar? ou o Contrato, vendidos separadamente, os trabalhos entram aqui sozinhos.'), FAQ_ACESSO, FAQ_ANO],
+  faq=[('Meus dados ficam salvos?','Sim, na sua conta. Você acessa do celular ou do computador com o mesmo e-mail.'), ('Já uso planilha ou Trello. Por que trocar?','Dá para fazer em planilha, sim. A diferença é que aqui já vem pronto para trabalho de vídeo: colunas do orçamento ao pago, contador de revisões, mensagens para o cliente e os números do mês, sem montar nada.'), ('É difícil de usar no celular?','Não. No celular você move o trabalho de coluna tocando na seta do card, e os números do mês ficam no topo.'), ('Funciona sozinho?','Sim. Você cadastra seus trabalhos direto nele. Se tiver também o Briefing, o Quanto Cobrar? ou o Contrato, que também vêm no Kit, os trabalhos entram aqui sozinhos.'), FAQ_ACESSO, FAQ_ANO],
   combina=[('quanto-cobrar','Quanto Cobrar?','#7BD88F','O orçamento entra no quadro com valor e prazo.'),('gerador-de-briefing','Gerador de Briefing','#3FD0C2','O pedido do cliente vira um card com as respostas.')],
   fh2='Feche o mês sabendo exatamente onde está.', selo='Celular e computador'))
 
@@ -1467,6 +1467,10 @@ CU_CSS = r"""
 @media (max-width:900px){.vv,.cu3-g{grid-template-columns:1fr}.cu3-g{gap:26px}.cu-b{margin:0 auto}}
 """
 
+KT_VIDEO = r'''
+  <section class="kv"><span class="kick rv">Por dentro do kit</span><h2 class="rv" style="margin-top:14px">Eu mostro <em class="ac">funcionando.</em></h2>
+    <video class="rv" src="__V__" controls playsinline preload="metadata"></video></section>
+'''
 KT_MIOLO = r'''
   <section class="jor" id="jornada">
     <span class="kick rv">Um trabalho, do começo ao fim</span>
@@ -1488,12 +1492,12 @@ KT_MIOLO = r'''
   </section>
 
   <section class="sj">
-    <span class="kick rv">Separadas ou juntas</span>
-    <h2 class="rv" style="margin-top:14px">Cada uma funciona sozinha. <em class="ac">Juntas, uma preenche a outra.</em></h2>
+    <span class="kick rv">Um sistema, não quatro apps</span>
+    <h2 class="rv" style="margin-top:14px">Cada parte num lugar dá retrabalho. <em class="ac">Aqui, uma preenche a outra.</em></h2>
     <div class="sj-g rv">
       <div class="sj-c">
-        <small>Uma ferramenta só</small>
-        <ul><li>Resolve aquele pedaço do trabalho</li><li>Você digita cliente, serviço, prazo e valor nela</li><li>Na ferramenta seguinte, digita de novo</li></ul>
+        <small>Cada parte num lugar</small>
+        <ul><li>Pedido no WhatsApp, preço na cabeça, combinado no áudio</li><li>Você digita cliente, serviço, prazo e valor em cada lugar</li><li>No passo seguinte, digita de novo</li></ul>
       </div>
       <div class="sj-c dest">
         <small>As quatro, no kit</small>
@@ -1504,6 +1508,7 @@ KT_MIOLO = r'''
   </section>
 '''
 KT_CSS = r'''
+.kv video{display:block;width:100%;max-width:900px;margin:26px auto 0;border-radius:22px;border:1px solid var(--line);background:#000;aspect-ratio:16/9}
 .jx{margin-top:26px;border:1px solid var(--line);border-radius:24px;background:var(--card);overflow:hidden}
 .jx-t{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--line)}
 .jx-t button{font:inherit;font-weight:700;font-size:14.5px;color:var(--mute);background:none;border:0;border-right:1px solid var(--line);padding:14px 8px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;transition:color .2s,background .2s}
@@ -1603,6 +1608,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gera_catalogo import carrega, parcela, brl
 CAT = carrega()
 POR_SLUG = {c['slug']: c for c in CAT['produtos']}
+POR_KEY = {c['key']: c for c in CAT['produtos']}
 KIT = CAT['kit']
 JORNADA = [c for c in sorted(CAT['produtos'], key=lambda c: c.get('jornada', 99)) if c.get('jornada')]
 seta = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
@@ -1617,11 +1623,22 @@ for p in PAGINAS:
     c = POR_SLUG[p['slug']]; ex = EXTRA[p['slug']]; vit = c['acesso'] == 'vitalício'
     p['pack'] = c['pack']; p['checkout'] = c['checkout']; p['preco'] = brl(c['preco'])
     p['parc6'] = brl(parcela(c['preco'], CAT), 2)
+    so_kit = c.get('so_no_kit'); bonus_de = POR_KEY.get(c.get('bonus_de')) if c.get('bonus') else None
     p['acesso_txt'] = 'acesso vitalício' if vit else 'acesso de 1 ano'
     p['acesso_selo'] = 'Acesso vitalício' if vit else 'Acesso de 1 ano'
     p['acesso_curto'] = 'acesso vitalício' if vit else '1 ano de acesso'
     for k in ('passos','passos_h2','antes','depois','ad_h2','miolo','cta_oferta','fecho','ver','sem_aula'):
         if k in ex: p[k] = ex[k]
+    if so_kit:      # vendida só dentro do Kit Freelancer: todo botão de compra leva à página do kit
+        p['checkout'] = f'https://basefl.com/conheca/{KIT["slug"]}/'; p['cta'] = p['cta_oferta'] = f'Conhecer o {KIT["nome"]}'; p['cta_topo'] = 'Ver o Kit'
+        p['acesso_curto'] = '1 ano · as 4 ferramentas do Kit'
+        p['inclui'] = [f'Vem no {KIT["nome"]}, com as outras 3 ferramentas'] + p['inclui']
+    if bonus_de:    # não é vendido: é bônus de outro produto. Todo botão leva à página dele
+        p['checkout'] = f'https://basefl.com/conheca/{bonus_de["slug"]}/'; p['preco'] = ''
+        p['cta'] = p['cta_oferta'] = f'Ver os {bonus_de["nome"]}'; p['cta_topo'] = 'Como ter'
+        p['parc_html'] = f'O {c["nome"]} não é vendido separado. <b>Vem de bônus com os {bonus_de["nome"]}</b> ({brl(bonus_de["preco"])}).'
+        p['acesso_selo'] = f'Bônus dos {bonus_de["nome"]}'
+        p['faq'] = [('Como eu consigo o ' + c['nome'] + '?', f'Ele vem de bônus para quem compra os {bonus_de["nome"]}. Não é vendido separado. Comprou, ele aparece liberado na mesma conta, por 1 ano.')] + p['faq']
     p['css'] += ex.get('css', ''); p['js'] += ex.get('js', '')
     if 'mais' in ex: p['bens'] = p['bens'] + ex['mais']
     p['combina'] = None
@@ -1637,10 +1654,10 @@ for p in PAGINAS:
             p['ver'] = (c['url'] + '?de=venda', tit + ' →')
         # o kit: as quatro ferramentas, na ordem de um trabalho
         trilho = ''.join(f'<li data-k="{j["key"]}" class="{"aqui" if j["slug"] == p["slug"] else ""}">{i+1}. {j["nome"]}</li>' for i, j in enumerate(JORNADA))
-        p['kit'] = f'''<section><div class="kitb rv"><div><span class="kick">{KIT["nome"]}</span><h2 style="margin-top:12px">Ou leve as quatro. <em class="ac">Uma preenche a outra.</em></h2>
+        p['kit'] = f'''<section><div class="kitb rv"><div><span class="kick">{KIT["nome"]} · preço de lançamento</span><h2 style="margin-top:12px">Vem com as outras três. <em class="ac">Uma preenche a outra.</em></h2>
           <p>O cliente responde o briefing, você calcula, manda a proposta, fecha o contrato e o trabalho entra sozinho no organizador. Sem digitar nada duas vezes.</p><ul class="trilho">{trilho}</ul></div>
-          <div class="lado"><div class="de">{brl(KIT["de"])} separadas</div><div class="por">{brl(KIT["preco"])} <small>/ 1 ano</small></div><a class="btn" href="https://basefl.com/conheca/{KIT["slug"]}/?de={p["slug"]}">Ver o {KIT["nome"]} {seta}</a></div></div></section>'''
-        p['faq'] = p['faq'] + [('E se eu quiser as outras ferramentas depois?', f'Você compra quando quiser, com o mesmo e-mail: o acesso entra na mesma conta, sem novo cadastro. E a qualquer momento você libera todas as que faltam por {brl(KIT["preco"])}.')]
+          <div class="lado"><div class="por">{brl(KIT["preco"])} <small>/ 1 ano</small></div><a class="btn" href="https://basefl.com/conheca/{KIT["slug"]}/?de={p["slug"]}">Ver o {KIT["nome"]} {seta}</a></div></div></section>'''
+        p['faq'] = p['faq'] + [('E se eu quiser as outras ferramentas depois?', f'Elas já vêm juntas: as quatro ferramentas são vendidas no {KIT["nome"]}, por {brl(KIT["preco"])}. Uma compra só, uma conta só.')]
     d = os.path.join(BASE, p['slug']); os.makedirs(d, exist_ok=True)
     open(os.path.join(d, 'index.html'), 'w', encoding='utf-8').write(pagina(p))
     print('ok', p['slug'])
@@ -1653,8 +1670,8 @@ def pagina_kit():
                 ('Manda a proposta', 'Um link com serviço, prazo e valor. O cliente aprova com um toque. Suas horas ficam só com você.'),
                 ('Fecha o contrato', 'Cliente, serviço, prazo e valor já vêm preenchidos. Ele lê e aceita pelo celular.'),
                 ('O trabalho entra no organizador', 'Prazo, revisões e pagamento num quadro. Você só acompanha e entrega.')]
-    linhas = ''.join(f'<div class="kl" data-k="{j["key"]}" style="--c:rgb({j["cor"]})"><img src="https://basefl.com/icones/{j["key"]}.png" alt="" width="44" height="44"><span><b>{j["nome"]}</b><small>{j["passo"]}</small></span><i>{brl(j["preco"])}</i></div>' for j in JORNADA)
-    demo = f'<div class="kd">{linhas}<div class="kt"><span>Separadas</span><s>{brl(k["de"])}</s></div><div class="kt tot"><span>No kit</span><b>{brl(k["preco"])}</b></div></div>'
+    linhas = ''.join(f'<div class="kl" data-k="{j["key"]}" style="--c:rgb({j["cor"]})"><img src="https://basefl.com/icones/{j["key"]}.png" alt="" width="44" height="44"><span><b>{j["nome"]}</b><small>{j["passo"]}</small></span><i>{i+1}</i></div>' for i, j in enumerate(JORNADA))
+    demo = f'<div class="kd">{linhas}<div class="kt tot"><span>Preço de lançamento</span><b>{brl(k["preco"])}</b></div></div>'
     css = """
 .kd{width:100%;max-width:420px;display:flex;flex-direction:column;gap:8px}
 .kl{display:flex;align-items:center;gap:12px;background:#171a19;border:1px solid #252a27;border-left:3px solid var(--c);border-radius:14px;padding:10px 14px 10px 12px;opacity:0;transform:translateY(8px);animation:kl .5s cubic-bezier(.2,.8,.2,1) forwards}
@@ -1663,7 +1680,8 @@ def pagina_kit():
 .kl span{flex:1;min-width:0;text-align:left}
 .kl b{display:block;font-family:var(--d);font-weight:800;font-size:15.5px}
 .kl small{display:block;color:var(--mute);font-size:12.5px}
-.kl i{font-style:normal;color:var(--mute);font-size:13.5px;font-variant-numeric:tabular-nums;text-decoration:line-through}
+.kl i{font-style:normal;color:var(--mute);font-size:13.5px;font-variant-numeric:tabular-nums;width:24px;height:24px;border-radius:50%;border:1px solid #2c322e;display:grid;place-items:center;flex:none}
+.kl.meu i{width:auto;height:auto;border:0}
 .kt{display:flex;justify-content:space-between;align-items:baseline;padding:4px 6px 0;color:var(--mute);font-size:14px}
 .kt.tot{color:var(--ink)}
 .kl.meu b{color:var(--mute)}.kl.meu i{text-decoration:none;color:var(--a)}.kl.meu i::before{content:"✓ já é seu";}.kl.meu i{font-size:0}.kl.meu i::before{font-size:13px}
@@ -1672,22 +1690,22 @@ def pagina_kit():
 """
     p = dict(slug=k['slug'], pack='kit', nome=k['nome'], secao='Kit · 4 ferramentas', cor='#F2A541', cor2='#FF7A45',
       pattern='linear-gradient(rgba(242,165,65,.05) 1px,transparent 1px) 0 0/100% 40px', fxx='70%', capa='https://basefl.com/icon-512.png',
-      kick='Kit · as 4 ferramentas', desc=f'Briefing, preço, proposta, contrato e organizador trabalhando juntos. As quatro ferramentas do freelancer por {brl(k["preco"])}.',
+      kick='Kit Freelancer · preço de lançamento', desc=f'Um sistema de trabalho para o editor freelancer: briefing, preço, proposta, contrato e organizador trabalhando juntos. Preço de lançamento: {brl(k["preco"])}.',
       h1='Do primeiro contato ao pagamento. <em>Sem retrabalho.</em>',
-      lead='As quatro ferramentas do editor freelancer, <b>em ordem</b>: o cliente responde o briefing, você calcula, manda a proposta, fecha o contrato e o trabalho <b>entra sozinho no organizador</b>. Nada é digitado duas vezes.',
+      lead='Não são quatro ferramentas soltas. É <b>um sistema de trabalho</b>, em ordem: o cliente responde o briefing, você calcula, manda a proposta, fecha o contrato e o trabalho <b>entra sozinho no organizador</b>. Nada é digitado duas vezes.',
       cta='Quero o Kit Freelancer', nota='Funciona no <b>celular e no computador</b>', rot='O que vem no kit', demo=demo, css=css + KT_CSS, js=KT_JS,
-      miolo=KT_MIOLO, ver=('#jornada', 'Ver um trabalho do começo ao fim ↓'), cta_oferta='Liberar as quatro ferramentas', fecho='Seu próximo trabalho, do pedido ao pagamento, <em class="ac">sem digitar duas vezes.</em>',
+      miolo=(KT_VIDEO.replace('__V__', k['video']) if k.get('video') else '') + KT_MIOLO, ver=('#jornada', 'Ver um trabalho do começo ao fim ↓'), cta_oferta='Liberar as quatro ferramentas', fecho='Seu próximo trabalho, do pedido ao pagamento, <em class="ac">sem digitar duas vezes.</em>',
       checkout=k['checkout'], preco=brl(k['preco']), parc6=brl(parcela(k['preco'], CAT), 2),
-      acesso_txt=f'acesso de 1 ano · em vez de {brl(k["de"])}', acesso_selo='Acesso de 1 ano', acesso_curto='1 ano de acesso',
+      acesso_txt='acesso de 1 ano · preço de lançamento', acesso_selo='Acesso de 1 ano', acesso_curto='1 ano de acesso',
       passos_h2='Um trabalho inteiro, do pedido ao pagamento.', passos=passos_j,
       h2='Quatro ferramentas. Um processo só.',
-      bens=[(j['nome'], j['desc'] + f' <b>Separada: {brl(j["preco"])}.</b>') for j in JORNADA],
+      bens=[(j['nome'], j['desc']) for j in JORNADA],
       inclui=[j['nome'] for j in JORNADA] + ['Uma conta só', 'Celular e computador', 'Aula ensinando a usar'],
       ad_h2='O que muda na sua rotina.',
       antes=['Dez mensagens para entender o pedido', 'Preço no chute, orçamento montado do zero', 'Combinado só por áudio', 'Prazos e pagamentos espalhados'],
       depois=['Pedido organizado em 1 minuto', 'Preço calculado e proposta por link', 'Contrato aceito pelo celular', 'Tudo num quadro, com o que falta receber'],
       combina=None,
-      faq=[('Já tenho uma das ferramentas. Vale a pena?', f'Vale. Por {brl(k["preco"])} você libera todas as que ainda não tem, na mesma conta, sem novo cadastro e sem perder nada do que já fez. Entre com o seu e-mail e esta página mostra o que você já tem e o que será liberado. Se faltar só uma, ela mesma avisa e leva você para a ferramenta avulsa.'),
+      faq=[('Já tenho uma das ferramentas. Vale a pena?', f'Vale. Por {brl(k["preco"])} você libera todas as que ainda não tem, na mesma conta, sem novo cadastro e sem perder nada do que já fez. Entre com o seu e-mail e esta página mostra o que você já tem e o que será liberado.'),
            ('Preciso usar todas?', 'Não. Cada uma funciona sozinha. Juntas, uma preenche a outra e você não digita nada duas vezes.'),
            ('O meu cliente vê os meus preços internos?', 'Não. O cliente só abre o que você manda para ele: o briefing para responder, a proposta para aprovar e o contrato para aceitar. Horas, valor por hora e a sua organização ficam só com você.'),
            FAQ_ACESSO, FAQ_ANO, ('Tem aula ensinando a usar?', 'Sim. Junto com o acesso vem uma aula mostrando, passo a passo, como usar cada ferramenta.')],

@@ -439,9 +439,9 @@ corpo = f"""<body>
   <nav><span>{LOGO}</span><span class="de">Base FL</span><div class="sp"></div></nav>
   <div class="okb"><i></i>Compra confirmada. Seu acesso aos Títulos Dinâmicos chega no e-mail.</div>
   <header class="hero">
-    <span class="mono kick">Só nesta página</span>
-    <h1>Antes de ir: e a <em>cor</em> dos seus vídeos?</h1>
-    <p class="lead">Você já resolveu os títulos. O <b>Mood</b> resolve a cor: mostre um vídeo com a cor que você gosta, mostre o seu, e baixe a LUT pronta para o CapCut. Sem saber color grading.</p>
+    <span class="mono kick">O passo seguinte dos LUTs</span>
+    <h1>E quando a cor que você quer <em>não está em nenhum pack?</em></h1>
+    <p class="lead">Um pack de LUTs traz looks prontos. O <b>Mood</b> cria a LUT da cor que você escolher: mostre um vídeo com a cor que você gosta, mostre o seu, e baixe a LUT pronta para o CapCut. Sem saber color grading.</p>
     <div class="cta"><a class="btn" href="#oferta" data-comprar>Sim, quero o Mood · R$ {PRECO}</a></div>
 {demo}  </header>
 

@@ -306,7 +306,7 @@ function vitrine(){
     <div class="row" style="margin-top:0"><button class="btn ghost" id="demo">Testar como o cliente responde</button></div>
     <div class="row"><button class="btn ghost" id="exemplo">Ver um briefing recebido</button></div>
     <div class="lock"><ul><li>Seu link pessoal, com o seu nome</li><li>Briefings salvos na sua conta, com os pontos de atenção</li><li>Respostas prontas para virar preço, proposta e contrato</li></ul>
-      <button class="btn" id="comprar">${venc ? 'Renovar meu acesso' : 'Quero o meu link · R$ ' + p.preco}</button>
+      <button class="btn" id="comprar">${venc ? 'Renovar meu acesso' : 'Liberar com o Kit Freelancer · R$ ' + p.preco}</button>
       ${Base.sessao() ? '' : '<button class="link ja" id="entrar">Já comprei · entrar</button>'}</div>`);
   $('#comprar').onclick = () => Base.comprar('briefing', 'ferramenta');
   if ($('#entrar')) $('#entrar').onclick = async () => { if (await Base.login()) inicio(); };

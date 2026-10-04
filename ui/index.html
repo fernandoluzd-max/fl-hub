@@ -146,6 +146,37 @@ button.aula svg{width:15px;height:15px;fill:currentColor;flex:none}
 .oferta{font-size:12.5px;color:var(--mute)}
 .up{font:inherit;font-size:13px;font-weight:700;border:1px solid #F2A541;color:#F2A541;background:transparent;border-radius:99px;padding:8px 14px;cursor:pointer}.up:hover{background:#F2A541;color:#141414}
 .oferta b{color:var(--ink);font-size:14px}
+.card.larga{grid-column:span 2}
+@media (max-width:760px){.card.larga{grid-column:auto}}
+.bon{border:1px dashed rgba(var(--c),.45);border-radius:14px;padding:12px;background:rgba(var(--c),.05);display:flex;flex-direction:column;gap:10px}
+.bon-t{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--sub)}.bon-t b{color:rgb(var(--c));font-weight:800}
+.bon-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.bon-i{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px;min-width:0}
+.bon-i img{border-radius:11px;flex:none}
+.bon-i span{flex:1;min-width:0}.bon-i b{display:block;font-size:14px;font-weight:700}.bon-i small{display:block;font-size:12px;color:var(--sub);line-height:1.3}
+.bon-i em{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgb(var(--c));border:1px solid rgba(var(--c),.45);border-radius:99px;padding:3px 8px}
+.bon-i .bon-b{flex:none;padding:7px 12px;font-size:12.5px}
+.kitx{--c:242,165,65;margin-bottom:16px;border-radius:var(--radius);border:1px solid rgba(var(--c),.45);background:linear-gradient(180deg,rgba(var(--c),.09),transparent 46%),var(--card);padding:18px;display:flex;flex-direction:column;gap:16px}
+.kitx-h{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.kitx-h .icon{flex:none;box-shadow:0 12px 28px -14px rgba(var(--c),.9);overflow:hidden}
+.kitx-t{flex:1;min-width:240px}
+.kitx-t h3{font-family:"Archivo",var(--font);font-weight:800;font-size:20px;letter-spacing:-.01em;margin:2px 0}
+.kitx-t p{font-family:"Figtree",var(--font);color:var(--sub);font-size:13.5px;max-width:56ch}
+.kitx-s{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgb(var(--c));border:1px solid rgba(var(--c),.5);border-radius:99px;padding:3px 9px;margin-bottom:4px}
+.kitx-c{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.kitx-c>b{font-family:"Archivo",var(--font);font-weight:900;font-size:28px;letter-spacing:-.02em;line-height:1}
+.kitx-c>small{color:var(--sub);font-size:12px;max-width:16ch;line-height:1.35}
+.kitx-ok{font-size:13px;color:var(--sub);display:inline-flex;align-items:center;gap:7px}
+.kitx-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:10px}
+.kitx-i{background:var(--bg,#0f1110);background:color-mix(in srgb,var(--card) 60%,#000);border:1px solid var(--line);border-top:2px solid rgba(var(--c),.8);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.kitx-n{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.kitx-n img{border-radius:13px}
+.kitx-n i{font-style:normal;font-size:11px;font-weight:800;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:rgb(var(--c));border:1px solid rgba(var(--c),.5);order:2}
+.kitx-i>b{font-size:14.5px;font-weight:700}
+.kitx-i>small{font-size:12.5px;color:rgb(var(--c));font-weight:600;line-height:1.3}
+.kitx-m{font-size:12px;color:var(--sub);min-height:17px;display:flex;align-items:center;gap:6px}
+.kitx-i .btns{margin-top:auto;padding-top:6px}.kitx-i .btns button{flex:1;padding:9px 10px;font-size:13px}
+:root[data-tema="claro"] .kitx-i>small,:root[data-tema="claro"] .kitx-s{filter:brightness(.7) saturate(1.3)}
 .btns .cta{background:rgb(var(--c));color:#141615;box-shadow:0 10px 24px -10px rgba(var(--c),.9);transition:filter .15s,transform .15s}
 .btns .cta:hover{filter:brightness(1.08);transform:translateY(-1px)}
 
@@ -183,7 +214,9 @@ button.aula svg{width:15px;height:15px;fill:currentColor;flex:none}
         <div class="pill"><span class="dot" id="d-found"></span><span id="t-found">Procurando o CapCut…</span></div>
         <div class="pill"><span class="dot" id="d-run"></span><span id="t-run">…</span></div>
       </div></div><div class="cards"></div></section>
-    <section class="sec" id="s-ferramentas"><div class="sec-h"><div><h2>Ferramentas</h2><p id="s-ferr-sub">Para precificar, fechar e organizar seus trabalhos.</p></div><span class="sp" style="flex:1"></span><button class="up" id="s-ferr-up" hidden></button></div><div class="cards"></div></section>
+    <section class="sec" id="s-ferramentas"><div class="sec-h"><div><h2>Ferramentas</h2><p id="s-ferr-sub">Para precificar, fechar e organizar seus trabalhos.</p></div><span class="sp" style="flex:1"></span><button class="up" id="s-ferr-up" hidden></button></div>
+      <div class="kitx" id="s-kit" hidden></div>
+      <div class="cards"></div></section>
     <div class="login" id="login">
       <h2 id="l-title">Entre com o e-mail da compra</h2>
       <p id="l-sub">Use o mesmo e-mail que você usou para comprar. Vamos enviar um código de acesso.</p>
@@ -241,15 +274,14 @@ const icone = key => `<img src="icones/${key}.png" alt="" width="72" height="72"
 // Aqui fica só o que é do app: em que seção o card aparece e como ele instala.
 const CAT = window.CATALOGO, POR_KEY = Object.fromEntries(CAT.produtos.map(p => [p.key, p]));
 const NO_APP = {
-  // KITS: instalam no CapCut. Títulos Dinâmicos é o kit completo: instala também os itens de 'inclui'.
-  // 'avulso' = só aparece sozinho para quem comprou esse item separado, antes de ele virar bônus.
+  // KITS: instalam no CapCut. Cada um é um produto próprio (Efeitos e LUTs entram como oferta no checkout dos Títulos).
   legendas:{ sec:'kits' }, sons:{ sec:'kits' }, luts:{ sec:'kits', lut:true },
   // FERRAMENTAS: abrem no navegador e no celular. As quatro primeiras seguem a ordem da jornada de um trabalho.
-  briefing:{ sec:'ferramentas' }, preco:{ sec:'ferramentas' }, contrato:{ sec:'ferramentas' }, painel:{ sec:'ferramentas' }, case:{ sec:'ferramentas' }, mood:{ sec:'ferramentas' },
-  // BÔNUS: não é vendido. Só aparece para quem já recebeu.
-  timer:{ sec:'ferramentas', soBonus:true },
+  briefing:{ sec:'ferramentas' }, preco:{ sec:'ferramentas' }, contrato:{ sec:'ferramentas' }, painel:{ sec:'ferramentas' }, mood:{ sec:'ferramentas' },
+  // BÔNUS dos Títulos: não são vendidos e não têm card próprio. Aparecem DENTRO do card dos Títulos Dinâmicos.
+  case:{ sec:'kits', bonusDe:'legendas' }, timer:{ sec:'kits', bonusDe:'legendas' },
 };
-const PRODUCTS = Object.keys(NO_APP).map(k => { const c = POR_KEY[k]; return { ...NO_APP[k], key:k, packId:c.pack, name:c.nome, desc:c.desc, cor:c.cor, preco:'R$ ' + c.preco, acesso:c.acesso, gancho:c.gancho, inclui:c.inclui, avulso:c.avulso, web: c.url ? 'https://basefl.com' + c.url : undefined }; });
+const PRODUCTS = Object.keys(NO_APP).map(k => { const c = POR_KEY[k]; return { ...NO_APP[k], key:k, packId:c.pack, name:c.nome, desc:c.desc, cor:c.cor, preco:'R$ ' + c.preco, acesso:c.acesso, gancho:c.gancho, inclui:c.inclui, soKit:c.so_no_kit, bonusTxt:c.bonus_txt, web: c.url ? 'https://basefl.com' + c.url : undefined }; });
 
 // ===== Servidor (chave pública: pode ficar no app) =====
 const SUPA = { url: 'https://otlaexuqyavpzxwzcsfo.supabase.co', key: 'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
@@ -418,8 +450,30 @@ function render(){
   const daJornada = CAT.kit.packs.filter(k => cat?.owned?.has(k)).length;
   // oferta de conjunto: a mesma regra do site (catálogo). Só aparece para quem já tem alguma e ainda faz sentido.
   const of = window.CATALOGO_OFERTA ? window.CATALOGO_OFERTA(k => !!cat?.owned?.has(k)) : null, up = $('#s-ferr-up');
-  up.hidden = !(of && of.todas && of.tenho.length);
-  if (!up.hidden){ up.textContent = of.todas.rotulo + '  →'; up.title = 'Libera: ' + of.faltam.map(p => p.nome).join(', '); up.onclick = () => T.opener.openUrl('https://basefl.com/conheca/' + CAT.kit.slug + '/?de=app'); }
+  up.hidden = true;
+  // KIT FREELANCER: um card só, com as 4 ferramentas dentro, na ordem de um trabalho.
+  const kc = $('#s-kit'), doKit = CAT.kit.inclui.map(k => PRODUCTS.find(x => x.key === k)).filter(x => x && cat?.packs?.some(y => y.id === x.packId));
+  kc.hidden = !doKit.length; kc.innerHTML = '';
+  if (doKit.length){
+    const completo = !!(of && of.completo), parte = !!(of && of.tenho.length && !completo), url = 'https://basefl.com/conheca/' + CAT.kit.slug + '/?de=app';
+    kc.className = 'kitx' + (completo ? ' on' : '');
+    const vcs = doKit.map(x => cat?.vence?.[x.packId]).filter(Boolean).map(d => +d), vc = completo && vcs.length ? new Date(Math.min(...vcs)) : null;
+    kc.innerHTML = `<div class="kitx-h"><div class="icon">${icone('kit')}</div>
+      <div class="kitx-t">${completo ? '' : '<span class="kitx-s">Preço de lançamento</span>'}<h3>${CAT.kit.nome}</h3>
+        <p>${parte ? 'Você já tem ' + of.tenho.map(p => p.nome).join(', ') + '. Falta: ' + of.faltam.map(p => p.nome).join(', ') + '.' : 'Um sistema de trabalho com 4 ferramentas, na ordem de um trabalho. Um passo preenche o próximo.'}</p></div>
+      <div class="kitx-c">${completo ? '<span class="kitx-ok"><span class="dot ok"></span>Liberado' + (vc ? ' · válido até ' + vc.toLocaleDateString('pt-BR') : '') + '</span>' : `<b>R$ ${CAT.kit.preco}</b><small>as 4 ferramentas<br>1 ano de acesso</small>`}</div></div><div class="kitx-g"></div>`;
+    if (!completo) kc.querySelector('.kitx-c').appendChild(btn(parte ? 'Liberar o que falta  →' : 'Conhecer o Kit  →', 'primary cta', () => T.opener.openUrl(url)));
+    doKit.forEach((x, i) => {
+      const tem = !!cat?.owned?.has(x.packId), venc = !!cat?.vencidos?.has(x.packId), li = document.createElement('div');
+      li.className = 'kitx-i k-' + x.key + (tem ? ' on' : ''); li.style.setProperty('--c', x.cor);
+      li.innerHTML = `<div class="kitx-n"><i>${i + 1}</i><img src="icones/${x.key}.png" alt="" width="48" height="48" draggable="false"></div><b>${x.name}</b><small>${x.gancho || ''}</small>
+        <span class="kitx-m">${tem ? '<span class="dot ok"></span>Liberado' : venc ? '<span class="dot err"></span>Acesso vencido' : ''}</span>`;
+      const b = document.createElement('div'); b.className = 'btns';
+      b.appendChild(btn(tem ? 'Abrir' : 'Experimentar', tem ? 'primary' : 'ghost', () => abreWeb(x.web)));
+      if (tem && window.Aulas && Aulas.tem([x.packId])){ const ba = btn('Ver aula', 'ghost aula', () => Aulas.abre([x.packId], { titulo: x.name, cor: x.cor, dono: true })); ba.disabled = false; ba.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Ver aula'; b.appendChild(ba); }
+      li.appendChild(b); kc.querySelector('.kitx-g').appendChild(li);
+    });
+  }
   $('#s-ferr-sub').textContent = daJornada >= 2 ? 'A ordem de um trabalho: Briefing → Preço e proposta → Contrato → Organizador. Um passo já preenche o próximo.' : 'Para precificar, fechar e organizar seus trabalhos.';
   for (const p of PRODUCTS){
     if (p.emBreve){
@@ -428,20 +482,23 @@ function render(){
       $('#s-' + p.sec + ' .cards').appendChild(c); continue;
     }
     if (p.soBonus && !cat?.owned?.has(p.packId)) continue;
-    if (p.avulso && !(cat?.owned?.has(p.packId) && !cat?.owned?.has('fl-legendas'))) continue;
+    if (p.soKit) continue;                                     // as 4 ferramentas ficam dentro do card do Kit Freelancer
+    if (p.bonusDe) continue;                                   // bônus: é desenhado dentro do card do produto principal
+    const bonus = PRODUCTS.filter(x => x.bonusDe === p.key && cat?.packs?.some(y => y.id === x.packId));
     const srv = cat?.packs?.find(x => x.id === p.packId);
     const owned = !!cat?.owned?.has(p.packId);
     const inst = state?.installed?.find(i=>i.id===p.packId);
     let novo = inst && srv && inst.version !== srv.version;
     const partes = partesDoKit(p), falta = owned && partes.some(x => !x.inst), sonsInst = partes.find(x => x.p.media && x.inst);
     if (p.inclui && owned) novo = novo || partes.some(x => x.inst && x.inst.version !== x.srv.version);
-    const c = document.createElement('div'); c.className = 'card k-' + p.key + (srv && owned ? ' on' : '') + (srv && !owned ? ' locked' : '');
+    const c = document.createElement('div'); c.className = 'card k-' + p.key + (srv && owned ? ' on' : '') + (srv && !owned ? ' locked' : '') + (bonus.length ? ' larga' : '');
     if (p.cor) c.style.setProperty('--c', p.cor);
     let meta = '';
     if (p.web && srv && owned) meta = '<span class="dot ok"></span>Liberado · abre no navegador e no celular';
-    else if (inst) meta = `<span class="dot ok"></span>Instalado · v${inst.version}` + partes.map(x => x.p.media && x.inst?.media_files ? ` · ${x.inst.media_files.length} sons` : x.p.lut && x.inst?.lut_names ? ` · ${x.inst.lut_names.length} LUTs` : '').join('') + (inst && falta ? ' <span class="tag">falta instalar os bônus</span>' : '') + (novo ? ' <span class="tag">nova versão</span>' : '');
+    else if (inst) meta = `<span class="dot ok"></span>Instalado · v${inst.version}` + partes.map(x => x.p.media && x.inst?.media_files ? ` · ${x.inst.media_files.length} sons` : x.p.lut && x.inst?.lut_names ? ` · ${x.inst.lut_names.length} LUTs` : '').join('') + (inst && falta ? ' <span class="tag">falta instalar uma parte</span>' : '') + (novo ? ' <span class="tag">nova versão</span>' : '');
     else if (srv && owned) meta = '<span class="dot"></span>Liberado · não instalado';
     else if (srv && cat?.vencidos?.has(p.packId)) meta = '<span class="dot err"></span>Acesso vencido · renove para continuar';
+    else if (srv && p.soKit) meta = `<span class="oferta"><b>${CAT.kit.nome}</b> · vem com as 4 ferramentas</span>`;
     else if (srv) meta = p.preco ? `<span class="oferta"><b>${p.preco}</b> · acesso ${p.acesso || ''}</span>` : '<span class="oferta"><b>Novo</b> · experimente agora</span>';
     const vc = cat?.vence?.[p.packId];
     if (vc && owned){ const dias = Math.ceil((vc - Date.now()) / 864e5); meta += dias <= 30 ? ` · <span class="tag">vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}</span>` : ` · válido até ${vc.toLocaleDateString('pt-BR')}`; }
@@ -449,6 +506,18 @@ function render(){
     const vitrine = srv && !owned && !cat?.vencidos?.has(p.packId);
     c.innerHTML = (vitrine ? `<span class="selo">Conheça</span>` : '') + `<div class="icon">${icone(p.key)}${cad}</div><h3>${p.name}</h3>` + (vitrine && p.gancho ? `<div class="gancho">${p.gancho}</div>` : '') + `<p>${p.desc}</p><div class="meta">${meta}</div>`;
     if (vitrine && srv.buy_url){ c.classList.add('clica'); c.onclick = e => { if (!e.target.closest('button')) T.opener.openUrl(srv.buy_url); }; }
+    if (bonus.length){   // os bônus ficam presos ao produto que os entrega
+      const bx = document.createElement('div'); bx.className = 'bon';
+      bx.innerHTML = `<span class="bon-t"><b>+ ${bonus.length} bônus</b> que vêm com ${p.name}</span><div class="bon-g"></div>`;
+      for (const x of bonus){
+        const tem = !!cat?.owned?.has(x.packId), li = document.createElement('div'); li.className = 'bon-i k-' + x.key; li.style.setProperty('--b', x.cor);
+        li.innerHTML = `<img src="icones/${x.key}.png" alt="" width="44" height="44" draggable="false"><span><b>${x.name}</b><small>${x.bonusTxt || ''}</small></span>`;
+        if (tem) li.appendChild(btn('Abrir', 'ghost bon-b', () => abreWeb(x.web)));
+        else { const t = document.createElement('em'); t.textContent = 'Bônus'; li.appendChild(t); }
+        bx.querySelector('.bon-g').appendChild(li);
+      }
+      c.appendChild(bx);
+    }
     const b = document.createElement('div'); b.className = 'btns';
     if (p.web && srv){
       if (owned) b.appendChild(btn('Abrir', 'primary', () => abreWeb(p.web)));

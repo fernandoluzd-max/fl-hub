@@ -318,11 +318,12 @@
     var o = oferta();
     if (key === 'kit') {
       if (o.completo) return { abrir: '/' };
-      if (!o.todas) return { key: o.faltam[0].key };          // falta 1 (ou o conjunto não compensa): a avulsa
       return { key: 'kit' };
     }
     var p = POR_KEY[key] || POR_PACK[key];
     if (p && tem(p.pack)) return { abrir: p.url || '/' };
+    if (p && p.so_no_kit) return { key: 'kit' };              // as 4 ferramentas só são vendidas no Kit Freelancer
+    if (p && p.bonus && p.bonus_de) return { key: p.bonus_de }; // bônus: quem vende é o produto principal
     return { key: p ? p.key : key };
   }
   function linkCompra(key, origem) {
@@ -351,7 +352,8 @@
     else if (o.todas && o.tenho.length)      // já é cliente: a oferta principal é liberar tudo o que falta
       h = '<span class="tem">Você já tem: <i>' + esc(nomes(o.tenho)) + '</i>. Faltam: <i>' + esc(nomes(o.faltam)) + '</i>.</span>' +
           '<button class="flb-btn" data-a="kit">' + esc(o.todas.rotulo) + '</button>' +
-          '<button class="kit" data-a="liberar">ou só ' + esc(p.nome) + ' por ' + brl(p.preco) + '</button>';
+          (p.so_no_kit ? '' : '<button class="kit" data-a="liberar">ou só ' + esc(p.nome) + ' por ' + brl(p.preco) + '</button>');
+    else if (p.so_no_kit) h = '<button class="flb-btn" data-a="kit">Conhecer o ' + esc(CAT.kit.nome) + ' · ' + brl(CAT.kit.preco) + '</button>';
     else h = '<button class="flb-btn" data-a="liberar">' + avulsa + '</button>' +
           (o.todas ? '<button class="kit" data-a="kit">ou ' + esc(o.todas.titulo.toLowerCase()) + ' por ' + brl(o.todas.preco) + '</button>' : '');
     d.innerHTML = '<span class="rot">' + esc(op.rotulo || 'Próximo passo') + '</span><b>' + esc(op.titulo) + '</b>' + (op.texto ? '<span class="tx">' + esc(op.texto) + '</span>' : '') + h;

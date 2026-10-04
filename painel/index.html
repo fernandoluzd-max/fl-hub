@@ -280,7 +280,7 @@ async function carrega(){
       else if (linhas.length){ modo = 'leitura'; D = linhas; if (cfg[0]) META = +cfg[0].meta_mes || META; }
     } catch(e){ toast(traduz(e.message)); }
   }
-  if (modo === 'demo'){ D = exemplo(); F = exemploFerr(); META = 5000; const logado = !!Base.sessao(); aviso(logado ? 'Você está vendo um exemplo. Libere o Base Demandas para organizar os seus trabalhos.' : 'Este é um exemplo: pode mexer à vontade. Libere para organizar os seus trabalhos de verdade.', 'Liberar · R$ ' + Base.produto('painel').preco, !logado); if (!carrega._demo){ carrega._demo = true; Base.evento('demo_started', PACK); } }
+  if (modo === 'demo'){ D = exemplo(); F = exemploFerr(); META = 5000; const logado = !!Base.sessao(); aviso(logado ? 'Você está vendo um exemplo. Libere o Base Demandas para organizar os seus trabalhos.' : 'Este é um exemplo: pode mexer à vontade. Libere para organizar os seus trabalhos de verdade.', 'Liberar com o Kit · R$ ' + Base.produto('painel').preco, !logado); if (!carrega._demo){ carrega._demo = true; Base.evento('demo_started', PACK); } }
   if (modo === 'leitura') aviso(vencido ? 'Seu acesso de 1 ano terminou. Seus trabalhos estão salvos, mas só para leitura.' : 'Seu acesso ao Base Demandas não está ativo. Seus trabalhos estão salvos, só para leitura.', 'Renovar');
   $('#fab').classList.toggle('hide', modo === 'leitura');
   botaoConta(); desenha();

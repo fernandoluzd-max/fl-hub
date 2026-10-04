@@ -423,7 +423,7 @@ function monta(animar = true){
   if (trava && !monta._demo){ monta._demo = true; Base.evento('demo_completed', PACK); }
   if (acesso && Base.eu.jornada) Base.rpc('perfil_salvar', { p:{ nome:D.eu, doc:D.euDoc || null, cidade:D.cidade || null, pag:D.pag, dia:D.dia } }).then(p => { Base.eu.perfil = p; }, () => {});
   const cad = `<div class="cadeado"><p>${vencido ? 'Seu acesso de 1 ano terminou' : `Seu ${D.formato === 'rapido' ? 'termo' : 'contrato'} está pronto 🔒`}</p><small>${vencido ? 'Renove para voltar a enviar e salvar contratos.' : 'Libere para enviar ao cliente, copiar e salvar em PDF. Acesso de 1 ano, use quantas vezes quiser.'}</small>
-      <button class="btn" id="comprar">${vencido ? 'Renovar acesso' : 'Liberar o gerador · R$ ' + Base.produto('contrato').preco}</button>${Base.sessao() ? '' : '<button class="link" id="entrar2">Já comprei · entrar</button>'}</div>`;
+      <button class="btn" id="comprar">${vencido ? 'Renovar acesso' : 'Liberar com o Kit Freelancer · R$ ' + Base.produto('contrato').preco}</button>${Base.sessao() ? '' : '<button class="link" id="entrar2">Já comprei · entrar</button>'}</div>`;
   const btLink = link ? '<button class="btn" id="publicar">Enviar para o cliente aceitar</button><div class="err" id="erro"></div>' : '';
   let corpo;
   if (D.formato === 'rapido'){

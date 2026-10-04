@@ -28,12 +28,7 @@
     if (V.pack === 'kit') {
       $$('.kl[data-k]').forEach(function (l) { if (tenho[l.dataset.k]) l.classList.add('meu'); });
       if (o.completo) { aviso('Você já tem as ' + o.tenho.length + ' ferramentas nesta conta. Não precisa comprar de novo.'); botoes('Abrir minhas ferramentas', Base.jornada[0].url); }
-      else if (!o.todas) {
-        aviso('Você já tem ' + lista(o.tenho) + '. ' + (o.faltam.length > 1 ? 'Faltam só ' : 'Falta só ') +
-          o.faltam.map(function (p) { return '<a href="' + venda(p) + '">' + esc(p.nome) + ' (' + brl(p.preco) + ')</a>'; }).join(' e ') + '. Para você, sai melhor liberar ' + (o.faltam.length > 1 ? 'separadas' : 'só ela') + '.');
-        botoes('Ver ' + o.faltam[0].nome, venda(o.faltam[0]));
-      }
-      else if (o.tenho.length) { aviso('Você já tem ' + lista(o.tenho) + '. Esta compra libera ' + lista(o.faltam) + ' na mesma conta, por ' + brl(o.todas.preco) + '.'); botoes('Liberar as outras ' + o.faltam.length + ' ferramentas'); }
+      else if (o.tenho.length) { aviso('Você já tem ' + lista(o.tenho) + '. Esta compra libera ' + lista(o.faltam) + ' na mesma conta, por ' + brl(o.todas.preco) + '.'); botoes(o.todas.titulo.replace('Libere', 'Liberar')); }
       return;
     }
 
@@ -44,10 +39,9 @@
     $$('.kitb .trilho li[data-k]').forEach(function (l) { if (tenho[l.dataset.k]) l.classList.add('meu'); });
     if (o.tenho.length) {
       var h = kitb.querySelector('h2'), t = kitb.querySelector('p'), de = kitb.querySelector('.de'), a = kitb.querySelector('a.btn');
-      if (h) h.innerHTML = 'Libere as outras ' + o.faltam.length + '. <em class="ac">Uma preenche a outra.</em>';
+      if (h) h.innerHTML = esc(o.todas.titulo) + '. <em class="ac">Uma preenche a outra.</em>';
       if (t) t.innerHTML = 'Você já tem ' + lista(o.tenho) + '. Por ' + brl(o.todas.preco) + ' você libera ' + lista(o.faltam) + ' na mesma conta.';
-      if (de) de.textContent = brl(o.todas.de) + ' separadas';
-      if (a) a.firstChild.textContent = 'Liberar as outras ' + o.faltam.length + ' ';
+      if (a) a.firstChild.textContent = o.todas.titulo.replace('Libere', 'Liberar') + ' ';
     }
   }
   Base.pronto.then(ajusta, ajusta);
