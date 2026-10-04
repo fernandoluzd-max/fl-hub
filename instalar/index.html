@@ -87,6 +87,7 @@ h3{font-size:20px;font-stretch:104%;letter-spacing:-.01em;line-height:1.2}
 .player.quieto .pl-barra{opacity:0;pointer-events:none}
 .pl-b{flex:none;width:44px;height:44px;border:0;background:transparent;color:inherit;border-radius:10px;cursor:pointer;display:grid;place-items:center}
 .pl-b:hover{background:rgba(255,255,255,.12)}
+.pl-vel{width:auto;min-width:52px;padding:0 8px;font:inherit;font-size:13.5px;font-weight:750;font-variant-numeric:tabular-nums}
 .pl-b .i-toca{display:none;fill:currentColor;stroke:none}
 .player.parado .pl-b .i-toca{display:block}.player.parado .pl-b .i-pausa{display:none}
 .pl-b .i-som{display:none}.player.com-som .i-som{display:block}.player.com-som .i-mudo{display:none}
@@ -196,6 +197,7 @@ footer{padding:26px 0 40px;color:var(--apagado);font-size:13.5px}
         <span class="pl-t" id="plT">0:00</span>
         <input class="pl-linha" id="plLinha" type="range" min="0" max="1000" value="0" step="1" aria-label="Posição do vídeo">
         <span class="pl-t" id="plD">0:00</span>
+        <button class="pl-b pl-vel" id="plVel" type="button" aria-label="Velocidade: 1x. Toque para mudar">1x</button>
         <button class="pl-b" id="plMudo" type="button" aria-label="Ligar o som"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path class="i-som" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/><path class="i-mudo" d="M16 9.5l5 5M21 9.5l-5 5"/></svg></button>
         <button class="pl-b" id="plCheia" type="button" aria-label="Tela cheia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
       </div>
@@ -333,6 +335,12 @@ aba(isWin ? 'win' : 'mac');
   const alterna = () => { escolheu = true; if (v.paused) toca(); else v.pause(); };
   v.onclick = alterna; play.onclick = alterna; centro.onclick = alterna;
   mudo.onclick = () => { escolheu = true; v.muted = !v.muted; estado(); };
+  // velocidade: 1x, 1,25x, 1,5x e 2x (a escolha fica guardada para a próxima visita)
+  const VEL = [1, 1.25, 1.5, 2], vel = $('plVel'); let iv = 0;
+  try { const g = VEL.indexOf(+localStorage.getItem('fl_inst_vel')); if (g > 0) iv = g; } catch (e) {}
+  const poeVel = () => { v.playbackRate = VEL[iv]; const t = String(VEL[iv]).replace('.', ',') + 'x'; vel.textContent = t; vel.setAttribute('aria-label', 'Velocidade: ' + t + '. Toque para mudar'); };
+  vel.onclick = () => { iv = (iv + 1) % VEL.length; poeVel(); try { localStorage.setItem('fl_inst_vel', String(VEL[iv])); } catch (e) {} mexeu(); };
+  v.addEventListener('loadedmetadata', poeVel); poeVel();
   cheia.onclick = () => { const f = box.requestFullscreen || box.webkitRequestFullscreen; if (document.fullscreenElement) document.exitFullscreen(); else if (f) f.call(box); else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen(); };
   linha.oninput = () => { arrastando = true; linha.style.setProperty('--p', linha.value / 10 + '%'); if (v.duration) $('plT').textContent = tempo(v.duration * linha.value / 1000); };
   linha.onchange = () => { if (v.duration) v.currentTime = v.duration * linha.value / 1000; arrastando = false; };

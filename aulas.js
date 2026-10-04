@@ -44,8 +44,10 @@
 .fla-top{display:flex;align-items:center;gap:12px;padding:14px 16px 14px 18px;border-bottom:1px solid #262b29}\
 .fla-top small{display:block;font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgb(var(--k))}\
 .fla-top b{display:block;font-family:"Archivo",inherit;font-weight:800;font-size:17px;line-height:1.2}\
-.fla-x{margin-left:auto;flex:none;width:36px;height:36px;border-radius:50%;border:1px solid #2B302E;background:#1d2120;color:#F4F0E4;font-size:15px;cursor:pointer}\
-.fla-x:hover{background:#262b29}\
+.fla .fla-x{all:unset;box-sizing:border-box;margin-left:auto;flex:none;width:40px;height:40px;min-width:40px;border-radius:50%;border:1px solid #2B302E;background:#1d2120;color:#F4F0E4;cursor:pointer;display:grid;place-items:center;transition:background .15s,border-color .15s}\
+.fla .fla-x svg{width:16px;height:16px;display:block;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;pointer-events:none}\
+.fla .fla-x:focus-visible{outline:2px solid #F4F0E4;outline-offset:2px}\
+.fla .fla-x:hover{background:#2b302e;border-color:#3a413e}\
 .fla-co{display:grid;grid-template-columns:minmax(0,1fr) 300px;min-height:0;flex:1}\
 .fla-co.so{grid-template-columns:minmax(0,1fr)}\
 .fla-pl{position:relative;background:#000;aspect-ratio:16/9;align-self:start;overflow:hidden;-webkit-user-select:none;user-select:none}\
@@ -143,7 +145,7 @@
     var aulas = todas.filter(function (a) { return dono || a.so_cliente === false; });
     var el = document.createElement('div'); el.className = 'fla'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Aulas');
     if (op.cor) el.style.setProperty('--k', op.cor);
-    var topo = '<div class="fla-top"><span><small>Aulas</small><b></b></span><button class="fla-x" aria-label="Fechar">✕</button></div>';
+    var topo = '<div class="fla-top"><span><small>Aulas</small><b></b></span><button class="fla-x" type="button" aria-label="Fechar"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"/></svg></button></div>';
     if (!aulas.length) {
       el.innerHTML = '<div class="fla-cx" style="max-width:520px">' + topo + '<div class="fla-tr"><b>' + (todas.length ? 'Aula liberada para quem tem o produto' : 'A aula ainda não foi publicada') + '</b><p>' + (todas.length ? 'Entre com o e-mail da compra para assistir.' : 'Assim que ela entrar no ar, aparece aqui.') + '</p></div></div>';
     } else {
