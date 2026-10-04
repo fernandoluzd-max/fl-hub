@@ -116,14 +116,14 @@ addEventListener('hashchange', () => location.reload());
 let C = null;
 function desenha(){
   const c = C.contrato, ed = C.editor || {}, aceito = C.status === 'aceito', ac = C.aceite || {};
-  const a = c.contratado || {}, b = c.contratante || {}, r = c.resumo || {};
+  const a = c.contratado || {}, b = c.contratante || {}, r = c.resumo || {}, as = c.assinado || {};
   document.title = 'Contrato · ' + (a.nome || ed.nome || '');
   topo({ nome: a.nome || ed.nome }, c.formato === 'rapido' ? 'Termo de serviço' : 'Contrato');
   const linha = (rot, v) => v ? `<div><span>${rot}</span><p>${esc(v)}</p></div>` : '';
   const rev = +r.revisoes ? (+r.revisoes === 1 ? '1 rodada de ajustes' : r.revisoes + ' rodadas de ajustes') : '';
   $('#tela').innerHTML = `
     <article class="papel doc">
-      ${aceito ? '<div class="selo-l"><div class="selo">ACEITO</div></div>' : ''}
+      ${aceito ? '<div class="selo-l"><div class="selo">ASSINADO</div></div>' : ''}
       <h1>${esc(c.titulo)}</h1>
       <div class="sb">Entre ${esc(a.nome)} e ${esc(b.nome)}</div>
       <p><b>CONTRATADO:</b> ${esc(a.nome)}${a.doc ? ', CPF/CNPJ ' + esc(docBonito(a.doc)) : ''}${a.cidade ? ', ' + esc(a.cidade) : ''}.</p>
@@ -131,30 +131,30 @@ function desenha(){
       ${(r.servico || r.valor) ? `<div class="resumo">${linha('Serviço', r.servico)}${linha('Entrega', r.entrega)}${linha('Prazo', r.prazo)}${linha('Revisões', rev)}${linha('Valor total', r.valor ? dinheiro(r.valor) : '')}${linha('Pagamento', r.pagamento)}</div>` : ''}
       ${(c.clausulas || []).map(([t, p]) => `<h3>${esc(t)}</h3><p>${esc(p)}</p>`).join('')}
       ${c.local_data ? `<p class="loc">${esc(c.local_data)}</p>` : ''}
-      <div class="ass"><div>${esc(a.nome)}<small>Contratado</small></div><div>${esc(aceito && ac.nome ? ac.nome : b.nome)}<small>Contratante</small></div></div>
-      ${aceito ? `<div class="registro"><b>Aceite eletrônico registrado.</b><br>${esc(ac.nome || '')}${ac.doc ? ' · CPF/CNPJ ' + esc(docBonito(ac.doc)) : ''}<br>${diaHora(ac.em)}</div>` : ''}
+      <div class="ass"><div>${esc(as.nome || a.nome)}<small>Contratado${as.em ? ' · assinou em ' + diaHora(as.em) : ''}</small></div><div>${esc(aceito && ac.nome ? ac.nome : b.nome)}<small>Contratante</small></div></div>
+      ${as.em || aceito ? `<div class="registro"><b>${aceito ? 'Assinaturas eletrônicas registradas.' : 'Assinatura eletrônica do contratado registrada.'}</b>${as.em ? `<br>Contratado: ${esc(as.nome)}${a.doc ? ' · CPF/CNPJ ' + esc(docBonito(a.doc)) : ''} · ${diaHora(as.em)}` : ''}<br>Contratante: ${aceito ? `${esc(ac.nome || '')}${ac.doc ? ' · CPF/CNPJ ' + esc(docBonito(ac.doc)) : ''} · ${diaHora(ac.em)}` : 'aguardando a sua assinatura'}</div>` : ''}
     </article>
     <div id="acoes" class="noprint"></div>
     <p class="foot noprint">Contrato enviado por ${esc(a.nome || ed.nome || 'seu editor')}.</p>`;
   const z = $('#acoes'), nomeEd = primeiro(a.nome || ed.nome);
   if (aceito){
-    z.innerHTML = `<div class="ok-box"><b>Contrato aceito ✓</b><span>Guarde uma cópia. ${esc(nomeEd)} também tem o registro.</span></div>
+    z.innerHTML = `<div class="ok-box"><b>Contrato assinado ✓</b><span>Guarde uma cópia. ${esc(nomeEd)} também tem o registro.</span></div>
       <button class="btn" id="pdf">Salvar em PDF</button>
-      <a class="btn zap" target="_blank" rel="noopener" href="${esc(zapUrl(ed, `Oi, ${nomeEd}! Li e aceitei o contrato. Podemos começar!`))}">Avisar ${esc(nomeEd)} no WhatsApp</a>`;
+      <a class="btn zap" target="_blank" rel="noopener" href="${esc(zapUrl(ed, `Oi, ${nomeEd}! Li e assinei o contrato. Podemos começar!`))}">Avisar ${esc(nomeEd)} no WhatsApp</a>`;
     $('#pdf').onclick = () => window.print();
     return;
   }
   z.innerHTML = `<div class="caixa">
-      <h2>Aceitar este contrato</h2>
-      <p class="s">Leia com calma. Estando de acordo, confirme com o seu nome.</p>
+      <h2>Assinar este contrato</h2>
+      <p class="s">${as.em ? esc(a.nome) + ' já assinou. ' : ''}Leia com calma. Estando de acordo, assine com o seu nome.</p>
       <label for="nome">Seu nome completo</label><input class="inp" id="nome" autocomplete="name" maxlength="80">
       <label for="doc">CPF ou CNPJ <span style="font-weight:500;color:var(--dim)">(opcional)</span></label><input class="inp" id="doc" inputmode="numeric" maxlength="20" value="${esc(b.doc || '')}">
       <label class="tog"><input type="checkbox" id="li"><span>Li o contrato acima e estou de acordo com tudo.</span></label>
-      <button class="btn" id="ok">Aceitar contrato</button><div class="err" id="erro"></div>
+      <button class="btn" id="ok">Assinar contrato</button><div class="err" id="erro"></div>
     </div>
     <button class="btn ghost" id="pdf">Salvar em PDF para ler depois</button>
     <a class="btn ghost" target="_blank" rel="noopener" href="${esc(zapUrl(ed, `Oi, ${nomeEd}! Tenho uma dúvida sobre o contrato: `))}">Tirar uma dúvida com ${esc(nomeEd)}</a>
-    <p class="nota">O aceite fica registrado com o seu nome, a data e a hora.</p>`;
+    <p class="nota">A assinatura fica registrada com o seu nome, a data e a hora.</p>`;
   $('#pdf').onclick = () => window.print();
   $('#ok').onclick = async () => {
     const n = $('#nome'), v = n.value.trim().replace(/\s+/g, ' ');
