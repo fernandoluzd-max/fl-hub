@@ -246,6 +246,8 @@ const NO_APP = {
   legendas:{ sec:'kits' }, sons:{ sec:'kits' }, luts:{ sec:'kits', lut:true },
   // FERRAMENTAS: abrem no navegador e no celular. As quatro primeiras seguem a ordem da jornada de um trabalho.
   briefing:{ sec:'ferramentas' }, preco:{ sec:'ferramentas' }, contrato:{ sec:'ferramentas' }, painel:{ sec:'ferramentas' }, case:{ sec:'ferramentas' }, mood:{ sec:'ferramentas' },
+  // BÔNUS: não é vendido. Só aparece para quem já recebeu.
+  timer:{ sec:'ferramentas', soBonus:true },
 };
 const PRODUCTS = Object.keys(NO_APP).map(k => { const c = POR_KEY[k]; return { ...NO_APP[k], key:k, packId:c.pack, name:c.nome, desc:c.desc, cor:c.cor, preco:'R$ ' + c.preco, acesso:c.acesso, gancho:c.gancho, inclui:c.inclui, avulso:c.avulso, web: c.url ? 'https://basefl.com' + c.url : undefined }; });
 
@@ -425,6 +427,7 @@ function render(){
       c.innerHTML = `<div class="icon">${icone(p.key)}</div><h3>${p.name}</h3><p>${p.desc}</p><div class="meta"><span class="dot"></span>Em breve</div><div class="btns"><button class="primary" disabled>Em breve</button></div>`;
       $('#s-' + p.sec + ' .cards').appendChild(c); continue;
     }
+    if (p.soBonus && !cat?.owned?.has(p.packId)) continue;
     if (p.avulso && !(cat?.owned?.has(p.packId) && !cat?.owned?.has('fl-legendas'))) continue;
     const srv = cat?.packs?.find(x => x.id === p.packId);
     const owned = !!cat?.owned?.has(p.packId);

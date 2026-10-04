@@ -111,6 +111,24 @@
       "desc": "Seus melhores vídeos e os seus links numa página só. Serve de portfólio para o cliente e de link da bio."
     },
     {
+      "key": "timer",
+      "pack": "fl-timer",
+      "nome": "ChronoCut",
+      "curto": "Timer",
+      "preco": 0,
+      "bonus": true,
+      "_bonus": "Não é vendido: é liberado como bônus. Quais produtos dão direito a ele ainda está por definir (ver supabase/18-chronocut.sql, item 6).",
+      "acesso": "junto com a oferta",
+      "slug": "",
+      "url": "/timer/",
+      "cor": "255,90,95",
+      "checkout": "",
+      "greenn": "",
+      "tipo": "ferramenta",
+      "gancho": "Quanto tempo esse vídeo leva de verdade?",
+      "desc": "O timer do editor: tempo por projeto e por etapa, revisões e exportações à parte, e o seu valor por hora."
+    },
+    {
       "key": "legendas",
       "pack": "fl-legendas",
       "nome": "Títulos Dinâmicos",

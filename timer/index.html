@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ChronoCut — o timer do editor | Base FL</title>
+<meta name="description" content="ChronoCut: registre o tempo de cada projeto de edição, separe revisões e exportações e veja quanto você recebe por hora.">
+<meta name="theme-color" content="#0D0F0E">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/timer/favicon-32.png">
+<link rel="apple-touch-icon" href="/timer/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+/* ChronoCut · mesmo esqueleto visual das outras ferramentas do Base FL (fundo, painéis, botões, campos). Só a cor de destaque é dele. */
+:root{--bg:#0D0F0E;--panel:#151816;--panel2:#1B1F1C;--line:#272D29;--ink:#F4F0E4;--mute:#9A968A;--dim:#5f5c55;--accent:#FF5A5F;--accent-ink:#1c0607;--ok:#7fce8f;--warn:#F2A541;--err:#ff8f7a;
+  --f:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:16px/1.5 var(--f);min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(700px 420px at 85% -8%,rgba(255,90,95,.08),transparent 70%)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:10px}
+[hidden]{display:none!important}
+.wrap{position:relative;max-width:720px;margin:0 auto;padding:16px 18px 90px}
+header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+header img{width:38px;height:38px;border-radius:11px;box-shadow:0 0 0 1px rgba(255,255,255,.10);flex:none}
+header .nm{font-weight:800;font-stretch:112%;font-size:15px;letter-spacing:-.01em;line-height:1.1}
+header .nm small{display:block;font-weight:500;font-stretch:100%;color:var(--mute);font-size:12px}
+header .sp{flex:1}
+.sinc{font-size:12px;color:var(--dim);display:inline-flex;align-items:center;gap:6px}
+.sinc i{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.sinc.erro{color:var(--warn)}.sinc.erro i{background:var(--warn)}
+.link{background:none;border:0;color:var(--mute);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;min-height:32px}
+h1{font-weight:850;font-stretch:118%;font-size:clamp(26px,7vw,34px);line-height:1.04;letter-spacing:-.025em;margin-bottom:8px;text-wrap:balance}
+h2{font-weight:800;font-stretch:110%;font-size:19px;letter-spacing:-.01em;line-height:1.2}
+h3{font-weight:750;font-size:14.5px}
+.sub{color:var(--mute);font-size:15px;margin-bottom:20px;max-width:52ch}
+.dica{color:var(--mute);font-size:13.5px}
+label{display:block;font-size:13px;font-weight:700;color:var(--mute);margin:14px 0 6px}
+label small{font-weight:500;color:var(--dim)}
+.inp{width:100%;min-height:48px;background:var(--bg);border:1px solid var(--line);border-radius:13px;padding:0 14px;font-size:16px;outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--accent)}
+select.inp{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mute) 50%),linear-gradient(135deg,var(--mute) 50%,transparent 50%);background-position:calc(100% - 20px) 21px,calc(100% - 14px) 21px;background-size:6px 6px;background-repeat:no-repeat;padding-right:36px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;border:0;border-radius:14px;background:var(--accent);color:var(--accent-ink);font-weight:800;font-size:16px;cursor:pointer;padding:0 20px;text-decoration:none;transition:transform .15s,filter .2s}
+.btn:active{transform:scale(.985)}.btn:disabled{opacity:.5;cursor:default}
+.btn:hover{filter:brightness(1.07)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:#3a423c;filter:none}
+.btn.full{width:100%}
+.btn.p{min-height:40px;font-size:14px;padding:0 14px;border-radius:11px}
+.btn.perigo{background:transparent;color:var(--err);border:1px solid rgba(255,143,122,.4)}
+.cartao{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px 16px;margin-top:14px}
+/* navegação: o cronômetro é a tela principal; o resto é secundário */
+.abas{display:flex;gap:4px;padding:4px;border-radius:14px;background:var(--panel);border:1px solid var(--line);margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
+.abas::-webkit-scrollbar{display:none}
+.abas button{flex:1;min-width:max-content;border:0;background:transparent;color:var(--mute);font-weight:650;font-size:14px;padding:9px 14px;border-radius:10px;cursor:pointer;min-height:40px}
+.abas button[aria-selected=true]{background:var(--ink);color:#141615}
+/* cronômetro */
+.cron{text-align:center;padding:22px 16px 20px}
+.cron .linha{display:flex;gap:8px;align-items:center}
+.cron .linha .inp{flex:1;min-width:0;font-weight:700}
+.etapas{display:flex;gap:6px;overflow-x:auto;padding:12px 0 2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.etapas::-webkit-scrollbar{display:none}
+.etapas button{flex:none;border:1px solid var(--line);background:var(--bg);color:var(--mute);border-radius:99px;padding:8px 13px;font-size:13.5px;font-weight:650;cursor:pointer;min-height:38px;white-space:nowrap}
+.etapas button[aria-pressed=true]{border-color:var(--accent);color:var(--ink);background:rgba(255,90,95,.12)}
+.etapas .sep{flex:none;width:1px;background:var(--line);margin:6px 4px}
+.revl{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:center;margin-top:12px;font-size:13.5px;color:var(--mute)}
+.revl .conta{display:inline-flex;align-items:center;gap:6px;color:var(--ink);font-weight:700}
+.revl .conta button{width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:var(--bg);cursor:pointer;font-weight:800}
+.seg{display:inline-flex;padding:3px;border-radius:11px;border:1px solid var(--line);background:var(--bg)}
+.seg button{border:0;background:transparent;color:var(--mute);font-size:13px;font-weight:650;padding:6px 11px;border-radius:8px;cursor:pointer;min-height:32px}
+.seg button[aria-pressed=true]{background:var(--panel2);color:var(--ink)}
+.tempo{font-weight:850;font-stretch:112%;font-variant-numeric:tabular-nums;font-size:clamp(60px,19vw,116px);line-height:1;letter-spacing:-.04em;margin:22px 0 4px}
+.tempo.pausado{color:var(--mute)}
+.estado{font-size:13.5px;color:var(--mute);min-height:20px}
+.estado b{color:var(--accent)}
+.acoes{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.acoes .btn{min-width:150px}
+.extra{display:grid;gap:10px;margin-top:18px;text-align:left}
+.foco{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--mute)}
+.noproj{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);text-align:left;font-size:14px;color:var(--mute);display:grid;gap:8px}
+.noproj b{color:var(--ink)}
+.barra{height:7px;border-radius:7px;background:var(--panel2);overflow:hidden}
+.barra i{display:block;height:100%;border-radius:7px;background:var(--accent);transition:width .4s}
+.barra.ok i{background:var(--ok)}.barra.warn i{background:var(--warn)}
+.aviso{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border-radius:12px;border:1px solid rgba(242,165,65,.35);background:rgba(242,165,65,.07);font-size:13.5px;color:var(--ink);text-align:left}
+.aviso svg{flex:none;width:18px;height:18px;margin-top:1px;fill:none;stroke:var(--warn);stroke-width:2;stroke-linecap:round}
+.aviso .ac{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.espera{display:flex;gap:12px;align-items:center;text-align:left}
+.espera .tx{flex:1;min-width:0}
+.espera b{display:block;font-size:14.5px}
+.espera small{color:var(--mute);font-size:13px}
+.espera .t{font-variant-numeric:tabular-nums;font-weight:800;font-size:18px}
+/* listas */
+.lista{list-style:none;display:grid;gap:8px;margin-top:12px}
+.item{display:flex;gap:12px;align-items:center;padding:13px 14px;border-radius:15px;border:1px solid var(--line);background:var(--panel);cursor:pointer;text-align:left;width:100%}
+.item:hover{border-color:#3a423c}
+.item .tx{flex:1;min-width:0}
+.item b{display:block;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item small{color:var(--mute);font-size:13px}
+.item .n{font-variant-numeric:tabular-nums;font-weight:800;font-size:15px;white-space:nowrap}
+.selo{display:inline-block;font-size:11.5px;font-weight:750;padding:2px 8px;border-radius:99px;background:rgba(255,255,255,.07);color:var(--mute);margin-left:6px;vertical-align:1px}
+.selo.atraso{background:rgba(255,143,122,.14);color:var(--err)}.selo.ok{background:rgba(127,206,143,.14);color:var(--ok)}.selo.on{background:rgba(255,90,95,.16);color:var(--accent)}
+.kp{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.kp div{padding:13px 14px;border-radius:15px;border:1px solid var(--line);background:var(--bg)}
+.kp small{display:block;color:var(--mute);font-size:12.5px}
+.kp b{font-size:21px;font-weight:850;font-stretch:108%;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.kp em{display:block;font-style:normal;color:var(--dim);font-size:12px;margin-top:2px}
+@media (min-width:620px){.kp{grid-template-columns:repeat(4,1fr)}.kp.t3{grid-template-columns:repeat(3,1fr)}}
+.bar-l{display:grid;gap:9px;margin-top:12px}
+.bar-l .r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;font-size:13.5px}
+.bar-l .r span:nth-child(2){font-variant-numeric:tabular-nums;font-weight:700}
+.bar-l .r .barra{grid-column:1/-1}
+.reg{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:2px 10px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:13.5px}
+.reg small{grid-column:1/-1;color:var(--mute);font-size:12.5px}
+.reg .d{font-variant-numeric:tabular-nums;font-weight:700}
+.reg button{border:1px solid var(--line);background:var(--bg);color:var(--mute);border-radius:9px;min-height:32px;padding:0 10px;font-size:12.5px;font-weight:650;cursor:pointer}
+.filtros{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+@media (max-width:560px){.filtros{grid-template-columns:1fr}.g2{grid-template-columns:1fr}}
+.vazio{padding:26px 14px;text-align:center;color:var(--mute);font-size:14px;border:1.5px dashed var(--line);border-radius:16px;margin-top:12px}
+.tog{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line);cursor:pointer;font-size:14.5px}
+.tog input{width:20px;height:20px;accent-color:var(--accent);margin-top:2px;flex:none}
+.tog small{display:block;color:var(--mute);font-size:13px}
+.el{display:grid;grid-template-columns:minmax(0,1fr) 130px 40px;gap:6px;margin-top:6px}
+.el .inp{min-height:42px;font-size:14.5px}
+.el button{border:1px solid var(--line);background:var(--bg);border-radius:11px;color:var(--mute);cursor:pointer}
+/* folha (formulários por cima) */
+.folha{position:fixed;inset:0;z-index:60;background:rgba(6,7,7,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:grid;align-items:end;justify-items:center;padding:0}
+.folha .cx{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:22px 22px 0 0;padding:20px 18px calc(22px + env(safe-area-inset-bottom))}
+@media (min-width:640px){.folha{align-items:center;padding:20px}.folha .cx{border-radius:22px}}
+.folha .fh{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px}
+.folha .x{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--bg);cursor:pointer;display:grid;place-items:center;flex:none}
+.folha .x svg{width:15px;height:15px;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;fill:none}
+.folha .pe{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.folha .pe .btn{flex:1;min-width:140px}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);background:var(--ink);color:#141615;padding:11px 18px;border-radius:13px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:90;max-width:calc(100vw - 30px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.lock ul{list-style:none;display:grid;gap:9px;margin:4px 0 18px;font-size:15px}
+.lock li{padding-left:26px;position:relative}
+.lock li::before{content:"";position:absolute;left:2px;top:7px;width:11px;height:6px;border-left:2.5px solid var(--accent);border-bottom:2.5px solid var(--accent);transform:rotate(-45deg)}
+/* modo compacto: só o essencial, para deixar num canto da tela */
+body.mini .wrap{max-width:340px;padding:10px 10px 12px}
+body.mini header,body.mini .abas,body.mini .foot,body.mini .so-cheio{display:none}
+body.mini .cron{padding:14px 12px}
+body.mini .tempo{font-size:54px;margin:12px 0 2px}
+body.mini .acoes .btn{min-width:0;flex:1;min-height:44px}
+body.mini .cartao{margin-top:0}
+.foot{margin-top:26px;text-align:center;color:var(--dim);font-size:12.5px}
+@media (max-width:430px){.abas button{padding:9px 8px;font-size:13px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+  <header id="topo"></header>
+  <nav class="abas" id="abas" role="tablist" hidden></nav>
+  <main id="tela"><p class="sub">Carregando…</p></main>
+  <p class="foot" id="foot"></p>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="/catalogo.js"></script>
+<script src="/base.js?v=4"></script>
+<script>
+'use strict';
+// =====================================================================================
+// ChronoCut — o timer do editor.
+// Regra de ouro: o tempo NUNCA sai de um contador na tela. Cada registro guarda início, fim e pausas,
+// e toda conta é feita em cima desses horários. Por isso fechar a aba ou trocar de aparelho não perde nada.
+// =====================================================================================
+const PACK = 'fl-timer';
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = Base.esc, brl = v => 'R$ ' + (+v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const api = (c, o) => Base.api(c, o);
+const TIPOS = { reels:'Reels', anuncio:'Anúncio', youtube:'YouTube', institucional:'Institucional', evento:'Evento', outro:'Outro' };
+const CAT = { trabalho:'Trabalho ativo', revisao:'Revisões', espera:'Processamento e espera', outro:'Outras atividades' };
+const ETAPAS_PADRAO = [
+  { n:'Organização do material', c:'trabalho' }, { n:'Seleção de cenas', c:'trabalho' }, { n:'Corte e montagem', c:'trabalho' }, { n:'Áudio', c:'trabalho' }, { n:'Cor', c:'trabalho' },
+  { n:'Legendas e títulos', c:'trabalho' }, { n:'Animações e efeitos', c:'trabalho' }, { n:'Revisão', c:'revisao' }, { n:'Exportação e entrega', c:'trabalho' },
+  { n:'Briefing', c:'outro' }, { n:'Reunião', c:'outro' }, { n:'Organização geral', c:'outro' } ];
+const CFG_PADRAO = { etapas: null, foco: 0, descanso: 0, som: false, atalhos: { pausa: '', fim: '' } };
+
+let PJ = [], RG = [], CFG = { ...CFG_PADRAO }, ABA = 'agora', SEL = null, ETP = null, REVN = 1, REVT = 'cliente', OBJ = '', pip = null;
+const mem = { get: k => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
+const etapas = () => (Array.isArray(CFG.etapas) && CFG.etapas.length ? CFG.etapas : ETAPAS_PADRAO);
+const catDe = n => (etapas().find(e => e.n === n) || {}).c || 'trabalho';
+
+// ---------- tempo ----------
+const ms = d => +new Date(d);
+function dur(r, agora = Date.now()){            // tempo ativo de um registro: (fim − início) − pausas
+  const fim = r.fim ? ms(r.fim) : agora; let d = fim - ms(r.inicio);
+  for (const p of r.pausas || []) d -= Math.max(0, Math.min(fim, p[1] ? ms(p[1]) : fim) - ms(p[0]));
+  return Math.max(0, d);
+}
+const pausado = r => !!(r && (r.pausas || []).some(p => !p[1]));
+const relogio = t => { const s = Math.floor(t / 1000), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return (h ? h + ':' : '') + String(m).padStart(h ? 2 : 1, '0') + ':' + String(s % 60).padStart(2, '0'); };
+const horas = t => { const m = Math.round(t / 60000); if (m < 60) return m + ' min'; const h = Math.floor(m / 60), r = m % 60; return h + 'h' + (r ? String(r).padStart(2, '0') : ''); };
+const dataCurta = d => new Date(d).toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' });
+const hora = d => new Date(d).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+const paraCampo = d => { const x = new Date(d), z = n => String(n).padStart(2, '0'); return `${x.getFullYear()}-${z(x.getMonth() + 1)}-${z(x.getDate())}T${z(x.getHours())}:${z(x.getMinutes())}`; };
+const hoje = () => paraCampo(Date.now()).slice(0, 10);
+
+const ativo = () => RG.find(r => !r.fim && r.categoria !== 'espera') || null;
+const esperas = () => RG.filter(r => !r.fim && r.categoria === 'espera');
+const proj = id => PJ.find(p => p.id === id) || null;
+function soma(pid){                              // totais de um projeto, por categoria e por etapa
+  const o = { trabalho:0, revisao:0, espera:0, outro:0, etapas:{}, rodadas:{ interna:new Set(), cliente:new Set() }, n:0 };
+  for (const r of RG) if (r.projeto_id === pid){ const d = dur(r); o[r.categoria] += d; o.n++;
+    if (r.categoria !== 'espera') o.etapas[r.etapa] = (o.etapas[r.etapa] || 0) + d;
+    if (r.categoria === 'revisao' && r.rev_n) o.rodadas[r.rev_tipo === 'interna' ? 'interna' : 'cliente'].add(r.rev_n); }
+  o.ativo = o.trabalho + o.revisao + o.outro;     // o que conta para o valor por hora: sem pausas e sem espera
+  return o;
+}
+
+// ---------- utilidades de tela ----------
+function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2800); }
+function tela(h){ $('#tela').innerHTML = h; }
+function sinc(ok){ const e = $('#sinc'); if (!e) return; e.classList.toggle('erro', !ok); e.lastChild.textContent = ok ? 'Salvo' : 'Sem conexão: não foi salvo'; }
+async function grava(fn, msgErro){               // toda gravação passa por aqui: mostra o estado e nunca finge que salvou
+  try { const r = await fn(); sinc(true); return r; }
+  catch (e){ sinc(false); toast(msgErro || Base.traduz(e.message)); throw e; }
+}
+async function copia(t){ try { await navigator.clipboard.writeText(t); } catch { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); } }
+function folha(titulo, corpo, aoAbrir){
+  fechaFolha();
+  const d = document.createElement('div'); d.className = 'folha'; d.id = 'folha'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-label', titulo);
+  d.innerHTML = `<div class="cx"><div class="fh"><h2>${esc(titulo)}</h2><button class="x" type="button" aria-label="Fechar"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13"/></svg></button></div>${corpo}</div>`;
+  document.body.appendChild(d);
+  d.querySelector('.x').onclick = fechaFolha; d.addEventListener('mousedown', e => { if (e.target === d) fechaFolha(); });
+  if (aoAbrir) aoAbrir(d); const f = d.querySelector('input,select,button.btn'); if (f) f.focus();
+}
+function fechaFolha(){ const f = $('#folha'); if (f) f.remove(); }
+
+// ---------- dados ----------
+async function carrega(){
+  const [p, r, c] = await Promise.all([
+    api('/rest/v1/timer_projetos?select=*&order=criado_em.desc'),
+    api('/rest/v1/timer_registros?select=*&order=inicio.desc&limit=5000'),
+    api('/rest/v1/timer_config?select=dados').catch(() => []) ]);
+  PJ = p || []; RG = r || []; CFG = { ...CFG_PADRAO, ...((c && c[0] && c[0].dados) || {}) }; CFG.atalhos = { ...CFG_PADRAO.atalhos, ...(CFG.atalhos || {}) };
+}
+const salvaCfg = () => grava(() => api('/rest/v1/timer_config', { method:'POST', prefer:'resolution=merge-duplicates', body:{ dados: CFG, atualizado_em: new Date().toISOString() } }));
+async function recarrega(){ try { await carrega(); sinc(true); } catch { sinc(false); } }
+
+// ---------- o cronômetro ----------
+async function inicia(){
+  const p = proj(SEL); if (!p) return novoProjeto();
+  if (ativo()) return;
+  const cat = catDe(ETP), corpo = { projeto_id: p.id, etapa: ETP, categoria: cat, objetivo: OBJ.trim() || null, inicio: new Date().toISOString(), pausas: [] };
+  if (cat === 'revisao'){ corpo.rev_n = REVN; corpo.rev_tipo = REVT; }
+  try {
+    const [r] = await grava(() => api('/rest/v1/timer_registros', { method:'POST', body: corpo, prefer:'return=representation' }), 'Não consegui iniciar.');
+    RG.unshift(r); focoIni = Date.now(); focoAvisado = false; descAvisado = Date.now(); avisaOutros(); desenha();
+  } catch (e){
+    // o servidor só deixa UM cronômetro ligado por pessoa: se já existe (outra aba ou aparelho), mostra ele aqui
+    await recarrega(); if (ativo()){ adota(); toast('Já havia um cronômetro ligado em outra aba ou aparelho. Estou mostrando ele aqui.'); } desenha();
+  }
+}
+async function pausa(){
+  const r = ativo(); if (!r || pausado(r)) return;
+  const ps = [...(r.pausas || []), [new Date().toISOString(), null]];
+  await grava(() => api(`/rest/v1/timer_registros?id=eq.${r.id}`, { method:'PATCH', body:{ pausas: ps } })); r.pausas = ps; avisaOutros(); desenha();
+}
+async function retoma(){
+  const r = ativo(); if (!r || !pausado(r)) return;
+  const ps = (r.pausas || []).map(p => p[1] ? p : [p[0], new Date().toISOString()]);
+  await grava(() => api(`/rest/v1/timer_registros?id=eq.${r.id}`, { method:'PATCH', body:{ pausas: ps } })); r.pausas = ps; descAvisado = Date.now(); avisaOutros(); desenha();
+}
+async function fecha(r, quando = new Date().toISOString()){      // encerra um registro; pausa aberta fecha junto, no mesmo instante
+  const ps = (r.pausas || []).map(p => p[1] ? p : [p[0], ms(p[0]) > ms(quando) ? p[0] : quando]);
+  await grava(() => api(`/rest/v1/timer_registros?id=eq.${r.id}`, { method:'PATCH', body:{ fim: quando, pausas: ps } })); r.fim = quando; r.pausas = ps;
+}
+async function encerra(){
+  const r = ativo(); if (!r) return;
+  await fecha(r); avisaOutros(); desenha();
+  const p = proj(r.projeto_id);
+  folha('Sessão salva', `<p class="sub" style="margin:6px 0 0"><b style="color:var(--ink)">${horas(dur(r))}</b> em ${esc(r.etapa)}, no projeto <b style="color:var(--ink)">${esc(p ? p.nome : '')}</b>. Encerrar a sessão não entrega o projeto: você pode continuar depois.</p>
+    <div class="pe"><button class="btn ghost" id="f-dep">Continuar depois</button><button class="btn" id="f-conc">Concluir o projeto</button></div>`, d => {
+    d.querySelector('#f-dep').onclick = fechaFolha;
+    d.querySelector('#f-conc').onclick = async () => { await conclui(p, true); fechaFolha(); };
+  });
+}
+async function trocaEtapa(n){
+  if (n === ETP) return; const r = ativo(); ETP = n; mem.set('fl_timer_etp', n);
+  if (!r){ return desenha(); }
+  // com o cronômetro ligado: fecha o registro da etapa antiga e abre o da nova no MESMO instante (nenhum segundo se perde)
+  const agora = new Date().toISOString(), eraPausa = pausado(r), cat = catDe(n);
+  const corpo = { projeto_id: r.projeto_id, etapa: n, categoria: cat, objetivo: r.objetivo, inicio: agora, pausas: eraPausa ? [[agora, null]] : [] };
+  if (cat === 'revisao'){ corpo.rev_n = REVN; corpo.rev_tipo = REVT; }
+  try { await fecha(r, agora); const [novo] = await grava(() => api('/rest/v1/timer_registros', { method:'POST', body: corpo, prefer:'return=representation' })); RG.unshift(novo); avisaOutros(); }
+  catch { await recarrega(); }
+  desenha();
+}
+async function conclui(p, sim){
+  if (!p) return; const v = sim ? new Date().toISOString() : null;
+  if (sim){ const a = ativo(); if (a && a.projeto_id === p.id) await fecha(a); for (const e of esperas().filter(x => x.projeto_id === p.id)) await fecha(e); }
+  await grava(() => api(`/rest/v1/timer_projetos?id=eq.${p.id}`, { method:'PATCH', body:{ concluido_em: v, atualizado_em: new Date().toISOString() } })); p.concluido_em = v;
+  if (sim && SEL === p.id){ const o = PJ.find(x => !x.concluido_em); SEL = o ? o.id : null; mem.set('fl_timer_sel', SEL || ''); }
+  toast(sim ? 'Projeto concluído' : 'Projeto reaberto'); avisaOutros(); desenha();
+}
+// espera (exportação, upload, download): corre em paralelo e NÃO entra no trabalho ativo
+async function esperaIni(){
+  const p = proj(SEL); if (!p) return;
+  try { const [r] = await grava(() => api('/rest/v1/timer_registros', { method:'POST', prefer:'return=representation', body:{ projeto_id: p.id, etapa: 'Exportação ou envio', categoria: 'espera', inicio: new Date().toISOString(), pausas: [] } })); RG.unshift(r); }
+  catch { await recarrega(); }
+  avisaOutros(); desenha();
+}
+async function esperaFim(id){ const r = RG.find(x => x.id === id); if (r){ await fecha(r); avisaOutros(); desenha(); } }
+function adota(){ const r = ativo(); if (!r) return; SEL = r.projeto_id; ETP = r.etapa; OBJ = r.objetivo || ''; if (r.rev_n){ REVN = r.rev_n; REVT = r.rev_tipo || 'cliente'; } }
+
+// ---------- foco, descanso e avisos (nada disso pausa o cronômetro sozinho) ----------
+let focoIni = Date.now(), focoAvisado = false, descAvisado = Date.now(), aviso = null;
+function bip(){ if (!CFG.som) return; try { const a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), g = a.createGain(); o.frequency.value = 660; g.gain.value = .05; o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime + .18); } catch {} }
+function confere(){
+  const r = ativo(); if (!r || pausado(r)) return;
+  if (CFG.foco > 0 && !focoAvisado && Date.now() - focoIni >= CFG.foco * 60000){ focoAvisado = true; aviso = { t: `Bloco de ${CFG.foco} min concluído.`, k: 'foco' }; bip(); desenha(); }
+  else if (CFG.descanso > 0 && !aviso && Date.now() - descAvisado >= CFG.descanso * 60000){ descAvisado = Date.now(); aviso = { t: `Você está há ${CFG.descanso} min direto. Uma pausa curta ajuda.`, k: 'desc' }; bip(); desenha(); }
+  // estimativa: avisa uma vez em 80% e uma vez ao passar (fica guardado, não repete)
+  const p = proj(r.projeto_id); if (p && +p.horas_est > 0){ const f = soma(p.id).ativo / (p.horas_est * 3600000), k = 'fl_timer_est_' + p.id, ja = +mem.get(k) || 0;
+    if (f >= 1 && ja < 100){ mem.set(k, '100'); toast(`"${p.nome}" passou da estimativa de ${String(+p.horas_est).replace('.', ',')}h.`); }
+    else if (f >= .8 && ja < 80){ mem.set(k, '80'); toast(`"${p.nome}" chegou a 80% da estimativa.`); } }
+}
+
+// ---------- topo, abas e telas ----------
+function topo(){
+  const s = Base.sessao();
+  $('#topo').innerHTML = `<img src="/icones/timer.png" alt=""><span class="nm">ChronoCut<small>Base FL</small></span><span class="sp"></span>
+    ${s && Base.tem(PACK) ? '<span class="sinc" id="sinc"><i></i>Salvo</span>' : ''}
+    <button class="link" id="conta">${s ? 'Sair' : 'Entrar'}</button>`;
+  $('#conta').onclick = async () => { if (Base.sessao()){ Base.sair(); inicio(); } else if (await Base.login()) inicio(); };
+}
+function abas(){
+  const n = $('#abas'); n.hidden = false;
+  n.innerHTML = [['agora','Cronômetro'],['projetos','Projetos'],['historico','Histórico'],['ajustes','Ajustes']].map(([k, t]) => `<button role="tab" aria-selected="${ABA === k}" data-a="${k}">${t}</button>`).join('');
+  n.querySelectorAll('button').forEach(b => b.onclick = () => { ABA = b.dataset.a; VER = null; desenha(); });
+}
+function vitrine(){
+  $('#abas').hidden = true; const venc = Base.vencido(PACK);
+  tela(`<h1>O tempo de cada projeto, sem atrapalhar a edição.</h1>
+    <p class="sub">O ChronoCut registra quanto você trabalha em cada vídeo, separa revisões e exportações, e mostra quanto você recebe por hora.</p>
+    <div class="cartao lock"><ul><li>Cronômetro por projeto e por etapa da edição</li><li>Revisões contadas à parte, por rodada</li><li>Exportação e upload separados do trabalho ativo</li><li>Valor por hora de cada projeto, antes dos custos</li></ul>
+      <p class="dica">${venc ? 'O seu acesso ao ChronoCut venceu. O histórico continua guardado.' : 'O ChronoCut é um bônus: ele é liberado junto com ofertas da Base FL, no mesmo e-mail da compra.'}</p>
+      ${Base.sessao() ? '' : '<button class="btn full" id="entrar" style="margin-top:16px">Já tenho acesso · entrar</button>'}</div>`);
+  if ($('#entrar')) $('#entrar').onclick = async () => { if (await Base.login()) inicio(); };
+}
+function desenha(){
+  if (!Base.tem(PACK)) return;
+  abas();
+  ({ agora: telaAgora, projetos: telaProjetos, historico: telaHistorico, ajustes: telaAjustes })[ABA]();
+  tique(); pintaPip();
+}
+
+// ===================== CRONÔMETRO =====================
+function telaAgora(){
+  const abertos = PJ.filter(p => !p.concluido_em);
+  if (!PJ.length) return tela(`<div class="cartao" style="text-align:center;padding:34px 18px"><h1>Quanto tempo esse vídeo leva de verdade?</h1>
+    <p class="sub" style="margin:0 auto 22px">Escolha o projeto, aperte iniciar e edite. No fim, você vê o tempo por etapa, as revisões e quanto ganhou por hora.</p>
+    <button class="btn" id="primeiro">Começar meu primeiro projeto</button></div>`), $('#primeiro').onclick = () => novoProjeto();
+  const a = ativo(); if (a) adota();
+  if (!proj(SEL) || (proj(SEL).concluido_em && !a)) SEL = abertos[0] ? abertos[0].id : null;
+  if (!etapas().some(e => e.n === ETP)) ETP = etapas()[0].n;
+  const p = proj(SEL), cat = catDe(ETP), es = esperas(), tot = p ? soma(p.id) : null, et = etapas(), iOutro = et.findIndex(e => e.c === 'outro');
+  const atrasado = p && p.prazo && !p.concluido_em && p.prazo < hoje();
+  const revCli = tot ? tot.rodadas.cliente.size : 0, passouRev = p && p.rev_incl != null && revCli > p.rev_incl;
+  tela(`<section class="cartao cron" aria-label="Cronômetro">
+    <div class="linha">
+      <select class="inp" id="sel" aria-label="Projeto" ${a ? 'disabled' : ''}>${abertos.length ? '' : '<option value="">Nenhum projeto em andamento</option>'}${(a && p && p.concluido_em ? [p, ...abertos] : abertos).map(x => `<option value="${x.id}"${x.id === SEL ? ' selected' : ''}>${esc(x.nome)}${x.cliente ? ' · ' + esc(x.cliente) : ''}</option>`).join('')}</select>
+      <button class="btn ghost p so-cheio" id="novo" ${a ? 'disabled' : ''}>Novo</button>
+    </div>
+    <div class="etapas so-cheio" role="group" aria-label="Etapa da edição">${et.map((e, i) => `${i === iOutro && i > 0 ? '<span class="sep" aria-hidden="true"></span>' : ''}<button data-e="${esc(e.n)}" aria-pressed="${e.n === ETP}">${esc(e.n)}</button>`).join('')}</div>
+    ${cat === 'revisao' ? `<div class="revl so-cheio"><span class="conta">Rodada <button id="rvMenos" aria-label="Rodada anterior">−</button><span id="rvn">${REVN}</span><button id="rvMais" aria-label="Próxima rodada">+</button></span>
+      <span class="seg" role="group" aria-label="Quem pediu"><button data-t="cliente" aria-pressed="${REVT === 'cliente'}">Pedido do cliente</button><button data-t="interna" aria-pressed="${REVT === 'interna'}">Ajuste meu</button></span></div>` : ''}
+    <div class="tempo${a && pausado(a) ? ' pausado' : ''}" id="t" aria-live="off">0:00</div>
+    <p class="estado" id="est">${a ? (pausado(a) ? 'Pausado. A pausa não conta como trabalho.' : `Contando em <b>${esc(a.etapa)}</b>${a.objetivo ? ' · ' + esc(a.objetivo) : ''}`) : (p ? 'Pronto para começar.' : 'Crie um projeto para começar.')}</p>
+    <div class="acoes">${!a ? `<button class="btn" id="ini" ${p ? '' : 'disabled'}>Iniciar</button>` : pausado(a) ? '<button class="btn" id="ret">Retomar</button><button class="btn ghost" id="enc">Encerrar</button>' : '<button class="btn" id="pau">Pausar</button><button class="btn ghost" id="enc">Encerrar</button>'}</div>
+    ${aviso ? `<div class="aviso" style="margin-top:16px" role="status"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div>${esc(aviso.t)}<div class="ac">${aviso.k === 'foco' ? '<button class="btn p ghost" data-av="mais">Continuar mais um bloco</button>' : ''}<button class="btn p ghost" data-av="pausa">Pausar</button>${aviso.k === 'foco' ? '<button class="btn p ghost" data-av="fim">Encerrar</button>' : ''}<button class="btn p ghost" data-av="ok">Seguir trabalhando</button></div></div></div>` : ''}
+    <div class="extra so-cheio">
+      ${a ? '' : `<input class="inp" id="obj" maxlength="140" placeholder="Objetivo desta sessão (opcional). Ex.: finalizar o primeiro corte" value="${esc(OBJ)}" aria-label="Objetivo da sessão">`}
+      <div class="foco"><span>Bloco de foco:</span><span class="seg" role="group" aria-label="Bloco de foco">${[[0,'Livre'],[25,'25 min'],[50,'50 min']].map(([v, t]) => `<button data-f="${v}" aria-pressed="${+CFG.foco === v}">${t}</button>`).join('')}<button data-f="x" aria-pressed="${![0,25,50].includes(+CFG.foco)}">${![0,25,50].includes(+CFG.foco) ? CFG.foco + ' min' : 'Outro'}</button></span></div>
+    </div>
+    ${p ? `<div class="noproj"><span>Neste projeto: <b id="tp">${horas(tot.ativo)}</b> de trabalho${+p.horas_est > 0 ? ` de ${String(+p.horas_est).replace('.', ',')}h previstas` : ''}${p.prazo ? ` · entrega ${dataCurta(p.prazo + 'T12:00')}` : ''}${atrasado ? '<span class="selo atraso">atrasado</span>' : ''}</span>
+      ${+p.horas_est > 0 ? `<div class="barra ${tot.ativo >= p.horas_est * 3600000 ? 'warn' : ''}"><i id="bp" style="width:${Math.min(100, tot.ativo / (p.horas_est * 36000)).toFixed(1)}%"></i></div>` : ''}
+      ${passouRev ? `<span style="color:var(--warn)">Este projeto já teve ${revCli} rodadas pedidas pelo cliente; o combinado eram ${p.rev_incl}.</span>` : ''}</div>` : ''}
+  </section>
+  ${p ? `<section class="cartao so-cheio" aria-label="Processamento e espera">${es.length ? es.map(e => `<div class="espera"><div class="tx"><b>Exportando ou enviando</b><small>${esc((proj(e.projeto_id) || {}).nome || '')} · não conta como trabalho</small></div><span class="t" data-esp="${e.id}">0:00</span><button class="btn p ghost" data-fe="${e.id}">Encerrar</button></div>`).join('<div style="height:10px"></div>') : ''}
+    ${es.some(e => e.projeto_id === p.id) ? '' : `<div class="espera"${es.length ? ' style="margin-top:12px"' : ''}><div class="tx"><b>Exportando, subindo ou baixando arquivo?</b><small>Registre a espera à parte. Ela não entra no seu tempo de trabalho.</small></div><button class="btn p ghost" id="esp">Registrar espera</button></div>`}</section>` : ''}
+  <div class="so-cheio" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px">
+    <button class="link" id="mini">Modo compacto</button>${'documentPictureInPicture' in window ? '<button class="link" id="flut">Deixar flutuando sobre os outros apps</button>' : ''}${p ? '<button class="link" id="manual">Lançar tempo esquecido</button>' : ''}</div>
+  <button class="link" id="sai-mini" style="display:none;margin:8px auto 0">Sair do modo compacto</button>`);
+  const liga = (s, f) => { const e = $(s); if (e) e.onclick = f; };
+  $('#sel').onchange = e => { SEL = e.target.value || null; mem.set('fl_timer_sel', SEL || ''); desenha(); };
+  liga('#novo', () => novoProjeto()); liga('#ini', inicia); liga('#pau', pausa); liga('#ret', retoma); liga('#enc', encerra); liga('#esp', esperaIni);
+  $$('.etapas button').forEach(b => b.onclick = () => trocaEtapa(b.dataset.e));
+  $$('[data-fe]').forEach(b => b.onclick = () => esperaFim(b.dataset.fe));
+  if ($('#obj')) $('#obj').oninput = e => { OBJ = e.target.value; };
+  const rodada = async d => { REVN = Math.max(1, Math.min(99, REVN + d)); const r = ativo(); if (r && r.categoria === 'revisao'){ await grava(() => api(`/rest/v1/timer_registros?id=eq.${r.id}`, { method:'PATCH', body:{ rev_n: REVN } })); r.rev_n = REVN; } desenha(); };
+  liga("#rvMenos", () => rodada(-1)); liga("#rvMais", () => rodada(1));
+  $$('.revl .seg button').forEach(b => b.onclick = async () => { REVT = b.dataset.t; const r = ativo(); if (r && r.categoria === 'revisao'){ await grava(() => api(`/rest/v1/timer_registros?id=eq.${r.id}`, { method:'PATCH', body:{ rev_tipo: REVT } })); r.rev_tipo = REVT; } desenha(); });
+  const poeFoco = async v => { CFG.foco = +v; focoIni = Date.now(); focoAvisado = false; await salvaCfg().catch(() => {}); desenha(); };
+  $$('.foco .seg button').forEach(b => b.onclick = () => { if (b.dataset.f !== 'x') return poeFoco(b.dataset.f);
+    folha('Bloco de foco', `<label for="fc-m">Quantos minutos tem o seu bloco?</label><input class="inp" id="fc-m" inputmode="numeric" value="${[0,25,50].includes(+CFG.foco) ? 40 : CFG.foco}"><p class="dica" style="margin-top:8px">Quando o bloco termina, aparece um aviso. O cronômetro continua contando até você decidir.</p><div class="pe"><button class="btn" id="fc-ok">Usar esse tempo</button></div>`, d => {
+      d.querySelector('#fc-ok').onclick = () => { const v = parseInt(d.querySelector('#fc-m').value, 10); if (!(v > 0 && v <= 240)) return toast('Use um número entre 1 e 240'); fechaFolha(); poeFoco(v); }; }); });
+  $$('[data-av]').forEach(b => b.onclick = () => { const k = b.dataset.av; if (k === 'mais'){ focoIni = Date.now(); focoAvisado = false; } aviso = null; if (k === 'pausa') pausa(); else if (k === 'fim') encerra(); else desenha(); });
+  liga('#mini', () => { document.body.classList.add('mini'); $('#sai-mini').style.display = 'block'; }); liga('#sai-mini', () => { document.body.classList.remove('mini'); desenha(); });
+  if (document.body.classList.contains('mini')) $('#sai-mini').style.display = 'block';
+  liga('#flut', flutua); liga('#manual', () => editaRegistro(null, SEL));
+}
+function tique(){
+  const a = ativo(), t = $('#t'); if (t) t.textContent = relogio(a ? dur(a) : 0);
+  $$('[data-esp]').forEach(e => { const r = RG.find(x => x.id === e.dataset.esp); if (r) e.textContent = relogio(dur(r)); });
+  const p = proj(SEL); if (p && $('#tp')){ const s = soma(p.id); $('#tp').textContent = horas(s.ativo); const b = $('#bp'); if (b) b.style.width = Math.min(100, s.ativo / (p.horas_est * 36000)).toFixed(1) + '%'; }
+  document.title = a ? (pausado(a) ? '⏸ ' : '') + relogio(dur(a)) + ' · ' + ((proj(a.projeto_id) || {}).nome || 'ChronoCut') : 'ChronoCut — o timer do editor | Base FL';
+  pintaPip(true);
+}
+
+// ---------- janela flutuante (fica por cima dos outros programas; só em navegadores que têm esse recurso) ----------
+async function flutua(){
+  try {
+    pip = await documentPictureInPicture.requestWindow({ width: 320, height: 170 });
+    pip.document.head.innerHTML = '<style>' + $('style').textContent + 'body{min-height:0}.pp{padding:12px 14px;text-align:center}.pp b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pp small{color:var(--mute);font-size:12px}.pp .tempo{font-size:46px;margin:6px 0 8px}.pp .acoes{margin:0;gap:8px}.pp .btn{flex:1;min-width:0;min-height:38px;font-size:14px}</style>';
+    pip.document.body.innerHTML = '<div class="pp" id="pp"></div>';
+    pip.addEventListener('pagehide', () => { pip = null; });
+    pintaPip();
+  } catch { toast('Não consegui abrir a janela flutuante neste navegador.'); }
+}
+function pintaPip(soTempo){
+  if (!pip) return; const a = ativo(), d = pip.document, p = a ? proj(a.projeto_id) : proj(SEL);
+  if (soTempo && d.getElementById('ppt')){ d.getElementById('ppt').textContent = relogio(a ? dur(a) : 0); return; }
+  d.getElementById('pp').innerHTML = `<b>${esc(p ? p.nome : 'Nenhum projeto')}</b><small>${esc(a ? a.etapa + (pausado(a) ? ' · pausado' : '') : (ETP || ''))}</small><div class="tempo${a && pausado(a) ? ' pausado' : ''}" id="ppt">${relogio(a ? dur(a) : 0)}</div>
+    <div class="acoes">${!a ? '<button class="btn" data-k="ini">Iniciar</button>' : pausado(a) ? '<button class="btn" data-k="ret">Retomar</button><button class="btn ghost" data-k="enc">Encerrar</button>' : '<button class="btn" data-k="pau">Pausar</button><button class="btn ghost" data-k="enc">Encerrar</button>'}</div>`;
+  d.querySelectorAll('[data-k]').forEach(b => b.onclick = () => ({ ini: inicia, ret: retoma, pau: pausa, enc: encerra })[b.dataset.k]());
+}
+
+// ===================== PROJETOS =====================
+function novoProjeto(p){
+  const ed = !!p, v = p || {};
+  folha(ed ? 'Editar projeto' : 'Novo projeto', `
+    ${!ed && Base.tem('fl-painel') ? '<button class="btn ghost p" id="pj-puxa" type="button" style="margin-top:8px">Puxar do Base Demandas</button><div id="pj-lista"></div>' : ''}
+    <label for="pj-nome">Nome do projeto</label><input class="inp" id="pj-nome" maxlength="80" value="${esc(v.nome || '')}" placeholder="Ex.: Reels de lançamento">
+    <p class="dica" style="margin-top:8px">Só o nome já basta. O resto é opcional e ajuda nos relatórios.</p>
+    <div class="g2">
+      <div><label for="pj-cli">Cliente <small>opcional</small></label><input class="inp" id="pj-cli" maxlength="80" value="${esc(v.cliente || '')}"></div>
+      <div><label for="pj-tipo">Tipo de vídeo <small>opcional</small></label><select class="inp" id="pj-tipo"><option value="">Não informar</option>${Object.entries(TIPOS).map(([k, t]) => `<option value="${k}"${v.tipo === k ? ' selected' : ''}>${t}</option>`).join('')}</select></div>
+      <div><label for="pj-prazo">Prazo de entrega <small>opcional</small></label><input class="inp" id="pj-prazo" type="date" value="${esc(v.prazo || '')}"></div>
+      <div><label for="pj-valor">Valor combinado (R$) <small>opcional</small></label><input class="inp" id="pj-valor" inputmode="decimal" value="${v.valor != null ? String(v.valor).replace('.', ',') : ''}" placeholder="0,00"></div>
+      <div><label for="pj-est">Estimativa de horas <small>opcional</small></label><input class="inp" id="pj-est" inputmode="decimal" value="${v.horas_est != null ? String(+v.horas_est).replace('.', ',') : ''}" placeholder="Ex.: 6"></div>
+      <div><label for="pj-rev">Revisões incluídas <small>opcional</small></label><input class="inp" id="pj-rev" inputmode="numeric" value="${v.rev_incl != null ? v.rev_incl : ''}" placeholder="Ex.: 2"></div>
+    </div>
+    <div class="pe"><button class="btn" id="pj-ok">${ed ? 'Salvar' : 'Criar projeto'}</button></div>`, d => {
+    let demanda = v.demanda_id || null;
+    const num = s => { const n = parseFloat(String(s || '').replace(/\./g, '').replace(',', '.')); return isFinite(n) && n >= 0 ? n : null; };
+    const q = s => d.querySelector(s);
+    if (q('#pj-puxa')) q('#pj-puxa').onclick = async () => {
+      // quem tem o Base Demandas não cadastra duas vezes: os dados do trabalho vêm de lá
+      let l = []; try { l = await api('/rest/v1/demandas?select=id,cliente,titulo,valor,prazo,rev_total,coluna&order=criado_em.desc'); } catch {}
+      l = (l || []).filter(x => x.coluna !== 'pago' && !PJ.some(pp => pp.demanda_id === x.id));
+      q('#pj-lista').innerHTML = l.length ? `<ul class="lista">${l.slice(0, 12).map(x => `<li><button class="item" type="button" data-d="${x.id}"><span class="tx"><b>${esc(x.titulo || x.cliente)}</b><small>${esc(x.cliente)}${x.prazo ? ' · entrega ' + dataCurta(x.prazo + 'T12:00') : ''}</small></span></button></li>`).join('')}</ul>` : '<p class="dica" style="margin-top:8px">Não há trabalhos em aberto no Base Demandas.</p>';
+      q('#pj-lista').querySelectorAll('[data-d]').forEach(b => b.onclick = () => { const x = l.find(y => y.id === b.dataset.d); demanda = x.id;
+        q('#pj-nome').value = x.titulo || x.cliente; q('#pj-cli').value = x.cliente || ''; q('#pj-prazo').value = x.prazo || ''; q('#pj-valor').value = +x.valor ? String(x.valor).replace('.', ',') : ''; q('#pj-rev').value = x.rev_total != null ? x.rev_total : ''; q('#pj-lista').innerHTML = ''; toast('Dados trazidos do Base Demandas'); });
+    };
+    q('#pj-ok').onclick = async () => {
+      const nome = q('#pj-nome').value.trim(); if (!nome){ toast('Dê um nome ao projeto'); q('#pj-nome').focus(); return; }
+      const rev = parseInt(q('#pj-rev').value, 10);
+      const corpo = { nome, cliente: q('#pj-cli').value.trim() || null, tipo: q('#pj-tipo').value || null, prazo: q('#pj-prazo').value || null, valor: num(q('#pj-valor').value), horas_est: num(q('#pj-est').value), rev_incl: rev >= 0 ? Math.min(rev, 99) : null, demanda_id: demanda, atualizado_em: new Date().toISOString() };
+      try {
+        if (ed){ await grava(() => api(`/rest/v1/timer_projetos?id=eq.${p.id}`, { method:'PATCH', body: corpo })); Object.assign(p, corpo); }
+        else { const [n] = await grava(() => api('/rest/v1/timer_projetos', { method:'POST', body: corpo, prefer:'return=representation' })); PJ.unshift(n); SEL = n.id; mem.set('fl_timer_sel', SEL); ABA = VER ? ABA : 'agora'; }
+        fechaFolha(); avisaOutros(); desenha();
+      } catch {}
+    };
+  });
+}
+let VER = null;       // projeto aberto na aba Projetos
+function telaProjetos(){
+  if (VER && proj(VER)) return telaProjeto(proj(VER));
+  const linha = p => { const s = soma(p.id), at = ativo() && ativo().projeto_id === p.id, atraso = p.prazo && !p.concluido_em && p.prazo < hoje();
+    return `<li><button class="item" data-p="${p.id}"><span class="tx"><b>${esc(p.nome)}${at ? '<span class="selo on">contando</span>' : ''}${atraso ? '<span class="selo atraso">atrasado</span>' : ''}</b><small>${[p.cliente, p.tipo && TIPOS[p.tipo], p.prazo && 'entrega ' + dataCurta(p.prazo + 'T12:00')].filter(Boolean).map(esc).join(' · ') || 'Sem detalhes'}</small></span><span class="n">${horas(s.ativo)}</span></button></li>`; };
+  const ab = PJ.filter(p => !p.concluido_em), co = PJ.filter(p => p.concluido_em);
+  tela(`<div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2>Em andamento</h2><button class="btn p" id="novo">Novo projeto</button></div>
+    ${ab.length ? `<ul class="lista">${ab.map(linha).join('')}</ul>` : '<p class="vazio">Nenhum projeto em andamento.</p>'}
+    <h2 style="margin-top:26px">Concluídos</h2>
+    ${co.length ? `<ul class="lista">${co.map(linha).join('')}</ul>` : '<p class="vazio">Os projetos que você concluir aparecem aqui, com o relatório completo.</p>'}`);
+  $('#novo').onclick = () => novoProjeto();
+  $$('[data-p]').forEach(b => b.onclick = () => { VER = b.dataset.p; desenha(); });
+}
+function telaProjeto(p){
+  const s = soma(p.id), regs = RG.filter(r => r.projeto_id === p.id), est = +p.horas_est > 0 ? p.horas_est * 3600000 : 0, vh = +p.valor > 0 && s.ativo >= 60000 ? p.valor / (s.ativo / 3600000) : null;
+  const max = Math.max(1, ...Object.values(s.etapas)), revC = s.rodadas.cliente.size, revI = s.rodadas.interna.size, atraso = p.prazo && !p.concluido_em && p.prazo < hoje();
+  tela(`<button class="link" id="volta">← Todos os projetos</button>
+    <h1 style="margin-top:8px">${esc(p.nome)}${p.concluido_em ? '<span class="selo ok">concluído</span>' : atraso ? '<span class="selo atraso">atrasado</span>' : ''}</h1>
+    <p class="sub" style="margin-bottom:8px">${[p.cliente, p.tipo && TIPOS[p.tipo], p.prazo && 'Entrega em ' + new Date(p.prazo + 'T12:00').toLocaleDateString('pt-BR')].filter(Boolean).map(esc).join(' · ') || 'Sem cliente, tipo ou prazo informados.'}</p>
+    <div class="kp">
+      <div><small>Trabalho ativo</small><b>${horas(s.ativo)}</b><em>sem pausas e sem espera</em></div>
+      <div><small>Em revisões</small><b>${horas(s.revisao)}</b><em>${s.ativo ? Math.round(s.revisao / s.ativo * 100) + '% do trabalho' : 'nenhuma ainda'}</em></div>
+      <div><small>Processamento e espera</small><b>${horas(s.espera)}</b><em>fora do trabalho ativo</em></div>
+      <div><small>Valor por hora, antes dos custos</small><b>${vh ? brl(vh) : '—'}</b><em>${vh ? brl(p.valor) + ' ÷ ' + horas(s.ativo) : !(+p.valor > 0) ? 'informe o valor combinado' : 'registre o tempo do projeto'}</em></div>
+    </div>
+    ${est ? `<section class="cartao"><h3>Estimativa e realizado</h3><div class="bar-l"><div class="r"><span>${horas(s.ativo)} trabalhadas de ${String(+p.horas_est).replace('.', ',')}h previstas</span><span>${s.ativo > est ? horas(s.ativo - est) + ' a mais' : 'faltam ' + horas(est - s.ativo)}</span><div class="barra ${s.ativo > est ? 'warn' : s.ativo >= est * .8 ? '' : 'ok'}"><i style="width:${Math.min(100, s.ativo / est * 100).toFixed(1)}%"></i></div></div></div></section>` : ''}
+    <section class="cartao"><h3>Tempo por etapa</h3>${Object.keys(s.etapas).length ? `<div class="bar-l">${Object.entries(s.etapas).sort((a, b) => b[1] - a[1]).map(([n, d]) => `<div class="r"><span>${esc(n)}</span><span>${horas(d)}</span><div class="barra"><i style="width:${(d / max * 100).toFixed(1)}%"></i></div></div>`).join('')}</div>` : '<p class="dica" style="margin-top:8px">Ainda não há tempo registrado neste projeto.</p>'}</section>
+    <section class="cartao"><h3>Revisões</h3><p class="dica" style="margin-top:8px">${revC || revI ? `${revC} ${revC === 1 ? 'rodada pedida' : 'rodadas pedidas'} pelo cliente${p.rev_incl != null ? ` (combinado: ${p.rev_incl})` : ''} e ${revI} de ajuste seu. Tempo total em revisões: ${horas(s.revisao)}.` : 'Nenhuma rodada de revisão registrada.'}${p.rev_incl != null && revC > p.rev_incl ? ` <b style="color:var(--warn)">Passou do combinado em ${revC - p.rev_incl}.</b>` : ''}</p></section>
+    <section class="cartao"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h3>Registros</h3><button class="btn p ghost" id="add">Lançar tempo</button></div>
+      ${regs.length ? regs.map(r => `<div class="reg"><span><b>${esc(r.etapa)}</b>${r.categoria === 'revisao' && r.rev_n ? ` · rodada ${r.rev_n} (${r.rev_tipo === 'interna' ? 'ajuste meu' : 'cliente'})` : ''}${!r.fim ? '<span class="selo on">ligado</span>' : ''}${r.manual ? '<span class="selo">lançado à mão</span>' : ''}</span><span class="d">${horas(dur(r))}</span><button data-r="${r.id}">Corrigir</button>
+        <small>${dataCurta(r.inicio)} · ${hora(r.inicio)} às ${r.fim ? hora(r.fim) : 'agora'}${(r.pausas || []).length ? ` · ${r.pausas.length} ${r.pausas.length === 1 ? 'pausa' : 'pausas'}` : ''} · ${CAT[r.categoria]}${r.objetivo ? ' · ' + esc(r.objetivo) : ''}</small></div>`).join('') : '<p class="dica" style="margin-top:8px">Nenhum registro ainda.</p>'}</section>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+      <button class="btn ghost p" id="ed">Editar projeto</button><button class="btn ghost p" id="comp">Relatório para o cliente</button>
+      <button class="btn ghost p" id="conc">${p.concluido_em ? 'Reabrir projeto' : 'Concluir projeto'}</button><button class="btn perigo p" id="apg">Apagar projeto</button></div>`);
+  $('#volta').onclick = () => { VER = null; desenha(); };
+  $('#ed').onclick = () => novoProjeto(p); $('#add').onclick = () => editaRegistro(null, p.id);
+  $('#conc').onclick = () => conclui(p, !p.concluido_em);
+  $$('[data-r]').forEach(b => b.onclick = () => editaRegistro(RG.find(r => r.id === b.dataset.r)));
+  $('#comp').onclick = () => relatorioCliente(p);
+  $('#apg').onclick = () => folha('Apagar este projeto?', `<p class="sub" style="margin:6px 0 0">Apaga o projeto <b style="color:var(--ink)">${esc(p.nome)}</b> e os ${regs.length} registros de tempo dele. Não dá para desfazer.</p><div class="pe"><button class="btn ghost" id="nao">Cancelar</button><button class="btn perigo" id="sim">Apagar de vez</button></div>`, d => {
+    d.querySelector('#nao').onclick = fechaFolha;
+    d.querySelector('#sim').onclick = async () => { try { await grava(() => api(`/rest/v1/timer_projetos?id=eq.${p.id}`, { method:'DELETE' })); PJ = PJ.filter(x => x.id !== p.id); RG = RG.filter(r => r.projeto_id !== p.id); if (SEL === p.id) SEL = null; VER = null; fechaFolha(); avisaOutros(); desenha(); toast('Projeto apagado'); } catch {} };
+  });
+}
+function relatorioCliente(p){
+  const s = soma(p.id);
+  const texto = fin => [`Projeto: ${p.nome}`, p.cliente && `Cliente: ${p.cliente}`, `Tempo de trabalho: ${horas(s.ativo)}`,
+    ...Object.entries(s.etapas).sort((a, b) => b[1] - a[1]).map(([n, d]) => `  ${n}: ${horas(d)}`),
+    s.revisao ? `Revisões: ${horas(s.revisao)} (${s.rodadas.cliente.size} ${s.rodadas.cliente.size === 1 ? 'rodada pedida' : 'rodadas pedidas'} por você)` : null,
+    fin && +p.valor > 0 ? `Valor combinado: ${brl(p.valor)}` : null].filter(Boolean).join('\n');
+  folha('Relatório para o cliente', `<p class="dica" style="margin-top:6px">Um resumo em texto, para colar no WhatsApp ou no e-mail. Pausas e tempo de exportação ficam de fora.</p>
+    <label class="tog" style="margin-top:12px"><input type="checkbox" id="rf"><span>Incluir o valor combinado<small>O seu valor por hora nunca entra neste relatório.</small></span></label>
+    <textarea class="inp" id="rt" readonly style="min-height:190px;padding:12px 14px;font-size:14px;line-height:1.5;resize:vertical"></textarea>
+    <div class="pe"><button class="btn" id="rc">Copiar</button></div>`, d => {
+    const pinta = () => { d.querySelector('#rt').value = texto(d.querySelector('#rf').checked); }; pinta(); d.querySelector('#rf').onchange = pinta;
+    d.querySelector('#rc').onclick = async () => { await copia(d.querySelector('#rt').value); toast('Relatório copiado'); };
+  });
+}
+// corrigir um registro, lançar tempo esquecido ou apagar (com confirmação)
+function editaRegistro(r, pid){
+  const novo = !r, ini = r ? r.inicio : new Date(Date.now() - 3600000).toISOString(), fim = r ? r.fim : new Date().toISOString();
+  const pausaMin = r ? Math.round(((r.fim ? ms(r.fim) : Date.now()) - ms(r.inicio) - dur(r)) / 60000) : 0, et = etapas();
+  folha(novo ? 'Lançar tempo esquecido' : 'Corrigir registro', `
+    ${novo ? `<label for="rg-p">Projeto</label><select class="inp" id="rg-p">${PJ.map(p => `<option value="${p.id}"${p.id === pid ? ' selected' : ''}>${esc(p.nome)}</option>`).join('')}</select>` : ''}
+    <label for="rg-e">O que foi</label><select class="inp" id="rg-e">${et.map(e => `<option value="${esc(e.n)}"${r && r.etapa === e.n ? ' selected' : ''}>${esc(e.n)}</option>`).join('')}<option value="__espera"${r && r.categoria === 'espera' ? ' selected' : ''}>Exportação ou envio (espera)</option></select>
+    <div class="g2"><div><label for="rg-i">Início</label><input class="inp" id="rg-i" type="datetime-local" value="${paraCampo(ini)}"></div>
+      <div><label for="rg-f">Fim${r && !r.fim ? ' <small>ainda ligado</small>' : ''}</label><input class="inp" id="rg-f" type="datetime-local" value="${fim ? paraCampo(fim) : ''}"></div></div>
+    <label for="rg-pa">Pausas, em minutos <small>não contam como trabalho</small></label><input class="inp" id="rg-pa" inputmode="numeric" value="${pausaMin || ''}" placeholder="0">
+    <div class="pe">${novo ? '' : '<button class="btn perigo" id="rg-x">Apagar</button>'}<button class="btn" id="rg-ok">${novo ? 'Lançar' : 'Salvar correção'}</button></div>`, d => {
+    const q = s => d.querySelector(s);
+    q('#rg-ok').onclick = async () => {
+      const i = new Date(q('#rg-i').value), fv = q('#rg-f').value, f = fv ? new Date(fv) : null, pm = Math.max(0, parseInt(q('#rg-pa').value, 10) || 0), e = q('#rg-e').value;
+      if (isNaN(i)) return toast('Confira o horário de início');
+      if (novo && !f) return toast('Informe o horário de fim');
+      if (f && (isNaN(f) || f <= i)) return toast('O fim precisa ser depois do início');
+      if (f && f > Date.now() + 60000) return toast('O fim não pode ficar no futuro');
+      if (f && pm * 60000 >= f - i) return toast('As pausas não podem ser maiores que o período');
+      const espera = e === '__espera', etapa = espera ? 'Exportação ou envio' : e, cat = espera ? 'espera' : catDe(e);
+      // as pausas viram um único intervalo no começo do período: a conta do tempo ativo continua a mesma
+      const corpo = { etapa, categoria: cat, inicio: i.toISOString(), fim: f ? f.toISOString() : null, pausas: pm ? [[i.toISOString(), new Date(+i + pm * 60000).toISOString()]] : [] };
+      if (cat !== 'revisao'){ corpo.rev_n = null; corpo.rev_tipo = null; } else if (!r || !r.rev_n){ corpo.rev_n = 1; corpo.rev_tipo = 'cliente'; }
+      try {
+        if (novo){ const [n] = await grava(() => api('/rest/v1/timer_registros', { method:'POST', prefer:'return=representation', body:{ ...corpo, projeto_id: q('#rg-p').value, manual: true } })); RG.push(n); RG.sort((a, b) => ms(b.inicio) - ms(a.inicio)); }
+        else { await grava(() => api(`/rest/v1/timer_registros?id=eq.${r.id}`, { method:'PATCH', body: corpo })); Object.assign(r, corpo); RG.sort((a, b) => ms(b.inicio) - ms(a.inicio)); }
+        fechaFolha(); avisaOutros(); desenha(); toast(novo ? 'Tempo lançado' : 'Registro corrigido');
+      } catch { await recarrega(); desenha(); }
+    };
+    if (q('#rg-x')) q('#rg-x').onclick = () => { const b = q('#rg-x'); if (b.dataset.certo !== '1'){ b.dataset.certo = '1'; b.textContent = 'Apagar mesmo?'; return; }
+      grava(() => api(`/rest/v1/timer_registros?id=eq.${r.id}`, { method:'DELETE' })).then(() => { RG = RG.filter(x => x.id !== r.id); fechaFolha(); avisaOutros(); desenha(); toast('Registro apagado'); }).catch(() => {}); };
+  });
+}
+
+// ===================== HISTÓRICO =====================
+let FILTRO = { per: '30', cli: '', tipo: '' };
+function telaHistorico(){
+  const desde = FILTRO.per === 'tudo' ? 0 : FILTRO.per === 'mes' ? +new Date(new Date().getFullYear(), new Date().getMonth(), 1) : Date.now() - (+FILTRO.per) * 864e5;
+  const pjs = PJ.filter(p => (!FILTRO.cli || p.cliente === FILTRO.cli) && (!FILTRO.tipo || p.tipo === FILTRO.tipo)), ids = new Set(pjs.map(p => p.id));
+  const regs = RG.filter(r => ids.has(r.projeto_id) && ms(r.inicio) >= desde), tot = { trabalho:0, revisao:0, espera:0, outro:0 };
+  regs.forEach(r => tot[r.categoria] += dur(r));
+  // valor por hora médio: só projetos CONCLUÍDOS, com valor e com tempo, e só se houver pelo menos 3 (senão a média engana)
+  const base = pjs.filter(p => p.concluido_em && +p.valor > 0 && soma(p.id).ativo >= 60000 && ms(p.concluido_em) >= desde);
+  const media = base.length >= 3 ? base.reduce((a, p) => a + +p.valor, 0) / (base.reduce((a, p) => a + soma(p.id).ativo, 0) / 3600000) : null;
+  const clientes = [...new Set(PJ.map(p => p.cliente).filter(Boolean))].sort();
+  tela(`<h2>Histórico</h2>
+    <div class="filtros">
+      <select class="inp" id="f-per" aria-label="Período">${[['7','Últimos 7 dias'],['30','Últimos 30 dias'],['mes','Este mês'],['90','Últimos 90 dias'],['tudo','Tudo']].map(([v, t]) => `<option value="${v}"${FILTRO.per === v ? ' selected' : ''}>${t}</option>`).join('')}</select>
+      <select class="inp" id="f-cli" aria-label="Cliente"><option value="">Todos os clientes</option>${clientes.map(c => `<option${FILTRO.cli === c ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select>
+      <select class="inp" id="f-tipo" aria-label="Tipo de vídeo"><option value="">Todos os tipos</option>${Object.entries(TIPOS).map(([k, t]) => `<option value="${k}"${FILTRO.tipo === k ? ' selected' : ''}>${t}</option>`).join('')}</select>
+    </div>
+    <div class="kp">
+      <div><small>Trabalho ativo</small><b>${horas(tot.trabalho + tot.revisao + tot.outro)}</b><em>edição, revisões e outras</em></div>
+      <div><small>Em revisões</small><b>${horas(tot.revisao)}</b><em>${tot.trabalho + tot.revisao + tot.outro ? Math.round(tot.revisao / (tot.trabalho + tot.revisao + tot.outro) * 100) + '% do trabalho' : '—'}</em></div>
+      <div><small>Processamento e espera</small><b>${horas(tot.espera)}</b><em>contado à parte</em></div>
+      <div><small>Outras atividades</small><b>${horas(tot.outro)}</b><em>briefing, reuniões…</em></div>
+    </div>
+    <section class="cartao"><h3>Valor por hora médio, antes dos custos</h3><p class="dica" style="margin-top:8px">${media ? `<b style="color:var(--ink);font-size:22px">${brl(media)}</b><br>Calculado com ${base.length} projetos concluídos neste filtro, que têm valor e tempo registrados.` : `Aparece quando houver pelo menos 3 projetos concluídos com valor e tempo registrados neste filtro. Hoje ${base.length === 1 ? 'há 1' : 'há ' + base.length}.`}</p></section>
+    <section class="cartao"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h3>${regs.length} ${regs.length === 1 ? 'registro' : 'registros'}</h3><button class="btn p ghost" id="csv" ${regs.length ? '' : 'disabled'}>Exportar planilha (CSV)</button></div>
+      ${regs.length ? regs.slice(0, 60).map(r => `<div class="reg"><span><b>${esc((proj(r.projeto_id) || {}).nome || '')}</b> · ${esc(r.etapa)}</span><span class="d">${horas(dur(r))}</span><button data-r="${r.id}">Corrigir</button><small>${dataCurta(r.inicio)} · ${hora(r.inicio)} às ${r.fim ? hora(r.fim) : 'agora'} · ${CAT[r.categoria]}</small></div>`).join('') + (regs.length > 60 ? `<p class="dica" style="margin-top:10px">Mostrando os 60 mais recentes. A planilha traz todos.</p>` : '') : '<p class="dica" style="margin-top:8px">Nenhum registro neste filtro.</p>'}</section>`);
+  $('#f-per').onchange = e => { FILTRO.per = e.target.value; desenha(); }; $('#f-cli').onchange = e => { FILTRO.cli = e.target.value; desenha(); }; $('#f-tipo').onchange = e => { FILTRO.tipo = e.target.value; desenha(); };
+  $$('[data-r]').forEach(b => b.onclick = () => editaRegistro(RG.find(r => r.id === b.dataset.r)));
+  $('#csv').onclick = () => {
+    const c = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"', L = [['Projeto','Cliente','Tipo','Etapa','Categoria','Rodada de revisão','Início','Fim','Pausas (min)','Tempo ativo (min)','Lançado à mão'].map(c).join(';')];
+    regs.forEach(r => { const p = proj(r.projeto_id) || {}, f = r.fim ? ms(r.fim) : Date.now();
+      L.push([p.nome, p.cliente, p.tipo && TIPOS[p.tipo], r.etapa, CAT[r.categoria], r.rev_n ? r.rev_n + (r.rev_tipo === 'interna' ? ' (ajuste meu)' : ' (cliente)') : '', new Date(r.inicio).toLocaleString('pt-BR'), r.fim ? new Date(r.fim).toLocaleString('pt-BR') : '', Math.round((f - ms(r.inicio) - dur(r)) / 60000), Math.round(dur(r) / 60000), r.manual ? 'sim' : ''].map(c).join(';')); });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + L.join('\r\n')], { type:'text/csv;charset=utf-8' })); a.download = 'chronocut-registros.csv'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  };
+}
+
+// ===================== AJUSTES =====================
+function telaAjustes(){
+  const et = etapas().map(e => ({ ...e }));
+  tela(`<h2>Ajustes</h2>
+    <section class="cartao"><h3>Etapas</h3><p class="dica" style="margin:6px 0 8px">As etapas já vêm prontas para edição de vídeo. Mude só se quiser.</p>
+      <div id="els">${et.map((e, i) => `<div class="el"><input class="inp" data-i="${i}" maxlength="60" value="${esc(e.n)}" aria-label="Nome da etapa ${i + 1}"><select class="inp" data-c="${i}" aria-label="Como conta a etapa ${i + 1}"><option value="trabalho"${e.c === 'trabalho' ? ' selected' : ''}>Trabalho</option><option value="revisao"${e.c === 'revisao' ? ' selected' : ''}>Revisão</option><option value="outro"${e.c === 'outro' ? ' selected' : ''}>Outras</option></select><button data-x="${i}" aria-label="Remover etapa">×</button></div>`).join('')}</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><button class="btn p ghost" id="e-add">Adicionar etapa</button><button class="btn p" id="e-ok">Salvar etapas</button><button class="link" id="e-pad">Voltar às etapas prontas</button></div></section>
+    <section class="cartao"><h3>Foco e descanso</h3>
+      <label for="a-desc">Lembrar de descansar a cada (minutos) <small>0 desliga</small></label><input class="inp" id="a-desc" inputmode="numeric" value="${+CFG.descanso || 0}">
+      <label class="tog" style="margin-top:12px"><input type="checkbox" id="a-som" ${CFG.som ? 'checked' : ''}><span>Tocar um som curto nos avisos<small>Os avisos nunca pausam o cronômetro sozinhos.</small></span></label></section>
+    <section class="cartao"><h3>Atalhos de teclado</h3><p class="dica" style="margin:6px 0 4px">Vazio por padrão, para não brigar com os atalhos do seu editor. Clique no campo e aperte a combinação (com Alt, Ctrl ou ⌘). Só funcionam com esta página em foco, e nunca enquanto você digita num campo.</p>
+      <div class="g2"><div><label for="k-pausa">Iniciar, pausar e retomar</label><input class="inp" id="k-pausa" readonly value="${esc(CFG.atalhos.pausa)}" placeholder="Nenhum"></div><div><label for="k-fim">Encerrar a sessão</label><input class="inp" id="k-fim" readonly value="${esc(CFG.atalhos.fim)}" placeholder="Nenhum"></div></div>
+      <button class="link" id="k-limpa" style="margin-top:8px">Limpar atalhos</button></section>
+    <p class="dica" style="margin-top:16px">O ChronoCut precisa de internet para salvar. Se a conexão cair, o aviso no topo mostra que não foi salvo. O cronômetro em si não se perde: o horário de início já está guardado.</p>`);
+  const le = () => $$('#els .el').map(l => ({ n: l.querySelector('input').value.trim(), c: l.querySelector('select').value })).filter(e => e.n);
+  $('#e-add').onclick = () => { CFG.etapas = [...le(), { n: 'Nova etapa', c: 'trabalho' }]; telaAjustes(); const i = $$('#els input'); i[i.length - 1].select(); };
+  $$('[data-x]').forEach(b => b.onclick = () => { const l = le(); l.splice(+b.dataset.x, 1); CFG.etapas = l.length ? l : null; telaAjustes(); });
+  $('#e-ok').onclick = async () => { const l = le(); if (!l.length) return toast('Deixe pelo menos uma etapa'); if (new Set(l.map(e => e.n)).size !== l.length) return toast('Há duas etapas com o mesmo nome'); CFG.etapas = l; await salvaCfg().catch(() => {}); toast('Etapas salvas'); };
+  $('#e-pad').onclick = async () => { CFG.etapas = null; await salvaCfg().catch(() => {}); telaAjustes(); toast('Etapas prontas de volta'); };
+  $('#a-desc').onchange = async e => { CFG.descanso = Math.max(0, Math.min(240, parseInt(e.target.value, 10) || 0)); e.target.value = CFG.descanso; await salvaCfg().catch(() => {}); };
+  $('#a-som').onchange = async e => { CFG.som = e.target.checked; await salvaCfg().catch(() => {}); bip(); };
+  ['pausa', 'fim'].forEach(k => { const c = $('#k-' + k); c.onkeydown = async e => { e.preventDefault(); const t = combo(e); if (!t) return; CFG.atalhos[k] = t; c.value = t; await salvaCfg().catch(() => {}); }; });
+  $('#k-limpa').onclick = async () => { CFG.atalhos = { pausa: '', fim: '' }; await salvaCfg().catch(() => {}); telaAjustes(); };
+}
+// atalho = modificador + tecla (nunca uma tecla sozinha, para não atrapalhar quem digita)
+function combo(e){ if (['Control','Alt','Shift','Meta'].includes(e.key) || !(e.altKey || e.ctrlKey || e.metaKey)) return ''; return [e.ctrlKey && 'Ctrl', e.metaKey && 'Cmd', e.altKey && 'Alt', e.shiftKey && 'Shift', e.code.replace(/^Key|^Digit/, '')].filter(Boolean).join('+'); }
+addEventListener('keydown', e => {
+  if (!Base.tem(PACK) || $('#folha')) return; const t = e.target; if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+  const c = combo(e); if (!c) return;
+  if (c === CFG.atalhos.pausa){ e.preventDefault(); const a = ativo(); if (!a) inicia(); else if (pausado(a)) retoma(); else pausa(); }
+  else if (c === CFG.atalhos.fim){ e.preventDefault(); encerra(); }
+});
+
+// ---------- outras abas e aparelhos ----------
+let canal = null; try { canal = new BroadcastChannel('fl-timer'); canal.onmessage = async () => { await recarrega(); desenha(); }; } catch {}
+const avisaOutros = () => { try { canal && canal.postMessage(1); } catch {} };
+// sessão que ficou ligada com a página fechada: pergunta em vez de adivinhar
+function confereEsquecida(){
+  const a = ativo(); if (!a || pausado(a)) return;
+  const vivo = +mem.get('fl_timer_vivo') || 0, ult = Math.max(vivo, ms(a.inicio)), parado = Date.now() - ult;
+  if (parado < 10 * 60000) return;
+  folha('O cronômetro ficou ligado', `<p class="sub" style="margin:6px 0 0">A sessão de <b style="color:var(--ink)">${esc((proj(a.projeto_id) || {}).nome || '')}</b> está contando desde ${dataCurta(a.inicio)} às ${hora(a.inicio)}, e esta página ficou fechada por ${horas(parado)}.</p>
+    <label for="eq-f">Se você parou antes, a que horas foi?</label><input class="inp" id="eq-f" type="datetime-local" value="${paraCampo(ult)}">
+    <div class="pe"><button class="btn ghost" id="eq-c">Eu continuei trabalhando</button><button class="btn" id="eq-ok">Encerrar nesse horário</button></div>`, d => {
+    d.querySelector('#eq-c').onclick = fechaFolha;
+    d.querySelector('#eq-ok').onclick = async () => { const f = new Date(d.querySelector('#eq-f').value); if (isNaN(f) || f <= new Date(a.inicio) || f > Date.now()) return toast('Escolha um horário entre o início e agora'); await fecha(a, f.toISOString()); fechaFolha(); avisaOutros(); desenha(); toast('Sessão encerrada no horário informado'); };
+  });
+}
+
+// ---------- início ----------
+let relogioLigado = false;
+async function inicio(){
+  topo(); await Base.pronto; await Base.carrega(); topo();
+  $('#foot').textContent = 'Os seus registros ficam guardados na sua conta Base FL.';
+  if (!Base.tem(PACK)) return vitrine();
+  try { await carrega(); } catch (e){ $('#abas').hidden = true; return tela(`<h1>Não consegui abrir.</h1><p class="sub">${esc(Base.traduz(e.message))}</p><button class="btn" onclick="location.reload()">Tentar de novo</button>`); }
+  SEL = mem.get('fl_timer_sel') || null; ETP = mem.get('fl_timer_etp') || etapas()[0].n; adota();
+  desenha(); confereEsquecida();
+  if (!relogioLigado){ relogioLigado = true;
+    setInterval(() => { if (!Base.tem(PACK)) return; tique(); if (ativo() && !pausado(ativo())) mem.set('fl_timer_vivo', String(Date.now())); }, 1000);
+    setInterval(confere, 15000);
+    setInterval(async () => { if (Base.tem(PACK) && !$('#folha') && document.visibilityState === 'visible'){ const antes = (ativo() || {}).id; await recarrega(); if ((ativo() || {}).id !== antes) desenha(); } }, 45000);   // pega o que mudou em outro aparelho
+    addEventListener('beforeunload', () => { if (ativo() && !pausado(ativo())) mem.set('fl_timer_vivo', String(Date.now())); });
+  }
+}
+Base.aoMudar(() => { if (!!Base.sessao() !== ($('#conta')?.textContent === 'Sair')) inicio(); });
+inicio();
+</script>
+</body>
+</html>
