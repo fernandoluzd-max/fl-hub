@@ -271,7 +271,7 @@
     var etapa = function (codigo) {
       f.corpo.innerHTML = '<h2>' + (codigo ? 'Digite o código' : 'Entre na sua conta') + '</h2>' +
         '<p>' + (codigo ? 'Enviamos um código para <b style="color:#F4F0E4">' + esc(email) + '</b>. Confira também o spam.' : 'Use o e-mail da compra. Você entra uma vez só e todas as suas ferramentas ficam liberadas neste aparelho.') + '</p>' +
-        '<input class="flb-inp" id="flb-campo" ' + (codigo ? 'inputmode="numeric" autocomplete="one-time-code" placeholder="Código de 6 números"' : 'type="email" autocomplete="email" placeholder="seu@email.com" value="' + esc(email) + '"') + '>' +
+        '<input class="flb-inp" id="flb-campo" ' + (codigo ? 'inputmode="numeric" autocomplete="one-time-code" placeholder="Código que chegou no e-mail"' : 'type="email" autocomplete="email" placeholder="seu@email.com" value="' + esc(email) + '"') + '>' +
         '<button class="flb-btn" id="flb-ir">' + (codigo ? 'Entrar' : 'Enviar código') + '</button>' +
         (codigo ? '<button class="flb-btn fantasma" id="flb-volta">Usar outro e-mail</button>' : '') + '<div class="flb-erro" id="flb-erro"></div>';
       var campo = f.corpo.querySelector('#flb-campo'), ir = f.corpo.querySelector('#flb-ir'), erro = f.corpo.querySelector('#flb-erro');
@@ -284,7 +284,11 @@
         if (!codigo) {
           email = campo.value.trim().toLowerCase();
           if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { erro.textContent = 'Digite um e-mail válido.'; ir.disabled = false; return; }
-          p = cru('/auth/v1/otp', { method: 'POST', body: { email: email, create_user: true } }).then(function () { etapa(true); });
+          // só manda o código para e-mail que tem compra (cada código é um e-mail enviado). Se o banco ainda não tiver essa pergunta, segue como antes.
+          p = cru('/rest/v1/rpc/pub_tem_compra', { method: 'POST', body: { p_email: email } }).then(function (tem) { return tem !== false; }, function () { return true; }).then(function (tem) {
+            if (!tem) { var er = new Error('Não encontrei compra com esse e-mail. Use o mesmo e-mail da compra. Se acabou de comprar, espere 1 minuto e tente de novo.'); er.semCompra = true; throw er; }
+            return cru('/auth/v1/otp', { method: 'POST', body: { email: email, create_user: true } });
+          }).then(function () { etapa(true); });
         } else {
           var token = campo.value.replace(/\D/g, '');
           if (token.length < 6) { erro.textContent = 'Digite o código que chegou no e-mail.'; ir.disabled = false; return; }
@@ -293,7 +297,7 @@
             return carrega(true).then(function () { fechaFolha(true); });
           });
         }
-        p.catch(function (e) { erro.textContent = traduz(e.message); ir.disabled = false; });
+        p.catch(function (e) { erro.textContent = e.semCompra ? e.message : traduz(e.message); ir.disabled = false; });
       };
     };
     etapa(false);

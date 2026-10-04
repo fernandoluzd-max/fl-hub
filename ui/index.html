@@ -221,7 +221,7 @@ button.aula svg{width:15px;height:15px;fill:currentColor;flex:none}
       <h2 id="l-title">Entre com o e-mail da compra</h2>
       <p id="l-sub">Use o mesmo e-mail que você usou para comprar. Vamos enviar um código de acesso.</p>
       <input id="l-email" type="email" placeholder="seuemail@exemplo.com" autocomplete="email">
-      <input id="l-code" class="code" inputmode="numeric" maxlength="8" placeholder="••••••" style="display:none">
+      <input id="l-code" class="code" inputmode="numeric" maxlength="8" placeholder="••••••••" style="display:none">
       <div class="erro" id="l-err"></div>
       <button class="primary" id="l-go">Enviar código</button>
       <a id="l-back" style="display:none">Usar outro e-mail</a>
@@ -348,6 +348,9 @@ $('#l-go').onclick = async () => {
     if ($('#l-code').style.display === 'none'){
       loginEmail = $('#l-email').value.trim().toLowerCase();
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(loginEmail)) throw new Error('Digite um e-mail válido.');
+      // só manda o código para e-mail que tem compra (cada código é um e-mail enviado). Se o banco ainda não tiver essa pergunta, segue como antes.
+      let temCompra = true; try { temCompra = (await api('/rest/v1/rpc/pub_tem_compra', { method:'POST', body:{ p_email: loginEmail }, auth:false })) !== false; } catch {}
+      if (!temCompra){ $('#l-err').textContent = 'Não encontrei compra com esse e-mail. Use o mesmo e-mail da compra. Se acabou de comprar, espere 1 minuto e tente de novo.'; b.disabled = false; return; }
       await api('/auth/v1/otp', { method:'POST', body:{ email: loginEmail, create_user: true }, auth:false });
       $('#l-code').value = ''; loginStage(true);
     } else {
