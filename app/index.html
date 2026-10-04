@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Base FL</title>
+<meta name="description" content="Suas ferramentas do Base FL no celular: Kit Freelancer, Mood, CaseUp e ChronoCut.">
+<meta name="theme-color" content="#0D0F0E">
+<link rel="manifest" href="/app/manifest.webmanifest">
+<link rel="icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Base FL">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--fundo:#0D0F0E;--card:#141716;--linha:#262D28;--papel:#F4F0E4;--cinza:#A9B0AA;--apagado:#7C847E;--ambar:#F2A541;--tinta:#1a1206;
+  --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--f:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--fundo);color:var(--papel);font:16px/1.5 var(--f);-webkit-font-smoothing:antialiased;min-height:100dvh;padding:env(safe-area-inset-top) 0 calc(env(safe-area-inset-bottom) + 28px)}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ambar);outline-offset:3px;border-radius:8px}
+.larg{max-width:560px;margin:0 auto;padding:0 16px}
+.topo{display:flex;align-items:center;gap:11px;padding:14px 0 10px;position:sticky;top:0;background:linear-gradient(var(--fundo) 70%,transparent);z-index:5}
+.topo img{width:38px;height:38px;border-radius:10px}
+.topo b{font-family:var(--d);font-weight:800;font-size:18px;line-height:1.1;display:block}
+.topo small{display:block;color:var(--apagado);font-size:12.5px;max-width:30vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topo .esp{flex:1}
+.chip{flex:none;border:1px solid var(--linha);background:var(--card);border-radius:99px;padding:9px 12px;font-weight:650;font-size:14px;min-height:42px;display:inline-flex;align-items:center;gap:7px;text-decoration:none}
+.chip.cta{background:var(--ambar);border-color:var(--ambar);color:var(--tinta)}
+.chip svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+
+.ola{padding:10px 0 4px}
+.ola h1{font-family:var(--d);font-stretch:112%;font-weight:900;font-size:clamp(28px,8vw,36px);letter-spacing:-.03em;line-height:1.02}
+.ola h1 span{color:var(--ambar)}
+.ola p{color:var(--cinza);margin-top:8px;font-size:15.5px}
+.entrar{margin-top:16px;width:100%;border:0;border-radius:16px;background:var(--ambar);color:var(--tinta);font-weight:800;font-size:17px;padding:16px;min-height:56px}
+
+.aviso{margin-top:14px;border:1px solid rgba(242,165,65,.45);background:rgba(242,165,65,.08);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px}
+.aviso span{flex:1;font-size:14.5px;color:var(--cinza)}.aviso span b{display:block;color:var(--papel);font-size:15.5px}
+
+h2{font-family:var(--d);font-weight:800;font-size:19px;letter-spacing:-.01em;margin:26px 0 4px}
+.sub{color:var(--apagado);font-size:14px;margin-bottom:12px}
+.lista{display:grid;gap:10px}
+.item{--k:242,165,65;display:flex;align-items:center;gap:13px;padding:12px;border-radius:18px;border:1px solid var(--linha);background:var(--card);text-decoration:none;min-height:76px;position:relative;transition:transform .12s,border-color .2s}
+.item:active{transform:scale(.985)}
+.item img{width:52px;height:52px;border-radius:14px;flex:none}
+.item .t{flex:1;min-width:0}
+.item .t b{display:block;font-weight:700;font-size:16px;line-height:1.2}
+.item .t small{display:block;color:var(--cinza);font-size:13.5px;line-height:1.3;margin-top:2px}
+.item .a{flex:none;font-weight:800;font-size:13.5px;border-radius:99px;padding:9px 14px;border:1px solid var(--linha);white-space:nowrap}
+.item.meu{border-color:rgba(var(--k),.5);background:linear-gradient(90deg,rgba(var(--k),.10),transparent 60%),var(--card)}
+.item.meu .a{background:rgb(var(--k));border-color:transparent;color:#10130f}
+.item .n{position:absolute;left:8px;top:8px;width:19px;height:19px;border-radius:50%;background:var(--fundo);border:1px solid rgba(var(--k),.6);color:rgb(var(--k));font-size:10.5px;font-weight:800;display:grid;place-items:center}
+
+.kit{border:1px solid rgba(242,165,65,.45);border-radius:22px;padding:14px;background:linear-gradient(180deg,rgba(242,165,65,.09),transparent 40%),var(--card)}
+.kit-h{display:flex;align-items:center;gap:13px;margin-bottom:12px}
+.kit-h img{width:56px;height:56px;border-radius:15px;flex:none}
+.kit-h .t{flex:1;min-width:0}
+.kit-h b{display:block;font-family:var(--d);font-weight:800;font-size:18px}
+.kit-h small{display:block;color:var(--cinza);font-size:13.5px;line-height:1.3}
+.kit-h .selo{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ambar);border:1px solid rgba(242,165,65,.5);border-radius:99px;padding:2px 8px;margin-bottom:3px}
+.kit .item{background:rgba(0,0,0,.28)}
+.kit-b{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;text-decoration:none;background:var(--ambar);color:var(--tinta);border-radius:14px;padding:13px 16px;font-weight:800;min-height:52px}
+.kit-b i{font-style:normal;font-family:var(--d);font-weight:900;font-size:19px}
+
+/* packs do CapCut: no celular ficam trancados, com o motivo escrito */
+.pack{align-items:flex-start;flex-wrap:wrap;opacity:.96}
+.pack img{filter:saturate(.55) brightness(.8)}
+.pack .cad{position:absolute;left:46px;top:46px;width:24px;height:24px;border-radius:50%;background:var(--fundo);border:1px solid var(--linha);display:grid;place-items:center}
+.pack .cad svg{width:12px;height:12px;fill:none;stroke:var(--ambar);stroke-width:2.6;stroke-linecap:round}
+.pack .pc{flex-basis:100%;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--cinza);border-top:1px dashed var(--linha);padding-top:10px;margin-top:2px}
+.pack .pc svg{width:17px;height:17px;flex:none;fill:none;stroke:var(--ambar);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pack .pc b{color:var(--papel)}
+.pack .a{text-decoration:none}
+.bon{flex-basis:100%;display:grid;gap:8px;border:1px dashed rgba(var(--k),.45);background:rgba(var(--k),.05);border-radius:14px;padding:11px;margin-top:4px}
+.bon-t{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--cinza)}.bon-t b{color:rgb(var(--k));font-weight:800}
+.bon-i{display:flex;align-items:center;gap:10px;background:var(--fundo);border:1px solid var(--linha);border-radius:12px;padding:8px 10px;text-decoration:none;min-height:58px}
+.bon-i img{width:40px;height:40px;border-radius:11px;filter:none}
+.bon-i .t b{font-size:15px}.bon-i .t small{font-size:12.5px}
+.bon-i em{font-style:normal;flex:none;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ambar);border:1px solid rgba(242,165,65,.45);border-radius:99px;padding:4px 9px}
+.bon-i em.ab{font-size:13.5px;letter-spacing:0;text-transform:none;background:var(--ambar);color:var(--tinta);border-color:transparent;padding:8px 14px}
+.manda{width:100%;margin-top:12px;border:1px solid var(--linha);background:var(--card);border-radius:14px;padding:13px;font-weight:700;font-size:15px;min-height:50px}
+
+.rod{margin-top:28px;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;font-size:14px;color:var(--apagado)}
+.rod a,.rod button{color:var(--cinza);background:none;border:0;padding:8px 0;text-decoration:underline;text-underline-offset:3px;font-size:14px}
+.carrega{color:var(--apagado);padding:30px 0;text-align:center}
+.pcaviso{margin-top:14px;border:1px solid var(--linha);border-radius:16px;padding:14px;color:var(--cinza);font-size:14.5px}
+.pcaviso a{color:var(--ambar);font-weight:700}
+[hidden]{display:none !important}
+@media (prefers-reduced-motion:reduce){.item{transition:none}}
+</style>
+</head>
+<body>
+<div class="larg">
+  <div class="topo">
+    <img src="/logo.png" alt="">
+    <span><b>Base FL</b><small id="quem">o ecossistema do editor de vídeo</small></span>
+    <span class="esp"></span>
+    <a class="chip cta" id="instalar" href="/instalar/" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10.500l5 5 5-5M5 20h14"/></svg>Instalar</a>
+    <button class="chip" id="conta" hidden>Sair</button>
+  </div>
+
+  <!-- visitante: ainda não entrou -->
+  <section class="ola" id="fora" hidden>
+    <h1>Sua Base FL, <span>no celular.</span></h1>
+    <p>Entre com o <b>mesmo e-mail da compra</b>. Chega um código no e-mail; não tem senha para lembrar.</p>
+    <button class="entrar" id="entrar">Entrar com o meu e-mail</button>
+  </section>
+
+  <div class="pcaviso" id="pc" hidden>Você está no computador. Aqui o melhor é o app Base FL, que instala os packs no CapCut: <a href="/instalar/">baixar o app</a>.</div>
+
+  <div id="tudo" hidden>
+    <h2>Packs do CapCut</h2>
+    <p class="sub">São instalados dentro do CapCut do computador. No celular não dá para instalar.</p>
+    <div class="lista" id="packs"></div>
+    <button class="manda" id="manda" hidden>Mandar o link de instalação para o meu computador</button>
+
+    <h2>Para a cor dos seus vídeos</h2>
+    <p class="sub">Abre aqui mesmo, no celular.</p>
+    <div class="lista" id="ferr"></div>
+
+    <h2 id="h-kit">Para atender o cliente</h2>
+    <p class="sub">A ordem de um trabalho. Um passo preenche o próximo.</p>
+    <div class="kit" id="kit"></div>
+  </div>
+  <p class="carrega" id="carrega">Carregando…</p>
+
+  <div class="rod">
+    <a href="https://wa.me/5548999642195?text=Oi!%20Preciso%20de%20ajuda%20com%20o%20Base%20FL." target="_blank" rel="noopener">Suporte</a>
+    <a href="/">Conhecer tudo</a>
+  </div>
+</div>
+
+<script src="/catalogo.js"></script>
+<script src="/base.js"></script>
+<script src="/app/pwa.js"></script>
+<script>
+const $ = s => document.querySelector(s), esc = Base.esc, C = window.CATALOGO, POR = Object.fromEntries(C.produtos.map(p => [p.key, p]));
+const cad = '<span class="cad"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>';
+const icone = k => `<img src="/icones/${k}-64.png" alt="" width="52" height="52" loading="lazy">`;
+const venda = p => '/conheca/' + p.slug + '/?de=celular';
+
+// uma ferramenta: quem tem abre; quem não tem conhece (ou experimenta, no caso das do kit)
+function ferramenta(p, n){
+  const tem = Base.tem(p.pack), venc = Base.vencido(p.pack);
+  const sub = tem ? (p.bonus_txt || p.gancho || p.desc) : venc ? 'Acesso vencido' : p.bonus ? 'Bônus dos Títulos Dinâmicos' : (p.gancho || p.desc);
+  const acao = tem ? 'Abrir' : p.so_no_kit ? 'Testar' : p.bonus ? 'Ver' : 'Conhecer';
+  const href = tem || p.so_no_kit ? p.url : venda(p);
+  return `<a class="item${tem ? ' meu' : ''}" style="--k:${esc(p.cor)}" href="${esc(href)}">${n ? `<span class="n">${n}</span>` : ''}${icone(p.key)}<span class="t"><b>${esc(p.nome)}</b><small>${esc(sub)}</small></span><span class="a">${acao}</span></a>`;
+}
+function pack(p){
+  const tem = Base.tem(p.pack);
+  // os bônus ficam presos ao produto que os entrega: quem tem abre aqui mesmo; quem não tem só vê que vêm junto
+  const bon = (p.bonus_inclusos || []).map(k => POR[k]).filter(Boolean);
+  const bonus = bon.length ? `<span class="bon"><span class="bon-t"><b>+ ${bon.length} bônus</b> que vêm com ${esc(p.nome)}${bon.some(b => Base.tem(b.pack)) ? ' e abrem no celular' : ''}</span>${bon.map(b => {
+      const meu = Base.tem(b.pack);
+      return `<${meu ? 'a href="' + esc(b.url) + '"' : 'span'} class="bon-i" style="--k:${esc(b.cor)}"><img src="/icones/${b.key}-64.png" alt="" width="40" height="40" loading="lazy"><span class="t"><b>${esc(b.nome)}</b><small>${esc(b.bonus_txt || b.gancho || '')}</small></span><em class="${meu ? 'ab' : ''}">${meu ? 'Abrir' : 'Bônus'}</em></${meu ? 'a' : 'span'}>`;
+    }).join('')}</span>` : '';
+  return `<div class="item pack${tem ? ' meu' : ''}" style="--k:${esc(p.cor)}">${icone(p.key)}${cad}<span class="t"><b>${esc(p.nome)}</b><small>${esc(tem ? 'Liberado na sua conta' : (p.gancho || p.desc))}</small></span>${tem ? '' : `<a class="a" href="${esc(venda(p))}">Conhecer</a>`}
+    <span class="pc"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span><b>Só no computador.</b> ${tem ? 'Instale pelo app Base FL, no Mac ou no Windows.' : 'Funciona no CapCut do Mac e do Windows.'}</span></span>${bonus}</div>`;
+}
+
+function desenha(){
+  const logado = !!Base.sessao();
+  $('#carrega').hidden = true; $('#tudo').hidden = false;
+  $('#fora').hidden = logado; $('#conta').hidden = !logado;
+  $('#quem').textContent = logado ? Base.email() : 'o ecossistema do editor de vídeo';
+  $('#pc').hidden = FLPWA.celular;
+  // Kit Freelancer: um bloco só, com as quatro em ordem
+  const o = Base.oferta(), K = C.kit, J = K.inclui.map(k => POR[k]);
+  $('#kit').innerHTML = `<div class="kit-h"><img src="/icones/kit-64.png" alt="" width="56" height="56"><span class="t">${o.completo ? '' : '<span class="selo">Preço de lançamento</span>'}<b>${esc(K.nome)}</b><small>${o.completo ? 'As 4 ferramentas liberadas.' : o.tenho.length ? 'Você já tem ' + esc(Base.nomes(o.tenho)) + '.' : 'Um sistema de trabalho com 4 ferramentas.'}</small></span></div>
+    <div class="lista">${J.map((p, i) => ferramenta(p, i + 1)).join('')}</div>
+    ${o.completo ? '' : `<a class="kit-b" href="/conheca/${esc(K.slug)}/?de=celular"><span>${o.tenho.length ? 'Liberar o que falta' : 'Conhecer o Kit'} →</span><i>R$ ${K.preco}</i></a>`}`;
+  // fora do kit: o Mood
+  const soltas = C.produtos.filter(p => p.url && !p.so_no_kit && !p.bonus);     // bônus não é produto solto: aparece dentro dos Títulos
+  $('#ferr').innerHTML = soltas.map(p => ferramenta(p)).join('');
+  // packs: sempre trancados no celular
+  const ps = C.produtos.filter(p => !p.url);
+  $('#packs').innerHTML = ps.map(pack).join('');
+  $('#manda').hidden = !ps.some(p => Base.tem(p.pack));
+  botaoInstalar();
+}
+function botaoInstalar(){ $('#instalar').hidden = !FLPWA.celular || FLPWA.instalado(); }
+FLPWA.aoMudar(botaoInstalar);
+// Android: instala com um toque, sem sair daqui. Nos outros, o botão leva ao passo a passo.
+$('#instalar').onclick = async e => { if (!FLPWA.direto()) return; e.preventDefault(); await FLPWA.instala(); botaoInstalar(); };
+
+$('#entrar').onclick = async () => { if (await Base.login()) { await Base.carrega(true); desenha(); } };
+$('#conta').onclick = () => { Base.sair(); desenha(); };
+$('#manda').onclick = async () => {
+  const b = $('#manda'), link = 'https://basefl.com/instalar/';
+  if (navigator.share) { await FLPWA.manda('Instalar o Base FL no computador', 'Abrir no computador para instalar o Base FL:', link); return; }
+  b.textContent = (await FLPWA.copia(link)) ? 'Link copiado. Cole numa conversa sua e abra no computador.' : link;
+};
+(async () => {
+  try { await Base.pronto; await Base.carrega(); } catch (e) {}
+  desenha();
+  if (!Base.sessao() && new URLSearchParams(location.search).get('entrar')) $('#entrar').click();
+})();
+Base.aoMudar(() => desenha());
+</script>
+</body>
+</html>

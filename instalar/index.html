@@ -7,7 +7,7 @@
 <meta name="description" content="Baixe o app Base FL, entre com o e-mail da compra e comece a usar. Vídeo com o passo a passo, para Mac e Windows.">
 <link rel="icon" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
+<link rel="manifest" href="/app/manifest.webmanifest">
 <meta name="theme-color" content="#0D0F0E">
 <meta property="og:title" content="Instalar o Base FL">
 <meta property="og:description" content="Baixe o app, entre com o e-mail da compra e comece a usar.">
@@ -79,13 +79,70 @@ html.cel .so-cel{display:block}
 html.cel .so-pc{display:none !important}
 html.pc .baixar .bt:not(.meu){display:none}
 html.pc .abre .baixar,html.pc .fecho .baixar{grid-template-columns:1fr;max-width:420px}
-.manda{display:none;gap:10px;width:100%;max-width:520px;margin-top:clamp(22px,3vw,30px);text-align:left}
-html.cel .manda{display:grid}
-.manda .bt{cursor:pointer;font:inherit;color:inherit;width:100%;text-align:left}
-.manda .bt.zap{background:var(--ambar);border-color:var(--ambar);color:var(--ambar-tinta)}
-.manda .bt.zap span small{color:rgba(26,18,6,.72)}
-.manda .bt svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.manda .bt.zap svg{fill:currentColor;stroke:none}
+.cel{width:100%;max-width:460px;margin-top:22px;display:grid;gap:12px;text-align:left}
+html:not(.cel) .cel{display:none}
+.inst-b{width:100%;cursor:pointer;font:inherit;text-align:left}
+.inst-b svg{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.feito{border:1px solid rgba(63,184,175,.5);background:rgba(63,184,175,.08);border-radius:18px;padding:16px;display:grid;gap:8px;text-align:center}
+.feito>b{font-family:var(--d);font-weight:800;font-size:19px}.feito>span{color:var(--cinza);font-size:15px}.feito .bt{justify-content:center;margin-top:6px}
+.sem{display:block;text-align:center;color:var(--cinza);font-size:15px;padding:10px;text-underline-offset:3px}
+/* passo a passo: uma tela de celular desenhada, que mostra onde tocar */
+.guia{border:1px solid var(--linha);border-radius:24px;background:var(--parede);padding:16px;display:grid;gap:14px}
+.guia-c{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.guia-c small{font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ambar)}
+.guia-p{display:flex;gap:6px}.guia-p i{width:22px;height:4px;border-radius:9px;background:var(--linha);transition:background .3s}.guia-p i.on{background:var(--ambar)}
+.guia-tela{position:relative;height:250px;border-radius:22px;background:#07090a;border:1px solid #1c211e;overflow:hidden}
+.guia-t b{display:block;font-family:var(--d);font-stretch:108%;font-weight:800;font-size:21px;line-height:1.15;letter-spacing:-.01em}
+.guia-t{min-height:112px}
+.guia-t p{color:var(--cinza);font-size:15.5px;margin-top:6px}
+.guia-nav{display:grid;grid-template-columns:auto 1fr;gap:10px}
+.guia-nav button{font:inherit;font-weight:750;font-size:16px;border-radius:14px;padding:14px 18px;min-height:52px;border:1px solid var(--linha);background:transparent;color:var(--papel);cursor:pointer}
+.guia-nav button.vai{background:var(--ambar);border-color:var(--ambar);color:var(--ambar-tinta)}
+.guia-nav button:disabled{opacity:.35}
+/* peças do desenho */
+.gt{position:absolute;inset:0;animation:gt .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes gt{from{opacity:0;transform:translateX(14px)}}
+.gt .pag{position:absolute;inset:0 0 46px;padding:16px;display:grid;gap:9px;align-content:start}
+.gt .pag i{display:block;height:9px;border-radius:9px;background:#191e1b}.gt .pag i:nth-child(1){width:54%;height:14px;background:#232a26}.gt .pag i:nth-child(3){width:82%}.gt .pag i:nth-child(4){width:64%}
+.gt .barra{position:absolute;left:0;right:0;bottom:0;height:46px;background:#121614;border-top:1px solid #1f2622;display:flex;align-items:center;justify-content:space-around;padding:0 10px}
+.gt .barra.cima{top:0;bottom:auto;border-top:0;border-bottom:1px solid #1f2622;justify-content:space-between;gap:10px}
+.gt .barra.cima+.pag{inset:46px 0 0}
+.gt .url{flex:1;height:26px;border-radius:9px;background:#1b211d;color:#6f7a72;font-size:11.5px;display:flex;align-items:center;padding:0 10px}
+.gt .ic{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;position:relative;color:#5e6962}
+.gt .ic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.gt .alvo{color:var(--ambar)}
+.gt .alvo::before,.gt .alvo::after{content:"";position:absolute;inset:-5px;border-radius:inherit;border:2px solid var(--ambar);animation:pulso 1.6s ease-out infinite}
+.gt .alvo::after{animation-delay:.8s}
+@keyframes pulso{from{opacity:.9;transform:scale(.8)}to{opacity:0;transform:scale(1.7)}}
+.gt .folha{position:absolute;left:10px;right:10px;bottom:10px;border-radius:18px;background:#171c19;border:1px solid #242b27;padding:8px;display:grid;gap:6px;animation:sobe .5s cubic-bezier(.2,.8,.2,1) both}
+.gt .folha.cima{bottom:auto;top:10px;left:auto;width:74%;animation-name:desce}
+@keyframes sobe{from{transform:translateY(40px);opacity:0}}@keyframes desce{from{transform:translateY(-20px);opacity:0}}
+.gt .linha{display:flex;align-items:center;justify-content:space-between;gap:10px;border-radius:12px;padding:11px 12px;font-size:13.5px;color:#7d8880;background:#1d2320;position:relative}
+.gt .linha svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.gt .linha.alvo{color:var(--ambar-tinta);background:var(--ambar);font-weight:800}
+.gt .linha.alvo::before,.gt .linha.alvo::after{border-radius:14px;inset:-4px}
+@keyframes pulso2{from{opacity:.8}to{opacity:0;transform:scale(1.06,1.35)}}
+.gt .linha.alvo::before,.gt .linha.alvo::after{animation-name:pulso2}
+.gt .casa{position:absolute;inset:0;padding:22px 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px 12px;align-content:start;background:linear-gradient(160deg,#16201c,#0a0d0c)}
+.gt .casa i{aspect-ratio:1;border-radius:26%;background:#1d2622}
+.gt .casa span{display:grid;justify-items:center;gap:4px;font-size:9.5px;color:var(--papel);font-weight:650;animation:cai .7s cubic-bezier(.2,1.4,.3,1) .25s both}
+.gt .casa span img{width:100%;aspect-ratio:1;border-radius:26%;box-shadow:0 8px 22px -6px rgba(242,165,65,.8)}
+@keyframes cai{from{transform:scale(.2);opacity:0}}
+.gt .conf{position:absolute;left:14px;right:14px;top:50%;transform:translateY(-50%);border-radius:18px;background:#171c19;border:1px solid #242b27;padding:14px;display:grid;gap:12px;animation:sobe .5s both}
+.gt .conf .app{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700}.gt .conf .app img{width:38px;height:38px;border-radius:10px}
+.gt .conf .app small{display:block;font-weight:500;color:#7d8880;font-size:11.5px}
+.gt .conf .bts{display:flex;justify-content:flex-end;gap:8px}
+.gt .conf .bts em{font-style:normal;font-size:13px;padding:9px 14px;border-radius:10px;color:#7d8880;position:relative}
+.gt .conf .bts em.alvo{background:var(--ambar);color:var(--ambar-tinta);font-weight:800}.gt .conf .bts em.alvo::before,.gt .conf .bts em.alvo::after{border-radius:12px;inset:-4px;animation-name:pulso2}
+.sopc{margin-top:16px;border:1px dashed var(--linha);border-radius:20px;padding:16px;text-align:left}
+.sopc>b{display:flex;align-items:center;gap:8px;font-family:var(--d);font-weight:800;font-size:17px}
+.sopc>b svg{width:17px;height:17px;fill:none;stroke:var(--ambar);stroke-width:2.6;stroke-linecap:round}
+.sopc-l{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.sopc-l span{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--linha);border-radius:12px;padding:6px 11px 6px 6px;font-size:14px;font-weight:650;color:var(--cinza)}
+.sopc-l img{width:30px;height:30px;border-radius:8px;filter:saturate(.5) brightness(.8)}
+.sopc p{color:var(--cinza);font-size:15px}
+.sopc button{margin-top:12px;width:100%;font:inherit;font-weight:700;font-size:15px;color:var(--papel);background:transparent;border:1px solid var(--linha);border-radius:14px;padding:13px;min-height:50px;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.gt,.gt *{animation:none !important}}
 .ja{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
 .ja a{display:flex;align-items:center;gap:11px;padding:12px;border-radius:14px;border:1px solid var(--linha);background:var(--parede);text-decoration:none;color:inherit;font-weight:650;font-size:15px;min-height:60px}
 .ja a img{border-radius:10px;flex:none}
@@ -191,6 +248,7 @@ footer{padding:26px 0 40px;color:var(--apagado);font-size:13.5px}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.js .estante:not(.posto) .obj{opacity:1;transform:none}.estante.posto .obj{animation:none}.obj:hover .cx{transform:none}.pl-som{animation:none}}
 </style>
+<meta name="apple-mobile-web-app-title" content="Base FL">
 </head>
 <body>
 
@@ -204,19 +262,25 @@ footer{padding:26px 0 40px;color:var(--apagado);font-size:13.5px}
   </div>
 
   <section class="abre">
-    <h1><i class="so-pc">Agora é só <span>instalar.</span></i><i class="so-cel">Falta um passo, <span>no computador.</span></i></h1>
+    <h1><i class="so-pc">Agora é só <span>instalar.</span></i><i class="so-cel">Instale o Base FL <span>no celular.</span></i></h1>
     <p class="fala so-pc">O que você comprou fica dentro do app Base FL. Assista ao vídeo, baixe o app e entre com o <b>mesmo e-mail da compra</b>.</p>
-    <!-- CELULAR: o app é de computador. Aqui a pessoa manda o link para ela mesma e vê o que já dá para usar no celular. -->
-    <p class="fala so-cel">Você está no celular, e o app Base FL instala no <b>computador</b> (Mac ou Windows). Mande este link para você e abra lá para baixar.</p>
-    <div class="manda" id="manda">
-      <a class="bt zap" id="m-zap" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.800 1.300-.5.1-1.100.1-1.800-.1-.4-.1-.9-.3-1.600-.6-2.800-1.200-4.600-4-4.700-4.200-.1-.2-1.100-1.500-1.100-2.900s.7-2 1-2.300c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .600.500l.9 2.100c.1.2.1.3 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.600.2.300.7 1.200 1.600 1.900 1.100 1 2 1.300 2.300 1.400.3.100.5.100.600-.100l.8-1c.2-.2.4-.2.600-.100l2 .9c.300.100.5.200.500.300.1.200.1.700-.1 1.200z"/></svg><span><b>Mandar para o meu WhatsApp</b><small>Escolha a sua própria conversa e abra no computador</small></span></a>
-      <a class="bt" id="m-mail"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.500"/><path d="M4 7l8 6 8-6"/></svg><span><b>Mandar para o meu e-mail</b><small>Abre o seu e-mail com o link pronto</small></span></a>
-      <button class="bt" id="m-copia" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.500"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span><b id="m-copia-t">Copiar o link</b><small>basefl.com/instalar</small></span></button>
+    <!-- CELULAR: a pessoa instala o Base FL no próprio celular (fica um ícone na tela, abre como app). -->
+    <p class="fala so-cel">Fica um ícone na tela do seu celular e abre como um app. Dentro dele estão as suas ferramentas.</p>
+    <div class="cel so-cel" id="cel">
+      <button class="bt meu inst-b" id="c-inst" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10.500l5 5 5-5M5 20h14"/></svg><span><b>Instalar agora</b><small>Um toque e o ícone vai para a tela do celular</small></span></button>
+      <div class="feito" id="c-ok" hidden><b>Já está instalado.</b><span>Procure o ícone <b>Base FL</b> na tela do seu celular.</span><a class="bt meu" href="/app/"><span><b>Abrir o Base FL</b></span></a></div>
+      <div class="guia" id="guia" hidden>
+        <div class="guia-c"><small id="g-n"></small><span class="guia-p" id="g-p"></span></div>
+        <div class="guia-tela" id="g-tela" aria-hidden="true"></div>
+        <div class="guia-t"><b id="g-t"></b><p id="g-d"></p></div>
+        <div class="guia-nav"><button type="button" id="g-volta" aria-label="Passo anterior">Voltar</button><button type="button" class="vai" id="g-vai">Próximo</button></div>
+      </div>
+      <a class="sem" id="c-sem" href="/app/">Usar agora, sem instalar</a>
     </div>
 
     <!-- VÍDEO DE INSTALAÇÃO: o endereço fica em VIDEO_INSTALACAO, no começo do script lá embaixo.
          Começa sozinho, sem som (os navegadores só deixam assim). O botão grande liga o som e volta ao início. -->
-    <div class="player" id="player" hidden>
+    <div class="player so-pc" id="player" hidden>
       <video id="vid" playsinline muted preload="metadata" aria-label="Vídeo: instalando o Base FL"></video>
       <button class="pl-som" id="plSom" type="button"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5zM15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></i><span>Assistir com som</span></button>
       <button class="pl-centro" id="plCentro" type="button" aria-label="Tocar" hidden><i aria-hidden="true"></i></button>
@@ -243,21 +307,26 @@ footer{padding:26px 0 40px;color:var(--apagado);font-size:13.5px}
     </div>
     <p class="outro so-pc" id="outro" hidden></p>
     <p class="gratis so-pc" id="hint">O app é gratuito. Dentro dele aparece tudo o que você já liberou.</p>
-    <p class="gratis so-cel">O vídeo acima mostra como é a instalação no computador.</p>
   </section>
 </div>
 
 <section class="bloco so-cel">
   <div class="larg">
-    <h2>No celular, você já pode usar:</h2>
-    <p class="apoio">As ferramentas abrem aqui mesmo, no navegador. Entre com o <b>mesmo e-mail da compra</b>. Os packs do CapCut (Títulos, Efeitos Sonoros e LUTs) são instalados pelo computador.</p>
+    <h2>O que você usa no celular.</h2>
+    <p class="apoio">As ferramentas abrem no celular. Entre com o <b>mesmo e-mail da compra</b>.</p>
     <div class="ja" id="ja"></div>
+    <div class="sopc">
+      <b><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Só no computador</b>
+      <div class="sopc-l" id="sopc"></div>
+      <p>Títulos, Efeitos Sonoros e LUTs são instalados dentro do CapCut do computador. No celular não dá para instalar.</p>
+      <button type="button" id="m-pc">Mandar o link para o meu computador</button>
+    </div>
   </div>
 </section>
 
-<section class="bloco">
+<section class="bloco so-pc">
   <div class="larg">
-    <h2 class="so-pc">São três passos.</h2><h2 class="so-cel">No computador, são três passos.</h2>
+    <h2>São três passos.</h2>
     <div class="passos">
       <div class="passo"><h3>Baixe e instale o app</h3><p>É uma vez só, no Mac ou no Windows. O vídeo lá em cima mostra o caminho.</p></div>
       <div class="passo"><h3>Entre com o seu e-mail</h3><p>Use o <b>mesmo e-mail da compra</b>. Chega um código no e-mail; não tem senha para lembrar.</p></div>
@@ -310,9 +379,9 @@ footer{padding:26px 0 40px;color:var(--apagado);font-size:13.5px}
 
 <div class="larg">
   <section class="fecho">
-    <h2 class="so-pc">Tudo pronto para instalar.</h2><h2 class="so-cel">Abra no computador e instale.</h2>
+    <h2 class="so-pc">Tudo pronto para instalar.</h2><h2 class="so-cel">É rápido, e fica na tela do celular.</h2>
     <p class="apoio so-pc">Baixe, entre com o e-mail da compra e comece a usar. Quer ver o que mais tem no Base FL? <a href="/">Conheça as outras ferramentas</a>.</p>
-    <p class="apoio so-cel">Mande o link para você pelos botões lá em cima. Quer ver o que mais tem no Base FL? <a href="/">Conheça as outras ferramentas</a>.</p>
+    <p class="apoio so-cel"><a href="#cel">Voltar ao passo a passo</a>. Quer ver o que mais tem no Base FL? <a href="/">Conheça as outras ferramentas</a>.</p>
     <div class="baixar so-pc" id="dl2"></div>
     <div class="ajuda">
       <span><b>Travou em alguma parte?</b> No app, clique em <b>Diagnóstico para suporte</b>, copie e mande pra gente.</span>
@@ -323,6 +392,7 @@ footer{padding:26px 0 40px;color:var(--apagado);font-size:13.5px}
 </div>
 
 <script src="/catalogo.js"></script>
+<script src="/app/pwa.js"></script>
 <script>
 // ============================================================
 // VÍDEO DE INSTALAÇÃO: cole o endereço do vídeo entre as aspas.
@@ -349,20 +419,76 @@ if (sabe){   // só o botão do sistema da pessoa; o outro vira um link discreto
 if (!celular && !sabe) document.getElementById('hint').innerHTML = '<b>O app é para Mac ou Windows.</b> Abra esta página em um deles para baixar. As ferramentas de navegador você já pode usar aqui, entrando com o e-mail da compra.';
 document.querySelectorAll('#dl .bt').forEach(b => { const c = b.cloneNode(true); c.removeAttribute('id'); document.getElementById('dl2').appendChild(c); });
 
-// ----- celular: mandar o link para si mesmo e ver o que já dá para usar -----
-if (celular){
-  const LINK = 'https://basefl.com/instalar/', TXT = 'Abrir no computador para instalar o Base FL: ' + LINK;
-  document.getElementById('m-zap').href = 'https://wa.me/?text=' + encodeURIComponent(TXT);
-  document.getElementById('m-mail').href = 'mailto:?subject=' + encodeURIComponent('Instalar o Base FL no computador') + '&body=' + encodeURIComponent(TXT);
-  document.getElementById('m-copia').onclick = async () => {
-    const t = document.getElementById('m-copia-t');
-    try { await navigator.clipboard.writeText(LINK); t.textContent = 'Link copiado'; }
-    catch { const a = document.createElement('textarea'); a.value = LINK; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); t.textContent = 'Link copiado'; } catch { t.textContent = LINK; } a.remove(); }
-    setTimeout(() => { t.textContent = 'Copiar o link'; }, 2500);
+// ----- celular: instalar o Base FL no próprio celular -----
+if (celular && window.FLPWA){
+  const P = window.FLPWA, $ = id => document.getElementById(id);
+  const ic = { comp: '<svg viewBox="0 0 24 24"><path d="M12 15V4M8 7.500l4-4 4 4M6 11H5v9h14v-9h-1"/></svg>', mais: '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 9v6M9 12h6"/></svg>',
+    pts: '<svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.300" fill="currentColor"/><circle cx="12" cy="12" r="1.300" fill="currentColor"/><circle cx="12" cy="19" r="1.300" fill="currentColor"/></svg>', fora: '<svg viewBox="0 0 24 24"><path d="M14 5h5v5M19 5l-8 8M11 6H6a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-5"/></svg>',
+    seta: '<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>', casa: '<svg viewBox="0 0 24 24"><path d="M12 4v11M7 10.500l5 5 5-5M5 20h14"/></svg>' };
+  const pag = '<div class="pag"><i></i><i></i><i></i><i></i></div>';
+  const ios = c => `<div class="gt">${pag}<div class="barra"><span class="ic">${ic.seta}</span><span class="ic ${c ? 'alvo' : ''}">${ic.comp}</span><span class="ic">${ic.mais}</span></div></div>`;
+  const and = c => `<div class="gt"><div class="barra cima"><span class="url">basefl.com/instalar</span><span class="ic ${c ? 'alvo' : ''}">${ic.pts}</span></div>${pag}</div>`;
+  const folha = (linhas, cima) => `<div class="gt">${cima ? '<div class="barra cima"><span class="url">basefl.com/instalar</span><span class="ic">' + ic.pts + '</span></div>' : ''}${pag}<div class="folha${cima ? ' cima' : ''}">${linhas.map(l => `<div class="linha${l[2] ? ' alvo' : ''}"><span>${l[0]}</span>${l[1]}</div>`).join('')}</div></div>`;
+  const conf = bt => `<div class="gt">${pag}<div class="conf"><div class="app"><img src="/app/icone-192.png" alt=""><span>Base FL<small>basefl.com</small></span></div><div class="bts"><em>Cancelar</em><em class="alvo">${bt}</em></div></div></div>`;
+  const casa = `<div class="gt"><div class="casa"><i></i><i></i><i></i><i></i><i></i><span><img src="/app/icone-192.png" alt="">Base FL</span><i></i><i></i></div></div>`;
+  const NAV = P.ios ? 'Safari' : 'Chrome';
+  // os passos mudam conforme o aparelho. Link aberto dentro do Instagram/TikTok: primeiro tem que ir para o navegador.
+  const PASSOS = P.dentro ? [
+    ['Toque nos três pontinhos', 'Ficam no canto de cima da tela, neste app em que você está agora.', and(true)],
+    ['Escolha “Abrir no navegador”', 'Pode aparecer como “Abrir no ' + NAV + '” ou “Abrir no navegador externo”. A página abre de novo, e lá aparece o botão de instalar.', folha([['Copiar link', ''], ['Abrir no navegador', ic.fora, 1], ['Compartilhar', '']], true)],
+  ] : P.ios ? [
+    ['Toque em Compartilhar', 'É o quadradinho com a seta para cima, na barra do navegador.', ios(true)],
+    ['Escolha “Adicionar à Tela de Início”', 'Se não aparecer de primeira, role a lista um pouco para baixo.', folha([['Copiar', ''], ['Adicionar à Tela de Início', ic.mais, 1], ['Adicionar aos Favoritos', '']])],
+    ['Toque em Adicionar', 'Fica no canto de cima da tela. Não precisa mudar o nome.', conf('Adicionar')],
+    ['Pronto. O ícone está na sua tela', 'Abra o Base FL por ele e entre com o e-mail da compra.', casa],
+  ] : [
+    ['Toque nos três pontinhos', 'Ficam no canto de cima do navegador.', and(true)],
+    ['Escolha “Adicionar à tela inicial”', 'Em alguns celulares aparece como “Instalar app”.', folha([['Nova guia', ''], ['Adicionar à tela inicial', ic.casa, 1], ['Configurações', '']], true)],
+    ['Toque em Instalar', 'O celular pede uma confirmação. É só confirmar.', conf('Instalar')],
+    ['Pronto. O ícone está na sua tela', 'Abra o Base FL por ele e entre com o e-mail da compra.', casa],
+  ];
+  let at = 0, mexeu = false, relogio = null;
+  $('g-p').innerHTML = PASSOS.map(() => '<i></i>').join('');
+  function passo(i){
+    at = Math.max(0, Math.min(PASSOS.length - 1, i));
+    $('g-n').textContent = 'Passo ' + (at + 1) + ' de ' + PASSOS.length;
+    $('g-t').textContent = PASSOS[at][0]; $('g-d').textContent = PASSOS[at][1]; $('g-tela').innerHTML = PASSOS[at][2];
+    [...$('g-p').children].forEach((e, k) => e.classList.toggle('on', k <= at));
+    $('g-volta').disabled = at === 0;
+    const fim = at === PASSOS.length - 1;
+    $('g-vai').textContent = !fim ? 'Próximo' : P.dentro ? 'Copiar o link' : 'Ver de novo';
+  }
+  const para = () => { mexeu = true; clearInterval(relogio); };
+  $('g-volta').onclick = () => { para(); passo(at - 1); };
+  $('g-vai').onclick = async () => {
+    para();
+    if (at < PASSOS.length - 1) return passo(at + 1);
+    if (P.dentro){ $('g-vai').textContent = (await P.copia('https://basefl.com/instalar/')) ? 'Link copiado. Cole no ' + NAV : 'basefl.com/instalar'; return; }
+    passo(0);
   };
-  const C = window.CATALOGO, ja = document.getElementById('ja');
-  if (C && C.produtos) ja.innerHTML = C.produtos.filter(p => p.url).map(p => '<a href="' + p.url + '"><img src="/icones/' + p.key + '-64.png" alt="" width="40" height="40" loading="lazy">' + p.nome + '</a>').join('');
-  else ja.closest('section').hidden = true;
+  // arrastar o dedo para os lados também troca de passo
+  let x0 = null; const tela = $('g-tela');
+  tela.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+  tela.addEventListener('touchend', e => { if (x0 == null) return; const d = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(d) > 40){ para(); passo(at + (d < 0 ? 1 : -1)); } }, { passive: true });
+  function estado(){
+    const ok = P.instalado(), direto = !ok && P.direto();
+    $('c-ok').hidden = !ok; $('c-inst').hidden = !direto; $('guia').hidden = ok || direto; $('c-sem').hidden = ok;
+    clearInterval(relogio);
+    if (!$('guia').hidden && !mexeu && !matchMedia('(prefers-reduced-motion: reduce)').matches) relogio = setInterval(() => passo((at + 1) % PASSOS.length), 4200);
+  }
+  $('c-inst').onclick = async () => { const r = await P.instala(); if (r === 'manual') mexeu = false; estado(); };
+  P.aoMudar(estado); passo(0); estado();
+  // o que é de celular e o que é de computador
+  const C = window.CATALOGO;
+  if (C && C.produtos){
+    $('ja').innerHTML = C.produtos.filter(p => p.url && !p.bonus).map(p => '<a href="/app/"><img src="/icones/' + p.key + '-64.png" alt="" width="40" height="40" loading="lazy">' + p.nome + '</a>').join('');
+    $('sopc').innerHTML = C.produtos.filter(p => !p.url).map(p => '<span><img src="/icones/' + p.key + '-64.png" alt="" width="30" height="30" loading="lazy">' + p.nome + '</span>').join('');
+  }
+  $('m-pc').onclick = async () => {
+    const b = $('m-pc'), link = 'https://basefl.com/instalar/';
+    if (navigator.share){ await P.manda('Instalar o Base FL no computador', 'Abrir no computador para instalar o Base FL:', link); return; }
+    b.textContent = (await P.copia(link)) ? 'Link copiado. Cole numa conversa sua e abra no computador.' : link;
+  };
 }
 
 // ----- Mac / Windows -----
