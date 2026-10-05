@@ -53,177 +53,88 @@
     if (sp) { if (CFG.LINK_SUPORTE && CFG.LINK_SUPORTE !== "#") sp.href = CFG.LINK_SUPORTE; else sp.remove(); }
   }
 
-  /* ---------- 2. Motor de títulos animados ---------- */
-  var esc = function (s) { return s.replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
-  function build(el, style, text) {
-    el.className = el.className.replace(/\bs-\S+/g, "").replace(/\b(on|out)\b/g, "").trim() + " s-" + style;
-    var html = "", wi = 0, k = 0;
-    text.split("|").forEach(function (line, l) {
-      html += '<span class="ln" style="--l:' + l + '">';
-      if (style === "type") {
-        Array.prototype.forEach.call(line, function (ch) {
-          html += '<span class="c" style="--k:' + (k++) + '">' + (ch === " " ? "&nbsp;" : esc(ch)) + "</span>";
-        });
-        html += '<span class="caret"></span>';
-      } else {
-        line.split(" ").forEach(function (w) {
-          var cls = "", m = w.match(/^~([a-z])(?:\^([a-z]))?:(.*)$/);
-          if (m) { cls = " f-" + m[1] + (m[2] ? " c-" + m[2] : ""); w = m[3]; }
-          var hl = /^\*.*\*$/.test(w); w = w.replace(/\*/g, "");
-          var inner = style === "fwave" ? Array.prototype.map.call(w, function (ch) { return '<span class="c" style="--k:' + (k++) + '">' + esc(ch) + "</span>"; }).join("") : esc(w);
-          html += '<span class="w' + (hl ? " hl" : "") + cls + '" style="--i:' + (wi++) + '"><span class="wi">' + inner + "</span></span> ";
-        });
-      }
-      html += "</span>";
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  function evento(nome, extra) { try { var o = { event: nome, produto: "titulos_dinamicos" }; for (var k in (extra || {})) o[k] = extra[k]; (window.dataLayer = window.dataLayer || []).push(o); } catch (e) {} }
+
+  /* ---------- 2. Galeria dos estilos: o editor, agora de tocar ----------
+     PARA TROCAR OU ACRESCENTAR UM ESTILO: mexa só nesta lista.
+     nome · tipo · arquivo (o mesmo nome em assets/videos/*.mp4 e assets/images/posters/*.jpg) · cor do estilo */
+  var ESTILOS = [
+    ["Bold Template",     "Título",           "titulo-bold-template",   "#d9d06a"],
+    ["Clássico Fernando", "Título",           "titulo-classico",        "#d8d4cc"],
+    ["Script Rosa",       "Título",           "titulo-legendas-script", "#f3a5d6"],
+    ["Neon",              "Título",           "titulo-neon-prontos",    "#3fd5f2"],
+    ["Errado × Certo",    "Gancho",           "gancho-errado-certo",    "#62e36f"],
+    ["Mensagem Serifada", "Gancho",           "gancho-mensagem",        "#ff9a4d"],
+    ["Duas Linhas",       "Destaque de fala", "legenda-duas-linhas",    "#5fe0ea"]
+  ];
+  function galeria() {
+    var box = $("#gal"), v = $("#galVideo"); if (!box || !v) return;
+    var list = $("#galList"), clips = $("#galClips"), tag = $("#galTag"), nome = $("#galNome"), tipo = $("#galTipo"), pp = $("#galPP"), frame = $("#galFrame");
+    var nEl = $("#galN"); if (nEl) nEl.textContent = ESTILOS.length;
+    var num = function (i) { return (i < 9 ? "0" : "") + (i + 1); };
+    list.innerHTML = ESTILOS.map(function (e, i) {
+      return '<button type="button" role="tab" id="galT' + i + '" aria-selected="false" aria-controls="galFrame" tabindex="-1" style="--c:' + e[3] + '"><i>' + num(i) + "</i><span><b>" + esc(e[0]) + "</b><small>" + esc(e[1]) + "</small></span></button>";
+    }).join("");
+    // a faixa de texto da timeline também é controle (no celular é o controle principal)
+    clips.innerHTML = ESTILOS.map(function (e, i) { return '<button type="button" class="clip" tabindex="-1" style="--c:' + e[3] + '"><i>' + num(i) + "</i>" + esc(e[0]) + "</button>"; }).join("");
+    var tabs = $$("button", list), cl = $$(".clip", clips), cur = -1, auto = true, visivel = false, pausado = false, capas = false;
+    function arq(i, capa) { return capa ? "assets/images/posters/" + ESTILOS[i][2] + ".jpg" : "assets/videos/" + ESTILOS[i][2] + ".mp4"; }
+    function toca() { if (pausado || !visivel) return; var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+    function vai(i, dedo) {
+      i = (i + ESTILOS.length) % ESTILOS.length;
+      if (dedo) { auto = false; pausado = false; box.classList.remove("pausado"); pp.setAttribute("aria-label", "Pausar"); evento("estilo_visto", { estilo: ESTILOS[i][0] }); }
+      if (i === cur) { try { v.currentTime = 0; } catch (e) {} toca(); return; }
+      cur = i; var e = ESTILOS[i];
+      box.style.setProperty("--c", e[3]);
+      tabs.forEach(function (b, k) { var on = k === i; b.setAttribute("aria-selected", on ? "true" : "false"); b.tabIndex = on ? 0 : -1; });
+      cl.forEach(function (c, k) { c.classList.toggle("on", k === i); c.style.setProperty("--p", "0%"); });
+      tag.textContent = num(i) + " · " + e[1]; nome.textContent = e[0]; tipo.textContent = e[1];
+      frame.classList.remove("troca"); void frame.offsetWidth; frame.classList.add("troca");
+      v.poster = arq(i, true); v.src = arq(i); v.load(); toca();
+      // no celular a faixa rola sozinha até o estilo escolhido (sem puxar a página)
+      var c = cl[i]; if (c && clips.scrollWidth > clips.clientWidth + 4) clips.scrollTo({ left: c.offsetLeft - (clips.clientWidth - c.offsetWidth) / 2, behavior: "smooth" });
+    }
+    v.addEventListener("timeupdate", function () { if (cl[cur] && v.duration) cl[cur].style.setProperty("--p", Math.min(100, v.currentTime / v.duration * 100) + "%"); });
+    // sozinha, a galeria passa de estilo em estilo; depois do primeiro toque, fica no estilo que a pessoa escolheu
+    v.addEventListener("ended", function () { if (auto) vai(cur + 1); else { try { v.currentTime = 0; } catch (e) {} toca(); } });
+    tabs.forEach(function (b, i) { b.addEventListener("click", function () { vai(i, true); }); });
+    cl.forEach(function (c, i) { c.addEventListener("click", function () { vai(i, true); }); });
+    list.addEventListener("keydown", function (e) {
+      var d = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : e.key === "ArrowUp" || e.key === "ArrowLeft" ? -1 : 0;
+      if (e.key === "Home") { e.preventDefault(); vai(0, true); tabs[0].focus(); return; }
+      if (e.key === "End") { e.preventDefault(); vai(ESTILOS.length - 1, true); tabs[cur].focus(); return; }
+      if (!d) return; e.preventDefault(); vai(cur + d, true); tabs[cur].focus();
     });
-    el.innerHTML = html;
-    fit(el);
-    el._dur = style === "karaoke" ? wi * 420 + 1400 : style === "fword" ? wi * 230 + 1900 : (style === "type" || style === "fwave") ? k * 55 + 1900 : 2600 + wi * 90;
-  }
-  // Encaixa o título na largura: se uma palavra não couber, reduz a fonte só daquele título
-  function fit(el) {
-    el.style.fontSize = "";
-    var avail = el.clientWidth; if (!avail) return;
-    for (var n = 0; n < 6; n++) {
-      var widest = 0;
-      $$(".w", el).forEach(function (w) { widest = Math.max(widest, w.offsetWidth); });
-      if (widest <= avail * 0.94) break;
-      el.style.fontSize = (parseFloat(getComputedStyle(el).fontSize) * avail * 0.94 / widest) + "px";
-    }
-  }
-  function refit() { $$(".kt").forEach(function (el) { if (el.innerHTML) fit(el); }); }
-  if (document.fonts) { if (document.fonts.ready) document.fonts.ready.then(refit); if (document.fonts.addEventListener) document.fonts.addEventListener("loadingdone", refit); }
-  window.addEventListener("load", function () { refit(); setTimeout(refit, 1200); });
-  var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(refit, 150); });
-
-  function play(el) {
-    el.classList.remove("on", "out");
-    void el.offsetWidth;
-    el.classList.add("on");
-  }
-  // Cada card da biblioteca repete a própria animação enquanto está na tela
-  function loopCard(el) {
-    if (el._t) return;
-    var tick = function () {
-      el.classList.add("out");
-      el._t2 = setTimeout(function () { play(el); el._t = setTimeout(tick, el._dur); }, 380);
-    };
-    play(el);
-    el._t = setTimeout(tick, el._dur);
-  }
-  function stopCard(el) { clearTimeout(el._t); clearTimeout(el._t2); el._t = null; }
-
-  /* ---------- 3. Hero: editor com painel de títulos e timeline ---------- */
-  // Sequência do vídeo do topo (3,3 s por título, na mesma ordem do arquivo hero-titulos.mp4)
-  var HERO = ["Bold Template", "Neon", "Itálico Rápido", "Script Rosa", "Nome em Vermelho"], SEG = 3.3;
-  function hero() {
-    var v = $("#heroVideo"), list = $("#heroList"), clips = $("#heroClips"), head = $("#heroHead"), tag = $("#heroTag");
-    if (!v) return;
-    list.innerHTML = HERO.map(function (n) { return "<li><i>Aa</i>" + esc(n) + "</li>"; }).join("");
-    clips.innerHTML = HERO.map(function (n) { return '<span class="clip">' + esc(n) + "</span>"; }).join("");
-    var items = $$("li", list), cl = $$(".clip", clips), cur = -1;
-    function mark(i) {
-      if (i === cur) return; cur = i;
-      tag.textContent = HERO[i];
-      items.forEach(function (li, k) { li.classList.toggle("on", k === i); });
-      cl.forEach(function (c, k) { c.classList.toggle("on", k === i); });
-      var c = cl[i]; if (c) head.style.left = (c.offsetLeft + 14 + c.offsetWidth * 0.5) + "px";
-    }
-    mark(0);
-    v.addEventListener("timeupdate", function () { mark(Math.min(HERO.length - 1, Math.floor(v.currentTime / SEG))); });
-    if (reduce) return;
-    new IntersectionObserver(function (en) {
-      if (en[0].isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause();
-    }, { threshold: .2 }).observe($(".stage"));
+    pp.addEventListener("click", function () { pausado = !pausado; box.classList.toggle("pausado", pausado); pp.setAttribute("aria-label", pausado ? "Tocar" : "Pausar"); if (pausado) v.pause(); else toca(); });
+    // nada baixa antes de a galeria chegar perto da tela
+    function prepara() { if (capas) return; capas = true; ESTILOS.forEach(function (e, i) { var im = new Image(); im.src = arq(i, true); }); vai(0); }
+    if (!("IntersectionObserver" in window)) { visivel = true; prepara(); return; }
+    new IntersectionObserver(function (en) { if (en[0].isIntersecting) prepara(); }, { rootMargin: "500px 0px" }).observe(box);
+    new IntersectionObserver(function (en) { visivel = en[0].isIntersecting; if (visivel) toca(); else v.pause(); }, { threshold: .25 }).observe(frame);
   }
 
-  /* ---------- 4. Biblioteca: mídias reais, filtros e "ver mais" ---------- */
-  function library() {
-    var lib = $("#lib"); if (!lib) return;
-    var cards = $$(".preset", lib);
-    cards.forEach(function (card, i) {
-      var media = $(".preset-media", card), v = card.dataset.video, g = card.dataset.gif, im = card.dataset.img;
-      var kt = $(".kt", card);
-      if (v) {
-        var vid = document.createElement("video");
-        vid.muted = true; vid.loop = true; vid.playsInline = true; vid.preload = "none"; if (card.dataset.poster) vid.poster = card.dataset.poster;
-        vid.setAttribute("aria-label", ($(".preset-name", card) || {}).textContent || "Prévia do preset");
-        var src = document.createElement("source"); src.src = v; src.type = /\.webm$/i.test(v) ? "video/webm" : "video/mp4";
-        vid.appendChild(src); media.appendChild(vid); if (kt) kt.remove(); card._video = vid;
-      } else if (g || im) {
-        var img = document.createElement("img"); img.className = "media"; img.loading = "lazy"; img.decoding = "async";
-        img.src = g || im; img.alt = "Prévia do estilo " + (($(".preset-name", card) || {}).textContent || "");
-        media.appendChild(img); if (kt) kt.remove();
-      } else if (kt) {
-        build(kt, kt.dataset.style, kt.dataset.text);
-      }
-    });
-    // mostra 12 por vez; o botão carrega os próximos (os vídeos só tocam quando aparecem)
-    var POR = 12, vistos = POR, filtro = "all", more = $("#libMore"), nEl = $("#libN");
-    if (nEl) nEl.textContent = cards.length;
-    // contagem em cada filtro ("Títulos · 6")
-    var completa = !!CFG.QUANTIDADE_EXATA && cards.length === +CFG.QUANTIDADE_DE_PRESETS;      // só conta quando a galeria tem o pack inteiro
-    var hLib = $("#h-lib"); if (completa && hLib) hLib.textContent = "Os " + cards.length + " estilos do pack, em movimento.";
-    $$(".tabs button").forEach(function (b) { var i = $("[data-n]", b); if (!i) return; if (!completa) { i.remove(); return; } var f = b.dataset.filter;
-      i.textContent = " · " + cards.filter(function (c) { return f === "all" || c.dataset.cat === f; }).length; });
-    function pinta() {
-      var n = 0;
-      cards.forEach(function (c) { var ok = filtro === "all" || c.dataset.cat === filtro; if (ok) n++; c.hidden = !ok || (filtro === "all" && n > vistos); });
-      if (more) more.parentNode.style.display = filtro === "all" && cards.length > vistos ? "" : "none";
-    }
-    pinta();
-    // anima só o que está na tela
-    var io = new IntersectionObserver(function (en) {
-      en.forEach(function (e) {
-        var card = e.target, kt = $(".kt", card);
-        if (card._video) { if (e.isIntersecting) card._video.play().catch(function () {}); else card._video.pause(); return; }
-        if (!kt) return;
-        if (reduce) { kt.classList.add("on"); return; }
-        if (e.isIntersecting) loopCard(kt); else stopCard(kt);
-      });
-    }, { threshold: .35 });
-    cards.forEach(function (c) { io.observe(c); });
-
-    if (more) more.addEventListener("click", function () { vistos += POR; pinta(); });
-    $$(".tabs button").forEach(function (b) {
-      b.addEventListener("click", function () {
-        $$(".tabs button").forEach(function (x) { x.setAttribute("aria-selected", x === b ? "true" : "false"); });
-        filtro = b.dataset.filter; pinta();
-      });
-    });
-  }
-
-  /* ---------- 5. Calculadora de tempo (números do próprio visitante) ---------- */
-  function calc() {
-    var iV = $("#iV"), iT = $("#iT"), iM = $("#iM"); if (!iV) return;
-    function fill(r) { r.style.setProperty("--p", ((r.value - r.min) / (r.max - r.min) * 100) + "%"); }
-    function upd() {
-      var v = +iV.value, t = +iT.value, m = +iM.value;
-      $("#oV").textContent = v; $("#oT").textContent = t; $("#oM").textContent = m;
-      var titulos = Math.round(v * t * 52 / 12), min = titulos * m, h = Math.floor(min / 60), r = min % 60;
-      var txt = h ? h + "h" + (r ? String(r).padStart(2, "0") : "") : r + " min";
-      $("#oH").textContent = txt;
-      // na oferta, o número vai arredondado: meia hora mais próxima; abaixo de 1h, de 10 em 10 minutos
-      var eco = $("#calcEco");
-      if (eco && mexeu) {
-        var red;
-        if (min < 60) { red = Math.max(10, Math.round(min / 10) * 10); red = red >= 60 ? "1h" : red + " min"; }
-        else { var meias = Math.round(min / 30); red = Math.floor(meias / 2) + "h" + (meias % 2 ? "30" : ""); }
-        $("#calcEcoH").textContent = red; eco.hidden = false;
-      }
-      $("#oN").textContent = "São cerca de " + titulos + " títulos criados do zero.";
-      [iV, iT, iM].forEach(fill);
-    }
-    var mexeu = false;
-    [iV, iT, iM].forEach(function (r) { r.addEventListener("input", function () { mexeu = true; upd(); }); });
-    upd();
+  /* ---------- 3. Trecho da aula: o endereço vem do config.js. Vazio, fica o quadro "em breve". ---------- */
+  function aula() {
+    var tela = $("#aulaTela"); if (!tela || !CFG.VIDEO_TRECHO_AULA) return;
+    var v = document.createElement("video");
+    v.controls = true; v.playsInline = true; v.preload = "none"; v.setAttribute("playsinline", "");
+    if (CFG.CAPA_TRECHO_AULA) v.poster = CFG.CAPA_TRECHO_AULA; else v.preload = "metadata";
+    v.setAttribute("aria-label", "Trecho da aula de instalação e uso");
+    // vídeo em pé (9:16) ou deitado (16:9): o quadro se ajusta ao arquivo
+    v.addEventListener("loadedmetadata", function () { if (v.videoWidth && v.videoHeight) tela.style.aspectRatio = v.videoWidth + " / " + v.videoHeight; tela.classList.toggle("em-pe", v.videoHeight > v.videoWidth); });
+    v.addEventListener("play", function () { evento("aula_trecho_play"); }, { once: true });
+    v.addEventListener("error", function () { tela.classList.remove("tem"); v.remove(); });       // endereço errado: volta o quadro "em breve"
+    v.src = CFG.VIDEO_TRECHO_AULA;
+    tela.appendChild(v); tela.classList.add("tem");
   }
 
   /* ---------- 6. Entrada das seções ao rolar ---------- */
   function reveals() {
-    $$(".lane-clips li, .flow li").forEach(function (li) {
+    $$(".lane-clips li, .flow li, .rota li, .sem-d i").forEach(function (li) {
       li.style.setProperty("--i", Array.prototype.indexOf.call(li.parentNode.children, li));
     });
+    $$(".sem-d i").forEach(function (b, k) { b.style.setProperty("--i", k); });       // os blocos da semana entram em fila, de segunda a sexta
     var els = $$(".reveal, .compare, .flow, .laptop");
     if (reduce || !("IntersectionObserver" in window)) { els.forEach(function (e) { e.classList.add("in"); }); return; }
     var io = new IntersectionObserver(function (en) {
@@ -233,15 +144,15 @@
   }
 
   /* ---------- 7. Topo e barra fixa de compra ----------
-     A barra só aparece depois que o comparador saiu da tela (ou o topo, se o comparador ainda não tem vídeo).
+     A barra só aparece depois que o topo (com o comparador) saiu da tela.
      O botão dela leva para a oferta; depois que a oferta já foi vista, leva direto para o checkout. */
   function chrome() {
-    var top = $(".top"), sticky = $("#sticky"), heroEl = $(".hero"), cmp = $("#comparar"), offer = $("#oferta"), fin = $(".sec-final");
+    var top = $(".top"), sticky = $("#sticky"), heroEl = $(".hero"), offer = $("#oferta"), fin = $(".sec-final");
     var a = sticky && $("a", sticky), viuOferta = false, state = { offer: false, fin: false };
     function upd() {
       top.classList.toggle("scrolled", window.scrollY > 8);
       if (!sticky) return;
-      var ref = cmp && !cmp.hidden ? cmp : heroEl;
+      var ref = heroEl;
       var show = ref.getBoundingClientRect().bottom < 0 && !state.offer && !state.fin;
       sticky.classList.toggle("show", show);
       sticky.setAttribute("aria-hidden", show ? "false" : "true");
@@ -254,7 +165,7 @@
         if (e.target === offer) {
           state.offer = e.isIntersecting;
           if (e.isIntersecting && !viuOferta && a) {
-            viuOferta = true; a.setAttribute("href", checkoutHref()); a.textContent = "Liberar o pack";
+            viuOferta = true; a.setAttribute("href", checkoutHref()); a.textContent = "Quero o pack";
             a.addEventListener("click", function () { try { (window.dataLayer = window.dataLayer || []).push({ event: "cta_checkout", produto: "titulos_dinamicos", origem: "barra" }); } catch (x) {} });
           }
         } else state.fin = e.isIntersecting;
@@ -310,81 +221,73 @@
     loop();
   }
 
-  /* ---------- Antes e depois: comparador de arrastar com dois vídeos em sincronia ---------- */
-  function existe(url) {
-    return fetch(url, { method: "HEAD" }).then(function (r) {
-      return r.ok && !/text\/html/i.test(r.headers.get("content-type") || "");
-    }).catch(function () { return false; });
-  }
+  /* ---------- Sem x com os títulos: comparador de arrastar, dois vídeos em sincronia, no topo da página ---------- */
   function antesDepois() {
-    var sec = $("#comparar"), box = $("#ba"), ver = $("[data-ver]");
-    if (ver) ver.setAttribute("href", "#biblioteca");          // até confirmar que há vídeo
-    if (!sec || !box || !CFG.VIDEO_SEM_PACK || !CFG.VIDEO_COM_PACK) return;
-    var previa = /[?&]previa=1/.test(location.search);
-    var p = { antes: CFG.VIDEO_SEM_PACK, depois: CFG.VIDEO_COM_PACK, capaA: CFG.CAPA_SEM_PACK, capaD: CFG.CAPA_COM_PACK, legenda: CFG.LEGENDA_COMPARADOR };
-    Promise.all([existe(p.antes), existe(p.depois), p.capaA ? existe(p.capaA) : false, p.capaD ? existe(p.capaD) : false]).then(function (ok) {
-      p.ok = ok[0] && ok[1]; if (!ok[2]) p.capaA = ""; if (!ok[3]) p.capaD = "";
-      if (!p.ok && !previa) return;
-      box.appendChild(comparador(p));
-      sec.hidden = false; if (ver) ver.setAttribute("href", "#comparar");
-    });
+    var box = $("#ba"); if (!box || !CFG.VIDEO_SEM_PACK || !CFG.VIDEO_COM_PACK) return;
+    box.appendChild(comparador({ antes: CFG.VIDEO_SEM_PACK, depois: CFG.VIDEO_COM_PACK, capaA: CFG.CAPA_SEM_PACK, capaD: CFG.CAPA_COM_PACK, legenda: CFG.LEGENDA_COMPARADOR }));
   }
   function comparador(p) {
     var fig = document.createElement("figure"); fig.className = "cmp";
     var palco = document.createElement("div"); palco.className = "cmp-palco"; palco.style.setProperty("--x", "50%");
-    function lado(src, cls, rot, marca, capa) {
+    function lado(src, cls, rot, capa) {
       var d = document.createElement("div"); d.className = "cmp-lado " + cls;
-      if (p.ok) {
-        // o arquivo só começa a baixar quando a seção chega perto da tela (ver "carrega" abaixo)
-        var v = document.createElement("video"); v.muted = true; v.loop = true; v.playsInline = true; v.preload = "none"; v.dataset.src = src; if (capa) v.poster = capa;
-        v.setAttribute("muted", ""); v.setAttribute("playsinline", "");
-        v.setAttribute("aria-hidden", "true"); v.tabIndex = -1; d.appendChild(v); d._v = v;
-      } else { d.classList.add("vazio"); d.innerHTML = "<code>" + marca + "</code>"; }
+      // a capa aparece na hora; o arquivo do vídeo só começa a baixar depois que a página terminou de carregar (ver "carrega")
+      var v = document.createElement("video"); v.muted = true; v.loop = true; v.playsInline = true; v.preload = "none"; v.dataset.src = src; if (capa) v.poster = capa;
+      v.setAttribute("muted", ""); v.setAttribute("playsinline", ""); v.setAttribute("aria-hidden", "true"); v.tabIndex = -1; d.appendChild(v); d._v = v;
       var t = document.createElement("span"); t.className = "cmp-tag"; t.textContent = rot; d.appendChild(t);
       return d;
     }
-    var a = lado(p.antes, "antes", "Sem o pack", "sem-pack.mp4", p.capaA), d = lado(p.depois, "depois", "Com o pack", "com-pack.mp4", p.capaD);
+    var a = lado(p.antes, "antes", "Sem", p.capaA), d = lado(p.depois, "depois", "Com os títulos", p.capaD);
     var linha = document.createElement("span"); linha.className = "cmp-linha"; linha.innerHTML = '<i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6"/></svg></i>';
     // o controle de verdade é um range (teclado e leitor de tela); o arrasto com dedo/mouse mexe nele
     var rng = document.createElement("input"); rng.type = "range"; rng.min = 0; rng.max = 100; rng.value = 50; rng.className = "cmp-rng";
-    rng.setAttribute("aria-label", "Arraste para comparar o vídeo sem o pack e com o pack");
+    rng.setAttribute("aria-label", "Arraste para comparar o vídeo sem os títulos e com os títulos");
     var pp = document.createElement("button"); pp.type = "button"; pp.className = "cmp-pp"; pp.setAttribute("aria-label", "Pausar");
     pp.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path class="pa" d="M8 5v14M16 5v14"/><path class="pl" d="M8 5l11 7-11 7z"/></svg>';
-    palco.appendChild(a); palco.appendChild(d); palco.appendChild(linha); palco.appendChild(rng); palco.appendChild(pp);
+    var som = document.createElement("button"); som.type = "button"; som.className = "cmp-som"; som.setAttribute("aria-pressed", "false");
+    som.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path class="on" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.8 7.8 0 0 1 0 11"/><path class="off" d="M16 9.5l5 5M21 9.5l-5 5"/></svg><span>Ouvir</span>';
+    palco.appendChild(a); palco.appendChild(d); palco.appendChild(linha); palco.appendChild(rng); palco.appendChild(pp); palco.appendChild(som);
     fig.appendChild(palco);
     var cap = document.createElement("figcaption"); cap.className = "cmp-cap";
-    cap.innerHTML = '<span class="cmp-dica"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6"/></svg>Arraste a linha</span>' + (p.legenda ? "<span>" + esc(p.legenda) + "</span>" : "");
+    cap.innerHTML = '<span class="cmp-dica"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6"/></svg>O mesmo vídeo · arraste a linha</span>' + (p.legenda ? "<span>" + esc(p.legenda) + "</span>" : "");
     fig.appendChild(cap);
 
     var mexeu = false;
     function poe(x) { x = Math.max(0, Math.min(100, x)); rng.value = x; palco.style.setProperty("--x", x + "%"); }
-    rng.addEventListener("input", function () { mexeu = true; fig.classList.add("usado"); poe(+rng.value); });
-    // arrasto direto no palco (o range por cima cuida do toque; isto cobre o clique em qualquer ponto)
+    function usou() { if (!mexeu) evento("comparador_arrastado"); mexeu = true; fig.classList.add("usado"); }
+    rng.addEventListener("input", function () { usou(); poe(+rng.value); });
+    // arrasto direto no palco: vale o toque em qualquer ponto. Na vertical o dedo continua rolando a página (touch-action: pan-y).
     var arr = false;
     function pos(e) { var r = palco.getBoundingClientRect(); poe((e.clientX - r.left) / r.width * 100); }
-    palco.addEventListener("pointerdown", function (e) { if (e.target === pp || pp.contains(e.target)) return; arr = true; mexeu = true; fig.classList.add("usado"); try { palco.setPointerCapture(e.pointerId); } catch (x) {} pos(e); });
+    function botao(e) { return pp.contains(e.target) || som.contains(e.target); }
+    palco.addEventListener("pointerdown", function (e) { if (botao(e)) return; arr = true; usou(); try { palco.setPointerCapture(e.pointerId); } catch (x) {} pos(e); });
     palco.addEventListener("pointermove", function (e) { if (arr) pos(e); });
     ["pointerup", "pointercancel"].forEach(function (n) { palco.addEventListener(n, function () { arr = false; }); });
 
-    var va = a._v, vd = d._v, pausado = false, visto = false, carregado = false;
-    function carrega() { if (carregado || !va) return; carregado = true; [va, vd].forEach(function (v) { v.src = v.dataset.src; v.preload = "auto"; v.load(); }); }
-    if (va && "IntersectionObserver" in window) { var pre = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { carrega(); pre.disconnect(); } }, { rootMargin: "700px 0px" }); pre.observe(palco); } else carrega();
-    function toca(f) { if (!va || pausado || (reduce && !f)) return; carrega(); [vd, va].forEach(function (v) { var q = v.play(); if (q && q.catch) q.catch(function () {}); }); }
-    function para() { if (va) { vd.pause(); va.pause(); } }
-    if (va) {
-      // o "depois" manda; o "antes" acompanha (corrige se desgarrar mais de 2 quadros)
-      vd.addEventListener("timeupdate", function () { if (Math.abs(va.currentTime - vd.currentTime) > .08) { try { va.currentTime = vd.currentTime; } catch (e) {} } });
-      vd.addEventListener("seeked", function () { try { va.currentTime = vd.currentTime; } catch (e) {} });
-      pp.addEventListener("click", function () { pausado = !pausado; fig.classList.toggle("pausado", pausado); pp.setAttribute("aria-label", pausado ? "Tocar" : "Pausar"); if (pausado) para(); else toca(true); });
-      if (reduce) { pausado = true; fig.classList.add("pausado"); pp.setAttribute("aria-label", "Tocar"); }
-    } else pp.hidden = true;
+    var va = a._v, vd = d._v, pausado = false, visto = false, carregado = false, naTela = false;
+    function carrega() { if (carregado) return; carregado = true; [va, vd].forEach(function (v) { v.src = v.dataset.src; v.preload = "auto"; v.load(); }); if (naTela) toca(); }
+    function toca(f) { if (pausado && !f) return; carrega(); [vd, va].forEach(function (v) { var q = v.play(); if (q && q.catch) q.catch(function () {}); }); }
+    function para() { vd.pause(); va.pause(); }
+    // o "com" manda; o "sem" acompanha (corrige se desgarrar mais de 2 quadros)
+    vd.addEventListener("timeupdate", function () { if (Math.abs(va.currentTime - vd.currentTime) > .08) { try { va.currentTime = vd.currentTime; } catch (e) {} } });
+    vd.addEventListener("seeked", function () { try { va.currentTime = vd.currentTime; } catch (e) {} });
+    pp.addEventListener("click", function () { pausado = !pausado; fig.classList.toggle("pausado", pausado); pp.setAttribute("aria-label", pausado ? "Tocar" : "Pausar"); if (pausado) para(); else toca(true); });
+    // som: o áudio é o do vídeo "com". Ligar o som recomeça do início, para a fala fazer sentido.
+    som.addEventListener("click", function () {
+      var liga = vd.muted; vd.muted = !liga; if (liga) vd.removeAttribute("muted");
+      som.setAttribute("aria-pressed", liga ? "true" : "false"); fig.classList.toggle("com-som", liga); som.lastChild.textContent = liga ? "Som ligado" : "Ouvir";
+      if (liga) { evento("comparador_som"); pausado = false; fig.classList.remove("pausado"); pp.setAttribute("aria-label", "Pausar"); carrega(); try { vd.currentTime = 0; va.currentTime = 0; } catch (e) {} toca(true); }
+    });
+    // o vídeo começa a baixar quando a página termina de carregar (não disputa com o texto e a capa)
+    if (document.readyState === "complete") setTimeout(carrega, 200); else window.addEventListener("load", function () { setTimeout(carrega, 200); });
     if ("IntersectionObserver" in window) new IntersectionObserver(function (en) {
-      if (en[0].isIntersecting) {
-        toca();
+      naTela = en[en.length - 1].isIntersecting;      // vale a leitura mais recente
+      if (naTela) {
+        if (carregado) toca();
         // na primeira vez, a linha se mexe sozinha para mostrar que dá para arrastar
-        if (!visto && !reduce) { visto = true; var passos = [[400, 32], [1100, 68], [1800, 50]]; passos.forEach(function (s) { setTimeout(function () { if (!mexeu) { palco.classList.add("guia"); poe(s[1]); } }, s[0]); }); setTimeout(function () { palco.classList.remove("guia"); }, 2600); }
-      } else para();
-    }, { threshold: .45 }).observe(palco);
+        if (!visto) { visto = true; [[900, 30], [1650, 70], [2400, 50]].forEach(function (s) { setTimeout(function () { if (!mexeu) { palco.classList.add("guia"); poe(s[1]); } }, s[0]); }); setTimeout(function () { palco.classList.remove("guia"); }, 3200); }
+      } else { para(); if (!vd.muted) som.click(); }       // saiu da tela: para e desliga o som
+    }, { threshold: .3 }).observe(palco); else { naTela = true; }
     return fig;
   }
 
@@ -396,6 +299,6 @@
     var n = 0, t = setInterval(function () { if (confere() || ++n > 10) clearInterval(t); }, 500);
   }
 
-  function init() { applyConfig(); semPrints(); hero(); antesDepois(); library(); calc(); reveals(); chrome(); instalacao(); }
+  function init() { applyConfig(); semPrints(); antesDepois(); aula(); galeria(); reveals(); chrome(); instalacao(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();

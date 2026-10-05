@@ -11,7 +11,7 @@ window.PACK_CONFIG = {
   PRECO: "47",
 
   // Quantidade de estilos do pack.
-  // Enquanto QUANTIDADE_EXATA for false, a página escreve "Mais de 70" / "+70".
+  // Enquanto QUANTIDADE_EXATA for false, a página escreve "+70".
   // Quando você confirmar o número exato, troque o número e mude para true: a página passa a escrever só o número.
   QUANTIDADE_DE_PRESETS: "70",
   QUANTIDADE_EXATA: false,
@@ -24,15 +24,20 @@ window.PACK_CONFIG = {
   // Só preencha com o prazo que está configurado no produto, na Greenn.
   GARANTIA_DIAS: "7",
 
-  // SEM O PACK x COM O PACK (o comparador de arrastar, logo abaixo do topo).
-  // Coloque os dois arquivos em assets/videos/ com estes nomes. A página confere se eles existem:
-  // enquanto faltar algum, a seção não aparece. Para ver o espaço marcado antes disso: ?previa=1
+  // SEM x COM OS TÍTULOS (o comparador de arrastar, no topo da página).
+  // Os dois arquivos ficam em assets/videos/ com estes nomes. Para trocar, substitua os arquivos (mesma duração nos dois).
   VIDEO_SEM_PACK: "assets/videos/sem-pack.mp4",
   VIDEO_COM_PACK: "assets/videos/com-pack.mp4",
   // Capas (a imagem parada que aparece antes do vídeo carregar). Opcional: sem o arquivo, fica um fundo escuro.
   CAPA_SEM_PACK: "assets/images/posters/sem-pack.jpg",
   CAPA_COM_PACK: "assets/images/posters/com-pack.jpg",
   LEGENDA_COMPARADOR: "",   // opcional: uma linha embaixo do comparador
+
+  // TRECHO DA AULA (bloco "Vem com aula", logo abaixo do topo).
+  // Quando o vídeo estiver pronto, cole o endereço dele entre as aspas. Vazio, a página mostra o quadro "em breve".
+  // Ex.: "https://aulas.basefl.com/trecho-aula.mp4"
+  VIDEO_TRECHO_AULA: "",
+  CAPA_TRECHO_AULA: "",     // opcional: imagem parada que aparece antes do play
 
   // QUEM FEZ: uma linha a mais sobre o Fernando (só fatos). Vazia, não aparece.
   // Ex.: "Mais de X alunos no curso." ou "Edita para clientes desde 20XX."

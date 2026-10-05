@@ -1,21 +1,16 @@
-COMPARADOR "SEM O PACK x COM O PACK" (página dos Títulos Dinâmicos)
+COMPARADOR "SEM x COM OS TÍTULOS" (topo da página dos Títulos Dinâmicos)
 
-Coloque os dois arquivos NESTA pasta (assets/videos) com exatamente estes nomes:
+Os dois vídeos ficam NESTA pasta (assets/videos) com exatamente estes nomes:
 
-  sem-pack.mp4    o vídeo SEM nenhum título do pack
-  com-pack.mp4    o MESMO vídeo, COM os títulos do pack
+  sem-pack.mp4    o vídeo SEM os títulos (sem som)
+  com-pack.mp4    o MESMO vídeo, COM os títulos (com o som: é o que toca no botão "Ouvir")
 
-Pronto. O comparador de arrastar aparece sozinho na página, logo abaixo do topo.
-Enquanto os dois arquivos não existirem, a seção fica escondida para o público.
-Para ver o espaço marcado antes disso: basefl.com/conheca/legendas/?previa=1
-
-Capa (opcional): uma imagem parada de cada vídeo, que aparece antes de ele carregar.
+Capas (a imagem parada que aparece antes de o vídeo carregar):
   assets/images/posters/sem-pack.jpg
   assets/images/posters/com-pack.jpg
 
-Para ficar bom:
+Para trocar por outros:
  - vertical (9:16), 720x1280 já basta
  - os dois EXPORTADOS DO MESMO PROJETO, com a MESMA duração
    (eles tocam juntos; se um for mais longo, desencontra)
  - até uns 3 MB cada (MP4 / H.264)
- - na página eles tocam sem som, em repetição
