@@ -500,7 +500,7 @@ function render(){
         <span class="kitx-m">${tem ? '<span class="dot ok"></span>Liberado' : venc ? '<span class="dot err"></span>Acesso vencido' : ''}</span>`;
       const b = document.createElement('div'); b.className = 'btns';
       b.appendChild(btn(tem ? 'Abrir' : 'Experimentar', tem ? 'primary' : 'ghost', () => abreWeb(x.web)));
-      if (tem && window.Aulas && Aulas.tem([x.packId])){ const ba = btn('Ver aula', 'ghost aula', () => Aulas.abre([x.packId], { titulo: x.name, cor: x.cor, dono: true })); ba.disabled = false; ba.dataset.aula = Aulas.progresso([x.packId]).estado; ba.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Ver aula'; b.appendChild(ba); }
+      if (tem && window.Aulas && Aulas.tem([x.packId])){ const ba = btn('Ver aula', 'ghost aula', () => Aulas.abre([x.packId], { titulo: x.name, cor: x.cor, dono: true, abreLink: u => T.opener.openUrl(u) })); ba.disabled = false; ba.dataset.aula = Aulas.progresso([x.packId]).estado; ba.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Ver aula'; b.appendChild(ba); }
       li.appendChild(b); kc.querySelector('.kitx-g').appendChild(li);
     });
   }
@@ -570,7 +570,7 @@ function render(){
     // aula do produto: abre dentro do app, sem sair para outro site
     const packsAula = p.inclui ? [p.packId, ...p.inclui.map(k => PRODUCTS.find(x => x.key === k).packId)] : [p.packId];
     if (owned && window.Aulas && Aulas.tem(packsAula)){
-      const op = { titulo: p.name, cor: p.cor, dono: true }, n = Aulas.progresso(packsAula).total, rot = n > 1 ? 'Aulas' : 'Ver aula';
+      const op = { titulo: p.name, cor: p.cor, dono: true, abreLink: u => T.opener.openUrl(u) }, n = Aulas.progresso(packsAula).total, rot = n > 1 ? 'Aulas' : 'Ver aula';
       const ba = btn(rot, 'ghost aula', () => Aulas.abre(packsAula, op));
       ba.disabled = false; ba.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>' + rot; b.appendChild(ba);
       // padrão Base FL: todo produto com aula mostra o progresso no card, e o card inteiro abre a área de aulas

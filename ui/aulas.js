@@ -20,10 +20,10 @@
     return Promise.resolve(null);
   }
   // colunas novas (módulo e XP) entram com o arquivo 25 do Supabase; sem ele, a lista vem do jeito antigo e tudo continua funcionando
-  var COLS = 'id,pack_id,titulo,descricao,url,capa,duracao,ordem,so_cliente', NOVAS = ',modulo,modulo_desc,modulo_ordem,xp';
+  var COLS = 'id,pack_id,titulo,descricao,url,capa,duracao,ordem,so_cliente', NOVAS = ',modulo,modulo_desc,modulo_ordem,xp', CTA = ',cta_texto,cta_url,cta_segundos,cta_pack,cta_inicio';
   function pede(tok, cols) { return fetch(SUPA.url + '/rest/v1/aulas?select=' + cols + '&ativo=eq.true&order=ordem.asc', { headers: { apikey: SUPA.key, Authorization: 'Bearer ' + (tok || SUPA.key) } }); }
   function busca(tok) {
-    return pede(tok, COLS + NOVAS).then(function (r) { return r.ok ? r : pede(tok, COLS); })
+    return pede(tok, COLS + NOVAS + CTA).then(function (r) { return r.ok ? r : pede(tok, COLS + NOVAS); }).then(function (r) { return r.ok ? r : pede(tok, COLS); })
       .then(function (r) { if (r.ok) return r.json(); if (tok) return busca(null); return []; });
   }
   // módulos cadastrados (tabela aulas_modulos, arquivo 26): dão nome e texto ao módulo e deixam um módulo existir sem aula ("Em breve")
@@ -65,6 +65,22 @@
     mesmas(a).forEach(function (x) { mem.set(chave(x), sim ? 'fim' : '0'); if (!sim) delete srv.feitas[x.id]; });
     avisaProg();
     return token().then(function (tok) { if (!tok) return; return rpc(tok, 'aula_concluir', { p_aula: a.id, p_feita: !!sim }).then(function (j) { recebe(j); if (sim) mesmas(a).forEach(function (x) { mem.set(chave(x), 'fim'); }); avisaProg(); }); }).catch(function () {});
+  }
+  // PARA O DONO CONFERIR: quem já tem o produto não vê a oferta. Abrindo a página com ?oferta=teste no endereço, o botão aparece mesmo assim (só nessa aba).
+  var PREVIA = false; try { if (/[?&]oferta=teste\b/.test(location.search)) sessionStorage.setItem('fl_oferta_teste', '1'); PREVIA = sessionStorage.getItem('fl_oferta_teste') === '1'; } catch (e) {}
+  var tenho = {};      // produto do botão de oferta -> a pessoa já tem?
+  function jaTem(pack) {
+    if (!pack || PREVIA) return Promise.resolve(false); if (pack in tenho) return Promise.resolve(tenho[pack]);
+    try { if (window.Base && window.Base.tem && window.Base.tem(pack)) { tenho[pack] = true; return Promise.resolve(true); } } catch (e) {}
+    return token().then(function (tok) { if (!tok) return false; return rpc(tok, 'tem_licenca', { p_pack: pack }).then(function (r) { tenho[pack] = r === true; return tenho[pack]; }); }).catch(function () { return false; });
+  }
+  // clique no botão de oferta: entra na mesma tabela de eventos do site (checkout_clicked), marcado como vindo da aula
+  function registra(a) {
+    try {
+      if (window.Base && window.Base.evento) { window.Base.evento('checkout_clicked', a.cta_pack || a.pack_id, { de: 'aula', aula: a.id }); return; }
+      var v = mem.get('fl_vis'); if (!v) { v = 'v' + Math.random().toString(36).slice(2, 12) + Date.now().toString(36); mem.set('fl_vis', v); }
+      token().then(function (tok) { fetch(SUPA.url + '/rest/v1/rpc/evento', { method: 'POST', keepalive: true, headers: { apikey: SUPA.key, Authorization: 'Bearer ' + (tok || SUPA.key), 'Content-Type': 'application/json' }, body: JSON.stringify({ p_nome: 'checkout_clicked', p_pack: a.cta_pack || a.pack_id, p_visitante: v, p_dados: { de: 'aula', aula: a.id } }) }).catch(function () {}); });
+    } catch (e) {}
   }
   function xpDe(l) { return l.filter(feita).reduce(function (t, a) { return t + (a.xp == null ? 10 : +a.xp); }, 0); }
   // resumo de um produto (ou de vários juntos): usado nos cards do app, do site e da área de membros
@@ -202,6 +218,19 @@
 .fla-mh p{grid-column:1/-1;margin:4px 0 0;color:#B3B4A2;font-size:14px;line-height:1.5;max-width:64ch}\
 .fla-mh i{grid-column:1/-1;margin-top:10px;height:3px}\
 .fla-cards{display:grid;gap:6px}\
+.fla-cta{position:absolute;right:14px;top:14px;z-index:3;display:flex;align-items:center;gap:12px;max-width:calc(100% - 28px);padding:10px 10px 10px 16px;border-radius:14px;background:rgba(16,19,18,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(var(--k),.55);box-shadow:0 14px 34px -12px #000;color:#F4F0E4;text-decoration:none;opacity:0;transform:translateY(-10px);transition:opacity .45s ease,transform .55s cubic-bezier(.2,.8,.2,1),border-color .2s,background .2s}\
+.fla-cta[hidden]{display:none}\
+.fla-cta.on{opacity:1;transform:none}\
+.fla-cta:hover{background:rgba(22,26,24,.95);border-color:rgb(var(--k))}.fla-cta:focus-visible{outline:2px solid #F4F0E4;outline-offset:2px}\
+.fla-cta span{min-width:0}\
+.fla-cta small{display:block;font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:rgb(var(--k))}\
+.fla-cta b{display:block;margin-top:2px;font-size:15px;font-weight:800;line-height:1.2}\
+.fla-cta i{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgb(var(--k));color:#141615;transition:transform .2s}\
+.fla-cta:hover i{transform:translateX(2px)}\
+.fla-cta i svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}\
+@media (min-width:821px){.fla-pl.fim .fla-cta{top:auto;bottom:16px;right:50%;transform:translate(50%,8px)}.fla-pl.fim .fla-cta.on{transform:translate(50%,0)}}\
+@media (max-width:820px){.fla-cta{right:8px;top:8px;gap:9px;padding:7px 7px 7px 11px;border-radius:12px}.fla-cta small{display:none}.fla-cta b{margin:0;font-size:13px}.fla-cta i{width:28px;height:28px;border-radius:8px}}\
+@media (prefers-reduced-motion:reduce){.fla-cta{transition:opacity .2s}}\
 .fla-breve{display:flex;align-items:center;gap:14px;padding:16px 14px;border-radius:14px;border:1px dashed #343a37;color:#8d8e80;font-size:13.5px;line-height:1.4}\
 .fla-breve i{flex:none;width:38px;height:38px;border-radius:11px;background:repeating-linear-gradient(135deg,#1f2422 0 6px,#262b29 6px 12px)}\
 .fla-breve b{display:block;font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#B3B4A2;margin-bottom:2px}\
@@ -295,7 +324,7 @@
         '<div class="fla-co' + (multi ? '' : ' so') + '"><div><div class="fla-pl"><video playsinline preload="metadata"></video><div class="fla-esp"></div><button class="fla-gr" aria-label="Assistir">' + IC.play + '</button>' +
         '<div class="fla-ct"><div class="fla-bar" role="slider" aria-label="Posição do vídeo" tabindex="0"><i class="f"></i><i class="b"></i><i class="p"></i><span class="d"></span></div>' +
         '<div class="fla-ln"><button class="pp" aria-label="Tocar ou pausar">' + IC.play + '</button><button class="v10" aria-label="Voltar 10 segundos">' + IC.volta + '</button><button class="f10" aria-label="Avançar 10 segundos">' + IC.frente + '</button><span class="fla-tm">0:00 / 0:00</span><span class="sp"></span><button class="vel" aria-label="Velocidade">1x</button><button class="vol" aria-label="Som">' + IC.som + '</button><button class="tc" aria-label="Tela cheia">' + IC.cheia + '</button></div></div>' +
-        '<div class="fla-px"></div><div class="fla-er"><span><b>Não consegui carregar esta aula</b>Confira sua internet e tente de novo.</span></div></div>' +
+        '<a class="fla-cta" target="_blank" rel="noopener" hidden><span><small>Citado nesta aula</small><b></b></span><i>' + IC.dir + '</i></a><div class="fla-px"></div><div class="fla-er"><span><b>Não consegui carregar esta aula</b>Confira sua internet e tente de novo.</span></div></div>' +
         '<div class="fla-inf"><small></small><b></b><p></p><div class="fla-nav' + (multi ? '' : ' so') + '"><button class="ant" type="button">' + IC.esq + '<span>Aula anterior</span></button><button class="conc" type="button"></button><button class="prx" type="button"><span>Próxima aula</span>' + IC.dir + '</button></div></div></div>' + (multi ? '<div class="fla-li"></div>' : '') + '</div></div>';
     }
     el.querySelector('.fla-top b').textContent = op.titulo || 'Base FL';
@@ -385,8 +414,23 @@
     bConc.onclick = function () { var a = aulas[at]; if (!a) return; if (feita(a)) { conclui(a, false); tudo(); } else marca(a, true); };
     bAnt.onclick = function () { if (at > 0) toca(at - 1, true); }; bPrx.onclick = function () { if (at < aulas.length - 1) toca(at + 1, true); };
 
+    // BOTÃO DE OFERTA: só nas aulas que têm link cadastrado, a partir do momento marcado (cta_inicio, em segundos) ou, sem ele, no último minuto.
+    // Voltou o vídeo, some; avançou de novo, volta. Quem já tem o produto não vê.
+    var cta = pl.querySelector('.fla-cta'), ctaOk = false;
+    function ctaVe() {
+      var a = aulas[at], d = v.duration || 0, mostra = !!(ctaOk && a && d > 0 && v.currentTime >= (a.cta_inicio > 0 ? Math.min(a.cta_inicio, Math.max(0, d - 5)) : Math.max(0, d - (a.cta_segundos || 60))) && !pl.classList.contains('erro'));
+      if (mostra && cta.hidden) { cta.hidden = false; void cta.offsetWidth; cta.classList.add('on'); }
+      else if (!mostra && !cta.hidden) { cta.classList.remove('on'); cta.hidden = true; }
+    }
+    function ctaPrepara(a) {
+      ctaOk = false; cta.classList.remove('on'); cta.hidden = true;
+      if (!a.cta_url || !a.cta_texto || !/^https?:\/\//i.test(a.cta_url)) return;
+      cta.href = a.cta_url; cta.querySelector('b').textContent = a.cta_texto;
+      jaTem(a.cta_pack).then(function (tem) { if (aulas[at] === a && !tem) { ctaOk = true; ctaVe(); } });
+    }
+    cta.onclick = function (e) { var a = aulas[at]; if (!a) return; registra(a); if (typeof op.abreLink === 'function') { e.preventDefault(); op.abreLink(a.cta_url); } };
     function toca(i, jaToca) {
-      var a = aulas[i]; if (!a) return; at = i; clearInterval(conta);
+      var a = aulas[i]; if (!a) return; at = i; clearInterval(conta); ctaPrepara(a);
       pl.classList.remove('erro', 'toca', 'fim'); pl.classList.add('esp');
       v.poster = a.capa || ''; v.src = a.url; v.playbackRate = VEL[iv];
       var inf = el.querySelector('.fla-inf');
@@ -409,7 +453,8 @@
     v.onpause = function () { pp.innerHTML = IC.play; pl.classList.remove('some'); if (!v.ended) pl.classList.remove('toca'); };
     v.onwaiting = function () { pl.classList.add('esp'); }; v.onplaying = v.oncanplay = function () { pl.classList.remove('esp'); };
     v.onprogress = atualiza;
-    v.ontimeupdate = function () { atualiza(); var a = aulas[at]; if (a && !feita(a) && v.currentTime > 3) mem.set(chave(a), String(Math.floor(v.currentTime))); };
+    v.onseeked = ctaVe;
+    v.ontimeupdate = function () { atualiza(); ctaVe(); var a = aulas[at]; if (a && !feita(a) && v.currentTime > 3) mem.set(chave(a), String(Math.floor(v.currentTime))); };
     v.onended = function () {
       var a = aulas[at]; pl.classList.remove('toca', 'some'); if (a) marca(a, false);       // assistiu até o fim: conta como concluída
       var prox = aulas[at + 1]; pl.classList.add('fim');
