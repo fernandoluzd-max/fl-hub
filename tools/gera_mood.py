@@ -18,6 +18,7 @@ PARC = f'{parc:.2f}'.replace('.', ',')
 # As LUTs deles são criadas pelo motor do próprio Mood em tools/gera_mood_looks.mjs
 # (grava conheca/mood/assets/looks.png e as imagens paradas). Rode aquele script se trocar o vídeo ou as referências.
 import json
+import selo as SELO
 LOOKS = json.load(open(os.path.join(RAIZ, 'tools/mood_looks.json'), encoding='utf-8'))
 PALETA = json.load(open(os.path.join(RAIZ, 'tools/mood_paleta.json'), encoding='utf-8'))
 AS = '/conheca/mood/assets/'
@@ -50,6 +51,7 @@ HTML = r'''<!doctype html>
 <meta name="theme-color" content="#0E0F0F">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+__SELOLINK__
 <style>
 :root{
   --bg:#0E0F0F; --panel:#151716; --panel2:#1B1E1D; --line:#262A28; --ink:#F3EFE6; --mute:#A9AA9C; --dim:#73746B;
@@ -57,6 +59,7 @@ HTML = r'''<!doctype html>
   --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   --f:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   --m:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --selo:#FF8FA8; --selo-fundo:linear-gradient(140deg,#FFB347,#FF6FAE 45%,#B45CFF 100%); --selo-tinta:var(--ink); --selo-mudo:var(--mute);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
@@ -499,7 +502,7 @@ __GALERIA__
     <div class="inc"><span>LUTs ilimitadas durante 1 ano</span><span>Videoaula mostrando como usar</span><span>Funciona no celular e no computador</span><span>Passo a passo para CapCut, Premiere, DaVinci e Final Cut</span><span>Liberado na hora da compra</span><span>Atualizações incluídas no período</span></div>
     <a class="btn" href="#" data-comprar>Quero acessar o Mood</a>
     <br><a class="ou" href="https://basefl.com/lut/" data-testar>ou teste antes, com o seu vídeo</a>
-    <div class="gar"><svg viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3l11 4v9c0 7-4.6 12.300-11 15C10.600 28.300 6 23 6 16V7z"/><path d="M12 17l3.500 3.500L22.500 13"/></svg><p><b>7 dias de garantia</b>Criou suas LUTs e não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</p></div>
+    __GARANTIA__
   </div></div>
 
   <section>
@@ -678,7 +681,7 @@ new IntersectionObserver(es => { naOferta = es[0].isIntersecting; atualizaFixo()
 </body>
 </html>
 '''
-out = (HTML.replace('__REFS__', REFS).replace('__GALERIA__', GALERIA).replace('__PAL__', PAL).replace('__ID0__', LOOKS[0]['id']).replace('__N0__', LOOKS[0]['n']).replace('__AS__', AS).replace('__V__', V).replace('__LOGO__', LOGO).replace('__PRECO__', str(PRECO)).replace('__PARC__', PARC).replace('__CHECKOUT__', CHECKOUT))
+out = (HTML.replace('__SELOLINK__', SELO.LINK).replace('__GARANTIA__', SELO.garantia(7, texto='Criou suas LUTs e não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.')).replace('__REFS__', REFS).replace('__GALERIA__', GALERIA).replace('__PAL__', PAL).replace('__ID0__', LOOKS[0]['id']).replace('__N0__', LOOKS[0]['n']).replace('__AS__', AS).replace('__V__', V).replace('__LOGO__', LOGO).replace('__PRECO__', str(PRECO)).replace('__PARC__', PARC).replace('__CHECKOUT__', CHECKOUT))
 dest = os.path.join(RAIZ, 'conheca/mood/index.html')
 os.makedirs(os.path.dirname(dest), exist_ok=True)
 open(dest, 'w', encoding='utf-8').write(out)
@@ -723,6 +726,7 @@ corpo = f"""<body>
     <button class="btn gu" data-greenn-upsell="{UPSELL_ID}" data-loading="false" onclick="startLoading(this)">Sim, quero o Mood</button>
     <a class="nao" id="not-buy-link" href="{RECUSA}" rel="noopener noreferrer">Não, obrigado. Quero só os Títulos Dinâmicos.</a>
     <p class="um">Um clique e pronto: usa o mesmo pagamento da compra que você acabou de fazer.</p>
+    {SELO.garantia(7, texto='Vale para o Mood também. Não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.', tam=150)}
   </div></div>
   <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo</footer>
 </div>

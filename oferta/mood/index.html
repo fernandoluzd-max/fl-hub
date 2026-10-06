@@ -17,6 +17,7 @@
 <meta name="theme-color" content="#0E0F0F">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/selo.css?v=1">
 <style>
 :root{
   --bg:#0E0F0F; --panel:#151716; --panel2:#1B1E1D; --line:#262A28; --ink:#F3EFE6; --mute:#A9AA9C; --dim:#73746B;
@@ -24,6 +25,7 @@
   --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   --f:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   --m:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --selo:#FF8FA8; --selo-fundo:linear-gradient(140deg,#FFB347,#FF6FAE 45%,#B45CFF 100%); --selo-tinta:var(--ink); --selo-mudo:var(--mute);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
@@ -356,6 +358,7 @@ footer a{color:var(--mute)}
     <button class="btn gu" data-greenn-upsell="6786" data-loading="false" onclick="startLoading(this)">Sim, quero o Mood</button>
     <a class="nao" id="not-buy-link" href="https://basefl.com/instalar/" rel="noopener noreferrer">Não, obrigado. Quero só os Títulos Dinâmicos.</a>
     <p class="um">Um clique e pronto: usa o mesmo pagamento da compra que você acabou de fazer.</p>
+    <div class="gar-fl"><div class="selo-fl" role="img" aria-label="Garantia incondicional de 7 dias" style="--selo-tam:150px"><svg viewBox="0 0 300 300" aria-hidden="true"><circle cx="150" cy="150" r="147"/><path id="selo-c" fill="none" d="M150 150m-128 0a128 128 0 1 1 256 0a128 128 0 1 1 -256 0"/><text><textPath href="#selo-c" textLength="804" lengthAdjust="spacing">7 DIAS · RISCO ZERO · GARANTIA INCONDICIONAL · </textPath></text></svg><div class="selo-disco"><b>7</b><span>DIAS</span></div></div><div class="gar-t"><span class="gar-k">Garantia de 7 dias</span><span class="gar-h">Teste por 7 dias. Risco zero.</span><p>Vale para o Mood também. Não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</p></div></div>
   </div></div>
   <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo</footer>
 </div>

@@ -1029,3 +1029,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   .price-v{font-size:60px}
 }
 @media (prefers-reduced-motion:reduce){.fone-c,.cmp:not(.usado) .cmp-linha i{animation:none}.fone.reveal{transform:none}}
+
+/* v24: selo de garantia padrão do Base FL (selo.css), na cor da página */
+:root{--selo:var(--acc);--selo-tinta:var(--text);--selo-mudo:var(--muted)}
+.gar-fl[hidden]{display:none}
+#garantia.gar-fl{margin-top:26px;flex-direction:column;gap:20px;text-align:center}
+#garantia.gar-fl p{margin:0 auto;max-width:32ch}

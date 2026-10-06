@@ -2,6 +2,8 @@ import json
 # Gera as páginas de vendas em conheca/<slug>/index.html
 # Cada página tem uma cor, uma demonstração animada e o mesmo esqueleto curto.
 import os, sys, html
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import selo as SELO
 
 BASE = os.path.join(os.path.dirname(__file__), '..', 'conheca')
 
@@ -256,9 +258,10 @@ def pagina(p):
 <meta property="og:image" content="{capa}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+{SELO.LINK}
 <style>
-:root{{--a:{p['cor']};--a2:{p['cor2']};--ai:{p.get('ink','#111')};--pattern:{p['pattern']};--fxx:{p.get('fxx','70%')}}}
+:root{{--selo:{p['cor']};--selo-tinta:var(--ink);--selo-mudo:var(--mute);--a:{p['cor']};--a2:{p['cor2']};--ai:{p.get('ink','#111')};--pattern:{p['pattern']};--fxx:{p.get('fxx','70%')}}}
 {css}
 </style>
 </head>
@@ -293,7 +296,7 @@ def pagina(p):
     <div class="preco vpreco" hidden></div>
     <div class="parcf">{p.get('parc_html') or f"ou <b>12x de {p['parc6']}</b> no cartão · ou à vista no Pix"}</div>
     <div class="ctas"><button class="btn" data-comprar>{p.get('cta_oferta') or p['cta']} {seta}</button></div>
-    <p class="of-gar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.2-2.9 7.6-7 9.5-4.1-1.9-7-5.3-7-9.5V6z"/><path d="M8.800 12.200l2.300 2.300 4.200-4.600"/></svg><span><b>{G} dias de garantia.</b> Usou e não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</span></p>
+    {SELO.garantia(G)}
     <div class="selos"><span>{p['acesso_selo']}</span><span>Liberado na hora da compra</span>{'' if p.get('sem_aula') else '<span>Aula ensinando a usar</span>'}<span>{p['selo']}</span></div>
   </div></section>
 

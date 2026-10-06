@@ -1,0 +1,25 @@
+/* Selo de garantia do Base FL: o mesmo em todas as páginas de venda.
+   A cor vem da página: --selo (cor principal). Opcional: --selo-fundo (fundo do disco) e --selo-tam (tamanho). */
+.selo-fl{--s:var(--selo,#E8C46A);position:relative;width:var(--selo-tam,190px);aspect-ratio:1;margin:0 auto;flex:none;container-type:inline-size;font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.selo-fl::before{content:"";position:absolute;inset:-18%;border-radius:50%;background:radial-gradient(closest-side,var(--s),transparent 72%);opacity:.13;pointer-events:none}
+.selo-fl svg{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible;animation:selo-gira 44s linear infinite}
+.selo-fl svg circle{fill:none;stroke:var(--s);stroke-opacity:.3;stroke-width:1;stroke-dasharray:2.5 6}
+.selo-fl svg text{fill:var(--s);font-size:17.5px;font-weight:700;letter-spacing:.06em}
+.selo-disco{position:absolute;inset:15.5%;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--selo-fundo,radial-gradient(circle at 32% 26%,color-mix(in srgb,var(--s) 62%,#fff),var(--s) 46%,color-mix(in srgb,var(--s) 76%,#000) 100%));
+  box-shadow:inset 0 2px 1px rgba(255,255,255,.5),inset 0 -10px 22px rgba(0,0,0,.14),0 0 0 6px color-mix(in srgb,var(--s) 15%,transparent),0 18px 44px -14px color-mix(in srgb,var(--s) 55%,transparent)}
+.selo-disco b{font-family:"Archivo",system-ui,sans-serif;font-weight:800;font-stretch:100%;font-size:39cqw;line-height:.82;color:#F6F1E6;letter-spacing:-.02em;margin-top:-3cqw;text-shadow:0 1px 0 rgba(0,0,0,.08)}
+.selo-disco span{font-size:8cqw;font-weight:700;letter-spacing:.22em;margin:3.5cqw 0 0 .22em;color:#17130a;color:color-mix(in srgb,var(--s) 14%,#0d0b08)}
+@keyframes selo-gira{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.selo-fl svg{animation:none}}
+/* bloco de garantia com o selo (título e texto ao lado, ou embaixo no celular) */
+.gar-fl{display:flex;align-items:center;justify-content:center;gap:30px;max-width:600px;margin:34px auto 0;text-align:left}
+.gar-fl .gar-t{min-width:0}
+.gar-fl .gar-k{display:block;font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--selo,#E8C46A);margin-bottom:8px}
+.gar-fl .gar-h{display:block;font-family:"Archivo",system-ui,sans-serif;font-weight:800;font-size:22px;line-height:1.15;letter-spacing:-.015em;color:var(--selo-tinta,#F4F0E4);margin-bottom:8px;text-wrap:balance}
+.gar-fl p{margin:0;font-size:15px;line-height:1.5;color:var(--selo-mudo,#A9AA9C);max-width:36ch}
+@media (max-width:640px){
+  .gar-fl{flex-direction:column;gap:22px;text-align:center;margin-top:30px}
+  .gar-fl p{margin:0 auto;max-width:32ch}
+  .gar-fl .gar-h{font-size:21px}
+}
