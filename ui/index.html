@@ -259,16 +259,14 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
 
 <!-- condições de uso: aparece ao clicar em Instalar, uma vez por produto e por versão do texto -->
 <div class="modal" id="termo"><div class="box termo" role="dialog" aria-modal="true" aria-labelledby="t-title">
-  <span class="termo-s">Antes de instalar</span>
-  <h3 id="t-title">Condições de uso</h3>
-  <p>Os materiais do Base FL são <b>licenciados para o seu uso</b> enquanto o seu acesso a este produto estiver ativo.</p>
-  <ul>
-    <li>São para uso de quem comprou. Não podem ser <b>revendidos, redistribuídos nem compartilhados</b>.</li>
-    <li>O acesso está ligado à licença da sua compra.</li>
-    <li>Em caso de <b>reembolso, cancelamento ou perda do acesso</b>, a licença termina: os materiais devem ser removidos do computador e não podem mais ser usados.</li>
-  </ul>
-  <label class="termo-c"><input type="checkbox" id="t-ok"><span>Li e concordo com as condições de uso e acesso aos materiais.</span></label>
-  <div class="btns"><button class="primary" id="t-vai" disabled>Instalar</button><button class="ghost" id="t-nao">Cancelar</button></div>
+  <span class="termo-s" id="t-prod">Condições de uso</span>
+  <h3 id="t-title">Importante antes de instalar</h3>
+  <p>Os materiais disponibilizados através do Base FL são <b>licenciados para uso exclusivo do comprador</b> enquanto o acesso ao produto estiver ativo.</p>
+  <p>Ao prosseguir com a instalação, você declara estar ciente de que, em caso de <b>reembolso, cancelamento ou perda do direito de acesso</b> ao produto, a licença de utilização desses materiais também será encerrada.</p>
+  <p>Nessa situação, os arquivos vinculados à compra deverão deixar de ser utilizados e deverão ser removidos do dispositivo.</p>
+  <p>Os materiais não podem ser revendidos, redistribuídos, compartilhados ou disponibilizados a terceiros.</p>
+  <label class="termo-c"><input type="checkbox" id="t-ok"><span>Li, estou ciente e concordo com as condições de uso dos materiais.</span></label>
+  <div class="btns"><button class="primary" id="t-vai" disabled>Confirmar e instalar</button><button class="ghost" id="t-nao">Cancelar</button></div>
 </div></div>
 
 <script src="catalogo.js"></script>
@@ -617,7 +615,7 @@ function pedeAceite(p){
   if (aceitos.has(p.packId)) return Promise.resolve(true);
   return new Promise(fim => {
     const m = $('#termo'), ok = $('#t-ok'), vai = $('#t-vai');
-    $('#t-title').textContent = 'Condições de uso · ' + p.name; ok.checked = false; vai.disabled = true; m.classList.add('show'); ok.focus();
+    $('#t-prod').textContent = 'Condições de uso · ' + p.name; ok.checked = false; vai.disabled = true; m.classList.add('show'); ok.focus();
     const fecha = r => { m.classList.remove('show'); ok.onchange = vai.onclick = $('#t-nao').onclick = null; fim(r); };
     ok.onchange = () => { vai.disabled = !ok.checked; };
     $('#t-nao').onclick = () => fecha(false);
