@@ -460,6 +460,37 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
         return Err(format!("A instalação falhou e foi desfeita: {e}"));
     }
 
+    // Atualização: o que a versão anterior deste pacote instalou e a nova não traz mais (nome trocado, som retirado)
+    // sai do CapCut, para não ficar predefinição repetida nem pasta antiga vazia.
+    if let Some(prev) = read_json(&state_path(env, &m.id)).and_then(|j| serde_json::from_value::<Installed>(j).ok()) {
+        for st in targets.iter_mut() {
+            let Some(pt) = prev.targets.iter().find(|t| t.user_data == st.user_data) else { continue };
+            let presets = PathBuf::from(&st.user_data).join("Presets").join("Combination").join("Presets");
+            let mut tirados = 0;
+            for n in pt.presets.iter().filter(|n| !nomes.contains(n)) {
+                if fs::remove_dir_all(presets.join(n)).is_ok() {
+                    tirados += 1;
+                }
+            }
+            let velhos: Vec<String> = pt.preset_ids.iter().filter(|i| !st.preset_ids.contains(i)).cloned().collect();
+            let arq = presets.join(index::FILE);
+            if let Some(v) = read_json(&arq) {
+                let novo = index::remove(v, &velhos, &pt.created_folders);
+                // pastas que o FL Hub criou antes e continuam em uso seguem registradas como nossas
+                let vivas: Vec<String> = novo["preset_virtual_store"][0]["value"].as_array().map(|a| a.iter().filter_map(|e| e["id"].as_str().map(String::from)).collect()).unwrap_or_default();
+                for f in pt.created_folders.iter().filter(|f| vivas.contains(f)) {
+                    if !st.created_folders.contains(f) {
+                        st.created_folders.push(f.clone());
+                    }
+                }
+                let _ = fs::write(&arq, serde_json::to_string(&novo).unwrap());
+            }
+            if tirados > 0 {
+                say(&mut rep, format!("{tirados} predefinições da versão anterior foram retiradas"));
+            }
+        }
+    }
+
     rep.presets = nomes.len();
     rep.user_data = uds.iter().map(|u| fwd(u)).collect();
     say(&mut rep, format!("{} predefinições instaladas e organizadas", nomes.len()));

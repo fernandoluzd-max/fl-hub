@@ -337,9 +337,9 @@ PAGINAS = []
 PAGINAS.append(dict(
   slug='efeitos-sonoros', nome='Efeitos Sonoros', secao='Kits · CapCut', cor='#5AB8FF', cor2='#2E7CF6',
   pattern='radial-gradient(rgba(90,184,255,.10) 1px,transparent 1.4px) 0 0/22px 22px', empilha=True, fxx='50%',
-  kick='Plug &amp; Play · CapCut', desc='65 efeitos sonoros organizados por categoria, direto nas predefinições do CapCut com um clique.',
+  kick='Plug &amp; Play · CapCut', desc='261 efeitos sonoros organizados por categoria, direto nas predefinições do CapCut com um clique.',
   h1='O som que faltava no seu corte, <em>a um clique.</em>',
-  lead='<b>Instalou, abriu, usou.</b> 65 efeitos em 11 categorias (whooshes, impactos, risers, foleys e mais), instalados direto nas predefinições do seu CapCut. Sem baixar pasta, sem arrastar arquivo.',
+  lead='<b>Instalou, abriu, usou.</b> 261 efeitos em 14 categorias (whooshes, impactos, risers, pops, beeps, notificações e mais), instalados direto nas predefinições do seu CapCut. Sem baixar pasta, sem arrastar arquivo.',
   cta='Quero os efeitos', nota='Precisa do <b>CapCut para computador</b><br>Mac ou Windows',
   rot='Demonstração · predefinições do CapCut',
   demo='''<div class="cc">
@@ -416,7 +416,7 @@ demo();
   bens=[('Organizados por categoria','11 pastas: whooshes, impactos, risers, foleys, beeps e mais. Você acha o som pelo nome, sem ouvir 50 arquivos.'),
         ('Direto no CapCut','Ficam nas predefinições de áudio do CapCut. É só arrastar para a timeline do seu projeto.'),
         ('Instala e atualiza num clique','O app Base FL coloca tudo no lugar. Quando sair efeito novo, é só clicar em Atualizar.')],
-  inclui=['65 efeitos sonoros','11 categorias','Whooshes, impactos e risers','Foleys, beeps e cliques','Instalação em 1 clique','Acesso vitalício'],
+  inclui=['261 efeitos sonoros','14 categorias','Whooshes, impactos e risers','Foleys, beeps e cliques','Instalação em 1 clique','Acesso vitalício'],
   faq=[('Funciona em qual CapCut?','No CapCut para computador, no Mac ou no Windows. O app Base FL encontra o CapCut sozinho.'), FAQ_ACESSO, FAQ_VIT, FAQ_APP],
   fh2='Dê ritmo aos seus cortes hoje.', selo='Mac e Windows'))
 
