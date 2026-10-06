@@ -37,6 +37,7 @@ Deno.serve(async (req) => {
       const linhas = packs.map((pack_id) => {
         const a = (atuais ?? []).find((x: any) => x.pack_id === pack_id);
         if (a && a.sale_id === sale_id && a.status === "active") return null;              // aviso repetido da mesma venda
+        if (a && a.sale_id === sale_id && a.status === "revoked") return null;             // aviso de "pago" que chega atrasado, depois do reembolso da mesma venda: não reabre o acesso
         if (a && a.status === "active" && !a.expires_at) return null;                       // liberado na mão, sem vencimento
         const base = a?.status === "active" && a.expires_at && new Date(a.expires_at).getTime() > agora ? new Date(a.expires_at).getTime() : agora;
         return { email, pack_id, status: "active", source: "greenn", sale_id, expires_at: VIT.has(pack_id) ? null : new Date(base + ANO).toISOString() };

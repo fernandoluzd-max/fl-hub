@@ -313,7 +313,7 @@ def pagina(p):
     <p class="nota"><b class="pcur">{p['preco']}</b> · {p['acesso_txt']} · {G} dias de garantia</p>
   </div>
 
-  <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo</footer>
+  <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo<br><a href="https://basefl.com/termos/">Termos de uso</a> · <a href="https://basefl.com/privacidade/">Privacidade</a></footer>
 </div>
 <div class="toast" id="toast"></div>
 <script>

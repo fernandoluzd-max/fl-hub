@@ -528,7 +528,7 @@ __GALERIA__
     <p class="sec-p rv">Encontre o clima certo para a sua cena em menos de um minuto.</p>
     <div class="cta rv"><a class="btn" href="#oferta" data-comprar>Quero o Mood · R$ __PRECO__</a><a class="btn gh" href="https://basefl.com/lut/" data-testar>Testar agora, de graça</a></div>
   </div>
-  <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo</footer>
+  <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo<br><a href="https://basefl.com/termos/">Termos de uso</a> · <a href="https://basefl.com/privacidade/">Privacidade</a></footer>
 </div>
 <div class="fixo" id="fixo"><span><b>Mood · R$ __PRECO__</b>ou 12x de R$ __PARC__</span><a class="btn" href="#oferta" data-comprar>Quero o Mood</a></div>
 <div class="toast" id="toast"></div>
@@ -728,7 +728,7 @@ corpo = f"""<body>
     <p class="um">Um clique e pronto: usa o mesmo pagamento da compra que você acabou de fazer.</p>
     {SELO.garantia(7, texto='Vale para o Mood também. Não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.', tam=150)}
   </div></div>
-  <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo</footer>
+  <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo<br><a href="https://basefl.com/termos/">Termos de uso</a> · <a href="https://basefl.com/privacidade/">Privacidade</a></footer>
 </div>
 <div class="fixo" id="fixo"><span><b>Mood · R$ {PRECO}</b>ou 12x de R$ {PARC}</span><a class="btn" href="#oferta" data-comprar>Sim, quero</a></div>
 <div class="toast" id="toast"></div>
