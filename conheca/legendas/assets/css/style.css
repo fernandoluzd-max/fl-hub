@@ -1035,3 +1035,33 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .gar-fl[hidden]{display:none}
 #garantia.gar-fl{margin-top:26px;flex-direction:column;gap:20px;text-align:center}
 #garantia.gar-fl p{margin:0 auto;max-width:32ch}
+
+/* v25: trecho da aula sem controles; etapas em sequência (início, meio, fim); amostra da oferta em movimento */
+.ap-tela.auto video{pointer-events:none}
+.etapas li:nth-child(2){border-color:var(--line);background:var(--panel)}
+.etapas li{position:relative;overflow:hidden;isolation:isolate}
+.etapas li::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(120deg,var(--acc2-a30),var(--acc2-a12) 45%,transparent 80%);opacity:0}
+.etapas li::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--acc2),var(--acc2-hi));transform:scaleX(0);transform-origin:0 50%}
+.etapas .et-n{opacity:.45}
+.etapas.in li:nth-child(1)::before{animation:et-luz1 10s infinite}.etapas.in li:nth-child(2)::before{animation:et-luz2 10s infinite}.etapas.in li:nth-child(3)::before{animation:et-luz3 10s infinite}
+.etapas.in li:nth-child(1)::after{animation:et-bar1 10s infinite}.etapas.in li:nth-child(2)::after{animation:et-bar2 10s infinite}.etapas.in li:nth-child(3)::after{animation:et-bar3 10s infinite}
+.etapas.in li:nth-child(1) .et-n{animation:et-n1 10s infinite}.etapas.in li:nth-child(2) .et-n{animation:et-n2 10s infinite}.etapas.in li:nth-child(3) .et-n{animation:et-n3 10s infinite}
+.etapas.in .etapas-t span{animation:et-n1 10s infinite}.etapas.in .etapas-t span:nth-of-type(2){animation-name:et-n2}.etapas.in .etapas-t span:nth-of-type(3){animation-name:et-n3}
+.etapas-t span{opacity:.45}
+@keyframes et-luz1{0%{opacity:0}4%,28%{opacity:1}34%,100%{opacity:0}}
+@keyframes et-luz2{0%,30%{opacity:0}34%,58%{opacity:1}64%,100%{opacity:0}}
+@keyframes et-luz3{0%,60%{opacity:0}64%,88%{opacity:1}96%,100%{opacity:0}}
+@keyframes et-bar1{0%{transform:scaleX(0);opacity:1}30%,90%{transform:scaleX(1);opacity:1}97%,100%{transform:scaleX(1);opacity:0}}
+@keyframes et-bar2{0%,30%{transform:scaleX(0);opacity:1}60%,90%{transform:scaleX(1);opacity:1}97%,100%{transform:scaleX(1);opacity:0}}
+@keyframes et-bar3{0%,60%{transform:scaleX(0);opacity:1}88%,90%{transform:scaleX(1);opacity:1}97%,100%{transform:scaleX(1);opacity:0}}
+@keyframes et-n1{0%{opacity:.45}4%,92%{opacity:1}100%{opacity:.45}}
+@keyframes et-n2{0%,30%{opacity:.45}34%,92%{opacity:1}100%{opacity:.45}}
+@keyframes et-n3{0%,60%{opacity:.45}64%,92%{opacity:1}100%{opacity:.45}}
+.kit-amostra{gap:8px}
+.ka{margin:0;min-width:0;border-radius:12px;overflow:hidden;background:#060505;border:1px solid var(--line);position:relative}
+.ka::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 22%,transparent),inset 0 -40px 40px -30px color-mix(in srgb,var(--c) 14%,transparent);pointer-events:none}
+.ka-t{display:block;position:relative;aspect-ratio:16/10;overflow:hidden}
+.ka video{position:absolute;left:50%;top:50%;width:150%;height:auto;aspect-ratio:9/16;object-fit:fill;transform:translate(calc(var(--cx,50%)*-1),calc(var(--cy,49%)*-1));pointer-events:none}
+.ka figcaption{display:flex;align-items:center;gap:7px;padding:8px 10px 9px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ka figcaption i{flex:none;width:6px;height:6px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
+@media (max-width:360px){.ka figcaption{font-size:9px;letter-spacing:.06em;padding:7px 8px}}

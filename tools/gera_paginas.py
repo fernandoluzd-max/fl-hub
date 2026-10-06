@@ -1508,14 +1508,15 @@ KT_SELOS = ['Respondido ✓', 'R$ 1.350', 'Aceito ✓', 'No quadro ✓']
 KT_DOR = r'''
   <section class="dor">
     <span class="kick rv">Reconhece?</span>
-    <h2 class="rv" style="margin-top:14px">O trabalho é bom. <em class="ac">O que cansa é o resto.</em></h2>
+    <h2 class="rv" style="margin-top:14px">Você já ouviu essas quatro frases <em class="ac">de algum cliente.</em></h2>
+    <p class="sub2 rv">E respondeu cada uma na hora, pelo WhatsApp, sem nada anotado. É aí que o preço sai errado, o ajuste não acaba e o pagamento se perde.</p>
     <div class="dor-g">
       <div class="dor-c rv"><b>“Quanto fica?”</b><p>E você chuta um valor, torcendo para não ser caro nem barato demais.</p></div>
       <div class="dor-c rv d1"><b>“Quero uns vídeos.”</b><p>E lá se vão dez mensagens até entender o que o cliente quer de verdade.</p></div>
       <div class="dor-c rv d2"><b>“Só mais um ajustezinho.”</b><p>Pela quinta vez, porque nada ficou combinado por escrito.</p></div>
       <div class="dor-c rv d3"><b>“Te pago semana que vem.”</b><p>E no dia 20 você não lembra quem pagou, quem falta e quanto entrou.</p></div>
     </div>
-    <p class="dor-f rv">Nada disso é falta de talento. <b>É falta de sistema.</b></p>
+    <p class="dor-f rv">Para cada uma delas, <b>o kit tem um passo pronto.</b></p>
   </section>
 '''
 KT_BARRA = r'''
@@ -1881,9 +1882,9 @@ def pagina_kit():
         f'<div class="kf-c" style="--k:{j["cor"]}"><div class="kf-h"><img src="https://basefl.com/icones/{j["key"]}.png" alt="" width="56" height="56" loading="lazy"><span><small>{i+1} · {j["passo"]}</small><b>{j["nome"]}</b></span></div><ul>' + ''.join(f'<li>{x}</li>' for x in resolve[j['key']]) + f'</ul><a href="https://basefl.com{j["url"]}?de=kit">Testar {j["nome"]} →</a></div>' for i, j in enumerate(JORNADA)) + '</div></section>'
     p = dict(slug=k['slug'], pack='kit', nome=k['nome'], secao='Kit · 4 ferramentas', cor='#F2A541', cor2='#FF7A45',
       pattern='linear-gradient(rgba(242,165,65,.05) 1px,transparent 1px) 0 0/100% 40px', fxx='70%', capa='https://basefl.com/icon-512.png',
-      kick='Kit Freelancer · preço de lançamento', desc=f'Um sistema de trabalho para o editor freelancer: briefing, preço, proposta, contrato e organizador trabalhando juntos. Preço de lançamento: {brl(k["preco"])}.',
-      h1='Do “quanto fica?” ao “pago”. <em>Num sistema só.</em>', hero_cta_html=hero_cta,
-      lead='Pare de perder tempo e cliente na bagunça do WhatsApp. Aqui é <b>um sistema de trabalho</b>: o cliente responde o briefing por link, o preço sai calculado, a proposta e o contrato são aceitos pelo celular e o trabalho <b>entra sozinho no seu quadro</b>.',
+      kick='Kit Freelancer · preço de lançamento', desc=f'Para o editor freelancer organizar o atendimento de cada cliente: briefing, preço, proposta, contrato e acompanhamento do trabalho, num fluxo só. Preço de lançamento: {brl(k["preco"])}.',
+      h1='Pare de atender cliente <em>no improviso.</em>', hero_cta_html=hero_cta,
+      lead='O Kit Freelancer organiza tudo o que vem depois que o cliente aparece: você entende o pedido, define o preço, manda a proposta, fecha o contrato e acompanha o trabalho até o pagamento. <b>Um passo puxa o outro</b>, e você não digita a mesma coisa duas vezes.',
       cta='Quero o Kit Freelancer', nota='Funciona no <b>celular e no computador</b>', rot='', demo=demo, css=css + KT_CSS,
       js='window.FL_FERR = ' + json.dumps([dict(key=j['key'], nome=j['nome'], cor=j['cor']) for j in JORNADA], ensure_ascii=False) + ';\n' + KT_JS,
       miolo=KT_DOR + (KT_VIDEO.replace('__V__', k['video']) if k.get('video') else '') + KT_MIOLO.replace('<!--FERR-->', ferr) + KT_BARRA.replace('__P__', brl(k['preco'])), ver=('#jornada', 'Ver um trabalho do começo ao fim ↓'), cta_oferta='Liberar as quatro ferramentas', fecho='Seu próximo trabalho, do pedido ao pagamento, <em class="ac">sem digitar duas vezes.</em>',

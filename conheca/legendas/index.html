@@ -23,14 +23,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/images/posters/com-pack.jpg" fetchpriority="high">
 <link rel="stylesheet" href="/selo.css?v=1">
-<link rel="stylesheet" href="assets/css/style.css?v=24">
+<link rel="stylesheet" href="assets/css/style.css?v=25">
 
 <!-- ============================================================
      Pixel / GTM / métricas: cole aqui, se for usar.
      ============================================================ -->
 
-<script src="assets/js/config.js?v=23"></script>
-<script src="assets/js/main.js?v=23" defer></script>
+<script src="assets/js/config.js?v=25"></script>
+<script src="assets/js/main.js?v=25" defer></script>
 <script src="/prova.js?v=3" defer></script>
 </head>
 <body>
@@ -153,7 +153,7 @@
   </div>
 </section>
 
-<!-- ============ AS AULAS — um trecho REAL de uma aula, mostrado como prévia (nada aqui é clicável além do play).
+<!-- ============ AS AULAS — um trecho REAL de uma aula, mostrado como prévia (toca sozinho, sem som e sem controles: é só uma amostra).
      O VÍDEO: o endereço fica em VIDEO_TRECHO_AULA, no assets/js/config.js.
      As 3 etapas resumem o conteúdo: instalar → entender → usar. ============ -->
 <section class="sec sec-aula" id="aula" aria-labelledby="h-aula">
@@ -266,7 +266,7 @@
      Os prints são de alunos do curso (Reels Academy), não de compradores deste pack: a página diz isso. ============ -->
 <section class="sec sec-prova" id="prova" aria-labelledby="h-prova">
   <div class="wrap narrow"><h2 id="h-prova" class="h2 h2-m center prova-h" data-so-com-prints>O que meus alunos me mandam.</h2>
-    <p class="sub center" data-so-com-prints>Prints do jeito que chegaram. Toque em um para ler inteiro.</p></div>
+    <p class="sub center" data-so-com-prints>Prints de alunos.</p></div>
   <div class="wrap"><div data-prova="faixa" data-linhas="2"></div></div>
   <div class="wrap narrow"><p class="pv-nota center" data-so-com-prints>Esses recados são de alunos do Reels Academy, meu treinamento de edição. O pack é vendido à parte e sai do mesmo padrão que eu levo pras aulas.</p></div>
 </section>
@@ -305,7 +305,8 @@
           <span class="kit-n"><span data-mais>+</span><span data-qtd>70</span></span>
           <div><h3>Pack Títulos Dinâmicos</h3><p>Estilos de texto animado para o CapCut Desktop.</p></div>
         </div>
-        <div class="kit-amostra"><img src="assets/images/posters/titulo-bold-template.jpg" alt="Estilo Bold Template" width="540" height="960" loading="lazy" decoding="async" style="object-position:50% 49%"><img src="assets/images/posters/titulo-classico.jpg" alt="Estilo Clássico do Fernando" width="540" height="960" loading="lazy" decoding="async" style="object-position:50% 49%"><img src="assets/images/posters/legenda-duas-linhas.jpg" alt="Estilo Divertido" width="540" height="960" loading="lazy" decoding="async" style="object-position:50% 57%"><img src="assets/images/posters/titulo-nome-vermelho.jpg" alt="Estilo Bold Template" width="540" height="960" loading="lazy" decoding="async" style="object-position:50% 49%"></div>
+        <!-- AMOSTRA: os mesmos 4 estilos da galeria, tocando em fila. Os arquivos são os de assets/videos. -->
+        <div class="kit-amostra" id="kitAmostra"><figure class="ka" style="--c:#d9d06a;--cx:49.8%;--cy:49.3%"><span class="ka-t"><video muted loop playsinline preload="none" poster="assets/images/posters/titulo-bold-template.jpg" data-src="assets/videos/titulo-bold-template.mp4" aria-hidden="true" tabindex="-1" disablepictureinpicture></video></span><figcaption><i></i>Bold Template</figcaption></figure><figure class="ka" style="--c:#d8d4cc;--cx:47.2%;--cy:49.6%"><span class="ka-t"><video muted loop playsinline preload="none" poster="assets/images/posters/titulo-classico.jpg" data-src="assets/videos/titulo-classico.mp4" aria-hidden="true" tabindex="-1" disablepictureinpicture></video></span><figcaption><i></i>Clássico Fernando</figcaption></figure><figure class="ka" style="--c:#5fe0ea;--cx:50.0%;--cy:54.4%"><span class="ka-t"><video muted loop playsinline preload="none" poster="assets/images/posters/legenda-duas-linhas.jpg" data-src="assets/videos/legenda-duas-linhas.mp4" aria-hidden="true" tabindex="-1" disablepictureinpicture></video></span><figcaption><i></i>Duas Linhas</figcaption></figure><figure class="ka" style="--c:#ff5a4d;--cx:51.0%;--cy:49.5%"><span class="ka-t"><video muted loop playsinline preload="none" poster="assets/images/posters/titulo-nome-vermelho.jpg" data-src="assets/videos/titulo-nome-vermelho.mp4" aria-hidden="true" tabindex="-1" disablepictureinpicture></video></span><figcaption><i></i>Nome em Destaque</figcaption></figure></div>
         <ul class="kit-tipos">
           <li><b>Títulos</b><span>pra abrir o vídeo</span></li>
           <li><b>Ganchos</b><span>pros primeiros segundos</span></li>
@@ -340,16 +341,6 @@
       <p class="offer-como">Depois de pagar, você baixa o app Base FL, entra com o e-mail da compra e clica em Instalar.</p>
       <p class="offer-req"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>Requer CapCut Desktop no Windows ou no Mac. Não funciona no celular.</p>
     </div>
-    </div>
-
-    <!-- opcionais do checkout: título + cor + som. NÃO estão inclusos nos R$ 47: a página diz o preço de cada um. -->
-    <div class="extras reveal" aria-labelledby="h-extras">
-      <p class="extras-h" id="h-extras">Título resolvido. Quer fechar a cor e o som também?</p>
-      <p class="extras-s">Na hora de pagar, dá pra levar junto os outros dois packs do Base FL. São opcionais, <b>R$ 17 cada</b>, e instalam pelo mesmo app.</p>
-      <div class="extras-g">
-        <article class="ex ex-cor"><img src="/icones/luts.png" alt="" width="46" height="46" loading="lazy" onerror="this.remove()"><div><span class="ex-rot">Pra cor</span><h4>Pack de LUTs</h4><p>3 LUTs de conversão (Apple Log, S-Log2 e S-Log3 para Rec.709) e 20 de colorização. Um ponto de partida pra cor, sem começar do neutro.</p></div><em>+ R$ 17</em></article>
-        <article class="ex ex-som"><img src="/icones/sons.png" alt="" width="46" height="46" loading="lazy" onerror="this.remove()"><div><span class="ex-rot">Pro ritmo</span><h4>Efeitos Sonoros</h4><p>65 efeitos organizados por categoria, direto no seu CapCut. Pra marcar corte, entrada de texto e movimento.</p></div><em>+ R$ 17</em></article>
-      </div>
     </div>
   </div>
 </section>

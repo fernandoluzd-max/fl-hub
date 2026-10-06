@@ -117,16 +117,41 @@
   /* ---------- 3. Trecho da aula: o endereço vem do config.js. Vazio, fica o quadro "em breve". ---------- */
   function aula() {
     var tela = $("#aulaTela"); if (!tela || !CFG.VIDEO_TRECHO_AULA) return;
+    // é só uma amostra de que as aulas existem: toca sozinho, sem som, em loop, sem botão nenhum
     var v = document.createElement("video");
-    v.controls = true; v.playsInline = true; v.preload = "none"; v.setAttribute("playsinline", "");
-    if (CFG.CAPA_TRECHO_AULA) v.poster = CFG.CAPA_TRECHO_AULA; else v.preload = "metadata";
+    v.muted = true; v.defaultMuted = true; v.loop = true; v.playsInline = true; v.controls = false; v.preload = "none"; v.tabIndex = -1;
+    v.setAttribute("muted", ""); v.setAttribute("playsinline", ""); v.setAttribute("disablepictureinpicture", ""); v.setAttribute("disableremoteplayback", "");
+    if (CFG.CAPA_TRECHO_AULA) v.poster = CFG.CAPA_TRECHO_AULA;
     v.setAttribute("aria-label", "Trecho da aula de instalação e uso");
     // vídeo em pé (9:16) ou deitado (16:9): o quadro se ajusta ao arquivo
     v.addEventListener("loadedmetadata", function () { if (v.videoWidth && v.videoHeight) tela.style.aspectRatio = v.videoWidth + " / " + v.videoHeight; tela.classList.toggle("em-pe", v.videoHeight > v.videoWidth); });
-    v.addEventListener("play", function () { evento("aula_trecho_play"); }, { once: true });
+    v.addEventListener("playing", function () { evento("aula_trecho_play"); }, { once: true });
     v.addEventListener("error", function () { tela.classList.remove("tem"); v.remove(); });       // endereço errado: volta o quadro "em breve"
-    v.src = CFG.VIDEO_TRECHO_AULA;
-    tela.appendChild(v); tela.classList.add("tem");
+    tela.appendChild(v); tela.classList.add("tem", "auto");
+    var naTela = false, posto = false;
+    function toca() { if (!naTela || document.hidden) return; if (!posto) { posto = true; v.src = CFG.VIDEO_TRECHO_AULA; } var q = v.play(); if (q && q.catch) q.catch(function () {}); }
+    if (!("IntersectionObserver" in window)) { naTela = true; toca(); return; }
+    new IntersectionObserver(function (en) { naTela = en[en.length - 1].isIntersecting; if (naTela) toca(); else v.pause(); }, { threshold: .3 }).observe(tela);
+    // celular que segura o autoplay: o primeiro toque ou rolagem libera
+    ["touchend", "pointerdown", "scroll"].forEach(function (n) { window.addEventListener(n, function () { if (naTela && v.paused) toca(); }, { passive: true }); });
+    document.addEventListener("visibilitychange", toca);
+  }
+
+  /* ---------- Amostra da oferta: os 4 estilos tocando, um começando depois do outro ---------- */
+  function amostra() {
+    var box = $("#kitAmostra"); if (!box) return;
+    var vs = $$("video", box), posto = false, naTela = false;
+    function toca() {
+      if (!naTela) return;
+      vs.forEach(function (v, k) {
+        if (!posto) { v.muted = true; v.src = v.dataset.src; }
+        setTimeout(function () { if (!naTela) return; var q = v.play(); if (q && q.catch) q.catch(function () {}); }, posto ? 0 : k * 450);
+      });
+      posto = true;
+    }
+    if (!("IntersectionObserver" in window)) { naTela = true; toca(); return; }
+    new IntersectionObserver(function (en) { naTela = en[en.length - 1].isIntersecting; if (naTela) toca(); else vs.forEach(function (v) { v.pause(); }); }, { threshold: .2 }).observe(box);
+    ["touchend", "scroll"].forEach(function (n) { window.addEventListener(n, function () { if (naTela && posto && vs[0].paused) toca(); }, { passive: true }); });
   }
 
   /* ---------- 6. Entrada das seções ao rolar ---------- */
@@ -304,6 +329,6 @@
     var n = 0, t = setInterval(function () { if (confere() || ++n > 10) clearInterval(t); }, 500);
   }
 
-  function init() { applyConfig(); semPrints(); antesDepois(); aula(); galeria(); reveals(); chrome(); instalacao(); }
+  function init() { applyConfig(); semPrints(); antesDepois(); aula(); amostra(); galeria(); reveals(); chrome(); instalacao(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();
