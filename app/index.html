@@ -105,6 +105,11 @@ h2{font-family:var(--d);font-weight:800;font-size:19px;letter-spacing:-.01em;mar
 .pcaviso a{color:var(--ambar);font-weight:700}
 [hidden]{display:none !important}
 @media (prefers-reduced-motion:reduce){.item{transition:none}}
+.au{all:unset;box-sizing:border-box;flex-basis:100%;display:flex;align-items:center;gap:12px;width:100%;margin-top:10px;padding:12px 14px;border-radius:14px;border:1px solid rgba(var(--k),.4);background:rgba(var(--k),.09);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.au:active{transform:scale(.99)}.au:focus-visible{outline:2px solid #F4F0E4;outline-offset:2px}
+.au>svg{flex:none;width:34px;height:34px;padding:9px;border-radius:50%;background:rgb(var(--k));fill:#141615}
+.au-t{flex:1;min-width:0;display:block}.au-t>b{display:block;font-size:15px;font-weight:800;margin-bottom:3px}
+.kit .au{margin:10px 0 0}
 </style>
 </head>
 <body>
@@ -152,6 +157,7 @@ h2{font-family:var(--d);font-weight:800;font-size:19px;letter-spacing:-.01em;mar
 
 <script src="/catalogo.js"></script>
 <script src="/base.js"></script>
+<script src="/aulas.js"></script>
 <script src="/app/pwa.js"></script>
 <script>
 const $ = s => document.querySelector(s), esc = Base.esc, C = window.CATALOGO, POR = Object.fromEntries(C.produtos.map(p => [p.key, p]));
@@ -172,6 +178,13 @@ function destaque(p){
   const tem = Base.tem(p.pack), venc = Base.vencido(p.pack);
   return `<a class="item dest${tem ? ' meu' : ''}" style="--k:${esc(p.cor)}" href="${esc(tem ? p.url : venda(p))}">${icone(p.key)}<span class="t"><b>${esc(p.nome)}</b><small>${esc(p.gancho || '')}</small><em>${esc(venc ? 'Acesso vencido. Renove para continuar.' : p.desc)}</em></span><span class="a">${tem ? 'Abrir o ' + esc(p.nome) : venc ? 'Renovar' : 'Conhecer o ' + esc(p.nome) + ' →'}</span></a>`;
 }
+// AULAS: padrão do Base FL. Quem tem o produto e ele tem aula vê o progresso e abre a área de aulas daqui mesmo.
+const temAula = packs => window.Aulas && Aulas.tem(packs);
+const blocoAula = (packs, nome, cor) => temAula(packs) ? `<button class="au" type="button" style="--k:${esc(cor)}" data-aulas="${esc(packs.join(','))}" data-nome="${esc(nome)}" data-cor="${esc(cor)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span class="au-t"><b>${Aulas.progresso(packs).total > 1 ? 'Aulas' : 'Ver a aula'}</b><span class="flp" data-selo></span></span></button>` : '';
+function ligaAulas(){
+  document.querySelectorAll('[data-aulas]').forEach(b => { const packs = b.dataset.aulas.split(','), op = { titulo: b.dataset.nome, cor: b.dataset.cor, dono: true };
+    Aulas.selo(b.querySelector('[data-selo]'), packs, { cor: b.dataset.cor }); b.onclick = e => { e.preventDefault(); Aulas.abre(packs, op); }; });
+}
 function pack(p){
   const tem = Base.tem(p.pack);
   // os bônus ficam presos ao produto que os entrega: quem tem abre aqui mesmo; quem não tem só vê que vêm junto
@@ -181,7 +194,7 @@ function pack(p){
       return `<${meu ? 'a href="' + esc(b.url) + '"' : 'span'} class="bon-i" style="--k:${esc(b.cor)}"><img src="/icones/${b.key}-64.png" alt="" width="40" height="40" loading="lazy"><span class="t"><b>${esc(b.nome)}</b><small>${esc(b.bonus_txt || b.gancho || '')}</small></span><em class="${meu ? 'ab' : ''}">${meu ? 'Abrir' : 'Bônus'}</em></${meu ? 'a' : 'span'}>`;
     }).join('')}</span>` : '';
   return `<div class="item pack${tem ? ' meu' : ''}" style="--k:${esc(p.cor)}">${icone(p.key)}${cad}<span class="t"><b>${esc(p.nome)}</b><small>${esc(tem ? 'Liberado na sua conta' : (p.gancho || p.desc))}</small></span>${tem ? '' : `<a class="a" href="${esc(venda(p))}">Conhecer</a>`}
-    <span class="pc"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span><b>Só no computador</b>${tem ? 'Instale pelo app Base FL, no Mac ou no Windows.' : 'Funciona no CapCut do Mac e do Windows.'}</span></span>${bonus}</div>`;
+    <span class="pc"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span><b>Só no computador</b>${tem ? 'Instale pelo app Base FL, no Mac ou no Windows.' : 'Funciona no CapCut do Mac e do Windows.'}</span></span>${tem ? blocoAula([p.pack], p.nome, p.cor) : ''}${bonus}</div>`;
 }
 
 function desenha(){
@@ -194,6 +207,7 @@ function desenha(){
   const o = Base.oferta(), K = C.kit, J = K.inclui.map(k => POR[k]);
   $('#kit').innerHTML = `<div class="kit-h"><img src="/icones/kit-64.png" alt="" width="56" height="56"><span class="t">${o.completo ? '' : '<span class="selo">Preço de lançamento</span>'}<b>${esc(K.nome)}</b><small>${o.completo ? 'As 4 ferramentas liberadas.' : o.tenho.length ? 'Você já tem ' + esc(Base.nomes(o.tenho)) + '.' : 'Um sistema de trabalho com 4 ferramentas.'}</small></span></div>
     <div class="lista">${J.map((p, i) => ferramenta(p, i + 1)).join('')}</div>
+    ${o.tenho.length ? blocoAula(J.filter(p => Base.tem(p.pack)).map(p => p.pack), K.nome, '242,165,65') : ''}
     ${o.completo ? '' : `<a class="kit-b" href="/conheca/${esc(K.slug)}/?de=celular"><span>${o.tenho.length ? 'Liberar o que falta' : 'Conhecer o Kit'} →</span><i>R$ ${K.preco}</i></a>`}`;
   // fora do kit: o Mood
   const soltas = C.produtos.filter(p => p.url && !p.so_no_kit && !p.bonus);     // bônus não é produto solto: aparece dentro dos Títulos
@@ -202,7 +216,7 @@ function desenha(){
   const ps = C.produtos.filter(p => !p.url);
   $('#packs').innerHTML = ps.map(pack).join('');
   $('#manda').hidden = !ps.some(p => Base.tem(p.pack));
-  botaoInstalar();
+  botaoInstalar(); if (window.Aulas) ligaAulas();
 }
 // convite para instalar: aparece no celular, some para quem já instalou ou tocou em "agora não"
 const guardou = () => { try { return localStorage.getItem('fl_pin') === 'nao'; } catch (e) { return false; } };
@@ -228,6 +242,7 @@ $('#manda').onclick = async () => {
   if (!Base.sessao() && new URLSearchParams(location.search).get('entrar')) $('#entrar').click();
 })();
 Base.aoMudar(() => desenha());
+if (window.Aulas) Aulas.aoCarregar(() => { if (!$('#tudo').hidden) desenha(); });
 </script>
 </body>
 </html>

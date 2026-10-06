@@ -144,6 +144,9 @@ footer a{color:var(--mute);cursor:pointer;text-decoration:underline;text-underli
 .card.locked .icon svg{stroke:#141615}
 button.aula{display:inline-flex;align-items:center;justify-content:center;gap:7px}
 button.aula svg{width:15px;height:15px;fill:currentColor;flex:none}
+.card .flp.no-card{margin:10px 0 2px}
+button.aula[data-aula=feito] svg{fill:#7fce8f}
+button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;font-weight:800}
 .card.locked .lock{background:var(--card);border-color:rgba(var(--c),.6)}
 .card.locked .lock svg{stroke:rgb(var(--c))}
 .card.locked::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.07),transparent);transform:skewX(-18deg);animation:brilho 5s ease-in-out infinite;pointer-events:none}
@@ -497,7 +500,7 @@ function render(){
         <span class="kitx-m">${tem ? '<span class="dot ok"></span>Liberado' : venc ? '<span class="dot err"></span>Acesso vencido' : ''}</span>`;
       const b = document.createElement('div'); b.className = 'btns';
       b.appendChild(btn(tem ? 'Abrir' : 'Experimentar', tem ? 'primary' : 'ghost', () => abreWeb(x.web)));
-      if (tem && window.Aulas && Aulas.tem([x.packId])){ const ba = btn('Ver aula', 'ghost aula', () => Aulas.abre([x.packId], { titulo: x.name, cor: x.cor, dono: true })); ba.disabled = false; ba.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Ver aula'; b.appendChild(ba); }
+      if (tem && window.Aulas && Aulas.tem([x.packId])){ const ba = btn('Ver aula', 'ghost aula', () => Aulas.abre([x.packId], { titulo: x.name, cor: x.cor, dono: true })); ba.disabled = false; ba.dataset.aula = Aulas.progresso([x.packId]).estado; ba.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Ver aula'; b.appendChild(ba); }
       li.appendChild(b); kc.querySelector('.kitx-g').appendChild(li);
     });
   }
@@ -567,8 +570,12 @@ function render(){
     // aula do produto: abre dentro do app, sem sair para outro site
     const packsAula = p.inclui ? [p.packId, ...p.inclui.map(k => PRODUCTS.find(x => x.key === k).packId)] : [p.packId];
     if (owned && window.Aulas && Aulas.tem(packsAula)){
-      const ba = btn('Ver aula', 'ghost aula', () => Aulas.abre(packsAula, { titulo: p.name, cor: p.cor, dono: true }));
-      ba.disabled = false; ba.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Ver aula'; b.appendChild(ba);
+      const op = { titulo: p.name, cor: p.cor, dono: true }, n = Aulas.progresso(packsAula).total, rot = n > 1 ? 'Aulas' : 'Ver aula';
+      const ba = btn(rot, 'ghost aula', () => Aulas.abre(packsAula, op));
+      ba.disabled = false; ba.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>' + rot; b.appendChild(ba);
+      // padrão Base FL: todo produto com aula mostra o progresso no card, e o card inteiro abre a área de aulas
+      const sl = document.createElement('div'); sl.className = 'flp'; c.querySelector('.meta').after(sl); Aulas.selo(sl, packsAula, { cor: p.cor, classe: 'no-card' });
+      c.classList.add('clica'); c.onclick = e => { if (!e.target.closest('button, a, .bon')) Aulas.abre(packsAula, op); };
     }
     c.appendChild(b); $('#s-' + p.sec + ' .cards').appendChild(c);
   }
@@ -684,7 +691,7 @@ T.event.listen('progress', e => { const t = String(e.payload); step(t, /^aviso/i
 })();
 
 // as aulas pedem o acesso da conta: o servidor só entrega o vídeo das aulas dos produtos liberados
-if (window.Aulas){ Aulas.comToken(async () => (sess && await validSess()) ? sess.access_token : null); Aulas.aoCarregar(() => { if (!busy) render(); }); }
+if (window.Aulas){ Aulas.comToken(async () => (sess && await validSess()) ? sess.access_token : null); Aulas.aoCarregar(() => { if (!busy) render(); }); let rp = 0; Aulas.aoProgresso(() => { clearTimeout(rp); rp = setTimeout(() => { if (!busy && !document.querySelector('.fla')) render(); }, 400); }); }
 </script>
 </body>
 </html>

@@ -22,14 +22,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/images/posters/com-pack.jpg" fetchpriority="high">
-<link rel="stylesheet" href="assets/css/style.css?v=20">
+<link rel="stylesheet" href="assets/css/style.css?v=21">
 
 <!-- ============================================================
      Pixel / GTM / métricas: cole aqui, se for usar.
      ============================================================ -->
 
-<script src="assets/js/config.js?v=20"></script>
-<script src="assets/js/main.js?v=20" defer></script>
+<script src="assets/js/config.js?v=21"></script>
+<script src="assets/js/main.js?v=21" defer></script>
 <script src="/prova.js?v=3" defer></script>
 </head>
 <body>
@@ -73,24 +73,33 @@
   </div>
 </section>
 
-<!-- ============ 2. TEM AULA — logo depois da demonstração: não é uma pasta de arquivos largada.
-     O VÍDEO: escreva o endereço em VIDEO_TRECHO_AULA, no assets/js/config.js. Vazio, fica o quadro "em breve". ============ -->
+<!-- ============ 2. AS AULAS — logo depois da demonstração: não é uma pasta de arquivos largada.
+     O VÍDEO é um trecho real de uma das aulas: o endereço fica em VIDEO_TRECHO_AULA, no assets/js/config.js.
+     O que está escrito aqui é o que a pessoa encontra depois de comprar: 2 módulos, 5 aulas, progresso salvo. ============ -->
 <section class="sec sec-aula" id="aula" aria-labelledby="h-aula">
   <div class="wrap aula-grid">
     <div class="aula-copy reveal">
-      <p class="eyebrow"><span>Vem com aula</span></p>
+      <p class="eyebrow"><span>Não é só baixar e se virar</span></p>
       <h2 id="h-aula" class="h2 h2-m">Eu te mostro como instalar e como usar.</h2>
-      <p class="sub">Junto com o pack vai uma aula curta, gravada por mim: a instalação e o uso de cada tipo de título dentro do CapCut. Você assiste uma vez e sai usando.</p>
+      <p class="sub">Junto com os <span data-mais>+</span><span data-qtd>70</span> estilos vão <b>5 aulas práticas</b>, gravadas por mim. Eu abro o CapCut e monto um vídeo inteiro com os títulos do pack, mostrando como escolher, adaptar e encaixar cada um.</p>
+      <ol class="mods">
+        <li><span class="mod-n">Módulo 01</span><b>Instalando os Títulos</b><small>Por onde começar, com tudo pronto no seu CapCut.</small><em>1 aula</em></li>
+        <li><span class="mod-n">Módulo 02</span><b>Destrinchando os Títulos</b><small>Um vídeo de verdade, título por título: trocar o texto, escolher o estilo, encaixar na fala. Com dicas e truques pelo caminho.</small><em>4 aulas</em></li>
+      </ol>
+      <p class="aula-pos">Você assiste dentro do Base FL, no computador ou no celular, e o seu progresso fica salvo.</p>
     </div>
-    <div class="aula-player reveal" id="aulaPlayer">
-      <div class="ap-bar" aria-hidden="true"><i></i><i></i><i></i><span>aula · instalação e uso</span></div>
-      <div class="ap-tela" id="aulaTela">
-        <div class="ap-vazio">
-          <span class="ap-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5z"/></svg></span>
-          <p><b>Trecho da aula</b><span>em breve aqui</span></p>
+    <div class="aula-lado reveal">
+      <p class="aula-chama"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5v11l9-5.5z"/></svg>Dá o play e veja um trecho de uma das aulas.</p>
+      <div class="aula-player" id="aulaPlayer">
+        <div class="ap-bar" aria-hidden="true"><i></i><i></i><i></i><span>trecho da aula · Títulos Dinâmicos</span></div>
+        <div class="ap-tela" id="aulaTela">
+          <div class="ap-vazio">
+            <span class="ap-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5z"/></svg></span>
+            <p><b>Trecho da aula</b><span>em breve aqui</span></p>
+          </div>
         </div>
+        <div class="ap-tl" aria-hidden="true"><span>Aula 01</span><span>Aula 02</span><span>Aula 03</span><span>Aula 04</span><span>Aula 05</span></div>
       </div>
-      <div class="ap-tl" aria-hidden="true"><span>Instalar</span><span>Títulos</span><span>Ganchos</span><span>Destaques de fala</span></div>
     </div>
   </div>
 </section>
@@ -291,7 +300,7 @@
         </ul>
         <ul class="kit-lista">
           <li><b>Instalação pelo app Base FL</b><span>Um clique, no Windows ou no Mac. Sem pasta, sem importar arquivo.</span></li>
-          <li><b>Aula de instalação e uso</b><span>Gravada pelo Fernando, mostrando cada tipo de título.</span></li>
+          <li><b>5 aulas práticas</b><span>Gravadas pelo Fernando: a instalação e um vídeo inteiro montado com os títulos.</span></li>
           <li><b>Atualizações pelo app</b><span>O que entrar no pack depois chega pra você.</span></li>
           <li><b>Acesso vitalício</b><span>Paga uma vez. Fica na sua conta.</span></li>
         </ul>
@@ -344,7 +353,7 @@
       <details><summary>Como recebo e como instalo?</summary><p>Pelo app Base FL. Você baixa, entra com o e-mail da compra e clica em Instalar. Pagando por Pix ou cartão, a liberação é na hora.</p></details>
       <details><summary>Preciso importar arquivo toda vez?</summary><p>Não. Você instala uma vez e os estilos ficam no seu CapCut. Em cada projeto, é só escolher.</p></details>
       <details><summary>Dá pra mudar texto, cor e tamanho?</summary><p>O texto, sempre. Cor, tamanho e posição, na maioria dos estilos, direto no CapCut, como em qualquer texto.</p></details>
-      <details><summary>Tem aula ensinando?</summary><p>Tem. Um vídeo mostra a instalação e o uso de cada tipo de título.</p></details>
+      <details><summary>Tem aula ensinando?</summary><p>Tem. São 5 aulas práticas: a instalação e, depois, um vídeo inteiro montado com os títulos do pack. Você assiste dentro do Base FL e o progresso fica salvo.</p></details>
       <details><summary>Posso usar em vídeos de clientes?</summary><p>Pode. Use em quantos vídeos quiser, seus ou de clientes. O que não pode é repassar ou revender os arquivos do pack.</p></details>
       <details><summary>E se eu comprar e não gostar?</summary><p>Você tem <span data-garantia>7</span> dias de garantia. Dentro desse prazo, é só pedir o reembolso.</p></details>
       <!-- PERGUNTAS EXTRAS: as respostas ficam em FAQ_EXTRA, no assets/js/config.js. Pergunta sem resposta não aparece. -->
