@@ -26,9 +26,12 @@
     return pede(tok, COLS + NOVAS).then(function (r) { return r.ok ? r : pede(tok, COLS); })
       .then(function (r) { if (r.ok) return r.json(); if (tok) return busca(null); return []; });
   }
+  // módulos cadastrados (tabela aulas_modulos, arquivo 26): dão nome e texto ao módulo e deixam um módulo existir sem aula ("Em breve")
+  var modsSrv = [];
+  function buscaMods() { return fetch(SUPA.url + '/rest/v1/aulas_modulos?select=pack_id,ordem,nome,descricao&ativo=eq.true&order=ordem.asc', { headers: { apikey: SUPA.key, Authorization: 'Bearer ' + SUPA.key } }).then(function (r) { return r.ok ? r.json() : []; }).then(function (j) { modsSrv = Array.isArray(j) ? j : []; }).catch(function () { modsSrv = []; }); }
   function carrega() {
     if (pedido) return pedido;
-    pedido = token().then(function (tok) { return busca(tok).then(function (j) { return [j, tok]; }); })
+    pedido = token().then(function (tok) { return Promise.all([busca(tok), buscaMods()]).then(function (x) { return [x[0], tok]; }); })
       .then(function (x) { lista = Array.isArray(x[0]) ? x[0].filter(function (a) { return a.url; }) : []; avisa(); if (x[1]) sincroniza(x[1]); return lista; })
       .catch(function () { lista = []; return lista; });
     return pedido;
@@ -199,6 +202,10 @@
 .fla-mh p{grid-column:1/-1;margin:4px 0 0;color:#B3B4A2;font-size:14px;line-height:1.5;max-width:64ch}\
 .fla-mh i{grid-column:1/-1;margin-top:10px;height:3px}\
 .fla-cards{display:grid;gap:6px}\
+.fla-breve{display:flex;align-items:center;gap:14px;padding:16px 14px;border-radius:14px;border:1px dashed #343a37;color:#8d8e80;font-size:13.5px;line-height:1.4}\
+.fla-breve i{flex:none;width:38px;height:38px;border-radius:11px;background:repeating-linear-gradient(135deg,#1f2422 0 6px,#262b29 6px 12px)}\
+.fla-breve b{display:block;font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#B3B4A2;margin-bottom:2px}\
+.fla-mod.breve .fla-mh b{color:#B3B4A2}\
 .fla-card{all:unset;box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;width:100%;padding:13px 14px;border-radius:14px;border:1px solid #262b29;background:#191d1b;cursor:pointer;transition:border-color .2s,background .2s,transform .2s}\
 .fla-card:hover{border-color:rgba(var(--k),.5);background:#1d2120;transform:translateX(2px)}\
 .fla-card:focus-visible{outline:2px solid #F4F0E4;outline-offset:2px}\
@@ -304,7 +311,15 @@
     var at = -1, VEL = [1, 1.25, 1.5, 2], iv = Math.max(0, [1, 1.25, 1.5, 2].indexOf(parseFloat(mem.get('fl_aula_vel')))), some = 0, arr = false, auto = mem.get('fl_aula_auto') !== '0', conta = 0, px = pl.querySelector('.fla-px'), recem = null;
     pl.querySelector('.vel').textContent = String(VEL[iv]).replace('.', ',') + 'x';
     // módulos, na ordem; aulas sem módulo ficam num grupo só
-    var mods = []; aulas.forEach(function (a, i) { var n = a.modulo || '', m = mods[mods.length - 1]; if (!m || m.nome !== n) { m = { nome: n, desc: '', aulas: [] }; mods.push(m); } if (a.modulo_desc && !m.desc) m.desc = a.modulo_desc; m.aulas.push(i); });
+    var mods = []; aulas.forEach(function (a, i) { var n = a.modulo || '', m = mods[mods.length - 1]; if (!m || m.nome !== n) { m = { nome: n, desc: '', aulas: [], ordem: a.modulo_ordem || 1, pack: a.pack_id }; mods.push(m); } if (a.modulo_desc && !m.desc) m.desc = a.modulo_desc; m.aulas.push(i); });
+    // nome e texto oficiais do módulo; e os módulos que ainda não têm aula entram como "Em breve"
+    var pk = [].concat(packs);
+    modsSrv.filter(function (x) { return pk.indexOf(x.pack_id) >= 0; }).forEach(function (x) {
+      var m = null; mods.forEach(function (y) { if (y.pack === x.pack_id && y.ordem === x.ordem && y.nome) m = y; });
+      if (m) { m.nome = x.nome || m.nome; if (x.descricao) m.desc = x.descricao; }
+      else if (mods.some(function (y) { return y.nome; }) || !mods.length) mods.push({ nome: x.nome, desc: x.descricao || '', aulas: [], ordem: x.ordem, pack: x.pack_id, breve: true });
+    });
+    mods.sort(function (a, b) { return pk.indexOf(a.pack) - pk.indexOf(b.pack) || a.ordem - b.ordem; });
     var dur = function (a) { var d = parseFloat(mem.get('fl_aula_d_' + a.id)); return a.duracao || (d > 0 ? Math.max(1, Math.round(d / 60)) + ' min' : ''); };
     var est = function (a) { return feita(a) ? 'ok' : comecou(a) ? 'and' : 'novo0'; };
     var rot = function (a) { return feita(a) ? 'Concluída' : comecou(a) ? 'Em andamento' : (dur(a) || 'Não iniciada'); };
@@ -320,6 +335,7 @@
       else h += '<div class="fla-fim"><b>Tudo assistido.</b>Você pode rever qualquer aula quando quiser.</div>';
       mods.forEach(function (m, k) {
         var mf = m.aulas.filter(function (i) { return feita(aulas[i]); }).length;
+        if (!m.aulas.length) { h += '<section class="fla-mod breve"><div class="fla-mh"><small>Módulo ' + dois(k + 1) + '</small><b data-mn="' + k + '"></b><span>Em breve</span>' + (m.desc ? '<p data-md="' + k + '"></p>' : '') + '</div><div class="fla-breve"><i></i><span><b>Em breve</b>As aulas deste módulo entram aqui.</span></div></section>'; return; }
         h += '<section class="fla-mod"><div class="fla-mh">' + (m.nome ? '<small>Módulo ' + dois(k + 1) + '</small><b data-mn="' + k + '"></b>' : '<small>Aulas</small><b>Todas as aulas</b>') + '<span>' + mf + '/' + m.aulas.length + ' concluída' + (m.aulas.length > 1 ? 's' : '') + '</span>' + (m.desc ? '<p data-md="' + k + '"></p>' : '') + '<i class="fla-tr2"><u data-w="' + (mf / m.aulas.length * 100) + '"></u></i></div><div class="fla-cards">' +
           m.aulas.map(function (i) { var a = aulas[i], e = est(a); return '<button class="fla-card ' + e + (recem === a.id ? ' novo' : '') + '" type="button" data-i="' + i + '"><span class="n">' + (e === 'ok' ? IC.ok : dois(i + 1)) + '</span><span><b></b><small></small></span><span class="st">' + rot(a) + '</span></button>'; }).join('') + '</div></section>';
       });
@@ -336,7 +352,7 @@
       var feitas = aulas.filter(feita).length, pg = document.createElement('div'); pg.className = 'fla-pg';
       pg.innerHTML = '<span><b>' + feitas + ' de ' + aulas.length + ' aulas concluídas</b><em style="font-style:normal">' + Math.round(feitas / aulas.length * 100) + '%</em></span><i><u style="width:' + (feitas / aulas.length * 100) + '%"></u></i>'; li.appendChild(pg);
       mods.forEach(function (m, k) {
-        if (m.nome) { var t = document.createElement('div'); t.className = 'fla-lm'; var mf = m.aulas.filter(function (i) { return feita(aulas[i]); }).length; t.innerHTML = '<span></span><span>' + mf + '/' + m.aulas.length + '</span>'; t.firstChild.textContent = m.nome; li.appendChild(t); }
+        if (m.nome) { var t = document.createElement('div'); t.className = 'fla-lm'; var mf = m.aulas.filter(function (i) { return feita(aulas[i]); }).length; t.innerHTML = '<span></span><span>' + (m.aulas.length ? mf + '/' + m.aulas.length : 'em breve') + '</span>'; t.firstChild.textContent = m.nome; li.appendChild(t); }
         m.aulas.forEach(function (i) {
           var a = aulas[i], b = document.createElement('button'), ok = feita(a); b.className = 'fla-it' + (i === at ? ' on' : '') + (ok && i !== at ? ' ok' : '');
           b.innerHTML = '<span class="n"></span><span><b></b><small></small></span>';

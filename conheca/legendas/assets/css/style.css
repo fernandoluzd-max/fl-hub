@@ -883,3 +883,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .ap-tl span:first-child,.ap-tl span:last-child{flex-grow:1}
 .ap-tl span:first-child{background:rgba(88,214,201,.26);color:#fff}
 @media (min-width:900px){.aula-grid{align-items:center}.aula-chama{font-size:16.5px}}
+
+/* v22 · 6 aulas na faixa do player */
+.ap-tl span{padding:6px 5px;text-align:center}
+@media (max-width:520px){.ap-tl span{font-size:8.5px;letter-spacing:0}}
