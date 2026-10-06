@@ -413,10 +413,10 @@ async function demo(){
 demo();
 ''',
   h2='Efeitos certos, achados em segundos.',
-  bens=[('Organizados por categoria','11 pastas: whooshes, impactos, risers, foleys, beeps e mais. Você acha o som pelo nome, sem ouvir 50 arquivos.'),
+  bens=[('Organizados por categoria','14 pastas: whooshes, impactos, risers, pops, beeps, notificações e mais. Você acha o som pelo nome, sem ouvir 50 arquivos.'),
         ('Direto no CapCut','Ficam nas predefinições de áudio do CapCut. É só arrastar para a timeline do seu projeto.'),
         ('Instala e atualiza num clique','O app Base FL coloca tudo no lugar. Quando sair efeito novo, é só clicar em Atualizar.')],
-  inclui=['261 efeitos sonoros','14 categorias','Whooshes, impactos e risers','Foleys, beeps e cliques','Instalação em 1 clique','Acesso vitalício'],
+  inclui=['261 efeitos sonoros','14 categorias','Whooshes, impactos e risers','Pops, cliques, beeps e notificações','Instalação em 1 clique','Acesso vitalício'],
   faq=[('Funciona em qual CapCut?','No CapCut para computador, no Mac ou no Windows. O app Base FL encontra o CapCut sozinho.'), FAQ_ACESSO, FAQ_VIT, FAQ_APP],
   fh2='Dê ritmo aos seus cortes hoje.', selo='Mac e Windows'))
 
