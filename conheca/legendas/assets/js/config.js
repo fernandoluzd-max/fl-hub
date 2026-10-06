@@ -36,7 +36,7 @@ window.PACK_CONFIG = {
   // TRECHO DA AULA (bloco "Vem com aula", logo abaixo do topo).
   // É um trecho real de uma das aulas. Para trocar, mude o endereço. Vazio, a página mostra o quadro "em breve".
   // Ex.: "https://aulas.basefl.com/trecho-aula.mp4"
-  VIDEO_TRECHO_AULA: "https://aulas.basefl.com/trecho%20da%20aula.mp4",
+  VIDEO_TRECHO_AULA: "https://aulas.basefl.com/trecho%20aula%20lp.mp4",
   CAPA_TRECHO_AULA: "assets/images/posters/trecho-aula.jpg",     // opcional: imagem parada que aparece antes do play
 
   // QUEM FEZ: uma linha a mais sobre o Fernando (só fatos). Vazia, não aparece.

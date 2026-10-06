@@ -58,15 +58,14 @@
 
   /* ---------- 2. Galeria dos estilos: o editor, agora de tocar ----------
      PARA TROCAR OU ACRESCENTAR UM ESTILO: mexa só nesta lista.
-     nome · tipo · arquivo (o mesmo nome em assets/videos/*.mp4 e assets/images/posters/*.jpg) · cor do estilo */
+     O arquivo é o mesmo nome em assets/videos/*.mp4 e assets/images/posters/*.jpg.
+     O "centro do título" serve para o texto aparecer bem no meio do quadro (um pouco acima do centro, como na área segura de Reels). */
   var ESTILOS = [
-    ["Bold Template",     "Título",           "titulo-bold-template",   "#d9d06a"],
-    ["Clássico Fernando", "Título",           "titulo-classico",        "#d8d4cc"],
-    ["Script Rosa",       "Título",           "titulo-legendas-script", "#f3a5d6"],
-    ["Neon",              "Título",           "titulo-neon-prontos",    "#3fd5f2"],
-    ["Errado × Certo",    "Gancho",           "gancho-errado-certo",    "#62e36f"],
-    ["Mensagem Serifada", "Gancho",           "gancho-mensagem",        "#ff9a4d"],
-    ["Duas Linhas",       "Destaque de fala", "legenda-duas-linhas",    "#5fe0ea"]
+    // nome · família (só as três que representam o pack) · arquivo · cor · centro do título dentro do vídeo (x%, y%)
+    ["Bold Template",       "Bold Template",          "titulo-bold-template",  "#d9d06a", 49.8, 49.3],
+    ["Clássico Fernando",   "Clássicos do Fernando",  "titulo-classico",       "#d8d4cc", 47.2, 49.6],
+    ["Duas Linhas",         "Divertidos",             "legenda-duas-linhas",   "#5fe0ea", 50.0, 54.4],
+    ["Nome em Destaque",    "Bold Template",          "titulo-nome-vermelho",  "#ff5a4d", 51.0, 49.5]
   ];
   function galeria() {
     var box = $("#gal"), v = $("#galVideo"); if (!box || !v) return;
@@ -87,9 +86,10 @@
       if (i === cur) { try { v.currentTime = 0; } catch (e) {} toca(); return; }
       cur = i; var e = ESTILOS[i];
       box.style.setProperty("--c", e[3]);
+      v.style.setProperty("--cx", (e[4] || 50) + "%"); v.style.setProperty("--cy", (e[5] || 49) + "%");
       tabs.forEach(function (b, k) { var on = k === i; b.setAttribute("aria-selected", on ? "true" : "false"); b.tabIndex = on ? 0 : -1; });
       cl.forEach(function (c, k) { c.classList.toggle("on", k === i); c.style.setProperty("--p", "0%"); });
-      tag.textContent = num(i) + " · " + e[1]; nome.textContent = e[0]; tipo.textContent = e[1];
+      tag.textContent = e[1]; nome.textContent = e[0]; tipo.textContent = num(i) + " de " + num(ESTILOS.length - 1);
       frame.classList.remove("troca"); void frame.offsetWidth; frame.classList.add("troca");
       v.poster = arq(i, true); v.src = arq(i); v.load(); toca();
       // no celular a faixa rola sozinha até o estilo escolhido (sem puxar a página)
@@ -245,7 +245,7 @@
     var pp = document.createElement("button"); pp.type = "button"; pp.className = "cmp-pp"; pp.setAttribute("aria-label", "Pausar");
     pp.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path class="pa" d="M8 5v14M16 5v14"/><path class="pl" d="M8 5l11 7-11 7z"/></svg>';
     var som = document.createElement("button"); som.type = "button"; som.className = "cmp-som"; som.setAttribute("aria-pressed", "false");
-    som.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path class="on" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.8 7.8 0 0 1 0 11"/><path class="off" d="M16 9.5l5 5M21 9.5l-5 5"/></svg><span>Ouvir</span>';
+    som.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path class="on" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.8 7.8 0 0 1 0 11"/><path class="off" d="M16 9.5l5 5M21 9.5l-5 5"/></svg><span>Ativar som</span>';
     palco.appendChild(a); palco.appendChild(d); palco.appendChild(linha); palco.appendChild(rng); palco.appendChild(pp); palco.appendChild(som);
     fig.appendChild(palco);
     var cap = document.createElement("figcaption"); cap.className = "cmp-cap";
@@ -275,11 +275,16 @@
     // som: o áudio é o do vídeo "com". Ligar o som recomeça do início, para a fala fazer sentido.
     som.addEventListener("click", function () {
       var liga = vd.muted; vd.muted = !liga; if (liga) vd.removeAttribute("muted");
-      som.setAttribute("aria-pressed", liga ? "true" : "false"); fig.classList.toggle("com-som", liga); som.lastChild.textContent = liga ? "Som ligado" : "Ouvir";
+      som.setAttribute("aria-pressed", liga ? "true" : "false"); fig.classList.toggle("com-som", liga); som.lastChild.textContent = liga ? "Som ligado" : "Ativar som";
       if (liga) { evento("comparador_som"); pausado = false; fig.classList.remove("pausado"); pp.setAttribute("aria-label", "Pausar"); carrega(); try { vd.currentTime = 0; va.currentTime = 0; } catch (e) {} toca(true); }
     });
-    // o vídeo começa a baixar quando a página termina de carregar (não disputa com o texto e a capa)
-    if (document.readyState === "complete") setTimeout(carrega, 200); else window.addEventListener("load", function () { setTimeout(carrega, 200); });
+    // o vídeo do topo é a demonstração principal: começa a carregar na hora (a capa já está na tela) e toca sozinho, sem som
+    carrega();
+    [va, vd].forEach(function (v) { v.addEventListener("canplay", function () { if (naTela && !pausado && v.paused) toca(); }); });
+    // alguns celulares (modo de pouca energia, por exemplo) seguram o autoplay: o primeiro toque ou rolagem na página libera
+    var solta = function () { if (naTela && !pausado && (vd.paused || va.paused)) toca(); };
+    ["touchend", "pointerdown", "scroll", "keydown"].forEach(function (n) { window.addEventListener(n, solta, { passive: true, capture: true }); });
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) solta(); });
     if ("IntersectionObserver" in window) new IntersectionObserver(function (en) {
       naTela = en[en.length - 1].isIntersecting;      // vale a leitura mais recente
       if (naTela) {
