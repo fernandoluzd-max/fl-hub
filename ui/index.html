@@ -109,15 +109,25 @@ footer a{color:var(--mute);cursor:pointer;text-decoration:underline;text-underli
 .modal.show{display:grid}
 .box{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);width:min(620px,100%);padding:20px;display:flex;flex-direction:column;gap:12px}
 .box pre{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;max-height:340px;overflow:auto;font-size:12px;white-space:pre-wrap;-webkit-user-select:text;user-select:text}
-.termo{width:min(520px,100%);gap:14px}
-.termo-s{font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#F2A541}
-.termo h3{font-family:"Archivo",var(--font);font-weight:800;font-size:21px;margin-top:-8px}
+/* aviso antes de instalar: linguagem própria de "leia antes de continuar" (neutra); o verde só entra como confirmação do aceite */
+.termo{--tn:color-mix(in srgb,var(--ink) 55%,var(--card));--tc:var(--tn);width:min(520px,100%);gap:14px;position:relative;overflow:hidden;border-color:color-mix(in srgb,var(--tc) 38%,var(--line));transition:border-color .35s ease}
+.termo::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--tc);opacity:.75;transition:background .35s ease}
+.termo.ok{--tc:var(--ok)}
+.termo-h{display:flex;align-items:center;gap:13px;margin-top:4px}
+.termo-i{position:relative;flex:none;width:40px;height:40px;border-radius:12px;background:color-mix(in srgb,var(--tc) 13%,transparent);border:1px solid color-mix(in srgb,var(--tc) 40%,transparent);transition:background .35s ease,border-color .35s ease}
+.termo-i svg{position:absolute;inset:9px;width:20px;height:20px;fill:none;stroke:var(--tc);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:opacity .25s ease,transform .35s cubic-bezier(.3,1.4,.5,1),stroke .35s ease}
+.termo-i .v{opacity:0;transform:scale(.5)}
+.termo.ok .termo-i .a{opacity:0;transform:scale(.5)}.termo.ok .termo-i .v{opacity:1;transform:none}
+.termo-s{display:block;font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);margin-bottom:3px}
+.termo h3{font-family:"Archivo",var(--font);font-weight:800;font-size:21px;line-height:1.15}
 .termo p,.termo li{font-family:"Figtree",var(--font);font-size:14px;line-height:1.5;color:var(--sub)}
 .termo p b,.termo li b{color:var(--ink)}
-.termo ul{margin:0;padding-left:18px;display:grid;gap:7px}
-.termo-c{display:flex;gap:11px;align-items:flex-start;border:1px solid rgba(242,165,65,.5);background:rgba(242,165,65,.08);border-radius:12px;padding:12px;font-size:14px;font-weight:600;cursor:pointer}
-.termo-c input{width:19px;height:19px;flex:none;margin-top:1px;accent-color:#F2A541}
-.termo .btns button:disabled{opacity:.4;cursor:not-allowed}
+.termo-c{display:flex;gap:11px;align-items:flex-start;border:1px solid color-mix(in srgb,var(--tc) 45%,var(--line));background:color-mix(in srgb,var(--tc) 7%,transparent);border-radius:12px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;transition:border-color .35s ease,background .35s ease}
+.termo-c input{-webkit-appearance:none;appearance:none;width:20px;height:20px;flex:none;margin:1px 0 0;border-radius:6px;border:1.5px solid var(--tn);background:transparent center/14px no-repeat;cursor:pointer;transition:background-color .25s ease,border-color .25s ease,transform .3s cubic-bezier(.3,1.5,.5,1)}
+.termo-c input:checked{background-color:var(--ok);border-color:var(--ok);transform:scale(1.06);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M3 7.4l2.6 2.6L11 4.4' fill='none' stroke='%230d1a11' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.termo-c input:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.termo .btns .primary{background:var(--ok);color:#0d1a11;transition:background .35s ease,color .35s ease,opacity .35s ease}
+.termo .btns .primary:disabled{background:var(--step);color:var(--mute);opacity:1;cursor:not-allowed}
 .banner{background:linear-gradient(90deg,rgba(242,165,65,.14),transparent);border:1px solid rgba(242,165,65,.3);border-radius:14px;padding:12px 16px;font-size:13px;display:none}
 .banner.show{display:block}
 .banner.nova{background:linear-gradient(90deg,rgba(123,216,143,.16),transparent);border-color:rgba(123,216,143,.4);margin-bottom:10px}
@@ -259,11 +269,12 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
 
 <!-- condições de uso: aparece ao clicar em Instalar, uma vez por produto e por versão do texto -->
 <div class="modal" id="termo"><div class="box termo" role="dialog" aria-modal="true" aria-labelledby="t-title">
-  <span class="termo-s" id="t-prod">Condições de uso</span>
-  <h3 id="t-title">Importante antes de instalar</h3>
+  <div class="termo-h">
+    <span class="termo-i" aria-hidden="true"><svg class="a" viewBox="0 0 20 20"><path d="M10 2.6l8 14H2z"/><path d="M10 8v4.200M10 14.800v.100"/></svg><svg class="v" viewBox="0 0 20 20"><path d="M4 10.500l4 4 8-9"/></svg></span>
+    <div><span class="termo-s" id="t-prod">Condições de uso</span><h3 id="t-title">Importante antes de instalar</h3></div>
+  </div>
   <p>Os materiais disponibilizados através do Base FL são <b>licenciados para uso exclusivo do comprador</b> enquanto o acesso ao produto estiver ativo.</p>
-  <p>Ao prosseguir com a instalação, você declara estar ciente de que, em caso de <b>reembolso, cancelamento ou perda do direito de acesso</b> ao produto, a licença de utilização desses materiais também será encerrada.</p>
-  <p>Nessa situação, os arquivos vinculados à compra deverão deixar de ser utilizados e deverão ser removidos do dispositivo.</p>
+  <p>Em caso de <b>reembolso, cancelamento ou perda do direito de acesso</b>, a licença de uso dos materiais vinculados à compra será automaticamente encerrada, e qualquer utilização posterior deixará de ser autorizada.</p>
   <p>Os materiais não podem ser revendidos, redistribuídos, compartilhados ou disponibilizados a terceiros.</p>
   <label class="termo-c"><input type="checkbox" id="t-ok"><span>Li, estou ciente e concordo com as condições de uso dos materiais.</span></label>
   <div class="btns"><button class="primary" id="t-vai" disabled>Confirmar e instalar</button><button class="ghost" id="t-nao">Cancelar</button></div>
@@ -609,15 +620,15 @@ async function baixaEInstala(p, srv){
 }
 const erroInstala = e => { const m = String(e.message || e); return /not found|object not found|400|403/i.test(m) ? 'Este pack não está liberado para ' + (sess?.email||'este e-mail') + '.' : traduz(m); };
 // ----- condições de uso: lê, marca a caixa e confirma. Vale por produto e por versão do texto; fica registrado no servidor. -----
-const TERMO = '2026-10';          // mude só quando o texto das condições mudar de verdade: todo mundo aceita de novo
+const TERMO = '2026-10b';          // mude só quando o texto das condições mudar de verdade: todo mundo aceita de novo
 let aceitos = new Set();
 function pedeAceite(p){
   if (aceitos.has(p.packId)) return Promise.resolve(true);
   return new Promise(fim => {
     const m = $('#termo'), ok = $('#t-ok'), vai = $('#t-vai');
-    $('#t-prod').textContent = 'Condições de uso · ' + p.name; ok.checked = false; vai.disabled = true; m.classList.add('show'); ok.focus();
+    $('#t-prod').textContent = 'Condições de uso · ' + p.name; ok.checked = false; vai.disabled = true; m.querySelector('.termo').classList.remove('ok'); m.classList.add('show'); ok.focus();
     const fecha = r => { m.classList.remove('show'); ok.onchange = vai.onclick = $('#t-nao').onclick = null; fim(r); };
-    ok.onchange = () => { vai.disabled = !ok.checked; };
+    ok.onchange = () => { vai.disabled = !ok.checked; m.querySelector('.termo').classList.toggle('ok', ok.checked); };
     $('#t-nao').onclick = () => fecha(false);
     vai.onclick = async () => {
       if (!ok.checked) return; vai.disabled = true;
