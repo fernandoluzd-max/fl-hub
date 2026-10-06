@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Gera conheca/mood/index.html (página de vendas do Mood).
-# A demonstração da página usa o MESMO motor de cor da ferramenta: ele é copiado de lut/index.html.
+# A demonstração usa um vídeo real e LUTs criadas pelo motor do Mood (ver tools/gera_mood_looks.mjs).
 import os
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # preço, link de compra e parcelas: vêm do catalogo.json (fonte única)
@@ -14,8 +14,21 @@ I, NP = _CAT['juros_mes'], _CAT['parcelas']
 parc = PRECO * I / (1 - (1 + I) ** -NP)
 PARC = f'{parc:.2f}'.replace('.', ',')
 
-fer = open(os.path.join(RAIZ, 'lut/index.html'), encoding='utf-8').read()
-motor = fer[fer.index('// ===================== cor: sRGB <-> Lab'):fer.index('// ===================== estado')]
+# Os looks da demonstração (nomes, referências e força) ficam em tools/mood_looks.json.
+# As LUTs deles são criadas pelo motor do próprio Mood em tools/gera_mood_looks.mjs
+# (grava conheca/mood/assets/looks.png e as imagens paradas). Rode aquele script se trocar o vídeo ou as referências.
+import json
+LOOKS = json.load(open(os.path.join(RAIZ, 'tools/mood_looks.json'), encoding='utf-8'))
+PALETA = json.load(open(os.path.join(RAIZ, 'tools/mood_paleta.json'), encoding='utf-8'))
+AS = '/conheca/mood/assets/'
+V = '3'   # muda quando os arquivos da pasta assets mudam (evita versão antiga guardada no navegador)
+REFS = '\n'.join(
+    f'          <button class="rf{" on" if i == 0 else ""}" type="button" role="radio" aria-checked="{"true" if i == 0 else "false"}" data-id="{l["id"]}" data-n="{l["n"]}"><span class="mi"><img src="{AS}ref-{l["id"]}.jpg?v={V}" width="360" height="240" alt="" decoding="async"></span><span class="nm">{l["n"]}</span></button>'
+    for i, l in enumerate(LOOKS))
+GALERIA = '\n'.join(
+    f'      <figure class="rv"><img src="{AS}g-{l["id"]}.jpg?v={V}" width="480" height="270" alt="A mesma cena com o look {l["n"]}" loading="lazy" decoding="async"><figcaption>{l["n"]}</figcaption></figure>'
+    for l in LOOKS)
+PAL = ''.join(f'<i style="background:{c}"></i>' for c in PALETA)
 
 LOGO = '<span class="mood" aria-label="Mood">M<svg viewBox="0 0 414 231" aria-hidden="true"><circle cx="115.5" cy="115.5" r="115.5" fill="url(#mg)"/><circle cx="298" cy="115.5" r="99.9" fill="none" stroke="currentColor" stroke-width="31.2"/></svg>d</span>'
 
@@ -34,12 +47,12 @@ HTML = r'''<!doctype html>
 <link rel="icon" type="image/svg+xml" href="https://basefl.com/lut/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="https://basefl.com/lut/favicon-32.png">
 <link rel="apple-touch-icon" href="https://basefl.com/lut/apple-touch-icon.png">
-<meta name="theme-color" content="#111312">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://images.pexels.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#0E0F0F">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#111312; --panel:#191C1B; --panel2:#202423; --line:#2B302E; --ink:#F4F0E4; --mute:#B3B4A2; --dim:#74756a;
+  --bg:#0E0F0F; --panel:#151716; --panel2:#1B1E1D; --line:#262A28; --ink:#F3EFE6; --mute:#A9AA9C; --dim:#73746B;
   --grad:linear-gradient(125deg,#FFB347,#FF6FAE 38%,#B45CFF 70%,#5AB8FF);
   --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   --f:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
@@ -48,175 +61,278 @@ HTML = r'''<!doctype html>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 html,body{background:var(--bg)}
-body{color:var(--ink);font:17px/1.55 var(--f);overflow-x:hidden;-webkit-font-smoothing:antialiased}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(900px 620px at 85% -10%,rgba(180,92,255,.20),transparent 70%),radial-gradient(700px 480px at -8% 2%,rgba(255,179,71,.09),transparent 70%)}
+body{color:var(--ink);font:17px/1.6 var(--f);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{color:inherit}
 button{font:inherit;color:inherit}
+img{max-width:100%}
 :focus-visible{outline:2px solid #B45CFF;outline-offset:3px;border-radius:10px}
-.w{position:relative;max-width:1080px;margin:0 auto;padding:0 20px}
-.mono{font-family:var(--m);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.w{position:relative;max-width:1080px;margin:0 auto;padding:0 24px}
+.mono{font-family:var(--m);font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
 .kick{display:inline-flex;align-items:center;gap:10px}
-.kick::before{content:"";width:26px;height:2px;border-radius:2px;background:var(--grad)}
+.kick::before{content:"";width:22px;height:1.5px;border-radius:2px;background:var(--grad)}
 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 
 nav{display:flex;align-items:center;gap:12px;padding:18px 0}
-.mood{font-family:var(--d);font-weight:800;font-size:30px;line-height:1;letter-spacing:-.02em;display:inline-flex;align-items:baseline;color:var(--ink);text-decoration:none}
+.mood{font-family:var(--d);font-weight:800;font-size:28px;line-height:1;letter-spacing:-.02em;display:inline-flex;align-items:baseline;color:var(--ink);text-decoration:none}
 .mood svg{height:.56em;width:1em;margin:0 .035em;flex:none}
 nav .de{font-family:var(--m);font-size:10.5px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;padding-left:12px;border-left:1px solid var(--line);text-decoration:none}
 nav .sp{flex:1}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;text-decoration:none;font-weight:750;font-size:17px;border-radius:16px;padding:16px 26px;border:0;background:var(--grad);color:#14070e;transition:transform .12s,filter .15s;box-shadow:0 14px 40px -14px rgba(180,92,255,.9)}
-.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}
-.btn.sm{font-size:14px;padding:10px 16px;border-radius:12px;box-shadow:none}
-.btn.gh{background:transparent;color:var(--ink);border:1px solid #3d4340;box-shadow:none}
-.btn.gh:hover{border-color:var(--ink)}
-.btn.full{width:100%}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;text-decoration:none;font-weight:700;font-size:17px;line-height:1.2;text-align:center;border-radius:14px;padding:17px 28px;border:0;background:var(--grad);color:#14070e;transition:transform .18s ease,filter .18s ease}
+.btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.btn:active{transform:translateY(0) scale(.985)}
+.btn.sm{font-size:14px;padding:10px 16px;border-radius:11px}
+.btn.gh{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px #3a3f3c}
+.btn.gh:hover{box-shadow:inset 0 0 0 1px var(--ink)}
 
-.hero{text-align:center;padding:34px 0 26px}
-h1{font-family:var(--d);font-weight:800;font-size:clamp(38px,7.4vw,76px);line-height:.98;letter-spacing:-.035em;margin:14px auto 16px;max-width:13ch;text-wrap:balance}
-.lead{color:var(--mute);font-size:clamp(17px,2.2vw,20px);max-width:56ch;margin:0 auto 26px;text-wrap:pretty}
+.hero{text-align:center;padding:40px 0 0}
+h1{font-family:var(--d);font-weight:800;font-size:clamp(38px,7.4vw,76px);line-height:.98;letter-spacing:-.035em;margin:16px auto 18px;max-width:13ch;text-wrap:balance}
+.lead{color:var(--mute);font-size:clamp(17px,2.2vw,20px);max-width:56ch;margin:0 auto 28px;text-wrap:pretty}
 .lead b{color:var(--ink);font-weight:600}
 .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.sob{color:var(--dim);font-size:14px;margin-top:14px}
+.sob{color:var(--dim);font-size:14px;margin:16px auto 0;max-width:46ch;text-wrap:balance}
 
-/* demonstração real */
-.demo{position:relative;margin:26px auto 0;max-width:940px}
-.demo::before{content:"";position:absolute;inset:8% 4% -4%;background:var(--grad);filter:blur(70px);opacity:.28;z-index:0;border-radius:50%}
-.tela{position:relative;z-index:1;border-radius:26px;overflow:hidden;border:1px solid #3a3f3c;background:#0b0c0c;aspect-ratio:16/10;touch-action:pan-y;user-select:none;-webkit-user-select:none;box-shadow:0 40px 90px -40px #000}
-.tela canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.tela .corte{position:absolute;top:0;bottom:0;width:2px;background:#fff;box-shadow:0 0 14px rgba(255,255,255,.7);z-index:2;cursor:ew-resize}
-.tela .corte span{position:absolute;top:50%;left:50%;width:42px;height:42px;margin:-21px 0 0 -21px;border-radius:50%;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.45);display:grid;place-items:center;color:#111;font-weight:900;font-size:13px;letter-spacing:2px}
-.tg{position:absolute;top:14px;z-index:3;font-size:12px;font-weight:700;padding:6px 11px;border-radius:99px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);pointer-events:none}
-.tg.l{left:14px}.tg.r{right:14px;background:var(--grad);color:#111}
-.refb{position:absolute;left:14px;bottom:14px;z-index:3;display:flex;align-items:center;gap:10px;padding:7px 14px 7px 7px;border-radius:99px;background:rgba(0,0,0,.62);backdrop-filter:blur(8px);pointer-events:none}
-.refb canvas{position:static;width:46px;height:46px;border-radius:50%;box-shadow:0 0 0 2px #FF6FAE}
-.refb b{display:block;font-size:13.5px;line-height:1.2;text-align:left}
-.refb small{display:block;font-family:var(--m);font-size:9.5px;letter-spacing:.14em;color:var(--mute);text-align:left}
-.pct{position:absolute;right:14px;bottom:14px;z-index:3;padding:9px 14px;border-radius:16px;background:rgba(0,0,0,.62);backdrop-filter:blur(8px);text-align:right;pointer-events:none}
-.pct b{display:block;font-family:var(--d);font-weight:800;font-size:24px;line-height:1;font-variant-numeric:tabular-nums}
-.pct small{font-size:11.5px;color:var(--mute)}
-.tela.lendo::after{content:"";position:absolute;top:0;bottom:0;width:30%;left:-34%;z-index:2;background:linear-gradient(90deg,transparent,rgba(255,111,174,.30),rgba(180,92,255,.45),transparent);animation:varre .9s ease-in-out infinite}
-@keyframes varre{to{left:110%}}
-.esc{position:relative;z-index:1;margin-top:14px;text-align:left}
-.esc .mono{display:block;margin:0 0 9px 4px}
-.refs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.rf{position:relative;cursor:pointer;border-radius:16px;overflow:hidden;border:2px solid transparent;background:var(--panel);padding:0;aspect-ratio:16/10;transition:transform .15s}
-.rf:hover{transform:translateY(-2px)}
-.rf canvas{width:100%;height:100%;display:block;object-fit:cover}
-.rf span{position:absolute;left:8px;bottom:8px;font-size:12.5px;font-weight:700;padding:4px 9px;border-radius:99px;background:rgba(0,0,0,.62);backdrop-filter:blur(6px)}
-.rf.on{border-color:transparent;background:var(--grad);box-shadow:0 10px 30px -12px rgba(180,92,255,.9)}
-.rf.on canvas{border-radius:13px}
-.real{margin-top:12px;text-align:center;color:var(--dim);font-size:13.5px}
-.real i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#7fce8f;margin-right:7px;box-shadow:0 0 0 0 rgba(127,206,143,.6);animation:pulsa 2s infinite}
-@keyframes pulsa{70%{box-shadow:0 0 0 9px rgba(127,206,143,0)}100%{box-shadow:0 0 0 0 rgba(127,206,143,0)}}
-.semfoto .tela{background:#141615 url(https://basefl.com/lut/capa.png) center/cover}
-.semfoto .esc,.semfoto .real,.semfoto .tela>*{display:none}
+/* demonstração: vídeo real + looks criados no Mood */
+.demo{position:relative;margin:44px auto 0;max-width:980px}
+.tela{position:relative;border-radius:22px;overflow:hidden;background:#0a0b0b;aspect-ratio:16/9;box-shadow:0 0 0 1px #2a2e2c,0 60px 120px -60px #000;user-select:none;-webkit-user-select:none}
+.tela video,.tela canvas,.tela .fb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.tela .fb{opacity:0;transition:opacity .45s ease}
+.tela video::-webkit-media-controls{display:none!important}
+.tg,.refb,.orig{position:absolute;z-index:3;background:rgba(10,11,11,.58);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#fff}
+.tg{top:14px;left:14px;font-size:12px;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:99px;pointer-events:none}
+.refb{left:14px;bottom:14px;display:flex;align-items:center;gap:11px;padding:6px 15px 6px 6px;border-radius:14px;pointer-events:none;text-align:left}
+.refb img{width:57px;height:38px;border-radius:9px;object-fit:cover;display:block}
+.refb small{display:block;font-family:var(--m);font-weight:500;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.62);line-height:1.5}
+.refb b{display:block;font-size:13.5px;font-weight:600;line-height:1.25}
+.orig{right:14px;bottom:14px;border:0;cursor:pointer;font-size:12.5px;font-weight:600;padding:10px 14px;border-radius:99px;touch-action:none;transition:background .2s}
+.orig:hover,.orig.on{background:rgba(255,255,255,.92);color:#111}
+.orig .c{display:none}
+.painel{margin-top:14px;padding:16px 16px 14px;border-radius:20px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);text-align:left}
+.painel .rot{display:block;margin:0 0 12px 2px}
+.refs{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.rf{background:none;border:0;padding:0;cursor:pointer;text-align:center;color:var(--dim);min-width:0}
+.rf .mi{display:block;aspect-ratio:3/2;border-radius:11px;overflow:hidden;background:var(--panel2);box-shadow:0 0 0 1.5px transparent;transition:box-shadow .35s ease}
+.rf img{width:100%;height:100%;object-fit:cover;display:block;opacity:.6;transform:scale(1.001);transition:opacity .35s ease,transform .5s ease}
+.rf:hover img{opacity:.85}
+.rf .nm{display:block;margin-top:8px;font-size:12px;font-weight:600;line-height:1.25;transition:color .35s ease}
+.rf.on .mi{box-shadow:0 0 0 1.5px var(--bg),0 0 0 3px var(--ink)}
+.rf.on img{opacity:1;transform:scale(1.04)}
+.rf.on .nm{color:var(--ink)}
+.int{display:flex;align-items:center;gap:16px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.int span{font-size:13px;font-weight:600;color:var(--mute);flex:none}
+.int output{font-family:var(--m);font-weight:500;font-size:12px;color:var(--ink);width:4ch;text-align:right;flex:none;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;background:none;cursor:pointer;margin:0}
+.int input{flex:1;min-width:0;height:28px;--p:65%}
+.int input::-webkit-slider-runnable-track{height:3px;border-radius:3px;background:linear-gradient(90deg,var(--ink) var(--p),#343936 var(--p))}
+.int input::-moz-range-track{height:3px;border-radius:3px;background:#343936}
+.int input::-moz-range-progress{height:3px;border-radius:3px;background:var(--ink)}
+.int input::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-7.5px;border-radius:50%;background:var(--ink);border:0;box-shadow:0 2px 8px rgba(0,0,0,.5);transition:transform .15s}
+.int input::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--ink);border:0;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.int input:active::-webkit-slider-thumb{transform:scale(1.15)}
+.real{margin:14px auto 0;text-align:center;color:var(--dim);font-size:13.5px;max-width:52ch;text-wrap:balance}
 
-section{padding:74px 0 0}
-h2{font-family:var(--d);font-weight:800;font-size:clamp(28px,4.6vw,46px);line-height:1.04;letter-spacing:-.03em;margin:12px 0 12px;max-width:18ch;text-wrap:balance}
-.sec-p{color:var(--mute);max-width:58ch;font-size:17.5px}
-.rv{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+section{padding:104px 0 0}
+.sh{text-align:center}
+.sh .mono{display:block;margin-bottom:16px}
+h2{font-family:var(--d);font-weight:700;font-size:clamp(27px,4.3vw,44px);line-height:1.08;letter-spacing:-.028em;margin:0 auto 16px;max-width:19ch;text-wrap:balance}
+.sec-p{color:var(--mute);max-width:52ch;margin:0 auto;font-size:17.5px;text-wrap:pretty}
+.meio{display:flex;justify-content:center;margin-top:36px}
+.rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
 .rv.vis{opacity:1;transform:none}
 .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
 
-.tres{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
-.ps{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:22px}
-.ps .il{height:104px;border-radius:16px;background:var(--panel2);margin-bottom:16px;display:grid;place-items:center;position:relative;overflow:hidden}
-.ps .bola{width:58px;height:58px;border-radius:50%}
-.ps .bola.r{background:var(--grad)}
-.ps .bola.v{border:9px solid var(--ink)}
-.ps .par{display:flex}.ps .par .bola.v{margin-left:-16px}
-.ps .cube{font-family:var(--m);font-size:12px;color:#111;background:var(--grad);border-radius:12px;padding:12px 16px;white-space:nowrap}
-.ps .cube i{font-style:normal}
-.ps .n{font-family:var(--m);font-size:11px;letter-spacing:.16em;color:var(--mute)}
-.ps h3{font-family:var(--d);font-weight:800;font-size:21px;margin:4px 0 6px;letter-spacing:-.01em}
-.ps p{color:var(--mute);font-size:15.5px}
+/* problema */
+.dores{list-style:none;max-width:640px;margin:36px auto 0;text-align:center}
+.dores li{padding:20px 0;border-top:1px solid var(--line);font-size:18px;line-height:1.45;color:var(--ink);text-wrap:balance}
+.dores li:last-child{border-bottom:1px solid var(--line)}
 
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}
-.cx{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:24px}
-.cx h3{font-family:var(--d);font-weight:800;font-size:20px;margin-bottom:12px}
-.cx ul{list-style:none;display:flex;flex-direction:column;gap:11px}
-.cx li{display:flex;gap:11px;color:var(--mute);font-size:16px;line-height:1.4}
-.cx li::before{content:"";flex:none;width:20px;height:20px;margin-top:2px;border-radius:50%}
-.cx.nao li::before{background:#2c302e url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M6.5 6.5l7 7M13.5 6.5l-7 7' stroke='%2374756a' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E")}
-.cx.sim{border-color:transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,var(--grad) border-box;border:1.5px solid transparent}
-.cx.sim li{color:var(--ink)}
-.cx.sim li::before{background:#7fce8f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='%230b1a10' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+/* referência → direção → resultado */
+.fluxo{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:18px;align-items:start;margin-top:44px}
+.fx{text-align:center}
+.fx .md{display:block;aspect-ratio:3/2;border-radius:16px;overflow:hidden;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);position:relative}
+.fx .md img{width:100%;height:100%;object-fit:cover;display:block}
+.fx .dir{display:flex;flex-direction:column;justify-content:center;gap:16px;padding:0 22px;height:100%}
+.fx .pal{display:flex;height:34px;border-radius:9px;overflow:hidden}
+.fx .pal i{flex:1}
+.fx .bar{height:3px;border-radius:3px;background:#343936;position:relative}
+.fx .bar::before{content:"";position:absolute;left:0;top:0;bottom:0;width:65%;border-radius:3px;background:var(--ink)}
+.fx .bar::after{content:"";position:absolute;left:65%;top:50%;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;border-radius:50%;background:var(--ink)}
+.fx .mono{display:block;margin:18px 0 6px;color:var(--ink)}
+.fx p{color:var(--mute);font-size:15.5px;line-height:1.5;max-width:28ch;margin:0 auto;text-wrap:balance}
+.seta{align-self:start;margin-top:calc((100% - 36px) / 9);color:var(--dim);font-size:20px;line-height:1}
+.fluxo .seta{margin-top:88px}
 
-.bens{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
-.bem{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px}
-.bem h3{font-size:17.5px;font-weight:700;margin-bottom:5px}
-.bem p{color:var(--mute);font-size:15px;line-height:1.45}
-.bem .ic{width:42px;height:42px;border-radius:13px;background:var(--panel2);border:1px solid var(--line);display:grid;place-items:center;margin-bottom:12px}
-.bem .ic svg{width:22px;height:22px;fill:none;stroke:url(#mg);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+/* como funciona */
+.passos{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:44px;border-top:1px solid var(--line)}
+.passos li{padding:24px 22px 0 0;position:relative}
+.passos li+li{padding-left:22px;border-left:1px solid var(--line)}
+.passos .n{font-family:var(--m);font-weight:500;font-size:11px;letter-spacing:.18em;color:var(--dim)}
+.passos h3{font-family:var(--d);font-weight:700;font-size:19px;line-height:1.2;letter-spacing:-.01em;margin:10px 0 8px}
+.passos p{color:var(--mute);font-size:15px;line-height:1.5}
 
-.onde{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}
-.od{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:24px}
-.od .mono{display:block;margin-bottom:8px}
-.od h3{font-family:var(--d);font-weight:800;font-size:22px;margin-bottom:6px}
-.od p{color:var(--mute);font-size:15.5px}
-.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
-.chips span{font-size:13.5px;font-weight:700;padding:7px 12px;border-radius:99px;background:var(--panel2);border:1px solid var(--line)}
-.nota{margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(255,179,71,.08);border:1px solid rgba(255,179,71,.28);color:#e9d3ad;font-size:14.5px;line-height:1.45}
+/* antes e depois */
+.ba{position:relative;max-width:920px;margin:44px auto 0;aspect-ratio:16/9;border-radius:20px;overflow:hidden;background:var(--panel);box-shadow:0 0 0 1px #2a2e2c;--x:50%;user-select:none;-webkit-user-select:none}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.ba .a{clip-path:inset(0 calc(100% - var(--x)) 0 0)}
+.ba .lin{position:absolute;top:0;bottom:0;left:var(--x);width:1.5px;margin-left:-.75px;background:#fff;pointer-events:none}
+.ba .lin::after{content:"";position:absolute;top:50%;left:50%;width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'%3E%3Cpath d='M16 13l-5 6 5 6M22 13l5 6-5 6' fill='none' stroke='%23111' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");box-shadow:0 4px 16px rgba(0,0,0,.4)}
+.ba .et{position:absolute;top:14px;font-size:12px;font-weight:600;padding:6px 12px;border-radius:99px;background:rgba(10,11,11,.58);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:none}
+.ba .et.l{left:14px}.ba .et.r{right:14px}
+.ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;touch-action:pan-y}
+.ba input::-webkit-slider-thumb{-webkit-appearance:none;width:44px;height:400px}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:920px;margin:14px auto 0}
+.gal figure{min-width:0}
+.gal img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:12px;background:var(--panel)}
+.gal figcaption{margin-top:9px;text-align:center;font-size:13px;font-weight:600;color:var(--mute)}
+.leg{margin:14px auto 0;text-align:center;color:var(--dim);font-size:13.5px}
 
-.oferta{margin-top:74px;position:relative;border-radius:32px;padding:1.5px;background:var(--grad)}
-.oferta .in{border-radius:31px;background:#141716;padding:38px 28px;text-align:center;position:relative;overflow:hidden}
-.oferta .in::before{content:"";position:absolute;left:50%;top:-180px;width:560px;height:360px;transform:translateX(-50%);background:var(--grad);filter:blur(90px);opacity:.22}
-.oferta .in>*{position:relative}
-.oferta h2{margin:10px auto 8px;max-width:16ch}
-.preco{font-family:var(--d);font-weight:800;font-size:clamp(54px,10vw,84px);line-height:1;letter-spacing:-.04em;margin-top:16px}
-.preco small{font-size:.32em;letter-spacing:0;font-weight:700;color:var(--mute);margin-right:6px;vertical-align:.9em}
-.parc{color:var(--mute);margin:8px 0 22px;font-size:16px}
-.parc b{color:var(--ink)}
-.inc{display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;max-width:620px;margin:0 auto 26px;text-align:left}
-.inc span{display:flex;gap:10px;font-size:15.5px;line-height:1.35}
-.inc span::before{content:"";flex:none;width:20px;height:20px;border-radius:50%;background:#7fce8f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='%230b1a10' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
-.oferta .btn{min-width:min(100%,360px)}
-.oferta .ou{display:block;margin-top:14px;color:var(--mute);font-size:15px}
+/* praticidade */
+.pts{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:44px;border-top:1px solid var(--line)}
+.pts div{padding:26px 24px 0;text-align:center}
+.pts div+div{border-left:1px solid var(--line)}
+.pts h3{font-family:var(--d);font-weight:700;font-size:20px;letter-spacing:-.01em;margin-bottom:8px}
+.pts p{color:var(--mute);font-size:15.5px;line-height:1.5;max-width:30ch;margin:0 auto;text-wrap:balance}
+.onde{max-width:720px;margin:48px auto 0;text-align:center}
+.onde .mono{display:block;margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chips span{font-size:13.5px;font-weight:600;padding:8px 14px;border-radius:99px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line)}
+.nota{margin:16px auto 0;max-width:56ch;color:var(--dim);font-size:14px;line-height:1.5;text-wrap:pretty}
 
-.faq{max-width:760px;margin-top:26px}
-.duv .bem h3{font-size:18px}.duv .bem p b{color:var(--ink)}
-.franco{margin-top:18px;max-width:70ch;border-left:3px solid #FF6FAE;padding:4px 0 4px 16px;color:var(--mute);font-size:15.5px}.franco b{color:var(--ink)}
-.oferta .gar{margin:18px auto 0;max-width:460px;color:var(--mute);font-size:14.5px}.oferta .gar b{color:var(--ink)}
+/* videoaula */
+.aula{max-width:820px;margin:0 auto;padding:44px 32px;border-radius:26px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);text-align:center}
+.aula .pl{width:54px;height:54px;border-radius:50%;margin:0 auto 22px;display:grid;place-items:center;box-shadow:inset 0 0 0 1px #3a3f3c}
+.aula .pl svg{width:18px;height:18px;margin-left:3px;fill:var(--ink)}
+.aula ul{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;margin-top:26px}
+.aula li{font-size:14.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:9px}
+.aula li::before,.duo li::before,.inc span::before{content:"";flex:none;width:18px;height:18px;border-radius:50%;background:#2a2f2c url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='%23F3EFE6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+
+/* para quem é */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:920px;margin:44px auto 0}
+.cx{background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);border-radius:22px;padding:28px}
+.cx h3{font-family:var(--d);font-weight:700;font-size:19px;margin-bottom:16px;letter-spacing:-.01em}
+.cx ul{list-style:none;display:flex;flex-direction:column;gap:13px}
+.cx li{display:flex;gap:12px;color:var(--ink);font-size:16px;line-height:1.45}
+.cx li::before{margin-top:3px}
+.cx.nao h3{color:var(--mute)}
+.cx.nao li{color:var(--mute)}
+.cx.nao li::before{background:#222624 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M6.5 6.5l7 7M13.5 6.5l-7 7' stroke='%2373746B' stroke-width='1.7' stroke-linecap='round'/%3E%3C/svg%3E")}
+
+/* controle */
+.ctrl{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:44px;border-top:1px solid var(--line)}
+.ctrl div{padding:24px 20px 0;text-align:center}
+.ctrl div+div{border-left:1px solid var(--line)}
+.ctrl h3{font-size:16.5px;font-weight:700;margin-bottom:6px}
+.ctrl p{color:var(--mute);font-size:14.5px;line-height:1.5;text-wrap:balance}
+.franco{margin:44px auto 0;max-width:60ch;text-align:center;color:var(--mute);font-size:15.5px;line-height:1.6;text-wrap:pretty}
+.franco b{color:var(--ink);font-weight:600}
+
+/* oferta */
+.oferta{margin:104px auto 0;max-width:760px;position:relative;border-radius:30px;padding:1px;background:linear-gradient(160deg,rgba(255,179,71,.7),rgba(255,111,174,.35) 30%,#2a2e2c 60%)}
+.oferta .in{border-radius:29px;background:#121413;padding:52px 32px 40px;text-align:center}
+.oferta .mono{display:block;margin-bottom:14px}
+.oferta h2{margin:0 auto 6px;max-width:15ch}
+.preco{font-family:var(--d);font-weight:800;font-size:clamp(60px,11vw,92px);line-height:1;letter-spacing:-.04em;margin-top:26px}
+.preco small{font-size:.3em;letter-spacing:0;font-weight:600;color:var(--mute);margin-right:6px;vertical-align:1em}
+.parc{color:var(--mute);margin:10px 0 30px;font-size:16px}
+.parc b{color:var(--ink);font-weight:600}
+.inc{display:grid;grid-template-columns:1fr 1fr;gap:13px 26px;max-width:580px;margin:0 auto 32px;text-align:left}
+.inc span{display:flex;gap:11px;font-size:15.5px;line-height:1.4}
+.inc span::before{margin-top:2px}
+.oferta .btn{min-width:min(100%,380px);padding:19px 28px;font-size:18px}
+.oferta .ou{display:inline-block;margin-top:16px;color:var(--mute);font-size:15px;text-underline-offset:3px}
+.gar{display:flex;align-items:center;gap:16px;max-width:500px;margin:30px auto 0;padding:18px 20px;border-radius:16px;background:var(--panel2);text-align:left}
+.gar svg{flex:none;width:34px;height:34px;fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.gar p{color:var(--mute);font-size:14.5px;line-height:1.5}
+.gar b{display:block;color:var(--ink);font-size:15.5px;font-weight:700}
+
+.faq{max-width:720px;margin:36px auto 0}
 details{border-bottom:1px solid var(--line)}
-summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:18px 0;font-weight:700;font-size:17px}
+details:first-child{border-top:1px solid var(--line)}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:20px 2px;font-weight:600;font-size:17px;line-height:1.35}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"+";flex:none;font-size:22px;font-weight:400;color:#B45CFF}
+summary::after{content:"+";flex:none;font-size:22px;font-weight:400;color:var(--dim);line-height:1}
 details[open] summary::after{content:"–"}
-details p{color:var(--mute);padding:0 0 18px;max-width:64ch;font-size:16px}
+details p{color:var(--mute);padding:0 2px 20px;max-width:62ch;font-size:16px}
 
-.fim{text-align:center;padding:84px 0 30px}
-.fim h2{margin:12px auto 18px;max-width:15ch}
-footer{text-align:center;color:var(--dim);font-size:13.5px;padding:26px 0 110px}
+.fim{text-align:center;padding:112px 0 34px}
+.fim .mono{display:block;margin-bottom:16px}
+.fim h2{margin:0 auto 12px;max-width:15ch;font-size:clamp(32px,5.6vw,58px)}
+.fim .sec-p{margin-bottom:30px}
+footer{text-align:center;color:var(--dim);font-size:13px;padding:30px 0 110px;border-top:1px solid var(--line);margin-top:40px}
 footer a{color:var(--mute)}
-.fixo{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;align-items:center;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:rgba(17,19,18,.9);backdrop-filter:blur(14px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .3s}
+.fixo{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;align-items:center;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:rgba(14,15,15,.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .3s}
 .fixo.on{transform:none}
-.fixo span{flex:1;font-size:14px;color:var(--mute);line-height:1.25}
-.fixo span b{display:block;color:var(--ink);font-size:16px}
-.fixo .btn{padding:13px 20px;font-size:15.5px;box-shadow:none}
+.fixo span{flex:1;font-size:13.5px;color:var(--mute);line-height:1.3}
+.fixo span b{display:block;color:var(--ink);font-size:15.5px}
+.fixo .btn{padding:13px 20px;font-size:15.5px}
 .toast{pointer-events:none;position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#111;font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;transition:all .25s;z-index:30}
 .toast.on{opacity:1;transform:translate(-50%,0)}
-@media (max-width:820px){
-  .tres,.bens{grid-template-columns:1fr}.duo,.onde{grid-template-columns:1fr}
-  .ps{display:grid;grid-template-columns:96px 1fr;gap:0 16px;align-items:center;padding:16px}
-  .ps .cube i{display:none}.ps .cube{padding:10px 9px;font-size:11px}
-  .ps .il{height:96px;margin:0;grid-row:span 3}.ps .bola{width:44px;height:44px}.ps .bola.v{border-width:7px}
-  section{padding-top:60px}
+
+@media (max-width:860px){
+  section{padding-top:84px}
+  .fluxo{grid-template-columns:1fr;gap:10px;max-width:400px;margin-left:auto;margin-right:auto}
+  .fluxo .seta{margin:6px auto;transform:rotate(90deg)}
+  .passos{grid-template-columns:1fr;max-width:480px;margin-left:auto;margin-right:auto;border-top:0}
+  .passos li,.passos li+li{display:grid;grid-template-columns:44px 1fr;gap:0 4px;padding:20px 0;border-left:0;border-top:1px solid var(--line);text-align:left}
+  .passos li:last-child{border-bottom:1px solid var(--line)}
+  .passos .n{grid-row:span 2;padding-top:5px}
+  .passos h3{margin:0 0 4px;font-size:18px}
+  .pts,.ctrl{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto;border-top:0}
+  .pts div,.pts div+div,.ctrl div,.ctrl div+div{border-left:0;border-top:1px solid var(--line);padding:22px 8px}
+  .pts div:last-child,.ctrl div:last-child{border-bottom:1px solid var(--line)}
+  .duo{grid-template-columns:1fr;max-width:520px}
+  .oferta{margin-top:84px}
+  .fim{padding-top:88px}
 }
-@media (max-width:560px){
+@media (max-width:640px){
   body{font-size:16px}
-  .w{padding:0 16px}
+  .w{padding:0 20px}
   nav .de{display:none}
-  .hero{padding-top:18px}
+  .hero{padding-top:22px}
+  .cta{flex-direction:column;align-items:stretch}
   .cta .btn{width:100%}
-  .tela{border-radius:20px;aspect-ratio:4/3.3}
-  .refs{gap:7px}.rf{border-radius:12px}.rf span{font-size:10.5px;left:5px;bottom:5px;padding:3px 7px}
-  .refb{left:10px;bottom:10px;padding:5px 11px 5px 5px}.refb canvas{width:36px;height:36px}.refb b{font-size:12.5px}
-  .pct{right:10px;bottom:10px;padding:7px 11px}.pct b{font-size:19px}
-  .inc{grid-template-columns:1fr}
-  .oferta .in{padding:30px 18px}
+  .demo{margin-top:36px}
+  .tela{border-radius:18px;aspect-ratio:4/3}
+  .tg{top:10px;left:10px;font-size:11.5px;padding:5px 10px}
+  .refb{left:10px;bottom:10px;gap:9px;padding:5px 12px 5px 5px;border-radius:12px}
+  .refb img{width:45px;height:30px;border-radius:7px}
+  .refb b{font-size:12.5px}.refb small{font-size:8.5px}
+  .orig{right:10px;bottom:auto;top:10px;font-size:11.5px;padding:8px 12px}
+  .orig .l{display:none}.orig .c{display:inline}
+  .painel{padding:14px 12px 10px;border-radius:18px}
+  .refs{grid-template-columns:repeat(3,1fr);gap:14px 10px}
+  .rf .nm{font-size:11.5px;margin-top:7px}
+  .int{gap:12px;margin-top:14px;padding-top:10px}
+  .int input{height:36px}
+  h2{font-size:clamp(26px,7.4vw,33px);max-width:17ch;line-height:1.12}
+  .sec-p{font-size:16px;max-width:33ch}
+  .sh .mono{margin-bottom:14px}
+  .dores{margin-top:30px}
+  .dores li{font-size:16.5px;padding:18px 4px}
+  .fluxo,.passos,.pts,.ctrl,.duo{margin-top:34px}
+  .ba{margin-top:34px;aspect-ratio:4/3;border-radius:16px}
+  .ba .et{top:10px;font-size:11.5px;padding:5px 10px}.ba .et.l{left:10px}.ba .et.r{right:10px}
+  .gal{grid-template-columns:repeat(2,1fr);gap:14px 10px}
+  .gal figcaption{font-size:12.5px;margin-top:7px}
+  .aula{padding:36px 20px;border-radius:22px}
+  .aula ul{flex-direction:column;align-items:center;gap:12px}
+  .cx{padding:24px 20px;border-radius:20px}
+  .oferta .in{padding:42px 20px 30px}
+  .oferta h2{max-width:13ch}
+  .inc{grid-template-columns:1fr;max-width:300px;gap:12px}
+  .oferta .btn{width:100%;min-width:0}
+  .gar{gap:14px;padding:16px}
+  summary{font-size:16px;padding:18px 2px}
+  .fim h2{font-size:clamp(30px,9vw,40px);max-width:12ch}
 }
-@media (min-width:821px){.fixo{display:none}}
-@media (prefers-reduced-motion:reduce){.rv{transform:none}}
+@media (max-width:350px){
+  .w{padding:0 16px}
+  h1{font-size:35px}
+  .cta .btn{font-size:15.5px;padding:16px 10px}
+  .rf .nm{font-size:10.5px}
+  .refb small{display:none}
+}
+@media (min-width:861px){.fixo{display:none}}
+@media (prefers-reduced-motion:reduce){.rv{transform:none;transition:opacity .3s}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
@@ -241,91 +357,172 @@ footer a{color:var(--mute)}
 
     <div class="demo" id="demo">
       <div class="tela" id="tela">
-        <canvas id="dA" width="800" height="500"></canvas><canvas id="dD" width="800" height="500"></canvas>
-        <div class="corte" id="ct"><span>‹ ›</span></div>
-        <span class="tg l">Seu vídeo</span><span class="tg r">Com a LUT do Mood</span>
-        <div class="refb"><canvas id="rM" width="92" height="92"></canvas><span><small>REFERÊNCIA</small><b id="rN">–</b></span></div>
-        <div class="pct"><b id="pc">–</b><small>parecido com a referência</small></div>
+        <video id="vid" muted loop playsinline webkit-playsinline preload="metadata" poster="__AS__natureza.jpg?v=__V__" width="1280" height="720" disablepictureinpicture disableremoteplayback tabindex="-1" aria-label="Vídeo de um lago entre montanhas, usado na demonstração"></video>
+        <canvas id="gl" aria-hidden="true"></canvas>
+        <img class="fb" id="fb" alt="" width="480" height="270" hidden>
+        <span class="tg" id="tg">Com o Mood</span>
+        <div class="refb"><img id="rM" src="__AS__ref-__ID0__.jpg?v=__V__" width="360" height="240" alt=""><span><small>Referência</small><b id="rN">__N0__</b></span></div>
+        <button class="orig" id="orig" type="button" aria-label="Segure para ver o vídeo original"><span class="l">Segure para ver o original</span><span class="c">Segure: original</span></button>
       </div>
-      <div class="esc"><span class="mono">Toque numa referência e veja o seu vídeo mudar</span><div class="refs" id="refs"></div></div>
-      <p class="real"><i></i>Demonstração de verdade: o Mood está rodando agora nesta página.</p>
+      <div class="painel">
+        <span class="mono rot">Escolha uma referência</span>
+        <div class="refs" id="refs" role="radiogroup" aria-label="Referências de cor">
+__REFS__
+        </div>
+        <label class="int"><span>Intensidade</span><input type="range" id="int" min="0" max="100" value="65" aria-label="Intensidade do look"><output id="intv">65%</output></label>
+      </div>
+      <p class="real">Vídeo real, sem tratamento. Cada look é a LUT que o Mood criou a partir da foto de referência.</p>
     </div>
   </header>
 
   <section>
-    <span class="mono kick rv">Você já tentou</span>
-    <h2 class="rv">Você salvou o vídeo pela cor. E nunca conseguiu repetir.</h2>
-    <p class="sec-p rv">Abriu as curvas, mexeu na roda de cor, testou três packs de LUT. Chegou perto, mas não era aquilo. O Mood troca tudo isso por uma pergunta só: <b style="color:var(--ink)">qual cor você quer?</b></p>
-    <div class="duo">
-      <div class="cx nao rv"><h3>Sem o Mood</h3><ul><li>Horas mexendo em curva e roda de cor</li><li>Testar pack de LUT atrás de pack, e nenhum fica igual</li><li>A pele fica laranja, o céu fica estranho</li><li>Cada vídeo começa do zero</li></ul></div>
-      <div class="cx sim rv d1"><h3>Com o Mood</h3><ul><li>A cor que você escolheu, em menos de um minuto</li><li>Uma LUT feita para o seu vídeo, não um look genérico</li><li>Pele natural protegida com um botão</li><li>Salvou a LUT, usa em todos os vídeos da série</li></ul></div>
+    <div class="sh">
+      <span class="mono rv">O problema</span>
+      <h2 class="rv">Você sabe que a imagem pode ficar melhor. Só não sabe para onde levar.</h2>
+      <p class="sec-p rv">Colorir sem referência é ajustar no escuro. O tempo passa e a cor não chega.</p>
     </div>
+    <ul class="dores">
+      <li class="rv">Você abre o editor e não sabe por onde começar a cor.</li>
+      <li class="rv">Mexe em tudo ao mesmo tempo e a imagem fica diferente, não melhor.</li>
+      <li class="rv">Salva referências no Instagram e no Pinterest, mas não consegue levar aquilo para o seu vídeo.</li>
+      <li class="rv">Testa um look atrás do outro e perde uma hora até um funcionar.</li>
+    </ul>
+  </section>
+
+  <section id="resolve">
+    <div class="sh">
+      <span class="mono rv">Como o Mood resolve</span>
+      <h2 class="rv">Da referência ao resultado, sem adivinhar.</h2>
+      <p class="sec-p rv">O Mood não é um filtro nem um pack de LUTs. É uma ferramenta de direção de cor: você mostra o clima que quer e ele leva a sua cena até lá.</p>
+    </div>
+    <div class="fluxo">
+      <div class="fx rv"><span class="md"><img src="__AS__ref-golden.jpg?v=__V__" width="360" height="240" alt="Foto de referência com luz dourada" loading="lazy" decoding="async"></span><span class="mono">Referência</span><p>A imagem com o clima que você quer. Um frame de filme, um Reels, uma foto.</p></div>
+      <span class="seta rv" aria-hidden="true">→</span>
+      <div class="fx rv d1"><span class="md"><span class="dir"><span class="pal">__PAL__</span><span class="bar"></span></span></span><span class="mono">Direção</span><p>O Mood lê a luz, as sombras e os tons da referência e mostra o caminho na sua cena.</p></div>
+      <span class="seta rv d1" aria-hidden="true">→</span>
+      <div class="fx rv d2"><span class="md"><img src="__AS__g-golden.jpg?v=__V__" width="480" height="270" alt="A cena do lago com o clima da referência" loading="lazy" decoding="async"></span><span class="mono">Resultado</span><p>A sua imagem com aquele clima, na intensidade que você escolher.</p></div>
+    </div>
+    <div class="meio rv"><a class="btn" href="#oferta" data-comprar>Quero encontrar meu look</a></div>
   </section>
 
   <section id="como">
-    <span class="mono kick rv">Como funciona</span>
-    <h2 class="rv">Três passos. Nenhum deles é difícil.</h2>
-    <div class="tres">
-      <div class="ps rv"><div class="il"><span class="bola r"></span></div><span class="n">01</span><h3>Mostre a referência</h3><p>Um print ou o próprio vídeo que tem a cor que você gostou. Filme, clipe, Reels de outro criador.</p></div>
-      <div class="ps rv d1"><div class="il"><span class="par"><span class="bola r"></span><span class="bola v"></span></span></div><span class="n">02</span><h3>Mostre o seu vídeo</h3><p>O Mood lê a luz, as sombras e os tons dos dois e monta a cor na hora. Você vê o antes e depois.</p></div>
-      <div class="ps rv d2"><div class="il"><span class="cube"><i>LUT Base FL </i>001.cube</span></div><span class="n">03</span><h3>Baixe a LUT</h3><p>Um arquivo pronto para aplicar no seu editor. Um clique e o vídeo inteiro fica com aquela cor.</p></div>
+    <div class="sh">
+      <span class="mono rv">Como funciona</span>
+      <h2 class="rv">Quatro passos. Nenhum deles é técnico.</h2>
+    </div>
+    <ol class="passos">
+      <li class="rv"><span class="n">01</span><h3>Escolha sua imagem ou vídeo</h3><p>Solte o arquivo ou um print da cena. No celular ou no computador.</p></li>
+      <li class="rv d1"><span class="n">02</span><h3>Explore referências</h3><p>Mostre a imagem que tem o clima que você quer e veja a sua cena mudar.</p></li>
+      <li class="rv d2"><span class="n">03</span><h3>Ajuste a intensidade</h3><p>Suave, Fiel ou Intenso. Um controle define o quanto a referência entra.</p></li>
+      <li class="rv d3"><span class="n">04</span><h3>Encontre o look ideal</h3><p>Gostou? Baixe a LUT e aplique no seu editor.</p></li>
+    </ol>
+  </section>
+
+  <section id="prova">
+    <div class="sh">
+      <span class="mono rv">Antes e depois</span>
+      <h2 class="rv">A mesma cena. Seis direções.</h2>
+      <p class="sec-p rv">Sem cara de filtro. A referência influencia a imagem, não toma conta dela.</p>
+    </div>
+    <div class="ba rv" id="ba">
+      <img src="__AS__cena-golden.jpg?v=__V__" width="960" height="540" alt="Cena do lago com o look Golden Hour" loading="lazy" decoding="async">
+      <img class="a" src="__AS__cena.jpg?v=__V__" width="960" height="540" alt="Cena do lago original" loading="lazy" decoding="async">
+      <span class="et l">Original</span><span class="et r">Golden Hour</span>
+      <span class="lin"></span>
+      <input type="range" min="0" max="100" value="50" aria-label="Arraste para comparar antes e depois">
+    </div>
+    <p class="leg rv">Arraste para comparar.</p>
+    <div class="gal">
+__GALERIA__
+    </div>
+    <div class="meio rv"><a class="btn" href="#oferta" data-comprar>Quero usar o Mood</a></div>
+  </section>
+
+  <section id="pratico">
+    <div class="sh">
+      <span class="mono rv">Praticidade</span>
+      <h2 class="rv">Feito para você decidir a cor mais rápido.</h2>
+      <p class="sec-p rv">Teste climas diferentes antes de gastar tempo ajustando tudo na mão.</p>
+    </div>
+    <div class="pts">
+      <div class="rv"><h3>Menos de um minuto</h3><p>Da referência à LUT pronta, sem abrir curva nem roda de cor.</p></div>
+      <div class="rv d1"><h3>Abre no navegador</h3><p>Sem instalar nada. Funciona no iPhone, no Android, no Mac e no Windows.</p></div>
+      <div class="rv d2"><h3>Vale para a série inteira</h3><p>Salvou a LUT, usa em todos os vídeos do mesmo projeto.</p></div>
+    </div>
+    <div class="onde rv">
+      <span class="mono">Funciona no seu fluxo</span>
+      <div class="chips"><span>CapCut no computador</span><span>Premiere</span><span>DaVinci Resolve</span><span>Final Cut</span></div>
+      <p class="nota">O arquivo é o padrão do mercado (.cube). O CapCut do celular ainda não importa LUT de fora: você pode criar a LUT pelo celular e aplicar no CapCut do computador.</p>
     </div>
   </section>
 
-  <section>
-    <span class="mono kick rv">O que costuma dar errado com LUT</span>
-    <h2 class="rv">“E se a pele ficar laranja?”</h2>
-    <p class="sec-p rv">As dúvidas de quem já baixou LUT pronta e se arrependeu. E o que o Mood faz em cada uma.</p>
-    <div class="bens duv">
-      <div class="bem rv"><h3>E se a pele ficar laranja?</h3><p>Tem um botão de <b>pele natural</b>, que segura os tons de pele para ninguém sair laranja ou esverdeado.</p></div>
-      <div class="bem rv d1"><h3>E se ficar forte demais?</h3><p>Três botões, <b>Suave, Fiel ou Intenso</b>, e um controle de intensidade. O ajuste fino existe, mas fica guardado para quem quiser.</p></div>
-      <div class="bem rv d2"><h3>E se só ficar bom naquela cena?</h3><p>Antes de baixar, você vê a LUT aplicada em <b>outros momentos do mesmo vídeo</b>.</p></div>
-      <div class="bem rv"><h3>Como eu sei se ficou parecido?</h3><p>Um medidor mostra, <b>em porcentagem</b>, o quanto o seu vídeo se aproximou da referência.</p></div>
-      <div class="bem rv d1"><h3>Preciso ficar tirando print?</h3><p>Não. Solte o <b>arquivo de vídeo</b> e o Mood lê vários momentos dele sozinho.</p></div>
-      <div class="bem rv d2"><h3>Vocês ficam com os meus vídeos?</h3><p>Não. Tudo acontece <b>no seu aparelho</b>. Nenhum vídeo ou print é enviado para lugar nenhum.</p></div>
+  <section id="aula">
+    <div class="aula rv">
+      <div class="pl" aria-hidden="true"><svg viewBox="0 0 18 18"><path d="M3 1.8v14.4a.8.8 0 0 0 1.2.7l12-7.2a.8.8 0 0 0 0-1.4l-12-7.2A.8.8 0 0 0 3 1.8z"/></svg></div>
+      <span class="mono" style="display:block;margin-bottom:16px">Videoaula incluída</span>
+      <h2>Você não precisa descobrir sozinho.</h2>
+      <p class="sec-p">Assim que entrar, você encontra uma videoaula mostrando exatamente como usar. Em poucos minutos você entende o fluxo e já aplica nos seus projetos.</p>
+      <ul><li>Aula prática, direto ao ponto</li><li>Passo a passo de cada editor na tela</li><li>Liberada junto com a ferramenta</li></ul>
+    </div>
+  </section>
+
+  <section id="quem">
+    <div class="sh">
+      <span class="mono rv">Para quem é</span>
+      <h2 class="rv">Para quem edita e quer chegar na cor sem sofrer.</h2>
+    </div>
+    <div class="duo">
+      <div class="cx rv"><h3>É para você se</h3><ul><li>Entrega vídeo para cliente e precisa decidir a cor rápido</li><li>Já tem a referência na cabeça e quer chegar nela</li><li>Quer um visual próprio nos seus vídeos</li><li>Nunca estudou colorização e não pretende parar para estudar agora</li></ul></div>
+      <div class="cx nao rv d1"><h3>Talvez não seja se</h3><ul><li>Você edita só no CapCut do celular, que ainda não aceita LUT de fora</li><li>Você procura um pack com looks prontos para escolher</li><li>Você espera que qualquer cena fique idêntica à referência</li></ul></div>
+    </div>
+  </section>
+
+  <section id="controle">
+    <div class="sh">
+      <span class="mono rv">Você no controle</span>
+      <h2 class="rv">Poderoso por dentro. Simples na sua mão.</h2>
+    </div>
+    <div class="ctrl">
+      <div class="rv"><h3>Três intensidades</h3><p>Suave, Fiel ou Intenso, e um controle para o ajuste fino.</p></div>
+      <div class="rv d1"><h3>Pele natural</h3><p>Um botão segura os tons de pele. Ninguém sai laranja.</p></div>
+      <div class="rv d2"><h3>Medidor de semelhança</h3><p>Mostra, em porcentagem, o quanto a sua cena chegou perto da referência.</p></div>
+      <div class="rv d3"><h3>Nada sai do seu aparelho</h3><p>Seus vídeos não são enviados para lugar nenhum.</p></div>
     </div>
     <p class="franco rv"><b>O que o Mood não faz: milagre.</b> Quanto mais parecidas as cenas (pessoa com pessoa, rua com rua, dia com dia), mais igual fica. Com cenas muito diferentes, ele leva o clima da cor. Por isso o teste é grátis.</p>
   </section>
 
-  <section>
-    <span class="mono kick rv">Onde funciona</span>
-    <h2 class="rv">Cria no celular. Cria no computador.</h2>
-    <div class="onde">
-      <div class="od rv"><span class="mono">Para criar a LUT</span><h3>Celular e computador</h3><p>O Mood abre no navegador. Não precisa instalar nada: viu uma referência no celular, cria a LUT ali mesmo.</p><div class="chips"><span>iPhone</span><span>Android</span><span>Mac</span><span>Windows</span></div></div>
-      <div class="od rv d1"><span class="mono">Para usar a LUT</span><h3>No seu editor</h3><p>O arquivo é o padrão do mercado (.cube), com o passo a passo de cada programa na tela.</p><div class="chips"><span>CapCut no computador</span><span>Premiere</span><span>DaVinci Resolve</span><span>Final Cut</span></div>
-        <div class="nota">O CapCut do celular ainda não deixa importar LUT de fora, só o do computador. Se você edita no celular, pode criar a LUT por lá e aplicar no CapCut do computador.</div></div>
-    </div>
-  </section>
-
   <div class="oferta rv" id="oferta"><div class="in">
-    <span class="mono kick">Acesso de 1 ano</span>
+    <span class="mono">Acesso de 1 ano</span>
     <h2>Todas as cores que você quiser copiar.</h2>
     <div class="preco"><small>R$</small>__PRECO__</div>
     <p class="parc">à vista, ou <b>12x de R$ __PARC__</b></p>
-    <div class="inc"><span>LUTs ilimitadas durante 1 ano</span><span>Funciona no celular e no computador</span><span>Aula ensinando a usar</span><span>Liberado na hora da compra</span><span>Passo a passo para CapCut, Premiere, DaVinci e Final Cut</span><span>Atualizações incluídas no período</span></div>
-    <a class="btn" href="#" data-comprar>Liberar o Mood por 1 ano</a>
-    <a class="ou" href="https://basefl.com/lut/" data-testar>ou teste antes, com o seu vídeo</a>
-    <p class="gar"><b>7 dias de garantia.</b> Criou suas LUTs e não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</p>
+    <div class="inc"><span>LUTs ilimitadas durante 1 ano</span><span>Videoaula mostrando como usar</span><span>Funciona no celular e no computador</span><span>Passo a passo para CapCut, Premiere, DaVinci e Final Cut</span><span>Liberado na hora da compra</span><span>Atualizações incluídas no período</span></div>
+    <a class="btn" href="#" data-comprar>Quero acessar o Mood</a>
+    <br><a class="ou" href="https://basefl.com/lut/" data-testar>ou teste antes, com o seu vídeo</a>
+    <div class="gar"><svg viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3l11 4v9c0 7-4.6 12.300-11 15C10.600 28.300 6 23 6 16V7z"/><path d="M12 17l3.500 3.500L22.500 13"/></svg><p><b>7 dias de garantia</b>Criou suas LUTs e não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</p></div>
   </div></div>
 
   <section>
-    <span class="mono kick rv">Dúvidas</span>
-    <h2 class="rv">Antes de você perguntar.</h2>
+    <div class="sh">
+      <span class="mono rv">Dúvidas</span>
+      <h2 class="rv">Antes de você perguntar.</h2>
+    </div>
     <div class="faq rv">
-      <details><summary>Preciso saber color grading?</summary><p>Não. Você escolhe a referência e o Mood faz a parte técnica. Se quiser mexer, tem três botões (Suave, Fiel, Intenso) e um controle de intensidade.</p></details>
-      <details><summary>Dá para usar pelo celular?</summary><p>Dá para criar e baixar a LUT pelo celular, direto no navegador. Para aplicar, hoje é o CapCut do computador que aceita LUT de fora; o do celular ainda não tem essa opção. Premiere, DaVinci Resolve e Final Cut também aceitam.</p></details>
+      <details><summary>É difícil? Preciso entender de colorização?</summary><p>Não. Você escolhe a referência e o Mood faz a parte técnica. Se quiser mexer, tem três botões (Suave, Fiel, Intenso) e um controle de intensidade.</p></details>
+      <details><summary>Como eu aprendo a usar?</summary><p>O acesso vem com uma videoaula prática mostrando o uso do começo ao fim. Na hora de aplicar, o passo a passo do seu editor aparece na tela.</p></details>
+      <details><summary>Funciona no meu editor? E no celular?</summary><p>A LUT funciona no CapCut do computador, Premiere, DaVinci Resolve e Final Cut. Dá para criar e baixar a LUT pelo celular, direto no navegador, mas o CapCut do celular ainda não aceita LUT de fora.</p></details>
       <details><summary>Fica igual à referência com qualquer vídeo?</summary><p>Quanto mais parecidas as cenas, mais igual fica: pessoa com pessoa, rua com rua, dia com dia. Com cenas muito diferentes, o Mood leva o clima da cor, mas não faz milagre. Por isso dá para testar de graça antes, com o seu vídeo.</p></details>
       <details><summary>E se eu comprar e não gostar?</summary><p>Você tem 7 dias de garantia. Dentro desse prazo é só pedir o reembolso e você recebe o valor de volta.</p></details>
       <details><summary>Quantas LUTs eu posso criar?</summary><p>Quantas quiser, durante 1 ano. As LUTs que você baixou são suas e continuam funcionando para sempre.</p></details>
       <details><summary>Meus vídeos são enviados para algum servidor?</summary><p>Não. A leitura das cores acontece dentro do seu aparelho. Nada é enviado.</p></details>
-      <details><summary>Como recebo o acesso?</summary><p>Assim que a compra é aprovada, é só entrar na ferramenta com o e-mail da compra. Você recebe um código por e-mail, sem senha para decorar. O Mood também aparece liberado no app Base FL.</p></details>
-      <details><summary>Preciso ter o app Base FL?</summary><p>Não. O Mood funciona sozinho no navegador. Ele é uma ferramenta vendida separadamente dos outros produtos da Base FL.</p></details>
+      <details><summary>Como recebo o acesso?</summary><p>Assim que a compra é aprovada, é só entrar na ferramenta com o e-mail da compra. Você recebe um código por e-mail, sem senha para decorar. O Mood também aparece liberado no app Base FL, mas funciona sozinho no navegador.</p></details>
     </div>
   </section>
 
   <div class="fim">
-    <span class="mono kick rv">Mood</span>
+    <span class="mono rv">Mood</span>
     <h2 class="rv">A cor daquele vídeo, no seu.</h2>
+    <p class="sec-p rv">Encontre o clima certo para a sua cena em menos de um minuto.</p>
     <div class="cta rv"><a class="btn" href="#oferta" data-comprar>Quero o Mood · R$ __PRECO__</a><a class="btn gh" href="https://basefl.com/lut/" data-testar>Testar agora, de graça</a></div>
   </div>
   <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo</footer>
@@ -339,8 +536,6 @@ const CHECKOUT = '__CHECKOUT__';
 const PRODUTO = 'mood';
 // ====================================================
 const $ = s => document.querySelector(s);
-const calmo = false;   // as demonstrações sempre rodam, no ritmo normal (ver gera_paginas.py)
-const espera = ms => new Promise(r => setTimeout(r, ms));
 function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2400); }
 const DE = new URLSearchParams(location.search).get('de') || 'pagina';
 function linkCompra(){   // link de compra com a origem Base FL (utm); ?de=app quando vem do app
@@ -361,56 +556,129 @@ let passouTopo = false, naOferta = false; const fixo = $('#fixo'), atualizaFixo 
 new IntersectionObserver(es => { passouTopo = !es[0].isIntersecting; atualizaFixo(); }).observe($('.hero .cta'));
 new IntersectionObserver(es => { naOferta = es[0].isIntersecting; atualizaFixo(); }, { threshold:.2 }).observe($('#oferta'));
 
-// ===================== O MOTOR DO MOOD (o mesmo da ferramenta) =====================
-const N = 33;
-__MOTOR__
+// ===================== antes e depois (arrastar) =====================
+(() => {
+  const ba = $('#ba'); if (!ba) return;
+  const r = ba.querySelector('input'), poe = () => ba.style.setProperty('--x', r.value + '%');
+  let tocou = false; r.addEventListener('input', () => { tocou = true; poe(); }); poe();
+  // um empurrãozinho quando aparece, para mostrar que dá para arrastar
+  const ob = new IntersectionObserver(es => { if (!es[0].isIntersecting) return; ob.disconnect();
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const t0 = performance.now(), q = t => { if (tocou) return; const k = Math.min(1, (t - t0) / 1600); r.value = 50 - 16 * Math.sin(k * Math.PI * 2) * (1 - k * .4); poe(); if (k < 1) requestAnimationFrame(q); else { r.value = 50; poe(); } };
+    setTimeout(() => requestAnimationFrame(q), 500);
+  }, { threshold:.6 }); ob.observe(ba);
+})();
+
 // ===================== a demonstração =====================
-const FOTO = (id, w) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
-const VIDEO = 11455928;
-const REFS = [{ id:27674497, n:'Tarde' }, { id:36701246, n:'Dourado' }, { id:35161204, n:'Neon' }, { id:30933293, n:'Inverno' }];
-function foto(id, w, W, H){   // carrega e recorta no formato da tela
-  return new Promise((ok, erro) => { const im = new Image(); im.crossOrigin = 'anonymous';
-    im.onload = () => { const h = Math.min(im.height, Math.round(im.width * H / W)), c = document.createElement('canvas'); c.width = W; c.height = H; c.getContext('2d', { willReadFrequently:true }).drawImage(im, 0, (im.height - h) * .38, im.width, h, 0, 0, W, H); ok(c); };
-    im.onerror = () => erro(new Error('foto')); im.src = FOTO(id, w); });
-}
-(async () => {
-  const tela = $('#tela'), dA = $('#dA'), dD = $('#dD'), ct = $('#ct');
-  let src, S, atual = -1, mexeu = false, ocupado = false, corteX = 100, visivel = true;
-  const cortar = v => { corteX = clamp(v, 0, 100); dD.style.clipPath = `inset(0 0 0 ${corteX}%)`; ct.style.left = corteX + '%'; };
-  const desliza = async (para, ms) => { if (calmo){ cortar(para); return; } const de = corteX, t0 = performance.now(); await new Promise(fim => { const q = t => { const k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3); cortar(de + (para - de) * e); k < 1 ? requestAnimationFrame(q) : fim(); }; requestAnimationFrame(q); }); };
-  cortar(100);
-  try {
-    src = await foto(VIDEO, 900, 800, 500); dA.getContext('2d').drawImage(src, 0, 0); dD.getContext('2d').drawImage(src, 0, 0);
-    await Promise.all(REFS.map(async r => { r.cv = await foto(r.id, 500, 400, 250); }));
-  } catch { $('#demo').classList.add('semfoto'); return; }
-  S = amostra([src], 220);
-  $('#refs').innerHTML = REFS.map((r, i) => `<button class="rf" data-i="${i}" aria-label="Referência ${r.n}"><canvas width="400" height="250"></canvas><span>${r.n}</span></button>`).join('');
-  document.querySelectorAll('.rf').forEach((b, i) => { b.querySelector('canvas').getContext('2d').drawImage(REFS[i].cv, 0, 0); b.onclick = () => { mexeu = true; escolhe(i); }; });
-  async function escolhe(i){
-    if (ocupado || i === atual) return; ocupado = true; atual = i; const r = REFS[i];
-    document.querySelectorAll('.rf').forEach((b, k) => b.classList.toggle('on', k === i));
-    $('#rN').textContent = r.n; const m = $('#rM').getContext('2d'); m.drawImage(r.cv, 75, 0, 250, 250, 0, 0, 92, 92);
-    tela.classList.add('lendo'); await desliza(100, 260); await espera(30);
-    if (!r.lut){ prepara(S, amostra([r.cv], 220)); A = { ...PADRAO }; LUT = null; montaLUT(); r.lut = LUT; r.pct = semelhanca(); }
-    LUT = r.lut; aplica(src, dD);
-    await espera(calmo ? 0 : 380); tela.classList.remove('lendo');
-    $('#pc').textContent = r.pct + '%';
-    await desliza(mexeu ? 30 : 0, 900); if (!mexeu){ await espera(1500); await desliza(50, 700); }
-    ocupado = false;
+// O vídeo roda de verdade. As LUTs (uma por referência) foram criadas no Mood e ficam em looks.png;
+// aqui a página só aplica a LUT em cada quadro do vídeo, como o editor faria.
+(() => {
+  const demo = $('#demo'); if (!demo) return;
+  const AS = '__AS__', VER = '?v=__V__', NA = 17, DUR = 520;
+  const tela = $('#tela'), v = $('#vid'), cv = $('#gl'), fb = $('#fb'), tg = $('#tg'), rM = $('#rM'), rN = $('#rN'), int = $('#int'), intv = $('#intv'), orig = $('#orig');
+  const bts = [...demo.querySelectorAll('.rf')], NL = bts.length;
+  const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let atual = 0, antes = 0, t0 = -1e9, forca = int.value / 100, forcaS = forca, ver = 0, verAlvo = 0, mexeu = false, visivel = false, estreou = false;
+  let gl = null, modo = '', U = {}, ultT = -1, temQuadro = false, raf = 0, ultima = 0;
+
+  // ---- o vídeo: versão leve no celular; toca sozinho quando aparece ----
+  v.muted = true; v.defaultMuted = true;
+  v.src = AS + (Math.min(innerWidth, screen.width || 9999) < 700 ? 'natureza-m.mp4' : 'natureza.mp4') + VER;
+  const toca = () => { if (visivel && !document.hidden && v.paused){ const p = v.play(); if (p && p.catch) p.catch(() => {}); } };
+  ['touchstart', 'pointerdown', 'scroll'].forEach(ev => addEventListener(ev, toca, { passive:true }));   // se o navegador segurou o autoplay, o primeiro toque solta
+  document.addEventListener('visibilitychange', toca);
+  const capa = new Image(); capa.decoding = 'async'; capa.src = AS + 'natureza.jpg' + VER;
+
+  // ---- WebGL: aplica a LUT em cada quadro ----
+  const FRAG = 'uniform sampler2D v,l;uniform float a,b,t,k;varying vec2 u;const float n=' + NA + '.,nl=' + NL + '.;'
+    + 'vec3 lk(vec3 c,float r){float z=c.b*(n-1.),z0=floor(z),z1=min(z0+1.,n-1.);float x=(c.r*(n-1.)+.5)/(n*n),y=(r*n+c.g*(n-1.)+.5)/(n*nl);return mix(texture2D(l,vec2(x+z0/n,y)).rgb,texture2D(l,vec2(x+z1/n,y)).rgb,z-z0);}'
+    + 'void main(){vec3 c=clamp(texture2D(v,u).rgb,0.,1.);gl_FragColor=vec4(mix(c,mix(lk(c,a),lk(c,b),t),k),1.);}';
+  function ligaGL(atlas){
+    const g = cv.getContext('webgl', { alpha:false, antialias:false, powerPreference:'low-power' }); if (!g) return false;
+    const alta = g.getShaderPrecisionFormat(g.FRAGMENT_SHADER, g.HIGH_FLOAT).precision > 0;
+    const sh = (tp, src) => { const s = g.createShader(tp); g.shaderSource(s, src); g.compileShader(s); if (!g.getShaderParameter(s, g.COMPILE_STATUS)) throw new Error('shader'); return s; };
+    const pr = g.createProgram();
+    g.attachShader(pr, sh(g.VERTEX_SHADER, 'attribute vec2 p;uniform vec2 e;varying vec2 u;void main(){u=vec2(.5+p.x*.5*e.x,.5-p.y*.5*e.y);gl_Position=vec4(p,0.,1.);}'));
+    g.attachShader(pr, sh(g.FRAGMENT_SHADER, 'precision ' + (alta ? 'highp' : 'mediump') + ' float;' + FRAG));
+    g.linkProgram(pr); if (!g.getProgramParameter(pr, g.LINK_STATUS)) throw new Error('link'); g.useProgram(pr);
+    g.bindBuffer(g.ARRAY_BUFFER, g.createBuffer()); g.bufferData(g.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), g.STATIC_DRAW);
+    const loc = g.getAttribLocation(pr, 'p'); g.enableVertexAttribArray(loc); g.vertexAttribPointer(loc, 2, g.FLOAT, false, 0, 0);
+    g.pixelStorei(g.UNPACK_COLORSPACE_CONVERSION_WEBGL, g.NONE); g.pixelStorei(g.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+    const tex = un => { const x = g.createTexture(); g.activeTexture(g.TEXTURE0 + un); g.bindTexture(g.TEXTURE_2D, x); for (const [k, val] of [[g.TEXTURE_MIN_FILTER, g.LINEAR], [g.TEXTURE_MAG_FILTER, g.LINEAR], [g.TEXTURE_WRAP_S, g.CLAMP_TO_EDGE], [g.TEXTURE_WRAP_T, g.CLAMP_TO_EDGE]]) g.texParameteri(g.TEXTURE_2D, k, val); return x; };
+    tex(1); g.texImage2D(g.TEXTURE_2D, 0, g.RGBA, g.RGBA, g.UNSIGNED_BYTE, atlas);
+    tex(0); g.texImage2D(g.TEXTURE_2D, 0, g.RGBA, 1, 1, 0, g.RGBA, g.UNSIGNED_BYTE, new Uint8Array([10, 11, 11, 255]));
+    for (const n of ['v', 'l', 'a', 'b', 't', 'k', 'e']) U[n] = g.getUniformLocation(pr, n);
+    g.uniform1i(U.v, 0); g.uniform1i(U.l, 1);
+    cv.addEventListener('webglcontextlost', e => { e.preventDefault(); gl = null; semGL(); });
+    gl = g; return true;
   }
-  let arr = false;
-  const mov = e => { const q = tela.getBoundingClientRect(); cortar((e.clientX - q.left) / q.width * 100); };
-  tela.onpointerdown = e => { if (ocupado) return; mexeu = true; arr = true; tela.setPointerCapture(e.pointerId); mov(e); };
-  tela.onpointermove = e => { if (arr) mov(e); }; tela.onpointerup = tela.onpointercancel = () => arr = false;
-  new IntersectionObserver(es => { visivel = es[0].isIntersecting; }, { threshold:.2 }).observe(tela);
-  await escolhe(0);
-  while (!mexeu){ await espera(2200); if (mexeu) break; if (visivel && !ocupado) await escolhe((atual + 1) % REFS.length); }
+  function mede(){   // tamanho do desenho e recorte (preenche a moldura, como object-fit: cover)
+    if (!gl) return; const q = tela.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2), k = Math.min(1, 1280 / (q.width * d));
+    const w = Math.max(2, Math.round(q.width * d * k)), h = Math.max(2, Math.round(q.height * d * k));
+    if (cv.width !== w || cv.height !== h){ cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
+    const ca = w / h, va = 16 / 9; gl.uniform2f(U.e, ca < va ? ca / va : 1, ca < va ? 1 : va / ca);
+  }
+  function quadro(agora){
+    raf = 0; if (!visivel) return;
+    const k = Math.min(1, (agora - t0) / DUR), te = k * k * (3 - 2 * k);
+    ver += (verAlvo - ver) * .2; if (Math.abs(verAlvo - ver) < .003) ver = verAlvo;
+    forcaS += (forca - forcaS) * .3;
+    if (gl){
+      try {
+        gl.activeTexture(gl.TEXTURE0);
+        if (v.readyState >= 2 && v.videoWidth){ if (v.currentTime !== ultT){ gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, v); ultT = v.currentTime; temQuadro = true; } }
+        else if (!temQuadro && capa.complete && capa.naturalWidth){ gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, capa); temQuadro = true; ultT = -1; }
+        if (temQuadro){ gl.uniform1f(U.a, antes); gl.uniform1f(U.b, atual); gl.uniform1f(U.t, te); gl.uniform1f(U.k, forcaS * ver); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); cv.style.opacity = 1; }
+      } catch { gl = null; semGL(); }
+    } else if (modo === 'img') fb.style.opacity = Math.min(1, forcaS / .65) * ver;
+    raf = requestAnimationFrame(quadro);
+  }
+  const roda = () => { if (!raf && visivel) raf = requestAnimationFrame(quadro); };
+  function semGL(){   // sem WebGL: mostra a cena parada com o look (as mesmas LUTs, já aplicadas)
+    modo = 'img'; cv.hidden = true; v.pause(); v.removeAttribute('src'); v.poster = AS + 'cena.jpg' + VER; fb.hidden = false; fb.src = AS + 'g-' + bts[atual].dataset.id + '.jpg' + VER; roda();
+  }
+  cv.style.opacity = 0; cv.style.transition = 'opacity .3s';
+  const atlas = new Image();
+  atlas.onload = () => { try { if (ligaGL(atlas)){ modo = 'gl'; mede(); roda(); } else semGL(); } catch { gl = null; semGL(); } };
+  atlas.onerror = semGL; atlas.src = AS + 'looks.png' + VER;
+  if ('ResizeObserver' in window) new ResizeObserver(mede).observe(tela); else addEventListener('resize', mede);
+
+  // ---- trocar de referência (transição suave) ----
+  function escolhe(i){
+    if (i === atual) return;
+    antes = atual; atual = i; t0 = performance.now(); ultima = Date.now();
+    bts.forEach((b, k) => { b.classList.toggle('on', k === i); b.setAttribute('aria-checked', k === i); });
+    rN.textContent = bts[i].dataset.n; rM.src = bts[i].querySelector('img').src;
+    if (modo === 'img') fb.src = AS + 'g-' + bts[i].dataset.id + '.jpg' + VER;
+  }
+  bts.forEach((b, i) => b.addEventListener('click', () => { mexeu = true; mostra(1); escolhe(i); }));
+  $('#refs').addEventListener('keydown', e => { const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return; e.preventDefault(); mexeu = true; const i = (atual + d + NL) % NL; escolhe(i); bts[i].focus(); });
+  // ---- intensidade ----
+  const poeInt = () => { forca = int.value / 100; intv.textContent = int.value + '%'; int.style.setProperty('--p', int.value + '%'); };
+  int.addEventListener('input', () => { mexeu = true; mostra(1); poeInt(); }); poeInt();
+  // ---- segurar para ver o original ----
+  function mostra(x, seg){ verAlvo = x; tg.textContent = x ? 'Com o Mood' : 'Original'; orig.classList.toggle('on', !x && !!seg); }
+  const solta = () => mostra(1);
+  orig.addEventListener('pointerdown', e => { e.preventDefault(); mexeu = true; try { orig.setPointerCapture(e.pointerId); } catch {} mostra(0, 1); });
+  ['pointerup', 'pointercancel', 'lostpointercapture', 'blur'].forEach(ev => orig.addEventListener(ev, solta));
+  orig.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); mostra(0, 1); } });
+  orig.addEventListener('keyup', solta);
+  orig.addEventListener('contextmenu', e => e.preventDefault());
+
+  // ---- quando aparece: mostra o original por um instante e revela o look; depois passeia pelas referências ----
+  mostra(reduz ? 1 : 0); if (reduz) ver = 1;
+  new IntersectionObserver(es => {
+    visivel = es[0].isIntersecting;
+    if (visivel){ toca(); roda(); if (!estreou){ estreou = true; setTimeout(() => { if (verAlvo === 0 && !orig.classList.contains('on')) mostra(1); ultima = Date.now(); }, 1300); } }
+    else if (!v.paused) v.pause();
+  }, { threshold:.35 }).observe(tela);
+  if (!reduz) setInterval(() => { if (!mexeu && visivel && ultima && verAlvo === 1 && !document.hidden && Date.now() - ultima > 3600) escolhe((atual + 1) % NL); }, 400);
 })();
 </script>
 </body>
 </html>
 '''
-out = (HTML.replace('__MOTOR__', motor).replace('__LOGO__', LOGO).replace('__PRECO__', str(PRECO)).replace('__PARC__', PARC).replace('__CHECKOUT__', CHECKOUT))
+out = (HTML.replace('__REFS__', REFS).replace('__GALERIA__', GALERIA).replace('__PAL__', PAL).replace('__ID0__', LOOKS[0]['id']).replace('__N0__', LOOKS[0]['n']).replace('__AS__', AS).replace('__V__', V).replace('__LOGO__', LOGO).replace('__PRECO__', str(PRECO)).replace('__PARC__', PARC).replace('__CHECKOUT__', CHECKOUT))
 dest = os.path.join(RAIZ, 'conheca/mood/index.html')
 os.makedirs(os.path.dirname(dest), exist_ok=True)
 open(dest, 'w', encoding='utf-8').write(out)

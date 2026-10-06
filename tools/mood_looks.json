@@ -1,0 +1,8 @@
+[
+ {"id":"natural","n":"Natural Film","a":{"forca":68,"contr":10}},
+ {"id":"golden","n":"Golden Hour","a":{"forca":75,"contr":4}},
+ {"id":"moody","n":"Moody Green","a":{"forca":90,"contr":6}},
+ {"id":"clean","n":"Clean Cinematic","a":{"forca":75,"contr":10,"expo":4}},
+ {"id":"warm","n":"Warm Film","a":{"forca":60,"contr":10}},
+ {"id":"cool","n":"Cool Cinematic","a":{"forca":75,"contr":4}}
+]
