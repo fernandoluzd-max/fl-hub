@@ -183,7 +183,7 @@ function evento(nome){
   } catch {}
 }
 window.FLV = { pack: PACK, slug: PRODUTO, ir: null };   // 'ir': quando a conta já tem o produto, o botão abre a ferramenta em vez do pagamento (oferta-venda.js)
-function compra(){ if (FLV.ir){ location.href = FLV.ir; return; } const l = linkCompra(); if (l){ evento('checkout_clicked'); location.href = l; } else toast('Link de compra em breve.'); }
+function compra(){ if (FLV.ir){ location.href = FLV.ir; return; } const l = linkCompra(); if (l){ evento('checkout_clicked'); window.FLPixel && FLPixel.checkout(); location.href = l; } else toast('Link de compra em breve.'); }
 document.querySelectorAll('[data-comprar]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); compra(); }));
 // o teste grátis embutido (a ferramenta de verdade) pede a compra por aqui
 addEventListener('message', e => { if (e.origin === location.origin && e.data && e.data.fl === 'comprar') compra(); });
@@ -264,6 +264,7 @@ def pagina(p):
 :root{{--selo:{p['cor']};--selo-tinta:var(--ink);--selo-mudo:var(--mute);--a:{p['cor']};--a2:{p['cor2']};--ai:{p.get('ink','#111')};--pattern:{p['pattern']};--fxx:{p.get('fxx','70%')}}}
 {css}
 </style>
+<script src="/pixel.js"></script>
 </head>
 <body>
 <div class="fx"></div>

@@ -302,6 +302,7 @@ footer a{color:var(--mute)}
 @media (min-width:861px){.fixo{display:none}}
 @media (prefers-reduced-motion:reduce){.rv{transform:none;transition:opacity .3s}html{scroll-behavior:auto}}
 </style>
+<script src="/pixel.js"></script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="mg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="298" y2="231"><stop offset="0" stop-color="#FFB347"/><stop offset=".38" stop-color="#FF6FAE"/><stop offset=".7" stop-color="#B45CFF"/><stop offset="1" stop-color="#5AB8FF"/></linearGradient></defs></svg>
@@ -524,7 +525,7 @@ function linkCompra(){   // link de compra com a origem Base FL (utm); ?de=app q
 }
 document.querySelectorAll('[data-comprar]').forEach(b => b.addEventListener('click', e => {
   const l = linkCompra();
-  if (l){ e.preventDefault(); location.href = l; return; }
+  if (l){ e.preventDefault(); window.FLPixel && FLPixel.checkout(); location.href = l; return; }
   if (b.getAttribute('href') === '#'){ e.preventDefault(); toast('Link de compra em breve.'); }   // sem checkout ainda: os outros botões só rolam até a oferta
 }));
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); } }), { threshold:.12 });

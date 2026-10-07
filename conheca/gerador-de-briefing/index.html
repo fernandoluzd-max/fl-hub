@@ -237,6 +237,7 @@ a.btn{text-decoration:none}
 @media (max-width:900px){.vv,.ob,.od{grid-template-columns:1fr}.io-g{grid-template-columns:1fr;justify-items:center}.fone{margin:0 auto}.seta-io{transform:rotate(90deg)}.od>div{border-left:0;border-top:1px solid var(--line)}.od>div:first-child{border-top:0}}
 
 </style>
+<script src="/pixel.js"></script>
 </head>
 <body>
 <div class="fx"></div>
@@ -415,7 +416,7 @@ function evento(nome){
   } catch {}
 }
 window.FLV = { pack: PACK, slug: PRODUTO, ir: null };   // 'ir': quando a conta já tem o produto, o botão abre a ferramenta em vez do pagamento (oferta-venda.js)
-function compra(){ if (FLV.ir){ location.href = FLV.ir; return; } const l = linkCompra(); if (l){ evento('checkout_clicked'); location.href = l; } else toast('Link de compra em breve.'); }
+function compra(){ if (FLV.ir){ location.href = FLV.ir; return; } const l = linkCompra(); if (l){ evento('checkout_clicked'); window.FLPixel && FLPixel.checkout(); location.href = l; } else toast('Link de compra em breve.'); }
 document.querySelectorAll('[data-comprar]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); compra(); }));
 // o teste grátis embutido (a ferramenta de verdade) pede a compra por aqui
 addEventListener('message', e => { if (e.origin === location.origin && e.data && e.data.fl === 'comprar') compra(); });
