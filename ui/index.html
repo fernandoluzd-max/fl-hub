@@ -231,6 +231,8 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
     <div class="grid" id="grid">
       <div class="banner nova" id="nova"></div>
       <div class="banner" id="banner"></div>
+    <!-- recados em vídeo da plataforma: a lista vem de avisos.json (ver avisos.js) -->
+    <section class="sec" id="s-avisos" hidden></section>
     <section class="sec" id="s-kits"><div class="sec-h"><div><h2>Kits</h2><p>Materiais prontos que instalam direto no seu CapCut.</p></div>
       <div class="status">
         <div class="pill"><span class="dot" id="d-found"></span><span id="t-found">Procurando o CapCut…</span></div>
@@ -282,6 +284,8 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
 
 <script src="catalogo.js"></script>
 <script src="aulas.js"></script>
+<script src="avisos-dados.js"></script>
+<script src="avisos.js"></script>
 <script>
 // ===== tema (escuro/claro) e atividade recolhida: lembra a escolha =====
 const pref = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch {} } };
@@ -698,6 +702,9 @@ T.event.listen('progress', e => { const t = String(e.payload); step(t, /^aviso/i
   setInterval(() => { if (!busy) refresh(); }, 3000);
   setInterval(() => { if (!busy && sess) loadCatalog(); }, 60000);
 })();
+
+// RECADOS EM VÍDEO: faixa no topo da tela inicial; some na tela de login junto com as outras seções
+if (window.Avisos) Avisos.monta(document.getElementById('s-avisos'));
 
 // as aulas pedem o acesso da conta: o servidor só entrega o vídeo das aulas dos produtos liberados
 if (window.Aulas){ Aulas.comToken(async () => (sess && await validSess()) ? sess.access_token : null); Aulas.aoCarregar(() => { if (!busy) render(); }); let rp = 0; Aulas.aoProgresso(() => { clearTimeout(rp); rp = setTimeout(() => { if (!busy && !document.querySelector('.fla')) render(); }, 400); }); }

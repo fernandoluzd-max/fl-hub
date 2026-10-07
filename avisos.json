@@ -1,0 +1,43 @@
+{
+  "_leia": [
+    "RECADOS EM VÍDEO do Base FL. Aparecem no app do computador e em basefl.com/app (celular).",
+    "Para publicar um recado novo: copie um bloco de 'avisos', cole logo abaixo (com vírgula entre os blocos) e troque os dados.",
+    "Não precisa lançar versão nova do app: o app lê este arquivo direto do site.",
+    "id        -> nome curto, sem espaço e sem acento (ex.: novidade-outubro). Nunca repita nem troque depois: é por ele que o app sabe quem já viu.",
+    "titulo    -> curto. descricao -> uma frase.",
+    "video     -> endereço do vídeo em https://aulas.basefl.com/...",
+    "data      -> ano-mês-dia (ex.: 2026-10-06).",
+    "duracao   -> minutos:segundos (ex.: 1:38). Pode deixar vazio.",
+    "capa      -> imagem da capa (16:9), guardada na pasta avisos/. Sem capa, o app usa um quadro do próprio vídeo; nesse caso 'capa_seg' diz qual segundo usar.",
+    "destaque  -> true mostra o selo 'Novo' para quem ainda não abriu. false publica sem chamar atenção.",
+    "ordem     -> 1 aparece primeiro, 2 depois, e assim por diante.",
+    "ativo     -> false tira o recado do ar sem apagar."
+  ],
+  "titulo": "Recados do Base FL",
+  "avisos": [
+    {
+      "id": "app-no-celular",
+      "titulo": "O Base FL no celular",
+      "descricao": "Um recado rápido sobre como o Base FL funciona no celular.",
+      "video": "https://aulas.basefl.com/aviso-app-celular.mp4",
+      "data": "2026-10-06",
+      "duracao": "1:38",
+      "capa": "/avisos/app-no-celular.jpg",
+      "destaque": true,
+      "ordem": 1,
+      "ativo": true
+    },
+    {
+      "id": "botao-atualizar",
+      "titulo": "O botão de atualizar",
+      "descricao": "Um recado rápido sobre o botão de atualizar do app e quando usar.",
+      "video": "https://aulas.basefl.com/aviso-botao-atualizar.mp4",
+      "data": "2026-10-06",
+      "duracao": "1:13",
+      "capa": "/avisos/botao-atualizar.jpg",
+      "destaque": true,
+      "ordem": 2,
+      "ativo": true
+    }
+  ]
+}

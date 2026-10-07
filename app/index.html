@@ -133,6 +133,8 @@ h2{font-family:var(--d);font-weight:800;font-size:19px;letter-spacing:-.01em;mar
   <div class="pcaviso" id="pc" hidden>Você está no computador. Aqui o melhor é o app Base FL, que instala os packs no CapCut: <a href="/instalar/">baixar o app</a>.</div>
 
   <div id="tudo" hidden>
+    <!-- recados em vídeo da plataforma: a lista vem de /avisos.json (ver /avisos.js) -->
+    <div id="avisos" hidden></div>
     <h2>Packs do CapCut</h2>
     <p class="sub">São instalados dentro do CapCut do computador. No celular não dá para instalar.</p>
     <div class="lista" id="packs"></div>
@@ -158,6 +160,7 @@ h2{font-family:var(--d);font-weight:800;font-size:19px;letter-spacing:-.01em;mar
 <script src="/catalogo.js"></script>
 <script src="/base.js"></script>
 <script src="/aulas.js"></script>
+<script src="/avisos.js"></script>
 <script src="/app/pwa.js"></script>
 <script>
 const $ = s => document.querySelector(s), esc = Base.esc, C = window.CATALOGO, POR = Object.fromEntries(C.produtos.map(p => [p.key, p]));
@@ -217,6 +220,8 @@ function desenha(){
   $('#packs').innerHTML = ps.map(pack).join('');
   $('#manda').hidden = !ps.some(p => Base.tem(p.pack));
   botaoInstalar(); if (window.Aulas) ligaAulas();
+  // recados em vídeo: só para quem já entrou na conta
+  if (window.Avisos) { if (logado) Avisos.monta($('#avisos'), { toque: true }); else Avisos.desmonta($('#avisos')); }
 }
 // convite para instalar: aparece no celular, some para quem já instalou ou tocou em "agora não"
 const guardou = () => { try { return localStorage.getItem('fl_pin') === 'nao'; } catch (e) { return false; } };
