@@ -15,6 +15,9 @@ use walkdir::WalkDir;
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct UdState {
     pub user_data: String,
+    /// pasta "Presets" onde entrou (vazio em instalações antigas = User Data/Presets)
+    #[serde(default)]
+    pub presets_root: String,
     pub presets: Vec<String>,
     pub preset_ids: Vec<String>,
     pub created_folders: Vec<String>,
@@ -350,6 +353,12 @@ fn uninstall_luts(env: &Env, st: &Installed, progress: &mut dyn FnMut(&str)) {
     }
 }
 
+/// Pasta Combination/Presets de um destino instalado.
+fn dir_presets(t: &UdState) -> PathBuf {
+    let raiz = if t.presets_root.is_empty() { PathBuf::from(&t.user_data).join("Presets") } else { PathBuf::from(&t.presets_root) };
+    raiz.join("Combination").join("Presets")
+}
+
 pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result<Report, String> {
     if pack.manifest.kind.as_deref() == Some("lut") {
         return install_luts(env, pack, progress);
@@ -380,6 +389,12 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
         return Err("Não encontrei o CapCut neste computador. Abra o CapCut uma vez, crie um projeto qualquer, feche e tente de novo.".into());
     }
     say(&mut rep, format!("CapCut encontrado ({} pasta(s) de dados)", uds.len()));
+    let raizes = env.capcut_preset_roots();
+    for (ud, r) in &raizes {
+        if *r != ud.join("Presets") {
+            say(&mut rep, format!("Pasta de predefinições escolhida no CapCut: {}", fwd(r)));
+        }
+    }
 
     // 1. fontes
     let fr = install_fonts(env, pack).map_err(|e| format!("Erro ao instalar fontes: {e}"))?;
@@ -399,13 +414,13 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
     let mut targets = vec![];
 
     let resultado: Result<(), String> = (|| {
-        for ud in &uds {
-            let presets = ud.join("Presets").join("Combination").join("Presets");
+        for (ud, raiz) in &raizes {
+            let presets = raiz.join("Combination").join("Presets");
             fs::create_dir_all(&presets).map_err(|e| e.to_string())?;
             for n in &nomes {
                 let dest = presets.join(n);
                 if dest.exists() {
-                    let bk = backup_root.join(fwd(ud).replace(['/', ':'], "_")).join(n);
+                    let bk = backup_root.join(fwd(raiz).replace(['/', ':'], "_")).join(n);
                     move_path(&dest, &bk).map_err(|e| format!("backup de {n}: {e}"))?;
                     acoes.push(Acao::Moveu { original: dest.clone(), backup: bk });
                 }
@@ -413,7 +428,7 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
                 acoes.push(Acao::Criou(dest));
             }
             if let Some(r) = &m.resources_dir {
-                let rd = ud.join("Presets").join("Combination").join("Resources");
+                let rd = raiz.join("Combination").join("Resources");
                 let _ = fs::create_dir_all(&rd);
                 if let Ok(it) = fs::read_dir(pack.root.join(r)) {
                     for e in it.flatten() {
@@ -424,13 +439,13 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
                     }
                 }
             }
-            let mut st = UdState { user_data: fwd(ud), presets: nomes.clone(), ..Default::default() };
+            let mut st = UdState { user_data: fwd(ud), presets_root: fwd(raiz), presets: nomes.clone(), ..Default::default() };
             if let Some(ours) = &ours_index {
                 let arq = presets.join(index::FILE);
                 let anterior = fs::read_to_string(&arq).ok();
                 if let Some(t) = &anterior {
                     let _ = fs::create_dir_all(&backup_root);
-                    let _ = fs::write(backup_root.join(format!("{}-{}", fwd(ud).replace(['/', ':'], "_"), index::FILE)), t);
+                    let _ = fs::write(backup_root.join(format!("{}-{}", fwd(raiz).replace(['/', ':'], "_"), index::FILE)), t);
                 }
                 let mr = index::merge(anterior.as_deref().and_then(|t| serde_json::from_str(t.trim_start_matches('\u{feff}')).ok()), ours);
                 fs::write(&arq, serde_json::to_string(&mr.index).unwrap()).map_err(|e| format!("índice: {e}"))?;
@@ -438,7 +453,7 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
                 st.preset_ids = mr.preset_ids;
                 st.created_folders = mr.created_folders;
             }
-            let patcher = Patcher::new(env.target, fr.map.clone(), &fwd(&env.home), &fwd(ud));
+            let patcher = Patcher::new_with_root(env.target, fr.map.clone(), &fwd(&env.home), &fwd(ud), &fwd(raiz));
             for n in &nomes {
                 rep.files_patched += patcher.patch_dir(&presets.join(n));
             }
@@ -464,8 +479,8 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
     // sai do CapCut, para não ficar predefinição repetida nem pasta antiga vazia.
     if let Some(prev) = read_json(&state_path(env, &m.id)).and_then(|j| serde_json::from_value::<Installed>(j).ok()) {
         for st in targets.iter_mut() {
-            let Some(pt) = prev.targets.iter().find(|t| t.user_data == st.user_data) else { continue };
-            let presets = PathBuf::from(&st.user_data).join("Presets").join("Combination").join("Presets");
+            let presets = dir_presets(st);
+            let Some(pt) = prev.targets.iter().find(|t| dir_presets(t) == presets) else { continue };
             let mut tirados = 0;
             for n in pt.presets.iter().filter(|n| !nomes.contains(n)) {
                 if fs::remove_dir_all(presets.join(n)).is_ok() {
@@ -505,7 +520,7 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
         }
         // pastas criadas numa instalação anterior continuam sendo "nossas" (reinstalar reaproveita)
         for pt in prev.targets {
-            if let Some(t) = targets.iter_mut().find(|t| t.user_data == pt.user_data) {
+            if let Some(t) = targets.iter_mut().find(|t| dir_presets(t) == dir_presets(&pt)) {
                 for f in pt.created_folders {
                     if !t.created_folders.contains(&f) {
                         t.created_folders.push(f);
@@ -555,7 +570,7 @@ pub fn uninstall(env: &Env, id: &str, progress: &mut dyn FnMut(&str)) -> Result<
         return Err("O CapCut está aberto. Feche o CapCut e tente de novo.".into());
     }
     for t in &st.targets {
-        let presets = PathBuf::from(&t.user_data).join("Presets").join("Combination").join("Presets");
+        let presets = dir_presets(t);
         for n in &t.presets {
             let _ = fs::remove_dir_all(presets.join(n));
         }
@@ -564,7 +579,7 @@ pub fn uninstall(env: &Env, id: &str, progress: &mut dyn FnMut(&str)) -> Result<
             let novo = index::remove(v, &t.preset_ids, &t.created_folders);
             let _ = fs::write(&arq, serde_json::to_string(&novo).unwrap());
         }
-        let msg = format!("{} predefinições removidas de {}", t.presets.len(), t.user_data);
+        let msg = format!("{} predefinições removidas de {}", t.presets.len(), if t.presets_root.is_empty() { &t.user_data } else { &t.presets_root });
         log_line(env, &msg);
         progress(&msg);
     }
@@ -587,9 +602,15 @@ pub fn diagnose(env: &Env) -> String {
     let uds = env.capcut_user_data();
     s += &format!("Pastas do CapCut: {}\n", if uds.is_empty() { "NÃO ENCONTRADAS".into() } else { uds.iter().map(|u| fwd(u)).collect::<Vec<_>>().join(" | ") });
     for ud in &uds {
-        let p = ud.join("Presets").join("Combination").join("Presets");
+        match crate::env::custom_preset_path(ud) {
+            Some(c) => s += &format!("  pasta de predefinições escolhida no CapCut: {}{}\n", fwd(&c), if c.is_dir() { "" } else { " (NÃO EXISTE)" }),
+            None => s += "  pasta de predefinições escolhida no CapCut: padrão\n",
+        }
+    }
+    for (_, raiz) in env.capcut_preset_roots() {
+        let p = raiz.join("Combination").join("Presets");
         let n = fs::read_dir(&p).map(|r| r.flatten().filter(|e| e.path().is_dir()).count()).unwrap_or(0);
-        s += &format!("  predefinições em {}: {}\n", fwd(ud), n);
+        s += &format!("  predefinições em {}: {}\n", fwd(&raiz), n);
         s += &format!("  índice de pastas: {}\n", if p.join(index::FILE).exists() { "sim" } else { "não" });
     }
     for i in installed(env) {

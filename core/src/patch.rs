@@ -17,6 +17,11 @@ pub struct Patcher {
 impl Patcher {
     /// `home_fwd`: pasta pessoal (Mac/Linux). `ud_fwd`: User Data do CapCut (Windows).
     pub fn new(target: Target, map: BTreeMap<String, String>, home_fwd: &str, ud_fwd: &str) -> Patcher {
+        Patcher::new_with_root(target, map, home_fwd, ud_fwd, &format!("{ud_fwd}/Presets"))
+    }
+
+    /// Igual a `new`, mas a pasta de predefinições pode ser outra (a escolhida no CapCut).
+    pub fn new_with_root(target: Target, map: BTreeMap<String, String>, home_fwd: &str, ud_fwd: &str, presets_fwd: &str) -> Patcher {
         let re_font = Regex::new(r#"(?i)"([^"\\]*/)([^"\\/]+\.(?:ttf|otf|ttc))(\\?")"#).unwrap();
         let win_origin = r#""[A-Za-z]:/Users/[^/"\\]+/AppData/Local/CapCut/User Data"#;
         let rules = match target {
@@ -37,6 +42,7 @@ impl Patcher {
         };
         let mut rules = rules;
         // marcador usado pelos pacotes gerados (ex.: sons): vira a pasta User Data deste computador
+        rules.push((Regex::new(r#""__PLUGA_UD__/Presets/"#).unwrap(), format!("\"{presets_fwd}/")));
         rules.push((Regex::new(r#""__PLUGA_UD__"#).unwrap(), format!("\"{ud_fwd}")));
         Patcher { re_font, rules, map }
     }
