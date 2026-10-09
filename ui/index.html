@@ -732,7 +732,7 @@ T.event.listen('progress', e => { const t = String(e.payload); step(t, /^aviso/i
 })();
 
 // RECADOS EM VÍDEO: faixa no topo da tela inicial; some na tela de login junto com as outras seções
-if (window.Avisos) Avisos.monta(document.getElementById('s-avisos'));
+if (window.Avisos){ Avisos.aoAbrirLink(u => T.opener.openUrl(u)); Avisos.monta(document.getElementById('s-avisos')); }
 
 // as aulas pedem o acesso da conta: o servidor só entrega o vídeo das aulas dos produtos liberados
 if (window.Aulas){ Aulas.comToken(async () => (sess && await validSess()) ? sess.access_token : null); Aulas.aoCarregar(() => { if (!busy) render(); }); let rp = 0; Aulas.aoProgresso(() => { clearTimeout(rp); rp = setTimeout(() => { if (!busy && !document.querySelector('.fla')) render(); }, 400); }); }

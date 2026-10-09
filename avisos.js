@@ -7,6 +7,9 @@
   if (window.Avisos) return;
   var K = '242,165,65';
   var mem = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+  // abrir link do botão: no app o site injeta um abridor (abre no navegador do computador); no site, abre numa aba nova.
+  var abrirLink = null;
+  function abreLink(u) { if (abrirLink) { try { abrirLink(u); return; } catch (e) {} } try { var w = window.open(u, '_blank', 'noopener'); if (!w) location.href = u; } catch (e) { location.href = u; } }
   var noSite = /^https?:$/.test(location.protocol) && /(^|\.)basefl\.com$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
   var RAIZ = noSite ? '' : 'https://basefl.com';
   var MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
@@ -25,7 +28,10 @@
       vistos[id] = 1;
       var capa = texto(a.capa, 300); if (capa && !hostOk(capa)) capa = '';
       var d = /^(\d{4})-(\d{2})-(\d{2})$/.exec(texto(a.data, 10)), seg = +a.capa_seg;
-      out.push({ id: id, titulo: tit, descricao: texto(a.descricao, 220), video: video, capa: capa, capa_seg: seg >= 0 && seg < 36000 ? seg : 1,
+      // botão de ação do recado: só vale se tiver texto e um link https do próprio Base FL
+      var ctaT = texto(a.cta_texto, 28), ctaL = texto(a.cta_link, 300);
+      var cta = (ctaT && /^https:\/\//i.test(ctaL) && hostOk(ctaL)) ? { texto: ctaT, link: ctaL } : null;
+      out.push({ id: id, titulo: tit, descricao: texto(a.descricao, 220), video: video, capa: capa, capa_seg: seg >= 0 && seg < 36000 ? seg : 1, cta: cta,
         data: d ? d[0] : '', duracao: /^\d{1,3}:\d{2}$/.test(texto(a.duracao, 8)) ? texto(a.duracao, 8) : '', destaque: a.destaque !== false, ordem: isFinite(+a.ordem) ? +a.ordem : 1000 + i, _i: i });
     });
     out.sort(function (a, b) { return a.ordem - b.ordem || (a.data < b.data ? 1 : a.data > b.data ? -1 : 0) || a._i - b._i; });
@@ -189,6 +195,19 @@ display:block;border:1px solid var(--avl);background:var(--avf);border-radius:va
 .flv-bs .gh:hover,.flv-er button:hover{background:#1d2120;filter:none}\
 .flv-bs button:focus-visible,.flv-er button:focus-visible{outline:2px solid #F4F0E4;outline-offset:2px}\
 .flv-inf{padding:15px 18px 17px;border-top:1px solid #262b29;background:#151817}\
+.flv-cta{all:unset;position:relative;overflow:hidden;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:9px;width:100%;margin-top:14px;min-height:54px;padding:0 20px;border-radius:15px;color:#1a1205;font:800 15.5px/1.2 inherit;font-family:"Archivo",inherit;letter-spacing:.01em;cursor:pointer;text-align:center;background:linear-gradient(100deg,rgb(var(--k)),rgba(var(--k),.80) 55%,rgb(var(--k)));background-size:200% 100%;box-shadow:0 8px 24px rgba(var(--k),.34),0 0 0 1px rgba(255,255,255,.14) inset;animation:flvpulse 2.8s ease-in-out infinite,flvslide 6s ease-in-out infinite;transition:transform .14s,box-shadow .2s,filter .15s}\
+.flv-cta::before{content:"";position:absolute;top:0;left:-65%;width:48%;height:100%;background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.6),rgba(255,255,255,0));transform:skewX(-18deg);animation:flvshine 3.6s ease-in-out infinite;pointer-events:none}\
+.flv-cta>span,.flv-cta>svg{position:relative;z-index:1}\
+.flv-cta svg{flex:none;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;animation:flvnudge 1.7s ease-in-out infinite}\
+.flv-cta:hover{filter:brightness(1.05);box-shadow:0 12px 30px rgba(var(--k),.48),0 0 0 1px rgba(255,255,255,.2) inset}\
+.flv-cta:hover svg{animation-duration:.9s}\
+.flv-cta:active{transform:scale(.985)}\
+.flv-cta:focus-visible{outline:2px solid #F4F0E4;outline-offset:2px}\
+@keyframes flvshine{0%{left:-65%}26%{left:135%}100%{left:135%}}\
+@keyframes flvpulse{0%,100%{box-shadow:0 8px 22px rgba(var(--k),.30),0 0 0 1px rgba(255,255,255,.14) inset}50%{box-shadow:0 12px 32px rgba(var(--k),.54),0 0 0 1px rgba(255,255,255,.18) inset}}\
+@keyframes flvslide{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}\
+@keyframes flvnudge{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}\
+@media (prefers-reduced-motion:reduce){.flv-cta,.flv-cta::before,.flv-cta>svg{animation:none}}\
 .flv-inf p{font-size:15px;line-height:1.5;color:#c9c8bb;max-width:68ch}\
 .flv-inf p:empty{display:none}\
 .flv-inf small{display:block;margin-top:8px;font-size:12.5px;color:#8d8e80}\
@@ -307,6 +326,11 @@ display:block;border:1px solid var(--avl);background:var(--avf);border-radius:va
     el.querySelector('.flv-top b').textContent = a.titulo;
     el.querySelector('.flv-inf p').textContent = a.descricao;
     var dl = dataLonga(a.data); el.querySelector('.flv-inf small').textContent = dl ? 'Publicado em ' + dl : '';
+    if (a.cta) {       // botão de ação abaixo do vídeo (ex.: "Usar no celular")
+      var ctaB = cria('button', 'flv-cta'); ctaB.type = 'button'; ctaB.innerHTML = '<span></span>' + IC.dir;
+      ctaB.querySelector('span').textContent = a.cta.texto; ctaB.onclick = function () { abreLink(a.cta.link); };
+      el.querySelector('.flv-inf').appendChild(ctaB);
+    }
     var pl = el.querySelector('.flv-pl'), v = el.querySelector('video'), bar = el.querySelector('.flv-bar'), tm = el.querySelector('.flv-tm'), pp = el.querySelector('.pp'), px = el.querySelector('.flv-px'), arr = false;
     function atualiza() {
       var d = v.duration || 0, c = v.currentTime || 0, k = d ? c / d * 100 : 0;
@@ -328,10 +352,11 @@ display:block;border:1px solid var(--avl);background:var(--avf);border-radius:va
       pl.classList.remove('toca', 'some'); pl.classList.add('fim');
       var outros = dados.avisos.filter(function (x) { return x.id !== a.id; }), prox = outros.filter(novo)[0] || null;
       px.innerHTML = '<small></small><b></b><div class="flv-bs"><button class="gh re" type="button">Assistir de novo</button><button class="vai" type="button"></button></div>';
-      px.querySelector('small').textContent = prox ? 'Outro recado novo' : 'Fim do recado';
-      px.querySelector('b').textContent = prox ? prox.titulo : a.titulo;
-      var bv = px.querySelector('.vai'); bv.innerHTML = prox ? '<span>Assistir agora</span>' + IC.dir : '<span>Fechar</span>';
-      bv.onclick = prox ? function () { abre(prox.id, op); } : fecha;
+      px.querySelector('small').textContent = (!a.cta && prox) ? 'Outro recado novo' : 'Fim do recado';
+      px.querySelector('b').textContent = (!a.cta && prox) ? prox.titulo : a.titulo;
+      var bv = px.querySelector('.vai');
+      if (a.cta) { bv.innerHTML = '<span></span>' + IC.dir; bv.querySelector('span').textContent = a.cta.texto; bv.onclick = function () { abreLink(a.cta.link); }; }
+      else { bv.innerHTML = prox ? '<span>Assistir agora</span>' + IC.dir : '<span>Fechar</span>'; bv.onclick = prox ? function () { abre(prox.id, op); } : fecha; }
       px.querySelector('.re').onclick = function () { pl.classList.remove('fim'); v.currentTime = 0; v.play().catch(function () {}); };
       try { bv.focus({ preventScroll: true }); } catch (e) {}
     };
@@ -375,5 +400,6 @@ display:block;border:1px solid var(--avl);background:var(--avf);border-radius:va
   }
 
   window.Avisos = { monta: monta, desmonta: desmonta, abre: abre, fecha: fecha, recarrega: recarrega, carrega: carrega,
-    lista: function () { return dados.avisos.slice(); }, novos: function () { return novos().length; }, aoMudar: function (f) { ouv.push(f); } };
+    lista: function () { return dados.avisos.slice(); }, novos: function () { return novos().length; }, aoMudar: function (f) { ouv.push(f); },
+    aoAbrirLink: function (f) { abrirLink = typeof f === 'function' ? f : null; } };
 })();

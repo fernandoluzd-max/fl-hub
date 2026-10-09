@@ -18,11 +18,13 @@
     {
       "id": "app-no-celular",
       "titulo": "O Base FL no celular",
-      "descricao": "Um recado rápido sobre como o Base FL funciona no celular.",
+      "descricao": "Tivemos uma atualização: agora você também usa o Base FL pelo celular. Toque no botão para abrir.",
       "video": "https://aulas.basefl.com/aviso-app-celular.mp4",
       "data": "2026-10-06",
       "duracao": "1:38",
       "capa": "/avisos/app-no-celular.jpg",
+      "cta_texto": "Usar no celular",
+      "cta_link": "https://basefl.com/app/",
       "destaque": true,
       "ordem": 1,
       "ativo": true
