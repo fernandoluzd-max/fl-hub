@@ -256,6 +256,7 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
   <footer>
     <span id="ver">Base FL</span>
     <a id="diag">Diagnóstico para suporte</a>
+    <a id="avaliar" style="display:none">Avaliar o app</a>
     <span style="margin-left:auto" id="who"></span>
     <a id="logout" style="display:none">Sair</a>
   </footer>
@@ -287,6 +288,7 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
 <script src="aulas.js"></script>
 <script src="avisos-dados.js"></script>
 <script src="avisos.js"></script>
+<script src="aval.js"></script>
 <script>
 // ===== tema (escuro/claro) e atividade recolhida: lembra a escolha =====
 const pref = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch {} } };
@@ -675,14 +677,15 @@ async function doInstallKit(p){   // um clique: títulos + efeitos sonoros + LUT
   if (state.capcut_running){ step('Feche o CapCut antes de instalar.', 'warn'); return; }
   for (const x of partesDoKit(p)) if (!(await pedeAceite(x.p))) return;
   busy = true; render();
-  const partes = partesDoKit(p); let ok = 0;
+  const partes = partesDoKit(p); let ok = 0, instalouAlgo = false;
   try {
     if (!(await validSess())) throw new Error('Sua sessão expirou. Entre de novo.');
     for (const x of partes){ step('Instalando ' + x.p.name + '…', 'run'); await baixaEInstala(x.p, x.srv); ok++; }
     const tem = k => partes.some(x => x.p.key === k);
     step('Pronto! Abra o CapCut: os títulos' + (tem('sons') ? ' e os efeitos sonoros' : '') + ' estão nas predefinições' + (tem('luts') ? ' e os LUTs em Ajuste › Seus › LUT' : '') + '.', 'ok');
+    instalouAlgo = true;
   } catch(e){ step((ok ? 'Parte do kit foi instalada. ' : '') + erroInstala(e), 'err'); }
-  busy = false; await refresh();
+  busy = false; await refresh(); if (instalouAlgo) convidaAvaliar();
 }
 async function doRemoveKit(p){
   busy = true; render(); step('Removendo ' + p.name + '…', 'run');
@@ -694,14 +697,16 @@ async function doInstall(p, srv){
   if (!p.media && state.capcut_running){ step('Feche o CapCut antes de instalar.', 'warn'); return; }
   if (!(await pedeAceite(p))) return;
   busy = true; render(); step('Instalando ' + p.name + '…', 'run');
+  let instalouAlgo = false;
   try {
     if (!(await validSess())) throw new Error('Sua sessão expirou. Entre de novo.');
     const r = await baixaEInstala(p, srv);
     if (p.media) step(`Pronto! Os sons estão em ${state.system === 'Windows' ? 'Vídeos' : 'Filmes'} › Pluga & Edita › ${p.name}. Clique em "Abrir pasta" e arraste para o CapCut.`, 'ok');
     else if (p.lut) step('Pronto! Abra o CapCut: os LUTs estão em Ajuste › Seus › LUT.', 'ok');
     else step('Pronto! Abra o CapCut: está tudo nas predefinições.', 'ok');
+    instalouAlgo = true;
   } catch(e){ step(erroInstala(e), 'err'); }
-  busy = false; await refresh();
+  busy = false; await refresh(); if (instalouAlgo) convidaAvaliar();
 }
 
 async function doRemove(p, inst){
@@ -733,6 +738,21 @@ T.event.listen('progress', e => { const t = String(e.payload); step(t, /^aviso/i
 
 // RECADOS EM VÍDEO: faixa no topo da tela inicial; some na tela de login junto com as outras seções
 if (window.Avisos){ Avisos.aoAbrirLink(u => T.opener.openUrl(u)); Avisos.monta(document.getElementById('s-avisos')); }
+
+// AVALIAÇÃO DO APP (carinhas): grava no Supabase pela função aval_registrar; nota baixa oferece o suporte.
+if (window.Aval){
+  Aval.init({
+    enviar: (nota, com, app) => api('/rest/v1/rpc/aval_registrar', { method:'POST', body:{ p_nota: nota, p_comentario: com, p_app: app } }),
+    versao: () => state?.version || '',
+    suporte: () => $('#sup')?.click(),
+    abrirLink: u => T.opener.openUrl(u)
+  });
+  const av = $('#avaliar');
+  Aval.recarrega().then(() => { if (av && Aval.elegivel()) av.style.display = ''; });
+  if (av) av.onclick = () => Aval.abrir();
+}
+// chamado depois de instalar com sucesso: abre a avaliação (uma vez) e mostra o link "Avaliar o app"
+function convidaAvaliar(){ if (!window.Aval) return; Aval.aposInstalar(); const a = $('#avaliar'); if (a && Aval.elegivel()) a.style.display = ''; }
 
 // as aulas pedem o acesso da conta: o servidor só entrega o vídeo das aulas dos produtos liberados
 if (window.Aulas){ Aulas.comToken(async () => (sess && await validSess()) ? sess.access_token : null); Aulas.aoCarregar(() => { if (!busy) render(); }); let rp = 0; Aulas.aoProgresso(() => { clearTimeout(rp); rp = setTimeout(() => { if (!busy && !document.querySelector('.fla')) render(); }, 400); }); }

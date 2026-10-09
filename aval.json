@@ -1,0 +1,10 @@
+{
+  "_leia": [
+    "Liga/desliga a avaliação do app (as carinhas).",
+    "ativo = true mostra; false esconde para todo mundo (não precisa lançar versão nova do app).",
+    "titulo e sub: o texto que aparece em cima. Pode deixar como está."
+  ],
+  "ativo": true,
+  "titulo": "O que você está achando do Base FL?",
+  "sub": "Sua opinião ajuda a melhorar o app. Leva 5 segundos."
+}
