@@ -323,6 +323,7 @@ def pagina(p):
 <script src="/catalogo.js" defer></script>
 <script src="/base.js" defer></script>
 <script src="/oferta-venda.js" defer></script>
+<script src="/zap.js" defer></script>
 </body>
 </html>
 """

@@ -1,0 +1,529 @@
+{
+  "_leia": "Base de conhecimento do atendimento Base FL (WhatsApp). Este arquivo tem o que NÃO está no catalogo.json: explicações, compatibilidade, onde cada coisa fica e como resolver problemas. Preço, nome, acesso e link vêm do catalogo.json. Mudou algo? Edite aqui ou no catálogo e rode: python3 tools/gera_kb.py (gera suporte/kb.json, que o robô lê).",
+  "revisar_a_cada_dias": 45,
+  "empresa": {
+    "marca": "Base FL",
+    "dono": "Fernando Luz",
+    "razao_social": "FL TREINAMENTOS ONLINE LTDA",
+    "o_que_e": "Base FL é o ecossistema do editor de vídeo do Fernando Luz: um app gratuito (Mac e Windows) que instala os kits no CapCut do computador e reúne ferramentas para atender cliente, que abrem no navegador (computador ou celular). A pessoa compra só o que quiser; tudo o que compra aparece liberado no mesmo app, entrando com o e-mail da compra.",
+    "nao_confundir": [
+      "Reels Academy é o curso de edição do Fernando, vendido na Kiwify. É outro produto, com outro suporte. Os Títulos Dinâmicos são vendidos à parte, no Base FL.",
+      "Títulos Dinâmicos NÃO é legenda automática. Legenda automática o próprio CapCut faz. Os Títulos são estilos prontos de título, gancho e destaque de fala.",
+      "O app Base FL não é o CapCut e não tem vínculo com o CapCut."
+    ],
+    "garantia": "7 dias de garantia em todos os produtos, contados da compra, sem precisar justificar. O reembolso é pedido pela própria Greenn (no e-mail da compra) ou pelo suporte no WhatsApp. O valor volta pelo mesmo meio de pagamento, nos prazos da Greenn e da operadora. Com o reembolso, o acesso ao produto e aos bônus daquela compra se encerra.",
+    "licenca": "Pode usar os materiais em quantos vídeos quiser, seus ou de clientes, inclusive pagos. Não pode revender, repassar ou compartilhar os arquivos nem o acesso da conta.",
+    "pagamento": "Checkout da Greenn. Cartão em até 12x (com juros da Greenn) ou à vista no Pix. Pix e cartão aprovados liberam na hora; boleto só libera depois de compensar.",
+    "acesso": "Sem senha: a pessoa entra no app ou no site com o e-mail da compra e recebe um código de 6 números por e-mail. Compras aprovadas aparecem em até 1 minuto.",
+    "links": {
+      "instalar": "https://basefl.com/instalar/?de=whatsapp",
+      "inicio": "https://basefl.com/?de=whatsapp",
+      "termos": "https://basefl.com/termos/",
+      "privacidade": "https://basefl.com/privacidade/"
+    }
+  },
+  "produtos": {
+    "legendas": {
+      "apelidos": [
+        "títulos dinâmicos",
+        "titulos dinamicos",
+        "títulos",
+        "titulos",
+        "pack de títulos",
+        "pack de legendas",
+        "legendas animadas",
+        "títulos animados",
+        "ganchos",
+        "presets",
+        "predefinições",
+        "templates",
+        "pack do fernando"
+      ],
+      "o_que_e": "Pack com mais de 70 estilos de título, gancho e destaque de fala, animados, que entram no CapCut do computador com um clique pelo app Base FL. A pessoa escolhe um estilo, troca o texto e continua o vídeo.",
+      "familias": [
+        "Bold Template",
+        "Clássicos do Fernando",
+        "Divertidos",
+        "Duas Linhas",
+        "Nome em Destaque",
+        "Ganchos",
+        "Composição - Legenda"
+      ],
+      "para_quem": "Quem edita no CapCut do computador e perde tempo montando título do zero em todo vídeo. Precisa só do básico do CapCut.",
+      "compatibilidade": "Somente CapCut para computador (Desktop), no Windows (10 ou 11) ou no Mac (macOS 10.15 ou mais novo, Intel e Apple Silicon). NÃO funciona no CapCut do celular.",
+      "onde_fica_no_capcut": "No CapCut do computador: aba Mídia › Minhas predefinições, separados em pastas (por exemplo: Títulos - Ganchos, Clássico, Bold - Presets, Divertido).",
+      "como_usar": "Arrasta a predefinição para a timeline, clica no texto e troca pelo seu. Na maioria dos estilos dá para mudar cor, tamanho e posição como em qualquer texto do CapCut.",
+      "inclui": [
+        "+70 estilos",
+        "aulas em 3 etapas dentro do Base FL (instalar, entender, usar)",
+        "atualizações pelo app",
+        "bônus: CaseUp (1 ano)",
+        "bônus: ChronoCut (1 ano)"
+      ],
+      "limites": [
+        "Não é legenda automática.",
+        "Não instala no celular.",
+        "Alguns estilos têm cor e tamanho fixos; o texto sempre muda."
+      ],
+      "faq": [
+        {
+          "q": "Funciona no celular?",
+          "a": "Não. É só para o CapCut do computador (Windows ou Mac)."
+        },
+        {
+          "q": "Preciso saber animação?",
+          "a": "Não. A animação já vem pronta; precisa só do básico do CapCut no computador."
+        },
+        {
+          "q": "Posso usar em vídeo de cliente?",
+          "a": "Pode, em quantos vídeos quiser. Só não pode repassar os arquivos."
+        },
+        {
+          "q": "Preciso importar toda vez?",
+          "a": "Não. Instala uma vez e fica no CapCut."
+        },
+        {
+          "q": "Vem no Reels Academy?",
+          "a": "Não. Os Títulos Dinâmicos são vendidos à parte, no Base FL."
+        }
+      ]
+    },
+    "sons": {
+      "apelidos": [
+        "efeitos sonoros",
+        "efeitos",
+        "sons",
+        "sfx",
+        "whoosh",
+        "pack de sons",
+        "pack de efeitos"
+      ],
+      "o_que_e": "261 efeitos sonoros em 14 categorias (whooshes, impactos, risers, pops, cliques, beeps, notificações e mais), instalados direto nas predefinições do CapCut do computador pelo app Base FL. Não precisa baixar pasta nem arrastar arquivo.",
+      "compatibilidade": "CapCut para computador, Windows ou Mac. Não funciona no CapCut do celular.",
+      "onde_fica_no_capcut": "Nas predefinições do CapCut (Minhas predefinições), em pastas por categoria. É só arrastar para a timeline.",
+      "inclui": [
+        "261 efeitos",
+        "14 categorias",
+        "aula ensinando a usar",
+        "acesso vitalício",
+        "atualizações pelo app (botão Atualizar)"
+      ],
+      "faq": [
+        {
+          "q": "Recebo os arquivos em pasta?",
+          "a": "Não precisa: o app instala os sons direto nas predefinições do CapCut. Não tem pasta para procurar."
+        },
+        {
+          "q": "Funciona em outro editor?",
+          "a": "O pack foi feito para o CapCut do computador. O suporte oficial é para o CapCut."
+        }
+      ]
+    },
+    "luts": {
+      "apelidos": [
+        "luts",
+        "lut",
+        "pack de luts",
+        "colorização",
+        "s-log",
+        "apple log",
+        "rec709",
+        "rec.709"
+      ],
+      "o_que_e": "Pack com 23 LUTs para o CapCut do computador: 20 criativos (clima/estilo de cor para vídeo comum) e 3 técnicos de conversão (Sony S-Log2, Sony S-Log3 e Apple Log para Rec.709).",
+      "diferenca_tipos": "Criativos = dão o clima do vídeo, para vídeo comum (Rec.709, padrão do celular e da maioria das câmeras). Técnicos = só para quem grava em Log; convertem o Log para a cor normal. Não aplicar LUT técnico em vídeo que não foi gravado em Log.",
+      "compatibilidade": "CapCut para computador, Windows ou Mac.",
+      "onde_fica_no_capcut": "No CapCut do computador: Ajuste › LUT.",
+      "inclui": [
+        "20 LUTs criativos",
+        "3 LUTs técnicos",
+        "aula",
+        "acesso vitalício"
+      ],
+      "limites": [
+        "O resultado depende da imagem original; não fica idêntico em todos os vídeos.",
+        "Ajustar a intensidade ajuda quando o look fica forte demais."
+      ],
+      "nao_confundir": "LUTs (pack pronto de 23 looks) é diferente do Mood (ferramenta que cria uma LUT nova copiando a cor de uma referência)."
+    },
+    "mood": {
+      "apelidos": [
+        "mood",
+        "copiar cor",
+        "copiar a cor",
+        "cor de referência",
+        "criar lut",
+        "gerar lut",
+        "ferramenta de cor"
+      ],
+      "o_que_e": "Ferramenta no navegador que copia a cor de uma referência: a pessoa coloca a imagem/vídeo de referência e a própria cena, ajusta a intensidade e baixa a LUT pronta (.cube) para aplicar no editor. Não é um pack de LUTs nem um filtro.",
+      "como_usar": [
+        "1. Abra o Mood e entre com o e-mail da compra (código por e-mail).",
+        "2. Escolha a sua imagem ou vídeo (pode ser um print da cena).",
+        "3. Coloque a referência com o clima que você quer (frame de filme, Reels, foto).",
+        "4. Ajuste a intensidade: Suave, Fiel ou Intenso, e o controle fino. Tem botão para segurar o tom de pele.",
+        "5. Baixe a LUT e aplique no editor (no CapCut do computador: Ajuste › LUT › importar)."
+      ],
+      "compatibilidade": "Abre no navegador (iPhone, Android, Mac, Windows). A LUT (.cube) funciona no CapCut do computador, Premiere, DaVinci Resolve e Final Cut. O CapCut do celular ainda não importa LUT de fora: dá para criar pelo celular e aplicar no computador.",
+      "limites": [
+        "Não faz milagre: quanto mais parecidas as cenas (pessoa com pessoa, rua com rua, dia com dia), mais igual fica. Com cenas muito diferentes, leva o clima da cor.",
+        "Os vídeos não são enviados para servidor; a leitura acontece no aparelho."
+      ],
+      "teste_gratis": "Dá para testar de graça com o próprio vídeo antes de pagar; o acesso libera o download da LUT.",
+      "acesso_detalhe": "1 ano de acesso, LUTs ilimitadas no período. As LUTs baixadas continuam funcionando depois.",
+      "url_ferramenta": "https://basefl.com/lut/"
+    },
+    "kit": {
+      "apelidos": [
+        "kit freelancer",
+        "kit",
+        "ferramentas",
+        "ferramentas de atendimento",
+        "kit do freelancer"
+      ],
+      "o_que_e": "As 4 ferramentas para atender cliente, do pedido ao pagamento: Gerador de Briefing, Quanto Cobrar?, Gerador de Contrato e Base Demandas. Uma preenche a outra (o briefing vira preço, o preço vira proposta, a proposta vira contrato e o contrato aceito vira card no organizador).",
+      "como_e_vendido": "As 4 ferramentas são vendidas JUNTAS, no Kit Freelancer. Não são vendidas uma a uma. Quem já tem alguma delas libera as que faltam pelo mesmo preço do kit, na mesma conta, sem perder nada.",
+      "compatibilidade": "Abre no navegador, no computador ou no celular. Também aparece no app Base FL.",
+      "acesso_detalhe": "1 ano, com atualizações do período. Perto de vencer, o app avisa e dá para renovar.",
+      "privacidade_cliente": "O cliente final só vê o que a pessoa manda (briefing, proposta, contrato). Horas e valor por hora ficam só com o editor."
+    },
+    "briefing": {
+      "apelidos": [
+        "briefing",
+        "gerador de briefing"
+      ],
+      "o_que_e": "Um link com as perguntas certas: o cliente responde em 1 minuto tocando nas opções, sem conta, e o pedido chega organizado na conta do editor, com avisos do que observar antes de dar o preço.",
+      "url_ferramenta": "https://basefl.com/briefing/"
+    },
+    "preco": {
+      "apelidos": [
+        "quanto cobrar",
+        "calculadora",
+        "precificação",
+        "proposta",
+        "quanto cobrar?",
+        "calcular preço"
+      ],
+      "o_que_e": "Calculadora de preço: responde poucas perguntas sobre o trabalho e recebe um valor de referência para o seu nível (pelo tempo estimado × valor da hora), faixa justa para negociar, pacotes com desconto (4, 8, 12 ou 20 vídeos: 5%, 10%, 12%, 15%), urgência +40% e gravação. Gera proposta por link que o cliente aprova, ou texto para o WhatsApp.",
+      "teste_gratis": "1 cálculo grátis na página.",
+      "limites": [
+        "O valor é uma referência; o editor pode ajustar antes de mandar."
+      ],
+      "url_ferramenta": "https://basefl.com/preco/"
+    },
+    "contrato": {
+      "apelidos": [
+        "contrato",
+        "gerador de contrato",
+        "termo rápido"
+      ],
+      "o_que_e": "Gera termo rápido (trabalhos pequenos) ou contrato completo com 8 cláusulas (entrega, prazo, revisões, valor e pagamento, responsabilidades, uso do vídeo, cancelamento e foro). O cliente lê e aceita pelo celular por um link, sem conta; o aceite fica registrado com nome, data e hora. Também sai em PDF.",
+      "aviso_juridico": "É um modelo de referência em linguagem simples. Não substitui orientação de advogado em casos específicos.",
+      "url_ferramenta": "https://basefl.com/contrato/"
+    },
+    "painel": {
+      "apelidos": [
+        "base demandas",
+        "organizador",
+        "painel",
+        "demandas",
+        "organizar trabalhos",
+        "finanças"
+      ],
+      "o_que_e": "Quadro com todos os trabalhos, do orçamento ao pagamento: prazos, quem falta pagar, meta do mês, custos fixos, contador de revisões e mensagens prontas para o cliente no WhatsApp. Trabalhos aceitos nas outras ferramentas entram sozinhos.",
+      "url_ferramenta": "https://basefl.com/painel/"
+    },
+    "case": {
+      "apelidos": [
+        "caseup",
+        "case up",
+        "portfólio",
+        "portfolio",
+        "link da bio"
+      ],
+      "o_que_e": "Portfólio e link da bio numa página só: cola os links dos vídeos (Instagram, TikTok, YouTube, Vimeo, Google Drive), coloca botões (WhatsApp, Instagram) e publica em basefl.com/seunome.",
+      "como_obter": "Não é vendido separado: é bônus dos Títulos Dinâmicos (1 ano).",
+      "url_ferramenta": "https://basefl.com/case/"
+    },
+    "timer": {
+      "apelidos": [
+        "chronocut",
+        "crono cut",
+        "cronocut",
+        "timer"
+      ],
+      "o_que_e": "O timer do editor: tempo por projeto e por etapa, revisões e exportações à parte, e o valor por hora.",
+      "como_obter": "Não é vendido separado: é bônus dos Títulos Dinâmicos (1 ano).",
+      "url_ferramenta": "https://basefl.com/timer/"
+    },
+    "app": {
+      "apelidos": [
+        "app",
+        "aplicativo",
+        "instalador",
+        "app base fl",
+        "aplicativo base fl"
+      ],
+      "o_que_e": "App gratuito para Mac e Windows. Entra com o e-mail da compra (código por e-mail, sem senha). O que a pessoa comprou aparece com Instalar ou Abrir; o resto aparece com Conhecer. Também tem as aulas, e um botão Diagnóstico para suporte.",
+      "download": "https://basefl.com/instalar/?de=whatsapp",
+      "requisitos": "Mac: macOS 10.15 ou mais novo (Intel e Apple Silicon). Windows: 10 ou 11, sem precisar de senha de administrador.",
+      "celular": "No celular existe o Base FL como app de tela inicial (pela página de instalar), para as ferramentas e aulas. Os kits do CapCut (Títulos, Efeitos, LUTs) só instalam no computador.",
+      "atualizar": "Para atualizar o app: baixar de novo em basefl.com/instalar e instalar por cima. Para atualizar um kit: abrir o app e clicar em Atualizar/Instalar no kit."
+    }
+  },
+  "problemas": [
+    {
+      "id": "codigo_nao_chega",
+      "sinais": [
+        "código não chegou",
+        "codigo nao chegou",
+        "não recebi o código",
+        "nao recebi o codigo",
+        "não chega o código",
+        "nao chega codigo",
+        "código de acesso"
+      ],
+      "passos": [
+        "Confira as pastas Spam e Promoções e procure por \"Base FL\".",
+        "Confira se o e-mail digitado é exatamente o da compra.",
+        "Se for pedir de novo, espere 1 minuto entre um pedido e outro."
+      ],
+      "escalar_quando": "Depois de conferir spam e o e-mail certo, ainda não chega."
+    },
+    {
+      "id": "compra_nao_aparece",
+      "sinais": [
+        "tudo com cadeado",
+        "cadeado",
+        "não liberou",
+        "nao liberou",
+        "não aparece o que comprei",
+        "comprei e não",
+        "comprei e nao",
+        "paguei e não",
+        "paguei e nao",
+        "não recebi acesso",
+        "nao recebi acesso",
+        "não recebi o acesso",
+        "nao recebi o acesso"
+      ],
+      "passos": [
+        "Peça o e-mail usado na compra (só o e-mail, nunca senha).",
+        "Com o resultado da consulta de compra: se a compra aparece, oriente a sair do app (botão Sair, embaixo) e entrar com esse e-mail.",
+        "Se não aparece: pergunte se pagou por Pix/cartão (libera na hora) ou boleto (só depois de compensar), e se pode ter usado outro e-mail."
+      ],
+      "escalar_quando": "Pagamento confirmado pela pessoa e nenhuma compra encontrada no e-mail informado, ou divergência de valor/produto."
+    },
+    {
+      "id": "pagamento_pendente",
+      "sinais": [
+        "boleto",
+        "pix pendente",
+        "pagamento pendente",
+        "aguardando pagamento",
+        "não aprovou",
+        "nao aprovou",
+        "recusado",
+        "cartão recusado",
+        "cartao recusado"
+      ],
+      "passos": [
+        "Boleto: libera só depois de compensar (até 3 dias úteis).",
+        "Pix: é na hora; se não liberou, peça o e-mail da compra para conferir.",
+        "Cartão recusado: tentar outro cartão ou pagar no Pix; o checkout é da Greenn, o Base FL não vê dados de cartão."
+      ],
+      "escalar_quando": "Cobrança feita e acesso não liberado após conferência."
+    },
+    {
+      "id": "capcut_aberto",
+      "sinais": [
+        "capcut está aberto",
+        "capcut esta aberto",
+        "feche o capcut",
+        "diz que o capcut está aberto"
+      ],
+      "passos": [
+        "Fechar o CapCut completamente (no Mac: Command + Q; no Windows, conferir no Gerenciador de Tarefas, Ctrl + Shift + Esc, que não sobrou CapCut aberto).",
+        "O app percebe sozinho quando ele fecha; aí é clicar em Instalar."
+      ],
+      "escalar_quando": "Continua dizendo que está aberto com tudo fechado."
+    },
+    {
+      "id": "capcut_nao_encontrado",
+      "sinais": [
+        "capcut não encontrado",
+        "capcut nao encontrado",
+        "não encontrei o capcut",
+        "nao encontrei o capcut"
+      ],
+      "passos": [
+        "Abrir o CapCut do computador uma vez, criar um projeto qualquer e fechar.",
+        "Voltar ao app Base FL e clicar em Instalar."
+      ],
+      "escalar_quando": "CapCut instalado e o app continua sem achar. Peça o Diagnóstico para suporte."
+    },
+    {
+      "id": "predefinicoes_nao_aparecem",
+      "sinais": [
+        "não aparece no capcut",
+        "nao aparece no capcut",
+        "não aparecem",
+        "nao aparecem",
+        "não apareceu",
+        "nao apareceu",
+        "sumiram",
+        "não acho os títulos",
+        "nao acho os titulos",
+        "instalei e não",
+        "instalei e nao",
+        "minhas predefinições vazia",
+        "minhas predefinicoes"
+      ],
+      "passos": [
+        "Confirmar que é o CapCut do computador e que olhou em Mídia › Minhas predefinições.",
+        "Fechar o CapCut por completo, abrir o app Base FL, clicar em Instalar de novo e só depois abrir o CapCut.",
+        "Garantir que está com o app Base FL atualizado (baixar de novo em basefl.com/instalar). A versão nova instala também na pasta que a pessoa escolheu no CapCut.",
+        "Se ainda não aparecer: no CapCut, Configurações › Rascunho › \"Predefinir caminho para salvar\". Se estiver uma pasta diferente da padrão, essa é a causa. Peça um print dessa tela.",
+        "Peça o texto do botão Diagnóstico para suporte do app."
+      ],
+      "escalar_quando": "Fez tudo e não aparece; mande para a equipe com o diagnóstico e o print da tela de Configurações."
+    },
+    {
+      "id": "fonte_diferente",
+      "sinais": [
+        "fonte diferente",
+        "fonte errada",
+        "fonte não",
+        "fonte nao",
+        "letra diferente",
+        "fonte trocada"
+      ],
+      "passos": [
+        "Fechar o CapCut, clicar em Instalar de novo no app (ele reinstala as fontes) e reabrir o CapCut.",
+        "No Windows, se pedir para reiniciar, reiniciar o computador ajuda o CapCut a enxergar fontes novas."
+      ],
+      "escalar_quando": "A fonte continua errada em vários estilos depois de reinstalar e reiniciar."
+    },
+    {
+      "id": "aviso_ao_abrir_app",
+      "sinais": [
+        "não abre o app",
+        "nao abre o app",
+        "windows protegeu",
+        "aviso de segurança",
+        "não pode ser aberto",
+        "nao pode ser aberto",
+        "desenvolvedor não identificado",
+        "desenvolvedor nao identificado"
+      ],
+      "passos": [
+        "Mac: abrir o .dmg, arrastar o Base FL para Aplicativos; na pasta Aplicativos, botão direito no Base FL › Abrir › Abrir de novo na janela de aviso.",
+        "Windows: na tela azul \"O Windows protegeu o computador\", clicar em Mais informações › Executar assim mesmo."
+      ],
+      "escalar_quando": "Mesmo assim não abre; peça print da mensagem."
+    },
+    {
+      "id": "lut_nao_aparece",
+      "sinais": [
+        "lut não aparece",
+        "lut nao aparece",
+        "não acho a lut",
+        "nao acho a lut",
+        "luts não aparecem",
+        "luts nao aparecem"
+      ],
+      "passos": [
+        "Fechar o CapCut, clicar em Instalar nas LUTs no app e abrir o CapCut.",
+        "Procurar em Ajuste › LUT."
+      ],
+      "escalar_quando": "Instalou com o CapCut fechado e não aparece em Ajuste › LUT."
+    },
+    {
+      "id": "mood_resultado",
+      "sinais": [
+        "não ficou igual",
+        "nao ficou igual",
+        "cor ficou estranha",
+        "mood não",
+        "mood nao",
+        "ficou laranja",
+        "ficou forte"
+      ],
+      "passos": [
+        "Usar referência parecida com a cena (pessoa com pessoa, dia com dia).",
+        "Trocar para Suave ou baixar a intensidade.",
+        "Ligar o botão que segura o tom de pele."
+      ],
+      "escalar_quando": "Erro técnico na ferramenta (não carrega, não baixa)."
+    },
+    {
+      "id": "lut_no_celular",
+      "sinais": [
+        "lut no celular",
+        "capcut do celular",
+        "importar lut no celular"
+      ],
+      "passos": [
+        "O CapCut do celular ainda não importa LUT de fora. A LUT pode ser criada pelo celular, mas é aplicada no CapCut do computador, Premiere, DaVinci ou Final Cut."
+      ],
+      "escalar_quando": "Nunca: é limitação do CapCut."
+    },
+    {
+      "id": "ferramenta_nao_abre",
+      "sinais": [
+        "ferramenta não abre",
+        "ferramenta nao abre",
+        "página em branco",
+        "pagina em branco",
+        "não carrega",
+        "nao carrega",
+        "erro na ferramenta"
+      ],
+      "passos": [
+        "Abrir pelo navegador (Chrome, Safari) e entrar com o e-mail da compra.",
+        "Atualizar a página. Se continuar, testar em janela anônima.",
+        "Pedir print do erro."
+      ],
+      "escalar_quando": "Erro persiste com print."
+    },
+    {
+      "id": "trocar_email",
+      "sinais": [
+        "comprei com outro e-mail",
+        "comprei com outro email",
+        "email errado",
+        "e-mail errado",
+        "trocar o e-mail",
+        "trocar o email",
+        "mudar o email"
+      ],
+      "passos": [
+        "Pedir o e-mail usado na compra e o e-mail que quer usar.",
+        "A troca é feita pela equipe."
+      ],
+      "escalar_quando": "Sempre (troca de e-mail é feita por uma pessoa)."
+    },
+    {
+      "id": "renovar",
+      "sinais": [
+        "renovar",
+        "venceu",
+        "expirou",
+        "acabou o acesso",
+        "vencimento"
+      ],
+      "passos": [
+        "Ferramentas (Kit, Mood, CaseUp, ChronoCut) têm 1 ano de acesso; perto de vencer o app avisa e dá para renovar pela página do produto.",
+        "Títulos, Efeitos Sonoros e LUTs são vitalícios."
+      ],
+      "escalar_quando": "Venceu antes do prazo ou cobrança duplicada."
+    }
+  ],
+  "politicas_do_atendimento": [
+    "Nunca peça senha, código de verificação, dados de cartão ou documento. Só o e-mail da compra quando precisar conferir.",
+    "Nunca diga que liberou acesso, fez reembolso, trocou e-mail ou conferiu pagamento sem uma confirmação do sistema. Quando depender de pessoa, encaminhe para a equipe.",
+    "Reembolso: a garantia de 7 dias é um direito, nunca dificulte. Pergunte o motivo uma vez e tente resolver uma vez quando a base tiver a solução; se a pessoa confirmar que quer, encaminhe para a equipe sem questionar mais.",
+    "Não invente botão, menu ou recurso. Se não souber, peça um print ou encaminhe.",
+    "Não prometa prazo de atendimento humano."
+  ]
+}

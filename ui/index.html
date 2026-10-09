@@ -426,7 +426,7 @@ async function loadCatalog(){
 // Abre a ferramenta no navegador JÁ LOGADA: pede um passe de uso único e manda junto no endereço.
 // Se o passe não estiver disponível, abre do jeito normal (o navegador lembra do login depois da primeira vez).
 // SUPORTE: botão flutuante que abre o WhatsApp do suporte, já com a versão do app na mensagem
-const SUPORTE_ZAP = '5548999642195';
+const SUPORTE_ZAP = '5547996974735';
 document.getElementById('sup').onclick = () => {
   const v = (typeof state !== 'undefined' && state && state.version) ? ' (app ' + state.version + ')' : '';
   T.opener.openUrl('https://wa.me/' + SUPORTE_ZAP + '?text=' + encodeURIComponent('Oi! Preciso de ajuda com o Base FL' + v + '.'));
