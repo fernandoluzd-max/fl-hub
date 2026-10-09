@@ -543,7 +543,8 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
     fs::write(state_path(env, &m.id), serde_json::to_string_pretty(&st).unwrap()).map_err(|e| e.to_string())?;
     if !rep.missing_fonts.is_empty() {
         let faltam = rep.missing_fonts.join(", ");
-        say(&mut rep, format!("Aviso: fontes não incluídas no pacote: {faltam}"));
+        // só no registro interno (Diagnóstico): para o aluno não é erro, o CapCut usa uma fonte parecida
+        log_line(env, &format!("Fonte não incluída no pacote (o CapCut usa a padrão): {faltam}"));
     }
     Ok(rep)
 }
