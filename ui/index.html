@@ -277,6 +277,7 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
   </div>
   <p>Os materiais disponibilizados através do Base FL são <b>licenciados para uso exclusivo do comprador</b> enquanto o acesso ao produto estiver ativo.</p>
   <p>Em caso de <b>reembolso, cancelamento ou perda do direito de acesso</b>, a licença de uso dos materiais vinculados à compra será automaticamente encerrada, e qualquer utilização posterior deixará de ser autorizada.</p>
+  <p>Nessa situação, ao abrir o aplicativo, <b>os materiais instalados por ele serão removidos automaticamente do CapCut</b>, encerrando o acesso ao conteúdo licenciado.</p>
   <p>Os materiais não podem ser revendidos, redistribuídos, compartilhados ou disponibilizados a terceiros.</p>
   <label class="termo-c"><input type="checkbox" id="t-ok"><span>Li, estou ciente e concordo com as condições de uso dos materiais.</span></label>
   <div class="btns"><button class="primary" id="t-vai" disabled>Confirmar e instalar</button><button class="ghost" id="t-nao">Cancelar</button></div>
@@ -419,6 +420,7 @@ async function loadCatalog(){
     aceitos = new Set(); try { (await api('/rest/v1/rpc/aceites_meus', { method:'POST', body:{ p_versao: TERMO } }) || []).forEach(x => aceitos.add(x)); } catch {}
     cat = { packs, owned: new Set(lic.filter(valida).map(l => l.pack_id)),
             vencidos: new Set(lic.filter(l => l.status === 'active' && !valida(l)).map(l => l.pack_id)),
+            revogados: new Set(lic.filter(l => l.status === 'revoked').map(l => l.pack_id)),   // reembolso/cancelamento: o app remove do CapCut
             vence: Object.fromEntries(lic.filter(l => valida(l) && l.expires_at).map(l => [l.pack_id, new Date(l.expires_at)])) };
   } catch(e){ catErr = traduz(e.message); if (e.status === 401){ await saveSess(null); showLogin(true); } }
 }
@@ -594,8 +596,34 @@ function render(){
   }
 }
 
+// REEMBOLSO: quando a compra é reembolsada/cancelada, o servidor marca a licença como 'revoked'.
+// O app, ao abrir (e a cada conferência), remove do CapCut as predefinições que ELE instalou desse produto.
+// Só remove o que foi instalado pelo próprio app, e só quando o servidor confirma o reembolso (nunca por falta de internet).
+const nomePack = id => (PRODUCTS.find(x => x.packId === id)?.name) || id;
+let limpandoRevog = false, avisouCapcutRevog = false;
+async function removerRevogados(){
+  if (limpandoRevog || !cat || !cat.revogados || !cat.revogados.size || !state?.installed?.length) return;
+  const alvo = state.installed.filter(i => cat.revogados.has(i.id));
+  if (!alvo.length) return;
+  if (state.capcut_running){   // não dá para mexer nas predefinições com o CapCut aberto: avisa uma vez e tenta depois
+    if (!avisouCapcutRevog){ avisouCapcutRevog = true; step('Há material de uma compra reembolsada instalado. Feche o CapCut para o app removê-lo.', 'warn'); }
+    return;
+  }
+  avisouCapcutRevog = false;
+  limpandoRevog = true;
+  try {
+    for (const inst of alvo){
+      step('Compra reembolsada: removendo ' + nomePack(inst.id) + ' do CapCut…', 'run');
+      try { await invoke('uninstall_pack', { id: inst.id }); step(nomePack(inst.id) + ' foi removido do CapCut (acesso encerrado por reembolso).', 'warn'); }
+      catch(e){ step('Não consegui remover ' + nomePack(inst.id) + ' agora: ' + String(e.message || e), 'err'); }
+    }
+    state = await invoke('status');
+  } finally { limpandoRevog = false; }
+}
+
 async function refresh(){
   state = await invoke('status');
+  await removerRevogados();
   $('#d-found').className = 'dot ' + (state.capcut_found ? 'ok' : 'err');
   $('#t-found').textContent = state.capcut_found ? 'CapCut encontrado' : 'CapCut não encontrado';
   $('#d-run').className = 'dot ' + (state.capcut_running ? 'warn' : 'ok');
@@ -624,7 +652,7 @@ async function baixaEInstala(p, srv){
 }
 const erroInstala = e => { const m = String(e.message || e); return /not found|object not found|400|403/i.test(m) ? 'Este pack não está liberado para ' + (sess?.email||'este e-mail') + '.' : traduz(m); };
 // ----- condições de uso: lê, marca a caixa e confirma. Vale por produto e por versão do texto; fica registrado no servidor. -----
-const TERMO = '2026-10b';          // mude só quando o texto das condições mudar de verdade: todo mundo aceita de novo
+const TERMO = '2026-10c';          // mude só quando o texto das condições mudar de verdade: todo mundo aceita de novo
 let aceitos = new Set();
 function pedeAceite(p){
   if (aceitos.has(p.packId)) return Promise.resolve(true);
