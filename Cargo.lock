@@ -1052,7 +1052,7 @@ dependencies = [
 
 [[package]]
 name = "flcore"
-version = "0.10.22"
+version = "0.10.23"
 dependencies = [
  "chrono",
  "dirs 5.0.1",
@@ -1071,7 +1071,7 @@ dependencies = [
 
 [[package]]
 name = "flhub"
-version = "0.10.22"
+version = "0.10.23"
 dependencies = [
  "flcore",
  "reqwest 0.12.28",

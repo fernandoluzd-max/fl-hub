@@ -1,6 +1,6 @@
 [package]
 name = "flhub"
-version = "0.10.22"
+version = "0.10.23"
 description = "Base FL - o ecossistema do editor de video"
 edition = "2021"
 

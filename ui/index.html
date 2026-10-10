@@ -205,6 +205,14 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
 :root[data-tema="claro"] .gancho,:root[data-tema="claro"] .selo{filter:brightness(.7) saturate(1.3)}
 @media (prefers-reduced-motion:reduce){.card.locked::after{animation:none;display:none}}
 .tag{font-size:10.5px;font-weight:700;color:var(--accent-ink);background:var(--accent);border-radius:6px;padding:1px 6px}
+.satisf{margin:28px auto 4px;max-width:540px;text-align:center}
+.satisf-nota{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--mute,#9d998c)}
+.satisf-estrelas{color:#F2A541;letter-spacing:1.5px;font-size:14px}
+.satisf-nota b{color:var(--ink,#F4F0E4);font-weight:800;font-size:14px}
+.satisf-coms{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:11px}
+.satisf-com{max-width:250px;background:var(--card,#171a18);border:1px solid var(--line,#262d28);border-radius:12px;padding:9px 12px;font-size:12px;line-height:1.45;color:var(--sub,#b3b4a2);text-align:left}
+.satisf-com i{color:#F2A541;font-style:normal;font-size:11px;letter-spacing:1px;margin-right:6px}
+.satisf-com cite{display:block;margin-top:4px;font-style:normal;color:var(--mute,#9d998c);font-size:11px}
 </style>
 </head>
 <body>
@@ -251,6 +259,16 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
       <a id="l-back" style="display:none">Usar outro e-mail</a>
     </div>
     </div>
+
+    <!-- satisfação: nota REAL (média) + comentários que o Fernando marcou como destaque. Discreto. -->
+    <section class="satisf" id="satisf" hidden>
+      <div class="satisf-nota">
+        <span class="satisf-estrelas" id="satisf-estrelas" aria-hidden="true"></span>
+        <b id="satisf-media">—</b>
+        <span class="satisf-total" id="satisf-total"></span>
+      </div>
+      <div class="satisf-coms" id="satisf-coms"></div>
+    </section>
   </main>
 
   <footer>
@@ -450,6 +468,30 @@ async function quantosUsam(){
   } catch (e) {}
 }
 quantosUsam();
+// SATISFAÇÃO: nota REAL (média) + comentários em destaque. Só aparece se houver avaliações.
+async function satisfacao(){
+  try {
+    const r = await fetch(SUPA.url + '/rest/v1/rpc/aval_publico', { method:'POST', headers:{ apikey:SUPA.key, 'Content-Type':'application/json' }, body: JSON.stringify({ p_limite: 6 }) });
+    if (!r.ok) return; const d = await r.json();
+    if (!d || !d.total || d.total < 1 || d.media == null) return;
+    const media = Number(d.media), cheias = Math.round(media);
+    $('#satisf-estrelas').textContent = '★★★★★'.slice(0, cheias) + '☆☆☆☆☆'.slice(0, 5 - cheias);
+    $('#satisf-media').textContent = media.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    $('#satisf-total').textContent = '· ' + d.total.toLocaleString('pt-BR') + (d.total === 1 ? ' avaliação' : ' avaliações');
+    const box = $('#satisf-coms'); box.innerHTML = '';
+    (d.comentarios || []).slice(0, 6).forEach(c => {
+      const n = Math.max(1, Math.min(5, Number(c.nota) || 5));
+      const el = document.createElement('div'); el.className = 'satisf-com';
+      el.innerHTML = '<i></i><span></span>' + (c.nome ? '<cite></cite>' : '');
+      el.querySelector('i').textContent = '★★★★★'.slice(0, n);
+      el.querySelector('span').textContent = String(c.texto || '');
+      if (c.nome) el.querySelector('cite').textContent = '— ' + String(c.nome);
+      box.appendChild(el);
+    });
+    $('#satisf').hidden = false;
+  } catch (e) {}
+}
+satisfacao();
 async function abreWeb(url){
 
   try {
