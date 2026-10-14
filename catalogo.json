@@ -184,6 +184,21 @@
       "tipo": "kit",
       "gancho": "Cor de cinema em um clique",
       "desc": "3 LUTs técnicos de conversão (Apple Log, S-Log2 e S-Log3 para Rec.709) e 20 LUTs criativos de colorização."
+    },
+    {
+      "key": "assets",
+      "pack": "fl-assets",
+      "nome": "Base FL Assets",
+      "curto": "Assets",
+      "preco": 17,
+      "acesso": "vitalício",
+      "slug": "assets",
+      "cor": "232,196,106",
+      "checkout": "https://payfast.greenn.com.br/kbncn9f",
+      "greenn": "198176",
+      "tipo": "kit",
+      "gancho": "Animações que explicam por você",
+      "desc": "100 animações gráficas com fundo transparente, em 10 categorias, para colocar por cima dos seus vídeos."
     }
   ],
   "kit": {

@@ -6,7 +6,7 @@
   var ID = '1933184040544551';
   if (window.FLPixel) return;
   var PRODUTOS = {
-    'legendas': ['Títulos Dinâmicos', '195639'], 'efeitos-sonoros': ['Efeitos Sonoros', '195814'], 'luts': ['LUTs', '195812'], 'mood': ['Mood', '195947'],
+    'legendas': ['Títulos Dinâmicos', '195639'], 'efeitos-sonoros': ['Efeitos Sonoros', '195814'], 'luts': ['LUTs', '195812'], 'mood': ['Mood', '195947'], 'assets': ['Base FL Assets', '198176'],
     'kit-freelancer': ['Kit Freelancer', '195949'], 'gerador-de-briefing': ['Gerador de Briefing', '195949'], 'quanto-cobrar': ['Quanto Cobrar?', '195949'],
     'gerador-de-contrato': ['Gerador de Contrato', '195949'], 'financas-e-demandas': ['Base Demandas', '195949'], 'caseup': ['CaseUp', '195639']
   };

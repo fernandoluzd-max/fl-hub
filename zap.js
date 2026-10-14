@@ -15,6 +15,7 @@
     'mood': 'Oi! Gostaria de saber como funciona o Mood.',
     'luts': 'Oi! Gostaria de saber mais sobre as LUTs.',
     'efeitos-sonoros': 'Oi! Gostaria de saber mais sobre os Efeitos Sonoros.',
+    'assets': 'Oi! Gostaria de saber mais sobre o Base FL Assets.',
     'quanto-cobrar': 'Oi! Gostaria de saber como funciona o Quanto Cobrar.',
     'gerador-de-briefing': 'Oi! Gostaria de saber como funciona o Gerador de Briefing.',
     'gerador-de-contrato': 'Oi! Gostaria de saber como funciona o Gerador de Contrato.',
