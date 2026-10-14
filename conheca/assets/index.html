@@ -65,8 +65,8 @@ h2{font-family:var(--d);font-weight:850;font-stretch:108%;font-size:clamp(30px,4
 .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding:30px 0 10px}
 .hero-v{position:relative}
 .mosaico{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;transform:rotate(-2deg)}
-.mosaico .t{border-radius:16px;overflow:hidden;background:#141210;border:1px solid rgba(255,236,220,.08);aspect-ratio:1/1;position:relative}
-.mosaico .t video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.12)}
+.mosaico .t{border-radius:16px;overflow:hidden;background:#141210;border:1px solid rgba(255,236,220,.08);aspect-ratio:4/3;position:relative}
+.mosaico .t video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .mosaico .t:nth-child(2),.mosaico .t:nth-child(5),.mosaico .t:nth-child(8){transform:translateY(-18px)}
 .num{display:flex;gap:26px;margin-top:30px;flex-wrap:wrap}
 .num div b{display:block;font-family:var(--d);font-weight:850;font-size:30px;line-height:1;color:var(--ink)}
@@ -92,8 +92,58 @@ h2{font-family:var(--d);font-weight:850;font-stretch:108%;font-size:clamp(30px,4
 
 /* como funciona */
 .como{display:grid;grid-template-columns:1.25fr 1fr;gap:34px;align-items:center}
-.tela{border-radius:20px;overflow:hidden;border:1px solid rgba(255,236,220,.12);background:#000;box-shadow:0 30px 80px -30px rgba(0,0,0,.9),0 0 0 6px rgba(232,196,106,.06)}
-.tela video{width:100%;aspect-ratio:16/9;background:#000}
+.palco{position:relative;border-radius:22px;border:1px solid var(--line);background:linear-gradient(180deg,#151817,#0f1110);box-shadow:0 40px 100px -30px rgba(0,0,0,.9);overflow:hidden;height:440px}
+.palco::before{content:"";position:absolute;inset:-30% -10% auto;height:70%;background:radial-gradient(closest-side,rgba(232,196,106,.16),transparent);pointer-events:none}
+.palco .rot{position:absolute;right:14px;bottom:10px;font-size:11px;color:var(--dim);letter-spacing:.04em;z-index:5}
+.cena{position:absolute;inset:0;opacity:0;visibility:hidden;transform:scale(.97);transition:opacity .45s,transform .45s,visibility .45s}
+.cena.on{opacity:1;visibility:visible;transform:none}
+/* cena 1 · app */
+.c-app{display:flex;flex-direction:column;justify-content:center;padding:54px 34px 30px}
+.jan-top{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;gap:6px;padding:12px 14px;border-bottom:1px solid #222726;font-size:12px;color:#8d8c83}
+.jan-top i{width:10px;height:10px;border-radius:50%;background:#2c3130}
+.jan-top span{margin-left:8px;font-weight:700}
+.app-card{display:flex;align-items:center;gap:14px;background:#181c1b;border:1px solid #262c2a;border-radius:18px;padding:16px}
+.app-card img{border-radius:14px;flex:none}
+.app-t{flex:1;min-width:0}
+.app-t b{display:block;font-family:var(--d);font-weight:800;font-size:17px}
+.app-t span{color:var(--mute);font-size:13px}
+.app-bt{flex:none;font:inherit;font-weight:750;font-size:13.5px;border:0;border-radius:12px;padding:11px 14px;background:var(--a);color:var(--ai);transition:transform .12s,filter .2s}
+.app-bt.click{transform:scale(.93);filter:brightness(1.15)}
+.app-bt.feito{background:#2b3a2f;color:#9fe3b0}
+.app-prog{margin-top:18px;opacity:0;transition:opacity .3s}
+.app-prog.on{opacity:1}
+.app-bar{height:8px;border-radius:99px;background:#232826;overflow:hidden}
+.app-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a2),var(--a));border-radius:99px}
+.app-prog span{display:block;margin-top:9px;font-size:13px;color:var(--mute)}
+.cursor{position:absolute;left:30%;top:90%;width:26px;height:26px;z-index:4;transition:left .9s cubic-bezier(.4,0,.2,1),top .9s cubic-bezier(.4,0,.2,1);filter:drop-shadow(0 3px 6px rgba(0,0,0,.6))}
+/* cena 2 · CapCut */
+.c-cc{display:flex;flex-direction:column}
+.cc-top{display:flex;align-items:center;gap:4px;padding:10px 12px;border-bottom:1px solid #222726}
+.cc-tab{font-size:12px;color:#8d8c83;padding:5px 9px;border-radius:8px;white-space:nowrap}
+.cc-tab.on{background:#1f2423;color:var(--ink)}
+.cc-sp{flex:1}
+.cc-ok{font-size:11.5px;font-weight:700;color:#9fe3b0;opacity:0;transition:opacity .3s;white-space:nowrap}
+.cc-ok.on{opacity:1}
+.cc-body{flex:1;display:grid;grid-template-columns:170px minmax(0,1fr);min-height:0}
+.cc-side{border-right:1px solid #222726;padding:12px 8px;overflow:hidden}
+.cc-side small{display:block;font-size:10px;color:var(--a);letter-spacing:.1em;font-weight:700;padding:0 8px 4px}
+.pasta{display:flex;align-items:center;gap:8px;font-size:12px;padding:4px 8px;border-radius:7px;margin-top:1px;overflow:hidden;white-space:nowrap;opacity:0;transform:translateX(-10px);transition:all .3s cubic-bezier(.2,.8,.2,1)}
+.pasta.on{opacity:1;transform:none}
+.pasta.sel{background:rgba(232,196,106,.16);color:var(--ink)}
+.pasta i{flex:none;width:14px;height:11px;border-radius:2px;background:var(--a);opacity:.85;position:relative}
+.pasta i::before{content:"";position:absolute;left:0;top:-3px;width:6px;height:4px;border-radius:2px 2px 0 0;background:var(--a)}
+.cc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:12px;align-content:start}
+.tile{position:relative;border-radius:9px;overflow:hidden;background:#141210;border:1px solid #242a29;aspect-ratio:16/9;opacity:0;transform:scale(.92);transition:opacity .3s,transform .3s,border-color .2s,box-shadow .2s}
+.tile.on{opacity:1;transform:none}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile.pega{border-color:var(--a);box-shadow:0 0 0 2px rgba(232,196,106,.35)}
+.voa{position:absolute;z-index:6;border-radius:9px;overflow:hidden;border:1px solid var(--a);box-shadow:0 14px 30px rgba(0,0,0,.6);transition:all .7s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.voa img{width:100%;height:100%;object-fit:cover;display:block}
+.cc-tl{position:relative;height:78px;border-top:1px solid #222726;background:#0f1110;padding:10px 12px}
+.cc-v{position:absolute;left:12px;top:42px;height:24px;width:calc(100% - 110px);border-radius:5px;background:linear-gradient(90deg,#2a3a5a,#33476b);font-size:10.5px;font-weight:700;color:#cfd8ea;display:flex;align-items:center;padding-left:8px}
+.cc-a{position:absolute;left:30%;top:12px;height:24px;width:0;border-radius:5px;background:rgba(232,196,106,.28);border:1px solid var(--a);font-size:10.5px;font-weight:700;color:var(--ink);display:flex;align-items:center;padding-left:8px;white-space:nowrap;overflow:hidden;opacity:0;transition:width .45s ease,opacity .2s}
+.cc-a.on{opacity:1}
+.cc-ph{position:absolute;top:6px;bottom:6px;left:12px;width:2px;background:#fff;z-index:2;box-shadow:0 0 10px rgba(255,255,255,.6)}
 .passos{list-style:none;display:grid;gap:14px}
 .passos li{display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
 .passos li b.k{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(232,196,106,.12);color:var(--a);font-family:var(--d);font-weight:850;font-size:18px}
@@ -154,6 +204,7 @@ footer a{color:var(--mute)}
   .hero-v{max-width:520px;margin:0 auto;width:100%}
   .grade,#cat{grid-template-columns:repeat(2,minmax(0,1fr))}
   .como{grid-template-columns:1fr}
+  .palco{height:450px}
   .bens{grid-template-columns:1fr 1fr}
   .oferta{grid-template-columns:1fr}
   .of-img{padding:26px 20px 0}
@@ -169,6 +220,7 @@ footer a{color:var(--mute)}
   .barra .btn{width:auto}
   .as .n{font-size:12px;padding:8px 10px 10px}
 }
+@media (max-width:560px){.cc-body{grid-template-columns:112px minmax(0,1fr)}.pasta{font-size:10.5px;padding:4px 6px;gap:6px}.cc-side small{font-size:9px;letter-spacing:.06em}.cc-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:10px;gap:6px}.tile:nth-child(n+5){display:none}.cc-tab:nth-child(-n+2){display:none}.c-app{padding:54px 18px 26px}.app-card{flex-wrap:wrap}.app-bt{width:100%}.cc-ok{font-size:10.5px}}
 @media (prefers-reduced-motion:reduce){.rv{transform:none}}
 </style>
 <script src="/pixel.js"></script>
@@ -229,14 +281,37 @@ footer a{color:var(--mute)}
   <section class="sec rv">
     <div class="sec-h">
       <span class="kick">Como funciona</span>
-      <h2 style="margin-top:14px">Do download ao vídeo <em>em poucos minutos</em>.</h2>
+      <h2 style="margin-top:14px">Um clique e tudo entra <em>organizado no seu CapCut</em>.</h2>
+      <p class="sub">Nada de baixar arquivo, procurar pasta no computador e importar um por um. As 100 animações vão direto para as predefinições do CapCut, separadas por tema.</p>
     </div>
     <div class="como">
-      <div class="tela"><video src="https://aulas.basefl.com/MOTION%20TUTORIAL.mp4" controls playsinline preload="none" poster="/conheca/assets/p/tutorial.jpg"></video></div>
+      <div class="palco" id="palco" aria-label="Demonstração: instalando o Base FL Assets no CapCut">
+        <!-- cena 1: o app Base FL -->
+        <div class="cena c-app on" id="c-app">
+          <div class="jan-top"><i></i><i></i><i></i><span>Base FL</span></div>
+          <div class="app-card">
+            <img src="/icones/assets-64.png" alt="" width="52" height="52">
+            <div class="app-t"><b>Base FL Assets</b><span>100 animações · 10 pastas</span></div>
+            <button type="button" tabindex="-1" class="app-bt" id="app-bt">Instalar no CapCut</button>
+          </div>
+          <div class="app-prog"><div class="app-bar"><i id="app-bar"></i></div><span id="app-st">&nbsp;</span></div>
+          <div class="cursor" id="cursor" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2l16 9-7 1.6L9.5 20z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/></svg></div>
+        </div>
+        <!-- cena 2: o CapCut com as pastas -->
+        <div class="cena c-cc" id="c-cc">
+          <div class="cc-top"><span class="cc-tab">Mídia</span><span class="cc-tab">Áudio</span><span class="cc-tab">Texto</span><span class="cc-tab on">Predefinições</span><span class="cc-sp"></span><span class="cc-ok" id="cc-ok">✓ 100 animações instaladas</span></div>
+          <div class="cc-body">
+            <div class="cc-side"><small>BASE FL</small><div id="pastas"></div></div>
+            <div class="cc-grid" id="cc-grid"></div>
+          </div>
+          <div class="cc-tl"><div class="cc-ph" id="cc-ph"></div><div class="cc-v">seu vídeo</div><div class="cc-a" id="cc-a"></div></div>
+        </div>
+        <span class="rot">Ilustração</span>
+      </div>
       <ol class="passos">
         <li><b class="k">1</b><div><strong>Garanta o seu acesso</strong><p>O acesso é liberado no e-mail que você usar na compra.</p></div></li>
-        <li><b class="k">2</b><div><strong>Baixe pelo app Base FL</strong><p>No computador, entre com o mesmo e-mail e baixe as 100 animações, já separadas em 10 pastas.</p></div></li>
-        <li><b class="k">3</b><div><strong>Arraste para o seu vídeo</strong><p>Coloque a animação numa camada acima do vídeo. O fundo é transparente, então só a animação aparece.</p></div></li>
+        <li><b class="k">2</b><div><strong>Instale com um clique</strong><p>No app Base FL, no computador, clique em instalar. As 100 animações vão direto para o seu CapCut.</p></div></li>
+        <li><b class="k">3</b><div><strong>Tudo organizado em pastas</strong><p>Abriu o CapCut, está lá: 10 pastas separadas por tema nas predefinições. É só escolher e arrastar para o seu vídeo.</p></div></li>
       </ol>
     </div>
   </section>
@@ -245,7 +320,7 @@ footer a{color:var(--mute)}
   <section class="sec rv">
     <div class="sec-h">
       <span class="kick">Por que usar</span>
-      <h2 style="margin-top:14px">Seu vídeo mais claro, <em>sem abrir o After Effects</em>.</h2>
+      <h2 style="margin-top:14px">Seu vídeo mais claro, <em>sem precisar animar nada</em>.</h2>
     </div>
     <div class="bens">
       <div class="bem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg><strong>Fundo transparente</strong><p>Arquivos .mov em ProRes 4444 com canal alfa: a animação entra por cima de qualquer cena.</p></div>
@@ -291,7 +366,7 @@ footer a{color:var(--mute)}
       <details><summary>Como eu recebo as animações?</summary><p>Depois da compra, o acesso é liberado no e-mail que você usou no pagamento. No computador, entre no app Base FL com esse mesmo e-mail e baixe o Base FL Assets.</p></details>
       <details><summary>Funciona no celular?</summary><p>O download é feito pelo app Base FL, que roda no computador (Mac e Windows). Por isso, para receber as animações, você precisa de um computador.</p></details>
       <details><summary>Em que formato vêm os arquivos?</summary><p>São 100 vídeos .mov em ProRes 4444 com canal alfa (fundo transparente), em 1920×1080 a 60 fps, com 2 a 4 segundos cada.</p></details>
-      <details><summary>Preciso saber animar ou usar After Effects?</summary><p>Não. As animações já vêm prontas: você só coloca no seu vídeo e ajusta o tamanho e a posição.</p></details>
+      <details><summary>Preciso saber animar?</summary><p>Não. As animações já vêm prontas: você só coloca no seu vídeo e ajusta o tamanho e a posição.</p></details>
       <details><summary>Quanto espaço ocupa?</summary><p>Cerca de 3 GB no total, porque os arquivos são em alta qualidade e com transparência.</p></details>
       <details><summary>E se eu não gostar?</summary><p>Você tem 7 dias de garantia. Se não for o que esperava, peça o reembolso nesse prazo e recebe o valor de volta.</p></details>
       <details><summary>Ainda tenho dúvidas. Com quem eu falo?</summary><p>Chame o suporte no WhatsApp pelo botão no canto da tela.</p></details>
@@ -375,7 +450,7 @@ const vio = 'IntersectionObserver' in window ? new IntersectionObserver(es => es
 }), { rootMargin:'120px 0px', threshold:.01 }) : null;
 function liga(raiz){ raiz.querySelectorAll('video[data-src]').forEach(v => { if (vio) vio.observe(v); else { v.src = v.dataset.src; v.play().catch(() => {}); } }); }
 
-$('#mosaico').innerHTML = [3, 14, 26, 50, 55, 61, 77, 43, 65].map(n => `<div class="t">${vid(n)}</div>`).join('');
+$('#mosaico').innerHTML = [6, 14, 30, 17, 44, 94, 31, 95, 68].map(n => `<div class="t">${vid(n)}</div>`).join('');
 $('#destaques').innerHTML = [10, 17, 30, 37, 45, 58, 65, 73, 85, 92, 97, 69].map(card).join('');
 liga($('#mosaico')); liga($('#destaques'));
 
@@ -389,6 +464,67 @@ function mostra(i){
 }
 abas.addEventListener('click', e => { const b = e.target.closest('button'); if (b) mostra(+b.dataset.i); });
 mostra(0);
+
+// ====== demonstração "um clique e vai para o CapCut" (ilustração, roda só quando está na tela) ======
+(function(){
+  const palco = $('#palco'); if (!palco) return;
+  const dorme = ms => new Promise(r => setTimeout(r, ms));
+  let visivel = false;
+  new IntersectionObserver(es => { visivel = es[0].isIntersecting; }, { threshold:.15 }).observe(palco);
+  const espera = async () => { while (!visivel || document.hidden) await dorme(300); };
+  const PASTAS = ['Setas','Loading','Interface','Arquivos','Dinheiro','Redes Sociais','Checks','Tempo','Destaques','Dados'];
+  const MOSTRA = [0, 4, 1];   // pastas que a demonstração abre
+  const cur = $('#cursor'), bt = $('#app-bt');
+  const poe = (el, x, y) => { el.style.left = x + 'px'; el.style.top = y + 'px'; };
+  const centro = (el) => { const a = el.getBoundingClientRect(), p = palco.getBoundingClientRect(); return [a.left - p.left + a.width / 2, a.top - p.top + a.height / 2]; };
+  async function roda(){
+    while (true){
+      await espera();
+      // cena 1: o app
+      $('#c-cc').classList.remove('on'); $('#c-app').classList.add('on');
+      bt.textContent = 'Instalar no CapCut'; bt.classList.remove('feito'); $('.app-prog').classList.remove('on'); $('#app-bar').style.transition = 'none'; $('#app-bar').style.width = '0';
+      cur.style.transition = 'none'; poe(cur, palco.clientWidth * .3, palco.clientHeight * .9); void cur.offsetWidth; cur.style.transition = '';
+      await dorme(700);
+      const [x, y] = centro(bt); poe(cur, x - 6, y - 4);
+      await dorme(1000); bt.classList.add('click'); await dorme(180); bt.classList.remove('click');
+      bt.textContent = 'Instalando…'; $('.app-prog').classList.add('on');
+      const bar = $('#app-bar'); void bar.offsetWidth; bar.style.transition = 'width 1.8s cubic-bezier(.3,.1,.3,1)'; bar.style.width = '100%';
+      const st = $('#app-st');
+      for (let i = 0; i <= 10; i++){ st.textContent = 'Enviando para o CapCut · pasta ' + Math.max(1, i) + ' de 10'; await dorme(170); }
+      bt.textContent = '✓ Instalado'; bt.classList.add('feito'); st.textContent = '100 animações no seu CapCut, em 10 pastas';
+      await dorme(1100);
+      // cena 2: o CapCut
+      $('#c-app').classList.remove('on'); $('#c-cc').classList.add('on');
+      $('#cc-ok').classList.remove('on'); $('#cc-grid').innerHTML = ''; const a = $('#cc-a'); a.classList.remove('on'); a.style.width = '0'; a.textContent = '';
+      $('#pastas').innerHTML = PASTAS.map(p => `<div class="pasta"><i></i>${p}</div>`).join('');
+      await dorme(450);
+      for (const el of document.querySelectorAll('#pastas .pasta')){ el.classList.add('on'); await dorme(110); }
+      $('#cc-ok').classList.add('on');
+      for (const k of MOSTRA){
+        await espera();
+        document.querySelectorAll('#pastas .pasta').forEach((e, i) => e.classList.toggle('sel', i === k));
+        $('#cc-grid').innerHTML = Array.from({ length:6 }, (_, j) => { const n = k * 10 + j + 1; return `<div class="tile" data-n="${n}"><img src="${P}a${cod(n)}.jpg" alt=""></div>`; }).join('');
+        const tiles = [...document.querySelectorAll('#cc-grid .tile')];
+        for (const t of tiles){ await dorme(70); t.classList.add('on'); }
+        await dorme(700);
+        // arrasta uma animação para o vídeo
+        const t = tiles[[1, 3, 0][MOSTRA.indexOf(k)]]; if (!t || t.offsetParent === null) { await dorme(900); continue; }
+        t.classList.add('pega'); await dorme(350);
+        const pr = palco.getBoundingClientRect(), tr = t.getBoundingClientRect(), ar = a.getBoundingClientRect();
+        const v = document.createElement('div'); v.className = 'voa'; v.innerHTML = t.innerHTML;
+        Object.assign(v.style, { left:(tr.left - pr.left) + 'px', top:(tr.top - pr.top) + 'px', width:tr.width + 'px', height:tr.height + 'px' });
+        palco.appendChild(v); void v.offsetWidth;
+        Object.assign(v.style, { left:(ar.left - pr.left) + 'px', top:(ar.top - pr.top - 4) + 'px', width:'58px', height:'32px', opacity:'.9' });
+        await dorme(720); v.remove(); t.classList.remove('pega');
+        a.textContent = nome(+t.dataset.n); a.classList.add('on'); a.style.width = '0'; void a.offsetWidth; a.style.width = '34%';
+        const ph = $('#cc-ph'); ph.style.transition = 'none'; ph.style.left = '30%'; void ph.offsetWidth; ph.style.transition = 'left 1.3s linear'; ph.style.left = '62%';
+        await dorme(1500);
+      }
+      await dorme(900);
+    }
+  }
+  roda();
+})();
 
 // aparecer ao rolar
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); } }), { threshold:.08 });
