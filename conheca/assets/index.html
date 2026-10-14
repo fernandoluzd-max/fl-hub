@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Base FL Assets — 100 animações gráficas prontas</title>
+<meta name="description" content="100 animações gráficas com fundo transparente, em 10 categorias, para usar nos seus vídeos no CapCut.">
+<link rel="icon" href="https://basefl.com/favicon.png">
+<link rel="apple-touch-icon" href="https://basefl.com/apple-touch-icon.png">
+<meta name="theme-color" content="#0B0C0C">
+<meta property="og:title" content="Base FL Assets — 100 animações gráficas prontas">
+<meta property="og:description" content="Setas, loadings, ícones, checks, dinheiro, redes sociais e mais. Fundo transparente, Full HD, 60 fps.">
+<meta property="og:image" content="https://basefl.com/capas/assets.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/selo.css?v=1">
+<style>
+:root{
+  --bg:#0B0C0C; --bg2:#121413; --card:#161918; --line:#252A27; --ink:#F4F0E4; --mute:#A8A89A; --dim:#6b6a61;
+  --a:#E8C46A; --a2:#C9993A; --ai:#1A1405;
+  --selo:#E8C46A; --selo-tinta:var(--ink); --selo-mudo:var(--mute);
+  --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --f:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --m:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:16px/1.55 var(--f);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img,video{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+.fx{position:absolute;inset:0 0 auto;height:900px;pointer-events:none;overflow:hidden;z-index:0}
+.fx::before{content:"";position:absolute;width:1000px;height:700px;left:72%;top:-300px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(232,196,106,.22),transparent 72%)}
+.fx::after{content:"";position:absolute;inset:0;background:radial-gradient(rgba(232,196,106,.09) 1px,transparent 1.4px) 0 0/22px 22px;mask-image:radial-gradient(ellipse 70% 60% at 60% 10%,#000 25%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse 70% 60% at 60% 10%,#000 25%,transparent 75%)}
+
+.top{display:flex;align-items:center;gap:12px;padding:20px 0}
+.top a.mk{display:flex;align-items:center;gap:10px;text-decoration:none}
+.top img{width:36px;height:36px;border-radius:10px}
+.top b{font-family:var(--d);font-weight:800;font-size:16px;line-height:1.1;display:block}
+.top small{display:block;color:var(--mute);font-size:12px}
+.top .sp{flex:1}
+.cta-s{font-weight:700;font-size:14px;text-decoration:none;border-radius:99px;padding:9px 16px;background:var(--a);color:var(--ai);font-family:var(--f);white-space:nowrap}
+
+.kick{display:inline-flex;align-items:center;gap:8px;font-family:var(--m);font-weight:700;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--a)}
+.kick::before{content:"";width:22px;height:2px;background:var(--a);border-radius:2px}
+h1{font-family:var(--d);font-weight:850;font-stretch:110%;font-size:clamp(38px,6vw,66px);line-height:.98;letter-spacing:-.035em;margin:18px 0 18px;text-wrap:balance}
+h1 em,h2 em{font-style:normal;color:var(--a)}
+h2{font-family:var(--d);font-weight:850;font-stretch:108%;font-size:clamp(30px,4.2vw,46px);line-height:1.02;letter-spacing:-.03em;text-wrap:balance;max-width:760px}
+.lead{color:var(--mute);font-size:clamp(16px,1.9vw,18.5px);max-width:520px}
+.lead b{color:var(--ink);font-weight:600}
+.sub{color:var(--mute);font-size:17px;max-width:620px;margin-top:12px}
+.ctas{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font:inherit;font-weight:750;font-size:17px;border:0;border-radius:16px;padding:17px 26px;cursor:pointer;color:var(--ai);text-decoration:none;
+  background:linear-gradient(#F6DE9C 0%,var(--a) 50%,var(--a2) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 0 rgba(0,0,0,.16),0 14px 40px -12px rgba(232,196,106,.6);transition:transform .15s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 0 rgba(0,0,0,.16),0 20px 50px -12px rgba(232,196,106,.75)}
+.btn svg{width:18px;height:18px}
+.nota{color:var(--mute);font-size:13.5px;line-height:1.4}
+.nota b{color:var(--ink)}
+.sec{margin-top:110px}
+.sec-h{margin-bottom:30px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding:30px 0 10px}
+.hero-v{position:relative}
+.mosaico{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;transform:rotate(-2deg)}
+.mosaico .t{border-radius:16px;overflow:hidden;background:#141210;border:1px solid rgba(255,236,220,.08);aspect-ratio:1/1;position:relative}
+.mosaico .t video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.12)}
+.mosaico .t:nth-child(2),.mosaico .t:nth-child(5),.mosaico .t:nth-child(8){transform:translateY(-18px)}
+.num{display:flex;gap:26px;margin-top:30px;flex-wrap:wrap}
+.num div b{display:block;font-family:var(--d);font-weight:850;font-size:30px;line-height:1;color:var(--ink)}
+.num div span{color:var(--mute);font-size:13px}
+
+/* cards de asset */
+.grade{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+#cat{grid-template-columns:repeat(5,minmax(0,1fr))}
+.as{background:#141210;border:1px solid rgba(255,236,220,.08);border-radius:16px;overflow:hidden;transition:border-color .2s,transform .2s}
+.as:hover{border-color:rgba(232,196,106,.45);transform:translateY(-2px)}
+.as .v{aspect-ratio:16/9;position:relative;background:#141210}
+.as .v video,.as .v img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.as .n{display:flex;align-items:center;gap:8px;padding:10px 12px 12px;font-size:13px;font-weight:600;color:var(--ink);line-height:1.25}
+.as .n i{font-style:normal;font-family:var(--m);font-size:10.5px;color:var(--dim);letter-spacing:.05em}
+
+/* biblioteca */
+.abas{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 14px;margin:0 -20px 10px;padding-left:20px;padding-right:20px;scrollbar-width:none}
+.abas::-webkit-scrollbar{display:none}
+.abas button{flex:none;font:inherit;font-weight:700;font-size:14px;padding:10px 15px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--mute);cursor:pointer;white-space:nowrap}
+.abas button span{font-family:var(--m);font-size:10.5px;color:var(--dim);margin-left:6px}
+.abas button[aria-pressed="true"]{background:var(--a);border-color:var(--a);color:var(--ai)}
+.abas button[aria-pressed="true"] span{color:rgba(26,20,5,.6)}
+
+/* como funciona */
+.como{display:grid;grid-template-columns:1.25fr 1fr;gap:34px;align-items:center}
+.tela{border-radius:20px;overflow:hidden;border:1px solid rgba(255,236,220,.12);background:#000;box-shadow:0 30px 80px -30px rgba(0,0,0,.9),0 0 0 6px rgba(232,196,106,.06)}
+.tela video{width:100%;aspect-ratio:16/9;background:#000}
+.passos{list-style:none;display:grid;gap:14px}
+.passos li{display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.passos li b.k{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(232,196,106,.12);color:var(--a);font-family:var(--d);font-weight:850;font-size:18px}
+.passos li strong{display:block;font-size:16px;margin-bottom:2px}
+.passos li p{color:var(--mute);font-size:14.5px}
+
+/* benefícios */
+.bens{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.bem{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.bem svg{width:30px;height:30px;color:var(--a);margin-bottom:14px}
+.bem strong{display:block;font-family:var(--d);font-weight:800;font-size:19px;letter-spacing:-.01em;margin-bottom:6px}
+.bem p{color:var(--mute);font-size:14.5px}
+
+/* oferta */
+.oferta{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:24px;overflow:hidden;border:1px solid rgba(232,196,106,.35);background:linear-gradient(180deg,#1b1815,#121110);box-shadow:0 40px 100px -40px rgba(232,196,106,.35)}
+.of-img{background:radial-gradient(circle at 50% 45%,rgba(232,196,106,.22),transparent 65%),#141210;display:grid;place-items:center;padding:30px}
+.of-img img{width:min(360px,90%);filter:drop-shadow(0 30px 40px rgba(0,0,0,.5))}
+.of-t{padding:34px 32px}
+.of-t h3{font-family:var(--d);font-weight:850;font-size:30px;letter-spacing:-.02em;line-height:1.05}
+.of-t ul{list-style:none;margin:18px 0 22px;display:grid;gap:9px}
+.of-t li{display:flex;gap:10px;font-size:15px;color:var(--ink)}
+.of-t li::before{content:"✓";color:var(--a);font-weight:800}
+.preco{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.preco b{font-family:var(--d);font-weight:900;font-size:52px;letter-spacing:-.03em;line-height:1;color:var(--a)}
+.preco span{color:var(--mute);font-size:14px}
+.of-t .btn{width:100%;margin-top:18px}
+.of-t .nota{margin-top:12px;text-align:center}
+.gar-wrap{margin-top:26px}
+
+/* faq */
+.faq{max-width:780px;display:grid;gap:10px}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:0 18px}
+.faq summary{list-style:none;cursor:pointer;padding:17px 30px 17px 0;font-weight:700;font-size:16px;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:0;top:13px;font-size:22px;color:var(--a);transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{color:var(--mute);padding:0 0 18px;font-size:15px}
+
+.fecho{margin:110px 0 0;text-align:center}.fecho h2{margin:0 auto}.fecho .ctas{justify-content:center}.fecho .nota{margin-top:14px}
+footer{color:var(--dim);font-size:12.5px;text-align:center;padding:40px 0 110px}
+footer a{color:var(--mute)}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.rv.vis{opacity:1;transform:none}
+#conta{margin-top:16px;background:rgba(232,196,106,.08);border:1px solid rgba(232,196,106,.3);border-radius:12px;padding:12px 14px;font-size:14px;color:var(--ink)}
+.toast{pointer-events:none;position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#111;font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;transition:all .25s;z-index:50}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* barra fixa de compra (aparece depois do topo) */
+.barra{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(11,12,12,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid rgba(232,196,106,.2);display:flex;align-items:center;gap:14px;justify-content:center;transform:translateY(110%);transition:transform .3s}
+.barra.on{transform:none}
+.barra .bt{line-height:1.2}
+.barra .bt b{display:block;font-family:var(--d);font-weight:850;font-size:17px}
+.barra .bt span{color:var(--mute);font-size:12px}
+.barra .btn{padding:13px 20px;font-size:15px}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:34px}
+  .hero-v{max-width:520px;margin:0 auto;width:100%}
+  .grade,#cat{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .como{grid-template-columns:1fr}
+  .bens{grid-template-columns:1fr 1fr}
+  .oferta{grid-template-columns:1fr}
+  .of-img{padding:26px 20px 0}
+  .of-img img{width:min(240px,70%)}
+}
+@media (max-width:560px){
+  .sec{margin-top:84px}
+  .bens{grid-template-columns:1fr}
+  .of-t{padding:26px 20px}
+  .preco b{font-size:44px}
+  .top small{display:none}
+  .btn{width:100%}
+  .barra .btn{width:auto}
+  .as .n{font-size:12px;padding:8px 10px 10px}
+}
+@media (prefers-reduced-motion:reduce){.rv{transform:none}}
+</style>
+<script src="/pixel.js"></script>
+</head>
+<body>
+<div class="fx"></div>
+<div class="wrap">
+
+  <header class="top">
+    <a class="mk" href="https://basefl.com/"><img src="/icones/assets-64.png" alt="" width="36" height="36"><span><b>Base FL Assets</b><small>Animações gráficas · Base FL</small></span></a>
+    <span class="sp"></span>
+    <a class="cta-s" href="https://payfast.greenn.com.br/kbncn9f" data-comprar>Quero os assets</a>
+  </header>
+
+  <!-- 1 · HERO -->
+  <section class="hero">
+    <div>
+      <span class="kick">Animações gráficas · CapCut</span>
+      <h1>100 animações prontas para <em>explicar qualquer coisa</em> no seu vídeo.</h1>
+      <p class="lead">Setas, loadings, ícones, checks, dinheiro, redes sociais e muito mais. <b>Com fundo transparente</b>: é só colocar por cima do seu vídeo.</p>
+      <div class="ctas">
+        <a class="btn" href="https://payfast.greenn.com.br/kbncn9f" data-comprar>Quero os 100 assets <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <p class="nota"><b>R$ 17</b> à vista<br>ou 12x de R$ 1,75</p>
+      </div>
+      <div id="conta" hidden></div>
+      <div class="num">
+        <div><b>100</b><span>animações</span></div>
+        <div><b>10</b><span>categorias</span></div>
+        <div><b>Full HD</b><span>60 fps</span></div>
+      </div>
+    </div>
+    <div class="hero-v" aria-hidden="true">
+      <div class="mosaico" id="mosaico"></div>
+    </div>
+  </section>
+
+  <!-- 2 · ASSETS EM AÇÃO -->
+  <section class="sec rv">
+    <div class="sec-h">
+      <span class="kick">Assets em ação</span>
+      <h2 style="margin-top:14px">Movimento que <em>chama o olho</em> para onde importa.</h2>
+      <p class="sub">Estas são as animações de verdade, do jeito que você recebe. Aqui elas aparecem sobre um fundo escuro; no seu vídeo, o fundo é transparente.</p>
+    </div>
+    <div class="grade" id="destaques"></div>
+  </section>
+
+  <!-- 3 · EXPLORE A BIBLIOTECA -->
+  <section class="sec rv" id="biblioteca">
+    <div class="sec-h">
+      <span class="kick">Explore a biblioteca</span>
+      <h2 style="margin-top:14px">10 categorias. <em>Todas as 100</em> animações aqui embaixo.</h2>
+    </div>
+    <div class="abas" role="group" aria-label="Categorias" id="abas"></div>
+    <div class="grade" id="cat"></div>
+  </section>
+
+  <!-- 4 · COMO FUNCIONA -->
+  <section class="sec rv">
+    <div class="sec-h">
+      <span class="kick">Como funciona</span>
+      <h2 style="margin-top:14px">Do download ao vídeo <em>em poucos minutos</em>.</h2>
+    </div>
+    <div class="como">
+      <div class="tela"><video src="https://aulas.basefl.com/MOTION%20TUTORIAL.mp4" controls playsinline preload="none" poster="/conheca/assets/p/tutorial.jpg"></video></div>
+      <ol class="passos">
+        <li><b class="k">1</b><div><strong>Garanta o seu acesso</strong><p>O acesso é liberado no e-mail que você usar na compra.</p></div></li>
+        <li><b class="k">2</b><div><strong>Baixe pelo app Base FL</strong><p>No computador, entre com o mesmo e-mail e baixe as 100 animações, já separadas em 10 pastas.</p></div></li>
+        <li><b class="k">3</b><div><strong>Arraste para o seu vídeo</strong><p>Coloque a animação numa camada acima do vídeo. O fundo é transparente, então só a animação aparece.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 5 · BENEFÍCIOS -->
+  <section class="sec rv">
+    <div class="sec-h">
+      <span class="kick">Por que usar</span>
+      <h2 style="margin-top:14px">Seu vídeo mais claro, <em>sem abrir o After Effects</em>.</h2>
+    </div>
+    <div class="bens">
+      <div class="bem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg><strong>Fundo transparente</strong><p>Arquivos .mov em ProRes 4444 com canal alfa: a animação entra por cima de qualquer cena.</p></div>
+      <div class="bem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M8 9v6M12 9v6M16 9v6"/></svg><strong>Full HD a 60 fps</strong><p>1920×1080, com movimento suave mesmo em vídeos de ritmo rápido.</p></div>
+      <div class="bem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><strong>Curtas e diretas</strong><p>De 2 a 4 segundos cada: o tempo certo para destacar uma ideia sem travar o corte.</p></div>
+      <div class="bem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><strong>Tudo organizado</strong><p>10 pastas por tema e arquivos com nome do que fazem. Você acha a animação certa em segundos.</p></div>
+      <div class="bem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg><strong>Para todo tipo de conteúdo</strong><p>Tutoriais, vendas, finanças, produtividade, tecnologia e redes sociais.</p></div>
+      <div class="bem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><strong>Pronto para usar</strong><p>Nada para configurar ou animar: escolha, arraste e ajuste o tamanho.</p></div>
+    </div>
+  </section>
+
+  <!-- 6 · OFERTA -->
+  <section class="sec rv" id="oferta">
+    <div class="oferta">
+      <div class="of-img"><img src="/conheca/assets/p/objeto.png" alt="Base FL Assets" width="360" height="290"></div>
+      <div class="of-t">
+        <span class="kick">Base FL Assets</span>
+        <h3 style="margin-top:12px">As 100 animações, em 10 categorias.</h3>
+        <ul>
+          <li>100 animações gráficas em .mov com fundo transparente</li>
+          <li>10 categorias organizadas em pastas</li>
+          <li>Full HD 1920×1080 a 60 fps</li>
+          <li>Aula mostrando como usar</li>
+          <li>Download pelo app Base FL, no computador</li>
+        </ul>
+        <div class="preco"><b>R$ 17</b><span>à vista ou 12x de R$ 1,75</span></div>
+        <a class="btn" href="https://payfast.greenn.com.br/kbncn9f" data-comprar>Quero os 100 assets <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <p class="nota">Pagamento seguro pela Greenn · Pix, cartão ou boleto</p>
+      </div>
+    </div>
+    <div class="gar-wrap">
+      <div class="gar-fl"><div class="selo-fl" role="img" aria-label="Garantia incondicional de 7 dias"><svg viewBox="0 0 300 300" aria-hidden="true"><circle cx="150" cy="150" r="147"/><path id="selo-c" fill="none" d="M150 150m-128 0a128 128 0 1 1 256 0a128 128 0 1 1 -256 0"/><text><textPath href="#selo-c" textLength="804" lengthAdjust="spacing">7 DIAS · RISCO ZERO · GARANTIA INCONDICIONAL · </textPath></text></svg><div class="selo-disco"><b>7</b><span>DIAS</span></div></div><div class="gar-t"><span class="gar-k">Garantia de 7 dias</span><span class="gar-h">Teste por 7 dias. Risco zero.</span><p>Usou e não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</p></div></div>
+    </div>
+  </section>
+
+  <!-- 7 · FAQ -->
+  <section class="sec rv">
+    <div class="sec-h">
+      <span class="kick">Perguntas frequentes</span>
+      <h2 style="margin-top:14px">Ficou alguma dúvida?</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Como eu recebo as animações?</summary><p>Depois da compra, o acesso é liberado no e-mail que você usou no pagamento. No computador, entre no app Base FL com esse mesmo e-mail e baixe o Base FL Assets.</p></details>
+      <details><summary>Funciona no celular?</summary><p>O download é feito pelo app Base FL, que roda no computador (Mac e Windows). Por isso, para receber as animações, você precisa de um computador.</p></details>
+      <details><summary>Em que formato vêm os arquivos?</summary><p>São 100 vídeos .mov em ProRes 4444 com canal alfa (fundo transparente), em 1920×1080 a 60 fps, com 2 a 4 segundos cada.</p></details>
+      <details><summary>Preciso saber animar ou usar After Effects?</summary><p>Não. As animações já vêm prontas: você só coloca no seu vídeo e ajusta o tamanho e a posição.</p></details>
+      <details><summary>Quanto espaço ocupa?</summary><p>Cerca de 3 GB no total, porque os arquivos são em alta qualidade e com transparência.</p></details>
+      <details><summary>E se eu não gostar?</summary><p>Você tem 7 dias de garantia. Se não for o que esperava, peça o reembolso nesse prazo e recebe o valor de volta.</p></details>
+      <details><summary>Ainda tenho dúvidas. Com quem eu falo?</summary><p>Chame o suporte no WhatsApp pelo botão no canto da tela.</p></details>
+    </div>
+  </section>
+
+  <div class="fecho rv">
+    <h2>Deixe seus vídeos <em>mais fáceis de entender</em> hoje.</h2>
+    <div class="ctas"><a class="btn" href="https://payfast.greenn.com.br/kbncn9f" data-comprar>Quero os 100 assets <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+    <p class="nota"><b>R$ 17</b> à vista ou 12x de R$ 1,75 · 7 dias de garantia</p>
+  </div>
+
+  <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo<br>CapCut é marca de seus respectivos donos; o Base FL não tem vínculo com o CapCut.<br><a href="https://basefl.com/termos/">Termos de uso</a> · <a href="https://basefl.com/privacidade/">Privacidade</a></footer>
+</div>
+
+<div class="barra" id="barra" aria-hidden="true">
+  <div class="bt"><b>R$ 17</b><span>100 animações · 10 categorias</span></div>
+  <a class="btn" href="https://payfast.greenn.com.br/kbncn9f" data-comprar tabindex="-1">Quero os assets</a>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ====== link de compra e preço: espelham o catalogo.json (chave "assets") ======
+const CHECKOUT = 'https://payfast.greenn.com.br/kbncn9f';
+const PRODUTO = 'assets';
+const PACK = 'fl-assets';
+// ============================================================================
+const $ = s => document.querySelector(s);
+function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2400); }
+function checkoutAtual(){ try { const p = (window.CATALOGO && CATALOGO.produtos || []).find(x => x.key === PRODUTO); if (p && p.checkout) return p.checkout; } catch {} return CHECKOUT; }
+// link de compra: repassa os parâmetros do anúncio (UTMs, fbclid...) e, sem anúncio, marca a origem Base FL
+// (mesma regra da página dos Títulos, assets/js/main.js) — ?de=app quando vem do app
+function linkCompra(){
+  const c = checkoutAtual(); if (!/^https?:\/\//.test(c)) return '';
+  const u = new URL(c), inc = new URLSearchParams(location.search), de = inc.get('de') || 'pagina';
+  inc.forEach((v, k) => { if (k !== 'de' && !u.searchParams.has(k)) u.searchParams.set(k, v); });
+  if (!u.searchParams.has('utm_source')) u.searchParams.set('utm_source', 'basefl');
+  if (!u.searchParams.has('utm_medium')) u.searchParams.set('utm_medium', de);
+  if (!u.searchParams.has('utm_campaign')) u.searchParams.set('utm_campaign', PRODUTO);
+  if (!u.searchParams.has('src')) u.searchParams.set('src', 'basefl-' + de);
+  return u.toString();
+}
+// evento de uso (sem dados pessoais): ajuda a saber qual página vende
+function evento(nome){
+  try {
+    let v = localStorage.getItem('fl_vis'); if (!v){ v = 'v' + Math.random().toString(36).slice(2, 12) + Date.now().toString(36); localStorage.setItem('fl_vis', v); }
+    fetch('https://otlaexuqyavpzxwzcsfo.supabase.co/rest/v1/rpc/evento', { method:'POST', keepalive:true, headers:{ apikey:'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR', 'Content-Type':'application/json' },
+      body:JSON.stringify({ p_nome:nome, p_pack:PACK, p_visitante:v, p_dados:{ pagina:PRODUTO, de:new URLSearchParams(location.search).get('de') || 'pagina' } }) }).catch(() => {});
+  } catch {}
+}
+window.FLV = { pack: PACK, slug: 'assets', ir: null };   // 'ir': quando a conta já tem o produto, o botão abre o app em vez do pagamento (oferta-venda.js)
+function compra(){ if (FLV.ir){ location.href = FLV.ir; return; } const l = linkCompra(); if (l){ evento('checkout_clicked'); window.FLPixel && FLPixel.checkout(); location.href = l; } else toast('Link de compra em breve.'); }
+document.querySelectorAll('[data-comprar]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); compra(); }));
+evento('page_view');
+
+// ====== a biblioteca (nomes e pastas iguais aos arquivos entregues) ======
+const CATS = [
+  ['Setas e Direcionamento', ['Seta Curva Ascendente','Seta Horizontal','Seta para Baixo com Bounce','Seta de Atualização','Setas de Troca','Seta de Crescimento','Seta 3D','Chevrons em Sequência','Seta Desenhada à Mão','Seta em Trajetória Pontilhada']],
+  ['Loading e Progresso', ['Barra de Progresso com Contador','Loading Circular com Check','Barra de Progresso Premium','Anel de Progresso com Porcentagem','Loading Três Pontos','Barra de Download Concluído','Progresso em Cinco Etapas','Spinner Minimalista','Barra de Progresso Vertical','Linha de Carregamento']],
+  ['Interface e Navegação', ['Ícone Home com Clique','Engrenagem de Configurações','Calendário com Seleção de Data','Pesquisa com Campo de Busca','Sino de Notificação','Toggle Switch Ligando','Cadeado Abrindo e Fechando','Menu Hambúrguer para X','Barra de Navegação com Indicador','Cursor Clicando em Botão']],
+  ['Pastas e Arquivos', ['Pasta Abrindo','Arquivo Arrastado para Pasta','Ícone de Download','Upload para Nuvem','Pasta Recebendo Arquivos','Documento Sendo Criado','Arquivo ZIP Compactando','Nuvem Sincronizando','Pasta Duplicando','Armazenamento em Camadas']],
+  ['Dinheiro e Resultados', ['Carteira Recebendo Notas','Cédulas Surgindo','Moeda Girando','Contador de Faturamento','Pagamento com Cartão Aprovado','Gráfico de Barras Crescendo','Gráfico de Linha Crescendo','Símbolo de Porcentagem','Carrinho de Compras','Meta Atingida']],
+  ['Redes Sociais', ['Ícone de Câmera para Posts','Vídeo Vertical','Botão Play Pressionado','Corte de Vídeo','Coração de Curtida','Comentário Digitando','Ícone de Compartilhar','Seguidores se Multiplicando','Botão Seguir','Play para Pause']],
+  ['Checks e Status', ['Check em Círculo','Check Minimalista','Ícone de Erro','Ícone de Alerta','Selo de Aprovado','Ícone de Informação','Segurança Confirmada','Lista de Tarefas Concluídas','Sucesso com Explosão','Indicador de Status']],
+  ['Tempo e Produtividade', ['Cronômetro Iniciando','Relógio Acelerando','Ampulheta com Partículas','Calendário Trocando Datas','Checklist Concluindo','Timeline com Marcador','Foguete Decolando','Engrenagens de Automação','Ícone de Repetição','Alerta de Prazo']],
+  ['Destaques e Callouts', ['Retângulo de Destaque Desenhado','Círculo de Destaque','Sublinhado Animado','Marcador Pulsando','Callout com Linha e Caixa','Brackets nos Cantos','Spotlight com Halo','Linha Pontilhada Conectando Pontos','Moldura Arredondada','Pin Caindo com Bounce']],
+  ['Dados e Microinterações', ['Dashboard com Três Cards','Gráfico de Rosca com Valor','Contador Numérico','Avaliação Cinco Estrelas','Comparativo Antes e Depois','Sinal de Wi-Fi','Bateria Carregando','Rota no Mapa até o Destino','Onda de Áudio','Celebração com Confetes']]
+];
+const P = '/conheca/assets/p/';
+const cod = n => String(n).padStart(3, '0');
+const nome = n => CATS[Math.floor((n - 1) / 10)][1][(n - 1) % 10];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+const vid = n => `<video muted loop playsinline preload="none" poster="${P}a${cod(n)}.jpg" data-src="${P}a${cod(n)}.mp4"></video>`;
+const card = n => `<div class="as"><div class="v">${vid(n)}</div><div class="n"><i>${cod(n)}</i>${esc(nome(n))}</div></div>`;
+
+// vídeos: só carregam e tocam quando aparecem na tela (página leve no celular)
+const vio = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
+  const v = e.target;
+  if (e.isIntersecting){ if (!v.src) v.src = v.dataset.src; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+  else if (!v.paused) v.pause();
+}), { rootMargin:'120px 0px', threshold:.01 }) : null;
+function liga(raiz){ raiz.querySelectorAll('video[data-src]').forEach(v => { if (vio) vio.observe(v); else { v.src = v.dataset.src; v.play().catch(() => {}); } }); }
+
+$('#mosaico').innerHTML = [3, 14, 26, 50, 55, 61, 77, 43, 65].map(n => `<div class="t">${vid(n)}</div>`).join('');
+$('#destaques').innerHTML = [10, 17, 30, 37, 45, 58, 65, 73, 85, 92, 97, 69].map(card).join('');
+liga($('#mosaico')); liga($('#destaques'));
+
+const abas = $('#abas');
+abas.innerHTML = CATS.map((c, i) => `<button type="button" aria-pressed="${i === 0}" data-i="${i}">${esc(c[0])}<span>10</span></button>`).join('');
+function mostra(i){
+  abas.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.i === i)));
+  const g = $('#cat'); g.querySelectorAll('video').forEach(v => { if (vio) vio.unobserve(v); v.pause(); });
+  g.innerHTML = Array.from({ length:10 }, (_, k) => card(i * 10 + k + 1)).join('');
+  liga(g);
+}
+abas.addEventListener('click', e => { const b = e.target.closest('button'); if (b) mostra(+b.dataset.i); });
+mostra(0);
+
+// aparecer ao rolar
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); } }), { threshold:.08 });
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+// barra fixa de compra: aparece depois do topo e some na oferta
+const barra = $('#barra'); let passouTopo = false, naOferta = false;
+const atualizaBarra = () => barra.classList.toggle('on', passouTopo && !naOferta);
+new IntersectionObserver(es => { passouTopo = !es[0].isIntersecting; atualizaBarra(); }).observe($('.hero .ctas'));
+new IntersectionObserver(es => { naOferta = es[0].isIntersecting; atualizaBarra(); }, { threshold:.2 }).observe($('.oferta'));
+</script>
+<script src="/catalogo.js" defer></script>
+<script src="/base.js" defer></script>
+<script src="/oferta-venda.js" defer></script>
+<script src="/zap.js" defer></script>
+</body>
+</html>
