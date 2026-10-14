@@ -401,5 +401,102 @@
   </div>
 </div>
 <script src="/zap.js" defer></script>
+<!-- ===== Base FL · Aviso "só computador" antes do checkout ===== -->
+<style>
+#bfl-av{--a:var(--acc,#ff8a66);--ahi:var(--acc-hi,#ffc3ae);--adp:var(--acc-deep,#e0603f);--aink:var(--acc-ink,#1d0c06);--t2:var(--acc2,#58d6c9);
+  position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:16px;
+  background:rgba(6,5,4,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
+#bfl-av.on{opacity:1;visibility:visible}
+#bfl-av .bx{position:relative;width:100%;max-width:460px;max-height:calc(100vh - 32px);overflow:auto;
+  background:linear-gradient(180deg,#1b1815,#141210);border:1px solid rgba(255,236,220,.14);border-radius:22px;
+  padding:30px 26px 22px;color:#f4f0e4;font-family:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.8),0 0 0 1px rgba(255,138,102,.06),0 -20px 60px -30px rgba(255,138,102,.35) inset;
+  transform:translateY(18px) scale(.96);transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
+#bfl-av.on .bx{transform:none}
+#bfl-av .bx:before{content:"";position:absolute;left:24px;right:24px;top:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--a),transparent)}
+#bfl-av .x{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,236,220,.12);background:transparent;color:#aaa59b;font-size:18px;cursor:pointer;line-height:1}
+#bfl-av .x:hover{color:#f4f0e4;border-color:rgba(255,236,220,.3)}
+#bfl-av .ey{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--a);margin:0 0 12px;display:flex;align-items:center;gap:8px}
+#bfl-av .ey i{width:7px;height:7px;border-radius:50%;background:var(--a);box-shadow:0 0 12px var(--a);animation:bflp 1.6s infinite}
+@keyframes bflp{50%{opacity:.35}}
+#bfl-av h3{font-family:"Archivo",system-ui,sans-serif;font-weight:800;font-size:30px;line-height:1.05;letter-spacing:-.02em;margin:0 0 10px}
+#bfl-av h3 em{font-style:normal;color:var(--a)}
+#bfl-av .sub{color:#aaa59b;font-size:15px;line-height:1.5;margin:0 0 20px}
+#bfl-av .sub b{color:#f4f0e4}
+#bfl-av .lbl{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6f6a62;margin:0 0 8px}
+#bfl-av .row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+#bfl-av .row.no{grid-template-columns:repeat(2,1fr);margin-bottom:22px}
+#bfl-av .ch{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px 10px;border-radius:14px;font-size:13px;font-weight:700;position:relative}
+#bfl-av .ch svg{width:26px;height:26px}
+#bfl-av .ok{background:rgba(88,214,201,.10);border:1px solid rgba(88,214,201,.35);color:#a8efe6}
+#bfl-av .ok:after{content:"✓";position:absolute;top:6px;right:8px;font-size:11px;color:var(--t2)}
+#bfl-av .ng{background:rgba(255,80,60,.07);border:1px solid rgba(255,90,70,.35);color:#ff9a86}
+#bfl-av .ng svg{opacity:.75}
+#bfl-av .ng span{text-decoration:line-through;text-decoration-thickness:2px}
+#bfl-av .ng:after{content:"✕";position:absolute;top:6px;right:8px;font-size:11px;color:#ff6b55}
+#bfl-av .go{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:0;cursor:pointer;border-radius:14px;padding:16px 18px;
+  font-family:inherit;font-size:15px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:var(--aink);
+  background:linear-gradient(var(--ahi) 0%,var(--a) 48%,var(--adp) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 0 rgba(0,0,0,.16),0 14px 34px -12px rgba(255,138,102,.65);transition:transform .2s,filter .2s}
+#bfl-av .go:hover{transform:translateY(-1px);filter:brightness(1.05)}
+#bfl-av .bk{display:block;width:100%;margin-top:10px;padding:12px;background:transparent;border:1px solid rgba(255,236,220,.12);border-radius:12px;color:#aaa59b;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer}
+#bfl-av .bk:hover{color:#f4f0e4;border-color:rgba(255,236,220,.28)}
+#bfl-av .ft{text-align:center;margin:14px 0 0;font-size:12px;color:#6f6a62}
+@media (max-width:420px){#bfl-av .bx{padding:26px 18px 18px}#bfl-av h3{font-size:26px}#bfl-av .ch{font-size:12px}}
+</style>
+
+<div id="bfl-av" role="dialog" aria-modal="true" aria-labelledby="bfl-av-t">
+  <div class="bx">
+    <button class="x" aria-label="Fechar">×</button>
+    <p class="ey"><i></i>Antes de garantir o seu pack</p>
+    <h3 id="bfl-av-t">Funciona <em>só no computador.</em></h3>
+    <p class="sub">Os Títulos Dinâmicos rodam no <b>CapCut Desktop</b>. No celular e no iPad eles <b>não instalam</b>.</p>
+
+    <p class="lbl">Funciona em</p>
+    <div class="row">
+      <div class="ch ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg>macOS</div>
+      <div class="ch ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Windows</div>
+      <div class="ch ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/><path d="M8 10l2 2-2 2M12 14h4"/></svg>Linux</div>
+    </div>
+
+    <p class="lbl">Não funciona em</p>
+    <div class="row no">
+      <div class="ch ng"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg><span>Celular</span></div>
+      <div class="ch ng"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="2" width="16" height="20" rx="2.5"/><path d="M11 18h2"/></svg><span>iPad / tablet</span></div>
+    </div>
+
+    <button class="go">Entendi, vou usar no computador <span aria-hidden="true">→</span></button>
+    <button class="bk">Só edito no celular ou iPad</button>
+    <p class="ft">7 dias de garantia · Base FL</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var m=document.getElementById('bfl-av'); if(!m) return;
+  var alvo=null, liberado=false;
+  function abrir(a){alvo=a;m.classList.add('on');document.documentElement.style.overflow='hidden';setTimeout(function(){m.querySelector('.go').focus()},50);}
+  function fechar(){m.classList.remove('on');document.documentElement.style.overflow='';alvo=null;}
+  // Só pega botões que vão pro checkout da Greenn. Os de rolar a página não são afetados.
+  document.addEventListener('click',function(e){
+    var a=e.target.closest && e.target.closest('a[href*="greenn.com.br"]');
+    if(!a) return;
+    if(liberado){ liberado=false; return; } // clique confirmado: segue normal (Pixel, UTMs e checkout)
+    e.preventDefault(); e.stopImmediatePropagation();
+    abrir(a);
+  },true);
+  m.querySelector('.go').addEventListener('click',function(){
+    var a=alvo; fechar(); if(!a) return;
+    liberado=true; a.click(); // repete o clique original, agora liberado
+  });
+  m.querySelector('.bk').addEventListener('click',fechar);
+  m.querySelector('.x').addEventListener('click',fechar);
+  m.addEventListener('click',function(e){ if(e.target===m) fechar(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && m.classList.contains('on')) fechar(); });
+})();
+</script>
+<!-- ===== fim do aviso ===== -->
+
 </body>
 </html>
