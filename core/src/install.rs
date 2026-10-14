@@ -21,6 +21,9 @@ pub struct UdState {
     pub presets: Vec<String>,
     pub preset_ids: Vec<String>,
     pub created_folders: Vec<String>,
+    /// arquivos de recurso (vídeos/sons) que este pacote colocou em Combination/Resources: saem na desinstalação
+    #[serde(default)]
+    pub resources: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
@@ -129,7 +132,11 @@ fn desfazer(acoes: Vec<Acao>) {
     for a in acoes.into_iter().rev() {
         match a {
             Acao::Criou(p) => {
-                let _ = fs::remove_dir_all(&p);
+                if p.is_dir() {
+                    let _ = fs::remove_dir_all(&p);
+                } else {
+                    let _ = fs::remove_file(&p);
+                }
             }
             Acao::Moveu { original, backup } => {
                 let _ = fs::remove_dir_all(&original);
@@ -413,8 +420,11 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
     let mut acoes: Vec<Acao> = vec![];
     let mut targets = vec![];
 
+    let total_raizes = raizes.len();
     let resultado: Result<(), String> = (|| {
-        for (ud, raiz) in &raizes {
+        for (i_raiz, (ud, raiz)) in raizes.iter().enumerate() {
+            let ultima = i_raiz + 1 == total_raizes;
+            let mut recursos: Vec<String> = vec![];
             let presets = raiz.join("Combination").join("Presets");
             fs::create_dir_all(&presets).map_err(|e| e.to_string())?;
             for n in &nomes {
@@ -431,15 +441,28 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
                 let rd = raiz.join("Combination").join("Resources");
                 let _ = fs::create_dir_all(&rd);
                 if let Ok(it) = fs::read_dir(pack.root.join(r)) {
-                    for e in it.flatten() {
-                        let d = rd.join(e.file_name());
+                    let lista: Vec<_> = it.flatten().filter(|e| e.path().is_file()).collect();
+                    let n_rec = lista.len();
+                    for (k, e) in lista.into_iter().enumerate() {
+                        let nome = e.file_name().to_string_lossy().to_string();
+                        let d = rd.join(&nome);
                         if !d.exists() {
-                            let _ = fs::copy(e.path(), d);
+                            // pacotes grandes (vídeos): na última pasta do CapCut o arquivo é movido, não copiado
+                            // (o pacote extraído é apagado depois, então não precisa existir em dobro no disco)
+                            let movido = ultima && fs::rename(e.path(), &d).is_ok();
+                            if !movido {
+                                fs::copy(e.path(), &d).map_err(|err| format!("copiar o arquivo {nome}: {err} (falta espaço no disco?)"))?;
+                            }
+                            acoes.push(Acao::Criou(d));
+                        }
+                        recursos.push(nome);
+                        if n_rec >= 20 && (k + 1) % 10 == 0 {
+                            say(&mut rep, format!("Copiando para o CapCut… {} de {}", k + 1, n_rec));
                         }
                     }
                 }
             }
-            let mut st = UdState { user_data: fwd(ud), presets_root: fwd(raiz), presets: nomes.clone(), ..Default::default() };
+            let mut st = UdState { user_data: fwd(ud), presets_root: fwd(raiz), presets: nomes.clone(), resources: recursos, ..Default::default() };
             if let Some(ours) = &ours_index {
                 let arq = presets.join(index::FILE);
                 let anterior = fs::read_to_string(&arq).ok();
@@ -526,6 +549,12 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
                         t.created_folders.push(f);
                     }
                 }
+                // recursos que uma instalação anterior deste pacote colocou continuam sendo nossos
+                for r in pt.resources {
+                    if !t.resources.contains(&r) {
+                        t.resources.push(r);
+                    }
+                }
             }
         }
     }
@@ -579,6 +608,14 @@ pub fn uninstall(env: &Env, id: &str, progress: &mut dyn FnMut(&str)) -> Result<
         if let Some(v) = read_json(&arq) {
             let novo = index::remove(v, &t.preset_ids, &t.created_folders);
             let _ = fs::write(&arq, serde_json::to_string(&novo).unwrap());
+        }
+        // recursos (vídeos/sons) deste pacote, menos os que outro pacote instalado também usa
+        if !t.resources.is_empty() {
+            let rd = presets.parent().map(|c| c.join("Resources")).unwrap_or_default();
+            let outros: Vec<String> = installed(env).into_iter().filter(|p| p.id != id).flat_map(|p| p.targets).flat_map(|x| x.resources).collect();
+            for r in t.resources.iter().filter(|r| !outros.contains(r)) {
+                let _ = fs::remove_file(rd.join(r));
+            }
         }
         let msg = format!("{} predefinições removidas de {}", t.presets.len(), if t.presets_root.is_empty() { &t.user_data } else { &t.presets_root });
         log_line(env, &msg);

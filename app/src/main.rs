@@ -35,6 +35,10 @@ fn instalar_arquivo(app: &tauri::AppHandle, arquivo: &PathBuf, esperado: Option<
     let tmp = std::env::temp_dir().join(format!("plugaedita-{}", std::process::id()));
     let _ = app.emit("progress", "Preparando o pacote…");
     let pack = Pack::open(arquivo, &tmp).map_err(|e| format!("Pacote inválido: {e}"))?;
+    // pacote baixado: depois de extraído não serve mais (libera espaço antes de copiar para o CapCut; importa nos pacotes de vídeo)
+    if esperado.is_some() {
+        let _ = std::fs::remove_file(arquivo);
+    }
     if let Some(id) = esperado {
         if pack.manifest.id != id {
             let _ = std::fs::remove_dir_all(&tmp);
@@ -55,7 +59,9 @@ async fn install_remote(app: tauri::AppHandle, url: String, pack_id: String) -> 
         use std::io::{Read, Write};
         let _ = app.emit("progress", "Baixando o pack…");
         let cli = reqwest::blocking::Client::builder()
-            .timeout(std::time::Duration::from_secs(900))
+            // pacotes de vídeo têm alguns GB: o limite é de conexão e de silêncio, não de tempo total
+            .connect_timeout(std::time::Duration::from_secs(30))
+            .timeout(std::time::Duration::from_secs(4 * 3600))
             .build()
             .map_err(|e| e.to_string())?;
         let mut resp = cli.get(&url).send().map_err(|e| format!("Sem conexão com o servidor: {e}"))?;
@@ -75,10 +81,17 @@ async fn install_remote(app: tauri::AppHandle, url: String, pack_id: String) -> 
             f.write_all(&buf[..n]).map_err(|e| e.to_string())?;
             feito += n as u64;
             if total > 0 {
+                // pacotes grandes avisam a cada 5% (com o tamanho), os pequenos a cada 25%
+                let passo = if total > 200 * 1024 * 1024 { 5 } else { 25 };
                 let pct = feito * 100 / total;
-                if pct >= ultimo + 25 && pct < 100 {
-                    ultimo = pct - pct % 25;
-                    let _ = app.emit("progress", format!("Baixando… {ultimo}%"));
+                if pct >= ultimo + passo && pct < 100 {
+                    ultimo = pct - pct % passo;
+                    let msg = if total > 200 * 1024 * 1024 {
+                        format!("Baixando… {ultimo}% ({:.1} de {:.1} GB)", feito as f64 / 1e9, total as f64 / 1e9)
+                    } else {
+                        format!("Baixando… {ultimo}%")
+                    };
+                    let _ = app.emit("progress", msg);
                 }
             }
         }

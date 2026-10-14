@@ -337,7 +337,7 @@ const icone = key => `<img src="icones/${key}.png" alt="" width="72" height="72"
 const CAT = window.CATALOGO, POR_KEY = Object.fromEntries(CAT.produtos.map(p => [p.key, p]));
 const NO_APP = {
   // KITS: instalam no CapCut. Cada um é um produto próprio (Efeitos e LUTs entram como oferta no checkout dos Títulos).
-  legendas:{ sec:'kits' }, sons:{ sec:'kits' }, luts:{ sec:'kits', lut:true },
+  legendas:{ sec:'kits' }, sons:{ sec:'kits' }, luts:{ sec:'kits', lut:true }, assets:{ sec:'kits' },
   // FERRAMENTAS: abrem no navegador e no celular. As quatro primeiras seguem a ordem da jornada de um trabalho.
   briefing:{ sec:'ferramentas' }, preco:{ sec:'ferramentas' }, contrato:{ sec:'ferramentas' }, painel:{ sec:'ferramentas' }, mood:{ sec:'ferramentas' },
   // BÔNUS dos Títulos: não são vendidos e não têm card próprio. Aparecem DENTRO do card dos Títulos Dinâmicos.
