@@ -10,7 +10,7 @@
     'kit-freelancer': ['Kit Freelancer', '195949'], 'gerador-de-briefing': ['Gerador de Briefing', '195949'], 'quanto-cobrar': ['Quanto Cobrar?', '195949'],
     'gerador-de-contrato': ['Gerador de Contrato', '195949'], 'financas-e-demandas': ['Base Demandas', '195949'], 'caseup': ['CaseUp', '195639']
   };
-  var m = /^\/(conheca|oferta)\/([a-z0-9-]+)\//.exec(location.pathname), p = m && PRODUTOS[m[2]];
+  var m = /^\/(conheca|oferta|alunos)\/([a-z0-9-]+)\//.exec(location.pathname), p = m && PRODUTOS[m[2]];
   var dados = p ? { content_name: p[0], content_ids: [p[1]], content_type: 'product', content_category: 'Base FL' } : null;
   try {
     !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
