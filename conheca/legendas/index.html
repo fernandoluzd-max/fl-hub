@@ -408,26 +408,30 @@
   background:rgba(6,5,4,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
 #bfl-av.on{opacity:1;visibility:visible}
-#bfl-av .bx{position:relative;width:100%;max-width:460px;max-height:calc(100vh - 32px);overflow:auto;
+#bfl-av *{box-sizing:border-box}
+#bfl-av .bx{position:relative;width:100%;max-width:460px;max-height:calc(100vh - 32px);overflow-y:auto;overflow-x:hidden;
   background:linear-gradient(180deg,#1b1815,#141210);border:1px solid rgba(255,236,220,.14);border-radius:22px;
   padding:30px 26px 22px;color:#f4f0e4;font-family:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
   box-shadow:0 30px 80px -20px rgba(0,0,0,.8),0 0 0 1px rgba(255,138,102,.06),0 -20px 60px -30px rgba(255,138,102,.35) inset;
   transform:translateY(18px) scale(.96);transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
 #bfl-av.on .bx{transform:none}
 #bfl-av .bx:before{content:"";position:absolute;left:24px;right:24px;top:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--a),transparent)}
-#bfl-av .x{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,236,220,.12);background:transparent;color:#aaa59b;font-size:18px;cursor:pointer;line-height:1}
+#bfl-av .x{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,236,220,.12);background:transparent;color:#aaa59b;font-size:18px;cursor:pointer;line-height:1;z-index:2}
 #bfl-av .x:hover{color:#f4f0e4;border-color:rgba(255,236,220,.3)}
-#bfl-av .ey{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--a);margin:0 0 12px;display:flex;align-items:center;gap:8px}
-#bfl-av .ey i{width:7px;height:7px;border-radius:50%;background:var(--a);box-shadow:0 0 12px var(--a);animation:bflp 1.6s infinite}
+#bfl-av .tela{display:none}
+#bfl-av .tela.at{display:block;animation:bflin .3s ease}
+@keyframes bflin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#bfl-av .ey{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--a);margin:0 0 12px;display:flex;align-items:center;gap:8px;padding-right:40px}
+#bfl-av .ey i{width:7px;height:7px;border-radius:50%;background:var(--a);box-shadow:0 0 12px var(--a);animation:bflp 1.6s infinite;flex:none}
 @keyframes bflp{50%{opacity:.35}}
 #bfl-av h3{font-family:"Archivo",system-ui,sans-serif;font-weight:800;font-size:30px;line-height:1.05;letter-spacing:-.02em;margin:0 0 10px}
 #bfl-av h3 em{font-style:normal;color:var(--a)}
 #bfl-av .sub{color:#aaa59b;font-size:15px;line-height:1.5;margin:0 0 20px}
 #bfl-av .sub b{color:#f4f0e4}
 #bfl-av .lbl{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6f6a62;margin:0 0 8px}
-#bfl-av .row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
-#bfl-av .row.no{grid-template-columns:repeat(2,1fr);margin-bottom:22px}
-#bfl-av .ch{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px 10px;border-radius:14px;font-size:13px;font-weight:700;position:relative}
+#bfl-av .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 14px}
+#bfl-av .row.no{margin-bottom:22px}
+#bfl-av .ch{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px 10px;border-radius:14px;font-size:13px;font-weight:700;position:relative;text-align:center}
 #bfl-av .ch svg{width:26px;height:26px}
 #bfl-av .ok{background:rgba(88,214,201,.10);border:1px solid rgba(88,214,201,.35);color:#a8efe6}
 #bfl-av .ok:after{content:"✓";position:absolute;top:6px;right:8px;font-size:11px;color:var(--t2)}
@@ -440,44 +444,93 @@
   background:linear-gradient(var(--ahi) 0%,var(--a) 48%,var(--adp) 100%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 0 rgba(0,0,0,.16),0 14px 34px -12px rgba(255,138,102,.65);transition:transform .2s,filter .2s}
 #bfl-av .go:hover{transform:translateY(-1px);filter:brightness(1.05)}
+#bfl-av .go[disabled]{opacity:.6;cursor:default;transform:none}
 #bfl-av .bk{display:block;width:100%;margin-top:10px;padding:12px;background:transparent;border:1px solid rgba(255,236,220,.12);border-radius:12px;color:#aaa59b;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer}
 #bfl-av .bk:hover{color:#f4f0e4;border-color:rgba(255,236,220,.28)}
 #bfl-av .ft{text-align:center;margin:14px 0 0;font-size:12px;color:#6f6a62}
-@media (max-width:420px){#bfl-av .bx{padding:26px 18px 18px}#bfl-av h3{font-size:26px}#bfl-av .ch{font-size:12px}}
+#bfl-av .campo{display:block;width:100%;margin:0 0 6px;padding:14px 16px;border-radius:12px;border:1px solid rgba(255,236,220,.16);background:#0f0d0b;color:#f4f0e4;font-family:inherit;font-size:16px;outline:none;transition:border-color .2s,box-shadow .2s}
+#bfl-av .campo::placeholder{color:#6f6a62}
+#bfl-av .campo:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(255,138,102,.18)}
+#bfl-av .campo.err{border-color:#ff6b55}
+#bfl-av .msg{min-height:18px;margin:0 0 12px;font-size:13px;color:#ff9a86}
+#bfl-av .volta{display:block;margin:14px auto 0;background:none;border:0;color:#6f6a62;font-family:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+#bfl-av .volta:hover{color:#aaa59b}
+#bfl-av .okk{text-align:center;padding:18px 0 8px}
+#bfl-av .okk .ic{width:56px;height:56px;margin:0 auto 14px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(88,214,201,.12);border:1px solid rgba(88,214,201,.4);color:var(--t2);font-size:26px}
+#bfl-av .okk h3{font-size:26px;margin:0}
+@media (max-width:420px){#bfl-av .bx{padding:26px 18px 18px}#bfl-av h3{font-size:26px}#bfl-av .ch{font-size:12px}#bfl-av .go{font-size:14px;padding:15px 14px}}
 </style>
 
 <div id="bfl-av" role="dialog" aria-modal="true" aria-labelledby="bfl-av-t">
   <div class="bx">
-    <button class="x" aria-label="Fechar">×</button>
-    <p class="ey"><i></i>Antes de garantir o seu pack</p>
-    <h3 id="bfl-av-t">Funciona <em>só no computador.</em></h3>
-    <p class="sub">Os Títulos Dinâmicos rodam no <b>CapCut Desktop</b>. No celular e no iPad eles <b>não instalam</b>.</p>
+    <button class="x" type="button" aria-label="Fechar">×</button>
 
-    <p class="lbl">Funciona em</p>
-    <div class="row">
-      <div class="ch ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg>macOS</div>
-      <div class="ch ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Windows</div>
-      <div class="ch ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/><path d="M8 10l2 2-2 2M12 14h4"/></svg>Linux</div>
+    <!-- Tela 1: aviso -->
+    <div class="tela at" data-tela="aviso">
+      <p class="ey"><i></i>Antes de garantir o seu pack</p>
+      <h3 id="bfl-av-t">Funciona <em>só no computador.</em></h3>
+      <p class="sub">Os Títulos Dinâmicos rodam no <b>CapCut Desktop</b>. No celular e no iPad eles <b>não instalam</b>.</p>
+
+      <p class="lbl">Funciona em</p>
+      <div class="row">
+        <div class="ch ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg>macOS</div>
+        <div class="ch ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Windows</div>
+      </div>
+
+      <p class="lbl">Não funciona em</p>
+      <div class="row no">
+        <div class="ch ng"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg><span>Celular</span></div>
+        <div class="ch ng"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="2" width="16" height="20" rx="2.5"/><path d="M11 18h2"/></svg><span>iPad / tablet</span></div>
+      </div>
+
+      <button class="go" type="button" data-acao="confirmar">Entendi, vou usar no computador <span aria-hidden="true">→</span></button>
+      <button class="bk" type="button" data-acao="celular">Só edito no celular ou iPad</button>
+      <p class="ft">7 dias de garantia · Base FL</p>
     </div>
 
-    <p class="lbl">Não funciona em</p>
-    <div class="row no">
-      <div class="ch ng"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg><span>Celular</span></div>
-      <div class="ch ng"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="2" width="16" height="20" rx="2.5"/><path d="M11 18h2"/></svg><span>iPad / tablet</span></div>
+    <!-- Tela 2: captura de e-mail -->
+    <div class="tela" data-tela="email">
+      <p class="ey"><i></i>Base FL no celular</p>
+      <h3>Esse pack é só para computador.</h3>
+      <p class="sub">Quer ser avisado quando tiver algo da Base FL que funcione no celular?</p>
+      <form novalidate>
+        <input class="campo" type="email" name="email" required autocomplete="email" inputmode="email" placeholder="seu@email.com" aria-label="Seu e-mail">
+        <p class="msg" role="alert" aria-live="polite"></p>
+        <button class="go" type="submit">Me avisa</button>
+      </form>
+      <button class="volta" type="button" data-acao="voltar">Voltar</button>
     </div>
 
-    <button class="go">Entendi, vou usar no computador <span aria-hidden="true">→</span></button>
-    <button class="bk">Só edito no celular ou iPad</button>
-    <p class="ft">7 dias de garantia · Base FL</p>
+    <!-- Tela 3: confirmação -->
+    <div class="tela" data-tela="ok">
+      <div class="okk" role="status" aria-live="polite">
+        <div class="ic">✓</div>
+        <h3>Pronto, você vai ser avisado.</h3>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
+// TODO: definir para onde vai o e-mail (ainda não existe captura de leads no projeto).
+// Enquanto isso, esta função não envia o e-mail para lugar nenhum.
+function salvarLeadCelular(email){
+  return Promise.resolve();
+}
 (function(){
   var m=document.getElementById('bfl-av'); if(!m) return;
-  var alvo=null, liberado=false;
-  function abrir(a){alvo=a;m.classList.add('on');document.documentElement.style.overflow='hidden';setTimeout(function(){m.querySelector('.go').focus()},50);}
-  function fechar(){m.classList.remove('on');document.documentElement.style.overflow='';alvo=null;}
+  var alvo=null, liberado=false, timer=null;
+  var form=m.querySelector('form'), campo=m.querySelector('.campo'), msg=m.querySelector('.msg'), enviar=form.querySelector('.go');
+  function px(nome){ try{ if(typeof window.fbq==='function') window.fbq('trackCustom',nome); }catch(e){} }
+  function tela(nome){
+    m.querySelectorAll('.tela').forEach(function(t){ t.classList.toggle('at', t.getAttribute('data-tela')===nome); });
+    var foco = nome==='aviso' ? m.querySelector('[data-acao="confirmar"]') : nome==='email' ? campo : null;
+    if(foco) setTimeout(function(){ foco.focus(); },60);
+  }
+  function limpar(){ campo.value=''; campo.classList.remove('err'); msg.textContent=''; enviar.disabled=false; }
+  function abrir(a){ alvo=a; limpar(); tela('aviso'); m.classList.add('on'); document.documentElement.style.overflow='hidden'; }
+  function fechar(){ clearTimeout(timer); m.classList.remove('on'); document.documentElement.style.overflow=''; alvo=null; setTimeout(function(){ tela('aviso'); limpar(); },260); }
+
   // Só pega botões que vão pro checkout da Greenn. Os de rolar a página não são afetados.
   document.addEventListener('click',function(e){
     var a=e.target.closest && e.target.closest('a[href*="greenn.com.br"]');
@@ -486,11 +539,27 @@
     e.preventDefault(); e.stopImmediatePropagation();
     abrir(a);
   },true);
-  m.querySelector('.go').addEventListener('click',function(){
-    var a=alvo; fechar(); if(!a) return;
+
+  m.querySelector('[data-acao="confirmar"]').addEventListener('click',function(){
+    var a=alvo; px('AvisoComputadorConfirmou'); fechar(); if(!a) return;
     liberado=true; a.click(); // repete o clique original, agora liberado
   });
-  m.querySelector('.bk').addEventListener('click',fechar);
+  m.querySelector('[data-acao="celular"]').addEventListener('click',function(){ px('AvisoSoCelular'); tela('email'); });
+  m.querySelector('[data-acao="voltar"]').addEventListener('click',function(){ limpar(); tela('aviso'); });
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var email=(campo.value||'').trim();
+    if(!email){ campo.classList.add('err'); msg.textContent='Digite seu e-mail.'; campo.focus(); return; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ campo.classList.add('err'); msg.textContent='Esse e-mail não parece válido. Confere?'; campo.focus(); return; }
+    campo.classList.remove('err'); msg.textContent=''; enviar.disabled=true;
+    Promise.resolve(salvarLeadCelular(email)).catch(function(){}).then(function(){
+      px('LeadCelular'); tela('ok');
+      timer=setTimeout(fechar,2000);
+    });
+  });
+  campo.addEventListener('input',function(){ if(campo.classList.contains('err')){ campo.classList.remove('err'); msg.textContent=''; } });
+
   m.querySelector('.x').addEventListener('click',fechar);
   m.addEventListener('click',function(e){ if(e.target===m) fechar(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape' && m.classList.contains('on')) fechar(); });
