@@ -134,6 +134,19 @@ h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;back
 .pal{display:flex;border-radius:9px;overflow:hidden;height:26px}
 .pal i{flex:1;transition:background .25s}
 .cenas{margin-top:16px}
+.perfil{margin:18px 0 4px}.perfil .mono{display:block;margin-bottom:9px}.pfs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pf{font:inherit;text-align:left;cursor:pointer;padding:10px 12px;border-radius:13px;border:1px solid var(--line);background:var(--panel);color:inherit}
+.pf b{display:block;font-size:14px}.pf small{display:block;color:var(--mute);font-size:11.5px;margin-top:2px;line-height:1.3}
+.pf.on{background:linear-gradient(var(--panel2),var(--panel2)) padding-box,var(--grad) border-box;border:1.5px solid transparent}
+.pfn{color:var(--mute);font-size:12.5px;margin-top:8px;min-height:1em}
+@media (max-width:640px){.pfs{grid-template-columns:1fr 1fr}}
+.scp{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.scp .tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}.scp .tabs button{font:inherit;font-size:12px;padding:6px 10px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--mute);cursor:pointer}
+.scp .tabs button.on{color:#111;background:var(--grad);border-color:transparent}
+.scp .par{display:grid;grid-template-columns:1fr 1fr;gap:10px}.scp figure{margin:0}.scp canvas{width:100%;display:block;border-radius:10px;background:#000;image-rendering:auto}
+.scp figcaption{font-size:11px;color:var(--mute);margin-top:4px;font-family:var(--m);letter-spacing:.08em;text-transform:uppercase}
+.qa{margin-top:12px;display:grid;gap:6px}.qa div{display:flex;gap:8px;align-items:baseline;font-size:13px}.qa b{flex:none;width:18px;text-align:center}.qa small{color:var(--mute);margin-left:auto;font-family:var(--m);font-size:11px}
+@media (max-width:640px){.scp .par{grid-template-columns:1fr}}
 .cenas h3{font-size:14px;font-weight:700;margin-bottom:4px}
 .cenas p{color:var(--mute);font-size:13px;margin-bottom:10px}
 .cg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:min(100%,calc(var(--mh) * var(--ar) * 1.5));}
@@ -280,6 +293,45 @@ function rgb(L, a, b){   // Lab -> sRGB. Cor que não cabe na tela perde satura�
   return [gam(clamp(v[0], 0, 1)), gam(clamp(v[1], 0, 1)), gam(clamp(v[2], 0, 1))];
 }
 
+// ===================== GRAVADO EM LOG =====================
+// Converte o sinal Log da câmera para imagem normal (Rec.709) com as fórmulas oficiais publicadas pelos fabricantes:
+// curva Log -> luz da cena -> cores da câmera para Rec.709 -> curva de exibição suave (sem estourar) -> tela.
+// O valor que o navegador entrega é o sinal do arquivo (faixa de vídeo já esticada para 0..1).
+const PERFIS = {
+  normal: { nome:'Normal', curto:'Normal', dica:'Gravou no modo normal da câmera ou do celular' },
+  applelog: { nome:'Apple Log (iPhone)', curto:'Apple Log', dica:'iPhone 15 Pro em diante',
+    dec: v => { const R0 = -.05641088, sg = 47.28711236, Pt = sg * (.01 - R0) ** 2; return v >= Pt ? Math.pow(2, (v - .69336945) / .08550479) - .00964052 : v >= 0 ? Math.sqrt(v / sg) + R0 : R0; },
+    M: [[1.660491, -.58764114, -.07284986], [-.12455047, 1.1328999, -.00834942], [-.01815076, -.1005789, 1.11872966]] },
+  slog3: { nome:'Sony S-Log3 · S-Gamut3.Cine', curto:'S-Log3', dica:'Sony A7, FX3, FX30, ZV-E1…',
+    dec: v => { const y = (64 + 876 * v) / 1023; return y >= 171.2102946929 / 1023 ? Math.pow(10, (y * 1023 - 420) / 261.5) * .19 - .01 : (y * 1023 - 95) * .01125 / (171.2102946929 - 95); },
+    M: [[1.62694741, -.54013854, -.08680887], [-.17851553, 1.41794093, -.2394254], [-.04443611, -.19591997, 1.24035608]] },
+  slog2: { nome:'Sony S-Log2 · S-Gamut', curto:'S-Log2', dica:'Sony A7 III, A6500 e anteriores',
+    dec: v => (v >= .030001222851889303 ? Math.pow(10, (v - .646596) / .432699) - .037584 : (v - .030001222851889303) / 5) * .9 * 219 / 155,
+    M: [[1.87791513, -.79416876, -.08374637], [-.17680698, 1.35099962, -.17419264], [-.02620113, -.14842226, 1.17462339]] },
+};
+let PERFIL = (() => { const p = store.get('fl_mood_perfil'); return PERFIS[p] && p !== 'normal' ? p : null; })();
+const exibe = x => { x = Math.max(0, x) * .6; return clamp(x * (2.51 * x + .03) / (x * (2.43 * x + .59) + .14), 0, 1); };   // curva de exibição com roll-off (cinza 18% vai a ~41%)
+function entrada(r, g, b, o){   // sinal do arquivo -> imagem normal (sRGB 0..1)
+  const P = PERFIL && PERFIS[PERFIL]; if (!P){ o[0] = r; o[1] = g; o[2] = b; return o; }
+  const lr = P.dec(r), lg = P.dec(g), lb = P.dec(b), M = P.M;
+  let R = M[0][0]*lr + M[0][1]*lg + M[0][2]*lb, G = M[1][0]*lr + M[1][1]*lg + M[1][2]*lb, B = M[2][0]*lr + M[2][1]*lg + M[2][2]*lb;
+  // cor que não cabe no Rec.709: perde saturação em direção ao cinza da mesma luz (mantém o tom, sem canal negativo)
+  const Y = .2126*R + .7152*G + .0722*B, mn = Math.min(R, G, B);
+  if (mn < 0 && Y > 0){ const t = Y / (Y - mn); R = Y + (R - Y) * t; G = Y + (G - Y) * t; B = Y + (B - Y) * t; }
+  o[0] = gam(exibe(R)); o[1] = gam(exibe(G)); o[2] = gam(exibe(B)); return o;
+}
+function paraNormal(cv){   // canvas em Log -> canvas normal (para mostrar o "antes" de verdade)
+  if (!PERFIL) return cv;
+  const c = document.createElement('canvas'); c.width = cv.width; c.height = cv.height; const g = c.getContext('2d', { willReadFrequently:true });
+  g.drawImage(cv, 0, 0); const im = g.getImageData(0, 0, c.width, c.height), d = im.data, o = [0,0,0];
+  for (let i = 0; i < d.length; i += 4){ entrada(d[i] / 255, d[i+1] / 255, d[i+2] / 255, o); d[i] = o[0] * 255 + .5; d[i+1] = o[1] * 255 + .5; d[i+2] = o[2] * 255 + .5; }
+  g.putImageData(im, 0, 0); return c;
+}
+function pareceLog(cvs){   // vídeo muito lavado (pretos altos, pouco contraste e pouca cor) costuma ser Log
+  const s = amostra(cvs, 120), L = Float32Array.from(canal(s.P, 0)).sort(); let c = 0; for (let i = 0; i < s.P.length; i += 3) c += Math.hypot(s.P[i+1], s.P[i+2]);
+  const p2 = pct(L, 2), p98 = pct(L, 98); return p98 < 72 && p98 - p2 < 62 && c / (s.P.length / 3) < 11;   // só sugere: quem escolhe é a pessoa
+}
+
 // ===================== imagens e vídeos =====================
 const ehVideo = f => /^video\//.test(f.type) || /\.(mp4|mov|m4v|webm|mkv)$/i.test(f.name || '');
 function carrega(file){
@@ -351,12 +403,41 @@ function paleta(cv, k = 5){   // k-means simples: as cores principais
 //    específicos (verdes, laranjas, azuis) que as etapas 1 e 2 não pegam.
 // Tudo depende só da cor de entrada, então cabe inteiro no arquivo .cube.
 // =====================================================================
-function amostra(cvs, lado){   // pixels de uma ou mais imagens -> Lab e RGB
+function amostra(cvs, lado, log = false){   // pixels de uma ou mais imagens -> Lab e RGB (C = sinal original; P = cor real, já convertida se for Log)
   const partes = []; let n = 0;
   for (const cv of cvs){ const s = paraCanvas(cv, lado), d = s.getContext('2d', { willReadFrequently:true }).getImageData(0, 0, s.width, s.height).data; partes.push(d); n += d.length / 4; }
   const P = new Float32Array(n * 3), C = new Float32Array(n * 3); let j = 0;
-  for (const d of partes) for (let i = 0; i < d.length; i += 4){ const r = d[i]/255, g = d[i+1]/255, b = d[i+2]/255, v = lab(r, g, b); C[j] = r; C[j+1] = g; C[j+2] = b; P[j] = v[0]; P[j+1] = v[1]; P[j+2] = v[2]; j += 3; }
-  return { P, C, n };
+  const _e = [0,0,0];
+  for (const d of partes) for (let i = 0; i < d.length; i += 4){ const r = d[i]/255, g = d[i+1]/255, b = d[i+2]/255, v = log && PERFIL ? lab(...entrada(r, g, b, _e)) : lab(r, g, b); C[j] = r; C[j+1] = g; C[j+2] = b; P[j] = v[0]; P[j+1] = v[1]; P[j+2] = v[2]; j += 3; }
+  return { P, C, n, minis: cvs.map(miniatura) };
+}
+// miniatura em ordem de claridade (não muda com a cor/contraste): serve para saber se é a mesma cena
+function miniatura(cv){
+  const W2 = 24, H2 = 14, c = document.createElement('canvas'); c.width = W2; c.height = H2;
+  const g = c.getContext('2d', { willReadFrequently:true }); g.drawImage(cv, 0, 0, W2, H2);
+  const d = g.getImageData(0, 0, W2, H2).data, v = new Float32Array(W2 * H2);
+  for (let i = 0; i < v.length; i++) v[i] = d[i*4]*.3 + d[i*4+1]*.59 + d[i*4+2]*.11 + i * 1e-6;
+  const ix = Array.from(v.keys()).sort((x, y) => v[x] - v[y]), r = new Float32Array(v.length);
+  ix.forEach((k, j) => r[k] = j / (v.length - 1) - .5);
+  let s = 0; for (const x of r) s += x * x; s = Math.sqrt(s) || 1; for (let i = 0; i < r.length; i++) r[i] /= s;
+  return r;
+}
+function mesmaCena(S, R){   // 0 = cenas diferentes, 1 = mesma cena (mesmo enquadramento)
+  let mx = -1;
+  for (const a of S.minis || []) for (const b of R.minis || []){ let t = 0; for (let i = 0; i < a.length; i++) t += a[i] * b[i]; if (t > mx) mx = t; }
+  return { bruto: mx, s: suave(SIM.de, SIM.ate, mx) };
+}
+// quadros da referência muito diferentes dos outros (um close de celular no meio de um filme, por exemplo) ficam de fora
+function filtraQuadros(cvs){
+  if (cvs.length < 3) return cvs;
+  const st = cvs.map(cv => { const s = amostra([cv], 64); const L = [], A = [], B = []; for (let i = 0; i < s.P.length; i += 3){ L.push(s.P[i]); A.push(s.P[i+1]); B.push(s.P[i+2]); }
+    const q = v => { const x = Float32Array.from(v).sort(); return [x[(x.length*.1)|0], x[(x.length*.5)|0], x[(x.length*.9)|0]]; };
+    return [...q(L), ...q(A).map(x => x * 1.5), ...q(B).map(x => x * 1.5)]; });
+  const dist = (x, y) => Math.hypot(...x.map((v, i) => v - y[i]));
+  const d = st.map((x, i) => { const o = st.map((y, j) => j === i ? Infinity : dist(x, y)).sort((a, b) => a - b); return o[0]; });
+  const md = [...d].sort((a, b) => a - b)[d.length >> 1];
+  const fica = cvs.filter((_, i) => !(d[i] > Math.max(12, 2.5 * md)));
+  return fica.length >= Math.ceil(cvs.length / 2) ? fica : cvs;
 }
 function quantis(v, K){
   const s = Float32Array.from(v).sort(), n = s.length, q = new Float32Array(K + 1);
@@ -397,23 +478,46 @@ function limita2([p, q, r], mn, mx){   // segura o quanto a cor pode esticar ou 
   const n = Math.hypot(vx, vy); vx /= n; vy /= n;
   return [l1*vx*vx + l2*(1 - vx*vx), (l1 - l2)*vx*vy, l1*vy*vy + l2*(1 - vy*vy)];
 }
-const REFINO = { voltas:6, passo:.55, forca:.8, teto:16 }, GANHO_MAX = 3.2, LMAX = 2.2, CMAX = 2;
+const REFINO = { voltas:6, passo:.5, forca:.6, teto:12 }, GANHO_MAX = 2.4, LMAX = 1.7, CMAX = 1.6, LMIN = .55;
 let M = null;   // tudo que foi medido
 function prepara(S, R){
   const K = 64, UU = Float32Array.from({ length:K + 1 }, (_, i) => i / K);
   const qs = quantis(canal(S.P, 0), K), qr = quantis(canal(R.P, 0), K);
   // 1) curva de luz
   const y = new Float32Array(K + 1), m = K >> 1; y[m] = qr[m];
-  for (let i = m + 1; i <= K; i++){ const dx = qs[i] - qs[i-1]; y[i] = y[i-1] + clamp(qr[i] - qr[i-1], .4 * dx, LMAX * dx); }
-  for (let i = m - 1; i >= 0; i--){ const dx = qs[i+1] - qs[i]; y[i] = y[i+1] - clamp(qr[i+1] - qr[i], .4 * dx, LMAX * dx); }
+  for (let i = m + 1; i <= K; i++){ const dx = qs[i] - qs[i-1]; y[i] = y[i-1] + clamp(qr[i] - qr[i-1], LMIN * dx, LMAX * dx); }
+  for (let i = m - 1; i >= 0; i--){ const dx = qs[i+1] - qs[i]; y[i] = y[i+1] - clamp(qr[i+1] - qr[i], LMIN * dx, LMAX * dx); }
   const xs = [0, ...qs, 100], ys = [Math.max(0, y[0] - qs[0]), ...y, Math.min(100, y[K] + (100 - qs[K]))];
   for (let i = 1; i < xs.length; i++) if (xs[i] < xs[i-1]) xs[i] = xs[i-1];
   const TL = new Float32Array(101); for (let i = 0; i <= 100; i++) TL[i] = interp(xs, ys, i);
   alisa(TL, 4); for (let i = 0; i <= 100; i++) TL[i] = clamp(TL[i], 0, 100);
+  { const pre = Math.min(qr[0], 8), bra = Math.max(qr[K], 92);   // ponta preta e branca da referência
+    for (let i = 0; i <= 100; i++){ const lo = pre + (i / 100) * 0 , t = i / 100;
+      // protege as pontas: perto do preto e do branco a curva volta suavemente para a original (sem estourar nem esmagar detalhe)
+      const wpe = 1 - suave(0, 18, i), wbr = suave(82, 100, i), w = Math.max(wpe, wbr) * .6;
+      TL[i] = TL[i] * (1 - w) + i * w; } }
   // 2) cor por faixa de luz (transporte ótimo linear em cada faixa)
   const zs = zonas(S.P, qs, UU), zr = zonas(R.P, qr, UU);
   const T = zs.map((s, k) => { const r = zr[k], A = raiz2([s.caa, s.cab, s.cbb]), Ai = inv2(A); return limita2(sanduiche(Ai, raiz2(sanduiche(A, [r.caa, r.cab, r.cbb]))), .45, CMAX); });
   M = { qs, UU, TL, zs, zr, T, ref:[] };
+  { const cl = X => { let k = 0; for (let i = 0; i < X.length; i += 3){ const f = x => x >= .996 || x <= .004; if (f(X[i]) || f(X[i+1]) || f(X[i+2])) k++; } return 100 * k / (X.length / 3); };
+    const cm = P => { let t = 0; for (let i = 0; i < P.length; i += 3) t += Math.hypot(P[i+1], P[i+2]); return t / (P.length / 3); };
+    M.refClip = cl(R.C) - cl(S.C); M.refSat = cm(R.P) / Math.max(cm(S.P), 1e-6); }
+  { const sc = mesmaCena(S, R); M.cena = sc; M.s = sc.s; M.look = preparaLook(S, R); }
+  // vídeo "lavado" (log, sem cor) precisa ganhar bem mais saturação que um vídeo já colorido: o limite acompanha isso
+  { const cm = P => { const n = P.length / 3, c = new Float32Array(n); for (let i = 0; i < n; i++) c[i] = Math.hypot(P[i*3+1], P[i*3+2]); c.sort(); return c[n >> 1] || 1; };
+    const razao = cm(R.P) / Math.max(cm(S.P), 2);
+    Object.assign(PROT, PROT_BASE, { satMax: clamp(PROT_BASE.satMax * Math.pow(Math.max(1, razao), .8), PROT_BASE.satMax, 3.2) });
+    { const s = suave(SIM.de, SIM.ate, mesmaCena(S, R).bruto); PROT.giro *= 1 + 1.5 * s; PROT.luz *= 1 + 1.2 * s; PROT.satMax = 1 + (PROT.satMax - 1) * (1 + s); PROT.satMin *= 1 - .4 * s; PROT.tinta *= 1 + s; }
+    M.prot = { ...PROT }; }
+  // PELE: se as duas imagens têm pele, a pele do seu vídeo vai para o tom de pele da referência
+  // (é o que colorista faz: o resto da imagem muda, mas a pele fica bonita e no tom da referência)
+  { const est = P => { const n = P.length / 3, cs = [], hs = []; let w = 0;
+      for (let i = 0; i < n; i++){ const L = P[i*3], A = P[i*3+1], B = P[i*3+2], k = peleW(L, A, B); w += k; if (k > .5){ cs.push(Math.hypot(A, B)); hs.push(Math.atan2(B, A)); } }
+      const q = v => quantis(Float32Array.from(v.length ? v : [0]), 16);
+      return { f: w / n, qc: q(cs), qh: q(hs) }; };
+    const ps = est(S.P), pr = est(R.P);
+    M.pele = (ps.f > .015 && pr.f > .015) ? { ps, pr } : null; }
   // 3) refino: aproxima a distribuição inteira, com passos pequenos e suaves
   const ps = Math.max(1, Math.floor(S.n / 9000)), pr = Math.max(1, Math.floor(R.n / 9000));
   const ns = Math.ceil(S.n / ps), nr = Math.ceil(R.n / pr), X = new Float32Array(ns * 3), Y = new Float32Array(nr * 3), o = [0,0,0];
@@ -443,12 +547,16 @@ function prepara(S, R){
     }
   }
   // 4) grava o resultado em cada ponto da grade da LUT e suaviza a grade (evita degraus na imagem)
-  const T3 = N * N * N, L0 = new Float32Array(T3 * 3), D = new Float32Array(T3 * 3), W = new Float32Array(T3); let i = 0;
+  const T3 = N * N * N, L0 = new Float32Array(T3 * 3), D = new Float32Array(T3 * 3), W = new Float32Array(T3), og = [0,0,0]; let i = 0;
   for (let b = 0; b < N; b++) for (let g = 0; g < N; g++) for (let r = 0; r < N; r++){
-    const v = lab(r / (N-1), g / (N-1), b / (N-1)); completo(v[0], v[1], v[2], o);
+    const v = PERFIL ? lab(...entrada(r / (N-1), g / (N-1), b / (N-1), [0,0,0])) : lab(r / (N-1), g / (N-1), b / (N-1)); look(v[0], v[1], v[2], og); completo(v[0], v[1], v[2], o);
+    for (let k = 0; k < 3; k++) o[k] = og[k] + M.s * (o[k] - og[k]);
+    // mesma cena: a cópia completa é a resposta certa, as proteções saem aos poucos; outra cena: proteção inteira
+    const livre = [o[0], o[1], o[2]]; protege(v, o); pele(v, o);
+    const ks = M.s * M.s; for (let k = 0; k < 3; k++) o[k] += ks * (livre[k] - o[k]);
     L0[i*3] = v[0]; L0[i*3+1] = v[1]; L0[i*3+2] = v[2]; D[i*3] = o[0] - v[0]; D[i*3+1] = o[1] - v[1]; D[i*3+2] = o[2] - v[2];
     const h = Math.atan2(v[2], v[1]) * 180 / Math.PI, C = Math.hypot(v[1], v[2]);   // tons de pele
-    W[i] = suave(8, 28, h) * (1 - suave(62, 82, h)) * suave(8, 18, C) * (1 - suave(55, 75, C)) * suave(22, 38, v[0]) * (1 - suave(88, 96, v[0]));
+    W[i] = suave(10, 26, h) * (1 - suave(60, 76, h)) * suave(7, 14, C) * (1 - suave(36, 48, C)) * suave(22, 38, v[0]) * (1 - suave(88, 96, v[0]));
     i++;
   }
   // suaviza a grade; se alguma região ainda mudar de cor rápido demais (o que daria degraus e manchas), suaviza de novo só o necessário
@@ -476,6 +584,7 @@ function prepara(S, R){
   borra(); M.passes = 1; M.g0 = ganho();
   while (M.passes < 3 && ganho() > GANHO_MAX){ borra(); M.passes++; }
   M.g1 = ganho();
+  if (M.pele) W.fill(0); else if (M.s > 0) for (let k = 0; k < W.length; k++) W[k] *= 1 - M.s;
   M.L0 = L0; M.D = D; M.W = W;
   // pontos de controle para medir a semelhança
   const pm = Math.max(1, Math.floor(S.n / 5000)), nm = Math.ceil(S.n / pm); M.amC = new Float32Array(nm * 3); M.amL = new Float32Array(nm * 3);
@@ -486,12 +595,122 @@ function prepara(S, R){
   M.antes = nota(distancia(M.amL));
 }
 const _w = new Float64Array(ZC.length);
+// ===== LOOK (vale entre cenas diferentes) =====
+// Quando a referência é de OUTRA cena, copiar a distribuição inteira de cores copia também o conteúdo dela
+// (a parede, a roupa, o céu dela). Aqui se copia só o que é do tratamento, do jeito que um colorista faz:
+//  - luz: ponto de preto da referência, o formato da curva (contraste) e só parte da exposição; brancos nunca viram cinza
+//  - cor: o "ambiente" de cada faixa de luz (sem contar pele e sem contar luzes/objetos muito coloridos)
+//  - saturação por faixa, com limites
+//  - neutros protegidos: branco quase não tinge, cinza tinge pouco, sombra recebe o look; tudo com teto
+//  - cada cor só gira o tom até um limite; pele vai para a pele da referência
+const SIM = { de:.8, ate:.95 };
+const LOOK = { kTom:.8, kExpo:.5, maxExpo:8, capBranco:8, capBrancoLowKey:8, kCor:1.2, capCor:16, satLo:.45, satHi:1.35, kSatMenos:1, kSatMais:.8, neuBranco:.75, neuMeio:.35, capNeutro:9, giro:25, acento:75 };
+function pchip(xs, ys){
+  const n = xs.length, h = [], d = [], m = new Array(n).fill(0);
+  for (let i = 0; i < n - 1; i++){ h.push(Math.max(1e-6, xs[i+1] - xs[i])); d.push((ys[i+1] - ys[i]) / h[i]); }
+  m[0] = d[0]; m[n-1] = d[n-2];
+  for (let i = 1; i < n - 1; i++){ if (d[i-1] * d[i] <= 0) m[i] = 0; else { const w1 = 2*h[i] + h[i-1], w2 = h[i] + 2*h[i-1]; m[i] = (w1 + w2) / (w1 / d[i-1] + w2 / d[i]); } }
+  return x => { if (x <= xs[0]) return ys[0]; if (x >= xs[n-1]) return ys[n-1];
+    let i = 0; while (x > xs[i+1]) i++; const t = (x - xs[i]) / h[i], t2 = t*t, t3 = t2*t;
+    return (2*t3 - 3*t2 + 1) * ys[i] + (t3 - 2*t2 + t) * h[i] * m[i] + (-2*t3 + 3*t2) * ys[i+1] + (t3 - t2) * h[i] * m[i+1]; };
+}
+function pct(sorted, p){ const x = p / 100 * (sorted.length - 1), j = Math.floor(x), f = x - j; return sorted[j] + ((j + 1 < sorted.length ? sorted[j+1] : sorted[j]) - sorted[j]) * f; }
+function zonasLook(P, xs){
+  const Z = ZC.length, n = P.length / 3, w = new Float64Array(Z), grupos = Array.from({ length:Z }, () => []);
+  for (let i = 0; i < n; i++){
+    const L = P[i*3], a = P[i*3+1], b = P[i*3+2]; if (peleW(L, a, b) > .3) continue;
+    pesosZona(posicao(xs, UU65, L), w);
+    for (let k = 0; k < Z; k++) if (w[k] > .25) grupos[k].push([a, b, Math.hypot(a, b), w[k]]);
+  }
+  return grupos.map(g => {
+    if (g.length < 40) return null;
+    const cs = g.map(x => x[2]).sort((x, y) => x - y), lim = pct(cs, LOOK.acento);
+    let sa = 0, sb = 0, sw = 0; for (const x of g) if (x[2] <= lim){ sa += x[0] * x[3]; sb += x[1] * x[3]; sw += x[3]; }
+    return { a: sa / sw, b: sb / sw, c: pct(cs, 50) };
+  });
+}
+const UU65 = Float32Array.from({ length:65 }, (_, i) => i / 64);
+function preparaLook(S, R){
+  const p = LOOK, ls = Float32Array.from(canal(S.P, 0)).sort(), lr = Float32Array.from(canal(R.P, 0)).sort();
+  const PP = [.4, 3, 10, 25, 50, 75, 90, 97, 99.6], qs = PP.map(x => pct(ls, x)), qr = PP.map(x => pct(lr, x));
+  const ex = clamp((qr[4] - qs[4]) * p.kExpo, -p.maxExpo, p.maxExpo);
+  const qo = qs.map((x, i) => x + ex + p.kTom * ((qr[i] - qr[4]) - (x - qs[4])));
+  for (let i = 1; i < 8; i++) qo[i] = qs[i] + clamp(qo[i] - qs[i], -p.maxExpo - 4, p.maxExpo + 4);
+  // referência de luz baixa (low-key): os brancos podem descer mais (roll-off de cinema), mas continuam brancos
+  const capB = p.capBranco + p.capBrancoLowKey * suave(8, 30, qs[8] - qr[8]);
+  qo[8] = Math.max(qo[8], qs[8] - capB); qo[7] = Math.max(qo[7], qs[7] - capB * 1.2);
+  qo[0] = qr[0];
+  let xs = [0, ...qs, 100], ys = [Math.max(0, qo[0] - qs[0]), ...qo, qo[8] + (100 - qs[8]) * .7];
+  const X = [], Y = []; xs.forEach((x, i) => { if (!X.length || x > X[X.length-1] + .3){ X.push(x); Y.push(ys[i]); } });
+  for (let i = 1; i < Y.length; i++) Y[i] = Math.max(Y[i], Y[i-1]);
+  for (let r = 0; r < 3; r++) for (let i = 1; i < X.length; i++){ const dx = X[i] - X[i-1]; Y[i] = Y[i-1] + clamp(Y[i] - Y[i-1], .35 * dx, 2.2 * dx); }
+  const f = pchip(X, Y), TG = new Float32Array(101);
+  for (let i = 0; i <= 100; i++) TG[i] = clamp(f(i), 0, 100);
+  for (let i = 1; i <= 100; i++) if (TG[i] < TG[i-1]) TG[i] = TG[i-1];
+  const xS = quantis(canal(S.P, 0), 64), xR = quantis(canal(R.P, 0), 64);
+  const Zs = zonasLook(S.P, xS), Zr = zonasLook(R.P, xR);
+  const d = Zs.map((s, k) => { const r = Zr[k]; if (!s || !r) return [0, 0];
+    let da = r.a - s.a, db = r.b - s.b; const n = Math.hypot(da, db), f2 = n > 1e-6 ? p.capCor * Math.tanh(n / p.capCor) / n * p.kCor : 0; return [da * f2, db * f2]; });
+  // tirar saturação é seguro (referência dessaturada = resultado dessaturado); pôr saturação tem teto mais baixo
+  let sat = Zs.map((s, k) => { const r = Zr[k]; if (!s || !r) return 0; const x = Math.log(clamp((r.c + 1) / (s.c + 1), p.satLo, p.satHi)); return x * (x < 0 ? p.kSatMenos : p.kSatMais); });
+  sat = sat.map((x, k) => .25 * sat[Math.max(0, k-1)] + .5 * x + .25 * sat[Math.min(sat.length-1, k+1)]);
+  return { TG, xS, d, sat };
+}
+const _wl = new Float64Array(5);
+function look(L, a, b, o){
+  const G = M.look, p = LOOK, Lc = clamp(L, 0, 100), j = Math.min(99, Lc | 0), Lo = G.TG[j] + (G.TG[j+1] - G.TG[j]) * (Lc - j);
+  pesosZona(posicao(G.xS, UU65, L), _wl);
+  let da = 0, db = 0, ls = 0; for (let k = 0; k < 5; k++){ da += _wl[k] * G.d[k][0]; db += _wl[k] * G.d[k][1]; ls += _wl[k] * G.sat[k]; }
+  const s = Math.exp(ls), C = Math.hypot(a, b), neu = 1 - suave(4, 14, C);
+  const kd = 1 - neu * (p.neuBranco * suave(55, 90, Lo) + p.neuMeio * suave(20, 50, Lo) * (1 - suave(55, 90, Lo)));
+  da *= kd; db *= kd; const nn = Math.hypot(da, db), capn = p.capNeutro + (p.capCor - p.capNeutro) * suave(4, 14, C);
+  if (nn > 1e-6){ const f = capn * Math.tanh(nn / capn) / nn; da *= f; db *= f; }
+  let a2 = a * s + da, b2 = b * s + db;
+  const hi = Math.atan2(b, a); let dh = Math.atan2(b2, a2) - hi; dh = Math.atan2(Math.sin(dh), Math.cos(dh));
+  const lim = p.giro * Math.PI / 180, k = suave(6, 18, C), h2 = hi + k * lim * Math.tanh(dh / lim) + (1 - k) * dh, C2 = Math.hypot(a2, b2);
+  o[0] = Lo; o[1] = C2 * Math.cos(h2); o[2] = C2 * Math.sin(h2);
+}
 function base(L, a, b, o){   // etapas 1 e 2
   pesosZona(posicao(M.qs, M.UU, L), _w);
   let a2 = 0, b2 = 0;
-  for (let k = 0; k < ZC.length; k++){ const s = M.zs[k], r = M.zr[k], t = M.T[k], da = a - s.ma, db = b - s.mb; a2 += _w[k] * (r.ma + t[0]*da + t[1]*db); b2 += _w[k] * (r.mb + t[1]*da + t[2]*db); }
+  for (let k = 0; k < ZC.length; k++){ const s = M.zs[k], r = M.zr[k], t = M.T[k], da = a - s.ma, db = b - s.mb, dn = Math.hypot(da, db), q = suave(1.5, 7, dn), ta = t[0]*da + t[1]*db, tb = t[1]*da + t[2]*db; a2 += _w[k] * (r.ma + da + q * (ta - da)); b2 += _w[k] * (r.mb + db + q * (tb - db)); }
   const Lc = clamp(L, 0, 100), j = Math.min(99, Lc | 0);
   o[0] = M.TL[j] + (M.TL[j+1] - M.TL[j]) * (Lc - j); o[1] = a2; o[2] = b2;
+}
+// PROTEÇÃO: a cor nova pode mudar, mas sem virar outra coisa.
+// Cada cor do seu vídeo só gira o tom até um limite (o verde continua verde, a pele continua pele),
+// a saturação só cresce até um limite e a luz não pula demais. É isso que evita o resultado estourado,
+// as manchas e os degraus quando a referência é muito diferente do seu vídeo.
+const PROT = { giro:32, satMax:1.7, satMin:.5, tinta:10, luz:22 }, PROT_BASE = { ...PROT };
+const suaveLimite = (x, t) => t * Math.tanh(x / t);
+function protege(v, o){
+  const Ci = Math.hypot(v[1], v[2]), Co = Math.hypot(o[1], o[2]);
+  // luz
+  o[0] = v[0] + suaveLimite(o[0] - v[0], PROT.luz);
+  if (Co < 1e-6) return;
+  const hi = Math.atan2(v[2], v[1]), ho = Math.atan2(o[2], o[1]);
+  // quanto a cor de entrada tem "tom" de verdade (cinza quase não tem: aí vale só um leve tingimento)
+  const k = suave(3, 12, Ci);
+  let dh = ho - hi; dh = Math.atan2(Math.sin(dh), Math.cos(dh));
+  const lim = PROT.giro * Math.PI / 180, h2 = hi + (k * suaveLimite(dh, lim) + (1 - k) * dh);
+  let C2 = Co;
+  if (k > 0){ const r = Co / Math.max(Ci, 1e-6), rl = Math.exp(suaveLimite(Math.log(clamp(r, 1e-3, 1e3)), Math.log(PROT.satMax))); C2 = k * Math.max(Ci * Math.max(rl, PROT.satMin), 0) + (1 - k) * Co; }
+  C2 = Math.min(C2, Ci + PROT.tinta + Ci * (PROT.satMax - 1));   // cinza vira no máximo um leve tom
+  o[1] = C2 * Math.cos(h2); o[2] = C2 * Math.sin(h2);
+}
+function peleW(L, a, b){   // quanto uma cor parece pele (tom entre laranja e amarelo, saturação e luz de pele)
+  const h = Math.atan2(b, a) * 180 / Math.PI, C = Math.hypot(a, b);
+  return suave(14, 26, h) * (1 - suave(64, 76, h)) * suave(5, 10, C) * (1 - suave(32, 42, C)) * suave(22, 34, L) * (1 - suave(84, 94, L));
+}
+function pele(v, o){   // leva a pele do vídeo para a pele da referência, mantendo a textura
+  const P = M.pele; if (!P) return;
+  const w = peleW(v[0], v[1], v[2]); if (w <= 0) return;
+  // saturação e tom casados por posição: a pele menos saturada do vídeo vira a pele menos saturada da referência, e assim por diante
+  const C0 = Math.hypot(v[1], v[2]), h0 = Math.atan2(v[2], v[1]);
+  const C = clamp(interp(P.ps.qc, P.pr.qc, C0), C0 * .8, C0 * 1.5);
+  const dh = clamp(interp(P.ps.qh, P.pr.qh, h0) - h0, -.3, .3), h = h0 + dh;
+  const ta = C * Math.cos(h), tb = C * Math.sin(h), k = .9 * w;
+  o[1] = o[1] * (1 - k) + ta * k; o[2] = o[2] * (1 - k) + tb * k;
 }
 function completo(L, a, b, o){   // etapas 1, 2 e 3
   base(L, a, b, o); let x = o[0], y = o[1], z = o[2];
@@ -518,7 +737,7 @@ function montaLUT(){
   const T3 = N * N * N, t = LUT || new Float32Array(T3 * 3), L0 = M.L0, D = M.D, W = M.W;
   const f = A.forca / 100, cor = f * A.cor / 100, luz = f * A.luz / 100, kc = 1 + A.contr * .006, ks = 1 + A.sat / 100;
   for (let i = 0; i < T3; i++){
-    const j = i * 3, pc = cor * (A.pele ? 1 - .65 * W[i] : 1);
+    const j = i * 3, pc = cor * (A.pele ? 1 - .4 * W[i] : 1);
     let L = L0[j] + D[j] * luz, a = L0[j+1] + D[j+1] * pc, b = L0[j+2] + D[j+2] * pc;
     L += A.expo * .22; L = 50 + (L - 50) * kc; a *= ks; b *= ks; b += A.temp * .2; a += A.tint * .16;
     L = clamp(L, 0, 100); if (A.fade) L = clamp(L + A.fade * .16 * Math.pow(1 - L / 100, 2), 0, 100);
@@ -574,6 +793,7 @@ function passo1(){
       <label class="drop" id="dV"><span class="tag hide">Seu vídeo</span><span class="troca">Trocar</span><canvas class="hide"></canvas>
         <span class="txt bola v"></span><span class="txt n">02 · SEU VÍDEO</span><b class="txt">O vídeo que vai receber a cor</b><p class="txt">Solte aqui um print ou o arquivo do vídeo, do jeito que saiu da câmera.</p><input type="file" accept="image/*,video/*" multiple></label>
     </div>
+    <div class="perfil"><span class="mono">Como você gravou o seu vídeo?</span><div class="pfs" id="pfs">${Object.entries(PERFIS).map(([k, p]) => `<button type="button" class="pf" data-k="${k}"><b>${p.curto}</b><small>${p.dica}</small></button>`).join('')}</div><p class="pfn" id="pfn"></p></div>
     <div class="acoes"><button class="btn" id="ir" disabled>Copiar o mood</button><button class="link" id="ex">Não tenho nada agora · usar um exemplo</button><span class="dica">Seus arquivos não saem do seu aparelho.</span></div>
     <div class="dicas">
       <div><b>Mande o vídeo, se tiver</b>O Mood lê vários momentos dele sozinho. Fica mais preciso que um print só.</div>
@@ -584,7 +804,7 @@ function passo1(){
   const poe = q => {
     const el = zona(q), L = lista(q), cv = L[idx(q)]; el.querySelectorAll('.tira,.nota').forEach(x => x.remove());
     if (!cv) return;
-    const c = el.querySelector('canvas'); c.width = cv.width; c.height = cv.height; c.getContext('2d').drawImage(cv, 0, 0); c.classList.remove('hide'); el.querySelector('.tag').classList.remove('hide'); el.classList.add('tem');
+    const c = el.querySelector('canvas'); c.width = cv.width; c.height = cv.height; c.getContext('2d').drawImage(q === 'V' ? paraNormal(cv) : cv, 0, 0); c.classList.remove('hide'); el.querySelector('.tag').classList.remove('hide'); el.classList.add('tem');
     if (L.length > 1){
       const t = document.createElement('div'); t.className = 'tira';
       L.forEach((f, i) => { const b = document.createElement('button'); b.type = 'button'; b.className = i === idx(q) ? 'on' : ''; b.title = 'Usar este quadro na prévia'; const m = paraCanvas(f, 120); b.appendChild(m); b.onclick = e => { e.preventDefault(); e.stopPropagation(); if (q === 'V') iV = i; else iR = i; poe(q); }; t.appendChild(b); });
@@ -607,6 +827,7 @@ function passo1(){
       if (veioVideo) nt.push(cvs.length + ' momentos do vídeo lidos'); else if (cvs.length > 1) nt.push(cvs.length + ' prints lidos');
       if (cortou) nt.push('barras pretas removidas');
       if (br < 26) nt.push('imagem bem escura: se puder, use um trecho mais claro'); else if (br > 232) nt.push('imagem muito clara: se puder, use outro trecho');
+      if (q === 'V' && !PERFIL && pareceLog(cvs)) nt.push('parece gravado em Log: escolha o perfil logo abaixo');
       NOTAS[q] = nt.join(' · '); if (NOTAS[q]) NOTAS[q] = NOTAS[q][0].toUpperCase() + NOTAS[q].slice(1);
       if (q === 'V'){ VIDS = cvs; iV = cvs.length >> 1; CENAS = [null, null, null]; } else { REFS = cvs; iR = cvs.length >> 1; }
       poe(q);
@@ -619,6 +840,12 @@ function passo1(){
     el.ondrop = e => { e.preventDefault(); el.classList.remove('sobre'); recebe(q, e.dataTransfer.files); };
   }
   document.onpaste = e => { const f = [...(e.clipboardData?.files || [])].filter(x => /^image\//.test(x.type)); if (f.length) recebe(!REFS.length ? 'R' : 'V', f); };
+  const marca = () => { document.querySelectorAll('.pf').forEach(b => b.classList.toggle('on', b.dataset.k === (PERFIL || 'normal')));
+    $('#pfn').textContent = PERFIL ? `O Mood converte o ${PERFIS[PERFIL].curto} para a cor normal antes de copiar a referência. A LUT baixada já faz as duas coisas: aplique só ela, direto no vídeo em Log.` : ''; };
+  document.querySelectorAll('.pf').forEach(b => b.onclick = () => { PERFIL = b.dataset.k === 'normal' ? null : b.dataset.k; store.set('fl_mood_perfil', b.dataset.k);
+    if (PERFIL && NOTAS.V){ NOTAS.V = NOTAS.V.split(' · ').filter(t => !/parece gravado em log/i.test(t)).join(' · '); if (NOTAS.V) NOTAS.V = NOTAS.V[0].toUpperCase() + NOTAS.V.slice(1); }
+    marca(); poe('V'); });
+  marca();
   poe('R'); poe('V');
   $('#ex').onclick = () => { VIDS = [exemplo('v')]; REFS = [exemplo('r')]; iV = iR = 0; NOTAS = { V:'', R:'' }; CENAS = [null, null, null]; poe('R'); poe('V'); toast('Exemplo carregado'); };
   $('#ir').onclick = analisa;
@@ -644,9 +871,11 @@ async function analisa(){
   const bar = p => $('#bar').style.width = p + '%';
   await espera(60); bar(22); await espera(520);
   const lado = n => n > 3 ? 150 : n > 1 ? 190 : 260;
-  const R = amostra(REFS, lado(REFS.length)); $('#st').textContent = 'Medindo luz, sombras e tons do seu vídeo…'; bar(48); await espera(520);
-  const S = amostra(VIDS, lado(VIDS.length)); $('#st').textContent = 'Casando as cores ponto a ponto…'; bar(74); await espera(120);
+  const RX = filtraQuadros(REFS); M_fora = REFS.length - RX.length;
+  const R = amostra(RX, lado(RX.length)); $('#st').textContent = 'Medindo luz, sombras e tons do seu vídeo…'; bar(48); await espera(520);
+  const S = amostra(VIDS, lado(VIDS.length), true); $('#st').textContent = 'Casando as cores ponto a ponto…'; bar(74); await espera(120);
   prepara(S, R); A = { ...PADRAO }; LUT = null; montaLUT();
+  confere(); M.fora = M_fora;
   M.pal = paleta(REFS[iR]);
   if (VIDS.length > 1 && !CENAS.some(Boolean)){ let k = 0; VIDS.forEach((c, i) => { if (i !== iV && k < 3) CENAS[k++] = paraCanvas(c, 480); }); }
   // a transformação: o vídeo ganha a cor da referência ali mesmo, com a LUT que acabou de ficar pronta
@@ -655,6 +884,66 @@ async function analisa(){
   $('#junta').classList.add('muda'); await espera(1350);
   $('#st').textContent = 'Sua LUT está pronta.'; bar(100); await espera(700);
   passo2();
+}
+
+// ===================== CHECAGEM AUTOMÁTICA =====================
+// Mede no próprio vídeo (com a LUT final, igual ao arquivo) se apareceu algum defeito. Se apareceu, baixa a intensidade
+// até ficar dentro do limite, em vez de esconder o problema atrás de uma nota.
+let M_fora = 0;
+const QA_LIM = { estouro:2.5, sat:1.45, brancos:6, pele:15 };
+function mede(){
+  const n = M.amC.length / 3, o = [0,0,0]; let clipA = 0, clipD = 0, cA = 0, cD = 0, nb = 0, tb = 0, np = 0, gp = 0;
+  for (let i = 0; i < n; i++){
+    const r = M.amC[i*3], g = M.amC[i*3+1], b = M.amC[i*3+2]; pelaLUT(r, g, b, o); const e = entrada(r, g, b, [0,0,0]);
+    const ci = x => x >= .996 || x <= .004; if (ci(e[0]) || ci(e[1]) || ci(e[2])) clipA++; if (ci(o[0]) || ci(o[1]) || ci(o[2])) clipD++;
+    const v = M.amL.subarray(i*3, i*3+3), w = lab(o[0], o[1], o[2]), Ci = Math.hypot(v[1], v[2]), Co = Math.hypot(w[1], w[2]);
+    cA += Ci; cD += Co;
+    if (Ci < 6 && v[0] > 70){ nb++; tb += Co - Ci; }
+    if (peleW(v[0], v[1], v[2]) > .5){ np++; let d = Math.atan2(w[2], w[1]) - Math.atan2(v[2], v[1]); d = Math.atan2(Math.sin(d), Math.cos(d)); gp += Math.abs(d) * 180 / Math.PI; }
+  }
+  return { estouro: 100 * (clipD - clipA) / n, sat: cD / Math.max(cA, 1e-6), brancos: nb > 30 ? tb / nb : null, pele: np > .03 * n ? gp / np : null };   // pele só conta quando há pele de verdade na cena (3%+ da imagem)
+}
+function confere(){
+  // o limite acompanha a referência: se ela mesma é bem saturada ou tem pretos esmagados de propósito, isso é o look, não defeito
+  const lim = limites(); M.lim = lim;
+  const passa = q => q.estouro <= lim.estouro && q.sat <= lim.sat && (q.brancos == null || q.brancos <= lim.brancos) && (q.pele == null || q.pele <= lim.pele);
+  let q = mede(), f = A.forca; M.qa0 = q; M.reduziu = 0;
+  while (!passa(q) && A.forca > 40){ A.forca -= 10; montaLUT(); q = mede(); }
+  M.reduziu = f - A.forca; M.qa = q; PADRAO_SESSAO = A.forca;
+}
+let PADRAO_SESSAO = 100;
+function limites(){ const s = M.s || 0;
+  return { estouro: Math.max(QA_LIM.estouro, (M.refClip || 0) + 1), sat: Math.max(QA_LIM.sat, Math.min(2, (M.refSat || 1) * 1.1)), brancos: QA_LIM.brancos * (1 + 2 * s), pele: QA_LIM.pele * (1 + s) }; }
+function qaHtml(q){ const QA_LIM = M.lim || limites();
+  const linha = (ok, t, v) => `<div><b style="color:${ok ? '#7BE0A0' : '#FFB347'}">${ok ? '✓' : '!'}</b><span>${t}</span><small>${v}</small></div>`;
+  return linha(q.estouro <= QA_LIM.estouro, 'Sem estourar brancos nem esmagar pretos', (q.estouro > 0 ? '+' : '') + q.estouro.toFixed(1) + '% de pixels no limite')
+    + linha(q.sat <= QA_LIM.sat, 'Saturação sob controle', '×' + q.sat.toFixed(2) + ' a do vídeo')
+    + (q.brancos == null ? '' : linha(q.brancos <= QA_LIM.brancos, 'Brancos continuam brancos', (q.brancos >= 0 ? '+' : '') + q.brancos.toFixed(1) + ' de cor nos brancos'))
+    + (q.pele == null ? '' : linha(q.pele <= QA_LIM.pele, 'Pele natural', q.pele.toFixed(0) + '° de mudança no tom da pele'));
+}
+// ===================== SCOPES (medidos dos pixels) =====================
+function pixels(cv, lado = 360){ const s = paraCanvas(cv, lado); return { d: s.getContext('2d', { willReadFrequently:true }).getImageData(0, 0, s.width, s.height).data, w: s.width, h: s.height }; }
+function scope(cv, tipo, alvo){
+  const W = 360, H = tipo === 'vec' ? 360 : 200, { d, w, h } = pixels(cv), acc = new Float32Array(W * H * 3);
+  const poe = (x, y, k) => { if (x >= 0 && x < W && y >= 0 && y < H) acc[(y * W + x) * 3 + k] += 1; };
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++){
+    const i = (y * w + x) * 4, r = d[i] / 255, g = d[i+1] / 255, b = d[i+2] / 255, Y = .2126*r + .7152*g + .0722*b;
+    if (tipo === 'wf'){ const X = (x * W / w) | 0, yy = Math.round((1 - Y) * (H - 1)); poe(X, yy, 0); poe(X, yy, 1); poe(X, yy, 2); }
+    else if (tipo === 'rgb'){ const X = (x * (W / 3) / w) | 0; [r, g, b].forEach((v, k) => poe(X + k * (W / 3 | 0), Math.round((1 - v) * (H - 1)), k)); }
+    else { const cb = (b - Y) / 1.8556, cr = (r - Y) / 1.5748, X = Math.round((cb * 2 + .5) * (W - 1)), YY = Math.round((.5 - cr * 2) * (H - 1)); poe(X, YY, 0); poe(X, YY, 1); poe(X, YY, 2); }
+  }
+  let mx = 0; for (const v of acc) if (v > mx) mx = v; const lm = Math.log1p(mx) || 1;
+  alvo.width = W; alvo.height = H; const g = alvo.getContext('2d'), im = g.createImageData(W, H);
+  for (let p = 0; p < W * H; p++){
+    for (let k = 0; k < 3; k++){ const v = Math.min(1, 1.6 * Math.log1p(acc[p*3+k]) / lm);
+      let c = v; if (tipo === 'wf') c = v * (k === 1 ? 1 : .62); if (tipo === 'vec'){ const X = p % W, YY = (p / W) | 0, cbv = (X / (W - 1) - .5) / 2, crv = (.5 - YY / (H - 1)) / 2, rr = .5 + 1.5748 * crv, bb = .5 + 1.8556 * cbv, gg = (.5 - .2126 * rr - .0722 * bb) / .7152; c = v * (clamp([rr, gg, bb][k], 0, 1) * .6 + .4); }
+      im.data[p*4+k] = c * 255; }
+    im.data[p*4+3] = 255;
+  }
+  g.putImageData(im, 0, 0); g.strokeStyle = 'rgba(255,255,255,.16)'; g.lineWidth = 1; g.fillStyle = 'rgba(255,255,255,.4)'; g.font = '10px monospace';
+  if (tipo === 'vec'){ g.beginPath(); g.arc(W/2, H/2, W * .45, 0, 7); g.stroke(); g.beginPath(); g.moveTo(W/2, 0); g.lineTo(W/2, H); g.moveTo(0, H/2); g.lineTo(W, H/2); g.stroke();
+    const a = 123 * Math.PI / 180; g.strokeStyle = 'rgba(230,170,120,.7)'; g.beginPath(); g.moveTo(W/2, H/2); g.lineTo(W/2 + Math.cos(a) * W * .48, H/2 - Math.sin(a) * H * .48); g.stroke(); g.fillText('pele', W/2 + Math.cos(a) * W * .4 - 30, H/2 - Math.sin(a) * H * .4); }
+  else for (const v of [0, 25, 50, 75, 100]){ const y = Math.round((1 - v / 100) * (H - 1)) + .5; g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); g.fillText(String(v), 3, Math.max(10, y - 2)); }
 }
 
 // ===================== PASSO 2: ajuste =====================
@@ -667,11 +956,12 @@ function passo2(){
   tela(`<div class="ed">
     <div class="pvw">
         <div class="modos"><button class="md" data-m="ab">Antes e depois</button><button class="md" data-m="lado">Ao lado da referência</button></div>
-        <div class="pv" id="pv"><canvas id="cA"></canvas><canvas class="dep" id="cD"></canvas><div class="corte" id="ct"><span>‹ ›</span></div><span class="tg l">Antes</span><span class="tg r">Com a sua LUT</span></div>
+        <div class="pv" id="pv"><canvas id="cA"></canvas><canvas class="dep" id="cD"></canvas><div class="corte" id="ct"><span>‹ ›</span></div><span class="tg l">${PERFIL ? 'Antes (' + PERFIS[PERFIL].curto + ' convertido)' : 'Antes'}</span><span class="tg r">Com a sua LUT</span></div>
         <div class="lado hide" id="lado"><figure><canvas id="cL"></canvas><span class="tg l" style="background:var(--grad);color:#111">Seu vídeo com a LUT</span></figure><figure><canvas id="cR"></canvas><span class="tg l">Referência</span></figure></div>
     </div>
     <div class="extras">
       <div class="pals"><span class="mono">Referência</span><div class="pal" id="pal"></div><span class="mono">Seu vídeo agora</span><div class="pal" id="pal2"></div></div>
+      <div class="scp"><span class="mono">Checagem automática</span><div class="qa" id="qa"></div><p id="qaN" style="color:var(--mute);font-size:12px;margin-top:8px"></p></div>
       <div class="cenas"><h3>Confira em outras cenas</h3><p>${VIDS.length > 1 ? 'Estes são outros momentos do seu vídeo, já com a LUT. Se todos ficaram bons, pode baixar.' : 'Uma LUT pode ficar ótima num print e estranha em outro. Coloque até 3 cenas do mesmo vídeo para conferir antes de baixar.'}</p><div class="cg" id="cg"></div></div>
     </div>
     <div class="painel">
@@ -688,19 +978,23 @@ function passo2(){
       <button class="link" id="volta" style="display:block;margin:12px auto 0">← Trocar as imagens</button>
     </div></div>`);
   $('.ed').style.setProperty('--ar', (VID.width / VID.height).toFixed(4));      // formato do vídeo: a prévia, as cenas e o lado a lado seguem ele
-  const cA = $('#cA'), cD = $('#cD'), cL = $('#cL'), cR = $('#cR'); cA.width = VID.width; cA.height = VID.height; cA.getContext('2d').drawImage(VID, 0, 0);
+  const cA = $('#cA'), cD = $('#cD'), cL = $('#cL'), cR = $('#cR'); cA.width = VID.width; cA.height = VID.height; cA.getContext('2d').drawImage(paraNormal(VID), 0, 0);
   cR.width = REF.width; cR.height = REF.height; cR.getContext('2d').drawImage(REF, 0, 0);
   $('#pal').innerHTML = M.pal.map(c => `<i style="background:${c}"></i>`).join(''); $('#pal2').innerHTML = M.pal.map(() => '<i></i>').join('');
   const cortar = v => { corteX = clamp(v, 0, 100); cD.style.clipPath = `inset(0 0 0 ${corteX}%)`; $('#ct').style.left = corteX + '%'; };
-  let hMed = 0;
-  const mede = () => {
+  let hMed = 0, tScope = 'wf';
+  const scopes = () => {};
+  const qa = () => { const q = mede(); $('#qa').innerHTML = qaHtml(q);
+    $('#qaN').textContent = (M.reduziu && A.forca === PADRAO_SESSAO ? `A intensidade começou em ${A.forca}% porque em 100% a checagem achou um problema. ` : '') + (M.fora ? `${M.fora} quadro(s) da referência muito diferente(s) do resto foram ignorados.` : ''); };
+  const medeTudo = () => {
     const s = semelhanca(); $('#pct').textContent = s + '%'; $('#anel').style.setProperty('--p', s + '%');
     $('#medT').textContent = s >= 88 ? 'Muito parecido com a referência' : s >= 72 ? 'Parecido com a referência' : s >= 50 ? 'Lembra a referência' : 'Ainda longe da referência';
-    $('#medS').textContent = `Antes da LUT: ${M.antes}%.` + (A.forca >= 95 && s < 72 ? ' As cenas são bem diferentes: uma referência mais parecida com o seu vídeo copia melhor.' : '');
+    $('#medS').textContent = `Antes da LUT: ${M.antes}%.` + (M.s < .5 ? ' Cenas diferentes: o Mood copiou o tratamento (luz, sombras, tom e saturação) e manteve as cores reais dos seus objetos, por isso a nota não chega a 100.' : '');
     const p = paleta(cD); document.querySelectorAll('#pal2 i').forEach((el, i) => el.style.background = p[i]);
+    scopes(); qa();
   };
   let pend = false;
-  const pinta = () => { if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; montaLUT(); aplica(VID, cD); if (modo === 'lado') cL.getContext('2d').drawImage(cD, 0, 0); CENAS.forEach((c, i) => { if (c) aplica(c, document.querySelector(`#cn${i} canvas`)); }); clearTimeout(hMed); hMed = setTimeout(mede, 140); }); };
+  const pinta = () => { if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; montaLUT(); aplica(VID, cD); if (modo === 'lado') cL.getContext('2d').drawImage(cD, 0, 0); CENAS.forEach((c, i) => { if (c) aplica(c, document.querySelector(`#cn${i} canvas`)); }); clearTimeout(hMed); hMed = setTimeout(medeTudo, 140); }); };
   const troca = m => { modo = m; document.querySelectorAll('.md').forEach(b => b.classList.toggle('on', b.dataset.m === m)); $('#pv').classList.toggle('hide', m !== 'ab'); $('#lado').classList.toggle('hide', m !== 'lado'); if (m === 'lado'){ cL.width = cD.width; cL.height = cD.height; cL.getContext('2d').drawImage(cD, 0, 0); } };
   document.querySelectorAll('.md').forEach(b => b.onclick = () => troca(b.dataset.m));
   const txt = k => k === 'forca' || k === 'cor' || k === 'luz' ? A[k] + '%' : (A[k] > 0 ? '+' : '') + A[k];
@@ -719,7 +1013,7 @@ function passo2(){
   const mostra = i => { const el = $('#cn' + i), c = el.querySelector('canvas'); if (CENAS[i]){ aplica(CENAS[i], c); c.classList.remove('hide'); el.classList.add('tem'); el.querySelector('.t').classList.add('hide'); } else { c.classList.add('hide'); el.classList.remove('tem'); el.querySelector('.t').classList.remove('hide'); } };
   cg.querySelectorAll('input').forEach(inp => inp.onchange = async e => { const i = +inp.dataset.i; try { CENAS[i] = paraCanvas(semBarras(paraCanvas(await carrega(e.target.files[0]), 900)).cv, 480); mostra(i); } catch(er){ toast(er.message); } inp.value = ''; });
   cg.querySelectorAll('.x').forEach(b => b.onclick = e => { e.preventDefault(); CENAS[+b.dataset.i] = null; mostra(+b.dataset.i); });
-  montaLUT(); aplica(VID, cD); cortar(corteX); [0,1,2].forEach(mostra); troca(modo); mede();
+  montaLUT(); aplica(VID, cD); cortar(corteX); [0,1,2].forEach(mostra); troca(modo); medeTudo();
   if (!calmo && modo === 'ab') (async () => { for (const v of [20, 80, 50]){ await espera(380); if (!arr && $('#ct')) { cD.style.transition = 'clip-path .5s ease'; $('#ct').style.transition = 'left .5s ease'; cortar(v); } } await espera(520); if ($('#ct')){ cD.style.transition = ''; $('#ct').style.transition = ''; } })();
   $('#volta').onclick = passo1;
   $('#pronto').onclick = passo3;
@@ -741,7 +1035,7 @@ function passo3(){
       <button class="btn full" id="comprar">${vencido ? 'Renovar meu acesso' : 'Liberar o Mood · R$ ' + Base.produto('mood').preco}</button>${Base.sessao() ? '' : '<button class="link" id="entrar" style="display:block;margin:12px auto 0">Já comprei · entrar</button>'}</div>`;
   if (!acesso && !avisouDemo){ avisouDemo = true; Base.evento('demo_completed', PACK); }
   tela(`<div class="fim"><div class="sobre-t"><span class="mono">Sua LUT</span></div><h1>O mood está <em>copiado</em>.</h1><p class="sub" style="margin:0 auto">A LUT leva a cor da referência para o seu vídeo, com os ajustes que você fez.</p>
-    <div class="arq"><span class="ic">.cube</span><span><b>${nome}</b><small>Arquivo ${nome}.cube · padrão ${N}×${N}×${N} · funciona no CapCut, Premiere, DaVinci e Final Cut</small></span></div>
+    <div class="arq"><span class="ic">.cube</span><span><b>${nome}</b><small>Arquivo ${nome}.cube · padrão ${N}×${N}×${N} · funciona no CapCut, Premiere, DaVinci e Final Cut${PERFIL ? `<br><span style="color:#fff;font-weight:600">Para vídeo em ${PERFIS[PERFIL].curto}: aplique direto no vídeo em Log, sem outra LUT de conversão antes.</span>` : ''}</small></span></div>
     ${acesso ? `<button class="btn full" id="baixar">Baixar ${nome}</button>` : trava}
     <div class="capcut"><span><b>Instalar direto no CapCut</b><small>Um clique no app Base FL e a LUT aparece em Ajuste › LUT.</small></span><span class="breve">Em breve</span></div>
     <div class="como"><h3>Como usar no seu programa</h3>
