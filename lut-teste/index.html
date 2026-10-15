@@ -135,6 +135,12 @@ h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;back
 .pal{display:flex;border-radius:9px;overflow:hidden;height:26px}
 .pal i{flex:1;transition:background .25s}
 .cenas{margin-top:16px}
+.perfil{margin:18px 0 4px}.perfil .mono{display:block;margin-bottom:9px}.pfs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pf{font:inherit;text-align:left;cursor:pointer;padding:10px 12px;border-radius:13px;border:1px solid var(--line);background:var(--panel);color:inherit}
+.pf b{display:block;font-size:14px}.pf small{display:block;color:var(--mute);font-size:11.5px;margin-top:2px;line-height:1.3}
+.pf.on{background:linear-gradient(var(--panel2),var(--panel2)) padding-box,var(--grad) border-box;border:1.5px solid transparent}
+.pfn{color:var(--mute);font-size:12.5px;margin-top:8px;min-height:1em}
+@media (max-width:640px){.pfs{grid-template-columns:1fr 1fr}}
 .scp{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
 .scp .tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}.scp .tabs button{font:inherit;font-size:12px;padding:6px 10px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--mute);cursor:pointer}
 .scp .tabs button.on{color:#111;background:var(--grad);border-color:transparent}
@@ -288,6 +294,45 @@ function rgb(L, a, b){   // Lab -> sRGB. Cor que não cabe na tela perde satura�
   return [gam(clamp(v[0], 0, 1)), gam(clamp(v[1], 0, 1)), gam(clamp(v[2], 0, 1))];
 }
 
+// ===================== GRAVADO EM LOG =====================
+// Converte o sinal Log da câmera para imagem normal (Rec.709) com as fórmulas oficiais publicadas pelos fabricantes:
+// curva Log -> luz da cena -> cores da câmera para Rec.709 -> curva de exibição suave (sem estourar) -> tela.
+// O valor que o navegador entrega é o sinal do arquivo (faixa de vídeo já esticada para 0..1).
+const PERFIS = {
+  normal: { nome:'Normal', curto:'Normal', dica:'Gravou no modo normal da câmera ou do celular' },
+  applelog: { nome:'Apple Log (iPhone)', curto:'Apple Log', dica:'iPhone 15 Pro em diante',
+    dec: v => { const R0 = -.05641088, sg = 47.28711236, Pt = sg * (.01 - R0) ** 2; return v >= Pt ? Math.pow(2, (v - .69336945) / .08550479) - .00964052 : v >= 0 ? Math.sqrt(v / sg) + R0 : R0; },
+    M: [[1.660491, -.58764114, -.07284986], [-.12455047, 1.1328999, -.00834942], [-.01815076, -.1005789, 1.11872966]] },
+  slog3: { nome:'Sony S-Log3 · S-Gamut3.Cine', curto:'S-Log3', dica:'Sony A7, FX3, FX30, ZV-E1…',
+    dec: v => { const y = (64 + 876 * v) / 1023; return y >= 171.2102946929 / 1023 ? Math.pow(10, (y * 1023 - 420) / 261.5) * .19 - .01 : (y * 1023 - 95) * .01125 / (171.2102946929 - 95); },
+    M: [[1.62694741, -.54013854, -.08680887], [-.17851553, 1.41794093, -.2394254], [-.04443611, -.19591997, 1.24035608]] },
+  slog2: { nome:'Sony S-Log2 · S-Gamut', curto:'S-Log2', dica:'Sony A7 III, A6500 e anteriores',
+    dec: v => (v >= .030001222851889303 ? Math.pow(10, (v - .646596) / .432699) - .037584 : (v - .030001222851889303) / 5) * .9 * 219 / 155,
+    M: [[1.87791513, -.79416876, -.08374637], [-.17680698, 1.35099962, -.17419264], [-.02620113, -.14842226, 1.17462339]] },
+};
+let PERFIL = (() => { const p = store.get('fl_mood_perfil'); return PERFIS[p] && p !== 'normal' ? p : null; })();
+const exibe = x => { x = Math.max(0, x) * .6; return clamp(x * (2.51 * x + .03) / (x * (2.43 * x + .59) + .14), 0, 1); };   // curva de exibição com roll-off (cinza 18% vai a ~41%)
+function entrada(r, g, b, o){   // sinal do arquivo -> imagem normal (sRGB 0..1)
+  const P = PERFIL && PERFIS[PERFIL]; if (!P){ o[0] = r; o[1] = g; o[2] = b; return o; }
+  const lr = P.dec(r), lg = P.dec(g), lb = P.dec(b), M = P.M;
+  let R = M[0][0]*lr + M[0][1]*lg + M[0][2]*lb, G = M[1][0]*lr + M[1][1]*lg + M[1][2]*lb, B = M[2][0]*lr + M[2][1]*lg + M[2][2]*lb;
+  // cor que não cabe no Rec.709: perde saturação em direção ao cinza da mesma luz (mantém o tom, sem canal negativo)
+  const Y = .2126*R + .7152*G + .0722*B, mn = Math.min(R, G, B);
+  if (mn < 0 && Y > 0){ const t = Y / (Y - mn); R = Y + (R - Y) * t; G = Y + (G - Y) * t; B = Y + (B - Y) * t; }
+  o[0] = gam(exibe(R)); o[1] = gam(exibe(G)); o[2] = gam(exibe(B)); return o;
+}
+function paraNormal(cv){   // canvas em Log -> canvas normal (para mostrar o "antes" de verdade)
+  if (!PERFIL) return cv;
+  const c = document.createElement('canvas'); c.width = cv.width; c.height = cv.height; const g = c.getContext('2d', { willReadFrequently:true });
+  g.drawImage(cv, 0, 0); const im = g.getImageData(0, 0, c.width, c.height), d = im.data, o = [0,0,0];
+  for (let i = 0; i < d.length; i += 4){ entrada(d[i] / 255, d[i+1] / 255, d[i+2] / 255, o); d[i] = o[0] * 255 + .5; d[i+1] = o[1] * 255 + .5; d[i+2] = o[2] * 255 + .5; }
+  g.putImageData(im, 0, 0); return c;
+}
+function pareceLog(cvs){   // vídeo muito lavado (pretos altos, pouco contraste e pouca cor) costuma ser Log
+  const s = amostra(cvs, 120), L = Float32Array.from(canal(s.P, 0)).sort(); let c = 0; for (let i = 0; i < s.P.length; i += 3) c += Math.hypot(s.P[i+1], s.P[i+2]);
+  const p2 = pct(L, 2), p98 = pct(L, 98); return p98 < 72 && p98 - p2 < 62 && c / (s.P.length / 3) < 11;   // só sugere: quem escolhe é a pessoa
+}
+
 // ===================== imagens e vídeos =====================
 const ehVideo = f => /^video\//.test(f.type) || /\.(mp4|mov|m4v|webm|mkv)$/i.test(f.name || '');
 function carrega(file){
@@ -359,11 +404,12 @@ function paleta(cv, k = 5){   // k-means simples: as cores principais
 //    específicos (verdes, laranjas, azuis) que as etapas 1 e 2 não pegam.
 // Tudo depende só da cor de entrada, então cabe inteiro no arquivo .cube.
 // =====================================================================
-function amostra(cvs, lado){   // pixels de uma ou mais imagens -> Lab e RGB
+function amostra(cvs, lado, log = false){   // pixels de uma ou mais imagens -> Lab e RGB (C = sinal original; P = cor real, já convertida se for Log)
   const partes = []; let n = 0;
   for (const cv of cvs){ const s = paraCanvas(cv, lado), d = s.getContext('2d', { willReadFrequently:true }).getImageData(0, 0, s.width, s.height).data; partes.push(d); n += d.length / 4; }
   const P = new Float32Array(n * 3), C = new Float32Array(n * 3); let j = 0;
-  for (const d of partes) for (let i = 0; i < d.length; i += 4){ const r = d[i]/255, g = d[i+1]/255, b = d[i+2]/255, v = lab(r, g, b); C[j] = r; C[j+1] = g; C[j+2] = b; P[j] = v[0]; P[j+1] = v[1]; P[j+2] = v[2]; j += 3; }
+  const _e = [0,0,0];
+  for (const d of partes) for (let i = 0; i < d.length; i += 4){ const r = d[i]/255, g = d[i+1]/255, b = d[i+2]/255, v = log && PERFIL ? lab(...entrada(r, g, b, _e)) : lab(r, g, b); C[j] = r; C[j+1] = g; C[j+2] = b; P[j] = v[0]; P[j+1] = v[1]; P[j+2] = v[2]; j += 3; }
   return { P, C, n, minis: cvs.map(miniatura) };
 }
 // miniatura em ordem de claridade (não muda com a cor/contraste): serve para saber se é a mesma cena
@@ -504,7 +550,7 @@ function prepara(S, R){
   // 4) grava o resultado em cada ponto da grade da LUT e suaviza a grade (evita degraus na imagem)
   const T3 = N * N * N, L0 = new Float32Array(T3 * 3), D = new Float32Array(T3 * 3), W = new Float32Array(T3), og = [0,0,0]; let i = 0;
   for (let b = 0; b < N; b++) for (let g = 0; g < N; g++) for (let r = 0; r < N; r++){
-    const v = lab(r / (N-1), g / (N-1), b / (N-1)); look(v[0], v[1], v[2], og); completo(v[0], v[1], v[2], o);
+    const v = PERFIL ? lab(...entrada(r / (N-1), g / (N-1), b / (N-1), [0,0,0])) : lab(r / (N-1), g / (N-1), b / (N-1)); look(v[0], v[1], v[2], og); completo(v[0], v[1], v[2], o);
     for (let k = 0; k < 3; k++) o[k] = og[k] + M.s * (o[k] - og[k]);
     // mesma cena: a cópia completa é a resposta certa, as proteções saem aos poucos; outra cena: proteção inteira
     const livre = [o[0], o[1], o[2]]; protege(v, o); pele(v, o);
@@ -748,6 +794,7 @@ function passo1(){
       <label class="drop" id="dV"><span class="tag hide">Seu vídeo</span><span class="troca">Trocar</span><canvas class="hide"></canvas>
         <span class="txt bola v"></span><span class="txt n">02 · SEU VÍDEO</span><b class="txt">O vídeo que vai receber a cor</b><p class="txt">Solte aqui um print ou o arquivo do vídeo, do jeito que saiu da câmera.</p><input type="file" accept="image/*,video/*" multiple></label>
     </div>
+    <div class="perfil"><span class="mono">Como você gravou o seu vídeo?</span><div class="pfs" id="pfs">${Object.entries(PERFIS).map(([k, p]) => `<button type="button" class="pf" data-k="${k}"><b>${p.curto}</b><small>${p.dica}</small></button>`).join('')}</div><p class="pfn" id="pfn"></p></div>
     <div class="acoes"><button class="btn" id="ir" disabled>Copiar o mood</button><button class="link" id="ex">Não tenho nada agora · usar um exemplo</button><span class="dica">Seus arquivos não saem do seu aparelho.</span></div>
     <div class="dicas">
       <div><b>Mande o vídeo, se tiver</b>O Mood lê vários momentos dele sozinho. Fica mais preciso que um print só.</div>
@@ -758,7 +805,7 @@ function passo1(){
   const poe = q => {
     const el = zona(q), L = lista(q), cv = L[idx(q)]; el.querySelectorAll('.tira,.nota').forEach(x => x.remove());
     if (!cv) return;
-    const c = el.querySelector('canvas'); c.width = cv.width; c.height = cv.height; c.getContext('2d').drawImage(cv, 0, 0); c.classList.remove('hide'); el.querySelector('.tag').classList.remove('hide'); el.classList.add('tem');
+    const c = el.querySelector('canvas'); c.width = cv.width; c.height = cv.height; c.getContext('2d').drawImage(q === 'V' ? paraNormal(cv) : cv, 0, 0); c.classList.remove('hide'); el.querySelector('.tag').classList.remove('hide'); el.classList.add('tem');
     if (L.length > 1){
       const t = document.createElement('div'); t.className = 'tira';
       L.forEach((f, i) => { const b = document.createElement('button'); b.type = 'button'; b.className = i === idx(q) ? 'on' : ''; b.title = 'Usar este quadro na prévia'; const m = paraCanvas(f, 120); b.appendChild(m); b.onclick = e => { e.preventDefault(); e.stopPropagation(); if (q === 'V') iV = i; else iR = i; poe(q); }; t.appendChild(b); });
@@ -781,6 +828,7 @@ function passo1(){
       if (veioVideo) nt.push(cvs.length + ' momentos do vídeo lidos'); else if (cvs.length > 1) nt.push(cvs.length + ' prints lidos');
       if (cortou) nt.push('barras pretas removidas');
       if (br < 26) nt.push('imagem bem escura: se puder, use um trecho mais claro'); else if (br > 232) nt.push('imagem muito clara: se puder, use outro trecho');
+      if (q === 'V' && !PERFIL && pareceLog(cvs)) nt.push('parece gravado em Log: escolha o perfil logo abaixo');
       NOTAS[q] = nt.join(' · '); if (NOTAS[q]) NOTAS[q] = NOTAS[q][0].toUpperCase() + NOTAS[q].slice(1);
       if (q === 'V'){ VIDS = cvs; iV = cvs.length >> 1; CENAS = [null, null, null]; } else { REFS = cvs; iR = cvs.length >> 1; }
       poe(q);
@@ -793,6 +841,12 @@ function passo1(){
     el.ondrop = e => { e.preventDefault(); el.classList.remove('sobre'); recebe(q, e.dataTransfer.files); };
   }
   document.onpaste = e => { const f = [...(e.clipboardData?.files || [])].filter(x => /^image\//.test(x.type)); if (f.length) recebe(!REFS.length ? 'R' : 'V', f); };
+  const marca = () => { document.querySelectorAll('.pf').forEach(b => b.classList.toggle('on', b.dataset.k === (PERFIL || 'normal')));
+    $('#pfn').textContent = PERFIL ? `O Mood converte o ${PERFIS[PERFIL].curto} para a cor normal antes de copiar a referência. A LUT baixada já faz as duas coisas: aplique só ela, direto no vídeo em Log.` : ''; };
+  document.querySelectorAll('.pf').forEach(b => b.onclick = () => { PERFIL = b.dataset.k === 'normal' ? null : b.dataset.k; store.set('fl_mood_perfil', b.dataset.k);
+    if (PERFIL && NOTAS.V){ NOTAS.V = NOTAS.V.split(' · ').filter(t => !/parece gravado em log/i.test(t)).join(' · '); if (NOTAS.V) NOTAS.V = NOTAS.V[0].toUpperCase() + NOTAS.V.slice(1); }
+    marca(); poe('V'); });
+  marca();
   poe('R'); poe('V');
   $('#ex').onclick = () => { VIDS = [exemplo('v')]; REFS = [exemplo('r')]; iV = iR = 0; NOTAS = { V:'', R:'' }; CENAS = [null, null, null]; poe('R'); poe('V'); toast('Exemplo carregado'); };
   $('#ir').onclick = analisa;
@@ -820,7 +874,7 @@ async function analisa(){
   const lado = n => n > 3 ? 150 : n > 1 ? 190 : 260;
   const RX = filtraQuadros(REFS); M_fora = REFS.length - RX.length;
   const R = amostra(RX, lado(RX.length)); $('#st').textContent = 'Medindo luz, sombras e tons do seu vídeo…'; bar(48); await espera(520);
-  const S = amostra(VIDS, lado(VIDS.length)); $('#st').textContent = 'Casando as cores ponto a ponto…'; bar(74); await espera(120);
+  const S = amostra(VIDS, lado(VIDS.length), true); $('#st').textContent = 'Casando as cores ponto a ponto…'; bar(74); await espera(120);
   prepara(S, R); A = { ...PADRAO }; LUT = null; montaLUT();
   confere(); M.fora = M_fora;
   M.pal = paleta(REFS[iR]);
@@ -841,8 +895,8 @@ const QA_LIM = { estouro:2.5, sat:1.45, brancos:6, pele:15 };
 function mede(){
   const n = M.amC.length / 3, o = [0,0,0]; let clipA = 0, clipD = 0, cA = 0, cD = 0, nb = 0, tb = 0, np = 0, gp = 0;
   for (let i = 0; i < n; i++){
-    const r = M.amC[i*3], g = M.amC[i*3+1], b = M.amC[i*3+2]; pelaLUT(r, g, b, o);
-    const ci = x => x >= .996 || x <= .004; if (ci(r) || ci(g) || ci(b)) clipA++; if (ci(o[0]) || ci(o[1]) || ci(o[2])) clipD++;
+    const r = M.amC[i*3], g = M.amC[i*3+1], b = M.amC[i*3+2]; pelaLUT(r, g, b, o); const e = entrada(r, g, b, [0,0,0]);
+    const ci = x => x >= .996 || x <= .004; if (ci(e[0]) || ci(e[1]) || ci(e[2])) clipA++; if (ci(o[0]) || ci(o[1]) || ci(o[2])) clipD++;
     const v = M.amL.subarray(i*3, i*3+3), w = lab(o[0], o[1], o[2]), Ci = Math.hypot(v[1], v[2]), Co = Math.hypot(w[1], w[2]);
     cA += Ci; cD += Co;
     if (Ci < 6 && v[0] > 70){ nb++; tb += Co - Ci; }
@@ -903,7 +957,7 @@ function passo2(){
   tela(`<div class="ed">
     <div class="pvw">
         <div class="modos"><button class="md" data-m="ab">Antes e depois</button><button class="md" data-m="lado">Ao lado da referência</button></div>
-        <div class="pv" id="pv"><canvas id="cA"></canvas><canvas class="dep" id="cD"></canvas><div class="corte" id="ct"><span>‹ ›</span></div><span class="tg l">Antes</span><span class="tg r">Com a sua LUT</span></div>
+        <div class="pv" id="pv"><canvas id="cA"></canvas><canvas class="dep" id="cD"></canvas><div class="corte" id="ct"><span>‹ ›</span></div><span class="tg l">${PERFIL ? 'Antes (' + PERFIS[PERFIL].curto + ' convertido)' : 'Antes'}</span><span class="tg r">Com a sua LUT</span></div>
         <div class="lado hide" id="lado"><figure><canvas id="cL"></canvas><span class="tg l" style="background:var(--grad);color:#111">Seu vídeo com a LUT</span></figure><figure><canvas id="cR"></canvas><span class="tg l">Referência</span></figure></div>
     </div>
     <div class="extras">
@@ -927,7 +981,7 @@ function passo2(){
       <button class="link" id="volta" style="display:block;margin:12px auto 0">← Trocar as imagens</button>
     </div></div>`);
   $('.ed').style.setProperty('--ar', (VID.width / VID.height).toFixed(4));      // formato do vídeo: a prévia, as cenas e o lado a lado seguem ele
-  const cA = $('#cA'), cD = $('#cD'), cL = $('#cL'), cR = $('#cR'); cA.width = VID.width; cA.height = VID.height; cA.getContext('2d').drawImage(VID, 0, 0);
+  const cA = $('#cA'), cD = $('#cD'), cL = $('#cL'), cR = $('#cR'); cA.width = VID.width; cA.height = VID.height; cA.getContext('2d').drawImage(paraNormal(VID), 0, 0);
   cR.width = REF.width; cR.height = REF.height; cR.getContext('2d').drawImage(REF, 0, 0);
   $('#pal').innerHTML = M.pal.map(c => `<i style="background:${c}"></i>`).join(''); $('#pal2').innerHTML = M.pal.map(() => '<i></i>').join('');
   const cortar = v => { corteX = clamp(v, 0, 100); cD.style.clipPath = `inset(0 0 0 ${corteX}%)`; $('#ct').style.left = corteX + '%'; };
@@ -985,7 +1039,7 @@ function passo3(){
       <button class="btn full" id="comprar">${vencido ? 'Renovar meu acesso' : 'Liberar o Mood · R$ ' + Base.produto('mood').preco}</button>${Base.sessao() ? '' : '<button class="link" id="entrar" style="display:block;margin:12px auto 0">Já comprei · entrar</button>'}</div>`;
   if (!acesso && !avisouDemo){ avisouDemo = true; Base.evento('demo_completed', PACK); }
   tela(`<div class="fim"><div class="sobre-t"><span class="mono">Sua LUT</span></div><h1>O mood está <em>copiado</em>.</h1><p class="sub" style="margin:0 auto">A LUT leva a cor da referência para o seu vídeo, com os ajustes que você fez.</p>
-    <div class="arq"><span class="ic">.cube</span><span><b>${nome}</b><small>Arquivo ${nome}.cube · padrão ${N}×${N}×${N} · funciona no CapCut, Premiere, DaVinci e Final Cut</small></span></div>
+    <div class="arq"><span class="ic">.cube</span><span><b>${nome}</b><small>Arquivo ${nome}.cube · padrão ${N}×${N}×${N} · funciona no CapCut, Premiere, DaVinci e Final Cut${PERFIL ? `<br><span style="color:#fff;font-weight:600">Para vídeo em ${PERFIS[PERFIL].curto}: aplique direto no vídeo em Log, sem outra LUT de conversão antes.</span>` : ''}</small></span></div>
     ${acesso ? `<button class="btn full" id="baixar">Baixar ${nome}</button>` : trava}
     <div class="capcut"><span><b>Instalar direto no CapCut</b><small>Um clique no app Base FL e a LUT aparece em Ajuste › LUT.</small></span><span class="breve">Em breve</span></div>
     <div class="como"><h3>Como usar no seu programa</h3>
