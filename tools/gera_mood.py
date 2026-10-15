@@ -739,3 +739,120 @@ GREENN = r"""<script> window.startLoading = function(button) { const originalHTM
 up = cab + corpo + GREENN + script + '<script src="/zap.js" defer></script>\n</body>\n</html>\n'
 d2 = os.path.join(RAIZ, 'oferta/mood/index.html'); os.makedirs(os.path.dirname(d2), exist_ok=True)
 open(d2, 'w', encoding='utf-8').write(up); print('upsell ok', len(up))
+
+# ===== página PRIVADA da campanha para alunos (basefl.com/alunos/mood/) =====
+# Fora do Google (noindex) e sem link no site: só chega quem recebe o convite (e-mail / WhatsApp de quem pediu).
+# O desconto de verdade mora na OFERTA da Greenn (R$ 97), que é desativada no fim da campanha.
+# Esta página só mostra o prazo; mexer no navegador não muda preço nenhum.
+ALUNOS_CHECKOUT = 'https://payfast.greenn.com.br/2y52kh4/offer/HKpnsu?ch_id=144304'          # COLE AQUI o link da oferta de aluno (R$ 97) da Greenn
+ALUNOS_PRECO, ALUNOS_DE = 97, 147
+ALUNOS_FIM = '2026-10-26T23:59:00-03:00'               # fim REAL da condição, ex.: '2026-10-20T23:59:00-03:00' (o mesmo horário em que a oferta sai do ar na Greenn)
+ALUNOS_FIM_TXT = 'segunda, 26/10, às 23h59'           # o mesmo fim escrito para gente, ex.: 'segunda, 20/10, às 23h59'
+_ap = ALUNOS_PRECO * I / (1 - (1 + I) ** -NP); ALUNOS_PARC = f'{_ap:.2f}'.replace('.', ',')
+ECON = ALUNOS_DE - ALUNOS_PRECO
+PCT = round(ECON * 100 / ALUNOS_DE)
+_np = ALUNOS_DE * I / (1 - (1 + I) ** -NP); NORMAL_PARC = f'{_np:.2f}'.replace('.', ',')
+SOBE = 'Em 26/10 o Mood sobe para R$ 147 para todo mundo.'   # texto decidido: nada de "de R$ 147 por R$ 97"
+al = out
+def _tr(a, b, n=1):
+    global al
+    assert al.count(a) >= 1, a[:60]
+    al = al.replace(a, b) if n == 0 else al.replace(a, b, n)
+_tr('<title>Mood — copie a cor de qualquer vídeo | Base FL</title>', '<title>Mood · condição de aluno Base FL</title>\n<meta name="robots" content="noindex, nofollow">')
+_tr('<span class="mono kick">Sem saber color grading</span>', '<span class="mono kick">Condição de aluno Base FL</span>')
+_tr('<h1>Copie a cor de <em>qualquer vídeo</em>.</h1>', '<h1>A cor que você imagina, <em>muito mais fácil</em> de chegar.</h1>')
+_tr('<p class="lead">Sabe aquele vídeo com a cor que você queria no seu? Mostre ele para o Mood, mostre o seu vídeo, e baixe a <b>LUT pronta</b>. Leva menos de um minuto.</p>',
+    '<p class="lead">Escolha uma referência com a cor que você gosta, mostre o seu vídeo e o Mood cria a <b>LUT pronta</b> para o seu editor. Sem saber color grading.</p>\n'
+    f'    <div class="alp"><span class="por">Preço de aluno: <b>R$ {ALUNOS_PRECO}</b></span></div>\n    <p class="sobe">{SOBE}</p>\n'
+    '    <p class="prz" id="prz" hidden></p>')
+_tr('''      <a class="btn" href="https://basefl.com/lut/" data-testar>Testar com o meu vídeo, de graça</a>
+      <a class="btn gh" href="#oferta" data-comprar>Já testei, quero o Mood</a>''',
+    '''      <a class="btn" href="#oferta" data-comprar>Quero aproveitar meu valor de aluno</a>
+      <a class="btn gh" href="https://basefl.com/lut/" data-testar>Testar com o meu vídeo antes</a>''')
+_tr('<a class="btn sm" href="#oferta">Quero o Mood</a>', '<a class="btn sm" href="#oferta">Valor de aluno</a>')
+_tr('<span class="mono">Acesso de 1 ano</span>\n    <h2>Todas as cores que você quiser copiar.</h2>\n    <div class="preco"><small>R$</small>__PRECO__</div>'.replace('__PRECO__', str(PRECO)),
+    f'<span class="mono">Condição de aluno · acesso de 1 ano</span>\n    <h2>Todas as cores que você quiser copiar.</h2>\n    <p class="dex">Preço de aluno</p>\n    <div class="preco"><small>R$</small>{ALUNOS_PRECO}</div>\n    <p class="sobe">{SOBE}</p>')
+_tr(f'à vista, ou <b>12x de R$ {PARC}</b>', f'à vista, ou <b>12x de R$ {ALUNOS_PARC}</b>', 0)
+_tr('<a class="btn" href="#" data-comprar>Quero acessar o Mood</a>', '<a class="btn" href="#" data-comprar>Quero aproveitar meu valor de aluno</a>\n    <p class="prz2" id="prz2" hidden></p>')
+_tr(f'Quero o Mood · R$ {PRECO}', f'Quero o Mood · R$ {ALUNOS_PRECO}', 0)
+_tr(f'<b>Mood · R$ {PRECO}</b>ou 12x de R$ {PARC}', f'<b>Mood · R$ {ALUNOS_PRECO}</b>preço de aluno', 0)
+_tr('</style>', '''.alp{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:6px 14px;margin:22px auto 0}
+.alp .de{color:var(--dim);font-size:16px}.alp s{text-decoration-thickness:2px}
+.alp .por{font-size:18px}.alp .por b{font-family:var(--d);font-weight:800;font-size:30px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.alp .eco{font-family:var(--m);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#bfe9c8;background:rgba(127,206,143,.10);border:1px solid rgba(127,206,143,.35);border-radius:99px;padding:5px 11px}
+.prz,.prz2{color:var(--mute);font-size:14.5px;margin:14px auto 0}.prz b,.prz2 b{color:var(--ink)}
+.dex{color:var(--dim);font-size:16px;margin-top:20px}.dex s{text-decoration-thickness:2px}
+.sobe{color:var(--mute);font-size:14.5px;margin:10px auto 0}
+.encerrada .alp,.encerrada .dex,.encerrada .sobe{display:none}
+</style>''')
+# script: link da oferta de aluno, UTMs do convite repassadas ao checkout, prazo real
+_tr(f"const CHECKOUT = '{CHECKOUT}';", f"const CHECKOUT = '{ALUNOS_CHECKOUT}';")
+_tr("const PRODUTO = 'mood';", "const PRODUTO = 'mood_alunos';\nconst FIM = '" + ALUNOS_FIM + "', FIM_TXT = '" + ALUNOS_FIM_TXT + "', NORMAL = 'https://basefl.com/conheca/mood/', P_ALUNO = '" + str(ALUNOS_PRECO) + "', P_NORMAL = '" + str(ALUNOS_DE) + "', PARC_ALUNO = '" + ALUNOS_PARC + "', PARC_NORMAL = '" + NORMAL_PARC + "';")
+_tr('''  const u = new URL(CHECKOUT);
+  u.searchParams.set('utm_source', 'basefl'); u.searchParams.set('utm_medium', DE); u.searchParams.set('utm_campaign', PRODUTO); u.searchParams.set('src', 'basefl-' + DE);
+  return u.toString();''', '''  const u = new URL(CHECKOUT), inc = new URLSearchParams(location.search);
+  // o convite traz utm_* (canal, criativo, segmento) e c (lote/variante, sem dado pessoal): seguem para o checkout e para a UTMify
+  inc.forEach((v, k) => { if (/^(utm_|src$|sck$|c$)/.test(k) && !u.searchParams.has(k)) u.searchParams.set(k, v); });
+  if (!u.searchParams.has('utm_source')) u.searchParams.set('utm_source', 'basefl');
+  if (!u.searchParams.has('utm_medium')) u.searchParams.set('utm_medium', DE);
+  if (!u.searchParams.has('utm_campaign')) u.searchParams.set('utm_campaign', 'mood_alunos_2026');
+  if (!u.searchParams.has('src')) u.searchParams.set('src', 'basefl-alunos');
+  return u.toString();''')
+_tr("const io = new IntersectionObserver(", '''// prazo: só aparece se a data real estiver configurada. Depois do fim, o convite vira link para a página normal.
+(function(){
+  if (!FIM) return;
+  const fim = new Date(FIM).getTime(), p = $('#prz'), p2 = $('#prz2');
+  function t(){
+    const r = fim - Date.now();
+    if (r <= 0){
+      document.body.classList.add('encerrada');
+      // acabou: a página mostra o preço normal (R$ 147) em todo lugar
+      const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      for (let n; (n = w.nextNode());) {
+        n.nodeValue = n.nodeValue.split('R$ ' + PARC_ALUNO).join('R$ ' + PARC_NORMAL).split('R$ ' + P_ALUNO).join('R$ ' + P_NORMAL).replace(/preço de aluno/gi, 'acesso de 1 ano');
+        if (n.parentElement && n.parentElement.closest('.preco') && n.nodeValue.trim() === P_ALUNO) n.nodeValue = P_NORMAL;
+      }
+      [p, p2].forEach(e => { e.hidden = false; e.innerHTML = 'A condição de aluno <b>encerrou</b>. O Mood segue disponível pelo valor normal.'; });
+      document.querySelectorAll('[data-comprar]').forEach(b => { b.textContent = 'Ver o Mood'; b.href = NORMAL; b.replaceWith(b.cloneNode(true)); });
+      return;
+    }
+    const h = Math.floor(r / 36e5), m = Math.floor(r % 36e5 / 6e4);
+    const falta = h >= 24 ? Math.floor(h / 24) + 'd ' + (h % 24) + 'h' : h + 'h ' + m + 'min';
+    [p, p2].forEach(e => { e.hidden = false; e.innerHTML = 'Condição de aluno até <b>' + FIM_TXT + '</b> · faltam ' + falta; });
+    setTimeout(t, 30000);
+  }
+  t();
+})();
+const io = new IntersectionObserver(''')
+# ---- vídeo da campanha + arte "A cor muda tudo" logo abaixo do topo (15/10) ----
+ALUNOS_NORMAL_CHECKOUT = 'https://payfast.greenn.com.br/195947/offer/0Ng6fL'   # oferta pública de R$ 147 (vale depois do fim)
+_tr(f'<div class="alp"><span class="por">Preço de aluno: <b>R$ {ALUNOS_PRECO}</b></span></div>',
+    f'<div class="alp"><span class="por">Preço de aluno: <b>R$ {ALUNOS_PRECO}</b></span><span class="par">ou 12x de R$ {ALUNOS_PARC}</span></div>')
+VER_HTML = """  </header>
+
+  <section id="ver" class="ver">
+    <div class="sh">
+      <span class="mono rv">Na prática</span>
+      <h2 class="rv">O mesmo vídeo, várias cores.</h2>
+      <p class="sec-p rv">Uma gravação só. Cada cor é uma LUT que o Mood criou a partir de uma referência.</p>
+    </div>
+    <div class="vergrid">
+      <figure class="vv rv"><video src="/alunos/mood/assets/mood-video.mp4?v=1" poster="/alunos/mood/assets/mood-video.jpg?v=1" width="720" height="1280" muted loop playsinline webkit-playsinline autoplay controls preload="metadata" aria-label="Vídeo do Fernando mostrando a mesma cena em Log, Rec.709 e com quatro LUTs criadas pelo Mood"></video><figcaption>Toque para ouvir</figcaption></figure>
+      <figure class="va rv d2"><img src="/alunos/mood/assets/mood-arte.jpg?v=1" width="1080" height="1350" alt="A mesma cena sem LUT e com quatro looks criados pelo Mood: Vivo, Outono, Frio e Dourado" loading="lazy" decoding="async"></figure>
+    </div>
+  </section>
+"""
+_tr('  </header>\n', VER_HTML, 1)
+VER_CSS = """.alp .par{color:var(--mute);font-size:15px}
+.ver .vergrid{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1fr);gap:18px;align-items:start;max-width:980px;margin:28px auto 0}
+.ver figure{margin:0}.ver video,.ver img{display:block;width:100%;height:auto;border-radius:18px;background:var(--panel);box-shadow:0 0 0 1px var(--line),0 22px 60px -30px rgba(0,0,0,.8)}
+.ver figcaption{color:var(--dim);font-size:12.5px;text-align:center;margin-top:8px;font-family:var(--m);letter-spacing:.08em;text-transform:uppercase}
+@media (max-width:760px){.ver .vergrid{grid-template-columns:1fr;max-width:460px}}
+.encerrada .alp,"""
+_tr('.encerrada .alp,', VER_CSS)
+# depois do fim: o botão vai direto para a oferta pública de R$ 147
+_tr("NORMAL = 'https://basefl.com/conheca/mood/'", "NORMAL = '" + ALUNOS_NORMAL_CHECKOUT + "'")
+_tr("b.textContent = 'Ver o Mood'; b.href = NORMAL;", "b.textContent = 'Quero o Mood · R$ ' + P_NORMAL; b.href = NORMAL;")
+d3 = os.path.join(RAIZ, 'alunos/mood/index.html'); os.makedirs(os.path.dirname(d3), exist_ok=True)
+if os.path.exists(d3) and 'pagina-manual' in open(d3, encoding='utf-8').read(): print('alunos: página feita à mão, não sobrescrevi')
+else: open(d3, 'w', encoding='utf-8').write(al); print('alunos ok', len(al), '12x de', ALUNOS_PARC, f'economia R$ {ECON} ({PCT}%)')
