@@ -304,7 +304,10 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
   <div class="btns"><button class="primary" id="t-vai" disabled>Confirmar e instalar</button><button class="ghost" id="t-nao">Cancelar</button></div>
 </div></div>
 
-<script src="catalogo.js"></script>
+<!-- preços e links: o app usa o catálogo publicado no site (muda na hora para todo mundo, sem atualizar o app).
+     Sem internet ou se o site falhar, usa a cópia que veio junto com o app. -->
+<script src="https://basefl.com/catalogo.js" onerror="window.CATALOGO=null"></script>
+<script>if (!window.CATALOGO || !Array.isArray(window.CATALOGO.produtos) || !window.CATALOGO.kit || !['legendas','sons','luts','assets','briefing','preco','contrato','painel','mood','case','timer'].every(function (k) { return window.CATALOGO.produtos.some(function (p) { return p.key === k; }); })) { window.CATALOGO = null; document.write('<script src="catalogo.js"><\/script>'); }</script>
 <script src="aulas.js"></script>
 <script src="avisos-dados.js"></script>
 <script src="avisos.js"></script>
