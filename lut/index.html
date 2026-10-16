@@ -306,7 +306,13 @@ details.fino[open] summary .fa .f1{display:none}details.fino[open] summary .fa .
   .pl .tempo span{display:none}
   .acoes .btn{width:100%}
 }
-@media (prefers-reduced-motion:reduce){.pl .play::before,.pl .giro{animation:none}}
+.pl .somon{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;display:none;align-items:center;gap:12px;border:0;cursor:pointer;background:var(--grad);color:#14070e;font:800 17px var(--f);padding:16px 24px 16px 18px;border-radius:999px;box-shadow:0 18px 50px -12px rgba(255,111,174,.85);white-space:nowrap}
+.pl .somon::before{content:"";position:absolute;inset:-8px;border-radius:inherit;border:1px solid rgba(255,255,255,.35);animation:aro 2.2s ease-out infinite}
+.pl .somon svg{width:24px;height:24px}
+.pl.mudo-auto .somon{display:inline-flex}
+.pl.mudo-auto .ctl{opacity:0;pointer-events:none}
+@media (max-width:640px){.pl .somon{font-size:15px;padding:13px 18px 13px 14px}}
+@media (prefers-reduced-motion:reduce){.pl .play::before,.pl .giro,.pl .somon::before{animation:none}}
 </style>
 </head>
 <body>
@@ -1194,6 +1200,7 @@ function aulaIntro(){
     <div class="pl" id="pl">
       <video id="pv-aula" preload="metadata" playsinline src="${AULA_URL}#t=0.1"></video>
       <div class="giro"></div><div class="flash" id="pflash"></div>
+      <button class="somon" id="psomon" type="button">${IC_AULA.mudo}Toque para ouvir a aula</button>
       <button class="capa" id="pcapa" type="button" aria-label="Assistir a aula"><span class="play">${IC_AULA.play}</span><span class="rot"><small>Aula do Mood</small>Como ter o melhor resultado</span></button>
       <div class="ctl">
         <div class="barra" id="pbarra" role="slider" aria-label="Posição do vídeo" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><div class="trilho"><div class="buf"></div><div class="feito"></div><div class="bolinha"></div></div><span class="dica" id="pdica">0:00</span></div>
@@ -1243,10 +1250,14 @@ function montaPlayer(){
   const pisca = ic => { flash.innerHTML = ic; flash.classList.remove('on'); void flash.offsetWidth; flash.classList.add('on'); };
   const alterna = () => { if (v.paused){ v.play().catch(() => {}); pisca(IC_AULA.play); } else { v.pause(); pisca(IC_AULA.pausa); } };
   const acorda = () => { pl.classList.remove('quieto'); clearTimeout(timer); timer = setTimeout(() => { if (!v.paused && !arrastando) pl.classList.add('quieto'); }, 2600); };
-  const comeca = () => { if (!inicio){ inicio = true; pl.classList.add('iniciou'); evAula('aula_teste_play'); } v.play().catch(() => {}); acorda(); };
+  const comeca = () => { if (!inicio){ inicio = true; pl.classList.add('iniciou'); evAula('aula_teste_play'); } if (pl.classList.contains('mudo-auto')) return ligaSom(); v.play().catch(() => {}); acorda(); };
+  // o navegador só deixa começar sozinho SEM som: a aula já começa tocando muda, e o primeiro toque liga o som do começo
+  function ligaSom(){ pl.classList.remove('mudo-auto'); v.muted = false; if (v.volume === 0) v.volume = 1; v.currentTime = 0; v.play().catch(() => {}); evAula('aula_teste_som'); acorda(); }
+  $('#psomon').onclick = e => { e.stopPropagation(); ligaSom(); };
+  const autoplay = () => { v.muted = true; v.play().then(() => { inicio = true; pl.classList.add('iniciou', 'mudo-auto'); evAula('aula_teste_autoplay'); }).catch(() => { v.muted = false; }); };
 
   $('#pcapa').onclick = comeca;
-  v.addEventListener('click', () => { if (!inicio) return comeca(); alterna(); acorda(); });
+  v.addEventListener('click', () => { if (!inicio || pl.classList.contains('mudo-auto')) return comeca(); alterna(); acorda(); });
   v.addEventListener('dblclick', () => telaCheia());
   bToca.onclick = () => { if (!inicio) return comeca(); alterna(); };
   ['play', 'pause', 'ended'].forEach(e => v.addEventListener(e, estado));
@@ -1311,6 +1322,7 @@ function montaPlayer(){
   document.addEventListener('keydown', teclas);
   paraPlayer = () => { document.removeEventListener('keydown', teclas); document.removeEventListener('fullscreenchange', mudouTela); document.removeEventListener('webkitfullscreenchange', mudouTela); };
   somIcone(); pinta();
+  if (!calmo) autoplay();
 }
 
 // ===================== início =====================
