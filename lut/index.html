@@ -217,7 +217,11 @@ details.fino[open] summary .fa .f1{display:none}details.fino[open] summary .fa .
 .pg{cursor:pointer;font-weight:700;font-size:13px;color:var(--mute);background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:7px 13px}
 .pg.on{background:var(--ink);color:#111;border-color:var(--ink)}
 .lock{border-top:1px dashed var(--line);margin-top:16px;padding-top:16px}
-.lock p{font-weight:700;margin-bottom:4px}.lock .sm{color:var(--mute);font-size:14px;margin-bottom:12px}
+.lock p{font-weight:700;margin-bottom:4px}.lock.aluno{position:relative;margin-top:18px;padding:20px 18px 18px;border:0;border-radius:20px;background:linear-gradient(var(--panel),var(--panel)) padding-box,var(--grad) border-box;border:1px solid transparent}
+.lock .selo-al{display:inline-flex;align-items:center;gap:7px;font:700 11px var(--m);letter-spacing:.12em;text-transform:uppercase;color:#14070e;background:var(--grad);border-radius:999px;padding:6px 11px;margin-bottom:12px}
+.lock .prc{font-family:var(--d);font-weight:800;font-size:52px;line-height:1;letter-spacing:-.03em;margin:6px 0 6px}
+.lock .prc small{font-size:.36em;font-weight:600;color:var(--mute);margin-right:5px;vertical-align:.95em}
+.lock .sm{color:var(--mute);font-size:14px;margin-bottom:12px}
 .inp{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font:inherit;font-size:16px;outline:none;margin-bottom:12px}
 .inp:focus{border-color:var(--a2)}
 .err{color:#ff8f7a;font-size:14px;min-height:20px;margin-top:8px}
@@ -851,6 +855,24 @@ function arquivoCube(titulo){
   return L.join('\n') + '\n';
 }
 
+// ===================== condição de aluno (campanha) =====================
+// Quem chega pela página dos alunos (link com ?aluno=1) vê o preço de aluno no final, até o fim da campanha.
+// Depois do FIM tudo volta sozinho para o preço normal do catálogo.
+const ALUNO = { fim: '2026-10-26T23:59:59-03:00', preco: '97', parc: '9,97', normal: '147', ate: '26/10',
+  checkout: 'https://payfast.greenn.com.br/2y52kh4/offer/HKpnsu?ch_id=144304' };
+const ehAluno = (() => { try {
+  const q = new URLSearchParams(location.search);
+  if (q.get('aluno') === '1' || /mood_alunos/.test(q.get('utm_campaign') || '')) localStorage.setItem('mood_aluno', '1');
+  return localStorage.getItem('mood_aluno') === '1' && Date.now() < Date.parse(ALUNO.fim);
+} catch { return false; } })();
+function compraAluno(){
+  const u = new URL(ALUNO.checkout);
+  u.searchParams.set('utm_source', 'ferramenta'); u.searchParams.set('utm_medium', 'teste'); u.searchParams.set('utm_campaign', 'mood_alunos_2026'); u.searchParams.set('src', 'teste-gratis');
+  try { Base.evento('checkout_clicked', PACK, { de: 'ferramenta_aluno' }); } catch {}
+  try { window.FLPixel && FLPixel.checkout(); } catch {}
+  (window.top || window).location.href = u.toString();
+}
+
 // ===================== estado =====================
 let VIDS = [], iV = 0, REFS = [], iR = 0, CENAS = [null, null, null], NOTAS = { V:'', R:'' };
 let acesso = Base.tem(PACK), vencido = Base.vencido(PACK), avisouDemo = false;
@@ -1108,7 +1130,10 @@ function passo3(){
   passos(2);
   montaLUT();
   const { nome } = proximoNome();
-  const trava = acesso ? '' : `<div class="lock"><p>${vencido ? 'Seu acesso de 1 ano terminou' : 'Desbloqueie para baixar a sua LUT'}</p><div class="sm">${vencido ? 'Renove para continuar criando LUTs.' : 'Crie quantas LUTs quiser, por 1 ano, no celular e no computador.'}</div>
+  const trava = acesso ? '' : (ehAluno && !vencido) ? `<div class="lock aluno"><span class="selo-al">Condição de aluno · até ${ALUNO.ate}</span><p>Desbloqueie para baixar a sua LUT</p>
+      <div class="prc"><small>R$</small>${ALUNO.preco}</div><div class="sm">à vista, ou 12x de R$ ${ALUNO.parc}. Crie quantas LUTs quiser, por 1 ano, no celular e no computador. Depois de ${ALUNO.ate}, o Mood passa a custar R$ ${ALUNO.normal}.</div>
+      <button class="btn full" id="comprar" data-aluno="1">Liberar o Mood · R$ ${ALUNO.preco}</button>${Base.sessao() ? '' : '<button class="link" id="entrar" style="display:block;margin:12px auto 0">Já comprei · entrar</button>'}</div>`
+    : `<div class="lock"><p>${vencido ? 'Seu acesso de 1 ano terminou' : 'Desbloqueie para baixar a sua LUT'}</p><div class="sm">${vencido ? 'Renove para continuar criando LUTs.' : 'Crie quantas LUTs quiser, por 1 ano, no celular e no computador.'}</div>
       <button class="btn full" id="comprar">${vencido ? 'Renovar meu acesso' : 'Liberar o Mood · R$ ' + Base.produto('mood').preco}</button>${Base.sessao() ? '' : '<button class="link" id="entrar" style="display:block;margin:12px auto 0">Já comprei · entrar</button>'}</div>`;
   if (!acesso && !avisouDemo){ avisouDemo = true; Base.evento('demo_completed', PACK); }
   tela(`<div class="fim"><div class="sobre-t"><span class="mono">Sua LUT</span></div><h1>O mood está <em>copiado</em>.</h1><p class="sub" style="margin:0 auto">A LUT leva a cor da referência para o seu vídeo, com os ajustes que você fez.</p>
@@ -1129,7 +1154,7 @@ function passo3(){
     a.href = URL.createObjectURL(blob); a.download = nm + '.cube'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
     store.set('fl_lut_n', String(n)); toast(nm + ' baixada'); $('#baixar').textContent = 'Baixar de novo';
   };
-  if ($('#comprar')) $('#comprar').onclick = () => Base.comprar('mood', 'ferramenta');
+  if ($('#comprar')) $('#comprar').onclick = () => $('#comprar').dataset.aluno ? compraAluno() : Base.comprar('mood', 'ferramenta');
   if ($('#entrar')) $('#entrar').onclick = async () => { if (await Base.login()){ sincAcesso(); toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas o Mood não está nas compras deste e-mail'); passo3(); } };
 }
 
