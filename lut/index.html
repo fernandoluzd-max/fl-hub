@@ -1314,9 +1314,10 @@ function montaPlayer(){
 }
 
 // ===================== início =====================
-botaoConta(); if (store.get(AULA_VISTA)) passo1(); else aulaIntro();
+// a aula aparece SEMPRE antes do teste para quem ainda não comprou; quem já tem o Mood vai direto para a ferramenta
+botaoConta(); if (acesso) passo1(); else aulaIntro();
 document.addEventListener('click', e => { if (e.target.closest && e.target.closest('#rever')){ evAula('aula_teste_rever'); aulaIntro(); } });
-Base.pronto.then(() => { sincAcesso(); if ($('.fim')) passo3(); });
+Base.pronto.then(() => { sincAcesso(); if ($('.fim')) passo3(); else if (acesso && $('#pl')) { if (paraPlayer){ paraPlayer(); paraPlayer = null; } passo1(); } });
 Base.aoMudar(() => { const era = acesso; sincAcesso(); if (era !== acesso && $('.fim')) passo3(); });
 
 // aula da ferramenta: o botão só aparece quando existe aula cadastrada
