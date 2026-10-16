@@ -238,6 +238,9 @@ details.fino[open] summary .fa .f1{display:none}details.fino[open] summary .fa .
 .intro .nota{display:flex;gap:10px;align-items:flex-start;color:var(--mute);font-size:14.5px;line-height:1.45;margin:0 0 22px;max-width:62ch}
 .intro .nota i{flex:none;width:8px;height:8px;margin-top:7px;border-radius:50%;background:var(--grad)}
 .acoes{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px}
+.acoes .espera{color:var(--dim);font:700 12px var(--m);letter-spacing:.06em;padding:12px 0}
+#ja-vi.surge{animation:surge .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes surge{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .acoes .pula{background:none;border:0;color:var(--dim);font-size:14px;cursor:pointer;padding:10px 6px;text-decoration:underline;text-underline-offset:3px}
 .acoes .pula:hover{color:var(--mute)}
 .rever{display:inline-flex;align-items:center;gap:8px;background:none;border:1px solid var(--line);border-radius:999px;color:var(--mute);font-size:13.5px;font-weight:600;padding:7px 14px 7px 9px;cursor:pointer;margin:-8px 0 20px;transition:border-color .15s,color .15s}
@@ -1214,8 +1217,8 @@ function aulaIntro(){
       </div>
     </div>
     <div class="acoes">
-      <button class="btn" id="ja-vi" type="button">Já assisti, quero testar</button>
-      <button class="pula" id="pular" type="button">Pular e testar agora</button>
+      <button class="btn" id="ja-vi" type="button" hidden>Já assisti, quero testar</button>
+      <span class="espera" id="espera">Ligue o som para assistir a aula</span>
     </div>
   </div>`);
   montaPlayer();
@@ -1228,7 +1231,6 @@ function aulaIntro(){
     passo1();
   };
   $('#ja-vi').onclick = () => sai('ja_assisti');
-  $('#pular').onclick = () => sai('pulou');
   evAula('aula_teste_mostrou');
 }
 
@@ -1254,7 +1256,17 @@ function montaPlayer(){
   // o navegador só deixa começar sozinho SEM som: a aula já começa tocando muda, e o primeiro toque liga o som do começo
   function ligaSom(){ pl.classList.remove('mudo-auto'); v.muted = false; if (v.volume === 0) v.volume = 1; v.currentTime = 0; v.play().catch(() => {}); evAula('aula_teste_som'); acorda(); }
   $('#psomon').onclick = e => { e.stopPropagation(); ligaSom(); };
-  const autoplay = () => { v.muted = true; v.play().then(() => { inicio = true; pl.classList.add('iniciou', 'mudo-auto'); evAula('aula_teste_autoplay'); }).catch(() => { v.muted = false; }); };
+  const autoplay = () => {
+    v.muted = false;
+    v.play().then(() => { inicio = true; pl.classList.add('iniciou'); evAula('aula_teste_autoplay', { som: true }); acorda(); })
+      .catch(() => { v.muted = true; v.play().then(() => { inicio = true; pl.classList.add('iniciou', 'mudo-auto'); evAula('aula_teste_autoplay', { som: false }); }).catch(() => { v.muted = false; }); });
+  };
+  // o botão de seguir para o teste só aparece depois de 10 s de aula com som (ou 30 s sem som; ou na hora, se o vídeo não carregar)
+  let ouvido = 0, ult = 0;
+  const libera = () => { const b = $('#ja-vi'); if (b && b.hidden){ b.hidden = false; b.classList.add('surge'); const d = $('#espera'); if (d) d.remove(); } };
+  v.addEventListener('timeupdate', () => { const t = v.currentTime; if (!v.paused && t > ult && t - ult < 1.5) ouvido += (t - ult) * (v.muted ? 1 / 3 : 1); ult = t; const d = $('#espera'); if (d && ouvido < 10) d.textContent = v.muted ? 'Ligue o som para assistir a aula' : 'O botão para testar aparece em ' + Math.ceil(10 - ouvido) + ' s'; if (ouvido >= 10) libera(); });
+  v.addEventListener('seeking', () => { ult = v.currentTime; });
+  v.addEventListener('error', libera);
 
   $('#pcapa').onclick = comeca;
   v.addEventListener('click', () => { if (!inicio || pl.classList.contains('mudo-auto')) return comeca(); alterna(); acorda(); });
@@ -1266,7 +1278,7 @@ function montaPlayer(){
   ['loadedmetadata', 'progress', 'durationchange'].forEach(e => v.addEventListener(e, pinta));
   v.addEventListener('waiting', () => pl.classList.add('carrega'));
   ['playing', 'canplay', 'pause'].forEach(e => v.addEventListener(e, () => pl.classList.remove('carrega')));
-  v.addEventListener('error', () => { pl.classList.remove('carrega'); toast('Não deu para carregar a aula agora. Você pode pular e testar.'); });
+  v.addEventListener('error', () => { pl.classList.remove('carrega'); toast('Não deu para carregar a aula agora. Pode seguir para o teste.'); });
 
   // barra de progresso: clicar, arrastar (mouse e dedo) e teclado
   const posicao = x => { const r = barra.getBoundingClientRect(); return Math.min(1, Math.max(0, (x - r.left) / r.width)); };
