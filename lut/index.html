@@ -1180,7 +1180,10 @@ function botaoConta(){
 // ===================== AULA ANTES DO TESTE =====================
 // Na primeira visita aparece a aula (8 min) antes do teste. Quem já viu (ou pulou) vai direto para o passo 1.
 // Para trocar o vídeo, mude AULA_URL. Os eventos vão para a função "evento" do Supabase (aula_teste_*).
-const AULA_URL = 'https://aulas.basefl.com/mood.mp4';
+// versão para web: 38 MB, H.264 + AAC, com o índice no início do arquivo (começa a tocar sem baixar tudo).
+// O original (mood.mp4, 201 MB) tinha o índice no fim: o celular precisava baixar muito antes de tocar.
+const AULA_URL = 'https://aulas.basefl.com/mood-web.mp4';
+const AULA_CAPA = '/lut/aula-capa.jpg';
 const AULA_VISTA = 'mood_aula_vista';
 const IC_AULA = {
   play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4c0 .8.9 1.3 1.6.9l11.3-7.2c.6-.4.6-1.3 0-1.7L8.6 3.9C7.9 3.5 7 4 7 4.8z"/></svg>',
@@ -1202,7 +1205,7 @@ function aulaIntro(){
     <p class="sub">Nessa aula eu mostro, passo a passo, como escolher a referência e preparar o seu vídeo para o Mood acertar a cor.</p>
     <p class="nota"><i></i><span>Testar de qualquer jeito costuma dar um resultado fraco. Com esses cuidados, a diferença aparece na hora.</span></p>
     <div class="pl" id="pl">
-      <video id="pv-aula" preload="auto" muted playsinline webkit-playsinline src="${AULA_URL}"></video>
+      <video id="pv-aula" preload="auto" muted playsinline webkit-playsinline poster="${AULA_CAPA}" src="${AULA_URL}"></video>
       <div class="giro"></div><div class="flash" id="pflash"></div>
       <button class="somon" id="psomon" type="button">${IC_AULA.mudo}Toque para ouvir a aula</button>
       <button class="capa" id="pcapa" type="button" aria-label="Assistir a aula"><span class="play">${IC_AULA.play}</span><span class="rot"><small>Aula do Mood</small>Como ter o melhor resultado</span></button>
@@ -1253,18 +1256,19 @@ function montaPlayer(){
   const pisca = ic => { flash.innerHTML = ic; flash.classList.remove('on'); void flash.offsetWidth; flash.classList.add('on'); };
   const alterna = () => { if (v.paused){ v.play().catch(() => {}); pisca(IC_AULA.play); } else { v.pause(); pisca(IC_AULA.pausa); } };
   const acorda = () => { pl.classList.remove('quieto'); clearTimeout(timer); timer = setTimeout(() => { if (!v.paused && !arrastando) pl.classList.add('quieto'); }, 2600); };
-  const comeca = () => { if (!inicio){ inicio = true; pl.classList.add('iniciou'); evAula('aula_teste_play'); } if (pl.classList.contains('mudo-auto')) return ligaSom(); v.play().catch(() => {}); acorda(); };
+  const comeca = () => { if (!inicio){ inicio = true; pl.classList.add('iniciou'); evAula('aula_teste_play'); } if (pl.classList.contains('mudo-auto')) return ligaSom(); v.muted = false; somIcone(); v.play().catch(() => {}); acorda(); };   // toque da pessoa: pode tocar com som
   // o navegador só deixa começar sozinho SEM som: a aula já começa tocando muda, e o primeiro toque liga o som do começo
   function ligaSom(){ pl.classList.remove('mudo-auto'); v.muted = false; if (v.volume === 0) v.volume = 1; v.currentTime = 0; v.play().catch(() => {}); evAula('aula_teste_som'); acorda(); }
   $('#psomon').onclick = e => { e.stopPropagation(); ligaSom(); };
   const celular = matchMedia('(pointer:coarse)').matches || /iPhone|iPad|Android/i.test(navigator.userAgent);
   const mudoAuto = () => { v.muted = true; v.defaultMuted = true; return v.play().then(() => { inicio = true; pl.classList.add('iniciou', 'mudo-auto'); evAula('aula_teste_autoplay', { som: false }); }); };
+  const bloqueado = () => { v.muted = false; const d = $('#espera'); if (d && !inicio) d.textContent = 'Toque no play para assistir a aula'; };
   const autoplay = () => {
     // no celular o navegador nunca deixa começar com som: já começa mudo (e tenta de novo quando o vídeo carregar)
-    if (celular){ mudoAuto().catch(() => v.addEventListener('loadeddata', () => { if (!inicio) mudoAuto().catch(() => {}); }, { once: true })); return; }
+    if (celular){ mudoAuto().catch(() => { bloqueado(); v.addEventListener('loadeddata', () => { if (!inicio) mudoAuto().catch(bloqueado); }, { once: true }); }); return; }
     v.muted = false;
     v.play().then(() => { inicio = true; pl.classList.add('iniciou'); evAula('aula_teste_autoplay', { som: true }); acorda(); })
-      .catch(() => { mudoAuto().catch(() => { v.muted = false; }); });
+      .catch(() => { mudoAuto().catch(bloqueado); });
   };
   // o botão de seguir para o teste só aparece depois de 10 s de aula com som (ou 30 s sem som; ou na hora, se o vídeo não carregar)
   let ouvido = 0, ult = 0;
@@ -1344,9 +1348,11 @@ function montaPlayer(){
 
 // ===================== início =====================
 // a aula aparece SEMPRE antes do teste para quem ainda não comprou; quem já tem o Mood vai direto para a ferramenta
-botaoConta(); if (acesso) passo1(); else aulaIntro();
+// veio por um botão de teste (página de vendas ou dos alunos)? mostra a aula mesmo para quem está logado
+const VEIO_TESTE = /[?&](aluno|teste)=1/.test(location.search);
+botaoConta(); if (acesso && !VEIO_TESTE) passo1(); else aulaIntro();
 document.addEventListener('click', e => { if (e.target.closest && e.target.closest('#rever')){ evAula('aula_teste_rever'); aulaIntro(); } });
-Base.pronto.then(() => { sincAcesso(); if ($('.fim')) passo3(); else if (acesso && $('#pl')) { if (paraPlayer){ paraPlayer(); paraPlayer = null; } passo1(); } });
+Base.pronto.then(() => { sincAcesso(); if ($('.fim')) passo3(); else if (acesso && !VEIO_TESTE && $('#pl')) { if (paraPlayer){ paraPlayer(); paraPlayer = null; } passo1(); } });
 Base.aoMudar(() => { const era = acesso; sincAcesso(); if (era !== acesso && $('.fim')) passo3(); });
 
 // aula da ferramenta: o botão só aparece quando existe aula cadastrada
