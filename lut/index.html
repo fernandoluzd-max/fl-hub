@@ -238,6 +238,7 @@ details.fino[open] summary .fa .f1{display:none}details.fino[open] summary .fa .
 .intro .nota{display:flex;gap:10px;align-items:flex-start;color:var(--mute);font-size:14.5px;line-height:1.45;margin:0 0 22px;max-width:62ch}
 .intro .nota i{flex:none;width:8px;height:8px;margin-top:7px;border-radius:50%;background:var(--grad)}
 .acoes{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px}
+#ja-vi[hidden]{display:none!important}
 .acoes .espera{color:var(--dim);font:700 12px var(--m);letter-spacing:.06em;padding:12px 0}
 #ja-vi.surge{animation:surge .5s cubic-bezier(.2,.8,.2,1)}
 @keyframes surge{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -1201,7 +1202,7 @@ function aulaIntro(){
     <p class="sub">Nessa aula eu mostro, passo a passo, como escolher a referência e preparar o seu vídeo para o Mood acertar a cor.</p>
     <p class="nota"><i></i><span>Testar de qualquer jeito costuma dar um resultado fraco. Com esses cuidados, a diferença aparece na hora.</span></p>
     <div class="pl" id="pl">
-      <video id="pv-aula" preload="metadata" playsinline src="${AULA_URL}#t=0.1"></video>
+      <video id="pv-aula" preload="auto" muted playsinline webkit-playsinline src="${AULA_URL}"></video>
       <div class="giro"></div><div class="flash" id="pflash"></div>
       <button class="somon" id="psomon" type="button">${IC_AULA.mudo}Toque para ouvir a aula</button>
       <button class="capa" id="pcapa" type="button" aria-label="Assistir a aula"><span class="play">${IC_AULA.play}</span><span class="rot"><small>Aula do Mood</small>Como ter o melhor resultado</span></button>
@@ -1256,10 +1257,14 @@ function montaPlayer(){
   // o navegador só deixa começar sozinho SEM som: a aula já começa tocando muda, e o primeiro toque liga o som do começo
   function ligaSom(){ pl.classList.remove('mudo-auto'); v.muted = false; if (v.volume === 0) v.volume = 1; v.currentTime = 0; v.play().catch(() => {}); evAula('aula_teste_som'); acorda(); }
   $('#psomon').onclick = e => { e.stopPropagation(); ligaSom(); };
+  const celular = matchMedia('(pointer:coarse)').matches || /iPhone|iPad|Android/i.test(navigator.userAgent);
+  const mudoAuto = () => { v.muted = true; v.defaultMuted = true; return v.play().then(() => { inicio = true; pl.classList.add('iniciou', 'mudo-auto'); evAula('aula_teste_autoplay', { som: false }); }); };
   const autoplay = () => {
+    // no celular o navegador nunca deixa começar com som: já começa mudo (e tenta de novo quando o vídeo carregar)
+    if (celular){ mudoAuto().catch(() => v.addEventListener('loadeddata', () => { if (!inicio) mudoAuto().catch(() => {}); }, { once: true })); return; }
     v.muted = false;
     v.play().then(() => { inicio = true; pl.classList.add('iniciou'); evAula('aula_teste_autoplay', { som: true }); acorda(); })
-      .catch(() => { v.muted = true; v.play().then(() => { inicio = true; pl.classList.add('iniciou', 'mudo-auto'); evAula('aula_teste_autoplay', { som: false }); }).catch(() => { v.muted = false; }); });
+      .catch(() => { mudoAuto().catch(() => { v.muted = false; }); });
   };
   // o botão de seguir para o teste só aparece depois de 10 s de aula com som (ou 30 s sem som; ou na hora, se o vídeo não carregar)
   let ouvido = 0, ult = 0;
