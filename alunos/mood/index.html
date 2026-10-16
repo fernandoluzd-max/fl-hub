@@ -24,7 +24,7 @@
   --tinta:#15171B; --tinta2:#3A3F47; --mudo:#5F656E; --apagado:#8C9199; --claro:#ECEDEF; --claro2:#A7ADB6;
   --linha:rgba(21,23,27,.09); --linha2:rgba(21,23,27,.16); --linhaE:rgba(255,255,255,.09);
   /* Base FL */
-  --ambar:#F2A541; --ambar2:#E8923A; --dourado:#9C7B35;
+  --ambar:#F2A541; --ambar2:#E8923A; --dourado:#866829;
   /* MOOD */
   --esp:linear-gradient(90deg,#FFB347,#FF6FAE 38%,#B45CFF 70%,#5AB8FF);
   --d:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif; --t:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif; --m:"JetBrains Mono",ui-monospace,Menlo,monospace;
@@ -83,6 +83,8 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
 .top .mk small{display:block;font-size:12.5px;color:var(--mudo);margin-top:1px}
 .top .sp{flex:1}
 .top .btn{padding:10px 16px;border-radius:99px;font-size:14px}
+.top .btn b{font-weight:700}
+.top .so-cel{display:none}
 
 /* ===== primeira dobra ===== */
 .hero{position:relative;padding:112px 0 80px;overflow:hidden;background:radial-gradient(55% 45% at 80% 12%,rgba(180,92,255,.11),transparent 70%),radial-gradient(50% 40% at 12% 92%,rgba(255,179,71,.12),transparent 70%),var(--papel)}
@@ -98,14 +100,14 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
 .hcta .acoes{display:flex;flex-wrap:wrap;gap:10px}
 .nota{font-size:14px;color:var(--mudo)}
 .nota b{font:850 19px/1 var(--d);font-stretch:104%;color:var(--tinta);letter-spacing:-.02em;margin:0 3px}
-.hvid{grid-area:video;align-self:center}
+.hvid{grid-area:video;align-self:center;justify-self:center;width:clamp(260px,calc((100svh - 112px - 150px) * 9 / 16),340px)}
 .hg .cred{grid-area:cred;justify-self:end;align-self:start}
 
 /* credencial de aluno: a exclusividade com cara de Base FL */
 .cred{position:relative;width:100%;max-width:340px;background:var(--branco);border:1px solid var(--linha);border-radius:18px;box-shadow:0 22px 44px -30px rgba(21,23,27,.45);overflow:hidden;text-align:left}
 .cred::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:4px;border-radius:0 4px 4px 0;background:linear-gradient(180deg,#F6B356,#E8923A);transform-origin:top;animation:barra .6s var(--ease) .5s both}
 @keyframes barra{from{transform:scaleY(0)}to{transform:scaleY(1)}}
-.cred .c1{display:flex;align-items:center;gap:12px;padding:18px 20px 0 22px}
+.cred .c1{display:flex;align-items:center;gap:12px;padding:16px 20px 14px 22px}
 .cred .c1 .fl{width:34px;height:34px;border-radius:9px}
 .cred .c1 small{display:block;font:700 10.5px/1.2 var(--m);letter-spacing:.08em;color:var(--dourado)}
 .cred .c1 b{display:block;margin-top:3px;font:800 16px/1.15 var(--d);font-stretch:104%;letter-spacing:-.015em}
@@ -138,7 +140,7 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
 .ref:hover{transform:translateY(-1px);box-shadow:0 0 0 1px var(--linha2)}
 .ref img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:10px;filter:saturate(.9);transition:filter .25s}
 .ref span{display:flex;align-items:baseline;gap:6px;padding:0 4px;font:600 12.5px/1.1 var(--t);color:var(--tinta2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ref span b{font:700 10.5px/1 var(--m);letter-spacing:.04em;color:var(--apagado)}
+.ref span b{font:700 10.5px/1 var(--m);letter-spacing:.04em;color:var(--mudo)}
 .ref[aria-pressed="true"]{box-shadow:0 0 0 2px var(--tinta),0 10px 22px -14px rgba(21,23,27,.5)}
 .ref[aria-pressed="true"] img{filter:none}
 .ref[aria-pressed="true"] span{color:var(--tinta)}
@@ -146,7 +148,8 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
 .ref .barra{position:absolute;left:12px;right:12px;bottom:4px;height:2px;border-radius:2px;background:var(--tinta);transform:scaleX(0);transform-origin:left;opacity:.5}
 .refs.auto .ref[aria-pressed="true"] .barra{animation:enche var(--ciclo,3.8s) linear forwards}
 @keyframes enche{to{transform:scaleX(1)}}
-.refs-leg{margin-top:10px;font-size:12.5px;color:var(--apagado);text-align:center}
+.ref span{flex-direction:column;align-items:flex-start;gap:3px;font-size:12px}   /* nome inteiro mesmo com o vídeo mais estreito */
+.refs-leg{margin-top:10px;font-size:12.5px;color:var(--mudo);text-align:center}
 
 /* ===== como funciona ===== */
 .pss{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:52px 0 0;padding:0;list-style:none}
@@ -227,6 +230,16 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
 .specs div:first-child{border-left:0;padding-left:0}
 .specs small{display:block;font:700 10px/1 var(--m);letter-spacing:.1em;color:var(--claro2)}
 .specs p{margin-top:9px;font-size:15px;line-height:1.45;color:var(--claro)}
+/* abas dos passos: só no celular */
+.abas-passos{display:none}
+/* pra quem é */
+.pra-quem{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-top:56px}
+.pq-col{background:var(--grafite2);border:1px solid var(--linhaE);border-radius:18px;padding:22px}
+.pq-col h3{font:800 19px/1.2 var(--d);font-stretch:104%;letter-spacing:-.02em;color:var(--claro)}
+.pq-col ul{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:11px}
+.pq-col li{display:flex;gap:10px;align-items:flex-start;font-size:15.5px;line-height:1.45;color:var(--claro2)}
+.pq-col li::before{content:"";flex:none;width:18px;height:18px;margin-top:2px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--claro);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M5.2 9.3l2.4 2.3 5-5.1' fill='none' stroke='%23ECEDEF' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/18px no-repeat}
+.pq-nao li::before{box-shadow:inset 0 0 0 1.5px var(--claro2);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M6.4 6.4l5.2 5.2M11.6 6.4l-5.2 5.2' fill='none' stroke='%23A7ADB6' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E")}
 
 /* ===== condição de aluno ===== */
 .cond{background:radial-gradient(50% 55% at 100% 0%,rgba(90,184,255,.12),transparent 70%),radial-gradient(45% 50% at 0% 100%,rgba(255,111,174,.10),transparent 70%),var(--papel)}
@@ -242,8 +255,20 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
 .valor b{font-size:clamp(96px,15vw,136px);font-weight:900;font-stretch:104%;line-height:.86;letter-spacing:-.055em}
 .parc{text-align:center;font-size:18px;color:var(--tinta2);margin-top:12px}
 .parc b{color:var(--tinta);font-weight:700}
-.depois{text-align:center;margin-top:8px;font-size:14px;color:var(--mudo)}
-.depois b{color:var(--tinta2);font-weight:650}
+/* régua: hoje × depois de 26/10 */
+.regua{display:grid;grid-template-columns:1fr 2px auto;gap:0;align-items:start;margin-top:26px}
+.regua-hoje{min-width:0;padding-right:16px}
+.regua .valor{justify-content:flex-start;margin-top:0}
+.regua .parc{text-align:left}
+.regua-rot{display:block;min-height:1.2em;white-space:nowrap;font:700 10.5px/1.2 var(--m);letter-spacing:.06em;text-transform:uppercase;color:var(--tinta2);margin-bottom:12px}
+.regua .so-cel{display:none}
+.regua-linha{position:relative;align-self:stretch;width:2px;background:var(--tinta)}
+.regua-alca{position:absolute;top:50%;left:50%;width:34px;height:34px;transform:translate(-50%,-50%);display:grid;place-items:center;border-radius:50%;background:var(--branco);box-shadow:0 6px 18px -6px rgba(0,0,0,.5),0 0 0 1px var(--linha2)}
+.regua-alca svg{width:15px;height:15px;stroke:var(--tinta);stroke-width:2.2}
+.regua-depois{padding-left:20px}
+.regua-depois .regua-rot,.regua-sub{display:block;font:700 10.5px/1.2 var(--m);letter-spacing:.06em;text-transform:uppercase;color:var(--mudo)}
+.regua-valor{display:block;margin:8px 0 6px;font:850 clamp(32px,4vw,40px)/1 var(--d);font-stretch:104%;letter-spacing:-.03em;color:var(--mudo);white-space:nowrap}
+body.encerrada .regua{grid-template-columns:1fr}
 .relogio{margin-top:26px;padding:16px;border-radius:16px;background:var(--grafite);color:#fff}
 .relogio p{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;text-align:center;font-size:13.5px;color:var(--claro2);margin-bottom:12px}
 .relogio p b{color:#fff;font-weight:650}
@@ -265,6 +290,7 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
 /* ===== fechamento ===== */
 .fim h2{max-width:16ch}
 .fim .acoes{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:28px}
+.fim .aviso-aula{margin-top:16px;font-size:14px;color:var(--claro2);text-align:center}
 .faq{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;max-width:960px;margin:64px auto 0;text-align:left}
 .faq details{background:var(--grafite2);border:1px solid var(--linhaE);border-radius:14px;overflow:hidden}
 .faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px 18px;font:650 15.5px/1.3 var(--t);color:#fff}
@@ -275,9 +301,10 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
 .rod{padding:28px 0 110px;background:var(--grafite);color:var(--apagado);font-size:13px;text-align:center;border-top:1px solid var(--linhaE)}
 
 /* barra fixa do celular */
-.fixo{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:20;display:none;align-items:center;justify-content:space-between;gap:12px;padding:9px 9px 9px 16px;border-radius:18px;background:rgba(27,30,35,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#fff;box-shadow:0 16px 36px -16px rgba(0,0,0,.6);transform:translateY(140%);transition:transform .35s var(--ease)}
-.fixo.on{transform:none}
+.fixo{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom, 0px));z-index:20;display:none;align-items:center;justify-content:space-between;gap:12px;padding:9px 9px 9px 16px;border-radius:18px;background:rgba(27,30,35,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#fff;box-shadow:0 16px 36px -16px rgba(0,0,0,.6);transform:translateY(140%);opacity:0;visibility:hidden;pointer-events:none;transition:transform .2s var(--ease),opacity .2s var(--ease),visibility 0s linear .2s}
+.fixo.on{transform:none;opacity:1;visibility:visible;pointer-events:auto;transition:transform .2s var(--ease),opacity .2s var(--ease)}
 .fixo>span{font-size:12px;color:var(--claro2);line-height:1.25}.fixo>span b{display:block;font:850 18px/1.1 var(--d);font-stretch:104%;color:#fff}
+#fixoTempo{display:block;margin-top:3px;font:700 11px/1.2 var(--m);color:var(--ambar);font-variant-numeric:tabular-nums;white-space:nowrap}
 .fixo .btn{padding:13px 18px;font-size:15px;background:#fff;color:var(--tinta)}
 .fixo .btn:hover{color:#fff}
 
@@ -291,21 +318,40 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
 .encerrada [data-aluno]{display:none!important}
 
 @media (max-width:980px){
-  .hero{padding:96px 0 56px}
-  .hg{grid-template-columns:1fr;grid-template-rows:none;grid-template-areas:"kick" "ha" "hb" "sub" "video" "cta" "cred";row-gap:0;justify-items:center;text-align:center}
-  .hg .kick{justify-self:center;margin-bottom:18px}
+  .hero{padding:84px 0 56px}
+  .hg{grid-template-columns:1fr;grid-template-rows:none;grid-template-areas:"ha" "hb" "video" "cta" "sub" "cred";row-gap:0;justify-items:center;text-align:center}
+  .hg .kick{display:none}
   .ha,.hb{text-align:center;font-size:clamp(40px,11.5vw,64px)}
-  .hsub{margin-top:16px;max-width:32ch;font-size:16.5px}
-  .hvid{width:min(100%,340px);margin-top:28px}
+  .hsub{margin-top:24px;max-width:32ch;font-size:16.5px}
+  .hvid{width:min(340px,100%,calc((100svh - 300px) * 9 / 16));min-width:240px;margin-top:20px}
   .hcta{align-items:center;margin-top:24px;width:100%}
   .hcta .acoes{flex-direction:column;width:100%;max-width:400px}
   .hcta .acoes .btn{width:100%}
   .hg .cred{justify-self:center;margin-top:28px;max-width:400px}
-  .pss{grid-template-columns:1fr;gap:14px;margin-top:40px}
-  .pss>li:not(:last-child) .passo::after{right:auto;left:42px;top:auto;bottom:-15px;width:2px;height:14px}
+  /* chip de aluno no topo */
+  .top .btn{min-height:44px;padding:6px 14px;border:4px solid transparent;background-clip:padding-box;font:600 13px/1 var(--t)}
+  .top .so-desk{display:none}
+  .top .so-cel{display:inline}
+  .encerrada .top .btn{display:none}
+  /* como funciona: palco único com abas */
+  .abas-passos{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:40px}
+  .abas-passos button{min-height:44px;padding:6px 4px;border:0;border-radius:12px;background:var(--grafite2);color:var(--claro2);font:700 11px/1.15 var(--m);letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:background .3s var(--ease),color .3s var(--ease)}
+  .abas-passos button:nth-child(1){--cor:#FFB347}.abas-passos button:nth-child(2){--cor:#FF6FAE}.abas-passos button:nth-child(3){--cor:#B45CFF}
+  .abas-passos button[aria-selected="true"]{background:var(--cor);color:var(--tinta)}
+  .pss{grid-template-columns:1fr;gap:0;margin-top:14px}
+  .pss>li{grid-area:1 / 1}
+  .pss .passo{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s var(--ease),visibility 0s linear .3s}
+  .pss .passo.ativo,.pss:not(:has(.ativo))>li:first-child .passo{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .3s var(--ease)}
+  .pss>li:not(:last-child) .passo::after{display:none}
+  #como{padding:64px 0}
+  .passo .pn{display:none}
+  .passo .h3{margin-top:0}
+  .specs{grid-template-columns:1fr;gap:14px;margin-top:28px}
+  .specs div,.specs div:first-child{border-left:0;padding:14px 0 0}
+  .specs div:first-child{padding-top:20px}
+  .pra-quem{grid-template-columns:1fr}
   .faq{grid-template-columns:1fr}
   .fixo{display:flex}
-  .top .btn{display:none}
 }
 @media (max-width:520px){
   body{font-size:16.5px}
@@ -318,7 +364,15 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
   .gar{flex-direction:column;text-align:center}
   .digs{gap:6px}
   .of-top{justify-content:center}
-  .specs{grid-template-columns:1fr}.specs div{border-left:0;padding:16px 0 0}.specs div+div{border-top:1px solid var(--linhaE);margin-top:16px}
+  .valor b{font-size:clamp(72px,22vw,96px)}
+  .regua .so-desk{display:none}
+  .regua .so-cel{display:inline}
+}
+@media (max-width:380px){
+  .regua .parc b{white-space:nowrap}
+  .regua .parc{white-space:nowrap;font-size:16px}
+  .regua-hoje{padding-right:10px}
+  .hcta .btn,.oferta .btn,.fim .btn{font-size:15.5px;padding-inline:18px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -337,7 +391,7 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
   <div class="w">
     <a class="mk" href="https://basefl.com/" aria-label="Base FL"><svg class="fl" viewBox="0 0 1024 1024" aria-hidden="true"><use href="#fl"/></svg><span><b>Base FL</b><small>MOOD</small></span></a>
     <span class="sp"></span>
-    <a class="btn" href="#condicao">Ver condição de aluno</a>
+    <a class="btn" href="#condicao"><span class="so-desk"><span data-aluno><b>R$ 97</b> até 26/10 · Ver condição de aluno</span><span data-normal hidden>Ver a oferta</span></span><span class="so-cel" data-aluno>Aluno · <b>R$ 97</b> · até 26/10</span></a>
   </div>
 </header>
 
@@ -359,13 +413,13 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
           <span class="div" aria-hidden="true"></span>
           <span class="pega" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#15171B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg></span>
           <span class="hud">Arraste para comparar</span>
-          <span class="et a">Original</span><span class="et b" id="nomeRef">F1 · Natural</span>
+          <span class="et a">Original</span><span class="et b" id="nomeRef">F2 · Dourado</span>
         </div>
         <div class="refs" id="refs" role="group" aria-label="Escolha o look">
-          <button type="button" class="ref" data-k="1" data-n="Natural" aria-pressed="true"><img src="/alunos/mood/assets/hero/mini-f1.jpg?v=5" width="320" height="240" alt=""><span><b>F1</b>Natural</span><i class="barra"></i></button>
-          <button type="button" class="ref" data-k="2" data-n="Dourado" aria-pressed="false"><img src="/alunos/mood/assets/hero/mini-f2.jpg?v=5" width="320" height="240" alt=""><span><b>F2</b>Dourado</span><i class="barra"></i></button>
-          <button type="button" class="ref" data-k="3" data-n="Urbano" aria-pressed="false"><img src="/alunos/mood/assets/hero/mini-f3.jpg?v=5" width="320" height="240" alt=""><span><b>F3</b>Urbano</span><i class="barra"></i></button>
-          <button type="button" class="ref" data-k="4" data-n="Pastel" aria-pressed="false"><img src="/alunos/mood/assets/hero/mini-f4.jpg?v=5" width="320" height="240" alt=""><span><b>F4</b>Pastel</span><i class="barra"></i></button>
+          <button type="button" class="ref" data-k="1" data-n="Natural" aria-pressed="false" aria-label="Look F1 Natural"><img src="/alunos/mood/assets/hero/mini-f1.jpg?v=5" width="320" height="240" alt=""><span><b>F1</b>Natural</span><i class="barra"></i></button>
+          <button type="button" class="ref" data-k="2" data-n="Dourado" aria-pressed="true" aria-label="Look F2 Dourado"><img src="/alunos/mood/assets/hero/mini-f2.jpg?v=5" width="320" height="240" alt=""><span><b>F2</b>Dourado</span><i class="barra"></i></button>
+          <button type="button" class="ref" data-k="3" data-n="Urbano" aria-pressed="false" aria-label="Look F3 Urbano"><img src="/alunos/mood/assets/hero/mini-f3.jpg?v=5" width="320" height="240" alt=""><span><b>F3</b>Urbano</span><i class="barra"></i></button>
+          <button type="button" class="ref" data-k="4" data-n="Pastel" aria-pressed="false" aria-label="Look F4 Pastel"><img src="/alunos/mood/assets/hero/mini-f4.jpg?v=5" width="320" height="240" alt=""><span><b>F4</b>Pastel</span><i class="barra"></i></button>
         </div>
         <p class="refs-leg">As referências usadas em cada look. Toque para trocar.</p>
       </div>
@@ -382,7 +436,6 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
 
       <aside class="cred" data-aluno aria-label="Oferta exclusiva para alunos Base FL">
         <div class="c1"><svg class="fl" viewBox="0 0 1024 1024" aria-hidden="true"><use href="#fl"/></svg><span><small>BASE FL · ACESSO DE ALUNO</small><b>Oferta exclusiva para alunos</b></span></div>
-        <p class="c2">Você já faz parte da Base FL. Por isso, preparei uma condição especial pra você conhecer a MOOD antes de todo mundo.</p>
         <div class="c3"><span>Só para quem já é da casa</span><span>Até <b>26/10</b></span></div>
       </aside>
     </div>
@@ -395,6 +448,11 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
         <span class="kick rv">Como funciona</span>
         <h2 class="rv">Do print ao LUT em três passos.</h2>
         <p class="sub rv">Direto no navegador, sem instalar nada. Você vê o resultado antes de baixar.</p>
+      </div>
+      <div class="abas-passos" role="tablist" aria-label="Passos">
+        <button type="button" role="tab" data-ir="0" aria-selected="true">1 · Referência</button>
+        <button type="button" role="tab" data-ir="1" aria-selected="false">2 · Seu vídeo</button>
+        <button type="button" role="tab" data-ir="2" aria-selected="false">3 · LUT</button>
       </div>
       <ol class="pss" id="trilho">
         <li><button type="button" class="passo" data-i="0">
@@ -421,6 +479,22 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
         <div><small>GRAVOU EM LOG?</small><p>Funciona com Apple Log, S-Log2 e S-Log3.</p></div>
         <div><small>CHECAGEM AUTOMÁTICA</small><p>Evita branco estourado e cor exagerada antes de você baixar.</p></div>
       </div>
+      <div class="pra-quem rv">
+        <div class="pq-col">
+          <h3>Serve pra você se</h3>
+          <ul>
+            <li>Edita no computador: CapCut, Premiere, DaVinci ou Final Cut.</li>
+            <li>Quer repetir a mesma cor em vários vídeos (série, cliente, perfil).</li>
+            <li>Grava normal ou em Apple Log, S-Log2 ou S-Log3.</li>
+          </ul>
+        </div>
+        <div class="pq-col pq-nao">
+          <h3>Não serve se</h3>
+          <ul>
+            <li>Você edita só no CapCut do celular. Ele não aceita LUT importada.</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -439,9 +513,19 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
             <span class="tag" data-aluno><svg class="fl" viewBox="0 0 1024 1024" aria-hidden="true"><use href="#fl"/></svg>Acesso de aluno</span>
             <small>1 ano · pagamento único</small>
           </div>
-          <div class="valor" aria-label="Preço"><span class="rs">R$</span><b data-v>97</b></div>
-          <p class="parc">ou <b>12x de <span data-parc>R$ 9,97</span></b></p>
-          <p class="depois" data-aluno>Depois de 26/10, a MOOD passa a custar <b>R$ 147</b>.</p>
+          <div class="regua">
+            <div class="regua-hoje">
+              <span class="regua-rot" data-aluno><span class="so-desk">Até segunda, 26/10, 23h59</span><span class="so-cel">Até 26/10 · 23h59</span></span>
+              <div class="valor" aria-label="Preço"><span class="rs">R$</span><b data-v>97</b></div>
+              <p class="parc">ou <b>12x de <span data-parc>R$ 9,97</span></b></p>
+            </div>
+            <div class="regua-linha" aria-hidden="true" data-aluno><span class="regua-alca"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg></span></div>
+            <div class="regua-depois" data-aluno>
+              <span class="regua-rot">Depois de 26/10</span>
+              <span class="regua-valor">R$ 147</span>
+              <span class="regua-sub">para todo mundo</span>
+            </div>
+          </div>
           <div class="relogio" data-aluno aria-label="Tempo até o fim da condição de aluno">
             <p>A condição de aluno acaba <b>segunda, 26/10, às 23h59</b></p>
             <div class="digs">
@@ -481,20 +565,23 @@ h3{font-size:19px;font-weight:800;font-stretch:104%;letter-spacing:-.02em;line-h
         <a class="btn" href="#" data-comprar>Garantir meu preço de aluno <svg class="seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <a class="btn cl" href="https://basefl.com/lut/?aluno=1" data-testar>Testar grátis com meu vídeo</a>
       </div>
+      <p class="aviso-aula rv">O teste começa com uma aula de 8 minutos pra você acertar a cor.</p>
       <div class="faq">
+        <details><summary>O que é um LUT?</summary><p>É um arquivo .cube com a cor. Você aplica no editor do computador e o vídeo fica com aquele visual.</p></details>
         <details><summary>Funciona no celular?</summary><p>Você consegue criar a LUT pelo celular, mas pra aplicar no vídeo precisa editar no computador (CapCut, Premiere, DaVinci ou Final Cut). O CapCut de celular não aceita LUT importada.</p></details>
         <details><summary>É mensalidade?</summary><p>Não. É um pagamento só, e você cria quantos LUTs quiser durante 1 ano.</p></details>
         <details><summary>Eu gravo em Log. Funciona?</summary><p>Funciona com Apple Log, S-Log2 e S-Log3. Você escolhe o perfil e o LUT já faz a conversão junto com a cor.</p></details>
         <details><summary>E se eu não gostar?</summary><p>Você tem 7 dias de garantia. Dentro desse prazo é só pedir o reembolso e você recebe o valor de volta.</p></details>
         <details><summary>Paguei. E agora?</summary><p>O acesso é liberado no e-mail que você usou na compra. É só entrar em basefl.com/lut com esse e-mail.</p></details>
         <details><summary>Preciso entender de cor?</summary><p>Não. Você escolhe a referência e a MOOD faz o trabalho. Se quiser, dá pra ajustar a intensidade antes de baixar.</p></details>
+        <details><summary>Por que tem uma aula antes do teste?</summary><p>São 8 minutos mostrando como escolher a referência. É o que separa um resultado bom de um ruim.</p></details>
       </div>
     </div>
   </section>
 </main>
 <footer class="rod">MOOD é uma ferramenta da Base FL<span data-aluno> · Página exclusiva para alunos</span></footer>
 
-<div class="fixo" id="fixo"><span><b data-fx>R$ 97</b><span data-aluno>preço de aluno</span><span data-normal hidden>acesso de 1 ano</span></span><a class="btn" href="#" data-comprar>Garantir</a></div>
+<div class="fixo" id="fixo"><span><b data-fx>R$ 97</b><span data-aluno>preço de aluno</span><span data-normal hidden>acesso de 1 ano</span><span id="fixoTempo" data-aluno></span></span><a class="btn" href="#" data-comprar>Garantir</a></div>
 
 <script>
 // ====== links e prazo ======
@@ -502,6 +589,7 @@ const CHECKOUT = 'https://payfast.greenn.com.br/2y52kh4/offer/HKpnsu?ch_id=14430
 const NORMAL = 'https://payfast.greenn.com.br/195947/offer/0Ng6fL';                     // oferta pública (R$ 147), vale depois do fim
 const FIM = '2026-10-26T23:59:00-03:00';
 const P = { normal:{ v:'147', parc:'R$ 15,11' } };
+const LOOK_INICIAL = 2; // D1: pendente de aprovação. Trocar para 1 se recusado.
 // ===========================
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -518,6 +606,14 @@ function linkCompra(){
   return u.toString();
 }
 $$('[data-comprar]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); window.FLPixel && FLPixel.checkout(); location.href = linkCompra(); }));
+// teste grátis: leva a origem da campanha junto (só o que veio na URL, sem valores padrão)
+function linkTeste(){
+  const u = new URL('https://basefl.com/lut/'), inc = new URLSearchParams(location.search);
+  u.searchParams.set('aluno', '1');
+  inc.forEach((v, k) => { if (/^(utm_|src$|sck$|c$)/.test(k) && !u.searchParams.has(k)) u.searchParams.set(k, v); });
+  return u.toString();
+}
+$$('[data-testar]').forEach(a => a.href = linkTeste());
 
 // depois do prazo: preço normal em todo lugar e nada de "aluno"
 function aplicaFim(){
@@ -532,12 +628,19 @@ if (encerrada) aplicaFim();
 
 // relógio real até o fim da condição
 (function(){
-  const fim = new Date(FIM).getTime(), el = { D:$('#rD'), H:$('#rH'), M:$('#rM'), S:$('#rS') }, ult = {};
+  const fim = new Date(FIM).getTime(), el = { D:$('#rD'), H:$('#rH'), M:$('#rM'), S:$('#rS') }, ult = {}, fxT = $('#fixoTempo');
+  const p2 = n => String(n).padStart(2, '0');
+  function curto(r){   // relógio da barra fixa: mesmo FIM, mesmo ciclo
+    const d = Math.floor(r / 864e5), h = Math.floor(r % 864e5 / 36e5), m = Math.floor(r % 36e5 / 6e4);
+    const s = r >= 864e5 ? 'acaba em ' + d + 'd ' + p2(h) + 'h' : r >= 36e5 ? 'acaba em ' + p2(h) + 'h ' + p2(m) + 'min' : 'acaba em ' + p2(m) + 'min';
+    if (fxT.textContent !== s) fxT.textContent = s;
+  }
   const poe = (k, v) => { v = String(v).padStart(2, '0'); if (ult[k] !== v){ el[k].textContent = v; if (ult[k] !== undefined && !reduz){ el[k].classList.remove('tic'); void el[k].offsetWidth; el[k].classList.add('tic'); } ult[k] = v; } };
   function t(){
     const r = fim - Date.now();
     if (r <= 0){ if (!encerrada){ encerrada = true; aplicaFim(); } return; }
     poe('D', Math.floor(r / 864e5)); poe('H', Math.floor(r % 864e5 / 36e5)); poe('M', Math.floor(r % 36e5 / 6e4)); poe('S', Math.floor(r % 6e4 / 1e3));
+    curto(r);
     setTimeout(t, 1000 - (Date.now() % 1000) + 5);
   }
   t();
@@ -549,7 +652,9 @@ if (encerrada) aplicaFim();
 (function(){
   const tela = $('#tela'), v = $('#hv'), cv = $('#hc'), ctx = cv.getContext('2d'), nome = $('#nomeRef'), refsEl = $('#refs'), botoes = $$('#refs .ref'), play = $('#play');
   const TILE = { 0:[0,0], 1:[1,0], 2:[2,0], 3:[0,1], 4:[1,1] };   // coluna, linha
-  let pos = 50, atual = 1, ant = 1, mix = 1, mexeu = false, visivel = true, temQuadro = false;
+  let pos = 50, atual = LOOK_INICIAL, ant = LOOK_INICIAL, mix = 1, mexeu = false, visivel = true, temQuadro = false;
+  botoes.forEach(b => b.setAttribute('aria-pressed', +b.dataset.k === atual));
+  nome.textContent = 'F' + atual + ' · ' + botoes.find(x => +x.dataset.k === atual).dataset.n;
   const poe = p => { pos = Math.max(0, Math.min(100, p)); tela.style.setProperty('--p', pos + '%'); tela.setAttribute('aria-valuenow', Math.round(pos)); if (v.paused) desenha(); };
 
   function tamanho(){ const r = Math.min(devicePixelRatio || 1, 2), w = Math.round(tela.clientWidth * r); if (w > 0){ cv.width = Math.min(w, 540); cv.height = Math.round(cv.width * 16 / 9); } if (temQuadro) desenha(); }
@@ -628,9 +733,10 @@ if (encerrada) aplicaFim();
 
 // ============ três passos: progressão ============
 (function(){
-  const passos = $$('.passo'), trilho = $('#trilho'); let i = -1, timer = null, viu = false;
+  const passos = $$('.passo'), trilho = $('#trilho'), abas = $$('.abas-passos [role="tab"]'); let i = -1, timer = null, viu = false;
   function vai(n){
     i = n; passos.forEach((p, k) => { p.classList.toggle('ativo', k === n); p.classList.toggle('feito', k < n); });
+    abas.forEach(a => a.setAttribute('aria-selected', +a.dataset.ir === n));
     if (n === 2) conta();
     trilho.style.setProperty('--prog', n / (passos.length - 1));
   }
@@ -643,6 +749,13 @@ if (encerrada) aplicaFim();
     raf = requestAnimationFrame(f);
   }
   passos.forEach(p => p.addEventListener('click', () => { clearInterval(timer); vai(+p.dataset.i); }));
+  // abas (celular): fazem o mesmo que clicar no cartão; ←/→ trocam de aba
+  abas.forEach(a => a.addEventListener('click', () => { viu = true; clearInterval(timer); vai(+a.dataset.ir); }));
+  if (abas.length) abas[0].parentElement.addEventListener('keydown', e => {
+    const d = { ArrowLeft:-1, ArrowRight:1 }[e.key]; if (d === undefined) return;
+    e.preventDefault(); const n = (Math.max(i, 0) + d + abas.length) % abas.length;
+    viu = true; clearInterval(timer); vai(n); abas[n].focus();
+  });
   if (reduz){ vai(2); return; }
   new IntersectionObserver(es => { if (es[0].isIntersecting && !viu){ viu = true; vai(0); timer = setInterval(() => { if (i >= passos.length - 1){ clearInterval(timer); return; } vai(i + 1); }, 2800); } }, { threshold:.35 }).observe(trilho);
 })();
@@ -654,12 +767,13 @@ if (encerrada) aplicaFim();
   els.forEach(e => io.observe(e));
 })();
 
-// barra fixa do celular: aparece depois da primeira dobra e some na área da oferta
+// barra fixa do celular: aparece depois de 200 px de rolagem quando nenhum outro botão de compra (nem o cartão da oferta) está na tela
 (function(){
-  const fx = $('#fixo'), hero = $('.hero'), cond = $('.oferta'); let passou = false, naCond = false;
-  const at = () => fx.classList.toggle('on', passou && !naCond);
-  new IntersectionObserver(es => { passou = !es[0].isIntersecting; at(); }).observe(hero);
-  new IntersectionObserver(es => { naCond = es[0].isIntersecting; at(); }, { threshold:.2 }).observe(cond);
+  const fx = $('#fixo'), alvos = $$('[data-comprar]').filter(b => !fx.contains(b)).concat($('.oferta')), naTela = new Set();
+  const at = () => fx.classList.toggle('on', scrollY > 200 && naTela.size === 0);
+  const io = new IntersectionObserver(es => { es.forEach(e => e.isIntersecting ? naTela.add(e.target) : naTela.delete(e.target)); at(); }, { threshold:0 });
+  alvos.forEach(b => io.observe(b));
+  addEventListener('scroll', at, { passive:true });
 })();
 </script>
 </body>
