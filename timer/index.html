@@ -216,7 +216,7 @@ body.d-reta .d-rel{color:var(--warn)}
 .d-plano{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;position:sticky;top:16px}
 @media (max-width:880px){.d-plano{position:static}}
 .d-plano .ttl{font-weight:850;font-stretch:115%;font-size:clamp(22px,2.6vw,30px);line-height:1.05;letter-spacing:-.02em;margin:10px 0 2px;text-wrap:balance;overflow-wrap:anywhere}
-.d-plano .ttl.vazio{color:#55584f}
+.d-plano .ttl.d-vz{color:#55584f}
 .d-plano .ctx{color:var(--mute);font-size:13px}
 .d-plano .tc{font:700 44px/1 var(--m);letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin:16px 0 4px}
 .d-plano .fim{color:var(--mute);font-size:13.5px;margin:0}
@@ -1113,7 +1113,7 @@ function pintaConfigD(){
     const q = achaQtd(t); $('#d-qtd').hidden = !q; if (q) $('#d-qtdt').innerHTML = `Contar as <b>${q.n} ${esc(q.nome)}</b> uma a uma<small>Um toque a cada uma pronta. Quando todas estiverem prontas, o desafio pergunta se pode fechar.</small>`;
     f.meta = q && f.qtd ? q : null;
   } else f.meta = null;
-  const ttl = $('#d-pttl'); ttl.textContent = t || 'Dê um nome ao desafio'; ttl.classList.toggle('vazio', !t);
+  const ttl = $('#d-pttl'); ttl.textContent = t || 'Dê um nome ao desafio'; ttl.classList.toggle('d-vz', !t);
   $('#d-pctx').textContent = p ? p.nome + ' › ' + f.etapa : 'Sem projeto · não entra no valor por hora';
   $('#d-ptc').textContent = pl.ms ? tcod(pl.ms) : '—';
   $('#d-pfim').innerHTML = pl.ms && !pl.erro ? `Se começar agora, termina às <b>${hora(agoraD() + pl.ms)}</b>${pl.amanha ? ' de amanhã' : ''}` : '';
