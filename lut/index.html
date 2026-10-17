@@ -237,7 +237,31 @@ details.fino[open] summary .fa .f1{display:none}details.fino[open] summary .fa .
 .entra>*{animation:entra .35s cubic-bezier(.2,.8,.2,1) both}
 @keyframes entra{from{opacity:0;transform:translateY(10px)}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
-.link.aula{text-decoration:none;font-weight:700;color:var(--ink,#F4F0E4);border:1px solid var(--line,#2B302E);border-radius:99px;padding:6px 12px;margin-right:6px}
+.link.aula{position:relative;display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-weight:800;font-size:13.5px;color:#14070e;background:var(--grad);border:0;border-radius:99px;padding:8px 14px 8px 10px;margin-right:6px;box-shadow:0 8px 22px -10px rgba(255,111,174,.9)}
+.link.aula:hover{filter:brightness(1.07)}
+.link.aula .ai{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#14070e;color:#FF6FAE}
+.link.aula .ai svg{width:9px;height:9px;margin-left:1px}
+.link.aula[data-aula]::after{color:#14070e}
+.link.aula[data-aula=novo]::before,.link.aula[data-aula=andamento]::before{content:"";position:absolute;inset:-4px;border-radius:99px;border:2px solid #FF6FAE;opacity:0;animation:aulaPulso 2.2s ease-out infinite}
+@keyframes aulaPulso{0%{opacity:.85;transform:scale(.96)}100%{opacity:0;transform:scale(1.12)}}
+.ajuda{margin:-6px 0 22px}
+.ac-k{display:block;font:700 11px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin:0 0 2px!important}
+.sup-flut{position:fixed;right:16px;bottom:16px;z-index:20;display:flex;align-items:center;gap:0;height:40px;padding:0 10px;border-radius:99px;background:var(--panel);border:1px solid var(--line);color:var(--mute);text-decoration:none;font-size:13px;font-weight:600;opacity:.8;transition:opacity .15s,color .15s,background .15s,border-color .15s}
+.sup-flut svg{width:19px;height:19px;flex:none}
+.sup-flut span{max-width:0;overflow:hidden;white-space:nowrap;transition:max-width .2s,margin .2s}
+.sup-flut:hover,.sup-flut:focus-visible{opacity:1;color:#fff;background:#25D366;border-color:#25D366;box-shadow:0 8px 20px -8px rgba(37,211,102,.8)}
+.sup-flut:hover span,.sup-flut:focus-visible span{max-width:80px;margin-left:7px}
+.aula-card{display:flex;align-items:center;gap:14px;margin:0;padding:14px 16px;border-radius:18px;background:linear-gradient(var(--panel),var(--panel)) padding-box,var(--grad) border-box;border:1.5px solid transparent;cursor:pointer;text-align:left;width:100%;color:var(--ink)}
+.aula-card:hover{background:linear-gradient(var(--panel2),var(--panel2)) padding-box,var(--grad) border-box}
+.aula-card .ac-ic{position:relative;flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--grad);color:#14070e}
+.aula-card .ac-ic svg{width:17px;height:17px;margin-left:2px}
+.aula-card .ac-ic::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid #FF6FAE;opacity:0;animation:aulaPulso 2.2s ease-out infinite}
+.aula-card.vista .ac-ic::after{display:none}
+.aula-card .ac-t{flex:1;min-width:0}
+.aula-card .ac-t b{display:block;font-size:16.5px;line-height:1.25}
+.aula-card .ac-t small{display:block;color:var(--mute);font-size:13.5px;margin-top:3px}
+.aula-card .ac-bt{flex:none;font-weight:800;font-size:14px;color:#14070e;background:var(--grad);border-radius:12px;padding:10px 16px}
+@media (max-width:560px){.aula-card{flex-wrap:wrap}.aula-card .ac-bt{width:100%;text-align:center}}
 /* aula antes do teste */
 .intro{max-width:880px;margin:0 auto}
 .intro h1{max-width:20ch}
@@ -551,7 +575,7 @@ body.modo-aluno .capcut{display:none}
     <span class="mood" aria-label="Mood">M<svg viewBox="0 0 414 231" aria-hidden="true"><defs><linearGradient id="mg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="298" y2="231"><stop offset="0" stop-color="#FFB347"/><stop offset=".38" stop-color="#FF6FAE"/><stop offset=".7" stop-color="#B45CFF"/><stop offset="1" stop-color="#5AB8FF"/></linearGradient></defs><circle cx="115.5" cy="115.5" r="115.5" fill="url(#mg)"/><circle cx="298" cy="115.5" r="99.9" fill="none" stroke="currentColor" stroke-width="31.2"/></svg>d</span>
     <span class="de">Base FL</span>
     <div class="sp"></div>
-    <button class="link aula" id="aula" hidden>▶ Aula</button>
+    <button class="link aula" id="aula" hidden><span class="ai"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4c0 .8.9 1.3 1.6.9l11.3-7.2c.6-.4.6-1.3 0-1.7L8.6 3.9C7.9 3.5 7 4 7 4.8z"/></svg></span><span id="aulaRot">Aulas</span></button>
     <button class="link" id="conta"></button>
   </header>
   <div class="passos" id="passos"></div>
@@ -1921,6 +1945,39 @@ Base.aoMudar(() => { const era = acesso; sincAcesso(); if (era !== acesso && $('
 
 // aula da ferramenta: o botão só aparece quando existe aula cadastrada
 if (window.Aulas) Aulas.liga('#aula', ['fl-lut'], { titulo:'Mood', cor:'180,92,255', dono: () => acesso });
+// destaque das aulas: o botão do topo mostra quantas são, e quem tem o Mood vê um cartão chamativo no passo 1
+(function(){
+  if (!window.Aulas) return;
+  const OP = { titulo:'Mood', cor:'180,92,255', dono: () => acesso };
+  const PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4c0 .8.9 1.3 1.6.9l11.3-7.2c.6-.4.6-1.3 0-1.7L8.6 3.9C7.9 3.5 7 4 7 4.8z"/></svg>';
+  const esc = t => String(t || '').replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+  const SUP = 'https://wa.me/5547996974735?text=' + encodeURIComponent('Oi! Sou aluno do Mood e fiquei com uma dúvida aqui.');
+  const WPP = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.01c-.24.68-1.42 1.3-1.95 1.35-.5.05-.97.23-3.27-.68-2.77-1.09-4.52-3.92-4.66-4.1-.13-.18-1.11-1.48-1.11-2.83 0-1.34.7-2 .95-2.28.25-.27.54-.34.72-.34h.52c.17 0 .39-.06.61.47.24.56.79 1.92.86 2.06.07.14.11.3.02.48-.09.18-.14.3-.27.46-.14.16-.29.36-.41.48-.14.14-.28.29-.12.56.16.27.71 1.17 1.52 1.89 1.04.93 1.92 1.22 2.19 1.35.27.14.43.11.59-.07.16-.18.68-.79.86-1.07.18-.27.36-.23.61-.14.25.09 1.58.75 1.85.88.27.14.45.2.52.32.07.11.07.66-.17 1.33z"/></svg>';
+  function poe(){
+    const l = Aulas.de(['fl-lut']).filter((a, i, v) => v.findIndex(b => b.url === a.url) === i), n = l.length;
+    const rot = $('#aulaRot'); if (rot) rot.textContent = n > 1 ? n + ' aulas' : 'Aula';
+    const rever = $('#rever'), velho = $('#aulaCard');
+    if (!rever || !acesso){ if (velho) velho.remove(); if (rever) rever.style.display = ""; const sf = $('#supFlut'); if (sf) sf.remove(); return; }
+    let html = '';
+    if (n){
+      const p = Aulas.progresso(['fl-lut']), feito = p.estado === 'feito';
+      const tit = feito ? (n > 1 ? 'Você já viu as ' + n + ' dicas' : 'Você já viu a dica') : (n > 1 ? n + ' dicas pra você extrair o melhor do Mood' : 'Uma dica pra você extrair o melhor do Mood');
+      const sub = (p.feitas && !feito ? p.feitas + ' de ' + n + ' vistas · ' : '') + l.map(a => esc(a.titulo)).join(' · ');
+      html += `<button type="button" class="aula-card${feito ? ' vista' : ''}" data-ac><span class="ac-ic">${PLAY}</span><span class="ac-t"><small class="ac-k">Aulas</small><b>${tit}</b><small>${sub}</small></span><span class="ac-bt">${feito ? 'Rever' : p.feitas ? 'Continuar' : 'Assistir agora'}</span></button>`;
+    }
+    let sup = $('#supFlut');
+    if (!sup){ sup = document.createElement('a'); sup.id = 'supFlut'; sup.className = 'sup-flut'; sup.href = SUP; sup.target = '_blank'; sup.rel = 'noopener'; sup.setAttribute('aria-label', 'Suporte no WhatsApp'); sup.innerHTML = WPP + '<span>Suporte</span>'; sup.onclick = () => evAula('suporte_clicou'); document.body.appendChild(sup); }
+    if (!html){ if (velho) velho.remove(); rever.style.display = ""; return; }
+    let c = velho;
+    if (!c){ c = document.createElement('div'); c.id = 'aulaCard'; c.className = 'ajuda'; rever.after(c);
+      c.addEventListener('click', e => { if (e.target.closest('[data-ac]')){ evAula('aulas_card_clicou'); Aulas.abre(['fl-lut'], OP); } }); }
+    if (c.dataset.h !== html){ c.innerHTML = html; c.dataset.h = html; }
+    rever.style.display = "none";
+  }
+  Aulas.carrega().then(poe);
+  const b = $('#aula'); if (b) new MutationObserver(poe).observe(b, { attributes:true, attributeFilter:['data-aula','hidden'] });
+  const t = $('#tela'); if (t) new MutationObserver(() => { if ($('#rever') && !$('#aulaCard')) poe(); }).observe(t, { childList:true });
+})();
 </script>
 </body>
 </html>
