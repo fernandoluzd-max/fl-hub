@@ -421,7 +421,7 @@ body.modo-aluno .capcut{display:none}
 .al-quadro .rg.c{bottom:-8px;left:-8px;border-bottom-width:1px;border-left-width:1px}
 .al-quadro .rg.d{bottom:-8px;right:-8px;border-bottom-width:1px;border-right-width:1px}
 .al-cmp{--p:50%;position:relative;width:100%;height:min(38svh,340px);border-radius:12px;overflow:hidden;background:#000}
-.al-cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 26%;display:block}
+.al-cmp video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block;background:#000}
 .al-cmp .al-antes{clip-path:inset(0 calc(100% - var(--p)) 0 0)}
 .al-linha{position:absolute;top:0;bottom:0;left:var(--p);width:2px;margin-left:-1px;background:#fff;pointer-events:none}
 .al-alca{position:absolute;top:50%;left:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#fff;box-shadow:0 6px 18px -6px rgba(0,0,0,.5);display:grid;place-items:center}
@@ -1767,8 +1767,8 @@ function recepcaoAluno(){
     <div class="al-col b">
       <div class="al-quadro"><i class="rg a"></i><i class="rg b"></i><i class="rg c"></i><i class="rg d"></i>
         <div class="al-cmp" id="alCmp">
-          <img id="alDep" src="${AL_DEMO}natural.webp" alt="" width="720" height="1280" fetchpriority="high">
-          <img class="al-antes" src="${AL_DEMO}antes.webp" alt="" width="720" height="1280" fetchpriority="high">
+          <video id="alDep" src="${AL_DEMO}natural.mp4" poster="${AL_DEMO}natural.webp" muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto" aria-hidden="true" width="540" height="676"></video>
+          <video id="alAntes" class="al-antes" src="${AL_DEMO}antes.mp4" poster="${AL_DEMO}antes.webp" muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto" aria-hidden="true" width="540" height="676"></video>
           <div class="al-linha" aria-hidden="true"><span class="al-alca">${AL_SETA}</span></div>
           <span class="al-tag l">Seu vídeo</span><span class="al-tag r" id="alTagLut">LUT · Natural</span>
           <input type="range" min="0" max="100" step="1" value="50" aria-label="Comparar o vídeo sem cor com o vídeo com a LUT">
@@ -1798,17 +1798,26 @@ function recepcaoAluno(){
     catch { ok.hidden = false; ok.innerHTML = 'Copie este link:'; const i = document.createElement('input'); i.value = link; i.readOnly = true; ok.after(i); i.select(); evAluno('aluno_ponte_computador', { metodo:'manual' }); }
   };
   // demo: comparador arrastável + fichas de referência
-  const cmp = $('#alCmp'), inp = cmp.querySelector('input'), dep = $('#alDep');
+  const cmp = $('#alCmp'), inp = cmp.querySelector('input'), dep = $('#alDep'), ant = $('#alAntes');
   inp.addEventListener('input', () => cmp.style.setProperty('--p', inp.value + '%'));
-  const carregaTudo = () => AL_LOOKS.forEach(l => { const im = new Image(); im.src = AL_DEMO + l.k + '.webp'; });
-  if (document.readyState === 'complete') setTimeout(carregaTudo, 400); else addEventListener('load', () => setTimeout(carregaTudo, 400), { once:true });
+  // os dois lados tocam juntos: o "depois" segue o relógio do "antes"
+  const toca = v => { try { const r = v.play(); if (r && r.catch) r.catch(() => {}); } catch {} };
+  const sinc = () => { if (dep.readyState >= 2 && Math.abs(dep.currentTime - ant.currentTime) > .08) dep.currentTime = ant.currentTime; };
+  ant.addEventListener('timeupdate', sinc); ant.addEventListener('seeked', sinc);
+  ant.addEventListener('playing', () => { if (dep.paused) toca(dep); });
+  if (!calmo){ toca(ant); toca(dep); }
+  // fora da tela, pausa (economiza bateria e dados)
+  try { new IntersectionObserver(es => es.forEach(e => { if (calmo) return; if (e.isIntersecting){ toca(ant); toca(dep); } else { ant.pause(); dep.pause(); } })).observe(cmp); } catch {}
   document.querySelectorAll('.al-look').forEach(b => b.onclick = () => {
     const l = AL_LOOKS.find(x => x.k === b.dataset.k); if (!l || b.getAttribute('aria-pressed') === 'true') return;
     document.querySelectorAll('.al-look').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
-    const novo = new Image(); novo.onload = () => { dep.src = novo.src; $('#alTagLut').textContent = 'LUT · ' + l.nome; varreAlca(cmp, inp, true); };
-    novo.src = AL_DEMO + l.k + '.webp';
+    const t = ant.currentTime;
+    dep.poster = AL_DEMO + l.k + '.webp'; dep.src = AL_DEMO + l.k + '.mp4';
+    dep.addEventListener('loadeddata', () => { try { dep.currentTime = ant.currentTime || t; } catch {} if (!calmo && !ant.paused) toca(dep); }, { once:true });
+    $('#alTagLut').textContent = 'LUT · ' + l.nome; varreAlca(cmp, inp, true);
     evAluno('aluno_demo_look', { look:l.k });
   });
+  $('#alProva').addEventListener('click', () => { ant.pause(); dep.pause(); });
   varreAlca(cmp, inp);
   evAluno('aluno_recepcao_vista');
   return true;
