@@ -289,7 +289,6 @@ details.fino[open] summary .fa .f1{display:none}details.fino[open] summary .fa .
 .pl .somon .pilula svg{width:22px;height:22px}
 .pl .mudo-barra{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:4;background:rgba(255,255,255,.12);opacity:0;transition:opacity .35s;pointer-events:none}
 .pl .mudo-barra::before{content:"";position:absolute;inset:0 auto 0 0;width:calc(var(--p)*100%);background:var(--grad);background-size:calc(100% / max(var(--p),.001)) 100%}
-.pl.mudo-auto .mudo-barra{opacity:1}
 
 /* falha de carregamento: estado honesto, com saída */
 .pl .falha{position:absolute;inset:0;z-index:5;display:none;place-content:center;justify-items:center;gap:14px;text-align:center;padding:20px;background:rgba(10,11,11,.94)}
@@ -1349,20 +1348,27 @@ function montaPlayer(){
     if (pl.classList.contains('mudo-auto')) return ligaSom();
     if (!inicio){ inicio = true; pl.classList.add('iniciou'); evAula('aula_teste_play'); }
     pl.classList.remove('auto-tenta');
+    if (previa && !comSom){ try { v.currentTime = 0; } catch {} previa = false; }
     v.muted = false; if (v.volume === 0) v.volume = 1; somIcone(); comSom = true;
     if (v.readyState < 3) carregando(true);
     tocar(); acorda();
   };
   // o navegador só deixa começar sozinho SEM som: a aula já começa tocando muda, e o primeiro toque liga o som do começo
   function ligaSom(){
-    pl.classList.remove('mudo-auto'); comSom = true;
+    pl.classList.remove('mudo-auto'); comSom = true; previa = false;
     v.muted = false; if (v.volume === 0) v.volume = 1;
     try { v.currentTime = 0; } catch {}
     tocar(); somIcone(); evAula('aula_teste_som'); acorda();
   }
   $('#psomon').onclick = e => { e.stopPropagation(); ligaSom(); };
 
-  const mudoAuto = () => { v.muted = true; v.defaultMuted = true; return v.play().then(() => {
+  // a prévia muda começa no gancho (3:53, já ensinando na prática); com som, a aula sempre começa do 0:00
+  const GANCHO = 233;
+  let previa = false;
+  const vaiProGancho = () => { if (inicio && !pl.classList.contains('mudo-auto')) return; try { v.currentTime = GANCHO; previa = true; } catch {} };
+  const mudoAuto = () => { v.muted = true; v.defaultMuted = true;
+    if (v.readyState >= 1) vaiProGancho(); else v.addEventListener('loadedmetadata', vaiProGancho, { once: true });
+    return v.play().then(() => {
     if (inicio || pl.classList.contains('erro')) return;   // a pessoa tocou antes (vale o toque dela) ou o player está em falha
     inicio = true; pl.classList.remove('auto-tenta'); pl.classList.add('iniciou', 'mudo-auto'); somIcone();
     evAula('aula_teste_autoplay', { som: false });
