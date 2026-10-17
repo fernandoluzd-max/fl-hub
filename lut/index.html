@@ -868,16 +868,31 @@ function arquivoCube(titulo){
 // ===================== condição de aluno (campanha) =====================
 // Quem chega pela página dos alunos (link com ?aluno=1) vê o preço de aluno no final, até o fim da campanha.
 // Depois do FIM tudo volta sozinho para o preço normal do catálogo.
-const ALUNO = { fim: '2026-10-26T23:59:59-03:00', preco: '97', parc: '9,97', normal: '147', ate: '26/10',
+const ALUNO = { fim: '2026-10-26T23:59:00-03:00', preco: '97', parc: '9,97', normal: '147', ate: '26/10',
   checkout: 'https://payfast.greenn.com.br/2y52kh4/offer/HKpnsu?ch_id=144304' };
 const ehAluno = (() => { try {
   const q = new URLSearchParams(location.search);
   if (q.get('aluno') === '1' || /mood_alunos/.test(q.get('utm_campaign') || '')) localStorage.setItem('mood_aluno', '1');
   return localStorage.getItem('mood_aluno') === '1' && Date.now() < Date.parse(ALUNO.fim);
 } catch { return false; } })();
+// Origem da campanha (utm_*, src, sck, c) e código do contato (k): guardados na aba, porque a pessoa vê a aula e testa antes de comprar.
+const ORIGEM = (() => { const o = {}; try {
+  new URLSearchParams(location.search).forEach((v, k) => { if (/^(utm_|src$|sck$|c$|k$)/.test(k)) o[k] = v.slice(0, 120); });
+  if (Object.keys(o).length) sessionStorage.setItem('mood_origem', JSON.stringify(o));
+  else return JSON.parse(sessionStorage.getItem('mood_origem') || '{}') || {};
+} catch {} return o; })();
+// eventos da ferramenta levam o código do contato (k) e o canal, para o termômetro da campanha
+try { if (ORIGEM.k && window.Base && typeof Base.evento === 'function') { const ev0 = Base.evento;
+  Base.evento = (n, p, d) => ev0(n, p, Object.assign({}, d || {}, { k: ORIGEM.k, canal: ORIGEM.utm_source || null })); } } catch {}
 function compraAluno(){
   const u = new URL(ALUNO.checkout);
-  u.searchParams.set('utm_source', 'ferramenta'); u.searchParams.set('utm_medium', 'teste'); u.searchParams.set('utm_campaign', 'mood_alunos_2026'); u.searchParams.set('src', 'teste-gratis');
+  // primeiro a origem que veio no link; os valores da ferramenta só entram no que faltar
+  Object.entries(ORIGEM).forEach(([k, v]) => { if (k !== 'k' && !u.searchParams.has(k)) u.searchParams.set(k, v); });
+  if (!u.searchParams.has('utm_source')) u.searchParams.set('utm_source', 'ferramenta');
+  if (!u.searchParams.has('utm_medium')) u.searchParams.set('utm_medium', 'teste');
+  if (!u.searchParams.has('utm_campaign')) u.searchParams.set('utm_campaign', 'mood_alunos_2026');
+  if (!u.searchParams.has('src')) u.searchParams.set('src', 'teste-gratis');
+  if (!u.searchParams.has('utm_content')) u.searchParams.set('utm_content', 'teste-gratis');
   try { Base.evento('checkout_clicked', PACK, { de: 'ferramenta_aluno' }); } catch {}
   try { window.FLPixel && FLPixel.checkout(); } catch {}
   (window.top || window).location.href = u.toString();
