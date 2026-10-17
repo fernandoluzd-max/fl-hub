@@ -1255,6 +1255,7 @@ function botaoConta(){
 // O original (mood.mp4, 201 MB) tinha o índice no fim: o celular precisava baixar muito antes de tocar.
 const AULA_URL = 'https://aulas.basefl.com/mood-web.mp4';
 const AULA_CAPA = '/lut/aula-capa.jpg';
+const VEL_INICIAL = 1.5;   // velocidade com que a aula começa (a pessoa pode trocar no player)
 const AULA_VISTA = 'mood_aula_vista';
 const IC_AULA = {
   play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4c0 .8.9 1.3 1.6.9l11.3-7.2c.6-.4.6-1.3 0-1.7L8.6 3.9C7.9 3.5 7 4 7 4.8z"/></svg>',
@@ -1288,8 +1289,8 @@ function aulaIntro(){
           <button class="bt" id="ptoca" type="button" aria-label="Tocar">${IC_AULA.play}</button>
           <div class="vol"><button class="bt" id="psom" type="button" aria-label="Tirar o som">${IC_AULA.som}</button><input id="pvol" type="range" min="0" max="1" step="0.05" value="1" aria-label="Volume"></div>
           <div class="tempo" id="ptempo">0:00 <span>/ 0:00</span></div>
-          <div class="vel" role="group" aria-label="Velocidade">${[1, 1.25, 1.5, 2].map(v => `<button type="button" data-v="${v}" aria-pressed="${v === 1}">${String(v).replace('.', ',')}x</button>`).join('')}</div>
-          <button class="bt vel1" id="pvel1" type="button" aria-label="Velocidade: 1x">1x</button>
+          <div class="vel" role="group" aria-label="Velocidade">${[1, 1.25, 1.5, 2].map(v => `<button type="button" data-v="${v}" aria-pressed="${v === VEL_INICIAL}">${String(v).replace('.', ',')}x</button>`).join('')}</div>
+          <button class="bt vel1" id="pvel1" type="button" aria-label="Velocidade: 1,5x">1,5x</button>
           <button class="bt" id="ptela" type="button" aria-label="Tela cheia">${IC_AULA.tela}</button>
         </div>
       </div>
@@ -1393,7 +1394,7 @@ function montaPlayer(){
   // o botão de seguir para o teste aparece sozinho depois de ~10 s de aula com som (30 s sem som; ou na hora, se o vídeo não carregar)
   let ouvido = 0, ult = 0;
   const libera = () => { const b = $('#ja-vi'); if (b && b.hidden){ b.hidden = false; b.classList.add('surge'); } };
-  v.addEventListener('timeupdate', () => { const t = v.currentTime; if (!v.paused && t > ult && t - ult < 1.5) ouvido += (t - ult) * (v.muted ? 1 / 3 : 1); ult = t; if (t > 0) ultT = t; if (ouvido >= 10) libera(); });
+  v.addEventListener('timeupdate', () => { const t = v.currentTime; if (!v.paused && t > ult && t - ult < 1.5) ouvido += (t - ult) / (v.playbackRate || 1) * (v.muted ? 1 / 3 : 1); ult = t; if (t > 0) ultT = t; if (ouvido >= 10) libera(); });
   v.addEventListener('seeking', () => { ult = v.currentTime; });
 
   // falhas: tenta recarregar sozinho (rede), depois mostra um estado claro com "Tentar de novo" e libera o teste
@@ -1466,7 +1467,7 @@ function montaPlayer(){
   // velocidade (desktop: grupo; celular: um botão que alterna)
   const VELS = [1, 1.25, 1.5, 2];
   const velocidade = n => {
-    v.playbackRate = n;
+    v.defaultPlaybackRate = v.playbackRate = n;   // default: o load()/retry não volta para 1x
     pl.querySelectorAll('.vel button').forEach(x => x.setAttribute('aria-pressed', Number(x.dataset.v) === n));
     bVel1.textContent = String(n).replace('.', ',') + 'x'; bVel1.setAttribute('aria-label', 'Velocidade: ' + bVel1.textContent);
     evAula('aula_teste_velocidade', { v: n });
@@ -1515,6 +1516,7 @@ function montaPlayer(){
     clearTimeout(timer); clearTimeout(vigia); clearTimeout(lento);
   };
   somIcone(); pinta();
+  v.defaultPlaybackRate = v.playbackRate = VEL_INICIAL;   // a aula já começa em 1,5x; a pessoa pode mudar
   // a prévia muda roda mesmo com "reduzir movimento": a pessoa pediu a aula, e o toque já pausa/liga o som
   autoplay();
 }
