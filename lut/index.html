@@ -1789,8 +1789,8 @@ function recepcaoAluno(){
     <div class="al-col b">
       <div class="al-quadro"><i class="rg a"></i><i class="rg b"></i><i class="rg c"></i><i class="rg d"></i>
         <div class="al-cmp" id="alCmp">
-          <video id="alDep" src="${AL_DEMO}natural.mp4" poster="${AL_DEMO}natural.webp" muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto" aria-hidden="true" width="540" height="676"></video>
-          <video id="alAntes" class="al-antes" src="${AL_DEMO}normal-709.mp4" poster="${AL_DEMO}normal-709.webp" muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto" aria-hidden="true" width="540" height="676"></video>
+          <video id="alDep" src="${AL_DEMO}natural.mp4" poster="${AL_DEMO}natural.webp" muted autoplay loop playsinline webkit-playsinline disablepictureinpicture preload="auto" aria-hidden="true" width="540" height="676"></video>
+          <video id="alAntes" class="al-antes" src="${AL_DEMO}normal-709.mp4" poster="${AL_DEMO}normal-709.webp" muted autoplay loop playsinline webkit-playsinline disablepictureinpicture preload="auto" aria-hidden="true" width="540" height="676"></video>
           <div class="al-linha" aria-hidden="true"><span class="al-alca">${AL_SETA}</span></div>
           <span class="al-tag l" id="alTagAntes">Seu vídeo · Normal</span><span class="al-tag r" id="alTagLut">LUT · Natural</span>
           <input type="range" min="0" max="100" step="1" value="50" aria-label="Comparar o vídeo sem cor com o vídeo com a LUT">
@@ -1824,19 +1824,25 @@ function recepcaoAluno(){
   const cmp = $('#alCmp'), inp = cmp.querySelector('input'), dep = $('#alDep'), ant = $('#alAntes');
   inp.addEventListener('input', () => cmp.style.setProperty('--p', inp.value + '%'));
   // os dois lados tocam juntos: o "depois" segue o relógio do "antes"
-  const toca = v => { try { const r = v.play(); if (r && r.catch) r.catch(() => {}); } catch {} };
+  // o vídeo toca mesmo com "reduzir movimento" (é a demonstração, sem movimento de tela); só a alça fica parada
+  ant.muted = dep.muted = true; ant.defaultMuted = dep.defaultMuted = true;
+  let bloqueado = false;
+  const toca = v => { try { const r = v.play(); if (r && r.catch) r.catch(() => { bloqueado = true; }); } catch { bloqueado = true; } };
+  // iPhone em modo de pouca bateria bloqueia o autoplay: começa no primeiro toque na página
+  const destrava = () => { if (!cmp.isConnected) return; toca(ant); toca(dep); };
+  ['touchstart', 'pointerdown', 'scroll'].forEach(ev => addEventListener(ev, function f(){ if (!cmp.isConnected || (!ant.paused && !dep.paused)){ removeEventListener(ev, f); return; } destrava(); }, { passive:true }));
   const sinc = () => { if (dep.readyState >= 2 && Math.abs(dep.currentTime - ant.currentTime) > .08) dep.currentTime = ant.currentTime; };
   ant.addEventListener('timeupdate', sinc); ant.addEventListener('seeked', sinc);
   ant.addEventListener('playing', () => { if (dep.paused) toca(dep); });
-  if (!calmo){ toca(ant); toca(dep); }
+  toca(ant); toca(dep);
   // fora da tela, pausa (economiza bateria e dados)
-  try { new IntersectionObserver(es => es.forEach(e => { if (calmo) return; if (e.isIntersecting){ toca(ant); toca(dep); } else { ant.pause(); dep.pause(); } })).observe(cmp); } catch {}
+  try { new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ toca(ant); toca(dep); } else { ant.pause(); dep.pause(); } })).observe(cmp); } catch {}
   document.querySelectorAll('.al-look').forEach(b => b.onclick = () => {
     const l = AL_LOOKS.find(x => x.k === b.dataset.k); if (!l || b.getAttribute('aria-pressed') === 'true') return;
     document.querySelectorAll('.al-look').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
     const t = ant.currentTime;
     dep.poster = AL_DEMO + l.k + '.webp'; dep.src = AL_DEMO + l.k + '.mp4';
-    dep.addEventListener('loadeddata', () => { try { dep.currentTime = ant.currentTime || t; } catch {} if (!calmo && !ant.paused) toca(dep); }, { once:true });
+    dep.addEventListener('loadeddata', () => { try { dep.currentTime = ant.currentTime || t; } catch {} if (!ant.paused) toca(dep); }, { once:true });
     $('#alTagLut').textContent = 'LUT · ' + l.nome; varreAlca(cmp, inp, true);
     evAluno('aluno_demo_look', { look:l.k });
   });
@@ -1846,7 +1852,7 @@ function recepcaoAluno(){
     document.querySelectorAll('.al-grav button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
     const t = ant.currentTime, tocava = !ant.paused;
     ant.poster = AL_DEMO + g.arq + '.webp'; ant.src = AL_DEMO + g.arq + '.mp4';
-    ant.addEventListener('loadeddata', () => { try { ant.currentTime = t; } catch {} if (tocava && !calmo) toca(ant); }, { once:true });
+    ant.addEventListener('loadeddata', () => { try { ant.currentTime = t; } catch {} if (tocava) toca(ant); }, { once:true });
     $('#alTagAntes').textContent = 'Seu vídeo · ' + g.nome;
     cmp.style.setProperty('--p', '50%'); inp.value = 50; varreAlca(cmp, inp, true);
     evAluno('aluno_demo_gravacao', { como:b.dataset.g });
