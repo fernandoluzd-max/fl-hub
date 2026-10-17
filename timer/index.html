@@ -562,7 +562,7 @@ function topo(){
 }
 function abas(){
   const n = $('#abas'); n.hidden = false;
-  n.innerHTML = [['agora','Cronômetro'], ...(DES ? [['desafio','Desafio']] : []), ['projetos','Projetos'],['historico','Histórico'],['ajustes','Ajustes']].map(([k, t]) => `<button role="tab" aria-selected="${ABA === k}" data-a="${k}">${t}</button>`).join('');
+  n.innerHTML = [...(DES ? [['desafio','Desafio']] : []), ['agora','Cronômetro'], ['projetos','Projetos'],['historico','Histórico'],['ajustes','Ajustes']].map(([k, t]) => `<button role="tab" aria-selected="${ABA === k}" data-a="${k}">${t}</button>`).join('');
   n.querySelectorAll('button').forEach(b => b.onclick = () => { ABA = b.dataset.a; VER = null; desenha(); });
 }
 function vitrine(){
@@ -1532,7 +1532,8 @@ async function inicio(){
   if (!Base.tem(PACK)) return vitrine();
   try { await carrega(); } catch (e){ $('#abas').hidden = true; return tela(`<h1>Não consegui abrir.</h1><p class="sub">${esc(Base.traduz(e.message))}</p><button class="btn" onclick="location.reload()">Tentar de novo</button>`); }
   SEL = mem.get('fl_timer_sel') || null; ETP = mem.get('fl_timer_etp') || etapas()[0].n; adota();
-  await medeDesvio(); if (desafioAberto()) ABA = 'desafio';
+  // o ChronoCut abre no Desafio; se o cronômetro já está contando fora de um desafio, abre nele
+  await medeDesvio(); if (DES && (desafioAberto() || !ativo())) ABA = 'desafio';
   desenha(); confereEsquecida();
   if (!relogioLigado){ relogioLigado = true;
     setInterval(() => { if (!Base.tem(PACK)) return; tique(); if ((ativo() && !pausado(ativo())) || (desafioAberto() && !pausadoD(desafioAberto()))) mem.set('fl_timer_vivo', String(Date.now())); }, 1000);
