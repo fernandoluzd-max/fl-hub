@@ -170,6 +170,23 @@ fn diagnose() -> String {
     flcore::diagnose(&Env::detect())
 }
 
+/// Religa nos projetos do aluno as mídias dos nossos pacotes que mudaram de lugar (com backup).
+#[tauri::command]
+async fn reparar_projetos(app: tauri::AppHandle) -> Result<flcore::Reparo, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        flcore::reparar_projetos(&Env::detect(), &mut |m| {
+            let _ = app.emit("progress", m);
+        })
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
+#[tauri::command]
+fn verificar_projetos() -> flcore::Verificacao {
+    flcore::verificar_projetos(&Env::detect())
+}
+
 #[tauri::command]
 fn log_text() -> String {
     std::fs::read_to_string(Env::detect().log_path()).unwrap_or_default()
@@ -178,7 +195,7 @@ fn log_text() -> String {
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![status, install_pack, install_remote, uninstall_pack, diagnose, log_text, session_get, session_set, open_media])
+        .invoke_handler(tauri::generate_handler![status, install_pack, install_remote, uninstall_pack, diagnose, log_text, reparar_projetos, verificar_projetos, session_get, session_set, open_media])
         .setup(|app| {
             if let Some(w) = app.get_webview_window("main") {
                 let _ = w.set_title("Base FL");

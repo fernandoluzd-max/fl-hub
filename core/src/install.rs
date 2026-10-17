@@ -480,6 +480,18 @@ pub fn install(env: &Env, pack: &Pack, progress: &mut dyn FnMut(&str)) -> Result
             for n in &nomes {
                 rep.files_patched += patcher.patch_dir(&presets.join(n));
             }
+            // aviso: predefinição que cita arquivo que não existe neste computador vira "mídia perdida" no CapCut
+            let mut faltam: Vec<String> = Vec::new();
+            for n in &nomes {
+                for c in crate::projetos::referencias_externas(&presets.join(n)) {
+                    if !Path::new(&c).exists() && !faltam.contains(&c) {
+                        faltam.push(c);
+                    }
+                }
+            }
+            if !faltam.is_empty() {
+                log_line(env, &format!("Aviso do pacote: {} arquivo(s) citados pelas predefinições não existem neste computador (ex.: {})", faltam.len(), faltam[0]));
+            }
             // verificação: cada predefinição precisa ter JSON válido
             for n in &nomes {
                 let d = presets.join(n).join("preset_draft").join("draft_content.json");
@@ -654,5 +666,6 @@ pub fn diagnose(env: &Env) -> String {
     for i in installed(env) {
         s += &format!("Instalado: {} v{} em {}\n", i.name, i.version, i.installed_at);
     }
+    s += &crate::projetos::resumo(env);
     s
 }

@@ -287,7 +287,7 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
 <div class="modal" id="modal"><div class="box">
   <h3 id="m-title">Diagnóstico</h3>
   <pre id="m-body"></pre>
-  <div class="btns"><button class="primary" id="m-copy">Copiar</button><button class="ghost" id="m-close">Fechar</button></div>
+  <div class="btns"><button class="primary" id="m-copy">Copiar</button><button class="ghost" id="m-reparar" title="Religa nos seus projetos as mídias dos packs que mudaram de lugar (com cópia de segurança). Mídias suas não são alteradas.">Religar mídias dos projetos</button><button class="ghost" id="m-close">Fechar</button></div>
 </div></div>
 
 <!-- condições de uso: aparece ao clicar em Instalar, uma vez por produto e por versão do texto -->
@@ -787,6 +787,15 @@ $('#diag').onclick = async () => {
   $('#modal').classList.add('show');
 };
 $('#m-close').onclick = () => $('#modal').classList.remove('show');
+$('#m-reparar').onclick = async () => {
+  const b = $('#m-reparar'); b.disabled = true; b.textContent = 'Verificando…';
+  try {
+    const r = await invoke('reparar_projetos');
+    const t = r.midias_religadas ? `${r.midias_religadas} mídia(s) religada(s) em ${r.projetos_alterados} projeto(s). Cópia de segurança: ${r.backup}` : 'Nenhuma mídia dos packs para religar.';
+    $('#m-body').textContent = t + (r.log.length ? '\n' + r.log.join('\n') : '') + '\n\n' + await invoke('diagnose');
+  } catch(e){ $('#m-body').textContent = String(e) + '\n\n' + $('#m-body').textContent; }
+  b.disabled = false; b.textContent = 'Religar mídias dos projetos';
+};
 $('#m-copy').onclick = async () => { await navigator.clipboard.writeText($('#m-body').textContent); $('#m-copy').textContent = 'Copiado ✓'; setTimeout(()=>$('#m-copy').textContent='Copiar',1500); };
 
 T.event.listen('progress', e => { const t = String(e.payload); step(t, /^aviso/i.test(t) ? 'warn' : 'ok'); });
