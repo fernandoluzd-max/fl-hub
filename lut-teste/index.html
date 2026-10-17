@@ -1665,6 +1665,10 @@ const AL_SETA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l-6 6 
 const AL_OK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>';
 function evAluno(nome, dados){ try { Base.evento(nome, PACK, dados); } catch {} }
 if (ehAluno) document.body.classList.add('modo-aluno');
+// SÓ NA PÁGINA DE TESTE: com ?recepcao=1 a prévia finge que a conta ainda não tem o Mood,
+// para quem já comprou (o Fernando) ver a jornada inteira, com fita e credencial.
+const PREVIA = /[?&]recepcao=1/.test(location.search);
+if (PREVIA){ acesso = false; vencido = false; }
 
 // fita de aluno + folha "Sua condição"
 function atualizaFita(){
@@ -1704,7 +1708,7 @@ passos = function(at){
 
 // sincroniza a fita quando o acesso muda (login, compra)
 const _alSinc = sincAcesso;
-sincAcesso = function(){ _alSinc(); atualizaFita(); };
+sincAcesso = function(){ _alSinc(); if (PREVIA){ acesso = false; vencido = false; } atualizaFita(); };
 
 // tiras de amostras (6 cores principais, da mais escura para a mais clara)
 function tiraHtml(rot, cores, atraso){
