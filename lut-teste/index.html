@@ -9,7 +9,9 @@
 <meta property="og:title" content="Mood · a cor de um vídeo no seu">
 <meta property="og:description" content="Copie a cor de qualquer vídeo para o seu. Teste grátis.">
 <meta property="og:url" content="https://basefl.com/lut/">
-<!-- <meta property="og:image" content="https://basefl.com/lut/og-mood.jpg"> peça a produzir (D7) -->
+<meta property="og:image" content="https://basefl.com/lut/demo/og-mood.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="description" content="Copie o mood de qualquer vídeo. Escolha a referência, ajuste e baixe a LUT pronta.">
 <link rel="icon" type="image/svg+xml" href="/lut/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/lut/favicon-32.png">
@@ -408,18 +410,18 @@ body.modo-aluno .capcut{display:none}
 .al-quadro{order:3;position:relative;margin:6px 8px}
 .al-tiras{order:4}
 .al-cta{order:5;display:flex;flex-direction:column;gap:8px}
-.al-texto{order:6;font-size:16px;color:var(--ink);max-width:46ch}
-.al-lista{order:7}
-.al-serve{order:8}
-.al-ponte{order:9}
-.al-rodape{order:10}
+.al-texto{order:7;font-size:16px;color:var(--ink);max-width:46ch}
+.al-lista{order:8}
+.al-serve{order:9}
+.al-ponte{order:10}
+.al-rodape{order:11}
 .al-quadro .rg{position:absolute;width:14px;height:14px;border:0 solid #5A615E;pointer-events:none}
 .al-quadro .rg.a{top:-8px;left:-8px;border-top-width:1px;border-left-width:1px}
 .al-quadro .rg.b{top:-8px;right:-8px;border-top-width:1px;border-right-width:1px}
 .al-quadro .rg.c{bottom:-8px;left:-8px;border-bottom-width:1px;border-left-width:1px}
 .al-quadro .rg.d{bottom:-8px;right:-8px;border-bottom-width:1px;border-right-width:1px}
-.al-cmp{--p:50%;position:relative;width:100%;height:min(40svh,360px);border-radius:12px;overflow:hidden;background:#000}
-.al-cmp canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.al-cmp{--p:50%;position:relative;width:100%;height:min(38svh,340px);border-radius:12px;overflow:hidden;background:#000}
+.al-cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 26%;display:block}
 .al-cmp .al-antes{clip-path:inset(0 calc(100% - var(--p)) 0 0)}
 .al-linha{position:absolute;top:0;bottom:0;left:var(--p);width:2px;margin-left:-1px;background:#fff;pointer-events:none}
 .al-alca{position:absolute;top:50%;left:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#fff;box-shadow:0 6px 18px -6px rgba(0,0,0,.5);display:grid;place-items:center}
@@ -433,6 +435,14 @@ body.modo-aluno .capcut{display:none}
 .al-cmp:focus-within{outline:2px solid var(--ink);outline-offset:3px}
 .al-carrega{position:absolute;inset:0;display:grid;place-items:center;font:700 11px var(--m);letter-spacing:.12em;color:var(--mute)}
 .al-tiras{display:flex;flex-direction:column;gap:4px}
+.al-looks{order:4;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:2px}
+.al-look{position:relative;height:60px;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel);cursor:pointer}
+.al-look img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.al-look span{position:absolute;left:0;right:0;bottom:0;padding:3px 0;font:700 11px var(--m);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:rgba(17,19,18,.82)}
+.al-look[aria-pressed="true"]{border:2px solid var(--ink)}
+.al-look:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.al-legenda{order:6;font-size:13px;color:var(--mute)}
+.al-legenda b{color:var(--aluno);font:700 11px var(--m);letter-spacing:.1em;text-transform:uppercase;margin-right:6px}
 .al-tira{display:flex;align-items:center;gap:3px}
 .al-tira b{width:52px;font:700 11px var(--m);letter-spacing:.06em;color:var(--mute)}
 .al-tira span{width:22px;height:22px;border-radius:4px;animation:alSw .36s cubic-bezier(.2,.7,.2,1) both}
@@ -458,7 +468,7 @@ body.modo-aluno .capcut{display:none}
   .al-rec{grid-template-columns:5fr 7fr;column-gap:56px;align-items:start}
   .al-col{display:flex;flex-direction:column;gap:16px}
   .al-col.b{grid-column:2;grid-row:1}
-  .al-cmp{height:auto;aspect-ratio:16/10}
+  .al-cmp{height:min(66vh,600px)}
   .al-rec .al-serve,.al-rec .al-ponte,.al-rec .al-rodape{grid-column:1;max-width:520px}
   .al-rec .al-rodape{text-align:left}
 }
@@ -1391,6 +1401,7 @@ function botaoConta(){
 // O original (mood.mp4, 201 MB) tinha o índice no fim: o celular precisava baixar muito antes de tocar.
 const AULA_URL = 'https://aulas.basefl.com/mood-web.mp4';
 const AULA_CAPA = '/lut/aula-capa.jpg';
+const VEL_INICIAL = 1.5;   // velocidade com que a aula começa (a pessoa pode trocar no player)
 const AULA_VISTA = 'mood_aula_vista';
 const IC_AULA = {
   play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4c0 .8.9 1.3 1.6.9l11.3-7.2c.6-.4.6-1.3 0-1.7L8.6 3.9C7.9 3.5 7 4 7 4.8z"/></svg>',
@@ -1424,8 +1435,8 @@ function aulaIntro(){
           <button class="bt" id="ptoca" type="button" aria-label="Tocar">${IC_AULA.play}</button>
           <div class="vol"><button class="bt" id="psom" type="button" aria-label="Tirar o som">${IC_AULA.som}</button><input id="pvol" type="range" min="0" max="1" step="0.05" value="1" aria-label="Volume"></div>
           <div class="tempo" id="ptempo">0:00 <span>/ 0:00</span></div>
-          <div class="vel" role="group" aria-label="Velocidade">${[1, 1.25, 1.5, 2].map(v => `<button type="button" data-v="${v}" aria-pressed="${v === 1}">${String(v).replace('.', ',')}x</button>`).join('')}</div>
-          <button class="bt vel1" id="pvel1" type="button" aria-label="Velocidade: 1x">1x</button>
+          <div class="vel" role="group" aria-label="Velocidade">${[1, 1.25, 1.5, 2].map(v => `<button type="button" data-v="${v}" aria-pressed="${v === VEL_INICIAL}">${String(v).replace('.', ',')}x</button>`).join('')}</div>
+          <button class="bt vel1" id="pvel1" type="button" aria-label="Velocidade: 1,5x">1,5x</button>
           <button class="bt" id="ptela" type="button" aria-label="Tela cheia">${IC_AULA.tela}</button>
         </div>
       </div>
@@ -1529,7 +1540,7 @@ function montaPlayer(){
   // o botão de seguir para o teste aparece sozinho depois de ~10 s de aula com som (30 s sem som; ou na hora, se o vídeo não carregar)
   let ouvido = 0, ult = 0;
   const libera = () => { const b = $('#ja-vi'); if (b && b.hidden){ b.hidden = false; b.classList.add('surge'); } };
-  v.addEventListener('timeupdate', () => { const t = v.currentTime; if (!v.paused && t > ult && t - ult < 1.5) ouvido += (t - ult) * (v.muted ? 1 / 3 : 1); ult = t; if (t > 0) ultT = t; if (ouvido >= 10) libera(); });
+  v.addEventListener('timeupdate', () => { const t = v.currentTime; if (!v.paused && t > ult && t - ult < 1.5) ouvido += (t - ult) / (v.playbackRate || 1) * (v.muted ? 1 / 3 : 1); ult = t; if (t > 0) ultT = t; if (ouvido >= 10) libera(); });
   v.addEventListener('seeking', () => { ult = v.currentTime; });
 
   // falhas: tenta recarregar sozinho (rede), depois mostra um estado claro com "Tentar de novo" e libera o teste
@@ -1602,7 +1613,7 @@ function montaPlayer(){
   // velocidade (desktop: grupo; celular: um botão que alterna)
   const VELS = [1, 1.25, 1.5, 2];
   const velocidade = n => {
-    v.playbackRate = n;
+    v.defaultPlaybackRate = v.playbackRate = n;   // default: o load()/retry não volta para 1x
     pl.querySelectorAll('.vel button').forEach(x => x.setAttribute('aria-pressed', Number(x.dataset.v) === n));
     bVel1.textContent = String(n).replace('.', ',') + 'x'; bVel1.setAttribute('aria-label', 'Velocidade: ' + bVel1.textContent);
     evAula('aula_teste_velocidade', { v: n });
@@ -1651,6 +1662,7 @@ function montaPlayer(){
     clearTimeout(timer); clearTimeout(vigia); clearTimeout(lento);
   };
   somIcone(); pinta();
+  v.defaultPlaybackRate = v.playbackRate = VEL_INICIAL;   // a aula já começa em 1,5x; a pessoa pode mudar
   // a prévia muda roda mesmo com "reduzir movimento": a pessoa pediu a aula, e o toque já pausa/liga o som
   autoplay();
 }
@@ -1667,7 +1679,7 @@ function evAluno(nome, dados){ try { Base.evento(nome, PACK, dados); } catch {} 
 if (ehAluno) document.body.classList.add('modo-aluno');
 // SÓ NA PÁGINA DE TESTE: com ?recepcao=1 a prévia finge que a conta ainda não tem o Mood,
 // para quem já comprou (o Fernando) ver a jornada inteira, com fita e credencial.
-const PREVIA = /[?&]recepcao=1/.test(location.search);
+const PREVIA = true && /[?&]recepcao=1/.test(location.search);
 if (PREVIA){ acesso = false; vencido = false; }
 
 // fita de aluno + folha "Sua condição"
@@ -1715,17 +1727,18 @@ function tiraHtml(rot, cores, atraso){
   return `<div class="al-tira"><b>${rot}</b>${cores.map((c, i) => `<span style="background:${c};animation-delay:${atraso + i * 40}ms"></span>`).join('')}</div>`;
 }
 
-// demo da recepção: o próprio exemplo da ferramenta, com a LUT montada pelo mesmo motor
-function demoAluno(){
-  const ref = exemplo('r'), vid = exemplo('v'), dep = document.createElement('canvas');
-  const salva = { M, A, LUT, PERFIL };
-  try { PERFIL = null; const R = amostra([ref], 260), S = amostra([vid], 260, true); prepara(S, R); A = { ...PADRAO }; LUT = null; montaLUT(); aplica(vid, dep); }
-  finally { M = salva.M; A = salva.A; LUT = salva.LUT; PERFIL = salva.PERFIL; }
-  return { ref, vid, dep };
-}
-function varreAlca(cmp, inp){
-  if (calmo) return;
-  const ease = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2, t0 = performance.now() + 350;
+// demo da recepção: vídeo do Fernando gravado em Log e as 4 LUTs que o Mood fez a partir de cada referência
+const AL_DEMO = '/lut/demo/';
+const AL_LOOKS = [
+  { k:'natural', nome:'Natural' }, { k:'dourado', nome:'Dourado' }, { k:'urbano', nome:'Urbano' }, { k:'pastel', nome:'Pastel' }
+];
+function varreAlca(cmp, inp, curta){
+  if (calmo){ cmp.style.setProperty('--p', '50%'); inp.value = 50; return; }
+  const ease = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2, t0 = performance.now() + (curta ? 0 : 350);
+  if (curta){ // ao trocar de cor: a nova cor entra pela direita até o meio
+    const passo = agora => { if (!cmp.isConnected) return; const t = Math.min(1, (agora - t0) / 520), p = 92 - 42 * ease(t); cmp.style.setProperty('--p', p + '%'); inp.value = Math.round(p); if (t < 1) requestAnimationFrame(passo); };
+    requestAnimationFrame(passo); return;
+  }
   let parou = false; const para = () => { parou = true; }; inp.addEventListener('pointerdown', para, { once:true }); inp.addEventListener('keydown', para, { once:true });
   const passo = agora => {
     if (parou || !cmp.isConnected) return;
@@ -1753,8 +1766,15 @@ function recepcaoAluno(){
     </div>
     <div class="al-col b">
       <div class="al-quadro"><i class="rg a"></i><i class="rg b"></i><i class="rg c"></i><i class="rg d"></i>
-        <div class="al-cmp" id="alCmp"><span class="al-carrega">Montando o exemplo…</span></div></div>
-      <div class="al-tiras" id="alTiras" aria-hidden="true"></div>
+        <div class="al-cmp" id="alCmp">
+          <img id="alDep" src="${AL_DEMO}natural.webp" alt="" width="720" height="1280" fetchpriority="high">
+          <img class="al-antes" src="${AL_DEMO}antes.webp" alt="" width="720" height="1280" fetchpriority="high">
+          <div class="al-linha" aria-hidden="true"><span class="al-alca">${AL_SETA}</span></div>
+          <span class="al-tag l">Seu vídeo</span><span class="al-tag r" id="alTagLut">LUT · Natural</span>
+          <input type="range" min="0" max="100" step="1" value="50" aria-label="Comparar o vídeo sem cor com o vídeo com a LUT">
+        </div></div>
+      <div class="al-looks" role="group" aria-label="Escolha uma referência para ver a cor no vídeo">${AL_LOOKS.map((l, i) => `<button class="al-look" type="button" data-k="${l.k}" aria-pressed="${i === 0}"><img src="${AL_DEMO}ref-${l.k}.webp" alt="" width="150" height="150"><span>${l.nome}</span></button>`).join('')}</div>
+      <p class="al-legenda"><b>Toque numa referência</b>Vídeo meu, gravado em Log. Cada cor saiu do Mood a partir da referência.</p>
     </div>
     <div class="al-serve">
       <p>${AL_OK.replace('<svg', '<svg style="stroke:var(--ok)"')}<span>Serve se você edita no computador: CapCut, Premiere, DaVinci ou Final Cut.</span></p>
@@ -1777,22 +1797,19 @@ function recepcaoAluno(){
     try { await navigator.clipboard.writeText(link); ok.hidden = false; ok.textContent = 'Link copiado. Cole no WhatsApp Web ou no seu e-mail.'; evAluno('aluno_ponte_computador', { metodo:'copia' }); }
     catch { ok.hidden = false; ok.innerHTML = 'Copie este link:'; const i = document.createElement('input'); i.value = link; i.readOnly = true; ok.after(i); i.select(); evAluno('aluno_ponte_computador', { metodo:'manual' }); }
   };
-  // demo (montada depois do primeiro desenho, para a tela aparecer na hora)
-  setTimeout(() => {
-    const cmp = $('#alCmp'); if (!cmp) return;
-    let d; try { d = demoAluno(); } catch (e) { cmp.querySelector('.al-carrega').textContent = 'Exemplo indisponível'; return; }
-    d.vid.className = 'al-antes'; d.vid.setAttribute('aria-hidden', 'true'); d.dep.setAttribute('aria-hidden', 'true');
-    const mini = paraCanvas(d.ref, 240);
-    cmp.innerHTML = ''; cmp.append(d.dep, d.vid);
-    cmp.insertAdjacentHTML('beforeend', `<div class="al-linha" aria-hidden="true"><span class="al-alca">${AL_SETA}</span></div>
-      <span class="al-tag l">Seu vídeo</span><span class="al-tag r">Com a LUT</span><div class="al-ref" aria-hidden="true"><span>REF</span></div>
-      <input type="range" min="0" max="100" step="1" value="50" aria-label="Comparar antes e depois: seu vídeo e o vídeo com a LUT">`);
-    cmp.querySelector('.al-ref').prepend(mini);
-    const inp = cmp.querySelector('input');
-    inp.addEventListener('input', () => cmp.style.setProperty('--p', inp.value + '%'));
-    $('#alTiras').innerHTML = tiraHtml('REF', paleta(d.ref, 6), 0) + tiraHtml('LUT', paleta(d.dep, 6), 240);
-    varreAlca(cmp, inp);
-  }, 40);
+  // demo: comparador arrastável + fichas de referência
+  const cmp = $('#alCmp'), inp = cmp.querySelector('input'), dep = $('#alDep');
+  inp.addEventListener('input', () => cmp.style.setProperty('--p', inp.value + '%'));
+  const carregaTudo = () => AL_LOOKS.forEach(l => { const im = new Image(); im.src = AL_DEMO + l.k + '.webp'; });
+  if (document.readyState === 'complete') setTimeout(carregaTudo, 400); else addEventListener('load', () => setTimeout(carregaTudo, 400), { once:true });
+  document.querySelectorAll('.al-look').forEach(b => b.onclick = () => {
+    const l = AL_LOOKS.find(x => x.k === b.dataset.k); if (!l || b.getAttribute('aria-pressed') === 'true') return;
+    document.querySelectorAll('.al-look').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    const novo = new Image(); novo.onload = () => { dep.src = novo.src; $('#alTagLut').textContent = 'LUT · ' + l.nome; varreAlca(cmp, inp, true); };
+    novo.src = AL_DEMO + l.k + '.webp';
+    evAluno('aluno_demo_look', { look:l.k });
+  });
+  varreAlca(cmp, inp);
   evAluno('aluno_recepcao_vista');
   return true;
 }

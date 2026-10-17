@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mood — Base FL</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mood · a cor de um vídeo no seu">
+<meta property="og:description" content="Copie a cor de qualquer vídeo para o seu. Teste grátis.">
+<meta property="og:url" content="https://basefl.com/lut/">
+<meta property="og:image" content="https://basefl.com/lut/demo/og-mood.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="description" content="Copie o mood de qualquer vídeo. Escolha a referência, ajuste e baixe a LUT pronta.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -14,7 +21,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#111312; --panel:#191C1B; --panel2:#202423; --line:#2B302E; --ink:#F4F0E4; --mute:#B3B4A2; --dim:#6F7066;
+  --bg:#111312; --panel:#191C1B; --panel2:#202423; --line:#2B302E; --ink:#F4F0E4; --mute:#B3B4A2; --dim:#8A8B7F;
   --a:#FF6FAE; --a2:#B45CFF; --ok:#7fce8f;
   --grad:linear-gradient(125deg,#FFB347,#FF6FAE 38%,#B45CFF 70%,#5AB8FF);
   --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
@@ -373,9 +380,148 @@ details.fino[open] summary .fa .f1{display:none}details.fino[open] summary .fa .
 @media (prefers-reduced-motion:reduce){
   .pl .play::before,.pl .giro,.pl .somon .pilula::before,.pl .somon .ao-vivo i{animation:none}
 }
+
+/* ===================== modo aluno · Prova de cor ===================== */
+:root{--aluno:#F2A541}
+body.modo-aluno::before{display:none}
+.al-fita{position:sticky;top:0;z-index:40;display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;min-height:44px;padding:0 18px;border:0;border-bottom:1px solid var(--line);background:var(--panel);color:var(--aluno);font:700 11px/1.3 var(--m);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;text-align:left}
+.al-fita b{color:var(--ink)}
+.al-fita .al-ver{color:var(--mute);flex:none}
+.al-fita .al-desk{display:none}
+.al-fita[hidden]{display:none}
+.al-fita:focus-visible{outline-offset:-3px}
+@media (min-width:981px){.al-fita .al-cel{display:none}.al-fita .al-desk{display:inline}.al-fita{justify-content:center;gap:28px}}
+body.modo-aluno .passos{display:block;margin-bottom:18px}
+body.modo-aluno .passos[hidden]{display:none}
+.al-prog{font:700 11px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:8px}
+.al-prog b{color:var(--ink)}
+.al-segs{display:flex;gap:4px}
+.al-segs i{flex:1;height:2px;border-radius:2px;background:var(--line)}
+.al-segs i.ok{background:var(--dim)}
+.al-segs i.at{background:var(--ink)}
+body.modo-aluno #tela h1:not(.intro h1) em{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--ink)}
+body.modo-aluno .capcut{display:none}
+/* recepção */
+.al-rec{display:grid;gap:14px;max-width:1120px;margin:0 auto}
+.al-col{display:contents}
+.al-rot{order:1;font:700 11px var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--aluno)}
+.al-rec h1{order:2;font-size:clamp(30px,8.4vw,56px);line-height:1.04;max-width:15ch;margin:0}
+.al-quadro{order:3;position:relative;margin:6px 8px}
+.al-tiras{order:4}
+.al-cta{order:5;display:flex;flex-direction:column;gap:8px}
+.al-texto{order:7;font-size:16px;color:var(--ink);max-width:46ch}
+.al-lista{order:8}
+.al-serve{order:9}
+.al-ponte{order:10}
+.al-rodape{order:11}
+.al-quadro .rg{position:absolute;width:14px;height:14px;border:0 solid #5A615E;pointer-events:none}
+.al-quadro .rg.a{top:-8px;left:-8px;border-top-width:1px;border-left-width:1px}
+.al-quadro .rg.b{top:-8px;right:-8px;border-top-width:1px;border-right-width:1px}
+.al-quadro .rg.c{bottom:-8px;left:-8px;border-bottom-width:1px;border-left-width:1px}
+.al-quadro .rg.d{bottom:-8px;right:-8px;border-bottom-width:1px;border-right-width:1px}
+.al-cmp{--p:50%;position:relative;width:100%;height:min(38svh,340px);border-radius:12px;overflow:hidden;background:#000}
+.al-cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 26%;display:block}
+.al-cmp .al-antes{clip-path:inset(0 calc(100% - var(--p)) 0 0)}
+.al-linha{position:absolute;top:0;bottom:0;left:var(--p);width:2px;margin-left:-1px;background:#fff;pointer-events:none}
+.al-alca{position:absolute;top:50%;left:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#fff;box-shadow:0 6px 18px -6px rgba(0,0,0,.5);display:grid;place-items:center}
+.al-alca svg{width:15px;height:15px;fill:none;stroke:#111312;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.al-tag{position:absolute;top:10px;font:700 11px var(--m);letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:6px;background:rgba(17,19,18,.78);pointer-events:none}
+.al-tag.l{left:10px}.al-tag.r{right:10px}
+.al-ref{position:absolute;left:10px;bottom:10px;width:64px;height:80px;border-radius:6px;overflow:hidden;border:2px solid var(--ink);pointer-events:none}
+.al-ref canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.al-ref span{position:absolute;left:4px;top:3px;font:700 11px var(--m);color:#111312;background:rgba(244,240,228,.85);border-radius:3px;padding:0 3px}
+.al-cmp input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize}
+.al-cmp:focus-within{outline:2px solid var(--ink);outline-offset:3px}
+.al-carrega{position:absolute;inset:0;display:grid;place-items:center;font:700 11px var(--m);letter-spacing:.12em;color:var(--mute)}
+.al-tiras{display:flex;flex-direction:column;gap:4px}
+.al-looks{order:4;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:2px}
+.al-look{position:relative;height:60px;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel);cursor:pointer}
+.al-look img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.al-look span{position:absolute;left:0;right:0;bottom:0;padding:3px 0;font:700 11px var(--m);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:rgba(17,19,18,.82)}
+.al-look[aria-pressed="true"]{border:2px solid var(--ink)}
+.al-look:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.al-legenda{order:6;font-size:13px;color:var(--mute)}
+.al-legenda b{color:var(--aluno);font:700 11px var(--m);letter-spacing:.1em;text-transform:uppercase;margin-right:6px}
+.al-tira{display:flex;align-items:center;gap:3px}
+.al-tira b{width:52px;font:700 11px var(--m);letter-spacing:.06em;color:var(--mute)}
+.al-tira span{width:22px;height:22px;border-radius:4px;animation:alSw .36s cubic-bezier(.2,.7,.2,1) both}
+.al-cta .btn{height:56px;border-radius:999px;width:100%}
+.al-cta p{color:var(--mute);font-size:14px;text-align:center}
+.al-lista{border-top:1px solid var(--line);list-style:none}
+.al-lista li{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.al-lista li b{font:700 13px var(--m);color:var(--aluno)}
+.al-serve{display:flex;flex-direction:column;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.al-serve p{display:flex;gap:10px;align-items:flex-start;font-size:15px}
+.al-serve p.nao{color:var(--mute)}
+.al-serve svg{flex:none;width:18px;height:18px;margin-top:3px;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.al-ponte{display:none;flex-direction:column;gap:10px}
+.al-ponte.on{display:flex}
+.al-ponte p{color:var(--mute);font-size:15px}
+.al-ponte .btn{min-height:48px;border-radius:999px;width:100%}
+.al-ponte input{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:10px;color:var(--ink);font:13px var(--m);padding:10px}
+.al-ok{color:var(--ok);font-size:14px;text-align:center}
+.al-rodape{text-align:center;font:500 11px var(--m);letter-spacing:.06em;text-transform:uppercase;color:var(--mute);padding-top:4px}
+.al-rec > *,.al-col > *{animation:alEnt .32s cubic-bezier(.2,.7,.2,1) both}
+.al-quadro{animation-delay:.08s!important}
+@media (min-width:981px){
+  .al-rec{grid-template-columns:5fr 7fr;column-gap:56px;align-items:start}
+  .al-col{display:flex;flex-direction:column;gap:16px}
+  .al-col.b{grid-column:2;grid-row:1}
+  .al-cmp{height:min(66vh,600px)}
+  .al-rec .al-serve,.al-rec .al-ponte,.al-rec .al-rodape{grid-column:1;max-width:520px}
+  .al-rec .al-rodape{text-align:left}
+}
+/* sheet da condição */
+.al-sheet{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.al-sheet[hidden]{display:none}
+.al-veu{position:absolute;inset:0;border:0;background:rgba(5,6,6,.62);cursor:pointer}
+.al-sheet-c{position:relative;width:100%;max-width:560px;background:var(--panel);border-top:4px solid var(--aluno);border-radius:20px 20px 0 0;padding:22px 18px calc(26px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;animation:alSobe .28s cubic-bezier(.2,.7,.2,1) both}
+.al-sheet-c .al-rot{order:0}
+.al-sheet-c h2{font-family:var(--d);font-weight:800;font-size:24px;line-height:1.15}
+.al-sheet-c p{color:var(--mute);font-size:15px}
+.al-sheet-c .btn{width:100%;border-radius:999px;background:var(--ink);color:#111312;box-shadow:none}
+/* resultado: tiras */
+.al-res-tiras{margin:14px 0 4px}
+.al-res-tiras .al-rot{order:-1}
+.al-res-tiras .al-rot{margin-bottom:8px;display:block}
+/* liberação: credencial de aluno */
+.al-cred{margin-top:18px;background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--aluno);border-radius:0 0 20px 20px;padding:18px 18px 0;text-align:left;display:flex;flex-direction:column;gap:14px}
+.al-cred-top{display:flex;align-items:center;gap:10px;font:700 11px var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--aluno)}
+.al-cred-top img{width:28px;height:28px;border-radius:6px;display:block}
+.al-cred h3{font-size:16px;font-weight:600;line-height:1.4}
+.al-regua{display:grid;grid-template-columns:minmax(0,1fr) 2px auto;align-items:stretch}
+.al-hoje{padding-right:16px;display:flex;flex-direction:column}
+.al-dep{padding-left:22px;display:flex;flex-direction:column;color:var(--mute)}
+.al-regua .r{font:700 11px var(--m);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;white-space:nowrap}
+.al-v97{display:flex;align-items:flex-start;gap:4px;font-family:var(--d);font-weight:850;line-height:.9}
+.al-v97 small{font-size:20px;margin-top:10px}
+.al-v97 span{font-size:88px;letter-spacing:-.04em}
+.al-v147{font-family:var(--d);font-weight:850;font-size:34px;line-height:1;white-space:nowrap;margin-top:18px}
+.al-regua .s{font-size:13px;color:var(--mute);margin-top:6px}
+.al-traco{background:var(--ink);position:relative}
+.al-traco .al-alca{animation:alAlca .5s cubic-bezier(.2,.7,.2,1) .2s both}
+.al-inclui{list-style:none;display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:14px}
+.al-inclui li{display:flex;gap:10px;align-items:flex-start;font-size:15px}
+.al-inclui svg{flex:none;width:18px;height:18px;margin-top:3px;fill:none;stroke:var(--ok);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.al-cred .btn{height:56px;border-radius:999px}
+.al-depois{margin-top:-6px;text-align:center;font-size:13px;color:var(--mute)}
+.al-pico{margin:0 -18px;border-top:1px dashed #3A403D;padding:12px 18px 14px;text-align:center;font:700 11px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.al-entrar{display:block;margin:-4px auto 0}
+@media (min-width:981px){.al-v97 span{font-size:120px}}
+/* sua prova: cuidados recolhidos */
+.al-cuidados{margin-top:18px;border:1px solid var(--line);border-radius:14px;padding:4px 14px;background:var(--panel)}
+.al-cuidados summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:700;font-size:15px}
+.al-cuidados div{display:flex;flex-direction:column;gap:8px;padding:0 0 12px;font-size:14px;color:var(--mute)}
+@keyframes alEnt{from{opacity:0;transform:translateY(8px)}}
+@keyframes alSw{from{opacity:0;transform:scale(.9)}}
+@keyframes alAlca{from{opacity:0;transform:translateX(26px)}}
+@keyframes alSobe{from{opacity:0;transform:translateY(40px)}}
+@media (prefers-reduced-motion:reduce){.al-rec > *,.al-col > *,.al-tira span,.al-traco .al-alca,.al-sheet-c{animation:none!important}}
 </style>
 </head>
 <body>
+<button class="al-fita" id="alFita" type="button" aria-haspopup="dialog" hidden></button>
+<div class="al-sheet" id="alSheet" hidden><button class="al-veu" type="button" aria-label="Fechar" data-fecha></button><div class="al-sheet-c" role="dialog" aria-modal="true" aria-labelledby="alSheetT"></div></div>
 <div class="wrap">
   <header>
     <span class="mood" aria-label="Mood">M<svg viewBox="0 0 414 231" aria-hidden="true"><defs><linearGradient id="mg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="298" y2="231"><stop offset="0" stop-color="#FFB347"/><stop offset=".38" stop-color="#FF6FAE"/><stop offset=".7" stop-color="#B45CFF"/><stop offset="1" stop-color="#5AB8FF"/></linearGradient></defs><circle cx="115.5" cy="115.5" r="115.5" fill="url(#mg)"/><circle cx="298" cy="115.5" r="99.9" fill="none" stroke="currentColor" stroke-width="31.2"/></svg>d</span>
@@ -1211,13 +1357,11 @@ function passo3(){
   passos(2);
   montaLUT();
   const { nome } = proximoNome();
-  const trava = acesso ? '' : (ehAluno && !vencido) ? `<div class="lock aluno"><span class="selo-al">Condição de aluno · até ${ALUNO.ate}</span><p>Desbloqueie para baixar a sua LUT</p>
-      <div class="prc"><small>R$</small>${ALUNO.preco}</div><div class="sm">à vista, ou 12x de R$ ${ALUNO.parc}. Crie quantas LUTs quiser, por 1 ano, no celular e no computador. Depois de ${ALUNO.ate}, o Mood passa a custar R$ ${ALUNO.normal}.</div>
-      <button class="btn full" id="comprar" data-aluno="1">Liberar o Mood · R$ ${ALUNO.preco}</button>${Base.sessao() ? '' : '<button class="link" id="entrar" style="display:block;margin:12px auto 0">Já comprei · entrar</button>'}</div>`
+  const trava = acesso ? '' : (ehAluno && !vencido) ? credencialAluno()
     : `<div class="lock"><p>${vencido ? 'Seu acesso de 1 ano terminou' : 'Desbloqueie para baixar a sua LUT'}</p><div class="sm">${vencido ? 'Renove para continuar criando LUTs.' : 'Crie quantas LUTs quiser, por 1 ano, no celular e no computador.'}</div>
       <button class="btn full" id="comprar">${vencido ? 'Renovar meu acesso' : 'Liberar o Mood · R$ ' + Base.produto('mood').preco}</button>${Base.sessao() ? '' : '<button class="link" id="entrar" style="display:block;margin:12px auto 0">Já comprei · entrar</button>'}</div>`;
   if (!acesso && !avisouDemo){ avisouDemo = true; Base.evento('demo_completed', PACK); }
-  tela(`<div class="fim"><div class="sobre-t"><span class="mono">Sua LUT</span></div><h1>O mood está <em>copiado</em>.</h1><p class="sub" style="margin:0 auto">A LUT leva a cor da referência para o seu vídeo, com os ajustes que você fez.</p>
+  tela(`<div class="fim"><div class="sobre-t"><span class="mono">Sua LUT</span></div><h1>${ehAluno && !acesso ? 'Sua LUT está pronta.' : 'O mood está <em>copiado</em>.'}</h1><p class="sub" style="margin:0 auto">A LUT leva a cor da referência para o seu vídeo, com os ajustes que você fez.</p>
     <div class="arq"><span class="ic">.cube</span><span><b>${nome}</b><small>Arquivo ${nome}.cube · padrão ${N}×${N}×${N} · funciona no CapCut, Premiere, DaVinci e Final Cut${PERFIL ? `<br><span style="color:#fff;font-weight:600">Para vídeo em ${PERFIS[PERFIL].curto}: aplique direto no vídeo em Log, sem outra LUT de conversão antes.</span>` : ''}</small></span></div>
     ${acesso ? `<button class="btn full" id="baixar">Baixar ${nome}</button>` : trava}
     <div class="capcut"><span><b>Instalar direto no CapCut</b><small>Um clique no app Base FL e a LUT aparece em Ajuste › LUT.</small></span><span class="breve">Em breve</span></div>
@@ -1235,7 +1379,7 @@ function passo3(){
     a.href = URL.createObjectURL(blob); a.download = nm + '.cube'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
     store.set('fl_lut_n', String(n)); toast(nm + ' baixada'); $('#baixar').textContent = 'Baixar de novo';
   };
-  if ($('#comprar')) $('#comprar').onclick = () => $('#comprar').dataset.aluno ? compraAluno() : Base.comprar('mood', 'ferramenta');
+  if ($('#comprar')) $('#comprar').onclick = () => $('#comprar').dataset.aluno ? (evAluno('aluno_liberar_clique'), compraAluno()) : Base.comprar('mood', 'ferramenta');
   if ($('#entrar')) $('#entrar').onclick = async () => { if (await Base.login()){ sincAcesso(); toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas o Mood não está nas compras deste e-mail'); passo3(); } };
 }
 
@@ -1524,8 +1668,202 @@ function montaPlayer(){
 // ===================== início =====================
 // a aula aparece SEMPRE antes do teste para quem ainda não comprou; quem já tem o Mood vai direto para a ferramenta
 // veio por um botão de teste (página de vendas ou dos alunos)? mostra a aula mesmo para quem está logado
+
+// ===================== MODO ALUNO · "Prova de cor" =====================
+// Só roda para quem chegou como aluno (ehAluno). O modo normal da ferramenta não muda.
+const AL_SETA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg>';
+const AL_OK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>';
+function evAluno(nome, dados){ try { Base.evento(nome, PACK, dados); } catch {} }
+if (ehAluno) document.body.classList.add('modo-aluno');
+// SÓ NA PÁGINA DE TESTE: com ?recepcao=1 a prévia finge que a conta ainda não tem o Mood,
+// para quem já comprou (o Fernando) ver a jornada inteira, com fita e credencial.
+const PREVIA = false && /[?&]recepcao=1/.test(location.search);
+if (PREVIA){ acesso = false; vencido = false; }
+
+// fita de aluno + folha "Sua condição"
+function atualizaFita(){
+  const f = $('#alFita'); if (!f) return;
+  f.hidden = !(ehAluno && !acesso);
+  f.innerHTML = `<span class="al-cel">Aluno Base FL · <b>R$ ${ALUNO.preco}</b> até ${ALUNO.ate}</span><span class="al-desk">Aluno Base FL · Condição de aluno: <b>R$ ${ALUNO.preco}</b> até segunda, ${ALUNO.ate} · 23h59</span><span class="al-ver" aria-hidden="true">Ver ›</span>`;
+}
+let alFoco = null;
+function abreCondicao(){
+  const s = $('#alSheet'), c = s.querySelector('.al-sheet-c');
+  c.innerHTML = `<span class="al-rot">Sua condição de aluno</span><h2 id="alSheetT">R$ ${ALUNO.preco} até segunda, ${ALUNO.ate}, 23h59.</h2>
+    <p>Depois disso, o Mood passa a custar R$ ${ALUNO.normal} para todo mundo. É 1 ano de acesso, com LUTs ilimitadas. Primeiro você faz a prova; o preço só aparece de novo quando a sua LUT estiver pronta.</p>
+    <button class="btn" type="button" data-fecha>Continuar minha prova</button>`;
+  alFoco = document.activeElement; s.hidden = false; c.querySelector('.btn').focus();
+  evAluno('aluno_condicao_aberta');
+}
+function fechaCondicao(){ $('#alSheet').hidden = true; if (alFoco && alFoco.focus) alFoco.focus(); }
+$('#alFita').onclick = abreCondicao;
+$('#alSheet').addEventListener('click', e => { if (e.target.closest('[data-fecha]')) fechaCondicao(); });
+document.addEventListener('keydown', e => {
+  const s = $('#alSheet'); if (s.hidden) return;
+  if (e.key === 'Escape'){ e.preventDefault(); fechaCondicao(); }
+  if (e.key === 'Tab'){ const fs = [...s.querySelectorAll('.al-sheet-c button')]; const a = fs[0], z = fs[fs.length - 1];
+    if (e.shiftKey && document.activeElement === a){ e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z){ e.preventDefault(); a.focus(); } }
+});
+
+// linha de progresso (substitui as 3 caixas no modo aluno)
+const _alPassos = passos;
+passos = function(at){
+  if (!ehAluno) return _alPassos(at);
+  const box = $('#passos');
+  if (at === -2){ box.innerHTML = ''; box.hidden = true; return; }
+  box.hidden = false;
+  const n = at === -1 ? 1 : at + 2, nomes = ['', 'Aula · 8 min', 'Sua prova', 'Resultado', 'Sua LUT'];
+  box.innerHTML = `<p class="al-prog">Prova de cor · <b>${n}/4 ${nomes[n]}</b></p><p class="al-segs" aria-hidden="true">${[1, 2, 3, 4].map(i => `<i class="${i === n ? 'at' : i < n ? 'ok' : ''}"></i>`).join('')}</p>`;
+};
+
+// sincroniza a fita quando o acesso muda (login, compra)
+const _alSinc = sincAcesso;
+sincAcesso = function(){ _alSinc(); if (PREVIA){ acesso = false; vencido = false; } atualizaFita(); };
+
+// tiras de amostras (6 cores principais, da mais escura para a mais clara)
+function tiraHtml(rot, cores, atraso){
+  return `<div class="al-tira"><b>${rot}</b>${cores.map((c, i) => `<span style="background:${c};animation-delay:${atraso + i * 40}ms"></span>`).join('')}</div>`;
+}
+
+// demo da recepção: vídeo do Fernando gravado em Log e as 4 LUTs que o Mood fez a partir de cada referência
+const AL_DEMO = '/lut/demo/';
+const AL_LOOKS = [
+  { k:'natural', nome:'Natural' }, { k:'dourado', nome:'Dourado' }, { k:'urbano', nome:'Urbano' }, { k:'pastel', nome:'Pastel' }
+];
+function varreAlca(cmp, inp, curta){
+  if (calmo){ cmp.style.setProperty('--p', '50%'); inp.value = 50; return; }
+  const ease = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2, t0 = performance.now() + (curta ? 0 : 350);
+  if (curta){ // ao trocar de cor: a nova cor entra pela direita até o meio
+    const passo = agora => { if (!cmp.isConnected) return; const t = Math.min(1, (agora - t0) / 520), p = 92 - 42 * ease(t); cmp.style.setProperty('--p', p + '%'); inp.value = Math.round(p); if (t < 1) requestAnimationFrame(passo); };
+    requestAnimationFrame(passo); return;
+  }
+  let parou = false; const para = () => { parou = true; }; inp.addEventListener('pointerdown', para, { once:true }); inp.addEventListener('keydown', para, { once:true });
+  const passo = agora => {
+    if (parou || !cmp.isConnected) return;
+    const t = agora - t0; let p;
+    if (t < 0) p = 15; else if (t < 1300) p = 15 + 70 * ease(t / 1300); else if (t < 2400) p = 85 - 35 * ease((t - 1300) / 1100); else p = 50;
+    cmp.style.setProperty('--p', p + '%'); inp.value = Math.round(p);
+    if (t < 2400) requestAnimationFrame(passo);
+  };
+  requestAnimationFrame(passo);
+}
+
+// ATO 0 · recepção (primeira entrada da sessão; ?recepcao=1 força, para conferir)
+function recepcaoAluno(){
+  if (!ehAluno || acesso) return false;
+  const forca = /[?&]recepcao=1/.test(location.search);
+  try { if (!forca && sessionStorage.getItem('mood_recepcao_vista')) return false; sessionStorage.setItem('mood_recepcao_vista', '1'); } catch {}
+  passos(-2);
+  tela(`<div class="al-rec">
+    <div class="al-col a">
+      <span class="al-rot">Para quem já é aluno</span>
+      <h1>Copie a cor de qualquer vídeo para o seu.</h1>
+      <div class="al-cta"><button class="btn" id="alProva" type="button">Fazer minha prova de cor</button><p>Grátis. Começa com uma aula de 8 minutos para você acertar a cor.</p></div>
+      <p class="al-texto">Você escolhe um vídeo com a cor que gosta. O Mood lê essa cor e monta uma LUT para o seu vídeo ficar com o mesmo clima.</p>
+      <ol class="al-lista"><li><b>01</b>Coloque a referência</li><li><b>02</b>Coloque o seu vídeo</li><li><b>03</b>Baixe a LUT e aplique no seu editor</li></ol>
+    </div>
+    <div class="al-col b">
+      <div class="al-quadro"><i class="rg a"></i><i class="rg b"></i><i class="rg c"></i><i class="rg d"></i>
+        <div class="al-cmp" id="alCmp">
+          <img id="alDep" src="${AL_DEMO}natural.webp" alt="" width="720" height="1280" fetchpriority="high">
+          <img class="al-antes" src="${AL_DEMO}antes.webp" alt="" width="720" height="1280" fetchpriority="high">
+          <div class="al-linha" aria-hidden="true"><span class="al-alca">${AL_SETA}</span></div>
+          <span class="al-tag l">Seu vídeo</span><span class="al-tag r" id="alTagLut">LUT · Natural</span>
+          <input type="range" min="0" max="100" step="1" value="50" aria-label="Comparar o vídeo sem cor com o vídeo com a LUT">
+        </div></div>
+      <div class="al-looks" role="group" aria-label="Escolha uma referência para ver a cor no vídeo">${AL_LOOKS.map((l, i) => `<button class="al-look" type="button" data-k="${l.k}" aria-pressed="${i === 0}"><img src="${AL_DEMO}ref-${l.k}.webp" alt="" width="150" height="150"><span>${l.nome}</span></button>`).join('')}</div>
+      <p class="al-legenda"><b>Toque numa referência</b>Vídeo meu, gravado em Log. Cada cor saiu do Mood a partir da referência.</p>
+    </div>
+    <div class="al-serve">
+      <p>${AL_OK.replace('<svg', '<svg style="stroke:var(--ok)"')}<span>Serve se você edita no computador: CapCut, Premiere, DaVinci ou Final Cut.</span></p>
+      <p class="nao"><svg viewBox="0 0 24 24" aria-hidden="true" style="stroke:var(--mute)"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Não serve se você edita só no CapCut do celular. Ele não aceita LUT importada.</span></p>
+    </div>
+    <div class="al-ponte" id="alPonte">
+      <p>Está no celular? Dá para fazer a prova aqui. A LUT você aplica no editor do computador.</p>
+      <button class="btn ghost" id="alManda" type="button">Mandar o link para o computador</button>
+      <p class="al-ok" id="alOk" role="status" hidden></p>
+    </div>
+    <p class="al-rodape">Seus arquivos não saem do seu aparelho.</p>
+  </div>`);
+  $('#alProva').onclick = () => { evAluno('aluno_cta_prova'); aulaIntro(); };
+  // ponte celular → computador
+  if (matchMedia('(pointer: coarse)').matches) $('#alPonte').classList.add('on');
+  $('#alManda').onclick = async () => {
+    const u = new URL(location.href); u.searchParams.set('aluno', '1'); u.searchParams.delete('recepcao');
+    const ok = $('#alOk'), link = u.toString();
+    if (navigator.share){ try { await navigator.share({ title:'Mood · prova de cor', url:link }); evAluno('aluno_ponte_computador', { metodo:'share' }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
+    try { await navigator.clipboard.writeText(link); ok.hidden = false; ok.textContent = 'Link copiado. Cole no WhatsApp Web ou no seu e-mail.'; evAluno('aluno_ponte_computador', { metodo:'copia' }); }
+    catch { ok.hidden = false; ok.innerHTML = 'Copie este link:'; const i = document.createElement('input'); i.value = link; i.readOnly = true; ok.after(i); i.select(); evAluno('aluno_ponte_computador', { metodo:'manual' }); }
+  };
+  // demo: comparador arrastável + fichas de referência
+  const cmp = $('#alCmp'), inp = cmp.querySelector('input'), dep = $('#alDep');
+  inp.addEventListener('input', () => cmp.style.setProperty('--p', inp.value + '%'));
+  const carregaTudo = () => AL_LOOKS.forEach(l => { const im = new Image(); im.src = AL_DEMO + l.k + '.webp'; });
+  if (document.readyState === 'complete') setTimeout(carregaTudo, 400); else addEventListener('load', () => setTimeout(carregaTudo, 400), { once:true });
+  document.querySelectorAll('.al-look').forEach(b => b.onclick = () => {
+    const l = AL_LOOKS.find(x => x.k === b.dataset.k); if (!l || b.getAttribute('aria-pressed') === 'true') return;
+    document.querySelectorAll('.al-look').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    const novo = new Image(); novo.onload = () => { dep.src = novo.src; $('#alTagLut').textContent = 'LUT · ' + l.nome; varreAlca(cmp, inp, true); };
+    novo.src = AL_DEMO + l.k + '.webp';
+    evAluno('aluno_demo_look', { look:l.k });
+  });
+  varreAlca(cmp, inp);
+  evAluno('aluno_recepcao_vista');
+  return true;
+}
+
+// ATO 2 · sua prova: título, link do exemplo e cuidados recolhidos
+const _alP1 = passo1;
+passo1 = function(){
+  _alP1();
+  if (!ehAluno) return;
+  const h1 = $('#tela h1'); if (h1) h1.textContent = 'Agora com o seu vídeo.';
+  const st = $('#tela .sobre-t'); if (st) st.remove();
+  const sub = $('#tela .sub'); if (sub) sub.remove();
+  const ex = $('#ex'); if (ex){ ex.textContent = 'Não tenho vídeo aqui · usar um exemplo'; ex.addEventListener('click', () => evAluno('aluno_exemplo')); }
+  const dc = $('#tela .dicas');
+  if (dc) dc.outerHTML = `<details class="al-cuidados"><summary>3 cuidados da aula</summary><div>
+    <span>Vídeo é melhor que print: o Mood lê vários momentos.</span>
+    <span>Cena parecida com cena parecida: pessoa com pessoa, dia com dia.</span>
+    <span>Imagem limpa: sem legenda, botão ou moldura por cima.</span></div></details>`;
+};
+
+// ATO 3 · resultado: tiras REF · ANTES · LUT
+const _alP2 = passo2;
+let alViuRes = false;
+passo2 = function(){
+  _alP2();
+  if (!ehAluno) return;
+  if (!alViuRes){ alViuRes = true; evAluno('aluno_resultado_visto'); }
+  setTimeout(() => {
+    const pv = $('#pv'); if (!pv || !$('#cD')) return;
+    let ref, ant, dep; try { ref = paleta(REFS[iR], 6); ant = paleta($('#cA'), 6); dep = paleta($('#cD'), 6); } catch { return; }
+    const box = document.createElement('div'); box.className = 'al-res-tiras al-tiras'; box.setAttribute('aria-hidden', 'true');
+    box.innerHTML = '<span class="al-rot">Prova de cor</span>' + tiraHtml('REF', ref, 0) + tiraHtml('Antes', ant, 120) + tiraHtml('LUT', dep, 240);
+    pv.after(box);
+  }, 60);
+};
+
+// ATO 4 · credencial de aluno (mesmo botão #comprar / data-aluno de antes)
+function credencialAluno(){
+  const inclui = ['LUTs ilimitadas por 1 ano', 'No celular e no computador', 'CapCut, Premiere, DaVinci e Final Cut', 'Vídeo normal ou em Log (Apple Log, S-Log2, S-Log3)', 'Checagem automática e pele protegida', 'Pix ou cartão'];
+  return `<div class="al-cred">
+    <div class="al-cred-top"><img src="/logo.png" alt="Base FL" width="28" height="28"><span>Base FL · Acesso de aluno</span></div>
+    <h3>Para baixar esta e criar quantas quiser por 1 ano.</h3>
+    <div class="al-regua">
+      <div class="al-hoje"><span class="r">Até ${ALUNO.ate} · 23h59</span><span class="al-v97"><small>R$</small><span>${ALUNO.preco}</span></span><span class="s">ou 12x de R$ ${ALUNO.parc}</span></div>
+      <div class="al-traco"><span class="al-alca" aria-hidden="true">${AL_SETA}</span></div>
+      <div class="al-dep"><span class="r">Depois de ${ALUNO.ate}</span><span class="al-v147">R$ ${ALUNO.normal}</span><span class="s">para todo mundo</span></div>
+    </div>
+    <button class="btn full" id="comprar" data-aluno="1">Liberar minha LUT · R$ ${ALUNO.preco}</button>
+    <ul class="al-inclui">${inclui.map(t => `<li>${AL_OK}<span>${t}</span></li>`).join('')}</ul>
+    ${Base.sessao() ? '' : '<button class="link al-entrar" id="entrar">Já comprei · entrar</button>'}
+    <div class="al-pico">Só para quem já é da casa · até ${ALUNO.ate}</div>
+  </div>`;
+}
+atualizaFita();
 const VEIO_TESTE = /[?&](aluno|teste)=1/.test(location.search);
-botaoConta(); if (acesso && !VEIO_TESTE) passo1(); else aulaIntro();
+botaoConta(); if (acesso && !VEIO_TESTE) passo1(); else if (!recepcaoAluno()) aulaIntro();
 document.addEventListener('click', e => { if (e.target.closest && e.target.closest('#rever')){ evAula('aula_teste_rever'); aulaIntro(); } });
 Base.pronto.then(() => { sincAcesso(); if ($('.fim')) passo3(); else if (acesso && !VEIO_TESTE && $('#pl')) { if (paraPlayer){ paraPlayer(); paraPlayer = null; } passo1(); } });
 Base.aoMudar(() => { const era = acesso; sincAcesso(); if (era !== acesso && $('.fim')) passo3(); });
