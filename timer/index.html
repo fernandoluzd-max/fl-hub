@@ -10,11 +10,11 @@
 <link rel="icon" href="/timer/favicon-32.png">
 <link rel="apple-touch-icon" href="/timer/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 /* ChronoCut · mesmo esqueleto visual das outras ferramentas do Base FL (fundo, painéis, botões, campos). Só a cor de destaque é dele. */
-:root{--bg:#0D0F0E;--panel:#151816;--panel2:#1B1F1C;--line:#272D29;--ink:#F4F0E4;--mute:#9A968A;--dim:#5f5c55;--accent:#FF5A5F;--accent-ink:#1c0607;--ok:#7fce8f;--warn:#F2A541;--err:#ff8f7a;
-  --f:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+:root{--bg:#0D0F0E;--panel:#151816;--panel2:#1B1F1C;--line:#272D29;--ink:#F4F0E4;--mute:#9A968A;--dim:#8A877E;--accent:#FF5A5F;--accent-ink:#1c0607;--ok:#7fce8f;--warn:#F2A541;--err:#ff8f7a;
+  --f:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;--m:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--bg-reta:#13100D}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--bg)}
 body{color:var(--ink);font:16px/1.5 var(--f);min-height:100vh;overflow-x:hidden}
@@ -149,7 +149,222 @@ body.mini .acoes .btn{min-width:0;flex:1;min-height:44px}
 body.mini .cartao{margin-top:0}
 .foot{margin-top:26px;text-align:center;color:var(--dim);font-size:12.5px}
 @media (max-width:430px){.abas button{padding:9px 8px;font-size:13px}}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+/* ===================== DESAFIO (modo foco com prazo) =====================
+   O desafio é uma timeline: título = nome do clipe, timecode = tempo, playhead indo até o FIM.
+   Tudo com prefixo d- para não colidir com o cronômetro. */
+body.d-largo .wrap{max-width:1120px}
+body.d-reta{background:var(--bg-reta)}
+body{transition:background-color 1.2s cubic-bezier(.2,.7,.2,1)}
+.d-rot{font:700 11px/1.2 var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.d-faixa{display:flex;align-items:center;gap:10px;width:100%;margin-bottom:12px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;text-align:left;font-size:14px}
+.d-faixa b{font:700 14px var(--m);font-variant-numeric:tabular-nums}
+.d-faixa .tx{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d-faixa .ab{color:var(--mute);text-decoration:underline;text-underline-offset:3px}
+.d-rel{width:20px;height:20px;flex:none;color:var(--ink)}
+.d-rel .pont{transform-origin:12px 13.5px;animation:d-gira 60s linear infinite}
+body.d-reta .d-rel .pont{animation-duration:6s}
+body.d-reta .d-rel{color:var(--warn)}
+.d-pausado .d-rel .pont{animation-play-state:paused}
+@keyframes d-gira{to{transform:rotate(360deg)}}
+.d-cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;border:0;border-radius:14px;background:var(--accent);color:var(--accent-ink);font-weight:850;font-size:17px;padding:0 24px;cursor:pointer;transition:transform .12s}
+.d-cta:active{transform:scale(.98)}.d-cta:disabled{opacity:.4;cursor:default}
+.d-cta.full{width:100%}
+.d-b2{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border-radius:13px;border:1px solid #343B36;background:transparent;color:var(--ink);font-weight:700;font-size:15px;padding:0 18px;cursor:pointer}
+
+/* configurar */
+.d-cfg{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:880px){.d-cfg{grid-template-columns:1fr}}
+.d-cfg h1{font-size:clamp(30px,5vw,52px);margin:6px 0 4px}
+.d-passo{display:block;margin:24px 0 10px}
+.d-chips{display:flex;flex-wrap:wrap;gap:6px}
+.d-chips button{min-height:44px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--mute);font-weight:650;font-size:14.5px;padding:0 14px;cursor:pointer}
+.d-chips button[aria-pressed=true]{border-color:var(--ink);color:var(--ink);background:var(--panel2)}
+.d-chips .meu{border-style:dashed;border-color:#343B36;color:var(--ink);display:inline-flex;align-items:center;gap:8px}
+.d-chips .meu svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
+.d-chips .meu[aria-pressed=true]{border-style:solid;border-color:var(--accent);background:rgba(255,90,95,.1)}
+.d-chips .num{font-family:var(--m);font-weight:700}
+.d-campo{display:block;width:100%;background:transparent;border:0;border-bottom:2px solid #343B36;padding:8px 0 12px;font-weight:800;font-stretch:112%;font-size:clamp(24px,3.6vw,36px);letter-spacing:-.02em;outline:none;color:var(--ink);border-radius:0}
+.d-campo::placeholder{color:#55584f}
+.d-campo:focus{border-color:var(--accent)}
+.d-ajuda{display:flex;justify-content:space-between;gap:10px;color:var(--mute);font-size:13px;margin-top:8px}
+.d-ajuda .cont{font-family:var(--m);font-size:12px}
+.d-sug{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:13.5px;color:var(--mute)}
+.d-sug button{border:1px solid #343B36;background:var(--ink);color:#141615;border-radius:999px;padding:5px 11px;font-size:13px;font-weight:650;cursor:pointer;min-height:34px}
+.d-qtd{margin-top:12px;color:var(--ink);font-weight:500;display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--panel);font-size:14px;cursor:pointer}
+.d-qtd input{width:18px;height:18px;accent-color:var(--accent);flex:none}
+.d-qtd small{display:block;color:var(--mute);font-size:12.5px}
+.d-livre{margin-top:12px;padding:16px;border-radius:16px;border:1px solid var(--line);background:var(--panel)}
+.d-modo{display:inline-flex;padding:3px;border-radius:11px;border:1px solid var(--line);background:var(--bg);margin-bottom:14px}
+.d-modo button{border:0;background:transparent;color:var(--mute);font-size:13px;font-weight:650;padding:6px 12px;border-radius:8px;cursor:pointer;min-height:34px}
+.d-modo button[aria-pressed=true]{background:var(--panel2);color:var(--ink)}
+.d-hms{display:flex;align-items:flex-end;gap:6px}
+.d-hms .u{display:grid;justify-items:center;gap:4px}
+.d-hms .u label{font:700 10.5px var(--m);letter-spacing:.12em;color:var(--mute);text-transform:uppercase;margin:0}
+.d-hms .cx{display:grid;grid-template-columns:36px 64px 36px;align-items:center;border:1px solid #343B36;border-radius:12px;background:var(--bg);overflow:hidden}
+.d-hms .cx button{height:52px;border:0;background:transparent;color:var(--mute);font-size:20px;cursor:pointer}
+.d-hms .cx button:hover{color:var(--ink);background:var(--panel2)}
+.d-hms input{width:64px;height:52px;border:0;background:transparent;text-align:center;font:700 26px var(--m);font-variant-numeric:tabular-nums;outline:none;color:var(--ink)}
+.d-hms .dp{font:700 26px var(--m);color:var(--dim);padding-bottom:12px}
+@media (max-width:440px){.d-hms .cx{grid-template-columns:28px 46px 28px}.d-hms input{width:46px;font-size:22px}.d-hms .cx button{height:48px}}
+.d-hora{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.d-hora input{height:52px;border:1px solid #343B36;border-radius:12px;background:var(--bg);padding:0 14px;font:700 24px var(--m);color:var(--ink)}
+.d-hora span{color:var(--mute);font-size:14px}
+.d-valida{margin-top:10px;font-size:13.5px;color:var(--mute);min-height:20px}
+.d-valida.erro{color:var(--warn)}
+.d-opts{margin-top:18px}
+.d-opts .tog:first-child{border-top:0}
+.d-plano{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;position:sticky;top:16px}
+@media (max-width:880px){.d-plano{position:static}}
+.d-plano .ttl{font-weight:850;font-stretch:115%;font-size:clamp(22px,2.6vw,30px);line-height:1.05;letter-spacing:-.02em;margin:10px 0 2px;text-wrap:balance;overflow-wrap:anywhere}
+.d-plano .ttl.vazio{color:#55584f}
+.d-plano .ctx{color:var(--mute);font-size:13px}
+.d-plano .tc{font:700 44px/1 var(--m);letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin:16px 0 4px}
+.d-plano .fim{color:var(--mute);font-size:13.5px;margin:0}
+.d-plano .fim b,.d-plano .meta b{color:var(--ink)}
+.d-plano .meta{margin-top:8px;font-size:13.5px;color:var(--mute)}
+
+/* 3 2 1 */
+.d-pre{min-height:60vh;display:grid;place-items:center;text-align:center;cursor:pointer}
+.d-pre .n{font-weight:900;font-stretch:125%;font-size:clamp(140px,34vw,320px);line-height:.8;font-variant-numeric:tabular-nums;letter-spacing:-.05em}
+.d-pre .n.bate{animation:d-bate .9s cubic-bezier(.2,.7,.2,1)}
+@keyframes d-bate{0%{opacity:0;transform:scale(1.18)}25%{opacity:1;transform:scale(1)}85%{opacity:1}100%{opacity:0;transform:scale(.94)}}
+.d-pre .t{margin-top:22px;font-weight:700;font-stretch:110%;font-size:clamp(18px,2.4vw,24px);color:var(--mute);overflow-wrap:anywhere}
+
+/* foco */
+.d-foco{min-height:calc(100svh - 160px);display:grid;grid-template-rows:auto 1fr auto;gap:18px}
+/* tela cheia: só o desafio na tela */
+:fullscreen body.d-foco-on #topo,:fullscreen body.d-foco-on #abas,:fullscreen body.d-foco-on #foot{display:none!important}
+:fullscreen body.d-foco-on .d-foco{min-height:calc(100svh - 40px)}
+#d-sairtc{display:none}:fullscreen #d-sairtc{display:grid}
+.d-ftop{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.d-ftop .ctx{color:var(--mute);font-size:13.5px}
+.d-ftop .ctx b{color:var(--ink);font-weight:650}
+.d-ftop .sp{flex:1}
+.d-ico{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--mute);display:grid;place-items:center;cursor:pointer}
+.d-ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.d-ico[aria-pressed=false]{color:#55584f}
+.d-tit{font-weight:850;font-stretch:118%;font-size:clamp(34px,6.4vw,84px);line-height:.98;letter-spacing:-.03em;margin:10px 0 0;text-wrap:balance;max-width:18ch;overflow-wrap:anywhere}
+.d-tit.longo{font-size:clamp(28px,4.6vw,60px);max-width:24ch}
+.d-tit.entra{animation:d-titulo .7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes d-titulo{from{opacity:0;transform:translateY(18px);letter-spacing:.02em}to{opacity:1;transform:none;letter-spacing:-.03em}}
+.d-meio{display:grid;align-content:center;gap:20px}
+.d-tc{font-weight:800;font-variant-numeric:tabular-nums;font-size:clamp(84px,19vw,232px);line-height:.86;letter-spacing:-.045em;font-variation-settings:"wdth" 100,"wght" 760;transition:color .6s,opacity .3s;white-space:nowrap}
+.d-tc.h{font-size:clamp(64px,14vw,184px)}
+.d-tc .d-sg{opacity:.38}
+.d-pausado .d-tc{opacity:.45}
+body.d-reta .d-tc,.d-tc.d-ex{color:var(--warn)}
+.d-msg{min-height:26px;font-weight:700;font-stretch:108%;font-size:clamp(16px,2vw,20px);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s}
+.d-msg.on{opacity:1;transform:none}
+.d-trilho{position:relative;height:74px;margin-top:4px}
+.d-regua{position:absolute;inset:0 0 auto;height:14px;background:repeating-linear-gradient(90deg,#343B36 0 1px,transparent 1px 2.5%)}
+.d-regua::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,var(--dim) 0 1px,transparent 1px 25%);opacity:.7;height:9px}
+.d-pista{position:absolute;left:0;right:0;top:22px;height:34px;border-radius:7px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);overflow:hidden}
+.d-feito{position:absolute;inset:0 auto 0 0;width:0;background:var(--accent);opacity:.9}
+.d-feito::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 22px,rgba(28,6,7,.28) 22px 23px)}
+body.d-reta .d-feito{background:var(--warn)}
+.d-zona{position:absolute;top:0;bottom:0;right:0;background:repeating-linear-gradient(135deg,rgba(242,165,65,.16) 0 6px,transparent 6px 12px);box-shadow:inset 1px 0 0 rgba(242,165,65,.5)}
+.d-pz{position:absolute;top:0;bottom:0;width:4px;background:repeating-linear-gradient(0deg,rgba(244,240,228,.5) 0 2px,transparent 2px 5px)}
+.d-marco{position:absolute;top:16px;width:0;height:46px;border-left:1.5px dashed var(--dim)}
+.d-marco span{position:absolute;top:-16px;left:6px;white-space:nowrap}
+.d-marco.feito-m{border-color:var(--ink)}.d-marco.feito-m span{color:var(--ink)}
+.d-marco.cai{animation:d-cai .6s cubic-bezier(.2,.7,.2,1)}
+@keyframes d-cai{from{transform:translateY(-14px);opacity:0}to{transform:none;opacity:1}}
+.d-cab{position:absolute;top:10px;bottom:0;width:2px;margin-left:-1px;background:var(--ink);left:0}
+.d-cab::before{content:"";position:absolute;top:-2px;left:-6px;border:7px solid transparent;border-top:9px solid var(--ink)}
+.d-fimf{position:absolute;right:0;top:-2px;font:700 11px var(--m);letter-spacing:.12em;color:var(--mute)}
+.d-pontas{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--mute)}
+.d-pontas b{color:var(--ink);font-family:var(--m);font-weight:700;font-size:12.5px}
+.d-ent{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap}
+.d-ent .q{display:flex;gap:4px;flex-wrap:wrap}
+.d-ent .q i{width:26px;height:34px;border-radius:5px;box-shadow:inset 0 0 0 1.5px #343B36;transition:background-color .3s}
+.d-ent .q i.ok{background:var(--ok);box-shadow:none}
+.d-ent .q i.pop{animation:d-pop .45s cubic-bezier(.34,1.56,.64,1)}
+@keyframes d-pop{from{transform:scale(.6)}to{transform:none}}
+.d-ent b{font:700 14px var(--m)}
+.d-ent button{min-height:44px;border-radius:11px;border:1px solid #343B36;background:transparent;color:var(--ink);font-weight:700;font-size:14px;padding:0 14px;cursor:pointer}
+.d-ent .menos{min-width:44px;padding:0;color:var(--mute)}
+.d-ctl{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.d-ctl .sp{flex:1}
+.d-ctl .disc{border:0;background:none;color:var(--mute);font-size:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;min-height:44px}
+@media (max-width:640px){
+  .d-ctl{position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 26%);padding-top:18px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:5}
+  body.d-reta .d-ctl{background:linear-gradient(transparent,var(--bg-reta) 26%)}
+  .d-ctl .d-cta{flex:1 1 100%;order:-1}
+  .d-ctl .d-b2{flex:1}
+  .d-ctl .sp{display:none}
+}
+.d-q{display:grid;gap:14px;padding:20px;border-radius:18px;background:var(--panel);border:1px solid var(--line)}
+.d-q h2{font-size:clamp(22px,3vw,30px);line-height:1.1;text-wrap:balance;overflow-wrap:anywhere}
+.d-q p{color:var(--mute)}
+.d-q .bts{display:flex;gap:8px;flex-wrap:wrap}
+
+/* resultado */
+.d-res-top{display:flex;align-items:center;gap:10px;min-height:44px}
+.d-res-top .sp{flex:1}
+.d-pular{border:1px solid #343B36;background:transparent;color:var(--mute);border-radius:999px;padding:6px 14px;font-weight:650;font-size:13px;cursor:pointer;min-height:40px}
+.d-res.final .d-pular{visibility:hidden}
+.d-selo{display:inline-flex;align-items:center;gap:10px}
+.d-selo .ic{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--panel2);box-shadow:inset 0 0 0 1px #343B36}
+.d-selo svg{width:20px;height:20px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.d-res-g{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start;margin-top:14px}
+@media (max-width:880px){.d-res-g{grid-template-columns:1fr;gap:20px}}
+.d-frase{font-weight:900;font-stretch:122%;font-size:clamp(44px,8vw,96px);line-height:.92;letter-spacing:-.04em;margin:6px 0 10px;text-wrap:balance}
+.d-frase .w{display:inline-block;white-space:nowrap}
+.d-frase .l{display:inline-block;opacity:0;transform:translateY(.4em) rotate(4deg)}
+.d-res.anim .d-frase .l{animation:d-letra .5s cubic-bezier(.34,1.56,.64,1) forwards}
+.d-res.final .d-frase .l,.d-res.sem .d-frase .l{opacity:1;transform:none;animation:none}
+@keyframes d-letra{to{opacity:1;transform:none}}
+.d-sub{font-weight:700;font-stretch:108%;font-size:clamp(17px,2.2vw,22px);overflow-wrap:anywhere}
+.d-sub b{color:var(--c,var(--ok))}
+.d-rtit{color:var(--mute);font-size:14px;overflow-wrap:anywhere;margin-top:4px}
+.d-palco{position:relative;margin:26px 0 8px;height:118px}
+.d-palco .pp{position:absolute;left:0;top:34px;height:40px;border-radius:7px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line)}
+.d-palco .uso{position:absolute;left:0;top:34px;height:40px;border-radius:7px 0 0 7px;background:var(--ok);width:0}
+.d-palco .uso::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 22px,rgba(13,15,14,.22) 22px 23px)}
+.d-palco .sobra{position:absolute;top:34px;height:40px;border-radius:0 7px 7px 0;background:repeating-linear-gradient(135deg,rgba(255,90,95,.55) 0 7px,rgba(255,90,95,.25) 7px 14px);transform-origin:left center;opacity:0}
+.d-palco .d-ex{position:absolute;top:34px;height:40px;border-radius:0 7px 7px 0;background:var(--warn);width:0}
+.d-palco .lam{position:absolute;top:18px;height:72px;width:2px;margin-left:-1px;background:var(--ink);opacity:0;transform:scaleY(0);transform-origin:top}
+.d-palco .lam svg{position:absolute;top:-20px;left:-9px;width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:1.8}
+.d-palco .fimp{position:absolute;top:0;font:700 11px var(--m);letter-spacing:.12em;color:var(--mute);transform:translateX(-100%);white-space:nowrap}
+.d-palco .fimp.mov{transition:left .55s cubic-bezier(.2,.7,.2,1)}
+.d-palco.ima .fimp{color:var(--ok)}
+.d-palco .cort{position:absolute;top:84px;font:700 12px var(--m);color:var(--accent);white-space:nowrap;opacity:0;transform:translateY(-6px);transition:opacity .35s,transform .35s}
+.d-palco .cort.on{opacity:1;transform:none}
+.d-palco .cort.dir{transform:translateX(-100%);color:var(--warn)}
+.d-palco .ima-ic{position:absolute;top:-5px;right:34px;width:22px;height:22px;stroke:var(--ok);fill:none;stroke-width:1.8;opacity:0}
+.d-palco.ima .ima-ic{opacity:1}
+.d-res.anim .d-palco.ima .ima-ic{opacity:0;animation:d-ima .6s cubic-bezier(.34,1.56,.64,1) .7s forwards}
+@keyframes d-ima{from{opacity:0;transform:translateY(-10px) scale(.6)}to{opacity:1;transform:none}}
+.d-faisca{position:absolute;top:54px;width:0;height:0;pointer-events:none}
+.d-faisca i{position:absolute;left:0;top:0;width:2px;height:16px;margin:-8px -1px;background:var(--ink);border-radius:2px;opacity:0;animation:d-faisca .7s cubic-bezier(.2,.7,.2,1) forwards;transform:rotate(var(--r))}
+.d-faisca i.f{width:7px;height:10px;margin:-5px -3.5px;border-radius:1.5px;background:var(--ok);animation-name:d-quadro;animation-duration:.9s}
+@keyframes d-faisca{0%{opacity:1;transform:rotate(var(--r)) translateY(-4px) scaleY(.4)}60%{opacity:1}100%{opacity:0;transform:rotate(var(--r)) translateY(-46px) scaleY(1)}}
+@keyframes d-quadro{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rr))}}
+.d-laudo{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:4px 18px}
+.d-laudo .l{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:13px 0;border-top:1px solid var(--line);font-size:14.5px}
+.d-laudo .l:first-child{border-top:0}
+.d-laudo .l>span{color:var(--mute);flex:1}
+.d-laudo .l b{font:700 15px var(--m);font-variant-numeric:tabular-nums;white-space:nowrap}
+.d-laudo .l.dest b{font-size:20px;color:var(--c,var(--ok))}
+.d-laudo .bar{display:block;height:4px;border-radius:4px;background:var(--line);margin-top:8px;overflow:hidden}
+.d-laudo .bar i{display:block;height:100%;width:0;background:var(--c,var(--ok));transition:width .9s cubic-bezier(.2,.7,.2,1)}
+.d-vai{margin-top:12px;padding:14px 16px;border-radius:14px;border:1px dashed #343B36;font-size:14px;color:var(--mute)}
+.d-vai b{color:var(--ink)}
+.d-prox{margin-top:12px;padding:14px 16px;border-radius:14px;background:var(--panel2);font-size:14px;color:var(--mute);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.d-prox b{color:var(--ink)}
+.d-prox button{margin-left:auto}
+.d-acoes{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.d-fo{opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s}
+.d-res.final .d-fo,.d-res.sem .d-fo{opacity:1;transform:none}
+.d-desf{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:#141615;padding:8px 8px 8px 16px;border-radius:13px;font-weight:700;font-size:14px;display:flex;gap:12px;align-items:center;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:80;white-space:nowrap}
+.d-desf.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.d-desf button{border:0;background:#141615;color:var(--ink);border-radius:9px;padding:6px 12px;font-weight:700;cursor:pointer;min-height:36px}
+.d-pend .d-frase{font-size:clamp(36px,7vw,84px)}
+.d-mais{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.d-mais button{min-height:56px;min-width:84px;border-radius:14px;border:1px solid #343B36;background:var(--panel);color:var(--ink);font:700 17px var(--m);cursor:pointer}
+.d-mais button.rec{border-color:var(--ink);background:var(--panel2)}
+.d-mais button small{display:block;font:600 10.5px var(--f);color:var(--mute)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}.d-frase .l{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -160,6 +375,7 @@ body.mini .cartao{margin-top:0}
   <p class="foot" id="foot"></p>
 </div>
 <div class="toast" id="toast" role="status"></div>
+<div class="d-desf" id="d-desf" role="status"><span>Concluído.</span><button type="button" id="d-desf-b">Desfazer</button></div>
 
 <script src="/catalogo.js"></script>
 <script src="/base.js?v=4"></script>
@@ -241,6 +457,7 @@ async function carrega(){
     api('/rest/v1/timer_registros?select=*&order=inicio.desc&limit=5000'),
     api('/rest/v1/timer_config?select=dados').catch(() => []) ]);
   PJ = p || []; RG = r || []; CFG = { ...CFG_PADRAO, ...((c && c[0] && c[0].dados) || {}) }; CFG.atalhos = { ...CFG_PADRAO.atalhos, ...(CFG.atalhos || {}) };
+  await carregaD();
 }
 const salvaCfg = () => grava(() => api('/rest/v1/timer_config', { method:'POST', prefer:'resolution=merge-duplicates', body:{ dados: CFG, atualizado_em: new Date().toISOString() } }));
 async function recarrega(){ try { await carrega(); sinc(true); } catch { sinc(false); } }
@@ -261,20 +478,30 @@ async function inicia(){
 }
 async function pausa(){
   const r = ativo(); if (!r || pausado(r)) return;
-  const ps = [...(r.pausas || []), [new Date().toISOString(), null]];
-  await grava(() => api(`/rest/v1/timer_registros?id=eq.${r.id}`, { method:'PATCH', body:{ pausas: ps } })); r.pausas = ps; avisaOutros(); desenha();
+  const q = new Date().toISOString(), ps = [...(r.pausas || []), [q, null]];
+  await grava(() => api(`/rest/v1/timer_registros?id=eq.${r.id}`, { method:'PATCH', body:{ pausas: ps } })); r.pausas = ps;
+  const d = desafioAberto(); if (d && r.desafio_id === d.id) await pausaD(d, q).catch(() => {});   // o desafio ligado pausa junto
+  avisaOutros(); desenha();
 }
 async function retoma(){
   const r = ativo(); if (!r || !pausado(r)) return;
-  const ps = (r.pausas || []).map(p => p[1] ? p : [p[0], new Date().toISOString()]);
-  await grava(() => api(`/rest/v1/timer_registros?id=eq.${r.id}`, { method:'PATCH', body:{ pausas: ps } })); r.pausas = ps; descAvisado = Date.now(); avisaOutros(); desenha();
+  const q = new Date().toISOString(), ps = (r.pausas || []).map(p => p[1] ? p : [p[0], q]);
+  await grava(() => api(`/rest/v1/timer_registros?id=eq.${r.id}`, { method:'PATCH', body:{ pausas: ps } })); r.pausas = ps; descAvisado = Date.now();
+  const d = desafioAberto(); if (d && r.desafio_id === d.id) await retomaD(d, q).catch(() => {});
+  avisaOutros(); desenha();
 }
 async function fecha(r, quando = new Date().toISOString()){      // encerra um registro; pausa aberta fecha junto, no mesmo instante
   const ps = (r.pausas || []).map(p => p[1] ? p : [p[0], ms(p[0]) > ms(quando) ? p[0] : quando]);
   await grava(() => api(`/rest/v1/timer_registros?id=eq.${r.id}`, { method:'PATCH', body:{ fim: quando, pausas: ps } })); r.fim = quando; r.pausas = ps;
 }
-async function encerra(){
+async function encerra(forca){
   const r = ativo(); if (!r) return;
+  const dl = desafioAberto();
+  if (!forca && dl && r.desafio_id === dl.id) return folha('Encerrar o desafio também?', `<p class="sub" style="margin:6px 0 0">Esta sessão faz parte do desafio <b style="color:var(--ink)">${esc(dl.titulo)}</b>.</p>
+    <div class="pe"><button class="btn ghost" id="ed-so">Só o cronômetro</button><button class="btn" id="ed-dois">Encerrar os dois</button></div>`, f => {
+    f.querySelector('#ed-so').onclick = () => { fechaFolha(); encerra(true); };
+    f.querySelector('#ed-dois').onclick = () => { fechaFolha(); paraD('parou'); };
+  });
   await fecha(r); avisaOutros(); desenha();
   const p = proj(r.projeto_id);
   folha('Sessão salva', `<p class="sub" style="margin:6px 0 0"><b style="color:var(--ink)">${horas(dur(r))}</b> em ${esc(r.etapa)}, no projeto <b style="color:var(--ink)">${esc(p ? p.nome : '')}</b>. Encerrar a sessão não entrega o projeto: você pode continuar depois.</p>
@@ -290,6 +517,7 @@ async function trocaEtapa(n){
   const agora = new Date().toISOString(), eraPausa = pausado(r), cat = catDe(n);
   const corpo = { projeto_id: r.projeto_id, etapa: n, categoria: cat, objetivo: r.objetivo, inicio: agora, pausas: eraPausa ? [[agora, null]] : [] };
   if (cat === 'revisao'){ corpo.rev_n = REVN; corpo.rev_tipo = REVT; }
+  if (r.desafio_id) corpo.desafio_id = r.desafio_id;
   try { await fecha(r, agora); const [novo] = await grava(() => api('/rest/v1/timer_registros', { method:'POST', body: corpo, prefer:'return=representation' })); RG.unshift(novo); avisaOutros(); }
   catch { await recarrega(); }
   desenha();
@@ -334,7 +562,7 @@ function topo(){
 }
 function abas(){
   const n = $('#abas'); n.hidden = false;
-  n.innerHTML = [['agora','Cronômetro'],['projetos','Projetos'],['historico','Histórico'],['ajustes','Ajustes']].map(([k, t]) => `<button role="tab" aria-selected="${ABA === k}" data-a="${k}">${t}</button>`).join('');
+  n.innerHTML = [['agora','Cronômetro'], ...(DES ? [['desafio','Desafio']] : []), ['projetos','Projetos'],['historico','Histórico'],['ajustes','Ajustes']].map(([k, t]) => `<button role="tab" aria-selected="${ABA === k}" data-a="${k}">${t}</button>`).join('');
   n.querySelectorAll('button').forEach(b => b.onclick = () => { ABA = b.dataset.a; VER = null; desenha(); });
 }
 function vitrine(){
@@ -348,8 +576,10 @@ function vitrine(){
 }
 function desenha(){
   if (!Base.tem(PACK)) return;
+  if (ABA === 'desafio' && !DES) ABA = 'agora';
   abas();
-  ({ agora: telaAgora, projetos: telaProjetos, historico: telaHistorico, ajustes: telaAjustes })[ABA]();
+  document.body.classList.toggle('d-largo', ABA === 'desafio'); document.body.classList.remove('d-foco-on'); if (ABA !== 'desafio') document.body.classList.remove('d-reta');
+  ({ agora: telaAgora, desafio: telaDesafio, projetos: telaProjetos, historico: telaHistorico, ajustes: telaAjustes })[ABA]();
   tique(); pintaPip();
 }
 
@@ -365,7 +595,8 @@ function telaAgora(){
   const p = proj(SEL), cat = catDe(ETP), es = esperas(), tot = p ? soma(p.id) : null, et = etapas(), iOutro = et.findIndex(e => e.c === 'outro');
   const atrasado = p && p.prazo && !p.concluido_em && p.prazo < hoje();
   const revCli = tot ? tot.rodadas.cliente.size : 0, passouRev = p && p.rev_incl != null && revCli > p.rev_incl;
-  tela(`<section class="cartao cron" aria-label="Cronômetro">
+  const dfx = desafioAberto();
+  tela(`${dfx ? `<button class="d-faixa" id="d-faixa" type="button">${ICO_REL}<span class="tx">Desafio · ${esc(dfx.titulo)}</span><b id="d-faixa-t"></b><span class="ab">Abrir</span></button>` : ''}<section class="cartao cron" aria-label="Cronômetro">
     <div class="linha">
       <select class="inp" id="sel" aria-label="Projeto" ${a ? 'disabled' : ''}>${abertos.length ? '' : '<option value="">Nenhum projeto em andamento</option>'}${(a && p && p.concluido_em ? [p, ...abertos] : abertos).map(x => `<option value="${x.id}"${x.id === SEL ? ' selected' : ''}>${esc(x.nome)}${x.cliente ? ' · ' + esc(x.cliente) : ''}</option>`).join('')}</select>
       <button class="btn ghost p so-cheio" id="novo" ${a ? 'disabled' : ''}>Novo</button>
@@ -392,7 +623,7 @@ function telaAgora(){
   <button class="link" id="sai-mini" style="display:none;margin:8px auto 0">Sair do modo compacto</button>`);
   const liga = (s, f) => { const e = $(s); if (e) e.onclick = f; };
   $('#sel').onchange = e => { SEL = e.target.value || null; mem.set('fl_timer_sel', SEL || ''); desenha(); };
-  liga('#novo', () => novoProjeto()); liga('#ini', inicia); liga('#pau', pausa); liga('#ret', retoma); liga('#enc', encerra); liga('#esp', esperaIni);
+  liga('#novo', () => novoProjeto()); liga('#ini', inicia); liga('#pau', pausa); liga('#ret', retoma); liga('#enc', () => encerra()); liga('#esp', esperaIni);
   $$('.etapas button').forEach(b => b.onclick = () => trocaEtapa(b.dataset.e));
   $$('[data-fe]').forEach(b => b.onclick = () => esperaFim(b.dataset.fe));
   if ($('#obj')) $('#obj').oninput = e => { OBJ = e.target.value; };
@@ -406,13 +637,15 @@ function telaAgora(){
   $$('[data-av]').forEach(b => b.onclick = () => { const k = b.dataset.av; if (k === 'mais'){ focoIni = Date.now(); focoAvisado = false; } aviso = null; if (k === 'pausa') pausa(); else if (k === 'fim') encerra(); else desenha(); });
   liga('#mini', () => { document.body.classList.add('mini'); $('#sai-mini').style.display = 'block'; }); liga('#sai-mini', () => { document.body.classList.remove('mini'); desenha(); });
   if (document.body.classList.contains('mini')) $('#sai-mini').style.display = 'block';
-  liga('#flut', flutua); liga('#manual', () => editaRegistro(null, SEL));
+  liga('#flut', flutua); liga('#manual', () => editaRegistro(null, SEL)); liga('#d-faixa', () => { ABA = 'desafio'; desenha(); });
 }
 function tique(){
   const a = ativo(), t = $('#t'); if (t) t.textContent = relogio(a ? dur(a) : 0);
   $$('[data-esp]').forEach(e => { const r = RG.find(x => x.id === e.dataset.esp); if (r) e.textContent = relogio(dur(r)); });
   const p = proj(SEL); if (p && $('#tp')){ const s = soma(p.id); $('#tp').textContent = horas(s.ativo); const b = $('#bp'); if (b) b.style.width = Math.min(100, s.ativo / (p.horas_est * 36000)).toFixed(1) + '%'; }
   document.title = a ? (pausado(a) ? '⏸ ' : '') + relogio(dur(a)) + ' · ' + ((proj(a.projeto_id) || {}).nome || 'ChronoCut') : 'ChronoCut — o timer do editor | Base FL';
+  const dd = desafioAberto(); if (dd){ const rr = Dm.restante(dd, agoraD()), tx = rr >= 0 ? tcod(rr) : '+' + tcod(-rr);
+    document.title = (pausadoD(dd) ? 'Pausado · ' : rr < 0 ? 'Tempo! · ' : '') + tx + ' · ' + dd.titulo; const fx = $('#d-faixa-t'); if (fx) fx.textContent = tx; }
   pintaPip(true);
 }
 
@@ -428,8 +661,9 @@ async function flutua(){
 }
 function pintaPip(soTempo){
   if (!pip) return; const a = ativo(), d = pip.document, p = a ? proj(a.projeto_id) : proj(SEL);
-  if (soTempo && d.getElementById('ppt')){ d.getElementById('ppt').textContent = relogio(a ? dur(a) : 0); return; }
-  d.getElementById('pp').innerHTML = `<b>${esc(p ? p.nome : 'Nenhum projeto')}</b><small>${esc(a ? a.etapa + (pausado(a) ? ' · pausado' : '') : (ETP || ''))}</small><div class="tempo${a && pausado(a) ? ' pausado' : ''}" id="ppt">${relogio(a ? dur(a) : 0)}</div>
+  const dd = desafioAberto(), dTx = dd ? (r => (r >= 0 ? '' : '+') + tcod(Math.abs(r)))(Dm.restante(dd, agoraD())) : '';
+  if (soTempo && d.getElementById('ppt')){ d.getElementById('ppt').textContent = relogio(a ? dur(a) : 0); const x = d.getElementById('ppd'); if (x) x.textContent = dTx; return; }
+  d.getElementById('pp').innerHTML = `<b>${esc(p ? p.nome : 'Nenhum projeto')}</b><small>${esc(a ? a.etapa + (pausado(a) ? ' · pausado' : '') : (ETP || ''))}</small><div class="tempo${a && pausado(a) ? ' pausado' : ''}" id="ppt">${relogio(a ? dur(a) : 0)}</div>${dd ? `<small style="display:block;margin:-4px 0 8px">Desafio · faltam <b id="ppd">${dTx}</b></small>` : ''}
     <div class="acoes">${!a ? '<button class="btn" data-k="ini">Iniciar</button>' : pausado(a) ? '<button class="btn" data-k="ret">Retomar</button><button class="btn ghost" data-k="enc">Encerrar</button>' : '<button class="btn" data-k="pau">Pausar</button><button class="btn ghost" data-k="enc">Encerrar</button>'}</div>`;
   d.querySelectorAll('[data-k]').forEach(b => b.onclick = () => ({ ini: inicia, ret: retoma, pau: pausa, enc: encerra })[b.dataset.k]());
 }
@@ -614,6 +848,12 @@ function telaAjustes(){
     <section class="cartao"><h3>Atalhos de teclado</h3><p class="dica" style="margin:6px 0 4px">Vazio por padrão, para não brigar com os atalhos do seu editor. Clique no campo e aperte a combinação (com Alt, Ctrl ou ⌘). Só funcionam com esta página em foco, e nunca enquanto você digita num campo.</p>
       <div class="g2"><div><label for="k-pausa">Iniciar, pausar e retomar</label><input class="inp" id="k-pausa" readonly value="${esc(CFG.atalhos.pausa)}" placeholder="Nenhum"></div><div><label for="k-fim">Encerrar a sessão</label><input class="inp" id="k-fim" readonly value="${esc(CFG.atalhos.fim)}" placeholder="Nenhum"></div></div>
       <button class="link" id="k-limpa" style="margin-top:8px">Limpar atalhos</button></section>
+    ${DES ? (c => `<section class="cartao"><h3>Desafio</h3>
+      <label class="tog" style="margin-top:8px"><input type="checkbox" id="ad-321" ${c.conta321 ? 'checked' : ''}><span>Contagem 3, 2, 1<small>Três segundos antes de começar.</small></span></label>
+      <label class="tog"><input type="checkbox" id="ad-tela" ${c.telaCheia ? 'checked' : ''}><span>Tela cheia e tela acesa<small>A tela não apaga enquanto o desafio corre.</small></span></label>
+      <div class="g2"><div><label for="ad-cel">Celebrações</label><select class="inp" id="ad-cel">${[['completas','Completas'],['discretas','Discretas (sem faíscas)'],['desligadas','Desligadas']].map(([v, t]) => `<option value="${v}"${c.celebra === v ? ' selected' : ''}>${t}</option>`).join('')}</select></div>
+        <div><label for="ad-som">Sons</label><select class="inp" id="ad-som">${[['ligados','Ligados'],['conclusoes','Só conclusões'],['desligados','Desligados']].map(([v, t]) => `<option value="${v}"${c.sons === v ? ' selected' : ''}>${t}</option>`).join('')}</select></div></div>
+      <label for="ad-vol">Volume dos sons</label><input id="ad-vol" type="range" min="0.1" max="1" step="0.05" value="${c.vol}" style="width:100%;accent-color:var(--accent)"></section>`)(cfgD()) : ''}
     <p class="dica" style="margin-top:16px">O ChronoCut precisa de internet para salvar. Se a conexão cair, o aviso no topo mostra que não foi salvo. O cronômetro em si não se perde: o horário de início já está guardado.</p>`);
   const le = () => $$('#els .el').map(l => ({ n: l.querySelector('input').value.trim(), c: l.querySelector('select').value })).filter(e => e.n);
   $('#e-add').onclick = () => { CFG.etapas = [...le(), { n: 'Nova etapa', c: 'trabalho' }]; telaAjustes(); const i = $$('#els input'); i[i.length - 1].select(); };
@@ -624,6 +864,9 @@ function telaAjustes(){
   $('#a-som').onchange = async e => { CFG.som = e.target.checked; await salvaCfg().catch(() => {}); bip(); };
   ['pausa', 'fim'].forEach(k => { const c = $('#k-' + k); c.onkeydown = async e => { e.preventDefault(); const t = combo(e); if (!t) return; CFG.atalhos[k] = t; c.value = t; await salvaCfg().catch(() => {}); }; });
   $('#k-limpa').onclick = async () => { CFG.atalhos = { pausa: '', fim: '' }; await salvaCfg().catch(() => {}); telaAjustes(); };
+  if ($('#ad-321')){ $('#ad-321').onchange = e => salvaCfgD({ conta321: e.target.checked }); $('#ad-tela').onchange = e => salvaCfgD({ telaCheia: e.target.checked });
+    $('#ad-cel').onchange = e => salvaCfgD({ celebra: e.target.value }); $('#ad-som').onchange = e => { salvaCfgD({ sons: e.target.value }); som('voou'); };
+    $('#ad-vol').onchange = e => { salvaCfgD({ vol: +e.target.value }); som('marcador'); }; }
 }
 // atalho = modificador + tecla (nunca uma tecla sozinha, para não atrapalhar quem digita)
 function combo(e){ if (['Control','Alt','Shift','Meta'].includes(e.key) || !(e.altKey || e.ctrlKey || e.metaKey)) return ''; return [e.ctrlKey && 'Ctrl', e.metaKey && 'Cmd', e.altKey && 'Alt', e.shiftKey && 'Shift', e.code.replace(/^Key|^Digit/, '')].filter(Boolean).join('+'); }
@@ -634,12 +877,643 @@ addEventListener('keydown', e => {
   else if (c === CFG.atalhos.fim){ e.preventDefault(); encerra(); }
 });
 
+// ===================== DESAFIO (modo foco com prazo) =====================
+// O desafio é um PRAZO que a pessoa se dá. O tempo de TRABALHO continua só nos registros:
+// um desafio ligado a projeto usa o mesmo registro do cronômetro (desafio_id), então nada conta duas vezes.
+// Regra de ouro vale aqui também: tudo sai de horários (início, pausas, fim), nunca de um contador.
+let DS = [], DES = false, DESVIO = 0, DF = { marcos: {} }, RES = null, FD = null, dLaco = 0, dAgenda = 0, dTrava = null, dPreT = 0;
+const agoraD = () => Date.now() + DESVIO;
+const CFGD_PADRAO = { conta321: true, telaCheia: true, celebra: 'completas', sons: 'ligados', vol: .55, ultimoLivre: 0 };
+const cfgD = () => ({ ...CFGD_PADRAO, ...(CFG.desafio || {}) });
+const salvaCfgD = mud => { CFG.desafio = { ...cfgD(), ...mud }; return salvaCfg().catch(() => {}); };
+const desafioAberto = () => DS.find(d => !d.fim) || null;
+const regDoDesafio = d => d ? RG.find(r => !r.fim && r.desafio_id === d.id && r.categoria !== 'espera') || null : null;
+const pausadoD = d => !!(d && (d.pausas || []).some(p => !p[1]));
+
+// ---------- motor (funções puras: recebem o "agora" de fora) ----------
+const Dm = {
+  pausaTotal: (d, t) => (d.pausas || []).reduce((a, [i, f]) => a + Math.max(0, Math.min(t, f ? ms(f) : t) - ms(i)), 0),
+  usado: (d, t) => { const fim = d.fim ? ms(d.fim) : t; return Math.max(0, fim - ms(d.inicio) - Dm.pausaTotal(d, fim)); },
+  prazo: d => (d.plano_s + (d.extra_s || 0)) * 1000,
+  restante: (d, t) => Dm.prazo(d) - Dm.usado(d, t),
+  fracao: (d, t) => Math.min(1, Dm.usado(d, t) / Dm.prazo(d)),
+  reta: d => Math.min(300000, Dm.prazo(d) * .2),                     // reta final: últimos 5 min, ou 20% em desafios curtos
+  terminaEm: (d, t) => ms(d.inicio) + Dm.prazo(d) + Dm.pausaTotal(d, t),
+  fase(d, t){ if (d.fim) return 'fechado'; if (pausadoD(d)) return 'pausado'; const r = Dm.restante(d, t);
+    if (r <= 0) return 'esgotado'; if (r <= Dm.reta(d)) return 'reta'; if (Dm.usado(d, t) >= d.plano_s * 500) return 'segunda'; return 'primeira'; }
+};
+// classe do resultado: sempre calculada do tempo real de foco contra o plano ORIGINAL (os +N são tempo extra)
+function classeD(plano, usado){
+  const econ = plano - usado, tol = Math.max(60000, plano * .05);
+  if (econ >= plano * .25 && econ <= plano * .5) return 'voou';
+  if (econ >= tol) return 'antes';            // inclui folga acima de 50%: estimativa folgada (não premia inflar o plano)
+  if (econ > -tol) return 'prazo';
+  return 'depois';
+}
+const tcod = t => { const s = Math.max(0, Math.round(t / 1000)), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(s % 60).padStart(2, '0'); };
+const minExt = t => { const m = Math.round(t / 60000); if (m < 60) return m + (m === 1 ? ' minuto' : ' minutos'); const h = Math.floor(m / 60), r = m % 60; return h + 'h' + (r ? String(r).padStart(2, '0') : ''); };
+const fechaPausas = (ps, q) => (ps || []).map(p => p[1] ? p : [p[0], ms(p[0]) > ms(q) ? p[0] : q]);
+
+// ---------- relógio do servidor: corrige o aparelho se ele estiver adiantado/atrasado mais de 2 s ----------
+async function medeDesvio(){
+  try { const t0 = Date.now(), r = await fetch('/timer/favicon-32.png?d=' + t0, { method: 'HEAD', cache: 'no-store' }), t1 = Date.now(), h = r.headers.get('date');
+    if (!h) return; const dif = (+new Date(h) + 500) - (t0 + t1) / 2; DESVIO = Math.abs(dif) > 2000 ? Math.round(dif) : 0; } catch {}
+}
+
+// ---------- dados ----------
+async function carregaD(){
+  try { DS = await api('/rest/v1/timer_desafios?select=*&order=inicio.desc&limit=500') || []; DES = true; }
+  catch (e){ DES = false; DS = []; }   // tabela ainda não criada: a aba Desafio simplesmente não aparece
+}
+const patchD = async (d, body) => { await grava(() => api(`/rest/v1/timer_desafios?id=eq.${d.id}`, { method: 'PATCH', body })); Object.assign(d, body); };
+
+// ---------- som: tudo sintetizado na hora (WebAudio). Cada som é um gesto de edição ----------
+const SND = { ctx: null };
+function ac(){
+  if (cfgD().sons === 'desligados') return null;
+  try { if (!SND.ctx){ SND.ctx = new (window.AudioContext || window.webkitAudioContext)(); try { if (navigator.audioSession) navigator.audioSession.type = 'ambient'; } catch {} }
+    if (SND.ctx.state === 'suspended') SND.ctx.resume(); return SND.ctx; } catch { return null; }
+}
+function tom(f, t, dur, { tipo = 'sine', g = .12, ate = null, ataque = .004 } = {}){
+  const a = ac(); if (!a) return; const t0 = a.currentTime + t, o = a.createOscillator(), v = a.createGain(), vol = cfgD().vol;
+  o.type = tipo; o.frequency.setValueAtTime(f, t0); if (ate) o.frequency.exponentialRampToValueAtTime(ate, t0 + dur);
+  v.gain.setValueAtTime(0, t0); v.gain.linearRampToValueAtTime(g * vol, t0 + ataque); v.gain.exponentialRampToValueAtTime(.0001, t0 + dur);
+  o.connect(v).connect(a.destination); o.start(t0); o.stop(t0 + dur + .02);
+}
+function ruido(t, dur, { de = 2000, ate = 2000, tipo = 'bandpass', g = .12, q = 1.2 } = {}){
+  const a = ac(); if (!a) return; const t0 = a.currentTime + t, n = Math.ceil(a.sampleRate * dur), b = a.createBuffer(1, n, a.sampleRate), x = b.getChannelData(0);
+  for (let i = 0; i < n; i++) x[i] = Math.random() * 2 - 1;
+  const s = a.createBufferSource(), f = a.createBiquadFilter(), v = a.createGain(); s.buffer = b; f.type = tipo; f.Q.value = q;
+  f.frequency.setValueAtTime(de, t0); f.frequency.exponentialRampToValueAtTime(ate, t0 + dur);
+  v.gain.setValueAtTime(g * cfgD().vol, t0); v.gain.exponentialRampToValueAtTime(.0001, t0 + dur);
+  s.connect(f).connect(v).connect(a.destination); s.start(t0);
+}
+const ESCALA = [523.25, 587.33, 659.25, 783.99, 880, 1046.5, 1174.66, 1318.5];
+const SONS = {
+  tique(){ tom(1400, 0, .035, { tipo: 'triangle', g: .10 }); },
+  claquete(){ ruido(0, .06, { de: 3500, ate: 1800, g: .22, q: .8 }); tom(170, 0, .09, { g: .18 }); },
+  pausa(){ tom(520, 0, .16, { tipo: 'triangle', g: .10, ate: 300 }); },
+  volta(){ tom(300, 0, .14, { tipo: 'triangle', g: .10, ate: 540 }); },
+  marcador(){ tom(880, 0, .09, { g: .09 }); tom(1318.5, .08, .16, { g: .08 }); },
+  reta(){ tom(392, 0, .09, { tipo: 'triangle', g: .08 }); tom(392, .14, .12, { tipo: 'triangle', g: .07 }); },
+  mais(){ [0, .045, .09].forEach(t => ruido(t, .02, { de: 4000, ate: 4000, g: .12, q: 6 })); },
+  entrega(i, n){ tom(ESCALA[Math.min(i, ESCALA.length - 1)], 0, .22, { tipo: 'triangle', g: .11 }); if (i === n - 1){ tom(1046.5, .1, .5, { g: .06 }); tom(1318.5, .1, .5, { g: .05 }); } },
+  esgotado(){ [660, 990, 1320].forEach((f, k) => tom(f, 0, 1.3 - k * .3, { g: .07 / (k + 1), ataque: .01 })); },
+  lamina(){ ruido(0, .16, { de: 2500, ate: 9000, g: .22, q: 2 }); tom(2400, 0, .04, { tipo: 'square', g: .03 }); },
+  cai(){ ruido(0, .5, { de: 1400, ate: 180, tipo: 'lowpass', g: .12, q: .7 }); },
+  voou(){ [523.25, 659.25, 783.99, 1046.5].forEach((f, k) => tom(f, k * .085, .45, { tipo: 'triangle', g: .10 })); tom(2093, .34, .7, { g: .025 }); },
+  antes(){ [523.25, 783.99].forEach((f, k) => tom(f, k * .1, .4, { tipo: 'triangle', g: .10 })); },
+  prazo(){ ruido(0, .03, { de: 5000, ate: 3000, g: .25, q: 3 }); tom(523.25, .03, .5, { g: .09 }); tom(659.25, .03, .5, { g: .07 }); },
+  depois(){ [392, 493.88, 587.33].forEach(f => tom(f, 0, .9, { g: .06, ataque: .04 })); },
+  desfaz(){ ruido(0, .25, { de: 300, ate: 2500, tipo: 'lowpass', g: .08 }); }
+};
+// "Só conclusões" toca apenas os sons que fecham uma etapa
+const SO_FIM = ['claquete', 'esgotado', 'lamina', 'cai', 'voou', 'antes', 'prazo', 'depois', 'desfaz'];
+function som(k, ...a){ const s = cfgD().sons; if (s === 'desligados' || (s === 'conclusoes' && !SO_FIM.includes(k))) return; if (document.hidden && k !== 'esgotado') return; try { SONS[k](...a); } catch {} }
+
+// ---------- tela acesa e tela cheia (opcionais: recusa não quebra nada) ----------
+async function travaTela(){ if (!cfgD().telaCheia || dTrava || !('wakeLock' in navigator) || document.hidden) return; try { dTrava = await navigator.wakeLock.request('screen'); dTrava.addEventListener('release', () => { dTrava = null; }); } catch {} }
+function soltaTela(){ try { dTrava && dTrava.release(); } catch {} dTrava = null; }
+function telaCheia(){ if (!cfgD().telaCheia) return; const e = document.documentElement; try { if (!document.fullscreenElement && e.requestFullscreen) e.requestFullscreen({ navigationUI: 'hide' }).catch(() => {}); } catch {} }
+function saiTelaCheia(){ try { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); } catch {} }
+
+// ---------- frases ----------
+const MSGD = { ini: 'Tudo pronto. Bora tirar isso do papel.', meio: 'Metade do tempo já foi. Mantém o ritmo.', reta: 'Reta final. Foco no que falta.', volta: 'De volta. O prazo esperou você.' };
+const FRASES = {
+  voou: ['Tu voou nessa.', 'Que ritmo.', 'Corte seco.', 'Sobrou timeline.', 'Entregou e ainda sobrou.', 'Rápido e no capricho.'],
+  antes: ['Antes do prazo.', 'Fechou com folga.', 'Ganhou uns minutos.', 'Bem cortado.', 'No ritmo certo.'],
+  prazo: ['Na mosca.', 'Missão cumprida.', 'Encaixou certinho.', 'Prazo é prazo.', 'Snap no FIM.'],
+  depois: ['Fechou.', 'Pronto é pronto.', 'Entregue.', 'Tá feito.', 'Concluído, com calma.'],
+  pend: ['Faltou pouco?', 'Edição tem dessas.', 'O tempo acabou. A tarefa não.', 'Respira. Quanto falta?', 'Normal. Bora fechar.']
+};
+function frase(k){   // nunca repete nenhuma das 3 últimas daquele grupo
+  let v = {}; try { v = JSON.parse(mem.get('fl_timer_frases') || '{}') || {}; } catch {}
+  const vistas = v[k] || [], op = FRASES[k].filter(f => !vistas.includes(f)), f = op[Math.floor(Math.random() * op.length)] || FRASES[k][0];
+  v[k] = [f, ...vistas].slice(0, 3); mem.set('fl_timer_frases', JSON.stringify(v)); return f;
+}
+
+// ---------- configurar ----------
+// palavras do título que sugerem a etapa (a pessoa troca com um toque)
+const PISTAS = [[/legend|t[íi]tulo|caption/i, 'Legendas e títulos'], [/anima|motion|efeito|transi/i, 'Animações e efeitos'], [/\bcor\b|color|grade|\blut/i, 'Cor'],
+  [/[áa]udio|\bsom\b|\bmix|trilha/i, 'Áudio'], [/export|render|entreg|subir|upload/i, 'Exportação e entrega'], [/organiz|arquivo|pasta|backup/i, 'Organização do material']];
+const etapasD = () => etapas().filter(e => e.c !== 'outro');
+function sugereEtapa(t){
+  const lista = etapasD().map(e => e.n);
+  for (const [re, e] of PISTAS){ const m = t.match(re); if (m && lista.includes(e)) return [e, m[0].toLowerCase()]; }
+  return [lista.includes('Corte e montagem') ? 'Corte e montagem' : lista[0], null];
+}
+function achaQtd(t){ const m = t.match(/(?:^|\s)(\d{1,2})\s+([A-Za-zÀ-ÿ]+)/); if (!m) return null; const n = +m[1]; return n >= 2 && n <= 20 ? { n, nome: m[2].toLowerCase() } : null; }
+const ATALHOS = [10, 25, 45, 60, 90];
+const rotMin = m => m < 60 ? String(m) : (Math.floor(m / 60) + 'h' + (m % 60 ? String(m % 60).padStart(2, '0') : ''));
+function novoFD(){
+  const et = etapasD();
+  return { livre: true, etapa: (et.find(e => e.n === ETP) || et[0] || { n: 'Corte e montagem' }).n, titulo: '', etapaManual: false, qtd: true,
+    tempo: 25, h: 0, m: 40, s: 0, modoT: 'dur', ate: '', projeto: proj(SEL) && !proj(SEL).concluido_em ? SEL : '', erro: '' };
+}
+function planoFD(){
+  const f = FD; if (f.tempo !== 'livre') return { ms: f.tempo * 60000 };
+  let t, aviso = '', erro = '', amanha = false;
+  if (f.modoT === 'dur'){
+    if (f.m > 59 || f.s > 59) return { erro: 'Minutos e segundos vão de 0 a 59.' };
+    t = (f.h * 3600 + f.m * 60 + f.s) * 1000;
+  } else {
+    if (!f.ate) return { erro: 'Escolha o horário.' };
+    const [H, M] = f.ate.split(':').map(Number), alvo = new Date(agoraD()); alvo.setHours(H, M, 0, 0);
+    if (+alvo <= agoraD()){ alvo.setDate(alvo.getDate() + 1); amanha = true; }
+    t = Math.round((+alvo - agoraD()) / 1000) * 1000;
+  }
+  if (t < 60000) erro = 'O desafio precisa de pelo menos 1 minuto.';
+  else if (t > 8 * 3600000) erro = 'O máximo é 8 horas. Para mais que isso, divida em dois desafios.';
+  else if (t > 3 * 3600000) aviso = 'Desafio longo. Os lembretes de pausa do ChronoCut continuam valendo.';
+  return { ms: t, erro, aviso, amanha };
+}
+const tituloFD = () => FD.livre ? FD.titulo.replace(/\s+/g, ' ').trim() : FD.etapa;
+
+function telaConfigD(){
+  if (!FD) FD = novoFD();
+  const f = FD, et = etapasD().slice(0, 6), c = cfgD(), abertos = PJ.filter(p => !p.concluido_em);
+  const ult = c.ultimoLivre && !ATALHOS.includes(c.ultimoLivre / 60) ? c.ultimoLivre : 0;
+  tela(`<section class="d-cfg" aria-label="Novo desafio">
+    <div>
+      <span class="d-rot">Novo desafio</span>
+      <h1>O que você vai terminar agora?</h1>
+      <span class="d-rot d-passo" id="dl-o">1 · O desafio</span>
+      <div class="d-chips" role="group" aria-labelledby="dl-o" id="d-chips">
+        ${et.map(e => `<button type="button" data-e="${esc(e.n)}" aria-pressed="${!f.livre && f.etapa === e.n}">${esc(e.n)}</button>`).join('')}
+        <button type="button" class="meu" data-e="" aria-pressed="${f.livre}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>Criar meu próprio desafio</button>
+      </div>
+      <div id="d-livre" ${f.livre ? '' : 'hidden'}>
+        <label class="d-rot" for="d-nome" style="display:block;margin:16px 0 0">Escreva do seu jeito</label>
+        <input class="d-campo" id="d-nome" maxlength="60" autocomplete="off" value="${esc(f.titulo)}" placeholder="Finalizar o Reels do cliente">
+        <div class="d-ajuda"><span>Isso vai aparecer gigante na tela de foco.</span><span class="cont" id="d-cont">0/60</span></div>
+        <div class="d-sug" id="d-sug"><span>Conta em</span><button type="button" id="d-et"></button><span id="d-why"></span></div>
+        <label class="d-qtd" for="d-oqtd" id="d-qtd" hidden><input type="checkbox" id="d-oqtd" ${f.qtd ? 'checked' : ''}><span id="d-qtdt"></span></label>
+      </div>
+      <span class="d-rot d-passo" id="dl-t">2 · O tempo</span>
+      <div class="d-chips" role="group" aria-labelledby="dl-t" id="d-dur">
+        ${ATALHOS.map(m => `<button type="button" class="num" data-m="${m}" aria-pressed="${f.tempo === m}">${rotMin(m)}${m < 60 ? ' min' : ''}</button>`).join('')}
+        ${ult ? `<button type="button" class="num" data-ult="${ult}" aria-pressed="false">Seu último: ${esc(tcod(ult * 1000))}</button>` : ''}
+        <button type="button" class="meu" data-m="livre" aria-pressed="${f.tempo === 'livre'}">Definir meu tempo</button>
+      </div>
+      <div class="d-livre" id="d-tlivre" ${f.tempo === 'livre' ? '' : 'hidden'}>
+        <div class="d-modo" role="group" aria-label="Como definir o tempo"><button type="button" data-modo="dur" aria-pressed="${f.modoT === 'dur'}">Duração</button><button type="button" data-modo="hora" aria-pressed="${f.modoT === 'hora'}">Até um horário</button></div>
+        <div class="d-hms" id="d-mdur" ${f.modoT === 'dur' ? '' : 'hidden'}>
+          ${[['h', 'horas', 'uma hora', 1], ['m', 'min', 'cinco minutos', 5], ['s', 'seg', 'quinze segundos', 15]].map(([k, r, a, p], i) => `${i ? '<span class="dp">:</span>' : ''}<div class="u"><div class="cx"><button type="button" data-st="${k}" data-d="-${p}" aria-label="Menos ${a}">−</button><input id="d-${k}" inputmode="numeric" maxlength="${k === 'h' ? 1 : 2}" value="${k === 'h' ? f.h : String(f[k]).padStart(2, '0')}" aria-label="${r}"><button type="button" data-st="${k}" data-d="${p}" aria-label="Mais ${a}">+</button></div><label for="d-${k}">${r}</label></div>`).join('')}
+        </div>
+        <div class="d-hora" id="d-mhora" ${f.modoT === 'hora' ? '' : 'hidden'}><input type="time" id="d-ate" value="${esc(f.ate)}" aria-label="Terminar até"><span id="d-ated"></span></div>
+        <p class="d-valida" id="d-valida" role="status"></p>
+      </div>
+      <label class="d-rot d-passo" for="d-proj">3 · Onde o tempo conta</label>
+      <select class="inp" id="d-proj">${abertos.map(p => `<option value="${p.id}"${p.id === f.projeto ? ' selected' : ''}>${esc(p.nome)}${p.cliente ? ' · ' + esc(p.cliente) : ''}</option>`).join('')}<option value=""${f.projeto ? '' : ' selected'}>Sem projeto (só o desafio)</option></select>
+      <div class="d-opts">
+        <label class="tog"><input type="checkbox" id="d-o321" ${c.conta321 ? 'checked' : ''}><span>Contagem 3, 2, 1<small>Três segundos para respirar antes de começar.</small></span></label>
+        <label class="tog"><input type="checkbox" id="d-otela" ${c.telaCheia ? 'checked' : ''}><span>Tela cheia e tela acesa<small>A tela não apaga enquanto o desafio corre.</small></span></label>
+      </div>
+    </div>
+    <aside class="d-plano" aria-label="Como vai aparecer">
+      <span class="d-rot">Vai aparecer assim</span>
+      <div class="ttl" id="d-pttl"></div>
+      <div class="ctx" id="d-pctx"></div>
+      <div class="tc" id="d-ptc"></div>
+      <p class="fim" id="d-pfim"></p>
+      <p class="meta" id="d-pmeta" hidden></p>
+      <button class="d-cta full" id="d-comecar" type="button" style="margin-top:18px">Começar desafio</button>
+    </aside>
+  </section>`);
+  const liga = (s, ev, fn) => { const e = $(s); if (e) e[ev] = fn; };
+  $$('#d-chips button').forEach(b => b.onclick = () => { som('tique'); FD.livre = !b.dataset.e; if (!FD.livre){ FD.etapa = b.dataset.e; } $$('#d-chips button').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#d-livre').hidden = !FD.livre; if (FD.livre) $('#d-nome').focus(); pintaConfigD(); });
+  liga('#d-nome', 'oninput', e => { FD.titulo = e.target.value; pintaConfigD(); });
+  liga('#d-et', 'onclick', () => { const l = etapasD().map(e => e.n); FD.etapa = l[(l.indexOf(FD.etapa) + 1) % l.length]; FD.etapaManual = true; pintaConfigD(); });
+  liga('#d-oqtd', 'onchange', e => { FD.qtd = e.target.checked; pintaConfigD(); });
+  $$('#d-dur button').forEach(b => b.onclick = () => {
+    $$('#d-dur button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    if (b.dataset.ult){ const s = +b.dataset.ult; Object.assign(FD, { tempo: 'livre', modoT: 'dur', h: Math.floor(s / 3600), m: Math.floor(s % 3600 / 60), s: s % 60 }); telaConfigD(); return; }
+    FD.tempo = b.dataset.m === 'livre' ? 'livre' : +b.dataset.m; $('#d-tlivre').hidden = FD.tempo !== 'livre'; pintaConfigD();
+  });
+  $$('.d-modo button').forEach(b => b.onclick = () => { FD.modoT = b.dataset.modo; $$('.d-modo button').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#d-mdur').hidden = FD.modoT !== 'dur'; $('#d-mhora').hidden = FD.modoT !== 'hora'; pintaConfigD(); });
+  ['h', 'm', 's'].forEach(k => { const i = $('#d-' + k); i.oninput = () => { FD[k] = Math.max(0, parseInt(i.value.replace(/\D/g, ''), 10) || 0); pintaConfigD(); }; i.onblur = () => { i.value = k === 'h' ? FD.h : String(FD[k]).padStart(2, '0'); }; });
+  $$('[data-st]').forEach(b => b.onclick = () => {
+    const k = b.dataset.st, max = k === 'h' ? 8 : 59; let v = FD[k] + +b.dataset.d;
+    v = k === 'h' ? Math.max(0, Math.min(8, v)) : (v < 0 ? max + 1 + v : v > max ? v - max - 1 : v);
+    FD[k] = v; $('#d-' + k).value = k === 'h' ? v : String(v).padStart(2, '0'); som('tique'); pintaConfigD();
+  });
+  liga('#d-ate', 'oninput', e => { FD.ate = e.target.value; pintaConfigD(); });
+  liga('#d-proj', 'onchange', e => { FD.projeto = e.target.value; pintaConfigD(); });
+  liga('#d-o321', 'onchange', e => salvaCfgD({ conta321: e.target.checked }));
+  liga('#d-otela', 'onchange', e => salvaCfgD({ telaCheia: e.target.checked }));
+  liga('#d-comecar', 'onclick', () => comecaD());
+  pintaConfigD();
+}
+// atualiza só a prévia e as dicas (sem redesenhar a tela: o campo não perde o foco)
+function pintaConfigD(){
+  const f = FD, t = tituloFD(), pl = planoFD(), p = proj(f.projeto);
+  if (f.livre){
+    if (!f.etapaManual){ const [e, w] = sugereEtapa(t); f.etapa = e; $('#d-why').textContent = w ? `pela palavra “${w}”` : 'toque para trocar'; } else $('#d-why').textContent = 'escolhida por você';
+    $('#d-et').textContent = f.etapa; $('#d-cont').textContent = t.length + '/60';
+    const q = achaQtd(t); $('#d-qtd').hidden = !q; if (q) $('#d-qtdt').innerHTML = `Contar as <b>${q.n} ${esc(q.nome)}</b> uma a uma<small>Um toque a cada uma pronta. Quando todas estiverem prontas, o desafio pergunta se pode fechar.</small>`;
+    f.meta = q && f.qtd ? q : null;
+  } else f.meta = null;
+  const ttl = $('#d-pttl'); ttl.textContent = t || 'Dê um nome ao desafio'; ttl.classList.toggle('vazio', !t);
+  $('#d-pctx').textContent = p ? p.nome + ' › ' + f.etapa : 'Sem projeto · não entra no valor por hora';
+  $('#d-ptc').textContent = pl.ms ? tcod(pl.ms) : '—';
+  $('#d-pfim').innerHTML = pl.ms && !pl.erro ? `Se começar agora, termina às <b>${hora(agoraD() + pl.ms)}</b>${pl.amanha ? ' de amanhã' : ''}` : '';
+  $('#d-pmeta').hidden = !f.meta; if (f.meta) $('#d-pmeta').innerHTML = `Meta: <b>${f.meta.n} ${esc(f.meta.nome)}</b>`;
+  if (f.tempo === 'livre'){ const v = $('#d-valida'); v.textContent = pl.erro || pl.aviso || ''; v.classList.toggle('erro', !!pl.erro);
+    if (f.modoT === 'hora') $('#d-ated').textContent = pl.ms && !pl.erro ? 'são ' + horas(pl.ms) + ' a partir de agora' + (pl.amanha ? ' (amanhã)' : '') : ''; }
+  $('#d-comecar').disabled = !t || !!pl.erro || !pl.ms;
+}
+
+// ---------- começar ----------
+function comecaD(){
+  const pl = planoFD(), t = tituloFD(); if (!t || pl.erro || !pl.ms) return;
+  const c = { titulo: t.slice(0, 60), etapa: FD.etapa, origem: FD.livre ? 'livre' : 'etapa', prazo_modo: FD.tempo === 'livre' && FD.modoT === 'hora' ? 'horario' : 'duracao',
+    meta_qtd: FD.meta ? FD.meta.n : null, meta_nome: FD.meta ? FD.meta.nome.slice(0, 30) : null, projeto_id: FD.projeto || null, plano_ms: pl.ms };
+  ac(); telaCheia();                                         // dentro do toque: o navegador libera o som e a tela cheia
+  if (FD.tempo === 'livre' && FD.modoT === 'dur') salvaCfgD({ ultimoLivre: Math.round(pl.ms / 1000) });
+  const a = ativo();
+  if (c.projeto_id && a && a.projeto_id !== c.projeto_id){
+    const pa = proj(a.projeto_id), pn = proj(c.projeto_id);
+    return folha('Trocar o cronômetro de projeto?', `<p class="sub" style="margin:6px 0 0">O cronômetro está contando em <b style="color:var(--ink)">${esc(pa ? pa.nome : '')}</b>. Para o desafio contar em <b style="color:var(--ink)">${esc(pn ? pn.nome : '')}</b>, a sessão atual é encerrada e salva.</p>
+      <div class="pe"><button class="btn ghost" id="dt-nao">Cancelar</button><button class="btn" id="dt-sim">Encerrar e começar</button></div>`, d => {
+      d.querySelector('#dt-nao').onclick = fechaFolha;
+      d.querySelector('#dt-sim').onclick = async () => { fechaFolha(); try { await fecha(a); avisaOutros(); } catch { return; } preparaD(c); };
+    });
+  }
+  preparaD(c);
+}
+function preparaD(c){
+  if (!cfgD().conta321 || calmo) return criaD(c);
+  let n = 3; DF.pre = true;
+  tela(`<div class="d-pre" id="d-pre" role="timer" aria-label="Começando"><div><div class="n" id="d-pren">3</div><div class="t">${esc(c.titulo)}</div></div></div>`);
+  const pula = () => { clearTimeout(dPreT); if (DF.pre){ DF.pre = false; criaD(c); } };
+  $('#d-pre').onclick = pula; const tec = e => { removeEventListener('keydown', tec); pula(); }; addEventListener('keydown', tec);
+  const bate = () => { if (!DF.pre) return; som('tique'); const e = $('#d-pren'); if (!e) return; e.textContent = n; e.classList.remove('bate'); void e.offsetWidth; e.classList.add('bate');
+    dPreT = setTimeout(() => { n--; if (n) bate(); else { removeEventListener('keydown', tec); pula(); } }, 900); };
+  bate();
+}
+async function criaD(c){
+  DF.pre = false;
+  const q = new Date(agoraD()).toISOString();
+  let d;
+  try { [d] = await grava(() => api('/rest/v1/timer_desafios', { method: 'POST', prefer: 'return=representation', body: {
+    titulo: c.titulo, plano_s: Math.round(c.plano_ms / 1000), origem: c.origem, prazo_modo: c.prazo_modo, meta_qtd: c.meta_qtd, meta_nome: c.meta_nome,
+    projeto_id: c.projeto_id, etapa: c.etapa, inicio: q, pausas: [] } }), 'Não consegui começar o desafio.'); }
+  catch { await recarrega(); saiTelaCheia(); return desenha(); }
+  DS.unshift(d);
+  if (c.projeto_id){
+    try {
+      const a = ativo();
+      if (a && a.projeto_id === c.projeto_id){                       // o cronômetro já conta neste projeto: o desafio adota o registro
+        if (pausado(a)) await retoma();
+        await grava(() => api(`/rest/v1/timer_registros?id=eq.${a.id}`, { method: 'PATCH', body: { desafio_id: d.id } })); a.desafio_id = d.id;
+        if (a.etapa !== c.etapa){ ETP = a.etapa; await trocaEtapa(c.etapa); }
+      } else {
+        const cat = catDe(c.etapa), corpo = { projeto_id: c.projeto_id, etapa: c.etapa, categoria: cat, objetivo: c.origem === 'livre' ? c.titulo.slice(0, 140) : null, inicio: q, pausas: [], desafio_id: d.id };
+        if (cat === 'revisao'){ corpo.rev_n = REVN; corpo.rev_tipo = REVT; }
+        const [r] = await grava(() => api('/rest/v1/timer_registros', { method: 'POST', body: corpo, prefer: 'return=representation' })); RG.unshift(r);
+      }
+      SEL = c.projeto_id; ETP = c.etapa; mem.set('fl_timer_sel', SEL); mem.set('fl_timer_etp', ETP);
+    } catch { await recarrega(); toast('O desafio começou, mas não consegui ligar o cronômetro do projeto. Confira na aba Cronômetro.'); }
+  }
+  DF = { id: d.id, entra: true, marcos: {}, msg: MSGD.ini }; RES = null; FD = null;
+  focoIni = Date.now(); avisaOutros(); som('claquete'); travaTela(); ABA = 'desafio'; desenha();
+}
+
+// ---------- pausar, continuar, mais tempo (o registro do projeto acompanha no mesmo instante) ----------
+async function pausaD(d, q){ if (!d || pausadoD(d)) return; await patchD(d, { pausas: [...(d.pausas || []), [q, null]] }); }
+async function retomaD(d, q){ if (!d || !pausadoD(d)) return; await patchD(d, { pausas: d.pausas.map(p => p[1] ? p : [p[0], q]) }); }
+async function botaoPausaD(){
+  const d = desafioAberto(); if (!d) return; const r = regDoDesafio(d);
+  try {
+    if (pausadoD(d)){ if (r && pausado(r)) await retoma(); else await retomaD(d, new Date(agoraD()).toISOString()); som('volta'); DF.msg = MSGD.volta; travaTela(); }
+    else { if (r && !pausado(r)) await pausa(); else await pausaD(d, new Date(agoraD()).toISOString()); som('pausa'); soltaTela(); }
+  } catch { await recarrega(); }
+  avisaOutros(); desenha();
+}
+async function maisD(n){
+  const d = desafioAberto(); if (!d) return; const extra = Math.max(0, -Dm.restante(d, agoraD()));   // o tempo extra já usado vira prazo; o restante passa a ser N
+  try { await patchD(d, { extra_s: Math.min(28800, (d.extra_s || 0) + n * 60 + Math.ceil(extra / 1000)) }); } catch { return; }
+  som('mais'); DF.pend = false; DF.esgotouVisto = false; DF.msg = n === 5 && !extra ? 'Mais 5 minutos no prazo.' : `Mais ${n} minutos. Bora fechar.`;
+  if (Dm.restante(d, agoraD()) > Dm.reta(d)){ DF.marcos.reta = false; document.body.classList.remove('d-reta'); }
+  avisaOutros(); desenha();
+}
+async function entregaD(delta){
+  const d = desafioAberto(); if (!d || !d.meta_qtd) return; const l = [...(d.entregas || [])];
+  if (delta > 0){ if (l.length >= d.meta_qtd) return; som('entrega', l.length, d.meta_qtd); l.push(new Date(agoraD()).toISOString()); }
+  else { if (!l.length) return; l.pop(); }
+  try { await patchD(d, { entregas: l }); } catch { return; }
+  DF.pop = delta > 0;
+  if (delta > 0 && l.length === d.meta_qtd) DF.msg = `${d.meta_qtd === 1 ? 'Pronto' : 'As ' + d.meta_qtd + ' ' + (d.meta_nome || '') + ' estão prontas'}. Fecha o desafio?`;
+  avisaOutros(); desenha(); if (delta > 0 && l.length === d.meta_qtd){ const b = $('#d-concluir'); if (b) b.focus(); }
+}
+
+// ---------- concluir, parar, desfazer ----------
+async function concluiD(tFim){
+  const d = desafioAberto(); if (!d) return;
+  const t = tFim || agoraD(), q = new Date(t).toISOString(), pl = d.plano_s * 1000, u = Dm.usado(d, t), k = classeD(pl, u), r = regDoDesafio(d);
+  try { await patchD(d, { fim: q, resultado: 'terminou', classe: k, pausas: fechaPausas(d.pausas, q) }); } catch { return; }
+  if (r){ try { await fecha(r, q); } catch {} }
+  soltaTela(); document.body.classList.remove('d-reta');
+  const regMs = RG.filter(x => x.desafio_id === d.id && x.categoria !== 'espera').reduce((a, x) => a + dur(x), 0);
+  RES = { d, k, pl, u, regMs, quando: Date.now(), anim: !tFim, pz: (d.pausas || []).length, pzMs: Dm.pausaTotal(d, t) };
+  DF = { marcos: {} }; avisaOutros(); desenha();
+  if (!tFim){ const b = $('#d-desf'); b.classList.add('on'); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove('on'), 5000); }
+}
+async function paraD(res, tFim){
+  const d = desafioAberto(); if (!d) return; const q = new Date(tFim || agoraD()).toISOString(), r = regDoDesafio(d);
+  try { await patchD(d, { fim: q, resultado: res, pausas: fechaPausas(d.pausas, q) }); } catch { return; }
+  if (r){ try { await fecha(r, q); } catch {} }
+  soltaTela(); saiTelaCheia(); document.body.classList.remove('d-reta');
+  RES = { d, k: 'parou', pl: d.plano_s * 1000, u: Dm.usado(d, ms(q)), pz: (d.pausas || []).length, pzMs: Dm.pausaTotal(d, ms(q)), quando: Date.now(), anim: false };
+  DF = { marcos: {} }; FD = null; avisaOutros(); desenha();
+}
+async function desfazD(){
+  const R = RES; $('#d-desf').classList.remove('on'); if (!R || !R.d || Date.now() - R.quando > 6500) return;
+  const d = R.d; pulaAnim(true);
+  try { await patchD(d, { fim: null, resultado: null, classe: null }); } catch { return; }
+  if (d.projeto_id && !ativo()){                              // o trabalho volta a contar a partir de agora (nenhum minuto inventado)
+    try { const cat = catDe(d.etapa), corpo = { projeto_id: d.projeto_id, etapa: d.etapa, categoria: cat, objetivo: d.origem === 'livre' ? d.titulo.slice(0, 140) : null, inicio: new Date(agoraD()).toISOString(), pausas: [], desafio_id: d.id };
+      if (cat === 'revisao'){ corpo.rev_n = REVN; corpo.rev_tipo = REVT; }
+      const [r] = await grava(() => api('/rest/v1/timer_registros', { method: 'POST', body: corpo, prefer: 'return=representation' })); RG.unshift(r); } catch { await recarrega(); }
+  }
+  som('desfaz'); RES = null; DF = { id: d.id, marcos: {}, msg: 'Desafio reaberto. O tempo continuou contando.' }; travaTela(); avisaOutros(); desenha();
+}
+
+// ---------- telas ----------
+const ICO_REL = '<svg class="d-rel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M10 3h4M12 3v3"/><path class="pont" d="M12 13.5V9"/></svg>';
+const ICO_SOM = on => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/>${on ? '<path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>' : '<path d="M16 9.5l5 5M21 9.5l-5 5"/>'}</svg>`;
+function telaDesafio(){
+  document.body.classList.add('d-largo');
+  const d = desafioAberto();
+  if (DF.pre) return;
+  if (d){ document.body.classList.add('d-foco-on'); return DF.pend ? telaPendD(d) : telaFocoD(d); }
+  document.body.classList.remove('d-reta');
+  if (RES) return telaResD();
+  telaConfigD();
+}
+function telaFocoD(d){
+  const t = agoraD(), p = proj(d.projeto_id), fase = Dm.fase(d, t), esgot = fase === 'esgotado';
+  // marcos que já passaram (página recarregada, outra aba) ficam marcados sem repetir mensagem nem som
+  if (DF.id !== d.id) DF = { id: d.id, marcos: {} };
+  if (Dm.usado(d, t) >= d.plano_s * 500) DF.marcos.meio = true;
+  if (Dm.restante(d, t) <= Dm.reta(d)){ DF.marcos.reta = true; }
+  document.body.classList.toggle('d-reta', !!DF.marcos.reta && !pausadoD(d));
+  const sonsOn = cfgD().sons !== 'desligados', nE = (d.entregas || []).length;
+  tela(`<section class="d-foco${pausadoD(d) ? ' d-pausado' : ''}" id="d-foco" aria-label="Modo foco">
+    <div>
+      <div class="d-ftop">${ICO_REL}<span class="d-rot" id="d-fase"></span><span class="ctx">${p ? `· <b>${esc(p.nome)}</b> › ${esc(d.etapa || '')}` : '· Sem projeto'}</span><span class="sp"></span>
+        <button class="d-ico" id="d-sairtc" type="button" aria-label="Sair da tela cheia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button>
+        <button class="d-ico" id="d-som" type="button" aria-pressed="${sonsOn}" aria-label="Sons">${ICO_SOM(sonsOn)}</button></div>
+      <h1 class="d-tit${d.titulo.length > 34 ? ' longo' : ''}${DF.entra && !calmo ? ' entra' : ''}" id="d-tit">${esc(d.titulo)}</h1>
+    </div>
+    <div class="d-meio">
+      <div class="d-tc${d.plano_s + (d.extra_s || 0) >= 3600 ? ' h' : ''}${esgot ? ' d-ex' : ''}" id="d-tc" role="timer" aria-live="off"></div>
+      <div class="d-msg" id="d-msg" role="status" aria-live="polite"${esgot ? ' hidden' : ''}></div>
+      ${esgot ? `<div class="d-q"><span class="d-rot" style="color:var(--warn)">Tempo esgotado</span><h2>Você terminou “${esc(d.titulo)}”?</h2><p>Acabar o tempo não decide nada. Você decide.</p>
+        <div class="bts"><button class="d-cta" id="d-sim" type="button">Terminei</button><button class="d-b2" id="d-naoainda" type="button">Ainda não</button></div></div>` : ''}
+      ${d.meta_qtd ? `<div class="d-ent"><div class="q" aria-hidden="true">${Array.from({ length: d.meta_qtd }, (_, i) => `<i class="${i < nE ? 'ok' + (DF.pop && i === nE - 1 && !calmo ? ' pop' : '') : ''}"></i>`).join('')}</div>
+        <b>${nE} de ${d.meta_qtd} ${esc(d.meta_nome || '')}</b><button type="button" id="d-mais1" ${nE >= d.meta_qtd ? 'disabled' : ''}>+1 pronta</button>${nE ? '<button type="button" class="menos" id="d-menos1" aria-label="Desfazer a última entrega">−1</button>' : ''}</div>` : ''}
+      <div>
+        <div class="d-trilho" aria-hidden="true">
+          <div class="d-regua"></div>
+          <div class="d-pista"><div class="d-feito" id="d-feito"></div><div class="d-zona" id="d-zona"></div><div id="d-pzs"></div></div>
+          <div class="d-marco${DF.marcos.meio ? ' feito-m' : ''}" id="d-mmeio"><span class="d-rot">Metade</span></div>
+          <span class="d-fimf">FIM</span>
+          <div class="d-cab" id="d-cab"></div>
+        </div>
+        <div class="d-pontas"><span>Começou <b>${hora(d.inicio)}</b></span><span id="d-npz"></span><span>Termina <b id="d-hfim"></b></span></div>
+      </div>
+    </div>
+    ${esgot ? '<div></div>' : `<div class="d-ctl">
+      <button class="d-b2" id="d-pausa" type="button">${pausadoD(d) ? 'Continuar' : 'Pausar'}</button>
+      <button class="d-b2" id="d-mais5" type="button">+5 min</button>
+      <span class="sp"></span>
+      <button class="d-cta" id="d-concluir" type="button">Concluir desafio</button>
+      <button class="disc" id="d-desiste" type="button">Desistir</button>
+    </div>`}
+  </section>`);
+  DF.entra = false; DF.pop = false;
+  const liga = (s, f) => { const e = $(s); if (e) e.onclick = f; };
+  liga('#d-pausa', botaoPausaD); liga('#d-mais5', () => maisD(5)); liga('#d-concluir', () => concluiD());
+  liga('#d-sim', () => concluiD()); liga('#d-naoainda', () => { DF.pend = true; desenha(); });
+  liga('#d-sairtc', saiTelaCheia); liga('#d-mais1', () => entregaD(1)); liga('#d-menos1', () => entregaD(-1));
+  liga('#d-som', () => { const on = cfgD().sons === 'desligados'; salvaCfgD({ sons: on ? 'ligados' : 'desligados' }); desenha(); });
+  liga('#d-desiste', () => folha('Desistir deste desafio?', `<p class="sub" style="margin:6px 0 0">O tempo trabalhado até agora fica salvo${p ? ' no projeto' : ''}. Só o desafio é encerrado.</p>
+    <div class="pe"><button class="btn ghost" id="dd-nao">Continuar no desafio</button><button class="btn" id="dd-sim">Desistir</button></div>`, f => {
+      f.querySelector('#dd-nao').onclick = fechaFolha; f.querySelector('#dd-sim').onclick = () => { fechaFolha(); paraD('desistiu'); }; }));
+  DF.fase = fase; quadroD(true);
+  if (DF.msg){ falaD(DF.msg); DF.msg = ''; }
+  if (!pausadoD(d) && !esgot) travaTela();
+  agendaD(); if (!dLaco) dLaco = requestAnimationFrame(lacoD);
+}
+let dMsgT = 0;
+function falaD(t){ const m = $('#d-msg'); if (!m) return; m.textContent = t; m.classList.add('on'); clearTimeout(dMsgT); dMsgT = setTimeout(() => { const x = $('#d-msg'); if (x) x.classList.remove('on'); }, 6000); }
+// um quadro: só desenho. O texto do timecode muda quando o segundo muda; posições a cada frame.
+let dUlt = '';
+function quadroD(forca){
+  const d = desafioAberto(), tc = $('#d-tc'); if (!d || !tc) return;
+  const t = agoraD(), r = Dm.restante(d, t), f = Dm.fracao(d, t), txt = r >= 0 ? tcod(r) : '+' + tcod(-r);
+  if (forca || txt !== dUlt){ dUlt = txt; tc.innerHTML = txt.replace(/:/g, '<span class="d-sg">:</span>'); }
+  tc.style.fontVariationSettings = `"wdth" ${100 + 25 * f * f}, "wght" ${720 + 180 * f}`;
+  $('#d-feito').style.width = (f * 100) + '%'; $('#d-cab').style.left = (f * 100) + '%';
+  $('#d-zona').style.left = ((1 - Dm.reta(d) / Dm.prazo(d)) * 100) + '%';
+  $('#d-mmeio').style.left = (d.plano_s * 500 / Dm.prazo(d) * 100) + '%';
+  $('#d-hfim').textContent = hora(Dm.terminaEm(d, t));
+  const nz = (d.pausas || []).length; $('#d-npz').textContent = nz ? `${nz} ${nz === 1 ? 'pausa' : 'pausas'}` : '';
+  if (forca) $('#d-pzs').innerHTML = (d.pausas || []).map(([i]) => { const at = ms(i); return `<i class="d-pz" style="left:${Math.min(1, Dm.usado({ ...d, fim: null }, at) / Dm.prazo(d)) * 100}%"></i>`; }).join('');
+  const fase = Dm.fase(d, t); $('#d-fase').textContent = fase === 'pausado' ? 'Pausado · o prazo está congelado' : fase === 'esgotado' ? 'Tempo esgotado' : fase === 'reta' ? 'Reta final' : fase === 'segunda' ? 'Segunda metade' : 'Desafio';
+}
+function lacoD(){
+  dLaco = 0;
+  const d = desafioAberto(); if (!d || ABA !== 'desafio' || !$('#d-tc') || document.hidden) return;
+  const t = agoraD(), fase = Dm.fase(d, t), antes = DF.fase;
+  quadroD(false);
+  if (fase !== antes){
+    DF.fase = fase;
+    if (fase === 'segunda' && !DF.marcos.meio){ DF.marcos.meio = true; som('marcador'); falaD(MSGD.meio); const m = $('#d-mmeio'); m.classList.add('feito-m'); if (!calmo){ m.classList.remove('cai'); void m.offsetWidth; m.classList.add('cai'); } }
+    if (fase === 'reta' && !DF.marcos.reta){ DF.marcos.reta = true; som('reta'); falaD(MSGD.reta); document.body.classList.add('d-reta'); }
+    if (fase === 'esgotado'){ if (!DF.esgotouVisto){ DF.esgotouVisto = true; som('esgotado'); } soltaTela(); return desenha(); }
+  }
+  dLaco = requestAnimationFrame(lacoD);
+}
+// próximo marco agendado com setTimeout: com a aba escondida o laço para, mas o sino do fim ainda toca
+function agendaD(){
+  clearTimeout(dAgenda); const d = desafioAberto(); if (!d || pausadoD(d)) return;
+  const r = Dm.restante(d, agoraD()); if (r <= 0) return;
+  dAgenda = setTimeout(() => { const x = desafioAberto(); if (!x || pausadoD(x)) return;
+    if (Dm.restante(x, agoraD()) <= 0){ if (document.hidden && !DF.esgotouVisto){ DF.esgotouVisto = true; som('esgotado'); } if (ABA === 'desafio' && !document.hidden) desenha(); }
+    else agendaD(); }, Math.min(r + 50, 2147483000));
+}
+document.addEventListener('visibilitychange', () => {
+  const d = desafioAberto(); if (!d || !Base.tem(PACK)) return;
+  if (document.visibilityState === 'visible'){
+    DF.fase = Dm.fase(d, agoraD());                        // o que passou com a aba escondida não toca atrasado
+    if (Dm.usado(d, agoraD()) >= d.plano_s * 500) DF.marcos.meio = true;
+    if (Dm.restante(d, agoraD()) <= Dm.reta(d)) DF.marcos.reta = true;
+    if (DF.fase === 'esgotado') DF.esgotouVisto = true;
+    if (ABA === 'desafio' && !$('#folha')) desenha();
+  }
+});
+
+function telaPendD(d){
+  const t = agoraD(), u = Dm.usado(d, t), nE = (d.entregas || []).length;
+  let sug = Math.max(5, Math.round(d.plano_s / 60 * .25 / 5) * 5), por = 'um quarto do tempo que você planejou';
+  if (d.meta_qtd && nE > 0 && nE < d.meta_qtd){ const um = u / nE; sug = Math.max(5, Math.ceil(um * (d.meta_qtd - nE) / 300000) * 5); por = `seu ritmo: ${horas(um)} por ${(d.meta_nome || 'entrega').replace(/s$/, '')}`; }
+  sug = Math.min(sug, 240);
+  const vals = [...new Set([5, sug, 15, 30])].sort((a, b) => a - b).slice(0, 4);
+  tela(`<section class="d-pend" aria-label="Tempo esgotado, tarefa em andamento">
+    <span class="d-rot" style="color:var(--warn)">Tempo esgotado · tarefa em andamento</span>
+    <h1 class="d-frase" style="margin-top:14px">${esc(DF.frasePend || (DF.frasePend = frase('pend')))}</h1>
+    <p class="d-sub" style="color:var(--mute)">“${esc(d.titulo)}” continua aberto. Seu tempo de trabalho está salvo.${d.meta_qtd ? ` ${nE} de ${d.meta_qtd} ${esc(d.meta_nome || '')} prontas.` : ''}</p>
+    <span class="d-rot" style="display:block;margin-top:22px">Quanto tempo falta?</span>
+    <div class="d-mais">${vals.map(v => `<button type="button" data-mais="${v}"${v === sug ? ' class="rec"' : ''}>+${v}<small>${v === sug ? 'sugerido' : 'min'}</small></button>`).join('')}</div>
+    <p class="dica" style="margin-top:12px">Sugestão calculada pelo ${esc(por)}.</p>
+    <div class="d-acoes"><button class="d-b2" id="dp-depois" type="button">Continuar depois</button><button class="d-b2" id="dp-fim" type="button">Na verdade, terminei</button></div>
+  </section>`);
+  $$('[data-mais]').forEach(b => b.onclick = () => { DF.frasePend = ''; maisD(+b.dataset.mais); });
+  $('#dp-depois').onclick = () => paraD('parou');
+  $('#dp-fim').onclick = () => { DF.pend = false; concluiD(); };
+}
+
+const ICONES = {
+  voou: '<svg viewBox="0 0 24 24" style="stroke:var(--ok)"><path d="M4 20L20 4M14 4h6v6"/><path d="M4 12h5M4 16h3" opacity=".6"/></svg>',
+  antes: '<svg viewBox="0 0 24 24" style="stroke:var(--ok)"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  prazo: '<svg viewBox="0 0 24 24" style="stroke:var(--ok)"><path d="M6 4v8a6 6 0 0 0 12 0V4M6 8h4M14 8h4"/></svg>',
+  depois: '<svg viewBox="0 0 24 24" style="stroke:var(--ink)"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  parou: '<svg viewBox="0 0 24 24" style="stroke:var(--mute)"><path d="M8 6v12M16 6v12"/></svg>'
+};
+let RT = [];
+function telaResD(){
+  const R = RES, d = R.d, k = R.k, pl = R.pl, u = R.u, econ = pl - u, pct = Math.round(Math.abs(econ) / pl * 100), p = proj(d.projeto_id);
+  const cor = k === 'depois' ? 'var(--warn)' : 'var(--ok)', parou = k === 'parou';
+  if (!R.frase && !parou) R.frase = frase(k);
+  const rot = parou ? (d.resultado === 'desistiu' ? 'Desafio encerrado' : 'Desafio parado') : k === 'prazo' ? 'Concluído no prazo' : k === 'depois' ? 'Concluído com tempo extra' : 'Concluído antes do prazo';
+  let li = 0;
+  const fr = parou ? 'Sem problema.' : R.frase;
+  const fraseH = fr.split(' ').map(w => `<span class="w">${[...w].map(c => `<span class="l" style="animation-delay:${900 + (li++) * 28}ms">${esc(c)}</span>`).join('')}</span>`).join(' ');
+  const sub = parou ? `O tempo trabalhado foi salvo ${p ? 'no projeto ' : ''}do mesmo jeito.`
+    : k === 'voou' || k === 'antes' ? `Desafio concluído <b>${minExt(econ)}</b> antes do previsto.`
+    : k === 'prazo' ? (Math.abs(econ) < 30000 ? 'Desafio concluído <b>exatamente</b> no tempo planejado.' : `Desafio concluído no prazo, <b>${minExt(Math.abs(econ))} ${econ > 0 ? 'antes' : 'depois'}</b>.`)
+    : `Desafio concluído. Você usou <b>${minExt(-econ)}</b> a mais que o planejado.`;
+  const L = [['Tempo planejado', horas(pl)], ['Tempo utilizado', tcod(u)]];
+  if (k === 'voou' || k === 'antes') L.push(['Economizado em relação à meta', horas(econ), 'dest'], ['Conclusão', pct + '% antes do prazo', 'barra', pct]);
+  else if (k === 'prazo') L.push(['Diferença para o plano', Math.abs(econ) < 30000 ? 'zero' : (econ > 0 ? '−' : '+') + tcod(Math.abs(econ)), 'dest']);
+  else if (k === 'depois') L.push(['Tempo adicional', '+' + horas(-econ), 'dest'], ['Acima do plano', pct + '%', 'barra', Math.min(100, pct)]);
+  L.push(['Pausas', R.pz ? `${R.pz} · ${horas(R.pzMs)}` : 'nenhuma']);
+  const sugMin = Math.max(5, Math.ceil(u / 300000) * 5), sugMs = sugMin * 60000;
+  const prox = parou ? '' : u < pl * .5 ? `<span>Sua estimativa estava folgada. Da próxima, tente <b>${horas(sugMs)}</b>.</span><button class="d-b2" id="dr-rep" data-ms="${sugMs}" type="button">Repetir com ${horas(sugMs)}</button>`
+    : k === 'depois' ? `<span>Para algo parecido, planeje <b>${horas(sugMs)}</b>.</span><button class="d-b2" id="dr-rep" data-ms="${sugMs}" type="button">Repetir com ${horas(sugMs)}</button>`
+    : `<span>Repetir este desafio com <b>${horas(pl)}</b>?</span><button class="d-b2" id="dr-rep" data-ms="${pl}" type="button">Repetir</button>`;
+  const cel = cfgD().celebra, anima = R.anim && !parou && !calmo && cel !== 'desligadas';
+  tela(`<section class="d-res ${anima ? '' : 'sem final'}" id="d-res" style="--c:${cor}" aria-label="Resultado do desafio">
+    <div class="d-res-top"><span class="d-selo"><span class="ic">${ICONES[k]}</span><span class="d-rot" style="color:${parou || k === 'depois' ? 'var(--ink)' : 'var(--ok)'}">${rot}</span></span><span class="sp"></span>${anima ? '<button class="d-pular" id="d-pular" type="button">Pular animação</button>' : ''}</div>
+    <div class="d-res-g">
+      <div>
+        <h1 class="d-frase" aria-label="${esc(fr)}">${fraseH}</h1>
+        <p class="d-sub">${sub}</p>
+        <p class="d-rtit">“${esc(d.titulo)}”${d.meta_qtd ? ` · ${(d.entregas || []).length} de ${d.meta_qtd} ${esc(d.meta_nome || '')}` : ''}</p>
+        ${parou ? '' : `<div class="d-palco" id="d-palco" aria-hidden="true"><span class="fimp" id="dr-fim">FIM</span><svg class="ima-ic" viewBox="0 0 24 24"><path d="M6 4v8a6 6 0 0 0 12 0V4M6 8h4M14 8h4"/></svg>
+          <div class="pp" id="dr-pp"></div><div class="uso" id="dr-uso"></div><div class="sobra" id="dr-sobra"></div><div class="d-ex" id="dr-extra"></div>
+          <div class="lam" id="dr-lam"><svg viewBox="0 0 20 20"><path d="M10 2v16M5 6l5-4 5 4"/></svg></div><div class="d-faisca" id="dr-fa"></div><span class="cort" id="dr-cort"></span></div>`}
+      </div>
+      <div class="d-fo">
+        <div class="d-laudo">${L.map(([a, b, t, n]) => `<div class="l${t === 'dest' ? ' dest' : ''}"><span>${a}${t === 'barra' ? `<span class="bar"><i data-w="${n}"></i></span>` : ''}</span><b>${b}</b></div>`).join('')}</div>
+        <p class="d-vai">${p ? `<b>${(R.regMs != null ? R.regMs : u) < 60000 ? 'Menos de 1 min' : '+' + horas(R.regMs != null ? R.regMs : u)}</b> ${(R.regMs != null ? R.regMs : u) < 60000 ? 'entrou' : 'entraram'} em <b>${esc(d.etapa || '')}</b> do projeto <b>${esc(p.nome)}</b>. O valor por hora usa esse mesmo registro.` : 'Desafio sem projeto: conta no seu foco, não entra no valor por hora.'}</p>
+        ${prox ? `<div class="d-prox">${prox}</div>` : ''}
+        <div class="d-acoes"><button class="d-cta" id="dr-novo" type="button">Novo desafio</button><button class="d-b2" id="dr-hist" type="button">Ver histórico</button></div>
+      </div>
+    </div>
+  </section>`);
+  const repetir = msPlano => { const s = Math.round(msPlano / 1000); FD = { ...novoFD(), livre: d.origem !== 'etapa', titulo: d.titulo, etapa: d.etapa || novoFD().etapa, etapaManual: true, projeto: d.projeto_id && proj(d.projeto_id) && !proj(d.projeto_id).concluido_em ? d.projeto_id : '', tempo: 'livre', modoT: 'dur', h: Math.floor(s / 3600), m: Math.floor(s % 3600 / 60), s: s % 60 }; RES = null; saiTelaCheia(); desenha(); };
+  if ($('#dr-rep')) $('#dr-rep').onclick = e => repetir(+e.currentTarget.dataset.ms);
+  $('#dr-novo').onclick = () => { RES = null; FD = null; saiTelaCheia(); desenha(); };
+  $('#dr-hist').onclick = () => { RES = null; saiTelaCheia(); ABA = 'historico'; desenha(); };
+  if (parou) return;
+  if ($('#d-pular')) $('#d-pular').onclick = () => pulaAnim();
+  $('#d-res').addEventListener('pointerdown', e => { if ($('#d-res').classList.contains('anim') && !e.target.closest('button')) pulaAnim(); });
+  animaD(R, anima, cel === 'discretas');
+  R.anim = false;                                         // redesenhar (outra aba, recarga) não repete a festa
+}
+function pulaAnim(semSom){
+  const r = $('#d-res'), tocando = r && r.classList.contains('anim'); RT.forEach(clearTimeout); RT = [];
+  if (r && r._final) r._final(); if (tocando && !semSom && RES && !r._som) som(RES.k);
+}
+addEventListener('keydown', e => { if (e.key === 'Escape' && $('#d-res.anim')) pulaAnim(); });
+// coreografia (≈2,2 s): só transform, opacity e width. Pular leva ao quadro final idêntico.
+function animaD(R, anima, discreta){
+  RT.forEach(clearTimeout); RT = [];
+  const k = R.k, pl = R.pl, u = R.u, esc_ = Math.max(pl, u), fu = u / esc_, fp = pl / esc_, res = $('#d-res'), pal = $('#d-palco');
+  const uso = $('#dr-uso'), sob = $('#dr-sobra'), ext = $('#dr-extra'), lam = $('#dr-lam'), fim = $('#dr-fim'), cort = $('#dr-cort'), fa = $('#dr-fa');
+  pal.classList.toggle('ima', k === 'prazo');
+  $('#dr-pp').style.width = (fp * 100) + '%'; uso.style.background = k === 'depois' ? 'var(--ink)' : 'var(--ok)';
+  sob.style.left = (fu * 100) + '%'; sob.style.width = Math.max(0, fp - fu) * 100 + '%';
+  ext.style.left = (fp * 100) + '%'; lam.style.left = (fu * 100) + '%'; fim.style.left = (fp * 100) + '%'; cort.style.left = (fu * 100) + '%'; fa.style.left = (fu * 100) + '%';
+  const textoCorte = k === 'depois' ? `+${horas(u - pl)} extra` : `−${horas(pl - u)} cortados`;
+  const final = () => {
+    [uso, sob, ext, lam].forEach(e => e.style.transition = 'none');
+    uso.style.width = (Math.min(fu, fp) * 100) + '%'; lam.style.opacity = '0'; sob.style.opacity = '0';
+    if (k === 'voou' || k === 'antes'){ fim.style.left = (fu * 100) + '%'; cort.textContent = textoCorte; cort.classList.add('on'); }
+    if (k === 'depois'){ ext.style.width = ((fu - fp) * 100) + '%'; cort.style.left = '100%'; cort.classList.add('dir', 'on'); cort.textContent = textoCorte; }
+    if (k === 'prazo') uso.style.width = (fp * 100) + '%';
+    res.classList.remove('anim'); res.classList.add('final'); fa.innerHTML = '';
+    $$('#d-res .bar i').forEach(i => i.style.width = i.dataset.w + '%');
+  };
+  res._final = final; res._som = false;
+  if (!anima){ final(); if (R.anim) som(k); return; }
+  res.classList.add('anim');
+  const t = (q, f) => RT.push(setTimeout(f, q)), tocou = () => { res._som = true; };
+  t(30, () => { uso.style.transition = 'width .62s cubic-bezier(.6,0,.2,1)'; uso.style.width = (Math.min(fu, fp) * 100) + '%'; });
+  if (k === 'voou' || k === 'antes'){
+    t(380, () => { sob.style.transition = 'opacity .2s'; sob.style.opacity = '1'; });
+    t(640, () => { som('lamina'); lam.style.transition = 'transform .18s cubic-bezier(.7,0,.3,1), opacity .1s'; lam.style.opacity = '1'; lam.style.transform = 'scaleY(1)'; });
+    t(800, () => { if (!discreta){ faisca(fa, k === 'voou' ? 14 : 8, k === 'voou' ? 10 : 4); try { navigator.vibrate && navigator.vibrate(k === 'voou' ? [12, 40, 18] : 12); } catch {} } });
+    t(860, () => { som('cai'); sob.style.transition = 'transform .6s cubic-bezier(.5,0,.75,0), opacity .6s'; sob.style.transform = 'translateY(56px) rotate(7deg)'; sob.style.opacity = '0'; });
+    t(1000, () => { fim.classList.add('mov'); fim.style.left = (fu * 100) + '%'; lam.style.transition = 'opacity .3s'; lam.style.opacity = '0'; });
+    t(1250, () => { som(k); tocou(); cort.classList.add('on'); conta(cort, Math.round((pl - u) / 60000), n => `−${n} min cortados`, textoCorte); });
+  } else if (k === 'prazo'){
+    t(700, () => { som('prazo'); tocou(); fa.style.left = (fp * 100) + '%'; if (!discreta) faisca(fa, 8, 0, true); });
+  } else {
+    t(700, () => { som('depois'); tocou(); ext.style.transition = 'width .7s cubic-bezier(.2,.7,.2,1)'; ext.style.width = ((fu - fp) * 100) + '%'; });
+    t(1300, () => { cort.style.left = '100%'; cort.classList.add('dir', 'on'); cort.textContent = textoCorte; });
+  }
+  t(1500, () => { $$('#d-res .bar i').forEach(i => i.style.width = i.dataset.w + '%'); res.classList.add('final');
+    $$('#d-res .l.dest b').forEach(b => { const alvo = b.textContent, m = alvo.match(/\d+/); if (m) conta(b, +m[0], n => alvo.replace(/\d+/, n), alvo); }); });
+  t(2400, () => { res._final = null; final(); });
+}
+function faisca(el, linhas, quadros, verde){
+  el.innerHTML = Array.from({ length: linhas }, (_, i) => `<i style="--r:${-90 + (i - (linhas - 1) / 2) * (150 / linhas)}deg${verde ? ';background:var(--ok)' : ''}"></i>`).join('') +
+    Array.from({ length: quadros }, () => { const a = Math.random() * Math.PI, dd = 40 + Math.random() * 70; return `<i class="f" style="--dx:${(Math.cos(a) * dd * (Math.random() < .5 ? -1 : 1)).toFixed(1)}px;--dy:${(-Math.sin(a) * dd + 30).toFixed(1)}px;--rr:${((Math.random() - .5) * 260).toFixed(0)}deg"></i>`; }).join('');
+}
+// números contam até o valor real; o texto final é sempre o calculado
+function conta(el, n, fmt, fimTxt){ const t0 = performance.now(); const f = x => { if (!el.isConnected) return; const p = Math.min(1, (x - t0) / 750), e = 1 - Math.pow(1 - p, 3); el.textContent = p < 1 ? fmt(Math.round(n * e)) : fimTxt; if (p < 1) requestAnimationFrame(f); }; requestAnimationFrame(f); }
+
+// ---------- desafio esquecido: página fechada e o prazo passou há mais de 10 min ----------
+function confereDesafioEsquecido(){
+  const d = desafioAberto(); if (!d || pausadoD(d)) return false;
+  const t = agoraD(), vivo = +mem.get('fl_timer_vivo') || 0, r = Dm.restante(d, t);
+  if (r > -600000 || t - Math.max(vivo, ms(d.inicio)) < 600000) return false;
+  const padrao = Math.min(Math.max(vivo, ms(d.inicio) + 60000), Dm.terminaEm(d, t));
+  folha('O desafio ficou aberto', `<p class="sub" style="margin:6px 0 0">“<b style="color:var(--ink)">${esc(d.titulo)}</b>” começou ${dataCurta(d.inicio)} às ${hora(d.inicio)} e o prazo terminou às ${hora(Dm.terminaEm(d, t))}. A página ficou fechada desde então.</p>
+    <label for="de-f">Se você parou antes, a que horas foi?</label><input class="inp" id="de-f" type="datetime-local" value="${paraCampo(padrao)}">
+    <div class="pe"><button class="btn ghost" id="de-c">Ainda estou nele</button><button class="btn ghost" id="de-p">Parei sem terminar</button><button class="btn" id="de-t">Terminei nesse horário</button></div>`, f => {
+    const quando = () => { const x = new Date(f.querySelector('#de-f').value); if (isNaN(x) || x <= new Date(d.inicio) || x > Date.now()){ toast('Escolha um horário entre o início e agora'); return 0; } return +x; };
+    f.querySelector('#de-c').onclick = fechaFolha;
+    f.querySelector('#de-p').onclick = async () => { const q = quando(); if (!q) return; fechaFolha(); await paraD('parou', q); };
+    f.querySelector('#de-t').onclick = async () => { const q = quando(); if (!q) return; fechaFolha(); ABA = 'desafio'; await concluiD(q); };
+  });
+  return true;
+}
+
+$('#d-desf-b').onclick = desfazD;
+
 // ---------- outras abas e aparelhos ----------
 let canal = null; try { canal = new BroadcastChannel('fl-timer'); canal.onmessage = async () => { await recarrega(); desenha(); }; } catch {}
 const avisaOutros = () => { try { canal && canal.postMessage(1); } catch {} };
 // sessão que ficou ligada com a página fechada: pergunta em vez de adivinhar
 function confereEsquecida(){
+  if (confereDesafioEsquecido()) return;
   const a = ativo(); if (!a || pausado(a)) return;
+  const dl = desafioAberto(); if (dl && a.desafio_id === dl.id) return;
   const vivo = +mem.get('fl_timer_vivo') || 0, ult = Math.max(vivo, ms(a.inicio)), parado = Date.now() - ult;
   if (parado < 10 * 60000) return;
   folha('O cronômetro ficou ligado', `<p class="sub" style="margin:6px 0 0">A sessão de <b style="color:var(--ink)">${esc((proj(a.projeto_id) || {}).nome || '')}</b> está contando desde ${dataCurta(a.inicio)} às ${hora(a.inicio)}, e esta página ficou fechada por ${horas(parado)}.</p>
@@ -658,9 +1532,10 @@ async function inicio(){
   if (!Base.tem(PACK)) return vitrine();
   try { await carrega(); } catch (e){ $('#abas').hidden = true; return tela(`<h1>Não consegui abrir.</h1><p class="sub">${esc(Base.traduz(e.message))}</p><button class="btn" onclick="location.reload()">Tentar de novo</button>`); }
   SEL = mem.get('fl_timer_sel') || null; ETP = mem.get('fl_timer_etp') || etapas()[0].n; adota();
+  await medeDesvio(); if (desafioAberto()) ABA = 'desafio';
   desenha(); confereEsquecida();
   if (!relogioLigado){ relogioLigado = true;
-    setInterval(() => { if (!Base.tem(PACK)) return; tique(); if (ativo() && !pausado(ativo())) mem.set('fl_timer_vivo', String(Date.now())); }, 1000);
+    setInterval(() => { if (!Base.tem(PACK)) return; tique(); if ((ativo() && !pausado(ativo())) || (desafioAberto() && !pausadoD(desafioAberto()))) mem.set('fl_timer_vivo', String(Date.now())); }, 1000);
     setInterval(confere, 15000);
     setInterval(async () => { if (Base.tem(PACK) && !$('#folha') && document.visibilityState === 'visible'){ const antes = (ativo() || {}).id; await recarrega(); if ((ativo() || {}).id !== antes) desenha(); } }, 45000);   // pega o que mudou em outro aparelho
     addEventListener('beforeunload', () => { if (ativo() && !pausado(ativo())) mem.set('fl_timer_vivo', String(Date.now())); });
