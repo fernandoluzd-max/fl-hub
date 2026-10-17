@@ -440,6 +440,12 @@ body.modo-aluno .capcut{display:none}
 .al-look span{position:absolute;left:0;right:0;bottom:0;padding:3px 0;font:700 11px var(--m);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:rgba(17,19,18,.82)}
 .al-look[aria-pressed="true"]{border:2px solid var(--ink)}
 .al-look:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.al-grav{order:4;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.al-grav > span{font:700 11px var(--m);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.al-grav div{display:inline-flex;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+.al-grav button{min-height:38px;padding:0 14px;border:0;border-radius:999px;background:none;color:var(--mute);font:600 14px var(--f);cursor:pointer}
+.al-grav button[aria-pressed="true"]{background:var(--ink);color:#111312}
+.al-grav button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .al-legenda{order:6;font-size:13px;color:var(--mute)}
 .al-legenda b{color:var(--aluno);font:700 11px var(--m);letter-spacing:.1em;text-transform:uppercase;margin-right:6px}
 .al-tira{display:flex;align-items:center;gap:3px}
@@ -464,6 +470,7 @@ body.modo-aluno .capcut{display:none}
 .al-rec > *,.al-col > *{animation:alEnt .32s cubic-bezier(.2,.7,.2,1) both}
 .al-quadro{animation-delay:.08s!important}
 @media (min-width:981px){
+  .al-grav{justify-content:flex-start}
   .al-rec{grid-template-columns:5fr 7fr;column-gap:56px;align-items:start}
   .al-col{display:flex;flex-direction:column;gap:16px}
   .al-col.b{grid-column:2;grid-row:1}
@@ -1783,13 +1790,14 @@ function recepcaoAluno(){
       <div class="al-quadro"><i class="rg a"></i><i class="rg b"></i><i class="rg c"></i><i class="rg d"></i>
         <div class="al-cmp" id="alCmp">
           <video id="alDep" src="${AL_DEMO}natural.mp4" poster="${AL_DEMO}natural.webp" muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto" aria-hidden="true" width="540" height="676"></video>
-          <video id="alAntes" class="al-antes" src="${AL_DEMO}antes.mp4" poster="${AL_DEMO}antes.webp" muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto" aria-hidden="true" width="540" height="676"></video>
+          <video id="alAntes" class="al-antes" src="${AL_DEMO}normal-709.mp4" poster="${AL_DEMO}normal-709.webp" muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto" aria-hidden="true" width="540" height="676"></video>
           <div class="al-linha" aria-hidden="true"><span class="al-alca">${AL_SETA}</span></div>
-          <span class="al-tag l">Seu vídeo</span><span class="al-tag r" id="alTagLut">LUT · Natural</span>
+          <span class="al-tag l" id="alTagAntes">Seu vídeo · Normal</span><span class="al-tag r" id="alTagLut">LUT · Natural</span>
           <input type="range" min="0" max="100" step="1" value="50" aria-label="Comparar o vídeo sem cor com o vídeo com a LUT">
         </div></div>
+      <div class="al-grav" role="group" aria-label="Como o vídeo foi gravado"><span>Gravou como?</span><div><button type="button" data-g="normal" aria-pressed="true">Normal</button><button type="button" data-g="log" aria-pressed="false">Log</button></div></div>
       <div class="al-looks" role="group" aria-label="Escolha uma referência para ver a cor no vídeo">${AL_LOOKS.map((l, i) => `<button class="al-look" type="button" data-k="${l.k}" aria-pressed="${i === 0}"><img src="${AL_DEMO}ref-${l.k}.webp" alt="" width="150" height="150"><span>${l.nome}</span></button>`).join('')}</div>
-      <p class="al-legenda"><b>Toque numa referência</b>Vídeo meu, gravado em Log. Cada cor saiu do Mood a partir da referência.</p>
+      <p class="al-legenda"><b>Toque numa referência</b>Vídeo meu. Funciona gravando normal ou em Log. Cada cor saiu do Mood a partir da referência.</p>
     </div>
     <div class="al-serve">
       <p>${AL_OK.replace('<svg', '<svg style="stroke:var(--ok)"')}<span>Serve se você edita no computador: CapCut, Premiere, DaVinci ou Final Cut.</span></p>
@@ -1831,6 +1839,17 @@ function recepcaoAluno(){
     dep.addEventListener('loadeddata', () => { try { dep.currentTime = ant.currentTime || t; } catch {} if (!calmo && !ant.paused) toca(dep); }, { once:true });
     $('#alTagLut').textContent = 'LUT · ' + l.nome; varreAlca(cmp, inp, true);
     evAluno('aluno_demo_look', { look:l.k });
+  });
+  const GRAV = { normal:{ arq:'normal-709', nome:'Normal' }, log:{ arq:'antes', nome:'Log' } };
+  document.querySelectorAll('.al-grav button').forEach(b => b.onclick = () => {
+    const g = GRAV[b.dataset.g]; if (!g || b.getAttribute('aria-pressed') === 'true') return;
+    document.querySelectorAll('.al-grav button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    const t = ant.currentTime, tocava = !ant.paused;
+    ant.poster = AL_DEMO + g.arq + '.webp'; ant.src = AL_DEMO + g.arq + '.mp4';
+    ant.addEventListener('loadeddata', () => { try { ant.currentTime = t; } catch {} if (tocava && !calmo) toca(ant); }, { once:true });
+    $('#alTagAntes').textContent = 'Seu vídeo · ' + g.nome;
+    cmp.style.setProperty('--p', '50%'); inp.value = 50; varreAlca(cmp, inp, true);
+    evAluno('aluno_demo_gravacao', { como:b.dataset.g });
   });
   $('#alProva').addEventListener('click', () => { ant.pause(); dep.pause(); });
   varreAlca(cmp, inp);
