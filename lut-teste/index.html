@@ -513,6 +513,23 @@ body.modo-aluno .capcut{display:none}
 .al-cuidados{margin-top:18px;border:1px solid var(--line);border-radius:14px;padding:4px 14px;background:var(--panel)}
 .al-cuidados summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:700;font-size:15px}
 .al-cuidados div{display:flex;flex-direction:column;gap:8px;padding:0 0 12px;font-size:14px;color:var(--mute)}
+/* celular: títulos e textos centralizados em todas as telas do modo aluno */
+@media (max-width:640px){
+  .al-rec{text-align:center}
+  .al-rec .al-rot,.al-rec .al-legenda b{display:block}
+  .al-rec h1{margin:0 auto;max-width:13ch}
+  .al-rec .al-texto{margin:0 auto}
+  .al-rec .al-legenda{max-width:34ch;margin:0 auto}
+  .al-rec .al-lista,.al-rec .al-serve{text-align:left}
+  .al-rec .al-rodape{text-align:center}
+  body.modo-aluno .al-prog{text-align:center}
+  body.modo-aluno #tela h1{text-align:center;margin-left:auto;margin-right:auto}
+  body.modo-aluno #tela .sobre-t{justify-content:center}
+  body.modo-aluno #tela .sub{text-align:center;margin-left:auto;margin-right:auto}
+  body.modo-aluno .intro .nota{justify-content:center;text-align:left}
+  body.modo-aluno #rever{display:flex;margin-left:auto;margin-right:auto;width:max-content}
+  body.modo-aluno .al-cred h3{text-align:center}
+}
 @keyframes alEnt{from{opacity:0;transform:translateY(8px)}}
 @keyframes alSw{from{opacity:0;transform:scale(.9)}}
 @keyframes alAlca{from{opacity:0;transform:translateX(26px)}}
