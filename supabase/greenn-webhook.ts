@@ -11,7 +11,7 @@ const BLOQUEIA = ["refunded", "chargedback", "canceled", "unpaid"];
 // para trocar, crie o segredo EMAIL_REMETENTE (ex.: Base FL <acesso@seudominio.com>).
 // Sem a chave, ou sem o arquivo 31 do banco, o acesso é liberado do mesmo jeito; só o e-mail não sai.
 // REENVIAR para um comprador (ex.: aluno que diz que não recebeu): endereço da função (com o token) + &reenviar=email@doaluno.com
-// TESTE: abra no navegador o endereço desta função (com o token) acrescentando &teste=seuemail@exemplo.com  -> chega um e-mail de exemplo.
+// TESTE: abra no navegador o endereço desta função (com o token) acrescentando &teste=seuemail@exemplo.com  -> chega um e-mail de exemplo (&tipo=web ou &tipo=mood para os outros modelos).
 const RESEND = Deno.env.get("RESEND_API_KEY") ?? "", REMETENTE = Deno.env.get("EMAIL_REMETENTE") || "Base FL <acesso@ofernandoluz.com>", RESPOSTA = Deno.env.get("EMAIL_RESPOSTA") ?? "";
 const ESPERA = Number(Deno.env.get("EMAIL_ESPERA_MS") ?? 20000);      // espera os outros produtos do mesmo checkout chegarem
 const NO_COMPUTADOR = ["fl-legendas", "fl-sons", "fl-luts"];          // instalam no CapCut do computador, pelo app Base FL
@@ -53,7 +53,8 @@ export function telefoneDe(p: any): string | null {
 // Monta o e-mail. produtos = o que a pessoa comprou (nomes); packs = tudo o que essa compra liberou.
 export function montaEmail(email: string, produtos: string[], packs: string[]) {
   const F = "font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;";
-  const LINK = "https://basefl.com/instalar/?de=email", ZAP = "https://wa.me/5547996974735?text=" + encodeURIComponent("Oi! Comprei no Base FL e preciso de ajuda para acessar.");
+  const mood = packs.length === 1 && packs[0] === "fl-lut";              // só o Mood: abre no navegador, sem app
+  const LINK = mood ? "https://basefl.com/lut/?de=email" : "https://basefl.com/instalar/?de=email", ZAP = "https://wa.me/5547996974735?text=" + encodeURIComponent("Oi! Comprei no Base FL e preciso de ajuda para acessar.");
   const pc = packs.filter((x) => NO_COMPUTADOR.includes(x)), web = packs.filter((x) => !NO_COMPUTADOR.includes(x));
   const nomes = produtos.length ? produtos : packs.map((x) => NOMES[x] ?? x);
   const nomesWeb = web.map((x) => NOMES[x]).filter(Boolean);
@@ -61,7 +62,12 @@ export function montaEmail(email: string, produtos: string[], packs: string[]) {
   const passo = (n: number, titulo: string, texto: string) => `<tr><td valign="top" width="34" style="padding:0 12px 18px 0;"><div style="width:30px;height:30px;line-height:30px;border-radius:15px;background:#F2A541;color:#141615;${F}font-size:15px;font-weight:800;text-align:center;">${n}</div></td>
       <td valign="top" style="padding:3px 0 18px 0;${F}"><div style="font-size:16px;line-height:1.35;font-weight:700;color:#F4F0E4;">${titulo}</div><div style="font-size:14.5px;line-height:1.55;color:#B3B4A2;padding-top:3px;">${texto}</div></td></tr>`;
   const seuEmail = `<span style="display:inline-block;margin-top:6px;padding:7px 11px;border-radius:9px;background:#0D0F0E;border:1px solid #2b302e;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:14px;color:#F4F0E4;">${esc(email)}</span>`;
-  const passos = pc.length
+  const passos = mood
+    ? passo(1, "Abra o Mood", "No celular ou no computador, direto no navegador. Não precisa instalar nada. O botão está logo abaixo.") +
+      passo(2, "Toque em Entrar e use este e-mail", "Fica no alto da tela (ou em <strong style=\"color:#F4F0E4;\">Já comprei &middot; entrar</strong>). Use o mesmo e-mail da compra. Não tem senha." + "<br>" + seuEmail) +
+      passo(3, "Digite o código que chegar neste e-mail", "São 6 números. Se não aparecer, confira o spam e a aba Promoções.") +
+      passo(4, "Comece a transformar as cores dos seus vídeos", "Escolha a referência, ajuste e baixe a LUT pronta.")
+    : pc.length
     ? passo(1, "Abra a página de instalação no computador", "Mac ou Windows. Tem um vídeo curto mostrando tudo, passo a passo. O botão está logo abaixo.") +
       passo(2, "Baixe e abra o app Base FL", "É o app que coloca o material dentro do seu CapCut.") +
       passo(3, "Entre com este e-mail", "O mesmo da compra. Não tem senha: chega um código neste e-mail, é só digitar." + "<br>" + seuEmail) +
@@ -69,13 +75,15 @@ export function montaEmail(email: string, produtos: string[], packs: string[]) {
     : passo(1, "Abra o Base FL", "No celular ou no computador. O botão está logo abaixo.") +
       passo(2, "Entre com este e-mail", "O mesmo da compra. Não tem senha: chega um código neste e-mail, é só digitar." + "<br>" + seuEmail) +
       passo(3, "Toque na ferramenta e comece a usar", "Tudo o que você comprou já aparece liberado.");
-  const botao = pc.length ? "Ver o vídeo e baixar o app" : "Abrir o Base FL";
-  const obs = pc.length
+  const botao = mood ? "Acessar meu Mood" : pc.length ? "Ver o vídeo e baixar o app" : "Abrir o Base FL";
+  const obs = mood
+    ? `<strong style="color:#F4F0E4;">Dica (opcional):</strong> no celular, você pode adicionar o Mood à tela inicial pelo menu do navegador. Fica com um ícone, igual a um app. Não é obrigatório: o link funciona sempre.`
+    : pc.length
     ? `<strong style="color:#F4F0E4;">Está no celular agora?</strong> ${esc(lista(pc.map((x) => NOMES[x])))} ${pc.length > 1 ? "funcionam" : "funciona"} no CapCut do computador. Abra este e-mail no computador, ou digite lá: <strong style="color:#F4F0E4;">basefl.com/instalar</strong>` +
       (nomesWeb.length ? `<br><br><strong style="color:#F4F0E4;">Também liberado:</strong> ${esc(lista(nomesWeb))}. ${nomesWeb.length > 1 ? "Abrem" : "Abre"} no navegador, no celular ou no computador, pelo mesmo botão.` : "")
     : `<strong style="color:#F4F0E4;">Dica:</strong> no celular, o Base FL oferece colocar um ícone na tela inicial. Fica igual a um app.`;
   // assunto começa pelo nome do que a pessoa comprou (é o que ela reconhece na caixa de entrada); mais de 3 produtos: resume
-  const assunto = (nomes.length > 3 ? nomes[0] + " e mais " + (nomes.length - 1) : lista(nomes)) + ": seu acesso chegou";
+  const assunto = mood ? "🎨 Seu Mood chegou! Veja como acessar sua ferramenta" : (nomes.length > 3 ? nomes[0] + " e mais " + (nomes.length - 1) : lista(nomes)) + ": seu acesso chegou";
   const html = `<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark light"><title>${esc(assunto)}</title></head>
 <body style="margin:0;padding:0;background:#0D0F0E;">
@@ -90,7 +98,7 @@ export function montaEmail(email: string, produtos: string[], packs: string[]) {
     </td></tr>
     <tr><td style="padding:22px 26px 0 26px;${F}">
       <div style="display:inline-block;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#7fce8f;border:1px solid #2f5a3a;background:#14251a;border-radius:99px;padding:5px 11px;">&#10003;&nbsp; Pagamento confirmado</div>
-      <h1 style="margin:14px 0 10px 0;font-size:27px;line-height:1.15;color:#F4F0E4;font-weight:800;letter-spacing:-.4px;">Seu acesso chegou.</h1>
+      <h1 style="margin:14px 0 10px 0;font-size:27px;line-height:1.15;color:#F4F0E4;font-weight:800;letter-spacing:-.4px;">${mood ? "Seu Mood chegou." : "Seu acesso chegou."}</h1>
       <p style="margin:0;font-size:15.5px;line-height:1.55;color:#B3B4A2;">Você comprou ${comprou}. Já está tudo liberado. Falta só entrar, e é rápido:</p>
     </td></tr>
     <tr><td style="padding:22px 26px 0 26px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${passos}</table></td></tr>
@@ -98,7 +106,7 @@ export function montaEmail(email: string, produtos: string[], packs: string[]) {
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" bgcolor="#F2A541" style="background:#F2A541;border-radius:14px;">
         <a href="${LINK}" target="_blank" style="display:block;padding:17px 18px;${F}font-size:17px;font-weight:800;color:#141615;text-decoration:none;">${botao} &rarr;</a>
       </td></tr></table>
-      <p style="margin:10px 0 0 0;${F}font-size:12.5px;line-height:1.5;color:#8d8e80;">Se o botão não abrir, copie e cole no navegador: basefl.com/instalar</p>
+      <p style="margin:10px 0 0 0;${F}font-size:12.5px;line-height:1.5;color:#8d8e80;">Se o botão não abrir, copie e cole no navegador: ${mood ? "basefl.com/lut" : "basefl.com/instalar"}</p>
     </td></tr>
     <tr><td style="padding:20px 26px 0 26px;"><div style="border:1px solid #2b302e;background:#131615;border-radius:14px;padding:14px 15px;${F}font-size:14px;line-height:1.55;color:#B3B4A2;">${obs}</div></td></tr>
     <tr><td style="padding:20px 26px 26px 26px;${F}font-size:14px;line-height:1.55;color:#B3B4A2;">Travou em algum passo? <a href="${ZAP}" target="_blank" style="color:#F2A541;font-weight:700;text-decoration:underline;">Fale com o suporte no WhatsApp</a>.</td></tr>
@@ -106,8 +114,9 @@ export function montaEmail(email: string, produtos: string[], packs: string[]) {
   <p style="margin:18px 0 0 0;${F}font-size:12px;line-height:1.6;color:#5E5B53;">Você recebeu este e-mail porque fez uma compra no Base FL.<br>FL Treinamentos Online Ltda &middot; CNPJ 53.803.974/0001-70 &middot; <a href="https://basefl.com/termos/" style="color:#5E5B53;">Termos</a> &middot; <a href="https://basefl.com/privacidade/" style="color:#5E5B53;">Privacidade</a></p>
 </td></tr></table>
 </body></html>`;
-  const texto = `Seu acesso chegou.\n\nVocê comprou ${lista(nomes)}. Já está tudo liberado.\n\n` +
-    (pc.length ? `1. No computador (Mac ou Windows), abra: https://basefl.com/instalar/ (tem um vídeo mostrando tudo)\n2. Baixe e abra o app Base FL\n3. Entre com este e-mail: ${email} (chega um código, não tem senha)\n4. Clique em Instalar e abra o CapCut\n`
+  const texto = `${mood ? "Seu Mood chegou." : "Seu acesso chegou."}\n\nVocê comprou ${lista(nomes)}. Já está tudo liberado.\n\n` +
+    (mood ? `1. Abra: https://basefl.com/lut/?de=email (celular ou computador, direto no navegador; não precisa instalar nada)\n2. Toque em Entrar (no alto da tela) ou em "Já comprei · entrar" e use este e-mail: ${email}\n3. Digite o código de 6 números que chegar neste e-mail (confira o spam)\n4. Comece a transformar as cores dos seus vídeos\n`
+     : pc.length ? `1. No computador (Mac ou Windows), abra: https://basefl.com/instalar/ (tem um vídeo mostrando tudo)\n2. Baixe e abra o app Base FL\n3. Entre com este e-mail: ${email} (chega um código, não tem senha)\n4. Clique em Instalar e abra o CapCut\n`
                : `1. Abra: https://basefl.com/instalar/ (celular ou computador)\n2. Entre com este e-mail: ${email} (chega um código, não tem senha)\n3. Toque na ferramenta e comece a usar\n`) +
     `\nPrecisa de ajuda? WhatsApp do suporte: ${ZAP}\n`;
   return { assunto, html, texto };
@@ -168,7 +177,7 @@ Deno.serve(async (req) => {
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(teste)) return txt("Escreva um e-mail válido depois de teste=", 400);
     if (!RESEND) return txt("Falta o segredo RESEND_API_KEY na função. O e-mail não foi enviado.", 500);
     const web = end.searchParams.get("tipo") === "web";
-    const m = web ? montaEmail(teste, ["Kit Freelancer"], ["fl-briefing", "fl-preco", "fl-contrato", "fl-painel"]) : montaEmail(teste, ["Títulos Dinâmicos"], ["fl-legendas", "fl-case", "fl-timer"]);
+    const m = end.searchParams.get("tipo") === "mood" ? montaEmail(teste, ["Mood"], ["fl-lut"]) : web ? montaEmail(teste, ["Kit Freelancer"], ["fl-briefing", "fl-preco", "fl-contrato", "fl-painel"]) : montaEmail(teste, ["Títulos Dinâmicos"], ["fl-legendas", "fl-case", "fl-timer"]);
     const r = await mandaResend(teste, { ...m, assunto: "[TESTE] " + m.assunto }, "basefl-teste-" + Date.now());
     return r.ok ? txt("E-mail de teste enviado para " + teste + ". Confira a caixa de entrada e o spam.") : txt("O Resend recusou o envio: " + r.detalhe + "\nRemetente usado: " + REMETENTE, 502);
   }

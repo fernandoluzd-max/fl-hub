@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Seu Mood chegou — Base FL</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Compra confirmada. Veja como acessar o Mood, direto no navegador.">
+<meta name="theme-color" content="#141615">
+<link rel="icon" type="image/svg+xml" href="/lut/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/lut/favicon-32.png">
+<link rel="apple-touch-icon" href="/lut/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#111312; --panel:#191C1B; --panel2:#202423; --line:#2B302E; --ink:#F4F0E4; --mute:#B3B4A2; --dim:#8A8B7F;
+  --a:#FF6FAE; --a2:#B45CFF; --ok:#7fce8f;
+  --grad:linear-gradient(125deg,#FFB347,#FF6FAE 38%,#B45CFF 70%,#5AB8FF);
+  --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --f:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --m:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:16px/1.5 var(--f);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(760px 520px at 88% -8%,rgba(180,92,255,.16),transparent 70%),radial-gradient(620px 420px at -6% 4%,rgba(255,179,71,.07),transparent 70%)}
+button{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--a);outline-offset:3px;border-radius:10px}
+.wrap{position:relative;max-width:720px;margin:0 auto;padding:16px 16px 56px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:34px}
+.mood{font-family:var(--d);font-weight:800;font-size:30px;line-height:1;letter-spacing:-.02em;display:inline-flex;align-items:baseline;color:var(--ink)}
+.mood svg{height:.56em;width:1em;margin:0 .035em;flex:none}
+header .de{font-family:var(--m);font-size:10.5px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;padding-left:12px;border-left:1px solid var(--line)}
+.selo{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ok);border:1px solid #2f5a3a;background:#14251a;border-radius:99px;padding:5px 12px;margin-bottom:16px}
+h1{font-family:var(--d);font-weight:800;font-size:clamp(30px,7.4vw,48px);line-height:1.04;letter-spacing:-.03em;margin-bottom:14px;text-wrap:balance}
+h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mute);font-size:17px;max-width:54ch;margin-bottom:26px}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;cursor:pointer;font-weight:800;font-size:17px;letter-spacing:.04em;border-radius:16px;padding:18px 22px;border:0;background:var(--grad);color:#14070e;text-decoration:none;transition:transform .12s,filter .15s;box-shadow:0 14px 38px -14px rgba(180,92,255,.9)}
+.btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.btn svg{width:20px;height:20px}
+.sem-app{display:flex;gap:12px;align-items:flex-start;margin-top:16px;padding:14px 16px;border-radius:16px;background:var(--panel);border:1px solid var(--line);font-size:15px;color:var(--mute)}
+.sem-app svg{flex:none;width:22px;height:22px;color:var(--ok);margin-top:1px}
+.sem-app b{color:var(--ink)}
+h2{font-family:var(--d);font-weight:800;font-size:23px;letter-spacing:-.02em;margin:46px 0 16px;display:flex;align-items:center;gap:10px}
+h2::before{content:"";width:26px;height:2px;border-radius:2px;background:var(--grad)}
+.passos{list-style:none;display:grid;gap:10px;counter-reset:p}
+.passos li{counter-increment:p;display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;padding:16px;border-radius:18px;background:var(--panel);border:1px solid var(--line)}
+.passos li::before{content:counter(p);width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-family:var(--d);font-weight:800;font-size:18px;background:var(--panel2);border:1px solid var(--line);color:var(--ink)}
+.passos li:first-child::before{background:var(--grad);color:#14070e;border:0}
+.passos b{display:block;font-size:17px;line-height:1.3;margin-bottom:3px}
+.passos p{color:var(--mute);font-size:15px}
+.passos .k{display:inline-block;font-weight:700;color:var(--ink);background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:0 7px;white-space:nowrap}
+.passos .ir{display:inline-block;margin-top:8px;color:var(--a);font-weight:700;font-size:15px;text-underline-offset:3px}
+details.atalho{margin-top:46px;border-radius:18px;background:var(--panel);border:1px solid var(--line);overflow:hidden}
+details.atalho>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:16px}
+details.atalho>summary::-webkit-details-marker{display:none}
+summary .st{flex:1}
+summary .st b{display:block;font-family:var(--d);font-size:17px;font-weight:800;letter-spacing:-.01em;line-height:1.3}
+summary .st small{color:var(--dim);font-size:13.5px}
+summary .seta{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--line);transition:transform .2s}
+details[open] .seta{transform:rotate(180deg)}
+.at-c{padding:0 16px 18px}
+.abas{display:flex;gap:4px;flex-wrap:wrap;background:var(--bg);border:1px solid var(--line);border-radius:13px;padding:4px;margin-bottom:14px}
+.abas button{flex:1 1 auto;cursor:pointer;border:0;background:none;font-weight:700;font-size:14px;color:var(--mute);padding:9px 10px;border-radius:9px}
+.abas button[aria-selected="true"]{background:var(--ink);color:#111}
+.aba ol{padding-left:20px;display:grid;gap:7px;color:var(--mute);font-size:15px}
+.aba ol b{color:var(--ink)}
+.aba .q{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:14px 0 6px}
+.aba .q:first-child{margin-top:0}
+.opc{margin-top:14px;font-size:13.5px;color:var(--dim)}
+.ajuda{margin-top:46px;padding:20px 16px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(var(--panel),var(--panel)) padding-box}
+.ajuda h2{margin-top:0}
+.ajuda ul{list-style:none;display:grid;gap:10px;margin-bottom:18px}
+.ajuda li{display:grid;grid-template-columns:22px 1fr;gap:10px;color:var(--mute);font-size:15px}
+.ajuda li svg{width:20px;height:20px;color:var(--a);margin-top:2px}
+.ajuda li b{color:var(--ink)}
+.zap{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:15px 18px;border-radius:15px;border:1px solid #2f5a3a;background:#14251a;color:var(--ok);font-weight:750;font-size:16px;text-decoration:none}
+.zap svg{width:20px;height:20px}
+footer{margin-top:40px;text-align:center;color:var(--dim);font-size:12.5px}
+footer a{color:var(--dim)}
+@media (min-width:760px){
+  .wrap{padding-top:28px}
+  .btn{width:auto;display:inline-flex;padding:19px 34px}
+  .passos{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="mood" aria-label="Mood">M<svg viewBox="0 0 414 231" aria-hidden="true"><defs><linearGradient id="mg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="298" y2="231"><stop offset="0" stop-color="#FFB347"/><stop offset=".38" stop-color="#FF6FAE"/><stop offset=".7" stop-color="#B45CFF"/><stop offset="1" stop-color="#5AB8FF"/></linearGradient></defs><circle cx="115.5" cy="115.5" r="115.5" fill="url(#mg)"/><circle cx="298" cy="115.5" r="99.9" fill="none" stroke="currentColor" stroke-width="31.2"/></svg>d</span>
+    <span class="de">Base FL</span>
+  </header>
+
+  <main>
+    <span class="selo">&#10003; Compra confirmada</span>
+    <h1>Seu Mood chegou! Agora é hora de <em>transformar suas cores.</em> 🎨</h1>
+    <p class="sub">Sua compra foi confirmada! Vamos te mostrar como acessar o Mood e começar a usar sua nova ferramenta.</p>
+
+    <a class="btn" id="acessar" href="https://basefl.com/lut/?de=obrigado">ACESSAR MEU MOOD <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+
+    <div class="sem-app">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg>
+      <span><b>Não precisa instalar nenhum aplicativo.</b> O Mood funciona direto no navegador, no celular ou no computador.</span>
+    </div>
+
+    <h2>Como acessar</h2>
+    <ol class="passos">
+      <li><div><b>Acesse o Mood</b><p>Toque no botão <span class="k">Acessar meu Mood</span> acima. Ele abre a ferramenta no seu navegador.</p><a class="ir" href="https://basefl.com/lut/?de=obrigado">basefl.com/lut</a></div></li>
+      <li><div><b>Entre com seu e-mail</b><p>Toque em <span class="k">Entrar</span>, no canto de cima da tela (ou em <span class="k">Já comprei · entrar</span>). Use o mesmo e-mail da compra.</p></div></li>
+      <li><div><b>Confirme seu acesso</b><p>Chega um código de 6 dígitos no seu e-mail. Digite o código e toque em <span class="k">Entrar</span>. Não achou? Confira o spam e a aba Promoções.</p></div></li>
+      <li><div><b>Comece a usar</b><p>Pronto, o Mood está liberado. Escolha a referência, ajuste e baixe a LUT pronta.</p></div></li>
+    </ol>
+
+    <details class="atalho" id="atalho">
+      <summary>
+        <span class="st"><b>Quer acessar seu Mood com apenas um toque?</b><small>Opcional · crie um atalho na tela inicial</small></span>
+        <span class="seta" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+      </summary>
+      <div class="at-c">
+        <div class="abas" role="tablist" aria-label="Seu aparelho">
+          <button role="tab" id="t-ios" aria-controls="p-ios" aria-selected="true">iPhone</button>
+          <button role="tab" id="t-and" aria-controls="p-and" aria-selected="false">Android</button>
+          <button role="tab" id="t-win" aria-controls="p-win" aria-selected="false">Windows</button>
+          <button role="tab" id="t-mac" aria-controls="p-mac" aria-selected="false">macOS</button>
+        </div>
+        <div class="aba" role="tabpanel" id="p-ios" aria-labelledby="t-ios">
+          <ol>
+            <li>Abra o Mood no <b>Safari</b>.</li>
+            <li>Toque em <b>Compartilhar</b> (o quadrado com a seta para cima).</li>
+            <li>Toque em <b>Adicionar à Tela de Início</b> e depois em <b>Adicionar</b>.</li>
+          </ol>
+        </div>
+        <div class="aba" role="tabpanel" id="p-and" aria-labelledby="t-and" hidden>
+          <ol>
+            <li>Abra o Mood no <b>Chrome</b>.</li>
+            <li>Toque no menu <b>⋮</b> (canto de cima).</li>
+            <li>Toque em <b>Adicionar à tela inicial</b> ou <b>Instalar app</b>.</li>
+          </ol>
+        </div>
+        <div class="aba" role="tabpanel" id="p-win" aria-labelledby="t-win" hidden>
+          <p class="q">Chrome</p>
+          <ol>
+            <li>Clique no <b>ícone de instalar</b> na barra de endereço, se aparecer.</li>
+            <li>Ou: menu <b>⋮</b> → <b>Transmitir, salvar e compartilhar</b> → <b>Instalar página como app</b>.</li>
+          </ol>
+          <p class="q">Edge</p>
+          <ol>
+            <li>Menu <b>…</b> → <b>Aplicativos</b> → <b>Instalar este site como aplicativo</b>.</li>
+          </ol>
+        </div>
+        <div class="aba" role="tabpanel" id="p-mac" aria-labelledby="t-mac" hidden>
+          <p class="q">Chrome</p>
+          <ol>
+            <li>Menu <b>⋮</b> → <b>Transmitir, salvar e compartilhar</b> → <b>Criar atalho</b> ou <b>Instalar</b>.</li>
+          </ol>
+          <p class="q">Safari 17 ou mais novo</p>
+          <ol>
+            <li>Menu <b>Arquivo</b> → <b>Adicionar ao Dock</b>.</li>
+          </ol>
+        </div>
+        <p class="opc">É só um atalho. Não é obrigatório: o Mood funciona igual pelo link, em qualquer navegador.</p>
+      </div>
+    </details>
+
+    <section class="ajuda" aria-labelledby="aj-t">
+      <h2 id="aj-t">Não recebeu o código?</h2>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg><span><b>Confira o spam e a aba Promoções.</b> Às vezes o e-mail cai lá.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span><b>Use o mesmo e-mail da compra.</b> O código só vai para o e-mail que fez o pagamento.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><b>Espere 1 minuto e peça de novo.</b> Toque em <b>Usar outro e-mail</b>, confira o endereço e envie outra vez.</span></li>
+      </ul>
+      <a class="zap" href="https://wa.me/5547996974735?text=Oi!%20Comprei%20o%20Mood%20e%20preciso%20de%20ajuda%20para%20acessar." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.55-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.22-.16-.47-.28z"/></svg>Falar com o suporte no WhatsApp</a>
+    </section>
+  </main>
+
+  <footer>Base FL · FL Treinamentos Online Ltda · <a href="/termos/">Termos</a> · <a href="/privacidade/">Privacidade</a></footer>
+</div>
+<script>
+// abas do atalho (opcional). A página não libera nada: o acesso acontece só dentro do Mood, com o código do e-mail.
+(function(){
+  var abas = document.querySelectorAll('.abas [role=tab]');
+  function mostra(b){
+    abas.forEach(function(x){ var on = x === b; x.setAttribute('aria-selected', on); x.tabIndex = on ? 0 : -1; document.getElementById(x.getAttribute('aria-controls')).hidden = !on; });
+  }
+  abas.forEach(function(b, i){
+    b.onclick = function(){ mostra(b); };
+    b.onkeydown = function(e){ var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (d){ var n = abas[(i + d + abas.length) % abas.length]; mostra(n); n.focus(); } };
+  });
+  // abre já na aba do aparelho de quem está vendo
+  var ua = navigator.userAgent, id = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1) ? 't-ios' : /Android/.test(ua) ? 't-and' : /Mac/.test(ua) ? 't-mac' : /Win/.test(ua) ? 't-win' : 't-ios';
+  mostra(document.getElementById(id));
+})();
+</script>
+</body>
+</html>
