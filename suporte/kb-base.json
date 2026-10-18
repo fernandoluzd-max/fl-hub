@@ -423,6 +423,35 @@
       "escalar_quando": "Mesmo assim não abre; peça print da mensagem."
     },
     {
+      "id": "antivirus_bloqueia_instalador",
+      "sinais": [
+        "parâmetro incorreto",
+        "parametro incorreto",
+        "não pode acessar o dispositivo",
+        "nao pode acessar o dispositivo",
+        "caminho ou arquivo especificado",
+        "permissões adequadas",
+        "mcafee",
+        "avast",
+        "avg",
+        "norton",
+        "antivírus",
+        "antivirus",
+        "instalador não abre",
+        "instalador nao abre",
+        "erro ao instalar no windows"
+      ],
+      "passos": [
+        "É o antivírus bloqueando o instalador, porque o app é novo e ele ainda não conhece. O arquivo não tem defeito.",
+        "Apague os arquivos Base-FL-Windows da pasta Downloads e baixe de novo em basefl.com/instalar.",
+        "Abra o antivírus (McAfee, Avast, AVG, Norton…) e desligue a proteção/varredura em tempo real por 15 minutos.",
+        "Abra o Base-FL-Windows.exe. Se aparecer a tela azul, clique em Mais informações › Executar assim mesmo.",
+        "Depois de instalar, ligue a proteção do antivírus de novo.",
+        "Se ainda não abrir: no antivírus, procure em Quarentena / Histórico de proteção, Restaurar e Permitir o Base FL. No Windows: Segurança do Windows › Proteção contra vírus e ameaças › Histórico de proteção › Permitir."
+      ],
+      "escalar_quando": "Mesmo com o antivírus desligado não abre; peça print da mensagem e o nome do antivírus."
+    },
+    {
       "id": "lut_nao_aparece",
       "sinais": [
         "lut não aparece",

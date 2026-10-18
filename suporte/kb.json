@@ -1,7 +1,7 @@
 {
- "versao": "2026-10-09.db8437ca",
- "gerado_em": "2026-10-09",
- "revisar_ate": "2026-11-23",
+ "versao": "2026-10-18.12d8f622",
+ "gerado_em": "2026-10-18",
+ "revisar_ate": "2026-12-02",
  "empresa": {
   "marca": "Base FL",
   "dono": "Fernando Luz",
@@ -108,8 +108,8 @@
    "acesso": "1 ano",
    "gancho": "A cor daquele vídeo, no seu",
    "resumo": "Copie a cor de qualquer vídeo: coloque a referência e o seu vídeo e baixe a LUT pronta para o CapCut.",
-   "preco": 97,
-   "venda": "R$ 97 à vista ou 12x de R$ 9,97 no cartão. Acesso 1 ano. Garantia de 7 dias.",
+   "preco": 147,
+   "venda": "R$ 147 à vista ou 12x de R$ 15,11 no cartão. Acesso 1 ano. Garantia de 7 dias.",
    "pagina": "https://basefl.com/conheca/mood/?de=whatsapp",
    "pagina_compra": "https://basefl.com/conheca/mood/?de=whatsapp",
    "apelidos": [
@@ -329,6 +329,17 @@
    ],
    "nao_confundir": "LUTs (pack pronto de 23 looks) é diferente do Mood (ferramenta que cria uma LUT nova copiando a cor de uma referência)."
   },
+  "assets": {
+   "nome": "Base FL Assets",
+   "tipo": "kit",
+   "acesso": "vitalício",
+   "gancho": "Animações que explicam por você",
+   "resumo": "100 animações gráficas com fundo transparente, em 10 categorias, para colocar por cima dos seus vídeos.",
+   "preco": 17,
+   "venda": "R$ 17 à vista ou 12x de R$ 1,75 no cartão. Acesso vitalício. Garantia de 7 dias.",
+   "pagina": "https://basefl.com/conheca/assets/?de=whatsapp",
+   "pagina_compra": "https://basefl.com/conheca/assets/?de=whatsapp"
+  },
   "kit": {
    "nome": "Kit Freelancer",
    "tipo": "pacote",
@@ -526,6 +537,35 @@
    "escalar_quando": "Mesmo assim não abre; peça print da mensagem."
   },
   {
+   "id": "antivirus_bloqueia_instalador",
+   "sinais": [
+    "parâmetro incorreto",
+    "parametro incorreto",
+    "não pode acessar o dispositivo",
+    "nao pode acessar o dispositivo",
+    "caminho ou arquivo especificado",
+    "permissões adequadas",
+    "mcafee",
+    "avast",
+    "avg",
+    "norton",
+    "antivírus",
+    "antivirus",
+    "instalador não abre",
+    "instalador nao abre",
+    "erro ao instalar no windows"
+   ],
+   "passos": [
+    "É o antivírus bloqueando o instalador, porque o app é novo e ele ainda não conhece. O arquivo não tem defeito.",
+    "Apague os arquivos Base-FL-Windows da pasta Downloads e baixe de novo em basefl.com/instalar.",
+    "Abra o antivírus (McAfee, Avast, AVG, Norton…) e desligue a proteção/varredura em tempo real por 15 minutos.",
+    "Abra o Base-FL-Windows.exe. Se aparecer a tela azul, clique em Mais informações › Executar assim mesmo.",
+    "Depois de instalar, ligue a proteção do antivírus de novo.",
+    "Se ainda não abrir: no antivírus, procure em Quarentena / Histórico de proteção, Restaurar e Permitir o Base FL. No Windows: Segurança do Windows › Proteção contra vírus e ameaças › Histórico de proteção › Permitir."
+   ],
+   "escalar_quando": "Mesmo com o antivírus desligado não abre; peça print da mensagem e o nome do antivírus."
+  },
+  {
    "id": "lut_nao_aparece",
    "sinais": [
     "lut não aparece",
@@ -633,6 +673,7 @@
   "https://basefl.com/?de=whatsapp",
   "https://basefl.com/briefing/",
   "https://basefl.com/case/",
+  "https://basefl.com/conheca/assets/?de=whatsapp",
   "https://basefl.com/conheca/efeitos-sonoros/?de=whatsapp",
   "https://basefl.com/conheca/financas-e-demandas/?de=whatsapp",
   "https://basefl.com/conheca/gerador-de-briefing/?de=whatsapp",
