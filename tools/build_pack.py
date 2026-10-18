@@ -56,10 +56,13 @@ def main():
     a = argparse.ArgumentParser()
     for k in ("id", "name", "version", "presets", "out"): a.add_argument("--" + k, required=True)
     for k in ("resources", "fonts", "fonts-windows", "index", "aliases", "substitutes"): a.add_argument("--" + k)
+    a.add_argument("--raiz-extra", action="append", default=[], metavar="ORIGINAL=LOCAL",
+                   help="onde achar neste computador arquivos citados com outro caminho (ex.: cache antigo do CapCut)")
     a.add_argument("--permitir-faltando", action="store_true", help="gera mesmo com mídia citada que não existe (não recomendado)")
     o = a.parse_args()
     trabalho = tempfile.mkdtemp(prefix="flpack-")
-    rel = pacote_seguro.preparar(o.presets, trabalho, permitir_faltando=o.permitir_faltando)
+    rel = pacote_seguro.preparar(o.presets, trabalho, permitir_faltando=o.permitir_faltando,
+                                 raizes_extra=[tuple(r.split("=", 1)) for r in o.raiz_extra])
     o.presets = os.path.join(trabalho, "presets")
     embutidos = os.path.join(trabalho, "resources")
     man = {"id": o.id, "name": o.name, "version": o.version, "presets_dir": "presets",
