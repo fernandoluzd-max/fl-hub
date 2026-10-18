@@ -238,7 +238,31 @@ details.fino[open] summary .fa .f1{display:none}details.fino[open] summary .fa .
 .entra>*{animation:entra .35s cubic-bezier(.2,.8,.2,1) both}
 @keyframes entra{from{opacity:0;transform:translateY(10px)}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
-.link.aula{text-decoration:none;font-weight:700;color:var(--ink,#F4F0E4);border:1px solid var(--line,#2B302E);border-radius:99px;padding:6px 12px;margin-right:6px}
+.link.aula{position:relative;display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-weight:800;font-size:13.5px;color:#14070e;background:var(--grad);border:0;border-radius:99px;padding:8px 14px 8px 10px;margin-right:6px;box-shadow:0 8px 22px -10px rgba(255,111,174,.9)}
+.link.aula:hover{filter:brightness(1.07)}
+.link.aula .ai{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#14070e;color:#FF6FAE}
+.link.aula .ai svg{width:9px;height:9px;margin-left:1px}
+.link.aula[data-aula]::after{color:#14070e}
+.link.aula[data-aula=novo]::before,.link.aula[data-aula=andamento]::before{content:"";position:absolute;inset:-4px;border-radius:99px;border:2px solid #FF6FAE;opacity:0;animation:aulaPulso 2.2s ease-out infinite}
+@keyframes aulaPulso{0%{opacity:.85;transform:scale(.96)}100%{opacity:0;transform:scale(1.12)}}
+.ajuda{margin:-6px 0 22px}
+.ac-k{display:block;font:700 11px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin:0 0 2px!important}
+.sup-flut{position:fixed;right:16px;bottom:16px;z-index:20;display:flex;align-items:center;gap:0;height:40px;padding:0 10px;border-radius:99px;background:var(--panel);border:1px solid var(--line);color:var(--mute);text-decoration:none;font-size:13px;font-weight:600;opacity:.8;transition:opacity .15s,color .15s,background .15s,border-color .15s}
+.sup-flut svg{width:19px;height:19px;flex:none}
+.sup-flut span{max-width:0;overflow:hidden;white-space:nowrap;transition:max-width .2s,margin .2s}
+.sup-flut:hover,.sup-flut:focus-visible{opacity:1;color:#fff;background:#25D366;border-color:#25D366;box-shadow:0 8px 20px -8px rgba(37,211,102,.8)}
+.sup-flut:hover span,.sup-flut:focus-visible span{max-width:80px;margin-left:7px}
+.aula-card{display:flex;align-items:center;gap:14px;margin:0;padding:14px 16px;border-radius:18px;background:linear-gradient(var(--panel),var(--panel)) padding-box,var(--grad) border-box;border:1.5px solid transparent;cursor:pointer;text-align:left;width:100%;color:var(--ink)}
+.aula-card:hover{background:linear-gradient(var(--panel2),var(--panel2)) padding-box,var(--grad) border-box}
+.aula-card .ac-ic{position:relative;flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--grad);color:#14070e}
+.aula-card .ac-ic svg{width:17px;height:17px;margin-left:2px}
+.aula-card .ac-ic::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid #FF6FAE;opacity:0;animation:aulaPulso 2.2s ease-out infinite}
+.aula-card.vista .ac-ic::after{display:none}
+.aula-card .ac-t{flex:1;min-width:0}
+.aula-card .ac-t b{display:block;font-size:16.5px;line-height:1.25}
+.aula-card .ac-t small{display:block;color:var(--mute);font-size:13.5px;margin-top:3px}
+.aula-card .ac-bt{flex:none;font-weight:800;font-size:14px;color:#14070e;background:var(--grad);border-radius:12px;padding:10px 16px}
+@media (max-width:560px){.aula-card{flex-wrap:wrap}.aula-card .ac-bt{width:100%;text-align:center}}
 /* aula antes do teste */
 .intro{max-width:880px;margin:0 auto}
 .intro h1{max-width:20ch}
@@ -513,6 +537,10 @@ body.modo-aluno .capcut{display:none}
 .al-inclui svg{flex:none;width:18px;height:18px;margin-top:3px;fill:none;stroke:var(--ok);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .al-cred .btn{height:56px;border-radius:999px}
 .al-depois{margin-top:-6px;text-align:center;font-size:13px;color:var(--mute)}
+.al-preco-pub{display:flex;flex-direction:column;align-items:flex-start}
+.al-preco-pub .s{font-size:13px;color:var(--mute);margin-top:6px}
+.al-gar{margin-top:-6px;text-align:center;font-size:13px;color:var(--mute)}
+@media (max-width:640px){.al-preco-pub{align-items:center}}
 .al-pico{margin:0 -18px;border-top:1px dashed #3A403D;padding:12px 18px 14px;text-align:center;font:700 11px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
 .al-entrar{display:block;margin:-4px auto 0}
 @media (min-width:981px){.al-v97 span{font-size:120px}}
@@ -552,7 +580,7 @@ body.modo-aluno .capcut{display:none}
     <span class="mood" aria-label="Mood">M<svg viewBox="0 0 414 231" aria-hidden="true"><defs><linearGradient id="mg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="298" y2="231"><stop offset="0" stop-color="#FFB347"/><stop offset=".38" stop-color="#FF6FAE"/><stop offset=".7" stop-color="#B45CFF"/><stop offset="1" stop-color="#5AB8FF"/></linearGradient></defs><circle cx="115.5" cy="115.5" r="115.5" fill="url(#mg)"/><circle cx="298" cy="115.5" r="99.9" fill="none" stroke="currentColor" stroke-width="31.2"/></svg>d</span>
     <span class="de">Base FL</span>
     <div class="sp"></div>
-    <button class="link aula" id="aula" hidden>▶ Aula</button>
+    <button class="link aula" id="aula" hidden><span class="ai"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4c0 .8.9 1.3 1.6.9l11.3-7.2c.6-.4.6-1.3 0-1.7L8.6 3.9C7.9 3.5 7 4 7 4.8z"/></svg></span><span id="aulaRot">Aulas</span></button>
     <button class="link" id="conta"></button>
   </header>
   <div class="passos" id="passos"></div>
@@ -1099,6 +1127,7 @@ function arquivoCube(titulo){
 const ALUNO = { fim: '2026-10-26T23:59:00-03:00', preco: '97', parc: '9,97', normal: '147', ate: '26/10',
   checkout: 'https://payfast.greenn.com.br/2y52kh4/offer/HKpnsu?ch_id=144304' };
 const ehAluno = (() => { try {
+  if (/[?&]publico=1/.test(location.search)) return false;
   const q = new URLSearchParams(location.search);
   if (q.get('aluno') === '1' || /mood_alunos/.test(q.get('utm_campaign') || '')) localStorage.setItem('mood_aluno', '1');
   return localStorage.getItem('mood_aluno') === '1' && Date.now() < Date.parse(ALUNO.fim);
@@ -1383,11 +1412,11 @@ function passo3(){
   passos(2);
   montaLUT();
   const { nome } = proximoNome();
-  const trava = acesso ? '' : (ehAluno && !vencido) ? credencialAluno()
+  const trava = acesso ? '' : (ehAluno && !vencido) ? credencialAluno() : (PROVA && !vencido) ? credencialPublica()
     : `<div class="lock"><p>${vencido ? 'Seu acesso de 1 ano terminou' : 'Desbloqueie para baixar a sua LUT'}</p><div class="sm">${vencido ? 'Renove para continuar criando LUTs.' : 'Crie quantas LUTs quiser, por 1 ano, no celular e no computador.'}</div>
       <button class="btn full" id="comprar">${vencido ? 'Renovar meu acesso' : 'Liberar o Mood · R$ ' + Base.produto('mood').preco}</button>${Base.sessao() ? '' : '<button class="link" id="entrar" style="display:block;margin:12px auto 0">Já comprei · entrar</button>'}</div>`;
   if (!acesso && !avisouDemo){ avisouDemo = true; Base.evento('demo_completed', PACK); }
-  tela(`<div class="fim"><div class="sobre-t"><span class="mono">Sua LUT</span></div><h1>${ehAluno && !acesso ? 'Sua LUT está pronta.' : 'O mood está <em>copiado</em>.'}</h1><p class="sub" style="margin:0 auto">A LUT leva a cor da referência para o seu vídeo, com os ajustes que você fez.</p>
+  tela(`<div class="fim"><div class="sobre-t"><span class="mono">Sua LUT</span></div><h1>${PROVA && !acesso ? 'Sua LUT está pronta.' : 'O mood está <em>copiado</em>.'}</h1><p class="sub" style="margin:0 auto">A LUT leva a cor da referência para o seu vídeo, com os ajustes que você fez.</p>
     <div class="arq"><span class="ic">.cube</span><span><b>${nome}</b><small>Arquivo ${nome}.cube · padrão ${N}×${N}×${N} · funciona no CapCut, Premiere, DaVinci e Final Cut${PERFIL ? `<br><span style="color:#fff;font-weight:600">Para vídeo em ${PERFIS[PERFIL].curto}: aplique direto no vídeo em Log, sem outra LUT de conversão antes.</span>` : ''}</small></span></div>
     ${acesso ? `<button class="btn full" id="baixar">Baixar ${nome}</button>` : trava}
     <div class="capcut"><span><b>Instalar direto no CapCut</b><small>Um clique no app Base FL e a LUT aparece em Ajuste › LUT.</small></span><span class="breve">Em breve</span></div>
@@ -1405,7 +1434,7 @@ function passo3(){
     a.href = URL.createObjectURL(blob); a.download = nm + '.cube'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
     store.set('fl_lut_n', String(n)); toast(nm + ' baixada'); $('#baixar').textContent = 'Baixar de novo';
   };
-  if ($('#comprar')) $('#comprar').onclick = () => $('#comprar').dataset.aluno ? (evAluno('aluno_liberar_clique'), compraAluno()) : Base.comprar('mood', 'ferramenta');
+  if ($('#comprar')) $('#comprar').onclick = () => $('#comprar').dataset.aluno ? (evAluno('aluno_liberar_clique'), compraAluno()) : ($('#comprar').dataset.publico && evAluno('aluno_liberar_clique'), Base.comprar('mood', 'ferramenta'));
   if ($('#entrar')) $('#entrar').onclick = async () => { if (await Base.login()){ sincAcesso(); toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas o Mood não está nas compras deste e-mail'); passo3(); } };
 }
 
@@ -1699,8 +1728,10 @@ function montaPlayer(){
 // Só roda para quem chegou como aluno (ehAluno). O modo normal da ferramenta não muda.
 const AL_SETA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg>';
 const AL_OK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>';
-function evAluno(nome, dados){ try { Base.evento(nome, PACK, dados); } catch {} }
-if (ehAluno) document.body.classList.add('modo-aluno');
+function evAluno(nome, dados){ try { Base.evento(ehAluno ? nome : nome.replace(/^aluno_/, 'mood_'), PACK, dados); } catch {} }
+// jornada "Prova de cor": alunos (preço de aluno) e público que ainda não tem o Mood (preço normal)
+const PROVA = ehAluno || !acesso || /[?&]recepcao=1/.test(location.search);
+if (PROVA) document.body.classList.add('modo-aluno');
 // SÓ NA PÁGINA DE TESTE: com ?recepcao=1 a prévia finge que a conta ainda não tem o Mood,
 // para quem já comprou (o Fernando) ver a jornada inteira, com fita e credencial.
 const PREVIA = true && /[?&]recepcao=1/.test(location.search);
@@ -1734,7 +1765,7 @@ document.addEventListener('keydown', e => {
 // linha de progresso (substitui as 3 caixas no modo aluno)
 const _alPassos = passos;
 passos = function(at){
-  if (!ehAluno) return _alPassos(at);
+  if (!PROVA) return _alPassos(at);
   const box = $('#passos');
   if (at === -2){ box.innerHTML = ''; box.hidden = true; return; }
   box.hidden = false;
@@ -1776,13 +1807,14 @@ function varreAlca(cmp, inp, curta){
 
 // ATO 0 · recepção (primeira entrada da sessão; ?recepcao=1 força, para conferir)
 function recepcaoAluno(){
-  if (!ehAluno || acesso) return false;
+  if (!PROVA || acesso) return false;
+  try { if (!ehAluno && window.top !== window) return false; } catch {}
   const forca = /[?&]recepcao=1/.test(location.search);
   try { if (!forca && sessionStorage.getItem('mood_recepcao_vista')) return false; sessionStorage.setItem('mood_recepcao_vista', '1'); } catch {}
   passos(-2);
   tela(`<div class="al-rec">
     <div class="al-col a">
-      <span class="al-rot">Para quem já é aluno</span>
+      <span class="al-rot">${ehAluno ? 'Para quem já é aluno' : 'Teste grátis com o seu vídeo'}</span>
       <h1>Copie a cor de qualquer vídeo para o seu.</h1>
       <div class="al-cta"><button class="btn" id="alProva" type="button">Fazer minha prova de cor</button><p>Grátis. Começa com uma aula de 8 minutos para você acertar a cor.</p></div>
       <p class="al-texto">Você escolhe um vídeo com a cor que gosta. O Mood lê essa cor e monta uma LUT para o seu vídeo ficar com o mesmo clima.</p>
@@ -1799,7 +1831,7 @@ function recepcaoAluno(){
         </div></div>
       <div class="al-grav" role="group" aria-label="Como o vídeo foi gravado"><span>Gravou como?</span><div><button type="button" data-g="normal" aria-pressed="true">Normal</button><button type="button" data-g="log" aria-pressed="false">Log</button></div></div>
       <div class="al-looks" role="group" aria-label="Escolha uma referência para ver a cor no vídeo">${AL_LOOKS.map((l, i) => `<button class="al-look" type="button" data-k="${l.k}" aria-pressed="${i === 0}"><img src="${AL_DEMO}ref-${l.k}.webp" alt="" width="150" height="150"><span>${l.nome}</span></button>`).join('')}</div>
-      <p class="al-legenda"><b>Toque numa referência</b>Vídeo meu. Funciona gravando normal ou em Log. Cada cor saiu do Mood a partir da referência.</p>
+      <p class="al-legenda"><b>Toque numa referência</b>${ehAluno ? 'Vídeo meu.' : 'Vídeo do Fernando Luz, criador do Mood.'} Funciona gravando normal ou em Log. Cada cor saiu do Mood a partir da referência.</p>
     </div>
     <div class="al-serve">
       <p>${AL_OK.replace('<svg', '<svg style="stroke:var(--ok)"')}<span>Serve se você edita no computador: CapCut, Premiere, DaVinci ou Final Cut.</span></p>
@@ -1869,7 +1901,7 @@ function recepcaoAluno(){
 const _alP1 = passo1;
 passo1 = function(){
   _alP1();
-  if (!ehAluno) return;
+  if (!PROVA) return;
   const h1 = $('#tela h1'); if (h1) h1.textContent = 'Agora com o seu vídeo.';
   const st = $('#tela .sobre-t'); if (st) st.remove();
   const sub = $('#tela .sub'); if (sub) sub.remove();
@@ -1886,7 +1918,7 @@ const _alP2 = passo2;
 let alViuRes = false;
 passo2 = function(){
   _alP2();
-  if (!ehAluno) return;
+  if (!PROVA) return;
   if (!alViuRes){ alViuRes = true; evAluno('aluno_resultado_visto'); }
   setTimeout(() => {
     const pv = $('#pv'); if (!pv || !$('#cD')) return;
@@ -1909,10 +1941,25 @@ function credencialAluno(){
       <div class="al-dep"><span class="r">Depois de ${ALUNO.ate}</span><span class="al-v147">R$ ${ALUNO.normal}</span><span class="s">para todo mundo</span></div>
     </div>
     <button class="btn full" id="comprar" data-aluno="1">Liberar minha LUT · R$ ${ALUNO.preco}</button>
-    <p class="al-depois">[Depois do pagamento: entre com o e-mail da compra em “Entrar”. A prova desta aba não fica salva. Texto a confirmar.]</p>
     <ul class="al-inclui">${inclui.map(t => `<li>${AL_OK}<span>${t}</span></li>`).join('')}</ul>
     ${Base.sessao() ? '' : '<button class="link al-entrar" id="entrar">Já comprei · entrar</button>'}
     <div class="al-pico">Só para quem já é da casa · até ${ALUNO.ate}</div>
+  </div>`;
+}
+
+// liberação para o público: mesmo cartão, preço do catálogo, sem régua de aluno
+function credencialPublica(){
+  const p = (Base.produto('mood') || {}).preco || 147, parc = p === 147 ? '15,11' : '';
+  const inclui = ['LUTs ilimitadas por 1 ano', 'No celular e no computador', 'CapCut, Premiere, DaVinci e Final Cut', 'Vídeo normal ou em Log (Apple Log, S-Log2, S-Log3)', 'Checagem automática e pele protegida', 'Pix ou cartão'];
+  return `<div class="al-cred">
+    <div class="al-cred-top"><img src="/logo.png" alt="Base FL" width="28" height="28"><span>Base FL · Mood</span></div>
+    <h3>Para baixar esta e criar quantas quiser por 1 ano.</h3>
+    <div class="al-preco-pub"><span class="al-v97"><small>R$</small><span>${p}</span></span>${parc ? `<span class="s">à vista, ou 12x de R$ ${parc}</span>` : ''}</div>
+    <button class="btn full" id="comprar" data-publico="1">Liberar minha LUT · R$ ${p}</button>
+    <p class="al-gar">7 dias de garantia: não gostou, pede o reembolso.</p>
+    <ul class="al-inclui">${inclui.map(t => `<li>${AL_OK}<span>${t}</span></li>`).join('')}</ul>
+    ${Base.sessao() ? '' : '<button class="link al-entrar" id="entrar">Já comprei · entrar</button>'}
+    <div style="height:14px"></div>
   </div>`;
 }
 atualizaFita();
@@ -1924,6 +1971,39 @@ Base.aoMudar(() => { const era = acesso; sincAcesso(); if (era !== acesso && $('
 
 // aula da ferramenta: o botão só aparece quando existe aula cadastrada
 if (window.Aulas) Aulas.liga('#aula', ['fl-lut'], { titulo:'Mood', cor:'180,92,255', dono: () => acesso });
+// destaque das aulas: o botão do topo mostra quantas são, e quem tem o Mood vê um cartão chamativo no passo 1
+(function(){
+  if (!window.Aulas) return;
+  const OP = { titulo:'Mood', cor:'180,92,255', dono: () => acesso };
+  const PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4c0 .8.9 1.3 1.6.9l11.3-7.2c.6-.4.6-1.3 0-1.7L8.6 3.9C7.9 3.5 7 4 7 4.8z"/></svg>';
+  const esc = t => String(t || '').replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+  const SUP = 'https://wa.me/5547996974735?text=' + encodeURIComponent('Oi! Sou aluno do Mood e fiquei com uma dúvida aqui.');
+  const WPP = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.01c-.24.68-1.42 1.3-1.95 1.35-.5.05-.97.23-3.27-.68-2.77-1.09-4.52-3.92-4.66-4.1-.13-.18-1.11-1.48-1.11-2.83 0-1.34.7-2 .95-2.28.25-.27.54-.34.72-.34h.52c.17 0 .39-.06.61.47.24.56.79 1.92.86 2.06.07.14.11.3.02.48-.09.18-.14.3-.27.46-.14.16-.29.36-.41.48-.14.14-.28.29-.12.56.16.27.71 1.17 1.52 1.89 1.04.93 1.92 1.22 2.19 1.35.27.14.43.11.59-.07.16-.18.68-.79.86-1.07.18-.27.36-.23.61-.14.25.09 1.58.75 1.85.88.27.14.45.2.52.32.07.11.07.66-.17 1.33z"/></svg>';
+  function poe(){
+    const l = Aulas.de(['fl-lut']).filter((a, i, v) => v.findIndex(b => b.url === a.url) === i), n = l.length;
+    const rot = $('#aulaRot'); if (rot) rot.textContent = n > 1 ? n + ' aulas' : 'Aula';
+    const rever = $('#rever'), velho = $('#aulaCard');
+    if (!rever || !acesso){ if (velho) velho.remove(); if (rever) rever.style.display = ""; const sf = $('#supFlut'); if (sf) sf.remove(); return; }
+    let html = '';
+    if (n){
+      const p = Aulas.progresso(['fl-lut']), feito = p.estado === 'feito';
+      const tit = feito ? (n > 1 ? 'Você já viu as ' + n + ' dicas' : 'Você já viu a dica') : (n > 1 ? n + ' dicas pra você extrair o melhor do Mood' : 'Uma dica pra você extrair o melhor do Mood');
+      const sub = (p.feitas && !feito ? p.feitas + ' de ' + n + ' vistas · ' : '') + l.map(a => esc(a.titulo)).join(' · ');
+      html += `<button type="button" class="aula-card${feito ? ' vista' : ''}" data-ac><span class="ac-ic">${PLAY}</span><span class="ac-t"><small class="ac-k">Aulas</small><b>${tit}</b><small>${sub}</small></span><span class="ac-bt">${feito ? 'Rever' : p.feitas ? 'Continuar' : 'Assistir agora'}</span></button>`;
+    }
+    let sup = $('#supFlut');
+    if (!sup){ sup = document.createElement('a'); sup.id = 'supFlut'; sup.className = 'sup-flut'; sup.href = SUP; sup.target = '_blank'; sup.rel = 'noopener'; sup.setAttribute('aria-label', 'Suporte no WhatsApp'); sup.innerHTML = WPP + '<span>Suporte</span>'; sup.onclick = () => evAula('suporte_clicou'); document.body.appendChild(sup); }
+    if (!html){ if (velho) velho.remove(); rever.style.display = ""; return; }
+    let c = velho;
+    if (!c){ c = document.createElement('div'); c.id = 'aulaCard'; c.className = 'ajuda'; rever.after(c);
+      c.addEventListener('click', e => { if (e.target.closest('[data-ac]')){ evAula('aulas_card_clicou'); Aulas.abre(['fl-lut'], OP); } }); }
+    if (c.dataset.h !== html){ c.innerHTML = html; c.dataset.h = html; }
+    rever.style.display = "none";
+  }
+  Aulas.carrega().then(poe);
+  const b = $('#aula'); if (b) new MutationObserver(poe).observe(b, { attributes:true, attributeFilter:['data-aula','hidden'] });
+  const t = $('#tela'); if (t) new MutationObserver(() => { if ($('#rever') && !$('#aulaCard')) poe(); }).observe(t, { childList:true });
+})();
 </script>
 </body>
 </html>
