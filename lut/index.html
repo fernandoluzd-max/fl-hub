@@ -1130,7 +1130,16 @@ function arquivoCube(titulo){
 const ALUNO = { fim: '2026-10-18T00:00:00-03:00',   // condição de aluno encerrada em 18/10: oferta pública de lançamento (R$ 147)
   preco: '97', parc: '9,97', normal: '147', ate: '26/10',
   checkout: 'https://payfast.greenn.com.br/2y52kh4/offer/HKpnsu?ch_id=144304' };
+// Link da Kiwify (alunos da plataforma): ?utm_source=kiwify&utm_campaign=mood. Vale só nesta aba (sessionStorage),
+// não fica marcado no aparelho e não mexe nas outras campanhas. Para encerrar: KIWIFY_FIM com a data/hora final.
+const KIWIFY_FIM = '';
+const KIWIFY = (() => { try {
+  const q = new URLSearchParams(location.search);
+  if (q.get('utm_source') === 'kiwify' && q.get('utm_campaign') === 'mood') sessionStorage.setItem('mood_kiwify', '1');
+  return sessionStorage.getItem('mood_kiwify') === '1' && (!KIWIFY_FIM || Date.now() < Date.parse(KIWIFY_FIM));
+} catch { return false; } })();
 const ehAluno = (() => { try {
+  if (KIWIFY) return true;
   const q = new URLSearchParams(location.search);
   if (q.get('aluno') === '1' || /mood_alunos/.test(q.get('utm_campaign') || '')) localStorage.setItem('mood_aluno', '1');
   return localStorage.getItem('mood_aluno') === '1' && Date.now() < Date.parse(ALUNO.fim);
@@ -1745,13 +1754,17 @@ function atualizaFita(){
   const f = $('#alFita'); if (!f) return;
   f.hidden = !(PROVA && !acesso);
   const pr = (Base.produto('mood') || {}).preco || 147;
+  if (ehAluno){ f.innerHTML = `<span class="al-cel">Por tempo limitado · <b>R$ ${ALUNO.preco}</b></span><span class="al-desk">Condição especial por tempo limitado: <b>R$ ${ALUNO.preco}</b> ou 12x de R$ ${ALUNO.parc}</span><span class="al-ver" aria-hidden="true">Ver ›</span>`; return; }
   f.innerHTML = `<span class="al-cel">Oferta de lançamento · <b>R$ ${pr}</b></span><span class="al-desk">Mood · Oferta de lançamento: <b>R$ ${pr}</b> ou 12x de R$ 15,11</span><span class="al-ver" aria-hidden="true">Ver ›</span>`;
 }
 let alFoco = null;
 function abreCondicao(){
   const s = $('#alSheet'), c = s.querySelector('.al-sheet-c');
   const pr = (Base.produto('mood') || {}).preco || 147;
-  c.innerHTML = `<span class="al-rot">Oferta de lançamento</span><h2 id="alSheetT">Mood por R$ ${pr}, ou 12x de R$ 15,11.</h2>
+  if (ehAluno) c.innerHTML = `<span class="al-rot">Condição especial por tempo limitado</span><h2 id="alSheetT">Mood por R$ ${ALUNO.preco}, ou 12x de R$ ${ALUNO.parc}.</h2>
+    <p>1 ano de acesso, com LUTs ilimitadas, e 7 dias de garantia. Depois dessa condição, o Mood volta a custar R$ ${ALUNO.normal}. Primeiro você faz a prova com o seu vídeo; o preço aparece de novo quando a sua LUT estiver pronta.</p>
+    <button class="btn" type="button" data-fecha>Continuar minha prova</button>`;
+  else c.innerHTML = `<span class="al-rot">Oferta de lançamento</span><h2 id="alSheetT">Mood por R$ ${pr}, ou 12x de R$ 15,11.</h2>
     <p>1 ano de acesso, com LUTs ilimitadas, e 7 dias de garantia. Primeiro você faz a prova com o seu vídeo; o preço aparece de novo quando a sua LUT estiver pronta.</p>
     <button class="btn" type="button" data-fecha>Continuar minha prova</button>`;
   alFoco = document.activeElement; s.hidden = false; c.querySelector('.btn').focus();
@@ -1850,7 +1863,7 @@ function recepcaoAluno(){
     <p class="al-rodape">Seus arquivos não saem do seu aparelho.</p>
   </div>`);
   $('#alProva').onclick = () => { evAluno('aluno_cta_prova'); aulaIntro(); };
-  $('#alDireta').onclick = () => { evAluno('aluno_compra_direta'); compraPublico('compra-direta'); };
+  $('#alDireta').onclick = () => { evAluno('aluno_compra_direta'); ehAluno ? compraAluno() : compraPublico('compra-direta'); };
   // ponte celular → computador
   if (matchMedia('(pointer: coarse)').matches) $('#alPonte').classList.add('on');
   $('#alManda').onclick = async () => {
@@ -1942,14 +1955,14 @@ function credencialAluno(){
     <div class="al-cred-top"><img src="/logo.png" alt="Base FL" width="28" height="28"><span>Base FL · Acesso de aluno</span></div>
     <h3>Para baixar esta e criar quantas quiser por 1 ano.</h3>
     <div class="al-regua">
-      <div class="al-hoje"><span class="r">Até ${ALUNO.ate} · 23h59</span><span class="al-v97"><small>R$</small><span>${ALUNO.preco}</span></span><span class="s">ou 12x de R$ ${ALUNO.parc}</span></div>
+      <div class="al-hoje"><span class="r">Por tempo limitado</span><span class="al-v97"><small>R$</small><span>${ALUNO.preco}</span></span><span class="s">ou 12x de R$ ${ALUNO.parc}</span></div>
       <div class="al-traco"><span class="al-alca" aria-hidden="true">${AL_SETA}</span></div>
-      <div class="al-dep"><span class="r">Depois de ${ALUNO.ate}</span><span class="al-v147">R$ ${ALUNO.normal}</span><span class="s">para todo mundo</span></div>
+      <div class="al-dep"><span class="r">Preço normal</span><span class="al-v147">R$ ${ALUNO.normal}</span><span class="s">para todo mundo</span></div>
     </div>
     <button class="btn full" id="comprar" data-aluno="1">Liberar minha LUT · R$ ${ALUNO.preco}</button>
     <ul class="al-inclui">${inclui.map(t => `<li>${AL_OK}<span>${t}</span></li>`).join('')}</ul>
     ${Base.sessao() ? '' : '<button class="link al-entrar" id="entrar">Já comprei · entrar</button>'}
-    <div class="al-pico">Só para quem já é da casa · até ${ALUNO.ate}</div>
+    <div class="al-pico">Condição especial para quem já é da casa</div>
   </div>`;
 }
 
