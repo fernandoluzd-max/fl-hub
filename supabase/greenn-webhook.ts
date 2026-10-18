@@ -54,7 +54,7 @@ export function telefoneDe(p: any): string | null {
 export function montaEmail(email: string, produtos: string[], packs: string[]) {
   const F = "font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;";
   const mood = packs.length === 1 && packs[0] === "fl-lut";              // só o Mood: abre no navegador, sem app
-  const LINK = mood ? "https://basefl.com/lut/?de=email" : "https://basefl.com/instalar/?de=email", ZAP = "https://wa.me/5547996974735?text=" + encodeURIComponent("Oi! Comprei no Base FL e preciso de ajuda para acessar.");
+  const LINK = mood ? "https://basefl.com/lut/?entrar=1&de=email" : "https://basefl.com/instalar/?de=email", ZAP = "https://wa.me/5547996974735?text=" + encodeURIComponent("Oi! Comprei no Base FL e preciso de ajuda para acessar.");
   const pc = packs.filter((x) => NO_COMPUTADOR.includes(x)), web = packs.filter((x) => !NO_COMPUTADOR.includes(x));
   const nomes = produtos.length ? produtos : packs.map((x) => NOMES[x] ?? x);
   const nomesWeb = web.map((x) => NOMES[x]).filter(Boolean);
@@ -63,10 +63,10 @@ export function montaEmail(email: string, produtos: string[], packs: string[]) {
       <td valign="top" style="padding:3px 0 18px 0;${F}"><div style="font-size:16px;line-height:1.35;font-weight:700;color:#F4F0E4;">${titulo}</div><div style="font-size:14.5px;line-height:1.55;color:#B3B4A2;padding-top:3px;">${texto}</div></td></tr>`;
   const seuEmail = `<span style="display:inline-block;margin-top:6px;padding:7px 11px;border-radius:9px;background:#0D0F0E;border:1px solid #2b302e;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:14px;color:#F4F0E4;">${esc(email)}</span>`;
   const passos = mood
-    ? passo(1, "Abra o Mood", "No celular ou no computador, direto no navegador. Não precisa instalar nada. O botão está logo abaixo.") +
-      passo(2, "Toque em Entrar e use este e-mail", "Fica no alto da tela (ou em <strong style=\"color:#F4F0E4;\">Já comprei &middot; entrar</strong>). Use o mesmo e-mail da compra. Não tem senha." + "<br>" + seuEmail) +
-      passo(3, "Digite o código que chegar neste e-mail", "São 6 números. Se não aparecer, confira o spam e a aba Promoções.") +
-      passo(4, "Comece a transformar as cores dos seus vídeos", "Escolha a referência, ajuste e baixe a LUT pronta.")
+    ? passo(1, "Toque em Acessar meu Mood", "O botão está logo abaixo. Abre no navegador, no celular ou no computador. Não precisa instalar nada.") +
+      passo(2, "Informe este e-mail", "O mesmo da compra. Não tem senha." + "<br>" + seuEmail) +
+      passo(3, "Digite o código que chegar neste e-mail", "Se não aparecer, confira o spam, o lixo eletrônico e a aba Promoções.") +
+      passo(4, "Pronto, o Mood abre", "Já liberado. Escolha a referência, ajuste e baixe a LUT pronta.")
     : pc.length
     ? passo(1, "Abra a página de instalação no computador", "Mac ou Windows. Tem um vídeo curto mostrando tudo, passo a passo. O botão está logo abaixo.") +
       passo(2, "Baixe e abra o app Base FL", "É o app que coloca o material dentro do seu CapCut.") +
@@ -115,7 +115,7 @@ export function montaEmail(email: string, produtos: string[], packs: string[]) {
 </td></tr></table>
 </body></html>`;
   const texto = `${mood ? "Seu Mood chegou." : "Seu acesso chegou."}\n\nVocê comprou ${lista(nomes)}. Já está tudo liberado.\n\n` +
-    (mood ? `1. Abra: https://basefl.com/lut/?de=email (celular ou computador, direto no navegador; não precisa instalar nada)\n2. Toque em Entrar (no alto da tela) ou em "Já comprei · entrar" e use este e-mail: ${email}\n3. Digite o código de 6 números que chegar neste e-mail (confira o spam)\n4. Comece a transformar as cores dos seus vídeos\n`
+    (mood ? `1. Abra: https://basefl.com/lut/?entrar=1&de=email (celular ou computador, direto no navegador; não precisa instalar nada)\n2. Informe este e-mail: ${email}\n3. Digite o código que chegar neste e-mail (confira o spam)\n4. Pronto, o Mood abre\n`
      : pc.length ? `1. No computador (Mac ou Windows), abra: https://basefl.com/instalar/ (tem um vídeo mostrando tudo)\n2. Baixe e abra o app Base FL\n3. Entre com este e-mail: ${email} (chega um código, não tem senha)\n4. Clique em Instalar e abra o CapCut\n`
                : `1. Abra: https://basefl.com/instalar/ (celular ou computador)\n2. Entre com este e-mail: ${email} (chega um código, não tem senha)\n3. Toque na ferramenta e comece a usar\n`) +
     `\nPrecisa de ajuda? WhatsApp do suporte: ${ZAP}\n`;
