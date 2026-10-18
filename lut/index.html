@@ -2002,6 +2002,18 @@ botaoConta(); if (acesso && !VEIO_TESTE) passo1(); else if (!recepcaoAluno()) au
 document.addEventListener('click', e => { if (e.target.closest && e.target.closest('#rever')){ evAula('aula_teste_rever'); aulaIntro(); } });
 Base.pronto.then(() => { sincAcesso(); if ($('.fim')) passo3(); else if (acesso && !VEIO_TESTE && $('#pl')) { if (paraPlayer){ paraPlayer(); paraPlayer = null; } passo1(); } });
 Base.aoMudar(() => { const era = acesso; sincAcesso(); if (era !== acesso && $('.fim')) passo3(); });
+// Vindo da página de obrigado (?entrar=1): abre o login na hora. Quem já tem acesso neste aparelho cai direto na ferramenta.
+if (/[?&]entrar=1/.test(location.search)) Base.pronto.then(async () => {
+  try { const u = new URL(location.href); u.searchParams.delete('entrar'); history.replaceState(null, '', u.pathname + u.search + u.hash); } catch {}
+  sincAcesso();
+  if (acesso) return;                                                    // já liberado: o início normal já abre a ferramenta
+  if (Base.sessao()){ toast('Este e-mail não tem o Mood. Toque em Sair e entre com o e-mail da compra.'); return; }
+  if (await Base.login()){
+    sincAcesso();
+    if (acesso){ toast('Pronto! Seu Mood está liberado'); if (paraPlayer){ paraPlayer(); paraPlayer = null; } passo1(); }
+    else toast('Entrou, mas o Mood não está nas compras deste e-mail');
+  }
+});
 
 // aula da ferramenta: o botão só aparece quando existe aula cadastrada
 if (window.Aulas) Aulas.liga('#aula', ['fl-lut'], { titulo:'Mood', cor:'180,92,255', dono: () => acesso });
