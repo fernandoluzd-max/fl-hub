@@ -574,6 +574,9 @@ body.modo-aluno #aula{display:none!important}
 @keyframes alAlca{from{opacity:0;transform:translateX(26px)}}
 @keyframes alSobe{from{opacity:0;transform:translateY(40px)}}
 @media (prefers-reduced-motion:reduce){.al-rec > *,.al-col > *,.al-tira span,.al-traco .al-alca,.al-sheet-c{animation:none!important}}
+.ok-titulos{display:flex;gap:12px;align-items:flex-start;margin:-4px 0 18px;padding:13px 15px;border-radius:14px;background:rgba(127,206,143,.08);border:1px solid rgba(127,206,143,.35);font-size:14.5px;color:var(--mute)}.ok-titulos[hidden]{display:none}
+.ok-titulos b{color:var(--ink)}.ok-titulos a{color:var(--ok);font-weight:700;text-underline-offset:3px;white-space:nowrap}
+.okt-ic{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--ok);color:#0b1a10;font-weight:900;font-size:13px}
 </style>
 </head>
 <body>
@@ -587,6 +590,11 @@ body.modo-aluno #aula{display:none!important}
     <button class="link aula" id="aula" hidden><span class="ai"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4c0 .8.9 1.3 1.6.9l11.3-7.2c.6-.4.6-1.3 0-1.7L8.6 3.9C7.9 3.5 7 4 7 4.8z"/></svg></span><span id="aulaRot">Aulas</span></button>
     <button class="link" id="conta"></button>
   </header>
+  <div class="ok-titulos" id="okTitulos" hidden>
+    <span class="okt-ic" aria-hidden="true">✓</span>
+    <span class="okt-tx"><b>Compra dos Títulos Dinâmicos confirmada.</b> Seu acesso chega no e-mail da compra. <a href="/instalar/?de=upsell-titulos">Ver como instalar os Títulos</a></span>
+  </div>
+  <script>if (/[?&]de=titulos/.test(location.search)) document.getElementById('okTitulos').hidden = false;</script>
   <div class="passos" id="passos"></div>
   <main id="tela"></main>
 </div>
