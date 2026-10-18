@@ -246,7 +246,8 @@ Deno.serve(async (req) => {
   } catch (e) { result = "erro: " + (e as Error).message; }
   // origem da venda (utm/src que a Greenn repassa) e telefone do comprador: para saber quais vendas vieram do WhatsApp.
   // Se as colunas ainda não existirem no banco (SQL 33 não rodado), grava do jeito antigo.
-  const extra = { origem: origemDe(p), telefone: telefoneDe(p) };
+  let extra: Record<string, unknown> = {};
+  try { extra = { origem: origemDe(p), telefone: telefoneDe(p) }; } catch { /* nunca atrapalha a venda */ }
   const { error: e1 } = await db.from("webhook_events").insert({ type, event, status, product_id, product_name, email, sale_id, result, ...extra });
   if (e1) await db.from("webhook_events").insert({ type, event, status, product_id, product_name, email, sale_id, result });
   if (avisar) {                                                                         // depois de responder à Greenn; qualquer falha aqui não muda o acesso
