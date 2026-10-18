@@ -1447,7 +1447,7 @@ function passo3(){
     store.set('fl_lut_n', String(n)); toast(nm + ' baixada'); $('#baixar').textContent = 'Baixar de novo';
   };
   if ($('#comprar')) $('#comprar').onclick = () => $('#comprar').dataset.aluno ? (evAluno('aluno_liberar_clique'), compraAluno()) : ($('#comprar').dataset.publico ? (evAluno('aluno_liberar_clique'), compraPublico()) : Base.comprar('mood', 'ferramenta'));
-  if ($('#entrar')) $('#entrar').onclick = async () => { if (await Base.login()){ sincAcesso(); toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas o Mood não está nas compras deste e-mail'); passo3(); } };
+  if ($('#entrar')) $('#entrar').onclick = async () => { if (await Base.login({ aviso: true })){ sincAcesso(); toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas o Mood não está nas compras deste e-mail'); passo3(); } };
 }
 
 // ===================== conta (pelo núcleo: a mesma sessão de todas as ferramentas) =====================
@@ -1455,7 +1455,7 @@ function botaoConta(){
   const b = $('#conta'); b.textContent = Base.sessao() ? 'Sair' : 'Entrar';
   b.onclick = async () => {
     if (Base.sessao()){ Base.sair(); sincAcesso(); toast('Você saiu.'); if ($('.fim')) passo3(); }
-    else if (await Base.login()){ sincAcesso(); toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas o Mood não está nas compras deste e-mail'); if ($('.fim')) passo3(); }
+    else if (await Base.login({ aviso: true })){ sincAcesso(); toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas o Mood não está nas compras deste e-mail'); if ($('.fim')) passo3(); }
   };
 }
 
@@ -2008,7 +2008,7 @@ if (/[?&]entrar=1/.test(location.search)) Base.pronto.then(async () => {
   sincAcesso();
   if (acesso) return;                                                    // já liberado: o início normal já abre a ferramenta
   if (Base.sessao()){ toast('Este e-mail não tem o Mood. Toque em Sair e entre com o e-mail da compra.'); return; }
-  if (await Base.login()){
+  if (await Base.login({ aviso: true })){
     sincAcesso();
     if (acesso){ toast('Pronto! Seu Mood está liberado'); if (paraPlayer){ paraPlayer(); paraPlayer = null; } passo1(); }
     else toast('Entrou, mas o Mood não está nas compras deste e-mail');

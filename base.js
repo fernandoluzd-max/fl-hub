@@ -239,7 +239,11 @@
     '.flb-trilha li{flex:1;min-width:0;text-align:center}' +
     '.flb-trilha a,.flb-trilha span{display:block;color:inherit;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-top:8px;border-top:3px solid #272D29;border-radius:2px}' +
     '.flb-trilha .ok a,.flb-trilha .ok span{border-top-color:rgba(242,165,65,.55);color:#9A968A}' +
-    '.flb-trilha .at a,.flb-trilha .at span{border-top-color:#F2A541;color:#F4F0E4}';
+    '.flb-trilha .at a,.flb-trilha .at span{border-top-color:#F2A541;color:#F4F0E4}' +
+    '.flb-aviso{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;padding:26px 22px;border-radius:inherit;background:#121513;text-align:center;opacity:0;transform:scale(.98);transition:opacity .18s,transform .18s}.flb-aviso.on{opacity:1;transform:none}' +
+    '.flb-aviso .ic{font-size:34px;line-height:1;margin-bottom:10px}.flb-aviso h3{font-weight:850;font-stretch:114%;font-size:21px;line-height:1.15;margin:0 0 8px;color:#F4F0E4}' +
+    '.flb-aviso p{margin:0 0 6px}.flb-aviso .flb-btn{margin-top:14px}' +
+    '.flb-reenvia{display:block;width:100%;margin-top:10px;background:none;border:0;color:#9A968A;font:inherit;font-size:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}.flb-reenvia:disabled{text-decoration:none;cursor:default;opacity:.75}';
   function poeCss() { if (document.getElementById('flb-css')) return; var s = document.createElement('style'); s.id = 'flb-css'; s.textContent = css; document.head.appendChild(s); }
 
   // ---------- entrar (uma tela só, para todas as ferramentas) ----------
@@ -273,8 +277,10 @@
         '<p>' + (codigo ? 'Enviamos um código para <b style="color:#F4F0E4">' + esc(email) + '</b>. Confira também o spam.' : 'Use o e-mail da compra. Você entra uma vez só e todas as suas ferramentas ficam liberadas neste aparelho.') + '</p>' +
         '<input class="flb-inp" id="flb-campo" ' + (codigo ? 'inputmode="numeric" autocomplete="one-time-code" placeholder="Código que chegou no e-mail"' : 'type="email" autocomplete="email" placeholder="seu@email.com" value="' + esc(email) + '"') + '>' +
         '<button class="flb-btn" id="flb-ir">' + (codigo ? 'Entrar' : 'Enviar código') + '</button>' +
+        (codigo && op.aviso ? '<button class="flb-reenvia" id="flb-reenvia" disabled></button>' : '') +
         (codigo ? '<button class="flb-btn fantasma" id="flb-volta">Usar outro e-mail</button>' : '') + '<div class="flb-erro" id="flb-erro"></div>';
       var campo = f.corpo.querySelector('#flb-campo'), ir = f.corpo.querySelector('#flb-ir'), erro = f.corpo.querySelector('#flb-erro');
+      if (codigo && op.aviso) espera(f.corpo.querySelector('#flb-reenvia'), erro);
       setTimeout(function () { try { campo.focus(); } catch (e) {} }, 260);
       campo.onkeydown = function (e) { if (e.key === 'Enter') ir.click(); };
       if (codigo) f.corpo.querySelector('#flb-volta').onclick = function () { etapa(false); };
@@ -288,7 +294,7 @@
           p = cru('/rest/v1/rpc/pub_tem_compra', { method: 'POST', body: { p_email: email } }).then(function (tem) { return tem !== false; }, function () { return true; }).then(function (tem) {
             if (!tem) { var er = new Error('Não encontrei compra com esse e-mail. Use o mesmo e-mail da compra. Se acabou de comprar, espere 1 minuto e tente de novo.'); er.semCompra = true; throw er; }
             return cru('/auth/v1/otp', { method: 'POST', body: { email: email, create_user: true } });
-          }).then(function () { etapa(true); });
+          }).then(function () { etapa(true); if (op.aviso) aviso(); });
         } else {
           var token = campo.value.replace(/\D/g, '');
           if (token.length < 6) { erro.textContent = 'Digite o código que chegou no e-mail.'; ir.disabled = false; return; }
@@ -298,6 +304,34 @@
           });
         }
         p.catch(function (e) { erro.textContent = e.semCompra ? e.message : traduz(e.message); ir.disabled = false; });
+      };
+    };
+    // aviso depois que o código saiu: não reinicia nada; fechar volta para o campo do código
+    var aviso = function () {
+      var v = document.createElement('div'); v.className = 'flb-aviso'; v.setAttribute('role', 'alertdialog'); v.setAttribute('aria-labelledby', 'flb-av-t');
+      v.innerHTML = '<div class="ic" aria-hidden="true">📩</div><h3 id="flb-av-t">Código enviado para seu e-mail!</h3>' +
+        '<p>Enviamos um código de verificação para <b style="color:#F4F0E4">' + esc(email) + '</b>.</p>' +
+        '<p>Não encontrou na caixa de entrada? Confira também as pastas de Spam, Lixo eletrônico e Lixeira.</p>' +
+        '<button class="flb-btn" type="button">Entendi, vou verificar!</button>';
+      f.el.appendChild(v); requestAnimationFrame(function () { v.classList.add('on'); });
+      var ok = v.querySelector('button'); setTimeout(function () { try { ok.focus(); } catch (e) {} }, 60);
+      ok.onclick = function () { v.remove(); var c = f.corpo.querySelector('#flb-campo'); if (c) try { c.focus(); } catch (e) {} };
+    };
+    // "Reenviar código": só depois de 60 s, e só quando a pessoa pede (nunca sozinho)
+    var espera = function (bt, erro) {
+      if (!bt) return;
+      var fim = Date.now() + 60000, t;
+      var tic = function () {
+        var s = Math.ceil((fim - Date.now()) / 1000);
+        if (s > 0) { bt.disabled = true; bt.textContent = 'Reenviar código em ' + s + ' s'; t = setTimeout(tic, 1000); }
+        else { bt.disabled = false; bt.textContent = 'Reenviar código'; }
+      };
+      tic();
+      bt.onclick = function () {
+        bt.disabled = true; erro.textContent = '';
+        cru('/auth/v1/otp', { method: 'POST', body: { email: email, create_user: true } }).then(function () {
+          clearTimeout(t); fim = Date.now() + 60000; tic(); aviso();
+        }, function (e) { erro.textContent = traduz(e.message); bt.disabled = false; });
       };
     };
     etapa(false);
