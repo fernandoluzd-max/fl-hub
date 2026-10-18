@@ -426,6 +426,7 @@ body.modo-aluno .passos[hidden]{display:none}
 .al-segs i.at{background:var(--ink)}
 body.modo-aluno #tela h1:not(.intro h1) em{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--ink)}
 body.modo-aluno .capcut{display:none}
+body.modo-aluno #aula{display:none!important}
 /* recepção */
 .al-rec{display:grid;gap:14px;max-width:1120px;margin:0 auto}
 .al-col{display:contents}
@@ -477,6 +478,10 @@ body.modo-aluno .capcut{display:none}
 .al-tira b{width:52px;font:700 11px var(--m);letter-spacing:.06em;color:var(--mute)}
 .al-tira span{width:22px;height:22px;border-radius:4px;animation:alSw .36s cubic-bezier(.2,.7,.2,1) both}
 .al-cta .btn{height:56px;border-radius:999px;width:100%}
+.al-direta{min-height:48px;width:100%;border:1px solid #3A403D;border-radius:999px;background:transparent;color:var(--ink);font:600 15px var(--f);cursor:pointer;transition:border-color .15s,transform .12s}
+.al-direta:hover{border-color:var(--mute)}
+.al-direta:active{transform:scale(.98)}
+.al-direta:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .al-cta p{color:var(--mute);font-size:14px;text-align:center}
 .al-lista{border-top:1px solid var(--line);list-style:none}
 .al-lista li{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
@@ -1124,7 +1129,8 @@ function arquivoCube(titulo){
 // ===================== condição de aluno (campanha) =====================
 // Quem chega pela página dos alunos (link com ?aluno=1) vê o preço de aluno no final, até o fim da campanha.
 // Depois do FIM tudo volta sozinho para o preço normal do catálogo.
-const ALUNO = { fim: '2026-10-26T23:59:00-03:00', preco: '97', parc: '9,97', normal: '147', ate: '26/10',
+const ALUNO = { fim: '2026-10-18T00:00:00-03:00',   // condição de aluno encerrada em 18/10: oferta pública de lançamento (R$ 147)
+  preco: '97', parc: '9,97', normal: '147', ate: '26/10',
   checkout: 'https://payfast.greenn.com.br/2y52kh4/offer/HKpnsu?ch_id=144304' };
 const ehAluno = (() => { try {
   if (/[?&]publico=1/.test(location.search)) return false;
@@ -1740,14 +1746,16 @@ if (PREVIA){ acesso = false; vencido = false; }
 // fita de aluno + folha "Sua condição"
 function atualizaFita(){
   const f = $('#alFita'); if (!f) return;
-  f.hidden = !(ehAluno && !acesso);
-  f.innerHTML = `<span class="al-cel">Aluno Base FL · <b>R$ ${ALUNO.preco}</b> até ${ALUNO.ate}</span><span class="al-desk">Aluno Base FL · Condição de aluno: <b>R$ ${ALUNO.preco}</b> até segunda, ${ALUNO.ate} · 23h59</span><span class="al-ver" aria-hidden="true">Ver ›</span>`;
+  f.hidden = !(PROVA && !acesso);
+  const pr = (Base.produto('mood') || {}).preco || 147;
+  f.innerHTML = `<span class="al-cel">Oferta de lançamento · <b>R$ ${pr}</b></span><span class="al-desk">Mood · Oferta de lançamento: <b>R$ ${pr}</b> ou 12x de R$ 15,11</span><span class="al-ver" aria-hidden="true">Ver ›</span>`;
 }
 let alFoco = null;
 function abreCondicao(){
   const s = $('#alSheet'), c = s.querySelector('.al-sheet-c');
-  c.innerHTML = `<span class="al-rot">Sua condição de aluno</span><h2 id="alSheetT">R$ ${ALUNO.preco} até segunda, ${ALUNO.ate}, 23h59.</h2>
-    <p>Depois disso, o Mood passa a custar R$ ${ALUNO.normal} para todo mundo. É 1 ano de acesso, com LUTs ilimitadas. Primeiro você faz a prova; o preço só aparece de novo quando a sua LUT estiver pronta.</p>
+  const pr = (Base.produto('mood') || {}).preco || 147;
+  c.innerHTML = `<span class="al-rot">Oferta de lançamento</span><h2 id="alSheetT">Mood por R$ ${pr}, ou 12x de R$ 15,11.</h2>
+    <p>1 ano de acesso, com LUTs ilimitadas, e 7 dias de garantia. Primeiro você faz a prova com o seu vídeo; o preço aparece de novo quando a sua LUT estiver pronta.</p>
     <button class="btn" type="button" data-fecha>Continuar minha prova</button>`;
   alFoco = document.activeElement; s.hidden = false; c.querySelector('.btn').focus();
   evAluno('aluno_condicao_aberta');
@@ -1816,7 +1824,7 @@ function recepcaoAluno(){
     <div class="al-col a">
       <span class="al-rot">${ehAluno ? 'Para quem já é aluno' : 'Teste grátis com o seu vídeo'}</span>
       <h1>Copie a cor de qualquer vídeo para o seu.</h1>
-      <div class="al-cta"><button class="btn" id="alProva" type="button">Fazer minha prova de cor</button><p>Grátis. Começa com uma aula de 8 minutos para você acertar a cor.</p></div>
+      <div class="al-cta"><button class="btn" id="alProva" type="button">Fazer minha prova de cor</button><p>Grátis. Começa com uma aula de 8 minutos para você acertar a cor.</p><button class="al-direta" id="alDireta" type="button">Já conheço o Mood. Quero comprar!</button></div>
       <p class="al-texto">Você escolhe um vídeo com a cor que gosta. O Mood lê essa cor e monta uma LUT para o seu vídeo ficar com o mesmo clima.</p>
       <ol class="al-lista"><li><b>01</b>Coloque a referência</li><li><b>02</b>Coloque o seu vídeo</li><li><b>03</b>Baixe a LUT e aplique no seu editor</li></ol>
     </div>
@@ -1845,6 +1853,7 @@ function recepcaoAluno(){
     <p class="al-rodape">Seus arquivos não saem do seu aparelho.</p>
   </div>`);
   $('#alProva').onclick = () => { evAluno('aluno_cta_prova'); aulaIntro(); };
+  $('#alDireta').onclick = () => { evAluno('aluno_compra_direta'); compraPublico('compra-direta'); };
   // ponte celular → computador
   if (matchMedia('(pointer: coarse)').matches) $('#alPonte').classList.add('on');
   $('#alManda').onclick = async () => {
@@ -1948,7 +1957,7 @@ function credencialAluno(){
 }
 
 // liberação para o público: mesmo cartão, preço do catálogo, sem régua de aluno
-function compraPublico(){
+function compraPublico(conteudo){
   // dentro da página de vendas (quadro), quem leva ao pagamento é a própria página
   try { if (window.top !== window) return Base.comprar('mood', 'ferramenta'); } catch {}
   const p = Base.produto('mood') || {}; if (!p.checkout) return Base.comprar('mood', 'ferramenta');
@@ -1958,8 +1967,8 @@ function compraPublico(){
   if (!u.searchParams.has('utm_medium')) u.searchParams.set('utm_medium', de || 'ferramenta');
   if (!u.searchParams.has('utm_campaign')) u.searchParams.set('utm_campaign', 'mood');
   if (!u.searchParams.has('src')) u.searchParams.set('src', 'basefl-' + (de || 'ferramenta'));
-  if (!u.searchParams.has('utm_content')) u.searchParams.set('utm_content', 'teste-gratis');
-  try { Base.evento('checkout_clicked', PACK, { de: 'ferramenta_publico', origem: u.searchParams.get('utm_source') + '/' + u.searchParams.get('utm_medium') }); } catch {}
+  if (!u.searchParams.has('utm_content')) u.searchParams.set('utm_content', conteudo || 'teste-gratis');
+  try { Base.evento('checkout_clicked', PACK, { de: conteudo === 'compra-direta' ? 'compra_direta' : 'ferramenta_publico', origem: u.searchParams.get('utm_source') + '/' + u.searchParams.get('utm_medium') }); } catch {}
   try { window.FLPixel && FLPixel.checkout(); } catch {}
   (window.top || window).location.href = u.toString();
 }
