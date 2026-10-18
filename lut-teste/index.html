@@ -1434,7 +1434,7 @@ function passo3(){
     a.href = URL.createObjectURL(blob); a.download = nm + '.cube'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
     store.set('fl_lut_n', String(n)); toast(nm + ' baixada'); $('#baixar').textContent = 'Baixar de novo';
   };
-  if ($('#comprar')) $('#comprar').onclick = () => $('#comprar').dataset.aluno ? (evAluno('aluno_liberar_clique'), compraAluno()) : ($('#comprar').dataset.publico && evAluno('aluno_liberar_clique'), Base.comprar('mood', 'ferramenta'));
+  if ($('#comprar')) $('#comprar').onclick = () => $('#comprar').dataset.aluno ? (evAluno('aluno_liberar_clique'), compraAluno()) : ($('#comprar').dataset.publico ? (evAluno('aluno_liberar_clique'), compraPublico()) : Base.comprar('mood', 'ferramenta'));
   if ($('#entrar')) $('#entrar').onclick = async () => { if (await Base.login()){ sincAcesso(); toast(acesso ? 'Ferramenta desbloqueada' : 'Entrou, mas o Mood não está nas compras deste e-mail'); passo3(); } };
 }
 
@@ -1948,6 +1948,21 @@ function credencialAluno(){
 }
 
 // liberação para o público: mesmo cartão, preço do catálogo, sem régua de aluno
+function compraPublico(){
+  // dentro da página de vendas (quadro), quem leva ao pagamento é a própria página
+  try { if (window.top !== window) return Base.comprar('mood', 'ferramenta'); } catch {}
+  const p = Base.produto('mood') || {}; if (!p.checkout) return Base.comprar('mood', 'ferramenta');
+  const u = new URL(p.checkout), de = new URLSearchParams(location.search).get('de');
+  Object.entries(ORIGEM).forEach(([k, v]) => { if (k !== 'k' && !u.searchParams.has(k)) u.searchParams.set(k, v); });
+  if (!u.searchParams.has('utm_source')) u.searchParams.set('utm_source', 'basefl');
+  if (!u.searchParams.has('utm_medium')) u.searchParams.set('utm_medium', de || 'ferramenta');
+  if (!u.searchParams.has('utm_campaign')) u.searchParams.set('utm_campaign', 'mood');
+  if (!u.searchParams.has('src')) u.searchParams.set('src', 'basefl-' + (de || 'ferramenta'));
+  if (!u.searchParams.has('utm_content')) u.searchParams.set('utm_content', 'teste-gratis');
+  try { Base.evento('checkout_clicked', PACK, { de: 'ferramenta_publico', origem: u.searchParams.get('utm_source') + '/' + u.searchParams.get('utm_medium') }); } catch {}
+  try { window.FLPixel && FLPixel.checkout(); } catch {}
+  (window.top || window).location.href = u.toString();
+}
 function credencialPublica(){
   const p = (Base.produto('mood') || {}).preco || 147, parc = p === 147 ? '15,11' : '';
   const inclui = ['LUTs ilimitadas por 1 ano', 'No celular e no computador', 'CapCut, Premiere, DaVinci e Final Cut', 'Vídeo normal ou em Log (Apple Log, S-Log2, S-Log3)', 'Checagem automática e pele protegida', 'Pix ou cartão'];
