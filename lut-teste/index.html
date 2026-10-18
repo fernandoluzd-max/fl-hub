@@ -1970,11 +1970,16 @@ function credencialAluno(){
 }
 
 // liberação para o público: mesmo cartão, preço do catálogo, sem régua de aluno
-function compraPublico(conteudo){
+async function compraPublico(conteudo){
   // dentro da página de vendas (quadro), quem leva ao pagamento é a própria página
   try { if (window.top !== window) return Base.comprar('mood', 'ferramenta'); } catch {}
-  const p = Base.produto('mood') || {}; if (!p.checkout) return Base.comprar('mood', 'ferramenta');
-  const u = new URL(p.checkout), de = new URLSearchParams(location.search).get('de');
+  // checkout sempre o atual: lê o catálogo na hora do clique (o celular pode estar com o catalogo.js antigo em cache)
+  let checkout = (Base.produto('mood') || {}).checkout;
+  try { const ac = new AbortController(), t = setTimeout(() => ac.abort(), 2500);
+    const c = await fetch('/catalogo.json?t=' + Date.now(), { cache:'no-store', signal:ac.signal }).then(r => r.json()); clearTimeout(t);
+    const m = (c.produtos || []).find(x => x.key === 'mood'); if (m && m.checkout) checkout = m.checkout; } catch {}
+  if (!checkout) return Base.comprar('mood', 'ferramenta');
+  const u = new URL(checkout), de = new URLSearchParams(location.search).get('de');
   Object.entries(ORIGEM).forEach(([k, v]) => { if (k !== 'k' && !u.searchParams.has(k)) u.searchParams.set(k, v); });
   if (!u.searchParams.has('utm_source')) u.searchParams.set('utm_source', 'basefl');
   if (!u.searchParams.has('utm_medium')) u.searchParams.set('utm_medium', de || 'ferramenta');
