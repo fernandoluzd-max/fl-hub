@@ -826,7 +826,7 @@ _tr("const io = new IntersectionObserver(", '''// prazo: só aparece se a data r
 })();
 const io = new IntersectionObserver(''')
 # ---- vídeo da campanha + arte "A cor muda tudo" logo abaixo do topo (15/10) ----
-ALUNOS_NORMAL_CHECKOUT = 'https://payfast.greenn.com.br/195947/offer/mlcPhh?ch_id=144304'   # oferta pública de R$ 147 (vale depois do fim)
+ALUNOS_NORMAL_CHECKOUT = 'https://payfast.greenn.com.br/195947/offer/yf7yxj?ch_id=144304'   # oferta pública de R$ 147 (vale depois do fim)
 _tr(f'<div class="alp"><span class="por">Preço de aluno: <b>R$ {ALUNOS_PRECO}</b></span></div>',
     f'<div class="alp"><span class="por">Preço de aluno: <b>R$ {ALUNOS_PRECO}</b></span><span class="par">ou 12x de R$ {ALUNOS_PARC}</span></div>')
 VER_HTML = """  </header>

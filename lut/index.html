@@ -1140,7 +1140,7 @@ const ALUNO = { fim: '2026-10-18T00:00:00-03:00',   // condição de aluno encer
   checkout: 'https://payfast.greenn.com.br/2y52kh4/offer/HKpnsu?ch_id=144304' };
 // Link da Kiwify (alunos da plataforma): ?utm_source=kiwify&utm_campaign=mood. Vale só nesta aba (sessionStorage),
 // não fica marcado no aparelho e não mexe nas outras campanhas. Para encerrar: KIWIFY_FIM com a data/hora final.
-const KIWIFY_FIM = '';
+const KIWIFY_FIM = '2026-10-19T15:00:00-03:00';   // encerrado: lançamento de R$ 79 vale para todos
 const KIWIFY = (() => { try {
   const q = new URLSearchParams(location.search);
   if (q.get('utm_source') === 'kiwify' && q.get('utm_campaign') === 'mood') sessionStorage.setItem('mood_kiwify', '1');
@@ -1758,21 +1758,23 @@ const PREVIA = false && /[?&]recepcao=1/.test(location.search);
 if (PREVIA){ acesso = false; vencido = false; }
 
 // fita de aluno + folha "Sua condição"
+// parcela em 12x com a tarifa da Greenn (3,39% a.m.), igual ao checkout: 79 → 8,12
+function parcMood(v){ const i = 0.0339, n = 12; return (v * i / (1 - Math.pow(1 + i, -n))).toFixed(2).replace('.', ','); }
 function atualizaFita(){
   const f = $('#alFita'); if (!f) return;
   f.hidden = !(PROVA && !acesso);
-  const pr = (Base.produto('mood') || {}).preco || 147;
+  const pr = (Base.produto('mood') || {}).preco || 79;
   if (ehAluno){ f.innerHTML = `<span class="al-cel">Por tempo limitado · <b>R$ ${ALUNO.preco}</b></span><span class="al-desk">Condição especial por tempo limitado: <b>R$ ${ALUNO.preco}</b> ou 12x de R$ ${ALUNO.parc}</span><span class="al-ver" aria-hidden="true">Ver ›</span>`; return; }
-  f.innerHTML = `<span class="al-cel">Oferta de lançamento · <b>R$ ${pr}</b></span><span class="al-desk">Mood · Oferta de lançamento: <b>R$ ${pr}</b> ou 12x de R$ 15,11</span><span class="al-ver" aria-hidden="true">Ver ›</span>`;
+  f.innerHTML = `<span class="al-cel">Lançamento · tempo limitado · <b>R$ ${pr}</b></span><span class="al-desk">Mood · Oferta de lançamento por tempo limitado: <b>R$ ${pr}</b> ou 12x de R$ ${parcMood(pr)}</span><span class="al-ver" aria-hidden="true">Ver ›</span>`;
 }
 let alFoco = null;
 function abreCondicao(){
   const s = $('#alSheet'), c = s.querySelector('.al-sheet-c');
-  const pr = (Base.produto('mood') || {}).preco || 147;
+  const pr = (Base.produto('mood') || {}).preco || 79;
   if (ehAluno) c.innerHTML = `<span class="al-rot">Condição especial por tempo limitado</span><h2 id="alSheetT">Mood por R$ ${ALUNO.preco}, ou 12x de R$ ${ALUNO.parc}.</h2>
     <p>1 ano de acesso, com LUTs ilimitadas, e 7 dias de garantia. Depois dessa condição, o Mood volta a custar R$ ${ALUNO.normal}. Primeiro você faz a prova com o seu vídeo; o preço aparece de novo quando a sua LUT estiver pronta.</p>
     <button class="btn" type="button" data-fecha>Continuar minha prova</button>`;
-  else c.innerHTML = `<span class="al-rot">Oferta de lançamento</span><h2 id="alSheetT">Mood por R$ ${pr}, ou 12x de R$ 15,11.</h2>
+  else c.innerHTML = `<span class="al-rot">Oferta de lançamento por tempo limitado</span><h2 id="alSheetT">Mood por R$ ${pr}, ou 12x de R$ ${parcMood(pr)}.</h2>
     <p>1 ano de acesso, com LUTs ilimitadas, e 7 dias de garantia. Primeiro você faz a prova com o seu vídeo; o preço aparece de novo quando a sua LUT estiver pronta.</p>
     <button class="btn" type="button" data-fecha>Continuar minha prova</button>`;
   alFoco = document.activeElement; s.hidden = false; c.querySelector('.btn').focus();
@@ -1996,7 +1998,7 @@ async function compraPublico(conteudo){
   (window.top || window).location.href = u.toString();
 }
 function credencialPublica(){
-  const p = (Base.produto('mood') || {}).preco || 147, parc = p === 147 ? '15,11' : '';
+  const p = (Base.produto('mood') || {}).preco || 79, parc = parcMood(p);
   const inclui = ['LUTs ilimitadas por 1 ano', 'No celular e no computador', 'CapCut, Premiere, DaVinci e Final Cut', 'Vídeo normal ou em Log (Apple Log, S-Log2, S-Log3)', 'Checagem automática e pele protegida', 'Pix ou cartão'];
   return `<div class="al-cred">
     <div class="al-cred-top"><img src="/logo.png" alt="Base FL" width="28" height="28"><span>Base FL · Mood</span></div>
