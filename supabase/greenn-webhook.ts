@@ -216,7 +216,7 @@ Deno.serve(async (req) => {
   const sale_id = String(p?.sale?.id ?? p?.contract?.id ?? "");
   let result = "ignorado", avisar = false;
   try {
-    const { data: prod } = await db.from("products").select("pack_ids").eq("greenn_product_id", product_id).maybeSingle();
+    const { data: prod } = await db.from("products").select("pack_ids,dias_acesso").eq("greenn_product_id", product_id).maybeSingle();
     const packs: string[] = prod?.pack_ids ?? [];
     if (type === "lead" || !email || !product_id) result = "ignorado (sem e-mail/produto)";
     else if (!packs.length) result = "produto não cadastrado";
@@ -226,7 +226,8 @@ Deno.serve(async (req) => {
       const { data: vit } = await db.from("packs").select("id").in("id", packs).eq("vitalicio", true);
       const VIT = new Set((vit ?? []).map((x: any) => x.id));
       const { data: atuais } = await db.from("licenses").select("pack_id,status,expires_at,sale_id").eq("email", email).in("pack_id", packs);
-      const ANO = 365 * 864e5, agora = Date.now();
+      const DIAS = Number(prod?.dias_acesso) > 0 ? Number(prod?.dias_acesso) : 365;   // products.dias_acesso (ex.: Mood 3 meses = 90); vazio = 1 ano
+      const ANO = DIAS * 864e5, agora = Date.now();
       const linhas = packs.map((pack_id) => {
         const a = (atuais ?? []).find((x: any) => x.pack_id === pack_id);
         if (a && a.sale_id === sale_id && a.status === "active") return null;              // aviso repetido da mesma venda
@@ -237,7 +238,7 @@ Deno.serve(async (req) => {
       }).filter(Boolean);
       const { error } = linhas.length ? await db.from("licenses").upsert(linhas) : { error: null };
       // aviso repetido da mesma venda (nada mudou) fica anotado como "já liberado", para não entrar de novo em e-mail nenhum
-      result = error ? "erro: " + error.message : (linhas.length ? "liberado: " : "já liberado: ") + packs.map((x) => x + (VIT.has(x) ? " (vitalício)" : " (1 ano)")).join(", ");
+      result = error ? "erro: " + error.message : (linhas.length ? "liberado: " : "já liberado: ") + packs.map((x) => x + (VIT.has(x) ? " (vitalício)" : DIAS === 365 ? " (1 ano)" : ` (${DIAS} dias)`)).join(", ");
       avisar = !error && linhas.length > 0;                                             // liberou algo novo: avisa por e-mail
     } else if (BLOQUEIA.includes(status)) {
       const { error } = await db.from("licenses").update({ status: "revoked", sale_id }).eq("email", email).in("pack_id", packs);

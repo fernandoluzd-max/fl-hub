@@ -509,8 +509,11 @@ window.FLEv = (() => {
 <script>
 (() => {
   const $ = s => document.querySelector(s);
-  // "Não, obrigado" leva junto os parâmetros da compra (a página de acesso pode precisar deles)
-  try { const q = location.search; if (q) document.querySelectorAll('a.nao').forEach(a => { a.href = a.href.split('?')[0] + q; }); } catch {}
+  // ===== CHAVE DO DOWNSELL: vazio = "Não, obrigado" vai para a página de acesso dos Títulos.
+  // Quando a oferta de 3 meses (R$ 37) existir na Greenn: DOWNSELL = '/oferta/mood-3-meses/'
+  const DOWNSELL = '';
+  // "Não, obrigado" leva junto os parâmetros da compra (o token da Greenn é o que permite o 1 clique no downsell)
+  try { const q = location.search; document.querySelectorAll('a.nao').forEach(a => { a.href = (DOWNSELL || a.href.split('?')[0]) + q; }); } catch {}
 
   // ===== player do vídeo do topo: começa mudo e tocando; o toque liga o som do começo =====
   const IC = {
@@ -613,6 +616,9 @@ window.FLEv = (() => {
   // Apple Pay / Google Pay / PayPal: o botão abre o checkout do Mood já preenchido (aí é só confirmar na carteira).
   // E se o 1 clique der erro por qualquer motivo, aparece no aviso da Greenn um botão para pagar de outro jeito.
   (() => {
+    // ===== CHAVE DO PIX: se a compra de teste mostrar que o 1 clique NÃO funciona com Pix, troque para false.
+    // Com false, quem pagou os Títulos com Pix toca no botão e cai no checkout do Mood com nome, e-mail e telefone preenchidos.
+    const PIX_1_CLIQUE = true;
     const q = new URLSearchParams(location.search), token = q.get('token');
     const CK = 'https://payfast.greenn.com.br/195947/offer/yf7yxj';
     const linkCk = (u, conteudo) => {
@@ -623,7 +629,7 @@ window.FLEv = (() => {
       x.searchParams.set('utm_source', 'greenn'); x.searchParams.set('utm_medium', 'upsell'); x.searchParams.set('utm_campaign', 'mood-upsell-79'); x.searchParams.set('utm_content', conteudo);
       return x.toString();
     };
-    let compra = null, carteira = false;
+    let compra = null, carteira = false, motivo = 'carteira';
     const UM_CLIQUE = ['CREDIT_CARD', 'TWO_CREDIT_CARDS', 'PIX', 'BOLETO'];
     if (token) fetch('https://apipay.greenn.com.br/api/upsell/' + encodeURIComponent(token), { headers: { Accept: 'application/json' } })
       .then(r => r.ok ? r.json() : null).then(u => {
@@ -631,10 +637,14 @@ window.FLEv = (() => {
         compra = u;
         try { window.FLEv && FLEv.metodo(u.method); } catch {}
         const alt = $('#altCk'); if (alt) alt.href = linkCk(u, 'checkout-alternativo');
-        carteira = !!u.method && !UM_CLIQUE.includes(String(u.method).toUpperCase());
+        const met = String(u.method || '').toUpperCase();
+        carteira = !!u.method && !UM_CLIQUE.includes(met);
+        if (!carteira && !PIX_1_CLIQUE && met === 'PIX') { carteira = true; motivo = 'pix'; }
         if (carteira) {
           const um = document.querySelector('.um');
-          if (um) um.textContent = 'Você pagou os Títulos com carteira digital: o botão abre o pagamento do Mood já preenchido, é só confirmar.';
+          if (um) um.textContent = motivo === 'pix'
+            ? 'Você pagou os Títulos com Pix: o botão abre o pagamento do Mood já preenchido. É só escolher Pix e pagar.'
+            : 'Você pagou os Títulos com carteira digital: o botão abre o pagamento do Mood já preenchido, é só confirmar.';
         }
       }).catch(() => {}).finally(() => { try { window.FLEv && FLEv.viu(); } catch {} });
     if (!token) try { window.FLEv && FLEv.viu(); } catch {}
@@ -644,7 +654,7 @@ window.FLEv = (() => {
       if (!b || !carteira) return;
       ev.preventDefault(); ev.stopImmediatePropagation();
       try { window.FLPixel && FLPixel.checkout(); } catch {}
-      location.href = linkCk(compra, 'carteira');
+      location.href = linkCk(compra, motivo);
     }, true);
     // erro no 1 clique: oferece pagar de outro jeito, já preenchido
     const socorro = () => {

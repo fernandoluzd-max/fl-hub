@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mood por 3 meses — Base FL</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Mostre um vídeo com a cor que você quer, mostre o seu, e baixe a LUT pronta para o seu editor.">
+<link rel="icon" type="image/svg+xml" href="https://basefl.com/lut/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://basefl.com/lut/favicon-32.png">
+<link rel="apple-touch-icon" href="https://basefl.com/lut/apple-touch-icon.png">
+<meta name="theme-color" content="#111312">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="preload" as="video" href="/oferta/mood/antes-depois.mp4" type="video/mp4">
+<link rel="stylesheet" href="/selo.css?v=1">
+<style>
+/* Downsell do Mood: quem disse não ao upsell de R$ 79 vê o Mood por 3 meses (R$ 37), também em 1 clique da Greenn. */
+:root{
+  --bg:#111312; --panel:#191C1B; --panel2:#202423; --line:#2B302E; --line2:#3A403D; --ink:#F4F0E4; --mute:#B3B4A2; --dim:#8A8B7F;
+  --ok:#7FCE8F; --ambar:#F2A541;
+  --grad:linear-gradient(125deg,#FFB347,#FF6FAE 38%,#B45CFF 70%,#5AB8FF);
+  --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --f:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --m:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --selo:#FF8FA8; --selo-fundo:linear-gradient(140deg,#FFB347,#FF6FAE 45%,#B45CFF 100%); --selo-tinta:var(--ink); --selo-mudo:var(--mute);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:17px/1.55 var(--f);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:10px}
+.w{max-width:1080px;margin:0 auto;padding:0 20px}
+.rot{font:700 11px var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--ambar)}
+.mono{font:700 11px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+h1,h2,h3{font-family:var(--d);letter-spacing:-.02em;line-height:1.05;text-wrap:balance}
+h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
+.sub{color:var(--mute);font-size:17px;max-width:52ch}
+
+/* compra confirmada */
+.ok-bar{display:flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:8px 16px;border-bottom:1px solid var(--line);background:var(--panel);font-size:14px;color:var(--mute);text-align:center}
+.ok-bar b{color:var(--ink);font-weight:700}
+.ok-bar svg{flex:none;width:18px;height:18px;color:var(--ok)}
+
+/* topo */
+.topo{padding:28px 0 18px;text-align:center}
+.marca{display:inline-flex;align-items:center;gap:10px;margin-bottom:22px}
+.marca .mood{font:850 24px/1 var(--d);letter-spacing:-.02em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.marca .de{font:700 10.5px var(--m);letter-spacing:.16em;color:var(--dim);padding-left:10px;border-left:1px solid var(--line)}
+.topo h1{font-weight:850;font-size:clamp(32px,7vw,58px);margin:10px auto 12px;max-width:16ch}
+.topo .sub{margin:0 auto}
+
+/* player (mesmo desenho do player da aula do Mood) */
+.pl{--p:0;position:relative;margin:22px auto 0;width:100%;max-width:860px;border-radius:22px;overflow:hidden;background:#0a0b0b;aspect-ratio:16/9;isolation:isolate;box-shadow:0 30px 80px -40px rgba(180,92,255,.55),0 0 0 1px rgba(255,255,255,.06)}
+.pl.vertical{max-width:420px;aspect-ratio:9/16;max-height:78svh}
+.pl::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:var(--grad);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);opacity:.35;pointer-events:none}
+.pl video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;cursor:pointer}
+.pl .somon{position:absolute;inset:0;z-index:4;display:grid;place-content:center;justify-items:center;gap:12px;width:100%;height:100%;padding:16px;border:0;cursor:pointer;color:#fff;background:radial-gradient(65% 75% at 50% 50%,rgba(5,6,6,.5),rgba(5,6,6,.12) 72%,transparent);opacity:0;visibility:hidden;transition:opacity .35s,visibility 0s linear .35s}
+.pl.mudo .somon{opacity:1;visibility:visible;transition:opacity .35s}
+.pl .somon .vivo{display:inline-flex;align-items:center;gap:8px;font:700 11px var(--m);letter-spacing:.16em;text-transform:uppercase;padding:7px 12px 7px 10px;border-radius:999px;background:rgba(10,11,11,.6);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.pl .somon .vivo i{width:7px;height:7px;border-radius:50%;background:#FF6FAE;animation:vivo 1.6s ease-out infinite}
+.pl .somon .pilula{position:relative;display:inline-flex;align-items:center;gap:10px;background:var(--grad);color:#14070e;font:800 17px var(--f);padding:15px 24px 15px 18px;border-radius:999px;box-shadow:0 18px 50px -12px rgba(255,111,174,.85);white-space:nowrap}
+.pl .somon .pilula::before{content:"";position:absolute;inset:-8px;border-radius:inherit;border:1px solid rgba(255,255,255,.35);animation:aro 2.2s ease-out infinite}
+.pl .somon .pilula svg{width:22px;height:22px}
+.pl .capa{position:absolute;inset:0;z-index:3;display:grid;place-items:center;border:0;width:100%;background:rgba(10,11,11,.35);cursor:pointer;opacity:0;visibility:hidden}
+.pl.parado .capa{opacity:1;visibility:visible}
+.pl .play{width:80px;height:80px;border-radius:50%;display:grid;place-items:center;background:var(--grad);color:#14070e;box-shadow:0 18px 50px -12px rgba(255,111,174,.8)}
+.pl .play svg{width:28px;height:28px;margin-left:4px}
+.pl .ctl{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;align-items:center;gap:6px;padding:26px 10px 8px;background:linear-gradient(to top,rgba(10,11,11,.8),transparent);transition:opacity .25s}
+.pl.mudo .ctl,.pl.parado .ctl{opacity:0;pointer-events:none}
+.pl.quieto .ctl{opacity:0}
+.pl .bt{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:0;background:none;color:rgba(244,240,228,.88);cursor:pointer}
+.pl .bt svg{width:20px;height:20px}
+.pl #pToca{width:40px;height:40px;background:var(--grad);color:#14070e}
+.pl #pToca svg{width:16px;height:16px}
+.pl .barra{flex:1;height:30px;display:flex;align-items:center;cursor:pointer;touch-action:none}
+.pl .trilho{position:relative;width:100%;height:4px;border-radius:4px;background:rgba(244,240,228,.16)}
+.pl .feito{position:absolute;inset:0 auto 0 0;width:calc(var(--p)*100%);border-radius:inherit;background:var(--grad)}
+.pl .mbarra{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:4;background:rgba(255,255,255,.12)}
+.pl .mbarra::before{content:"";position:absolute;inset:0 auto 0 0;width:calc(var(--p)*100%);background:var(--grad)}
+.pl:not(.mudo) .mbarra{display:none}
+.pl .falha{position:absolute;inset:0;z-index:5;display:none;place-content:center;text-align:center;padding:20px;background:rgba(10,11,11,.94);color:var(--mute);font-size:14px}
+.pl.erro .falha{display:grid}
+
+/* oferta */
+.oferta{max-width:560px;margin:26px auto 0;background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--ambar);border-radius:0 0 22px 22px;padding:22px 20px 20px;text-align:center}
+.oferta .mono{margin-bottom:6px}
+.oferta h3{font-weight:800;font-size:22px;margin-bottom:14px}
+.preco{display:flex;align-items:flex-start;justify-content:center;gap:4px;font-family:var(--d);font-weight:850;line-height:.9}
+.preco small{font-size:22px;margin-top:10px}
+.preco span{font-size:84px;letter-spacing:-.04em}
+.parc{color:var(--mute);font-size:14px;margin:6px 0 16px}
+.gu{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:60px;border:0;border-radius:999px;background:var(--grad);color:#14070e;font:800 18px var(--f);cursor:pointer;box-shadow:0 18px 44px -18px rgba(255,111,174,.9);transition:transform .12s,filter .15s}
+.gu:hover{filter:brightness(1.06)}
+.gu:active{transform:scale(.98)}
+.gu[data-loading="true"]{pointer-events:none}
+.um .alt{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.um{margin-top:10px;font-size:13.5px;color:var(--mute)}
+.aviso{display:flex;gap:10px;align-items:flex-start;text-align:left;margin:16px 0 0;padding:12px 14px;border-radius:14px;background:var(--panel2);border:1px solid var(--line);font-size:14px;color:var(--mute)}
+.aviso svg{flex:none;width:20px;height:20px;margin-top:1px;color:var(--ambar)}
+.aviso b{color:var(--ink)}
+.nao{display:inline-block;margin-top:16px;padding:10px 6px;font-size:14.5px;color:var(--mute);text-underline-offset:3px}
+.nao:hover{color:var(--ink)}
+.gar-mini{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;font-size:13.5px;color:var(--mute)}
+.gar-mini svg{width:16px;height:16px;color:var(--ok)}
+
+/* seções */
+.sec{padding:64px 0 0}
+.cab{text-align:center;max-width:640px;margin:0 auto 26px}
+.cab .rot{display:block;margin-bottom:10px}
+.cab .sub{margin:10px auto 0}
+
+/* comparador com referências (vídeos do Fernando) */
+.demo{display:grid;gap:14px;max-width:460px;margin:0 auto}
+.quadro{position:relative;margin:6px 8px}
+.quadro i{position:absolute;width:14px;height:14px;border:0 solid #5A615E}
+.quadro i.a{top:-8px;left:-8px;border-top-width:1px;border-left-width:1px}.quadro i.b{top:-8px;right:-8px;border-top-width:1px;border-right-width:1px}
+.quadro i.c{bottom:-8px;left:-8px;border-bottom-width:1px;border-left-width:1px}.quadro i.d{bottom:-8px;right:-8px;border-bottom-width:1px;border-right-width:1px}
+.cmp{--c:50%;position:relative;aspect-ratio:4/5;border-radius:12px;overflow:hidden;background:#000}
+.cmp video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%}
+.cmp .antes{clip-path:inset(0 calc(100% - var(--c)) 0 0)}
+.cmp .linha{position:absolute;top:0;bottom:0;left:var(--c);width:2px;margin-left:-1px;background:#fff;pointer-events:none}
+.cmp .alca{position:absolute;top:50%;left:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 6px 18px -6px rgba(0,0,0,.5)}
+.cmp .alca svg{width:15px;height:15px;fill:none;stroke:#111312;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.cmp .tag{position:absolute;top:10px;font:700 11px var(--m);letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:6px;background:rgba(17,19,18,.78);pointer-events:none}
+.cmp .tag.l{left:10px}.cmp .tag.r{right:10px}
+.cmp input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize}
+.grav{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.grav div{display:inline-flex;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+.grav button{min-height:38px;padding:0 14px;border:0;border-radius:999px;background:none;color:var(--mute);font:600 14px var(--f);cursor:pointer}
+.grav button[aria-pressed="true"]{background:var(--ink);color:#111312}
+.looks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.look{position:relative;height:62px;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel);cursor:pointer}
+.look img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.look span{position:absolute;left:0;right:0;bottom:0;padding:3px 0;font:700 11px var(--m);letter-spacing:.06em;text-transform:uppercase;background:rgba(17,19,18,.82)}
+.look[aria-pressed="true"]{border:2px solid var(--ink)}
+.leg{text-align:center;font-size:13.5px;color:var(--mute)}
+
+/* como funciona: a tela do Mood fazendo os 3 passos, em loop */
+.fluxo{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px;align-items:center}
+.tela{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -45px rgba(242,165,65,.45)}
+.tela-bar{display:flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-bottom:1px solid var(--line);font:700 10.5px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.tela-bar i{width:8px;height:8px;border-radius:50%;background:var(--line2)}
+.tela-bar span{margin-left:8px;color:var(--mute)}
+.tela-bar em{margin-left:auto;font-style:normal;color:var(--ambar);display:flex;align-items:center;gap:7px}
+.tela-bar em::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;animation:pisca 1.1s ease-in-out infinite}
+@keyframes pisca{50%{opacity:.25}}
+.tela-corpo{display:grid;grid-template-columns:minmax(0,.82fr) 34px minmax(0,1fr);align-items:start;gap:6px;padding:20px 18px 14px}
+.slot{position:relative}
+.slot .tag{display:block;margin-bottom:8px;font:700 10px var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);transition:color .4s}
+.moldura{position:relative;border-radius:14px;overflow:hidden;background:var(--panel2);outline:1px dashed var(--line2);outline-offset:-1px}
+.ref .moldura{aspect-ratio:1}
+.vid .moldura{aspect-ratio:4/5}
+.moldura img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.vazio{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:6px;color:var(--dim);font:600 12px var(--f);text-align:center;padding:10px;transition:opacity .4s}
+.vazio svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ref img{opacity:0;transform:translateY(18px) scale(.92) rotate(-3deg);transition:opacity .5s .35s,transform .7s .35s cubic-bezier(.2,.9,.25,1.15)}
+.paleta{display:flex;gap:5px;margin-top:9px;min-height:16px}
+.paleta i{flex:1;height:16px;border-radius:5px;opacity:0;transform:translateY(6px) scale(.6);transition:opacity .3s,transform .45s cubic-bezier(.2,.9,.25,1.4)}
+.vid .a{opacity:0;transform:translateY(18px) scale(.95);transition:opacity .5s .2s,transform .7s .2s cubic-bezier(.2,.9,.25,1.1)}
+.vid .b{clip-path:inset(0 100% 0 0);transition:clip-path 0s}
+.vid .fio{position:absolute;top:0;bottom:0;left:0;width:2px;background:#fff;box-shadow:0 0 18px 3px rgba(255,255,255,.55);opacity:0}
+.scan{position:absolute;left:0;right:0;top:0;height:34%;background:linear-gradient(180deg,transparent,rgba(242,165,65,.28) 80%,rgba(242,165,65,.9) 99%,transparent);opacity:0;pointer-events:none}
+.pct{position:absolute;left:8px;bottom:8px;padding:4px 8px;border-radius:999px;background:rgba(10,11,11,.78);font:700 10px var(--m);letter-spacing:.08em;color:var(--ink);opacity:0;transition:opacity .3s}
+.ponte{position:relative;height:2px;align-self:center;margin-top:-10px;background:repeating-linear-gradient(90deg,var(--line2) 0 5px,transparent 5px 10px);background-size:20px 2px}
+.ponte::after{content:"";position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left:7px solid var(--line2);border-right:0}
+.tela-pe{position:relative;height:66px;border-top:1px solid var(--line);padding:0 18px}
+.pe{position:absolute;inset:0 18px;display:flex;align-items:center;gap:14px;opacity:0;transform:translateY(8px);transition:opacity .35s,transform .45s}
+.pe small{font:700 10px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.int{flex:1;min-width:0;max-width:260px}
+.pe3 .arq{margin-left:auto}
+.int .trilho{position:relative;height:5px;border-radius:9px;background:var(--line2);margin-top:8px}
+.int .trilho b{position:absolute;inset:0 auto 0 0;width:0;border-radius:inherit;background:var(--ambar)}
+.int .trilho b::after{content:"";position:absolute;right:-7px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;background:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.arq{display:flex;align-items:center;gap:9px;padding:8px 12px 8px 10px;border-radius:12px;background:var(--panel2);border:1px solid var(--line2);opacity:0;transform:scale(.85);transition:opacity .3s,transform .45s cubic-bezier(.2,.9,.25,1.4)}
+.arq svg{width:18px;height:18px;stroke:var(--ambar);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.arq span{font:700 11.5px var(--m);color:var(--ink);white-space:nowrap}
+.arq .ok{color:var(--ok);font:700 10px var(--m);letter-spacing:.08em;opacity:0;transition:opacity .3s}
+.eds{display:flex;gap:5px;margin-top:9px;min-height:16px}
+.eds span{flex:1;text-align:center;padding:3px 4px;border-radius:6px;border:1px solid var(--line2);font:600 11px var(--f);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--mute);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .4s}
+
+/* lista dos passos (clicável, com barra de tempo) */
+.etapas{list-style:none;display:grid;gap:8px}
+.etapas button{position:relative;display:grid;grid-template-columns:auto 1fr;column-gap:14px;width:100%;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:transparent;text-align:left;cursor:pointer;overflow:hidden;transition:background .3s,border-color .3s}
+.etapas b{grid-row:span 2;font:700 13px var(--m);color:var(--dim);padding-top:3px;transition:color .3s}
+.etapas h3{font-size:19px;font-weight:800;color:var(--mute);transition:color .3s}
+.etapas p{color:var(--mute);font-size:15px;max-height:0;opacity:0;overflow:hidden;transition:max-height .45s,opacity .35s,margin .35s}
+.etapas .t{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--ambar);transform:scaleX(0);transform-origin:left}
+.etapas button[aria-current="step"]{background:var(--panel);border-color:var(--line2)}
+.etapas button[aria-current="step"] b{color:var(--ambar)}
+.etapas button[aria-current="step"] h3{color:var(--ink)}
+.etapas button[aria-current="step"] p{max-height:90px;opacity:1;margin-top:6px}
+.etapas button:hover:not([aria-current="step"]) h3{color:var(--ink)}
+
+/* passo 1: a referência entra e solta a paleta */
+.fluxo[data-p] .ref img{opacity:1;transform:none}
+.fluxo[data-p] .ref .vazio{opacity:0}
+.fluxo[data-p] .ref .moldura{outline-color:transparent}
+.fluxo[data-p] .paleta i{opacity:1;transform:none}
+.fluxo[data-p] .paleta i:nth-child(1){transition-delay:.95s}.fluxo[data-p] .paleta i:nth-child(2){transition-delay:1.03s}.fluxo[data-p] .paleta i:nth-child(3){transition-delay:1.11s}.fluxo[data-p] .paleta i:nth-child(4){transition-delay:1.19s}.fluxo[data-p] .paleta i:nth-child(5){transition-delay:1.27s}
+.fluxo[data-p="1"] .ref .tag{color:var(--ambar)}
+.fluxo[data-p="1"] .pe1{opacity:1;transform:none;transition-delay:1.2s}
+/* passo 2: o seu vídeo entra e o Mood lê as cores */
+.fluxo[data-p="2"] .vid .a,.fluxo[data-p="3"] .vid .a{opacity:1;transform:none}
+.fluxo[data-p="2"] .vid .vazio,.fluxo[data-p="3"] .vid .vazio{opacity:0}
+.fluxo[data-p="2"] .vid .moldura,.fluxo[data-p="3"] .vid .moldura{outline-color:transparent}
+.fluxo[data-p="2"] .vid .tag{color:var(--ambar)}
+.fluxo[data-p="2"] .scan{animation:scan 1.25s .7s ease-in-out 2 both}
+.fluxo[data-p="2"] .pct{opacity:1;transition-delay:.7s}
+.fluxo[data-p="2"] .ponte,.fluxo[data-p="3"] .ponte{animation:corre .6s linear infinite;background-image:repeating-linear-gradient(90deg,var(--ambar) 0 5px,transparent 5px 10px)}
+.fluxo[data-p="2"] .ponte::after,.fluxo[data-p="3"] .ponte::after{border-left-color:var(--ambar)}
+.fluxo[data-p="2"] .pe2{opacity:1;transform:none;transition-delay:.5s}
+@keyframes scan{0%{top:-34%;opacity:0}12%{opacity:1}88%{opacity:1}100%{top:100%;opacity:0}}
+@keyframes corre{to{background-position:20px 0}}
+/* passo 3: a cor entra no vídeo, ajusta a intensidade e baixa o .cube */
+.fluxo[data-p="3"] .vid .tag{color:var(--ambar)}
+.fluxo[data-p="3"] .vid .b{clip-path:inset(0 0 0 0);transition:clip-path 1.3s .35s cubic-bezier(.65,0,.35,1)}
+.fluxo[data-p="3"] .vid .fio{animation:fio 1.3s .35s cubic-bezier(.65,0,.35,1) both}
+@keyframes fio{0%{left:0;opacity:1}92%{opacity:1}100%{left:100%;opacity:0}}
+.fluxo[data-p="3"] .pe3{opacity:1;transform:none;transition-delay:.2s}
+.fluxo[data-p="3"] .int .trilho b{width:78%;transition:width 1.1s 1.7s cubic-bezier(.3,.8,.3,1)}
+.fluxo[data-p="3"] .arq{opacity:1;transform:none;transition-delay:2.9s}
+.fluxo[data-p="3"] .arq .ok{opacity:1;transition-delay:3.6s}
+.fluxo[data-p="3"] .eds span{opacity:1;transform:none}
+.fluxo[data-p="3"] .eds span:nth-child(1){transition-delay:3.7s}.fluxo[data-p="3"] .eds span:nth-child(2){transition-delay:3.8s}.fluxo[data-p="3"] .eds span:nth-child(3){transition-delay:3.9s}.fluxo[data-p="3"] .eds span:nth-child(4){transition-delay:4s}
+.pe3{flex-wrap:wrap;row-gap:8px}
+.tela-pe.alto{height:auto}
+@media (max-width:760px){
+  .fluxo{grid-template-columns:1fr}
+  .tela-corpo{grid-template-columns:minmax(0,.82fr) 22px minmax(0,1fr);padding:16px 14px 12px}
+  .tela-pe{padding:0 14px;height:92px}
+  .pe{inset:0 14px}
+  .pe3{align-content:center}
+  .int{flex-basis:100%;max-width:none}
+  .pe3 .arq{margin-left:0}
+  .eds{flex-wrap:wrap}
+  .eds span{flex:1 1 40%;font-size:10.5px}
+  .etapas button{padding:14px 16px}
+}
+@media (prefers-reduced-motion:reduce){
+  .fluxo *,.fluxo *::before,.fluxo *::after{transition-duration:0s!important;transition-delay:0s!important;animation:none!important}
+}
+
+/* inclui + pra quem */
+.duas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.cx{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px}
+.cx h3{font-size:19px;font-weight:800;margin-bottom:12px}
+.lista{list-style:none;display:grid;gap:10px}
+.lista li{display:flex;gap:10px;align-items:flex-start;font-size:15.5px}
+.lista svg{flex:none;width:18px;height:18px;margin-top:3px;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.lista .s svg{stroke:var(--ok)}
+.lista .n{color:var(--mute)}
+.lista .n svg{stroke:var(--mute)}
+
+/* garantia (selo do Base FL) */
+.gar-fl{display:flex;align-items:center;gap:24px;max-width:640px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px}
+.gar-t{display:grid;gap:4px}
+.gar-k{font:700 11px var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--selo)}
+.gar-h{font:800 22px var(--d);letter-spacing:-.02em}
+.gar-t p{color:var(--mute);font-size:15px}
+
+/* perguntas */
+.faq{max-width:680px;margin:0 auto;display:grid;gap:8px}
+.faq details{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px 18px}
+.faq summary{min-height:52px;display:flex;align-items:center;cursor:pointer;font-weight:700;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";margin-left:auto;font:700 20px var(--m);color:var(--mute)}
+.faq details[open] summary::after{content:"–"}
+.faq p{color:var(--mute);font-size:15.5px;padding:0 0 16px}
+
+.fim{text-align:center;padding:64px 0 120px}
+.fim .gu{max-width:420px}
+.rodape{border-top:1px solid var(--line);padding:22px 0 calc(90px + env(safe-area-inset-bottom));text-align:center;color:var(--dim);font-size:13px}
+.rodape a{color:var(--mute)}
+
+/* barra fixa no celular */
+.fixo{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(17,19,18,.94);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .3s}
+.fixo.on{transform:none}
+.fixo span{font-size:13px;color:var(--mute);line-height:1.3}
+.fixo b{display:block;color:var(--ink);font:800 16px var(--d)}
+.fixo a{flex:none;display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:999px;background:var(--grad);color:#14070e;font:800 15px var(--f);text-decoration:none}
+
+@media (max-width:760px){
+  .duas{grid-template-columns:1fr}
+  .gar-fl{flex-direction:column;text-align:center}
+  .pl{border-radius:16px}
+  .pl .somon .pilula{font-size:15px;padding:12px 18px 12px 14px}
+}
+.ad{position:relative;margin:22px auto 0;width:100%;max-width:420px;aspect-ratio:540/676;max-height:46vh;border-radius:22px;overflow:hidden;background:#0a0b0b;box-shadow:0 30px 80px -40px rgba(180,92,255,.55)}
+.ad video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.passos3{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:16px auto 0;max-width:620px}
+.passos3 span{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 14px 8px 10px}
+.passos3 svg{width:18px;height:18px;color:var(--ambar);flex:none}
+.passos3 i{font-style:normal;color:var(--dim)}
+.vsl{max-width:860px;margin:0 auto}
+@media (max-width:760px){
+  .ad{width:auto;height:30vh;max-height:none;max-width:100%;border-radius:16px;margin-top:16px}
+  .passos3{gap:6px;margin-top:12px}
+  .passos3 span{font-size:12.5px;padding:6px 10px 6px 8px;gap:6px}
+  .passos3 svg{width:15px;height:15px}
+  .passos3 i{display:none}
+  .oferta{margin-top:16px}
+}
+@media (min-width:761px){.fixo{display:none}}
+@media (min-width:1000px){
+  .topo{padding-top:24px}
+  .topo h1{font-size:50px;max-width:20ch}
+  .palco{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center;margin-top:22px;text-align:center}
+  .palco .ad{margin:0 0 0 auto;max-height:none}
+  .palco .pl{margin:0}
+  .palco .oferta{margin:0}
+  .palco .pl.vertical{justify-self:center}
+}
+@keyframes aro{0%{transform:scale(.92);opacity:.9}100%{transform:scale(1.35);opacity:0}}
+@keyframes vivo{0%{box-shadow:0 0 0 0 rgba(255,111,174,.6)}100%{box-shadow:0 0 0 8px rgba(255,111,174,0)}}
+@media (prefers-reduced-motion:reduce){.pl .somon .pilula::before,.pl .somon .vivo i{animation:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="ok-bar" role="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span><b>Compra confirmada.</b> Seus Títulos Dinâmicos chegam no seu e-mail.</span></div>
+
+<main>
+<section class="topo w">
+  <div class="marca"><span class="mood">Mood</span><span class="de">BASE FL</span></div>
+  <p class="rot">Antes de continuar</p>
+  <h1>Prefere começar com 3 meses?</h1>
+  <p class="sub">O mesmo Mood, com todas as cores, por 3 meses. Testa no teu ritmo e, se gostar, continua depois.</p>
+  <div class="passos3" aria-label="Como funciona">
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg>Escolhe a referência</span><i aria-hidden="true">→</i>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Sobe o teu vídeo</span><i aria-hidden="true">→</i>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Aplica no editor</span>
+  </div>
+
+  <div class="palco">
+  <div class="ad" aria-label="O mesmo vídeo antes e depois do Mood">
+    <video src="/oferta/mood/antes-depois.mp4" poster="/oferta/mood/antes-depois.jpg" autoplay muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto"></video>
+  </div>
+
+  <div class="oferta" id="oferta">
+    <p class="mono">Mood · acesso de 3 meses</p>
+    <h3>Mood por 3 meses</h3>
+    <div class="preco" aria-label="37 reais"><small>R$</small><span>37</span></div>
+    <p class="parc">à vista, ou 12x de R$ 3,80</p>
+    <!-- Botão de 1 clique da Greenn. OFERTA_3M = id da oferta de upsell "Mood 3 meses" criada na Greenn. -->
+    <button class="gu" data-greenn-upsell="OFERTA_3M" data-loading="false" onclick="startLoading(this)">Sim, quero 3 meses</button>
+    <p class="um">Um clique: usa o mesmo pagamento da compra dos Títulos.</p>
+    <div class="aviso"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span><b>Funciona no computador:</b> CapCut, Premiere, DaVinci, Final Cut. Não funciona no CapCut do celular.</span></div>
+    <p class="gar-mini"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>7 dias de garantia</p>
+    <a class="nao" id="not-buy-link" href="https://basefl.com/instalar/">Não, obrigado</a>
+  </div>
+  </div>
+</section>
+
+<section class="sec w">
+    <div class="gar-fl"><div class="selo-fl" role="img" aria-label="Garantia incondicional de 7 dias" style="--selo-tam:150px"><svg viewBox="0 0 300 300" aria-hidden="true"><circle cx="150" cy="150" r="147"/><path id="selo-c" fill="none" d="M150 150m-128 0a128 128 0 1 1 256 0a128 128 0 1 1 -256 0"/><text><textPath href="#selo-c" textLength="804" lengthAdjust="spacing">7 DIAS · RISCO ZERO · GARANTIA INCONDICIONAL · </textPath></text></svg><div class="selo-disco"><b>7</b><span>DIAS</span></div></div><div class="gar-t"><span class="gar-k">Garantia de 7 dias</span><span class="gar-h">Teste por 7 dias. Risco zero.</span><p>Não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</p></div></div>
+</section>
+</main>
+
+<footer class="rodape w">Base FL · o ecossistema do editor de vídeo · <a href="https://basefl.com/termos/">Termos de uso</a> · <a href="https://basefl.com/privacidade/">Privacidade</a></footer>
+
+<script src="/pixel.js"></script>
+<script>
+/* Eventos do downsell (banco: rpc evento): downsell_viu · downsell_aceitou · downsell_recusou. upsell_alt = checkout preenchido. */
+window.FLEv = (() => {
+  const URL_ = 'https://otlaexuqyavpzxwzcsfo.supabase.co/rest/v1/rpc/evento', KEY = 'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR';
+  const ck = n => { const m = document.cookie.match('(?:^|; )' + n + '=([^;]*)'); return m ? decodeURIComponent(m[1]) : null; };
+  let vis = null; try { vis = localStorage.getItem('fl_vis'); } catch {} vis = vis || ck('fl_vis');
+  if (!vis || !/^v[a-z0-9]{10,30}$/.test(vis)) { vis = 'v' + Math.random().toString(36).slice(2, 12) + Date.now().toString(36); try { localStorage.setItem('fl_vis', vis); } catch {} document.cookie = 'fl_vis=' + vis + ';path=/;max-age=31536000;SameSite=Lax'; }
+  const q = new URLSearchParams(location.search); let metodo = null, viu = false;
+  const manda = (nome, extra) => { try { fetch(URL_, { method:'POST', keepalive:true, headers:{ 'Content-Type':'application/json', apikey:KEY, Authorization:'Bearer ' + KEY }, body: JSON.stringify({ p_nome:nome, p_pack:'fl-lut', p_visitante:vis, p_dados:Object.assign({ oferta:'3m', metodo, de:q.get('utm_source') || null }, extra || {}) }) }).catch(() => {}); } catch {} };
+  document.addEventListener('click', e => {
+    const t = e.target.closest && e.target.closest('[data-greenn-upsell], a.nao');
+    if (!t) return;
+    manda(t.matches('[data-greenn-upsell]') ? 'downsell_aceitou' : 'downsell_recusou');
+  }, true);
+  return { metodo: m => { metodo = m ? String(m).toUpperCase() : null; }, viu: () => { if (viu) return; viu = true; manda('downsell_viu'); } };
+})();
+</script>
+<script src="https://metrics.basefl.com/t.js" data-key="pk_live_c3392e6c67a34797baf70e0604f3fa4f" data-endpoint="https://metrics.basefl.com" data-reserva="https://edge.central.automatizesolucoes.com" data-dominios="basefl.com,reelsacademy.com.br,ofernandoluz.com" data-endpoints="basefl.com=https://metrics.basefl.com,reelsacademy.com.br=https://metrics.reelsacademy.com.br,ofernandoluz.com=https://metrics.ofernandoluz.com" defer></script>
+<script> window.startLoading = function(button) { const originalHTML = button.innerHTML; button.setAttribute('data-loading', 'true'); button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path fill="#14070e" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/><path fill="#14070e" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></svg>`; try { window.FLPixel && FLPixel.checkout(); } catch (e) {} setTimeout(() => { button.setAttribute('data-loading', 'false'); button.innerHTML = originalHTML; }, 3000); }; (function (w, d, s, t) { if (w._greennUp) return; w._greennUp = t; var f = d.getElementsByTagName(s)[0], j = d.createElement(s); j.async = true; j.src = "https://payfast.greenn.com.br/assets/upsell.js?v=" + t; f.parentNode.insertBefore(j, f); })(window, document, "script", Date.now()); </script>
+<script>
+(() => {
+  // ===== CHAVES (preencher quando a oferta de 3 meses existir na Greenn) =====
+  const OFERTA = 'OFERTA_3M';          // id do upsell da Greenn (o mesmo do data-greenn-upsell)
+  const CHECKOUT = '';                 // link do checkout normal do Mood 3 meses (para Pix sem 1 clique e carteiras digitais)
+  const PIX_1_CLIQUE = true;           // mesma chave da página de R$ 79
+  const $ = s => document.querySelector(s);
+  const q = new URLSearchParams(location.search), token = q.get('token');
+  // "Não, obrigado" leva os parâmetros da compra para a página de acesso dos Títulos
+  try { const qs = location.search; document.querySelectorAll('a.nao').forEach(a => { a.href = a.href.split('?')[0] + qs; }); } catch {}
+  const linkCk = (u, conteudo) => {
+    if (!CHECKOUT) return null;
+    const x = new URL(CHECKOUT);
+    if (u) { x.searchParams.set('fn', u.name || ''); x.searchParams.set('em', u.email || ''); x.searchParams.set('ph', u.cellphone || ''); x.searchParams.set('document', u.document || u.cpf_cnpj || ''); }
+    x.searchParams.set('up_id', OFERTA);
+    x.searchParams.set('utm_source', 'greenn'); x.searchParams.set('utm_medium', 'downsell'); x.searchParams.set('utm_campaign', 'mood-downsell-37'); x.searchParams.set('utm_content', conteudo);
+    return x.toString();
+  };
+  let compra = null, desvia = false, motivo = 'carteira';
+  const UM_CLIQUE = ['CREDIT_CARD', 'TWO_CREDIT_CARDS', 'PIX', 'BOLETO'];
+  if (token) fetch('https://apipay.greenn.com.br/api/upsell/' + encodeURIComponent(token), { headers: { Accept: 'application/json' } })
+    .then(r => r.ok ? r.json() : null).then(u => {
+      if (!u) return;
+      compra = u; try { FLEv.metodo(u.method); } catch {}
+      const met = String(u.method || '').toUpperCase();
+      desvia = !!CHECKOUT && ((!!u.method && !UM_CLIQUE.includes(met)) || (!PIX_1_CLIQUE && met === 'PIX'));
+      if (desvia) { motivo = met === 'PIX' ? 'pix' : 'carteira'; const um = $('.um'); if (um) um.textContent = 'O botão abre o pagamento já preenchido. É só ' + (motivo === 'pix' ? 'escolher Pix e pagar.' : 'confirmar.'); }
+    }).catch(() => {}).finally(() => { try { FLEv.viu(); } catch {} });
+  else try { FLEv.viu(); } catch {}
+  document.addEventListener('click', ev => {
+    const b = ev.target.closest && ev.target.closest('[data-greenn-upsell]');
+    if (!b || !desvia) return;
+    const l = linkCk(compra, motivo); if (!l) return;
+    ev.preventDefault(); ev.stopImmediatePropagation();
+    try { window.FLPixel && FLPixel.checkout(); } catch {}
+    location.href = l;
+  }, true);
+})();
+</script>
+</body>
+</html>
