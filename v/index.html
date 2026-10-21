@@ -2,29 +2,59 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Mood · Base FL</title>
 <meta property="og:title" content="Mood · Base FL">
 <meta property="og:description" content="Tua cor de filme em 3 cliques.">
 <meta property="og:image" content="https://basefl.com/lut/demo/og-mood.jpg">
 <meta name="theme-color" content="#111312">
-<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#111312;color:#F4F0E4;font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:24px;text-align:center}a{color:#F4F0E4}</style>
+<link rel="icon" type="image/svg+xml" href="https://basefl.com/lut/favicon.svg">
+<link rel="preload" as="video" href="/oferta/mood/antes-depois.mp4" type="video/mp4">
+<style>
+:root{--bg:#111312;--panel:#191C1B;--line:#2B302E;--ink:#F4F0E4;--mute:#B3B4A2;--dim:#8A8B7F;--grad:linear-gradient(125deg,#FFB347,#FF6FAE 38%,#B45CFF 70%,#5AB8FF)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg)}
+body{min-height:100vh;color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;display:flex;justify-content:center;padding:22px 16px calc(28px + env(safe-area-inset-bottom))}
+main{width:100%;max-width:440px;text-align:center}
+.marca{font-weight:850;font-size:24px;letter-spacing:-.02em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}
+h1{font-size:clamp(26px,7.4vw,34px);line-height:1.1;font-weight:850;letter-spacing:-.02em;margin:10px 0 8px}
+.sub{color:var(--mute);font-size:15.5px;margin:0 auto 16px;max-width:34ch}
+.ad{position:relative;margin:0 auto 18px;height:min(38vh,380px);aspect-ratio:540/676;max-width:100%;border-radius:18px;overflow:hidden;background:#0a0b0b;box-shadow:0 30px 80px -40px rgba(180,92,255,.55)}
+.ad video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.bt{display:flex;align-items:center;justify-content:center;width:100%;min-height:56px;border-radius:16px;font-weight:800;font-size:17px;text-decoration:none;margin-top:10px;padding:14px 18px}
+.bt.um{background:var(--grad);color:#14070e;box-shadow:0 14px 40px -16px rgba(255,111,174,.8)}
+.bt.dois{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.bt:focus-visible{outline:3px solid #5AB8FF;outline-offset:3px}
+.nota{color:var(--dim);font-size:13.5px;margin-top:16px}
+.nota b{color:var(--mute);font-weight:700}
+</style>
 </head>
 <body>
-<!-- Links curtos do WhatsApp (basefl.com/v/?t=CÓDIGO&d=teste|checkout).
-     Só navegador de verdade segue (a prévia do WhatsApp não roda JavaScript, então não conta clique falso).
-     Leva para o redirecionador /camp/ir, que registra o clique e manda para o teste ou para o checkout. -->
-<p>Abrindo…</p>
-<p><a id="ir" href="https://basefl.com/lut/">Toque aqui se não abrir</a></p>
+<!-- Página curta do WhatsApp depois do "Manda o áudio" (basefl.com/v/?t=CÓDIGO).
+     Abriu: avisa o /camp/ir (d=abriu). Botões: /camp/ir com d=teste (teste direto, sem a aula) ou d=checkout (Mood R$ 79).
+     Links antigos com &d=teste|checkout seguem direto, sem mostrar a página. -->
+<main>
+  <span class="marca">Mood</span>
+  <h1>Tua cor de filme em 3 cliques</h1>
+  <p class="sub">Escolhe um vídeo com a cor que tu gosta, sobe o teu e aplica a mesma cor no teu editor.</p>
+  <div class="ad" aria-label="O mesmo vídeo antes e depois do Mood">
+    <video src="/oferta/mood/antes-depois.mp4" poster="/oferta/mood/antes-depois.jpg" autoplay muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto"></video>
+  </div>
+  <a class="bt um" id="teste" href="https://basefl.com/lut/?direto=1&amp;utm_source=whatsapp&amp;utm_medium=disparo&amp;utm_content=teste">Quero testar grátis</a>
+  <a class="bt dois" id="comprar" href="https://payfast.greenn.com.br/195947/offer/yf7yxj?ch_id=144304&amp;utm_source=whatsapp&amp;utm_medium=disparo&amp;utm_content=checkout">Quero o Mood · R$ 79</a>
+  <p class="nota"><b>Funciona no computador</b> (CapCut, Premiere, DaVinci, Final Cut). Não funciona no CapCut do celular.</p>
+</main>
 <script>
 (() => {
-  const q = new URLSearchParams(location.search), d = q.get('d') === 'checkout' ? 'checkout' : 'teste', t = q.get('t') || '';
-  const u = new URL('https://otlaexuqyavpzxwzcsfo.supabase.co/functions/v1/camp/ir');
-  if (/^[a-f0-9]{12,40}$/.test(t)) u.searchParams.set('t', t);
-  u.searchParams.set('o', 'whatsapp'); u.searchParams.set('d', d);
-  document.getElementById('ir').href = u.toString();
-  location.replace(u.toString());
+  const q = new URLSearchParams(location.search), t = q.get('t') || '', d = q.get('d');
+  const ok = /^[a-f0-9]{12,40}$/.test(t);
+  const ir = dest => { const u = new URL('https://otlaexuqyavpzxwzcsfo.supabase.co/functions/v1/camp/ir'); if (ok) u.searchParams.set('t', t); u.searchParams.set('o', 'whatsapp'); u.searchParams.set('d', dest); return u.toString(); };
+  if (d === 'teste' || d === 'checkout') { location.replace(ir(d)); return; }   // links antigos
+  if (!ok) return;                                                               // sem código: os botões levam direto, sem registro
+  document.getElementById('teste').href = ir('teste');
+  document.getElementById('comprar').href = ir('checkout');
+  try { fetch(ir('abriu'), { mode: 'no-cors', keepalive: true, cache: 'no-store' }).catch(() => {}); } catch {}
 })();
 </script>
 </body>
