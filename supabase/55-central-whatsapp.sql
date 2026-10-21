@@ -92,6 +92,9 @@ begin
       'checkout',  (select count(*) from pess where ck),
       'ambos',     (select count(*) from pess where te and ck),
       'nenhum',    (select count(*) from pess where ab and not te and not ck),
+      'teste_ab',    (select count(*) from pess where ab and te),
+      'checkout_ab', (select count(*) from pess where ab and ck),
+      'escolheram',  (select count(*) from pess where ab and (te or ck)),
       'cliques_teste',    (select count(*) from ev where tipo = 'teste'),
       'cliques_checkout', (select count(*) from ev where tipo = 'checkout'),
       'compras',   (select count(*) from comp)),
@@ -109,6 +112,7 @@ begin
           'teste',      (select count(*) from pess p where p.camp = c.camp and p.te),
           'checkout',   (select count(*) from pess p where p.camp = c.camp and p.ck),
           'nenhum',     (select count(*) from pess p where p.camp = c.camp and p.ab and not p.te and not p.ck),
+          'escolheram', (select count(*) from pess p where p.camp = c.camp and p.ab and (p.te or p.ck)),
           'compras',    (select count(*) from comp where comp.camp = c.camp)) as x
         from camps c) s), '[]'::jsonb),
     'recentes', coalesce((select jsonb_agg(jsonb_build_object('em', em, 't', tipo, 'camp', camp,
