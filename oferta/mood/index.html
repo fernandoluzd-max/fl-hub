@@ -137,12 +137,110 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
 .look[aria-pressed="true"]{border:2px solid var(--ink)}
 .leg{text-align:center;font-size:13.5px;color:var(--mute)}
 
-/* passos */
-.passos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;list-style:none}
-.passos li{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px}
-.passos b{display:block;font:700 13px var(--m);color:var(--ambar);margin-bottom:10px}
-.passos h3{font-size:19px;font-weight:800;margin-bottom:6px}
-.passos p{color:var(--mute);font-size:15px}
+/* como funciona: a tela do Mood fazendo os 3 passos, em loop */
+.fluxo{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px;align-items:center}
+.tela{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -45px rgba(242,165,65,.45)}
+.tela-bar{display:flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-bottom:1px solid var(--line);font:700 10.5px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.tela-bar i{width:8px;height:8px;border-radius:50%;background:var(--line2)}
+.tela-bar span{margin-left:8px;color:var(--mute)}
+.tela-bar em{margin-left:auto;font-style:normal;color:var(--ambar);display:flex;align-items:center;gap:7px}
+.tela-bar em::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;animation:pisca 1.1s ease-in-out infinite}
+@keyframes pisca{50%{opacity:.25}}
+.tela-corpo{display:grid;grid-template-columns:minmax(0,.82fr) 34px minmax(0,1fr);align-items:start;gap:6px;padding:20px 18px 14px}
+.slot{position:relative}
+.slot .tag{display:block;margin-bottom:8px;font:700 10px var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);transition:color .4s}
+.moldura{position:relative;border-radius:14px;overflow:hidden;background:var(--panel2);outline:1px dashed var(--line2);outline-offset:-1px}
+.ref .moldura{aspect-ratio:1}
+.vid .moldura{aspect-ratio:4/5}
+.moldura img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.vazio{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:6px;color:var(--dim);font:600 12px var(--f);text-align:center;padding:10px;transition:opacity .4s}
+.vazio svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ref img{opacity:0;transform:translateY(18px) scale(.92) rotate(-3deg);transition:opacity .5s .35s,transform .7s .35s cubic-bezier(.2,.9,.25,1.15)}
+.paleta{display:flex;gap:5px;margin-top:9px;min-height:16px}
+.paleta i{flex:1;height:16px;border-radius:5px;opacity:0;transform:translateY(6px) scale(.6);transition:opacity .3s,transform .45s cubic-bezier(.2,.9,.25,1.4)}
+.vid .a{opacity:0;transform:translateY(18px) scale(.95);transition:opacity .5s .2s,transform .7s .2s cubic-bezier(.2,.9,.25,1.1)}
+.vid .b{clip-path:inset(0 100% 0 0);transition:clip-path 0s}
+.vid .fio{position:absolute;top:0;bottom:0;left:0;width:2px;background:#fff;box-shadow:0 0 18px 3px rgba(255,255,255,.55);opacity:0}
+.scan{position:absolute;left:0;right:0;top:0;height:34%;background:linear-gradient(180deg,transparent,rgba(242,165,65,.28) 80%,rgba(242,165,65,.9) 99%,transparent);opacity:0;pointer-events:none}
+.pct{position:absolute;left:8px;bottom:8px;padding:4px 8px;border-radius:999px;background:rgba(10,11,11,.78);font:700 10px var(--m);letter-spacing:.08em;color:var(--ink);opacity:0;transition:opacity .3s}
+.ponte{position:relative;height:2px;align-self:center;margin-top:-10px;background:repeating-linear-gradient(90deg,var(--line2) 0 5px,transparent 5px 10px);background-size:20px 2px}
+.ponte::after{content:"";position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left:7px solid var(--line2);border-right:0}
+.tela-pe{position:relative;height:66px;border-top:1px solid var(--line);padding:0 18px}
+.pe{position:absolute;inset:0 18px;display:flex;align-items:center;gap:14px;opacity:0;transform:translateY(8px);transition:opacity .35s,transform .45s}
+.pe small{font:700 10px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.int{flex:1;min-width:0;max-width:260px}
+.pe3 .arq{margin-left:auto}
+.int .trilho{position:relative;height:5px;border-radius:9px;background:var(--line2);margin-top:8px}
+.int .trilho b{position:absolute;inset:0 auto 0 0;width:0;border-radius:inherit;background:var(--ambar)}
+.int .trilho b::after{content:"";position:absolute;right:-7px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;background:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.arq{display:flex;align-items:center;gap:9px;padding:8px 12px 8px 10px;border-radius:12px;background:var(--panel2);border:1px solid var(--line2);opacity:0;transform:scale(.85);transition:opacity .3s,transform .45s cubic-bezier(.2,.9,.25,1.4)}
+.arq svg{width:18px;height:18px;stroke:var(--ambar);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.arq span{font:700 11.5px var(--m);color:var(--ink);white-space:nowrap}
+.arq .ok{color:var(--ok);font:700 10px var(--m);letter-spacing:.08em;opacity:0;transition:opacity .3s}
+.eds{display:flex;gap:5px;margin-top:9px;min-height:16px}
+.eds span{flex:1;text-align:center;padding:3px 4px;border-radius:6px;border:1px solid var(--line2);font:600 11px var(--f);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--mute);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .4s}
+
+/* lista dos passos (clicável, com barra de tempo) */
+.etapas{list-style:none;display:grid;gap:8px}
+.etapas button{position:relative;display:grid;grid-template-columns:auto 1fr;column-gap:14px;width:100%;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:transparent;text-align:left;cursor:pointer;overflow:hidden;transition:background .3s,border-color .3s}
+.etapas b{grid-row:span 2;font:700 13px var(--m);color:var(--dim);padding-top:3px;transition:color .3s}
+.etapas h3{font-size:19px;font-weight:800;color:var(--mute);transition:color .3s}
+.etapas p{color:var(--mute);font-size:15px;max-height:0;opacity:0;overflow:hidden;transition:max-height .45s,opacity .35s,margin .35s}
+.etapas .t{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--ambar);transform:scaleX(0);transform-origin:left}
+.etapas button[aria-current="step"]{background:var(--panel);border-color:var(--line2)}
+.etapas button[aria-current="step"] b{color:var(--ambar)}
+.etapas button[aria-current="step"] h3{color:var(--ink)}
+.etapas button[aria-current="step"] p{max-height:90px;opacity:1;margin-top:6px}
+.etapas button:hover:not([aria-current="step"]) h3{color:var(--ink)}
+
+/* passo 1: a referência entra e solta a paleta */
+.fluxo[data-p] .ref img{opacity:1;transform:none}
+.fluxo[data-p] .ref .vazio{opacity:0}
+.fluxo[data-p] .ref .moldura{outline-color:transparent}
+.fluxo[data-p] .paleta i{opacity:1;transform:none}
+.fluxo[data-p] .paleta i:nth-child(1){transition-delay:.95s}.fluxo[data-p] .paleta i:nth-child(2){transition-delay:1.03s}.fluxo[data-p] .paleta i:nth-child(3){transition-delay:1.11s}.fluxo[data-p] .paleta i:nth-child(4){transition-delay:1.19s}.fluxo[data-p] .paleta i:nth-child(5){transition-delay:1.27s}
+.fluxo[data-p="1"] .ref .tag{color:var(--ambar)}
+.fluxo[data-p="1"] .pe1{opacity:1;transform:none;transition-delay:1.2s}
+/* passo 2: o seu vídeo entra e o Mood lê as cores */
+.fluxo[data-p="2"] .vid .a,.fluxo[data-p="3"] .vid .a{opacity:1;transform:none}
+.fluxo[data-p="2"] .vid .vazio,.fluxo[data-p="3"] .vid .vazio{opacity:0}
+.fluxo[data-p="2"] .vid .moldura,.fluxo[data-p="3"] .vid .moldura{outline-color:transparent}
+.fluxo[data-p="2"] .vid .tag{color:var(--ambar)}
+.fluxo[data-p="2"] .scan{animation:scan 1.25s .7s ease-in-out 2 both}
+.fluxo[data-p="2"] .pct{opacity:1;transition-delay:.7s}
+.fluxo[data-p="2"] .ponte,.fluxo[data-p="3"] .ponte{animation:corre .6s linear infinite;background-image:repeating-linear-gradient(90deg,var(--ambar) 0 5px,transparent 5px 10px)}
+.fluxo[data-p="2"] .ponte::after,.fluxo[data-p="3"] .ponte::after{border-left-color:var(--ambar)}
+.fluxo[data-p="2"] .pe2{opacity:1;transform:none;transition-delay:.5s}
+@keyframes scan{0%{top:-34%;opacity:0}12%{opacity:1}88%{opacity:1}100%{top:100%;opacity:0}}
+@keyframes corre{to{background-position:20px 0}}
+/* passo 3: a cor entra no vídeo, ajusta a intensidade e baixa o .cube */
+.fluxo[data-p="3"] .vid .tag{color:var(--ambar)}
+.fluxo[data-p="3"] .vid .b{clip-path:inset(0 0 0 0);transition:clip-path 1.3s .35s cubic-bezier(.65,0,.35,1)}
+.fluxo[data-p="3"] .vid .fio{animation:fio 1.3s .35s cubic-bezier(.65,0,.35,1) both}
+@keyframes fio{0%{left:0;opacity:1}92%{opacity:1}100%{left:100%;opacity:0}}
+.fluxo[data-p="3"] .pe3{opacity:1;transform:none;transition-delay:.2s}
+.fluxo[data-p="3"] .int .trilho b{width:78%;transition:width 1.1s 1.7s cubic-bezier(.3,.8,.3,1)}
+.fluxo[data-p="3"] .arq{opacity:1;transform:none;transition-delay:2.9s}
+.fluxo[data-p="3"] .arq .ok{opacity:1;transition-delay:3.6s}
+.fluxo[data-p="3"] .eds span{opacity:1;transform:none}
+.fluxo[data-p="3"] .eds span:nth-child(1){transition-delay:3.7s}.fluxo[data-p="3"] .eds span:nth-child(2){transition-delay:3.8s}.fluxo[data-p="3"] .eds span:nth-child(3){transition-delay:3.9s}.fluxo[data-p="3"] .eds span:nth-child(4){transition-delay:4s}
+.pe3{flex-wrap:wrap;row-gap:8px}
+.tela-pe.alto{height:auto}
+@media (max-width:760px){
+  .fluxo{grid-template-columns:1fr}
+  .tela-corpo{grid-template-columns:minmax(0,.82fr) 22px minmax(0,1fr);padding:16px 14px 12px}
+  .tela-pe{padding:0 14px;height:92px}
+  .pe{inset:0 14px}
+  .pe3{align-content:center}
+  .int{flex-basis:100%;max-width:none}
+  .pe3 .arq{margin-left:0}
+  .eds{flex-wrap:wrap}
+  .eds span{flex:1 1 40%;font-size:10.5px}
+  .etapas button{padding:14px 16px}
+}
+@media (prefers-reduced-motion:reduce){
+  .fluxo *,.fluxo *::before,.fluxo *::after{transition-duration:0s!important;transition-delay:0s!important;animation:none!important}
+}
 
 /* inclui + pra quem */
 .duas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
@@ -184,7 +282,7 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
 .fixo a{flex:none;display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:999px;background:var(--grad);color:#14070e;font:800 15px var(--f);text-decoration:none}
 
 @media (max-width:760px){
-  .passos,.duas{grid-template-columns:1fr}
+  .duas{grid-template-columns:1fr}
   .gar-fl{flex-direction:column;text-align:center}
   .pl{border-radius:16px}
   .pl .somon .pilula{font-size:15px;padding:12px 18px 12px 14px}
@@ -273,11 +371,35 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
 
 <section class="sec w">
   <div class="cab"><span class="rot">Como funciona</span><h2>Três passos, sem saber color grading.</h2></div>
-  <ol class="passos">
-    <li><b>01</b><h3>Escolha a cor</h3><p>Coloque um print ou um vídeo com a cor que você quer copiar.</p></li>
-    <li><b>02</b><h3>Mostre o seu vídeo</h3><p>Do jeito que saiu da câmera ou do celular. O Mood lê as cores dos dois.</p></li>
-    <li><b>03</b><h3>Baixe a LUT</h3><p>Ajuste a intensidade, baixe o arquivo .cube e aplique no seu editor do computador.</p></li>
-  </ol>
+  <div class="fluxo" id="fluxo">
+    <div class="tela" aria-hidden="true">
+      <div class="tela-bar"><i></i><i></i><i></i><span>Mood</span><em id="fxSt">Escolhendo a cor</em></div>
+      <div class="tela-corpo">
+        <div class="slot ref"><span class="tag">Referência</span>
+          <div class="moldura"><div class="vazio"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Print ou vídeo</div><img src="/lut/demo/ref-dourado.webp" alt="" width="300" height="300" loading="lazy" id="fxRef"></div>
+          <div class="paleta"><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="ponte"></div>
+        <div class="slot vid"><span class="tag">Seu vídeo</span>
+          <div class="moldura"><div class="vazio"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg>Do jeito que gravou</div><img class="a" src="/lut/demo/antes.webp" alt="" width="540" height="676" loading="lazy"><img class="b" src="/lut/demo/dourado.webp" alt="" width="540" height="676" loading="lazy"><i class="fio"></i><div class="scan"></div><div class="pct" id="fxPct">Lendo cores · 0%</div></div>
+          <div class="eds"><span>CapCut</span><span>Premiere</span><span>DaVinci</span><span>Final Cut</span></div>
+        </div>
+      </div>
+      <div class="tela-pe">
+        <div class="pe pe1"><small>Cores da referência separadas</small></div>
+        <div class="pe pe2"><small>Comparando com o seu vídeo · pele protegida</small></div>
+        <div class="pe pe3">
+          <div class="int"><small>Intensidade</small><div class="trilho"><b></b></div></div>
+          <div class="arq"><svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span>mood-dourado.cube</span><em class="ok">✓</em></div>
+        </div>
+      </div>
+    </div>
+    <ol class="etapas">
+      <li><button type="button" data-i="1"><b>01</b><h3>Escolha a cor</h3><p>Coloque um print ou um vídeo com a cor que você quer copiar.</p><i class="t"></i></button></li>
+      <li><button type="button" data-i="2"><b>02</b><h3>Mostre o seu vídeo</h3><p>Do jeito que saiu da câmera ou do celular. O Mood lê as cores dos dois.</p><i class="t"></i></button></li>
+      <li><button type="button" data-i="3"><b>03</b><h3>Baixe a LUT</h3><p>Ajuste a intensidade, baixe o arquivo .cube e aplique no seu editor do computador.</p><i class="t"></i></button></li>
+    </ol>
+  </div>
 </section>
 
 <section class="sec w">
@@ -393,6 +515,47 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
     document.querySelectorAll('.grav button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
     troca(dA, b.dataset.g); $('#tAnt').textContent = 'Seu vídeo · ' + b.dataset.n;
   });
+
+  // ===== como funciona: a tela faz os 3 passos sozinha (só quando está visível); clicar num passo pula para ele =====
+  (() => {
+    const fx = $('#fluxo'); if (!fx) return;
+    const bts = [...fx.querySelectorAll('.etapas button')], st = $('#fxSt'), pct = $('#fxPct');
+    const TEMPO = [0, 3400, 3600, 5600], ROT = ['', 'Escolhendo a cor', 'Lendo as cores', 'LUT pronta'];
+    const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let at = 0, tm = 0, cont = 0, visivel = false, ini = 0, resta = 0;
+    // paleta tirada da própria referência
+    const ref = $('#fxRef'), sw = fx.querySelectorAll('.paleta i');
+    const PAL = ['#3b2a1f', '#8a5a36', '#c98a4f', '#e7b77c', '#f6dfb8'];
+    sw.forEach((s, i) => s.style.background = PAL[i]);
+    const tira = () => { try {
+      const c = document.createElement('canvas'), x = c.getContext('2d', { willReadFrequently:true }); c.width = c.height = 24; x.drawImage(ref, 0, 0, 24, 24);
+      const d = x.getImageData(0, 0, 24, 24).data, px = [];
+      for (let i = 0; i < d.length; i += 4) px.push([d[i], d[i+1], d[i+2], d[i]*.3 + d[i+1]*.59 + d[i+2]*.11]);
+      px.sort((a, b) => a[3] - b[3]);
+      sw.forEach((s, i) => { const f = px.slice(Math.floor(px.length * i / 5), Math.floor(px.length * (i + 1) / 5)), m = k => Math.round(f.reduce((t, p) => t + p[k], 0) / f.length); s.style.background = `rgb(${m(0)},${m(1)},${m(2)})`; });
+    } catch {} };
+    if (ref.complete && ref.naturalWidth) tira(); else ref.addEventListener('load', tira, { once:true });
+    const conta = () => { clearInterval(cont); let n = 0; pct.textContent = 'Lendo cores · 0%'; setTimeout(() => { cont = setInterval(() => { n = Math.min(100, n + 4); pct.textContent = n < 100 ? `Lendo cores · ${n}%` : 'Cores lidas · 100%'; if (n >= 100) clearInterval(cont); }, 95); }, 700); };
+    const barra = (b, ms) => { const t = b.querySelector('.t'); t.style.transition = 'none'; t.style.transform = 'scaleX(0)'; void t.offsetWidth; if (ms) { t.style.transition = `transform ${ms}ms linear`; t.style.transform = 'scaleX(1)'; } };
+    const vai = (i, auto) => {
+      clearTimeout(tm); at = i;
+      // reinicia as animações: tira o estado, força o reflow, aplica de novo
+      if (i === 1 || !auto) { fx.removeAttribute('data-p'); void fx.offsetWidth; }
+      fx.dataset.p = i; st.textContent = ROT[i];
+      bts.forEach(b => { const on = +b.dataset.i === i; on ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current'); barra(b, 0); });
+      if (i === 2) conta();
+      if (calmo || !visivel) return;
+      resta = TEMPO[i]; ini = Date.now(); barra(bts[i - 1], resta);
+      tm = setTimeout(() => vai(i % 3 + 1, true), resta);
+    };
+    bts.forEach(b => b.onclick = () => vai(+b.dataset.i, false));
+    if (calmo) { visivel = true; return vai(3, false); }
+    try { new IntersectionObserver(es => es.forEach(e => {
+      const era = visivel; visivel = e.isIntersecting;
+      if (visivel && !era) vai(at || 1, !at ? false : true);
+      if (!visivel && era) { clearTimeout(tm); clearInterval(cont); }
+    }), { threshold:.35 }).observe(fx); } catch { visivel = true; vai(1, false); }
+  })();
 
   // ===== barra fixa do celular: aparece depois da oferta e some quando ela está na tela =====
   const fixo = $('#fixo'), of = $('#oferta'); let passou = false, vendo = true;
