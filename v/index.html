@@ -33,7 +33,7 @@ h1{font-size:clamp(26px,7.4vw,34px);line-height:1.1;font-weight:850;letter-spaci
 <body>
 <!-- Página curta do WhatsApp depois do "Manda o áudio" (basefl.com/v/?t=CÓDIGO).
      Abriu: avisa o /camp/ir (d=abriu). Botões: /camp/ir com d=teste (teste direto, sem a aula) ou d=checkout (Mood R$ 79).
-     Links antigos com &d=teste|checkout seguem direto, sem mostrar a página. -->
+     Sempre mostra a página: a pessoa escolhe entre testar grátis e comprar. -->
 <main>
   <span class="marca">Mood</span>
   <h1>Tua cor de filme em 3 cliques</h1>
@@ -41,16 +41,15 @@ h1{font-size:clamp(26px,7.4vw,34px);line-height:1.1;font-weight:850;letter-spaci
   <div class="ad" aria-label="O mesmo vídeo antes e depois do Mood">
     <video src="/oferta/mood/antes-depois.mp4" poster="/oferta/mood/antes-depois.jpg" autoplay muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto"></video>
   </div>
-  <a class="bt um" id="teste" href="https://basefl.com/lut/?direto=1&amp;utm_source=whatsapp&amp;utm_medium=disparo&amp;utm_content=teste">Quero testar grátis</a>
-  <a class="bt dois" id="comprar" href="https://payfast.greenn.com.br/195947/offer/yf7yxj?ch_id=144304&amp;utm_source=whatsapp&amp;utm_medium=disparo&amp;utm_content=checkout">Quero o Mood · R$ 79</a>
-  <p class="nota"><b>Funciona no computador</b> (CapCut, Premiere, DaVinci, Final Cut). Não funciona no CapCut do celular.</p>
+  <a class="bt um" id="teste" href="https://basefl.com/lut/?direto=1&amp;utm_source=whatsapp&amp;utm_medium=disparo&amp;utm_content=teste">Testar grátis</a>
+  <a class="bt dois" id="comprar" href="https://payfast.greenn.com.br/195947/offer/yf7yxj?ch_id=144304&amp;utm_source=whatsapp&amp;utm_medium=disparo&amp;utm_content=checkout">Quero comprar · R$ 79</a>
+  <p class="nota">💻 <b>Compatível com computador:</b> CapCut Desktop, Adobe Premiere Pro, DaVinci Resolve e Final Cut Pro.<br>⚠️ Não funciona no CapCut para celular.</p>
 </main>
 <script>
 (() => {
-  const q = new URLSearchParams(location.search), t = q.get('t') || '', d = q.get('d');
+  const q = new URLSearchParams(location.search), t = q.get('t') || '';
   const ok = /^[a-f0-9]{12,40}$/.test(t);
   const ir = dest => { const u = new URL('https://otlaexuqyavpzxwzcsfo.supabase.co/functions/v1/camp/ir'); if (ok) u.searchParams.set('t', t); u.searchParams.set('o', 'whatsapp'); u.searchParams.set('d', dest); return u.toString(); };
-  if (d === 'teste' || d === 'checkout') { location.replace(ir(d)); return; }   // links antigos
   if (!ok) return;                                                               // sem código: os botões levam direto, sem registro
   document.getElementById('teste').href = ir('teste');
   document.getElementById('comprar').href = ir('checkout');
