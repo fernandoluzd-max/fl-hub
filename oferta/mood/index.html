@@ -12,7 +12,7 @@
 <meta name="theme-color" content="#111312">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<link rel="preload" as="video" href="https://aulas.basefl.com/upssel.mp4" type="video/mp4">
+<link rel="preload" as="video" href="antes-depois.mp4" type="video/mp4">
 <link rel="stylesheet" href="/selo.css?v=1">
 <style>
 /* Upsell do Mood depois da compra dos Títulos Dinâmicos (Greenn, 1 clique · upsell 7205 · oferta R$ 79). */
@@ -288,11 +288,27 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
   .pl{border-radius:16px}
   .pl .somon .pilula{font-size:15px;padding:12px 18px 12px 14px}
 }
+.ad{position:relative;margin:22px auto 0;width:100%;max-width:420px;aspect-ratio:540/676;max-height:46vh;border-radius:22px;overflow:hidden;background:#0a0b0b;box-shadow:0 30px 80px -40px rgba(180,92,255,.55)}
+.ad video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.passos3{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:16px auto 0;max-width:620px}
+.passos3 span{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 14px 8px 10px}
+.passos3 svg{width:18px;height:18px;color:var(--ambar);flex:none}
+.passos3 i{font-style:normal;color:var(--dim)}
+.vsl{max-width:860px;margin:0 auto}
+@media (max-width:760px){
+  .ad{width:auto;height:30vh;max-height:none;max-width:100%;border-radius:16px;margin-top:16px}
+  .passos3{gap:6px;margin-top:12px}
+  .passos3 span{font-size:12.5px;padding:6px 10px 6px 8px;gap:6px}
+  .passos3 svg{width:15px;height:15px}
+  .passos3 i{display:none}
+  .oferta{margin-top:16px}
+}
 @media (min-width:761px){.fixo{display:none}}
 @media (min-width:1000px){
   .topo{padding-top:24px}
   .topo h1{font-size:50px;max-width:20ch}
-  .palco{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:28px;align-items:center;margin-top:22px;text-align:center}
+  .palco{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center;margin-top:22px;text-align:center}
+  .palco .ad{margin:0 0 0 auto;max-height:none}
   .palco .pl{margin:0}
   .palco .oferta{margin:0}
   .palco .pl.vertical{justify-self:center}
@@ -310,13 +326,43 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
 <section class="topo w">
   <div class="marca"><span class="mood">Mood</span><span class="de">BASE FL</span></div>
   <p class="rot">Antes de continuar · adicione ao seu pedido</p>
-  <h1>Os títulos você já tem. Agora falta a cor.</h1>
-  <p class="sub">Com o Mood você mostra um vídeo com a cor que gosta, mostra o seu, e baixa a LUT pronta para o seu editor.</p>
+  <h1>Tua cor de filme em 3 cliques</h1>
+  <p class="sub">Escolhe um vídeo com a cor que tu gosta, sobe o teu e aplica a mesma cor no teu editor.</p>
+  <div class="passos3" aria-label="Como funciona">
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg>Escolhe a referência</span><i aria-hidden="true">→</i>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Sobe o teu vídeo</span><i aria-hidden="true">→</i>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Aplica no editor</span>
+  </div>
 
   <div class="palco">
+  <div class="ad" aria-label="O mesmo vídeo antes e depois do Mood">
+    <video src="antes-depois.mp4" poster="antes-depois.jpg" autoplay muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto"></video>
+  </div>
+
+  <div class="oferta" id="oferta">
+    <p class="mono">Mood · acesso de 1 ano</p>
+    <h3>Adicione o Mood ao seu pedido</h3>
+    <div class="preco" aria-label="79 reais"><small>R$</small><span>79</span></div>
+    <p class="parc">à vista, ou 12x de R$ 8,12</p>
+    <!-- Botão de upsell de 1 clique da Greenn (upsell 7205 · Mood R$ 79). NÃO mexer no atributo data-greenn-upsell. -->
+    <button class="gu" data-greenn-upsell="7205" data-loading="false" onclick="startLoading(this)">Sim, quero o Mood</button>
+    <p class="um">Um clique: usa o mesmo cartão da compra dos Títulos.<br>Pagou com Pix, Apple Pay ou Google Pay? <a class="alt" id="altCk" href="https://payfast.greenn.com.br/195947/offer/yf7yxj?ch_id=144304&amp;utm_source=greenn&amp;utm_medium=upsell&amp;utm_campaign=mood-upsell-79&amp;utm_content=checkout-alternativo">Compre por aqui</a>, mesmo preço.</p>
+    <div class="aviso"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span><b>Funciona no computador:</b> CapCut, Premiere, DaVinci, Final Cut. Não funciona no CapCut do celular.</span></div>
+    <p class="gar-mini"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>7 dias de garantia</p>
+    <a class="nao" id="not-buy-link" href="https://basefl.com/instalar/">Não, obrigado</a>
+  </div>
+  </div>
+</section>
+
+<section class="sec w">
+  <div class="cab">
+    <span class="rot">Em vídeo</span>
+    <h2>Veja o Mood funcionando.</h2>
+  </div>
+  <div class="vsl">
   <div class="pl" id="pl">
-    <video id="pv" src="https://aulas.basefl.com/upssel.mp4" muted autoplay playsinline webkit-playsinline disablepictureinpicture preload="auto"></video>
-    <button class="somon" id="somon" type="button" aria-label="Ativar o som e ver o vídeo do começo"><span class="vivo"><i></i>Seu vídeo já começou</span><span class="pilula"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>Toque para ativar o som</span></button>
+    <video id="pv" src="https://aulas.basefl.com/upssel.mp4" muted playsinline webkit-playsinline disablepictureinpicture preload="metadata"></video>
+    <button class="somon" id="somon" type="button" aria-label="Ativar o som e ver o vídeo do começo"><span class="vivo"><i></i>Vídeo do Mood funcionando</span><span class="pilula"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>Toque para ativar o som</span></button>
     <button class="capa" id="capa" type="button" aria-label="Ver o vídeo"><span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4c0 .8.9 1.3 1.6.9l11.3-7.2c.6-.4.6-1.3 0-1.7L8.6 3.9C7.9 3.5 7 4 7 4.8z"/></svg></span></button>
     <div class="mbarra" aria-hidden="true"></div>
     <div class="ctl">
@@ -328,18 +374,6 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
     <div class="falha" role="alert">Não deu para carregar o vídeo agora. A oferta continua logo abaixo.</div>
   </div>
 
-  <div class="oferta" id="oferta">
-    <p class="mono">Mood · acesso de 1 ano</p>
-    <h3>Adicione o Mood ao seu pedido</h3>
-    <div class="preco" aria-label="79 reais"><small>R$</small><span>79</span></div>
-    <p class="parc">à vista, ou 12x de R$ 8,12</p>
-    <!-- Botão de upsell de 1 clique da Greenn (upsell 7205 · Mood R$ 79). NÃO mexer no atributo data-greenn-upsell. -->
-    <button class="gu" data-greenn-upsell="7205" data-loading="false" onclick="startLoading(this)">Sim, quero o Mood</button>
-    <p class="um">Um clique: usa o mesmo cartão da compra dos Títulos.<br>Pagou com Pix, Apple Pay ou Google Pay? <a class="alt" id="altCk" href="https://payfast.greenn.com.br/195947/offer/yf7yxj?ch_id=144304&amp;utm_source=greenn&amp;utm_medium=upsell&amp;utm_campaign=mood-upsell-79&amp;utm_content=checkout-alternativo">Compre por aqui</a>, mesmo preço.</p>
-    <div class="aviso"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span><b>Funciona no computador</b> (CapCut, Premiere, DaVinci, Final Cut). Não funciona no CapCut do celular.</span></div>
-    <p class="gar-mini"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>7 dias de garantia</p>
-    <a class="nao" id="not-buy-link" href="https://basefl.com/instalar/">Não, obrigado. Quero só os Títulos Dinâmicos.</a>
-  </div>
   </div>
 </section>
 
@@ -398,7 +432,7 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
     <ol class="etapas">
       <li><button type="button" data-i="1"><b>01</b><h3>Escolha a cor</h3><p>Coloque um print ou um vídeo com a cor que você quer copiar.</p><i class="t"></i></button></li>
       <li><button type="button" data-i="2"><b>02</b><h3>Mostre o seu vídeo</h3><p>Do jeito que saiu da câmera ou do celular. O Mood lê as cores dos dois.</p><i class="t"></i></button></li>
-      <li><button type="button" data-i="3"><b>03</b><h3>Baixe a LUT</h3><p>Ajuste a intensidade, baixe o arquivo .cube e aplique no seu editor do computador.</p><i class="t"></i></button></li>
+      <li><button type="button" data-i="3"><b>03</b><h3>Aplique no seu editor</h3><p>Ajuste a intensidade e aplique a cor no seu editor do computador.</p><i class="t"></i></button></li>
     </ol>
   </div>
 </section>
@@ -443,7 +477,7 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
   <h2>Os títulos já estão no seu pedido. Quer a cor junto?</h2>
   <p class="sub" style="margin:12px auto 22px">Mood por R$ 79, ou 12x de R$ 8,12. Um clique e pronto.</p>
   <a class="gu" href="#oferta" style="text-decoration:none">Ver a oferta</a>
-  <div><a class="nao" href="https://basefl.com/instalar/">Não, obrigado. Quero só os Títulos Dinâmicos.</a></div>
+  <div><a class="nao" href="https://basefl.com/instalar/">Não, obrigado</a></div>
 </section>
 </main>
 
@@ -452,6 +486,24 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
 <div class="fixo" id="fixo" aria-hidden="true"><span><b>Mood · R$ 79</b>ou 12x de R$ 8,12</span><a href="#oferta" tabindex="-1">Sim, quero</a></div>
 
 <script src="/pixel.js"></script>
+<script>
+/* Eventos do funil do upsell (banco: rpc evento). Mesmo visitante (fl_vis) do resto do site.
+   upsell_viu · upsell_aceitou (clique no 1 clique) · upsell_alt (checkout preenchido) · upsell_recusou */
+window.FLEv = (() => {
+  const URL_ = 'https://otlaexuqyavpzxwzcsfo.supabase.co/rest/v1/rpc/evento', KEY = 'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR';
+  const ck = n => { const m = document.cookie.match('(?:^|; )' + n + '=([^;]*)'); return m ? decodeURIComponent(m[1]) : null; };
+  let vis = null; try { vis = localStorage.getItem('fl_vis'); } catch {} vis = vis || ck('fl_vis');
+  if (!vis || !/^v[a-z0-9]{10,30}$/.test(vis)) { vis = 'v' + Math.random().toString(36).slice(2, 12) + Date.now().toString(36); try { localStorage.setItem('fl_vis', vis); } catch {} document.cookie = 'fl_vis=' + vis + ';path=/;max-age=31536000;SameSite=Lax'; }
+  const q = new URLSearchParams(location.search); let metodo = null, viu = false;
+  const manda = (nome, extra) => { try { fetch(URL_, { method:'POST', keepalive:true, headers:{ 'Content-Type':'application/json', apikey:KEY, Authorization:'Bearer ' + KEY }, body: JSON.stringify({ p_nome:nome, p_pack:'fl-lut', p_visitante:vis, p_dados:Object.assign({ oferta:'7205', metodo, de:q.get('utm_source') || null }, extra || {}) }) }).catch(() => {}); } catch {} };
+  document.addEventListener('click', e => {
+    const t = e.target.closest && e.target.closest('[data-greenn-upsell], #altCk, a.nao');
+    if (!t) return;
+    manda(t.matches('[data-greenn-upsell]') ? 'upsell_aceitou' : t.id === 'altCk' ? 'upsell_alt' : 'upsell_recusou', { onde: t.closest('.fim') ? 'fim' : t.closest('.fixo') ? 'barra' : 'topo' });
+  }, true);
+  return { metodo: m => { metodo = m ? String(m).toUpperCase() : null; }, viu: () => { if (viu) return; viu = true; manda('upsell_viu'); } };
+})();
+</script>
 <script src="https://metrics.basefl.com/t.js" data-key="pk_live_c3392e6c67a34797baf70e0604f3fa4f" data-endpoint="https://metrics.basefl.com" data-reserva="https://edge.central.automatizesolucoes.com" data-dominios="basefl.com,reelsacademy.com.br,ofernandoluz.com" data-endpoints="basefl.com=https://metrics.basefl.com,reelsacademy.com.br=https://metrics.reelsacademy.com.br,ofernandoluz.com=https://metrics.ofernandoluz.com" defer></script>
 <script> window.startLoading = function(button) { const originalHTML = button.innerHTML; button.setAttribute('data-loading', 'true'); button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path fill="#14070e" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/><path fill="#14070e" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></svg>`; try { window.FLPixel && FLPixel.checkout(); } catch (e) {} setTimeout(() => { button.setAttribute('data-loading', 'false'); button.innerHTML = originalHTML; }, 3000); }; (function (w, d, s, t) { if (w._greennUp) return; w._greennUp = t; var f = d.getElementsByTagName(s)[0], j = d.createElement(s); j.async = true; j.src = "https://payfast.greenn.com.br/assets/upsell.js?v=" + t; f.parentNode.insertBefore(j, f); })(window, document, "script", Date.now()); </script>
 <script>
@@ -496,9 +548,8 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
   barra.addEventListener('keydown', e => { if (e.key === 'ArrowRight') v.currentTime += 5; if (e.key === 'ArrowLeft') v.currentTime -= 5; });
   pl.addEventListener('pointermove', e => { if (e.pointerType === 'mouse') acorda(); });
   // iPhone em pouca bateria bloqueia o autoplay: começa no primeiro toque na página
-  const destrava = () => { if (v.paused && !pl.dataset.som && !v.ended) toca(); };
-  ['touchstart', 'scroll'].forEach(ev => addEventListener(ev, destrava, { once:true, passive:true }));
-  icones(); toca();
+  icones();
+  try { let foi = false; new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && !foi && !pl.dataset.som){ foi = true; toca(); } }), { threshold:.4 }).observe(pl); } catch { toca(); }
 
   // ===== comparador com referências (os vídeos do /lut/demo) =====
   const cmp = $('#cmp'), inp = cmp.querySelector('input'), dA = $('#dAnt'), dD = $('#dDep'), D = '/lut/demo/';
@@ -578,13 +629,15 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
       .then(r => r.ok ? r.json() : null).then(u => {
         if (!u) return;
         compra = u;
+        try { window.FLEv && FLEv.metodo(u.method); } catch {}
         const alt = $('#altCk'); if (alt) alt.href = linkCk(u, 'checkout-alternativo');
         carteira = !!u.method && !UM_CLIQUE.includes(String(u.method).toUpperCase());
         if (carteira) {
           const um = document.querySelector('.um');
           if (um) um.textContent = 'Você pagou os Títulos com carteira digital: o botão abre o pagamento do Mood já preenchido, é só confirmar.';
         }
-      }).catch(() => {});
+      }).catch(() => {}).finally(() => { try { window.FLEv && FLEv.viu(); } catch {} });
+    if (!token) try { window.FLEv && FLEv.viu(); } catch {}
     // carteira digital: o clique vai direto para o checkout preenchido (antes da Greenn tentar o 1 clique)
     document.addEventListener('click', ev => {
       const b = ev.target.closest && ev.target.closest('[data-greenn-upsell]');
