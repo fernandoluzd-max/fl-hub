@@ -558,6 +558,54 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
     }), { threshold:.35 }).observe(fx); } catch { visivel = true; vai(1, false); }
   })();
 
+  // ===== 1 clique da Greenn só funciona para quem pagou os Títulos com cartão digitado, Pix ou boleto.
+  // Apple Pay / Google Pay / PayPal: o botão abre o checkout do Mood já preenchido (aí é só confirmar na carteira).
+  // E se o 1 clique der erro por qualquer motivo, aparece no aviso da Greenn um botão para pagar de outro jeito.
+  (() => {
+    const q = new URLSearchParams(location.search), token = q.get('token');
+    const CK = 'https://payfast.greenn.com.br/195947/offer/yf7yxj';
+    const linkCk = (u, conteudo) => {
+      const x = new URL(CK);
+      x.searchParams.set('ch_id', '144304');
+      if (u) { x.searchParams.set('fn', u.name || ''); x.searchParams.set('em', u.email || ''); x.searchParams.set('ph', u.cellphone || ''); x.searchParams.set('document', u.document || u.cpf_cnpj || ''); }
+      x.searchParams.set('up_id', '7205');
+      x.searchParams.set('utm_source', 'greenn'); x.searchParams.set('utm_medium', 'upsell'); x.searchParams.set('utm_campaign', 'mood-upsell-79'); x.searchParams.set('utm_content', conteudo);
+      return x.toString();
+    };
+    let compra = null, carteira = false;
+    const UM_CLIQUE = ['CREDIT_CARD', 'TWO_CREDIT_CARDS', 'PIX', 'BOLETO'];
+    if (token) fetch('https://apipay.greenn.com.br/api/upsell/' + encodeURIComponent(token), { headers: { Accept: 'application/json' } })
+      .then(r => r.ok ? r.json() : null).then(u => {
+        if (!u) return;
+        compra = u;
+        const alt = $('#altCk'); if (alt) alt.href = linkCk(u, 'checkout-alternativo');
+        carteira = !!u.method && !UM_CLIQUE.includes(String(u.method).toUpperCase());
+        if (carteira) {
+          const um = document.querySelector('.um');
+          if (um) um.textContent = 'Você pagou os Títulos com carteira digital: o botão abre o pagamento do Mood já preenchido, é só confirmar.';
+        }
+      }).catch(() => {});
+    // carteira digital: o clique vai direto para o checkout preenchido (antes da Greenn tentar o 1 clique)
+    document.addEventListener('click', ev => {
+      const b = ev.target.closest && ev.target.closest('[data-greenn-upsell]');
+      if (!b || !carteira) return;
+      ev.preventDefault(); ev.stopImmediatePropagation();
+      try { window.FLPixel && FLPixel.checkout(); } catch {}
+      location.href = linkCk(compra, 'carteira');
+    }, true);
+    // erro no 1 clique: oferece pagar de outro jeito, já preenchido
+    const socorro = () => {
+      const box = document.getElementById('greenn-type-payment');
+      if (!box || !/erro|não foi possível|tente/i.test(box.textContent) || box.querySelector('.fl-outro')) return;
+      const a = document.createElement('a');
+      a.className = 'fl-outro'; a.href = linkCk(compra, 'erro-1-clique');
+      a.textContent = 'Pagar de outro jeito (Apple Pay, Google Pay, Pix ou outro cartão)';
+      a.style.cssText = 'display:block;margin-top:16px;padding:14px 16px;border-radius:6px;background:#007c5d;color:#fff;font:600 15px Montserrat,sans-serif;text-align:center;text-decoration:none';
+      box.appendChild(a);
+    };
+    try { new MutationObserver(socorro).observe(document.body, { childList:true, subtree:true, characterData:true }); } catch {}
+  })();
+
   // ===== barra fixa do celular: aparece depois da oferta e some quando ela está na tela =====
   const fixo = $('#fixo'), of = $('#oferta'); let passou = false, vendo = true;
   const atualiza = () => fixo.classList.toggle('on', passou && !vendo);
