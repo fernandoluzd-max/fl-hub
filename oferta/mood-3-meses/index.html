@@ -316,6 +316,8 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
 @keyframes aro{0%{transform:scale(.92);opacity:.9}100%{transform:scale(1.35);opacity:0}}
 @keyframes vivo{0%{box-shadow:0 0 0 0 rgba(255,111,174,.6)}100%{box-shadow:0 0 0 8px rgba(255,111,174,0)}}
 @media (prefers-reduced-motion:reduce){.pl .somon .pilula::before,.pl .somon .vivo i{animation:none}html{scroll-behavior:auto}}
+.preco small.av{align-self:flex-end;font-size:20px;margin:0 0 10px 6px;letter-spacing:0}
+.parc.pq{font-size:12.5px;color:var(--dim)}
 </style>
 </head>
 <body>
@@ -342,8 +344,8 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
   <div class="oferta" id="oferta">
     <p class="mono">Mood · acesso de 3 meses</p>
     <h3>Mood por 3 meses</h3>
-    <div class="preco" aria-label="37 reais"><small>R$</small><span>37</span></div>
-    <p class="parc">à vista, ou 12x de R$ 3,80</p>
+    <div class="preco" aria-label="37 reais à vista"><small>R$</small><span>37</span><small class="av">à vista</small></div>
+    <p class="parc pq">ou 12x de R$ 3,80 no cartão</p>
     <!-- Botão de 1 clique da Greenn. OFERTA_3M = id da oferta de upsell "Mood 3 meses" criada na Greenn. -->
     <button class="gu" data-greenn-upsell="OFERTA_3M" data-loading="false" onclick="startLoading(this)">Sim, quero 3 meses</button>
     <p class="um">Um clique: usa o mesmo pagamento da compra dos Títulos.</p>
