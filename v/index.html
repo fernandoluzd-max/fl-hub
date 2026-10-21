@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Mood · Base FL</title>
+<meta property="og:title" content="Mood · Base FL">
+<meta property="og:description" content="Tua cor de filme em 3 cliques.">
+<meta property="og:image" content="https://basefl.com/lut/demo/og-mood.jpg">
+<meta name="theme-color" content="#111312">
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#111312;color:#F4F0E4;font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:24px;text-align:center}a{color:#F4F0E4}</style>
+</head>
+<body>
+<!-- Links curtos do WhatsApp (basefl.com/v/?t=CÓDIGO&d=teste|checkout).
+     Só navegador de verdade segue (a prévia do WhatsApp não roda JavaScript, então não conta clique falso).
+     Leva para o redirecionador /camp/ir, que registra o clique e manda para o teste ou para o checkout. -->
+<p>Abrindo…</p>
+<p><a id="ir" href="https://basefl.com/lut/">Toque aqui se não abrir</a></p>
+<script>
+(() => {
+  const q = new URLSearchParams(location.search), d = q.get('d') === 'checkout' ? 'checkout' : 'teste', t = q.get('t') || '';
+  const u = new URL('https://otlaexuqyavpzxwzcsfo.supabase.co/functions/v1/camp/ir');
+  if (/^[a-f0-9]{12,40}$/.test(t)) u.searchParams.set('t', t);
+  u.searchParams.set('o', 'whatsapp'); u.searchParams.set('d', d);
+  document.getElementById('ir').href = u.toString();
+  location.replace(u.toString());
+})();
+</script>
+</body>
+</html>

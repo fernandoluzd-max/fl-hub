@@ -1249,7 +1249,7 @@ function passo1(){
   marca();
   poe('R'); poe('V');
   $('#ex').onclick = () => { VIDS = [exemplo('v')]; REFS = [exemplo('r')]; iV = iR = 0; NOTAS = { V:'', R:'' }; CENAS = [null, null, null]; poe('R'); poe('V'); toast('Exemplo carregado'); };
-  $('#ir').onclick = analisa;
+  $('#ir').onclick = (e) => { try { if (!acesso) Base.evento('teste_comecou', PACK, { direto: (typeof DIRETO !== 'undefined' && DIRETO) ? 1 : 0, canal: (ORIGEM && ORIGEM.utm_source) || null }); } catch {} return analisa(e); };
 }
 function exemplo(q){   // imagens de demonstração desenhadas aqui mesmo (sem arquivo externo)
   const c = document.createElement('canvas'); c.width = 900; c.height = 506; const x = c.getContext('2d', { willReadFrequently:true });
@@ -1948,7 +1948,7 @@ let alViuRes = false;
 passo2 = function(){
   _alP2();
   if (!PROVA) return;
-  if (!alViuRes){ alViuRes = true; evAluno('aluno_resultado_visto'); }
+  if (!alViuRes){ alViuRes = true; evAluno('aluno_resultado_visto'); try { Base.evento('teste_resultado', PACK, { direto: (typeof DIRETO !== 'undefined' && DIRETO) ? 1 : 0, canal: (ORIGEM && ORIGEM.utm_source) || null }); } catch {} }
   setTimeout(() => {
     const pv = $('#pv'); if (!pv || !$('#cD')) return;
     let ref, ant, dep; try { ref = paleta(REFS[iR], 6); ant = paleta($('#cA'), 6); dep = paleta($('#cD'), 6); } catch { return; }
@@ -2013,7 +2013,9 @@ function credencialPublica(){
 }
 atualizaFita();
 const VEIO_TESTE = /[?&](aluno|teste)=1/.test(location.search);
-botaoConta(); if (acesso && !VEIO_TESTE) passo1(); else if (!recepcaoAluno()) aulaIntro();
+// ?direto=1 (link do WhatsApp pós-compra): abre direto no teste, sem a aula. A aula continua no botão "Ver a aula".
+const DIRETO = (() => { try { if (new URLSearchParams(location.search).get('direto') === '1') sessionStorage.setItem('mood_direto', '1'); return sessionStorage.getItem('mood_direto') === '1'; } catch { return false; } })();
+botaoConta(); if ((acesso && !VEIO_TESTE) || (DIRETO && !acesso)) passo1(); else if (!recepcaoAluno()) aulaIntro();
 document.addEventListener('click', e => { if (e.target.closest && e.target.closest('#rever')){ evAula('aula_teste_rever'); aulaIntro(); } });
 Base.pronto.then(() => { sincAcesso(); if ($('.fim')) passo3(); else if (acesso && !VEIO_TESTE && $('#pl')) { if (paraPlayer){ paraPlayer(); paraPlayer = null; } passo1(); } });
 Base.aoMudar(() => { const era = acesso; sincAcesso(); if (era !== acesso && $('.fim')) passo3(); });
