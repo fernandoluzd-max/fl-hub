@@ -369,6 +369,7 @@ tr:last-child td{border-bottom:0}
     } finally { ocupado = false; }
   }
   function marcaVivo(iv) {
+    if (!ultimaAtualizacao) return;
     const on = iv.vivo && !document.hidden;
     $('vivo').classList.toggle('on', on);
     const h = new Date(ultimaAtualizacao + SP).toISOString().slice(11, 19);
