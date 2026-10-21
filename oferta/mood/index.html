@@ -3,24 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Uma oferta antes de continuar — Mood</title>
-<meta name="robots" content="noindex">
-<meta name="description" content="Mostre a referência, mostre o seu vídeo e baixe a LUT pronta. Sem saber color grading.">
-<meta property="og:title" content="Mood — copie a cor de qualquer vídeo">
-<meta property="og:description" content="Mostre a referência, mostre o seu vídeo e baixe a LUT pronta. Sem saber color grading.">
-<meta property="og:image" content="https://basefl.com/capas/mood.jpg">
-<meta name="twitter:card" content="summary_large_image">
-<meta property="og:type" content="website">
+<title>Adicione o Mood ao seu pedido — Base FL</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Mostre um vídeo com a cor que você quer, mostre o seu, e baixe a LUT pronta para o seu editor.">
 <link rel="icon" type="image/svg+xml" href="https://basefl.com/lut/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="https://basefl.com/lut/favicon-32.png">
 <link rel="apple-touch-icon" href="https://basefl.com/lut/apple-touch-icon.png">
-<meta name="theme-color" content="#0E0F0F">
+<meta name="theme-color" content="#111312">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="preload" as="video" href="https://aulas.basefl.com/upssel.mp4" type="video/mp4">
 <link rel="stylesheet" href="/selo.css?v=1">
 <style>
+/* Upsell do Mood depois da compra dos Títulos Dinâmicos (Greenn, 1 clique · upsell 7205 · oferta R$ 79). */
 :root{
-  --bg:#0E0F0F; --panel:#151716; --panel2:#1B1E1D; --line:#262A28; --ink:#F3EFE6; --mute:#A9AA9C; --dim:#73746B;
+  --bg:#111312; --panel:#191C1B; --panel2:#202423; --line:#2B302E; --line2:#3A403D; --ink:#F4F0E4; --mute:#B3B4A2; --dim:#8A8B7F;
+  --ok:#7FCE8F; --ambar:#F2A541;
   --grad:linear-gradient(125deg,#FFB347,#FF6FAE 38%,#B45CFF 70%,#5AB8FF);
   --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   --f:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
@@ -30,486 +28,376 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 html,body{background:var(--bg)}
-body{color:var(--ink);font:17px/1.6 var(--f);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{color:var(--ink);font:17px/1.55 var(--f);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{color:inherit}
 button{font:inherit;color:inherit}
-img{max-width:100%}
-:focus-visible{outline:2px solid #B45CFF;outline-offset:3px;border-radius:10px}
-.w{position:relative;max-width:1080px;margin:0 auto;padding:0 24px}
-.mono{font-family:var(--m);font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
-.kick{display:inline-flex;align-items:center;gap:10px}
-.kick::before{content:"";width:22px;height:1.5px;border-radius:2px;background:var(--grad)}
-em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:10px}
+.w{max-width:1080px;margin:0 auto;padding:0 20px}
+.rot{font:700 11px var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--ambar)}
+.mono{font:700 11px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+h1,h2,h3{font-family:var(--d);letter-spacing:-.02em;line-height:1.05;text-wrap:balance}
+h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
+.sub{color:var(--mute);font-size:17px;max-width:52ch}
 
-nav{display:flex;align-items:center;gap:12px;padding:18px 0}
-.mood{font-family:var(--d);font-weight:800;font-size:28px;line-height:1;letter-spacing:-.02em;display:inline-flex;align-items:baseline;color:var(--ink);text-decoration:none}
-.mood svg{height:.56em;width:1em;margin:0 .035em;flex:none}
-nav .de{font-family:var(--m);font-size:10.5px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;padding-left:12px;border-left:1px solid var(--line);text-decoration:none}
-nav .sp{flex:1}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;text-decoration:none;font-weight:700;font-size:17px;line-height:1.2;text-align:center;border-radius:14px;padding:17px 28px;border:0;background:var(--grad);color:#14070e;transition:transform .18s ease,filter .18s ease}
-.btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
-.btn:active{transform:translateY(0) scale(.985)}
-.btn.sm{font-size:14px;padding:10px 16px;border-radius:11px}
-.btn.gh{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px #3a3f3c}
-.btn.gh:hover{box-shadow:inset 0 0 0 1px var(--ink)}
+/* compra confirmada */
+.ok-bar{display:flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:8px 16px;border-bottom:1px solid var(--line);background:var(--panel);font-size:14px;color:var(--mute);text-align:center}
+.ok-bar b{color:var(--ink);font-weight:700}
+.ok-bar svg{flex:none;width:18px;height:18px;color:var(--ok)}
 
-.hero{text-align:center;padding:40px 0 0}
-h1{font-family:var(--d);font-weight:800;font-size:clamp(38px,7.4vw,76px);line-height:.98;letter-spacing:-.035em;margin:16px auto 18px;max-width:13ch;text-wrap:balance}
-.lead{color:var(--mute);font-size:clamp(17px,2.2vw,20px);max-width:56ch;margin:0 auto 28px;text-wrap:pretty}
-.lead b{color:var(--ink);font-weight:600}
-.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.sob{color:var(--dim);font-size:14px;margin:16px auto 0;max-width:46ch;text-wrap:balance}
+/* topo */
+.topo{padding:28px 0 18px;text-align:center}
+.marca{display:inline-flex;align-items:center;gap:10px;margin-bottom:22px}
+.marca .mood{font:850 24px/1 var(--d);letter-spacing:-.02em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.marca .de{font:700 10.5px var(--m);letter-spacing:.16em;color:var(--dim);padding-left:10px;border-left:1px solid var(--line)}
+.topo h1{font-weight:850;font-size:clamp(32px,7vw,58px);margin:10px auto 12px;max-width:16ch}
+.topo .sub{margin:0 auto}
 
-/* demonstração: vídeo real + looks criados no Mood */
-.demo{position:relative;margin:44px auto 0;max-width:980px}
-.tela{position:relative;border-radius:22px;overflow:hidden;background:#0a0b0b;aspect-ratio:16/9;box-shadow:0 0 0 1px #2a2e2c,0 60px 120px -60px #000;user-select:none;-webkit-user-select:none}
-.tela video,.tela canvas,.tela .fb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.tela .fb{opacity:0;transition:opacity .45s ease}
-.tela video::-webkit-media-controls{display:none!important}
-.tg,.refb,.orig{position:absolute;z-index:3;background:rgba(10,11,11,.58);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#fff}
-.tg{top:14px;left:14px;font-size:12px;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:99px;pointer-events:none}
-.refb{left:14px;bottom:14px;display:flex;align-items:center;gap:11px;padding:6px 15px 6px 6px;border-radius:14px;pointer-events:none;text-align:left}
-.refb img{width:57px;height:38px;border-radius:9px;object-fit:cover;display:block}
-.refb small{display:block;font-family:var(--m);font-weight:500;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.62);line-height:1.5}
-.refb b{display:block;font-size:13.5px;font-weight:600;line-height:1.25}
-.orig{right:14px;bottom:14px;border:0;cursor:pointer;font-size:12.5px;font-weight:600;padding:10px 14px;border-radius:99px;touch-action:none;transition:background .2s}
-.orig:hover,.orig.on{background:rgba(255,255,255,.92);color:#111}
-.orig .c{display:none}
-.painel{margin-top:14px;padding:16px 16px 14px;border-radius:20px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);text-align:left}
-.painel .rot{display:block;margin:0 0 12px 2px}
-.refs{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
-.rf{background:none;border:0;padding:0;cursor:pointer;text-align:center;color:var(--dim);min-width:0}
-.rf .mi{display:block;aspect-ratio:3/2;border-radius:11px;overflow:hidden;background:var(--panel2);box-shadow:0 0 0 1.5px transparent;transition:box-shadow .35s ease}
-.rf img{width:100%;height:100%;object-fit:cover;display:block;opacity:.6;transform:scale(1.001);transition:opacity .35s ease,transform .5s ease}
-.rf:hover img{opacity:.85}
-.rf .nm{display:block;margin-top:8px;font-size:12px;font-weight:600;line-height:1.25;transition:color .35s ease}
-.rf.on .mi{box-shadow:0 0 0 1.5px var(--bg),0 0 0 3px var(--ink)}
-.rf.on img{opacity:1;transform:scale(1.04)}
-.rf.on .nm{color:var(--ink)}
-.int{display:flex;align-items:center;gap:16px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
-.int span{font-size:13px;font-weight:600;color:var(--mute);flex:none}
-.int output{font-family:var(--m);font-weight:500;font-size:12px;color:var(--ink);width:4ch;text-align:right;flex:none;font-variant-numeric:tabular-nums}
-input[type=range]{-webkit-appearance:none;appearance:none;background:none;cursor:pointer;margin:0}
-.int input{flex:1;min-width:0;height:28px;--p:65%}
-.int input::-webkit-slider-runnable-track{height:3px;border-radius:3px;background:linear-gradient(90deg,var(--ink) var(--p),#343936 var(--p))}
-.int input::-moz-range-track{height:3px;border-radius:3px;background:#343936}
-.int input::-moz-range-progress{height:3px;border-radius:3px;background:var(--ink)}
-.int input::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-7.5px;border-radius:50%;background:var(--ink);border:0;box-shadow:0 2px 8px rgba(0,0,0,.5);transition:transform .15s}
-.int input::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--ink);border:0;box-shadow:0 2px 8px rgba(0,0,0,.5)}
-.int input:active::-webkit-slider-thumb{transform:scale(1.15)}
-.real{margin:14px auto 0;text-align:center;color:var(--dim);font-size:13.5px;max-width:52ch;text-wrap:balance}
-
-section{padding:104px 0 0}
-.sh{text-align:center}
-.sh .mono{display:block;margin-bottom:16px}
-h2{font-family:var(--d);font-weight:700;font-size:clamp(27px,4.3vw,44px);line-height:1.08;letter-spacing:-.028em;margin:0 auto 16px;max-width:19ch;text-wrap:balance}
-.sec-p{color:var(--mute);max-width:52ch;margin:0 auto;font-size:17.5px;text-wrap:pretty}
-.meio{display:flex;justify-content:center;margin-top:36px}
-.rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
-.rv.vis{opacity:1;transform:none}
-.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
-
-/* problema */
-.dores{list-style:none;max-width:640px;margin:36px auto 0;text-align:center}
-.dores li{padding:20px 0;border-top:1px solid var(--line);font-size:18px;line-height:1.45;color:var(--ink);text-wrap:balance}
-.dores li:last-child{border-bottom:1px solid var(--line)}
-
-/* referência → direção → resultado */
-.fluxo{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:18px;align-items:start;margin-top:44px}
-.fx{text-align:center}
-.fx .md{display:block;aspect-ratio:3/2;border-radius:16px;overflow:hidden;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);position:relative}
-.fx .md img{width:100%;height:100%;object-fit:cover;display:block}
-.fx .dir{display:flex;flex-direction:column;justify-content:center;gap:16px;padding:0 22px;height:100%}
-.fx .pal{display:flex;height:34px;border-radius:9px;overflow:hidden}
-.fx .pal i{flex:1}
-.fx .bar{height:3px;border-radius:3px;background:#343936;position:relative}
-.fx .bar::before{content:"";position:absolute;left:0;top:0;bottom:0;width:65%;border-radius:3px;background:var(--ink)}
-.fx .bar::after{content:"";position:absolute;left:65%;top:50%;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;border-radius:50%;background:var(--ink)}
-.fx .mono{display:block;margin:18px 0 6px;color:var(--ink)}
-.fx p{color:var(--mute);font-size:15.5px;line-height:1.5;max-width:28ch;margin:0 auto;text-wrap:balance}
-.seta{align-self:start;margin-top:calc((100% - 36px) / 9);color:var(--dim);font-size:20px;line-height:1}
-.fluxo .seta{margin-top:88px}
-
-/* como funciona */
-.passos{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:44px;border-top:1px solid var(--line)}
-.passos li{padding:24px 22px 0 0;position:relative}
-.passos li+li{padding-left:22px;border-left:1px solid var(--line)}
-.passos .n{font-family:var(--m);font-weight:500;font-size:11px;letter-spacing:.18em;color:var(--dim)}
-.passos h3{font-family:var(--d);font-weight:700;font-size:19px;line-height:1.2;letter-spacing:-.01em;margin:10px 0 8px}
-.passos p{color:var(--mute);font-size:15px;line-height:1.5}
-
-/* antes e depois */
-.ba{position:relative;max-width:920px;margin:44px auto 0;aspect-ratio:16/9;border-radius:20px;overflow:hidden;background:var(--panel);box-shadow:0 0 0 1px #2a2e2c;--x:50%;user-select:none;-webkit-user-select:none}
-.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.ba .a{clip-path:inset(0 calc(100% - var(--x)) 0 0)}
-.ba .lin{position:absolute;top:0;bottom:0;left:var(--x);width:1.5px;margin-left:-.75px;background:#fff;pointer-events:none}
-.ba .lin::after{content:"";position:absolute;top:50%;left:50%;width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'%3E%3Cpath d='M16 13l-5 6 5 6M22 13l5 6-5 6' fill='none' stroke='%23111' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");box-shadow:0 4px 16px rgba(0,0,0,.4)}
-.ba .et{position:absolute;top:14px;font-size:12px;font-weight:600;padding:6px 12px;border-radius:99px;background:rgba(10,11,11,.58);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:none}
-.ba .et.l{left:14px}.ba .et.r{right:14px}
-.ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;touch-action:pan-y}
-.ba input::-webkit-slider-thumb{-webkit-appearance:none;width:44px;height:400px}
-.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:920px;margin:14px auto 0}
-.gal figure{min-width:0}
-.gal img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:12px;background:var(--panel)}
-.gal figcaption{margin-top:9px;text-align:center;font-size:13px;font-weight:600;color:var(--mute)}
-.leg{margin:14px auto 0;text-align:center;color:var(--dim);font-size:13.5px}
-
-/* praticidade */
-.pts{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:44px;border-top:1px solid var(--line)}
-.pts div{padding:26px 24px 0;text-align:center}
-.pts div+div{border-left:1px solid var(--line)}
-.pts h3{font-family:var(--d);font-weight:700;font-size:20px;letter-spacing:-.01em;margin-bottom:8px}
-.pts p{color:var(--mute);font-size:15.5px;line-height:1.5;max-width:30ch;margin:0 auto;text-wrap:balance}
-.onde{max-width:720px;margin:48px auto 0;text-align:center}
-.onde .mono{display:block;margin-bottom:14px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.chips span{font-size:13.5px;font-weight:600;padding:8px 14px;border-radius:99px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line)}
-.nota{margin:16px auto 0;max-width:56ch;color:var(--dim);font-size:14px;line-height:1.5;text-wrap:pretty}
-
-/* videoaula */
-.aula{max-width:820px;margin:0 auto;padding:44px 32px;border-radius:26px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);text-align:center}
-.aula .pl{width:54px;height:54px;border-radius:50%;margin:0 auto 22px;display:grid;place-items:center;box-shadow:inset 0 0 0 1px #3a3f3c}
-.aula .pl svg{width:18px;height:18px;margin-left:3px;fill:var(--ink)}
-.aula ul{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;margin-top:26px}
-.aula li{font-size:14.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:9px}
-.aula li::before,.duo li::before,.inc span::before{content:"";flex:none;width:18px;height:18px;border-radius:50%;background:#2a2f2c url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='%23F3EFE6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
-
-/* para quem é */
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:920px;margin:44px auto 0}
-.cx{background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);border-radius:22px;padding:28px}
-.cx h3{font-family:var(--d);font-weight:700;font-size:19px;margin-bottom:16px;letter-spacing:-.01em}
-.cx ul{list-style:none;display:flex;flex-direction:column;gap:13px}
-.cx li{display:flex;gap:12px;color:var(--ink);font-size:16px;line-height:1.45}
-.cx li::before{margin-top:3px}
-.cx.nao h3{color:var(--mute)}
-.cx.nao li{color:var(--mute)}
-.cx.nao li::before{background:#222624 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M6.5 6.5l7 7M13.5 6.5l-7 7' stroke='%2373746B' stroke-width='1.7' stroke-linecap='round'/%3E%3C/svg%3E")}
-
-/* controle */
-.ctrl{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:44px;border-top:1px solid var(--line)}
-.ctrl div{padding:24px 20px 0;text-align:center}
-.ctrl div+div{border-left:1px solid var(--line)}
-.ctrl h3{font-size:16.5px;font-weight:700;margin-bottom:6px}
-.ctrl p{color:var(--mute);font-size:14.5px;line-height:1.5;text-wrap:balance}
-.franco{margin:44px auto 0;max-width:60ch;text-align:center;color:var(--mute);font-size:15.5px;line-height:1.6;text-wrap:pretty}
-.franco b{color:var(--ink);font-weight:600}
+/* player (mesmo desenho do player da aula do Mood) */
+.pl{--p:0;position:relative;margin:22px auto 0;width:100%;max-width:860px;border-radius:22px;overflow:hidden;background:#0a0b0b;aspect-ratio:16/9;isolation:isolate;box-shadow:0 30px 80px -40px rgba(180,92,255,.55),0 0 0 1px rgba(255,255,255,.06)}
+.pl.vertical{max-width:420px;aspect-ratio:9/16;max-height:78svh}
+.pl::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:var(--grad);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);opacity:.35;pointer-events:none}
+.pl video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;cursor:pointer}
+.pl .somon{position:absolute;inset:0;z-index:4;display:grid;place-content:center;justify-items:center;gap:12px;width:100%;height:100%;padding:16px;border:0;cursor:pointer;color:#fff;background:radial-gradient(65% 75% at 50% 50%,rgba(5,6,6,.5),rgba(5,6,6,.12) 72%,transparent);opacity:0;visibility:hidden;transition:opacity .35s,visibility 0s linear .35s}
+.pl.mudo .somon{opacity:1;visibility:visible;transition:opacity .35s}
+.pl .somon .vivo{display:inline-flex;align-items:center;gap:8px;font:700 11px var(--m);letter-spacing:.16em;text-transform:uppercase;padding:7px 12px 7px 10px;border-radius:999px;background:rgba(10,11,11,.6);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.pl .somon .vivo i{width:7px;height:7px;border-radius:50%;background:#FF6FAE;animation:vivo 1.6s ease-out infinite}
+.pl .somon .pilula{position:relative;display:inline-flex;align-items:center;gap:10px;background:var(--grad);color:#14070e;font:800 17px var(--f);padding:15px 24px 15px 18px;border-radius:999px;box-shadow:0 18px 50px -12px rgba(255,111,174,.85);white-space:nowrap}
+.pl .somon .pilula::before{content:"";position:absolute;inset:-8px;border-radius:inherit;border:1px solid rgba(255,255,255,.35);animation:aro 2.2s ease-out infinite}
+.pl .somon .pilula svg{width:22px;height:22px}
+.pl .capa{position:absolute;inset:0;z-index:3;display:grid;place-items:center;border:0;width:100%;background:rgba(10,11,11,.35);cursor:pointer;opacity:0;visibility:hidden}
+.pl.parado .capa{opacity:1;visibility:visible}
+.pl .play{width:80px;height:80px;border-radius:50%;display:grid;place-items:center;background:var(--grad);color:#14070e;box-shadow:0 18px 50px -12px rgba(255,111,174,.8)}
+.pl .play svg{width:28px;height:28px;margin-left:4px}
+.pl .ctl{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;align-items:center;gap:6px;padding:26px 10px 8px;background:linear-gradient(to top,rgba(10,11,11,.8),transparent);transition:opacity .25s}
+.pl.mudo .ctl,.pl.parado .ctl{opacity:0;pointer-events:none}
+.pl.quieto .ctl{opacity:0}
+.pl .bt{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:0;background:none;color:rgba(244,240,228,.88);cursor:pointer}
+.pl .bt svg{width:20px;height:20px}
+.pl #pToca{width:40px;height:40px;background:var(--grad);color:#14070e}
+.pl #pToca svg{width:16px;height:16px}
+.pl .barra{flex:1;height:30px;display:flex;align-items:center;cursor:pointer;touch-action:none}
+.pl .trilho{position:relative;width:100%;height:4px;border-radius:4px;background:rgba(244,240,228,.16)}
+.pl .feito{position:absolute;inset:0 auto 0 0;width:calc(var(--p)*100%);border-radius:inherit;background:var(--grad)}
+.pl .mbarra{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:4;background:rgba(255,255,255,.12)}
+.pl .mbarra::before{content:"";position:absolute;inset:0 auto 0 0;width:calc(var(--p)*100%);background:var(--grad)}
+.pl:not(.mudo) .mbarra{display:none}
+.pl .falha{position:absolute;inset:0;z-index:5;display:none;place-content:center;text-align:center;padding:20px;background:rgba(10,11,11,.94);color:var(--mute);font-size:14px}
+.pl.erro .falha{display:grid}
 
 /* oferta */
-.oferta{margin:104px auto 0;max-width:760px;position:relative;border-radius:30px;padding:1px;background:linear-gradient(160deg,rgba(255,179,71,.7),rgba(255,111,174,.35) 30%,#2a2e2c 60%)}
-.oferta .in{border-radius:29px;background:#121413;padding:52px 32px 40px;text-align:center}
-.oferta .mono{display:block;margin-bottom:14px}
-.oferta h2{margin:0 auto 6px;max-width:15ch}
-.preco{font-family:var(--d);font-weight:800;font-size:clamp(60px,11vw,92px);line-height:1;letter-spacing:-.04em;margin-top:26px}
-.preco small{font-size:.3em;letter-spacing:0;font-weight:600;color:var(--mute);margin-right:6px;vertical-align:1em}
-.parc{color:var(--mute);margin:10px 0 30px;font-size:16px}
-.parc b{color:var(--ink);font-weight:600}
-.inc{display:grid;grid-template-columns:1fr 1fr;gap:13px 26px;max-width:580px;margin:0 auto 32px;text-align:left}
-.inc span{display:flex;gap:11px;font-size:15.5px;line-height:1.4}
-.inc span::before{margin-top:2px}
-.oferta .btn{min-width:min(100%,380px);padding:19px 28px;font-size:18px}
-.oferta .ou{display:inline-block;margin-top:16px;color:var(--mute);font-size:15px;text-underline-offset:3px}
-.gar{display:flex;align-items:center;gap:16px;max-width:500px;margin:30px auto 0;padding:18px 20px;border-radius:16px;background:var(--panel2);text-align:left}
-.gar svg{flex:none;width:34px;height:34px;fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-.gar p{color:var(--mute);font-size:14.5px;line-height:1.5}
-.gar b{display:block;color:var(--ink);font-size:15.5px;font-weight:700}
+.oferta{max-width:560px;margin:26px auto 0;background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--ambar);border-radius:0 0 22px 22px;padding:22px 20px 20px;text-align:center}
+.oferta .mono{margin-bottom:6px}
+.oferta h3{font-weight:800;font-size:22px;margin-bottom:14px}
+.preco{display:flex;align-items:flex-start;justify-content:center;gap:4px;font-family:var(--d);font-weight:850;line-height:.9}
+.preco small{font-size:22px;margin-top:10px}
+.preco span{font-size:84px;letter-spacing:-.04em}
+.parc{color:var(--mute);font-size:14px;margin:6px 0 16px}
+.gu{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:60px;border:0;border-radius:999px;background:var(--grad);color:#14070e;font:800 18px var(--f);cursor:pointer;box-shadow:0 18px 44px -18px rgba(255,111,174,.9);transition:transform .12s,filter .15s}
+.gu:hover{filter:brightness(1.06)}
+.gu:active{transform:scale(.98)}
+.gu[data-loading="true"]{pointer-events:none}
+.um{margin-top:10px;font-size:13.5px;color:var(--mute)}
+.aviso{display:flex;gap:10px;align-items:flex-start;text-align:left;margin:16px 0 0;padding:12px 14px;border-radius:14px;background:var(--panel2);border:1px solid var(--line);font-size:14px;color:var(--mute)}
+.aviso svg{flex:none;width:20px;height:20px;margin-top:1px;color:var(--ambar)}
+.aviso b{color:var(--ink)}
+.nao{display:inline-block;margin-top:16px;padding:10px 6px;font-size:14.5px;color:var(--mute);text-underline-offset:3px}
+.nao:hover{color:var(--ink)}
+.gar-mini{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;font-size:13.5px;color:var(--mute)}
+.gar-mini svg{width:16px;height:16px;color:var(--ok)}
 
-.faq{max-width:720px;margin:36px auto 0}
-details{border-bottom:1px solid var(--line)}
-details:first-child{border-top:1px solid var(--line)}
-summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:20px 2px;font-weight:600;font-size:17px;line-height:1.35}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"+";flex:none;font-size:22px;font-weight:400;color:var(--dim);line-height:1}
-details[open] summary::after{content:"–"}
-details p{color:var(--mute);padding:0 2px 20px;max-width:62ch;font-size:16px}
+/* seções */
+.sec{padding:64px 0 0}
+.cab{text-align:center;max-width:640px;margin:0 auto 26px}
+.cab .rot{display:block;margin-bottom:10px}
+.cab .sub{margin:10px auto 0}
 
-.fim{text-align:center;padding:112px 0 34px}
-.fim .mono{display:block;margin-bottom:16px}
-.fim h2{margin:0 auto 12px;max-width:15ch;font-size:clamp(32px,5.6vw,58px)}
-.fim .sec-p{margin-bottom:30px}
-footer{text-align:center;color:var(--dim);font-size:13px;padding:30px 0 110px;border-top:1px solid var(--line);margin-top:40px}
-footer a{color:var(--mute)}
-.fixo{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;align-items:center;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:rgba(14,15,15,.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .3s}
+/* comparador com referências (vídeos do Fernando) */
+.demo{display:grid;gap:14px;max-width:460px;margin:0 auto}
+.quadro{position:relative;margin:6px 8px}
+.quadro i{position:absolute;width:14px;height:14px;border:0 solid #5A615E}
+.quadro i.a{top:-8px;left:-8px;border-top-width:1px;border-left-width:1px}.quadro i.b{top:-8px;right:-8px;border-top-width:1px;border-right-width:1px}
+.quadro i.c{bottom:-8px;left:-8px;border-bottom-width:1px;border-left-width:1px}.quadro i.d{bottom:-8px;right:-8px;border-bottom-width:1px;border-right-width:1px}
+.cmp{--c:50%;position:relative;aspect-ratio:4/5;border-radius:12px;overflow:hidden;background:#000}
+.cmp video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%}
+.cmp .antes{clip-path:inset(0 calc(100% - var(--c)) 0 0)}
+.cmp .linha{position:absolute;top:0;bottom:0;left:var(--c);width:2px;margin-left:-1px;background:#fff;pointer-events:none}
+.cmp .alca{position:absolute;top:50%;left:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 6px 18px -6px rgba(0,0,0,.5)}
+.cmp .alca svg{width:15px;height:15px;fill:none;stroke:#111312;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.cmp .tag{position:absolute;top:10px;font:700 11px var(--m);letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:6px;background:rgba(17,19,18,.78);pointer-events:none}
+.cmp .tag.l{left:10px}.cmp .tag.r{right:10px}
+.cmp input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize}
+.grav{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.grav div{display:inline-flex;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+.grav button{min-height:38px;padding:0 14px;border:0;border-radius:999px;background:none;color:var(--mute);font:600 14px var(--f);cursor:pointer}
+.grav button[aria-pressed="true"]{background:var(--ink);color:#111312}
+.looks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.look{position:relative;height:62px;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel);cursor:pointer}
+.look img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.look span{position:absolute;left:0;right:0;bottom:0;padding:3px 0;font:700 11px var(--m);letter-spacing:.06em;text-transform:uppercase;background:rgba(17,19,18,.82)}
+.look[aria-pressed="true"]{border:2px solid var(--ink)}
+.leg{text-align:center;font-size:13.5px;color:var(--mute)}
+
+/* passos */
+.passos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;list-style:none}
+.passos li{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px}
+.passos b{display:block;font:700 13px var(--m);color:var(--ambar);margin-bottom:10px}
+.passos h3{font-size:19px;font-weight:800;margin-bottom:6px}
+.passos p{color:var(--mute);font-size:15px}
+
+/* inclui + pra quem */
+.duas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.cx{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px}
+.cx h3{font-size:19px;font-weight:800;margin-bottom:12px}
+.lista{list-style:none;display:grid;gap:10px}
+.lista li{display:flex;gap:10px;align-items:flex-start;font-size:15.5px}
+.lista svg{flex:none;width:18px;height:18px;margin-top:3px;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.lista .s svg{stroke:var(--ok)}
+.lista .n{color:var(--mute)}
+.lista .n svg{stroke:var(--mute)}
+
+/* garantia (selo do Base FL) */
+.gar-fl{display:flex;align-items:center;gap:24px;max-width:640px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px}
+.gar-t{display:grid;gap:4px}
+.gar-k{font:700 11px var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--selo)}
+.gar-h{font:800 22px var(--d);letter-spacing:-.02em}
+.gar-t p{color:var(--mute);font-size:15px}
+
+/* perguntas */
+.faq{max-width:680px;margin:0 auto;display:grid;gap:8px}
+.faq details{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px 18px}
+.faq summary{min-height:52px;display:flex;align-items:center;cursor:pointer;font-weight:700;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";margin-left:auto;font:700 20px var(--m);color:var(--mute)}
+.faq details[open] summary::after{content:"–"}
+.faq p{color:var(--mute);font-size:15.5px;padding:0 0 16px}
+
+.fim{text-align:center;padding:64px 0 120px}
+.fim .gu{max-width:420px}
+.rodape{border-top:1px solid var(--line);padding:22px 0 calc(90px + env(safe-area-inset-bottom));text-align:center;color:var(--dim);font-size:13px}
+.rodape a{color:var(--mute)}
+
+/* barra fixa no celular */
+.fixo{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(17,19,18,.94);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .3s}
 .fixo.on{transform:none}
-.fixo span{flex:1;font-size:13.5px;color:var(--mute);line-height:1.3}
-.fixo span b{display:block;color:var(--ink);font-size:15.5px}
-.fixo .btn{padding:13px 20px;font-size:15.5px}
-.toast{pointer-events:none;position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#111;font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;transition:all .25s;z-index:30}
-.toast.on{opacity:1;transform:translate(-50%,0)}
+.fixo span{font-size:13px;color:var(--mute);line-height:1.3}
+.fixo b{display:block;color:var(--ink);font:800 16px var(--d)}
+.fixo a{flex:none;display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:999px;background:var(--grad);color:#14070e;font:800 15px var(--f);text-decoration:none}
 
-@media (max-width:860px){
-  section{padding-top:84px}
-  .fluxo{grid-template-columns:1fr;gap:10px;max-width:400px;margin-left:auto;margin-right:auto}
-  .fluxo .seta{margin:6px auto;transform:rotate(90deg)}
-  .passos{grid-template-columns:1fr;max-width:480px;margin-left:auto;margin-right:auto;border-top:0}
-  .passos li,.passos li+li{display:grid;grid-template-columns:44px 1fr;gap:0 4px;padding:20px 0;border-left:0;border-top:1px solid var(--line);text-align:left}
-  .passos li:last-child{border-bottom:1px solid var(--line)}
-  .passos .n{grid-row:span 2;padding-top:5px}
-  .passos h3{margin:0 0 4px;font-size:18px}
-  .pts,.ctrl{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto;border-top:0}
-  .pts div,.pts div+div,.ctrl div,.ctrl div+div{border-left:0;border-top:1px solid var(--line);padding:22px 8px}
-  .pts div:last-child,.ctrl div:last-child{border-bottom:1px solid var(--line)}
-  .duo{grid-template-columns:1fr;max-width:520px}
-  .oferta{margin-top:84px}
-  .fim{padding-top:88px}
+@media (max-width:760px){
+  .passos,.duas{grid-template-columns:1fr}
+  .gar-fl{flex-direction:column;text-align:center}
+  .pl{border-radius:16px}
+  .pl .somon .pilula{font-size:15px;padding:12px 18px 12px 14px}
 }
-@media (max-width:640px){
-  body{font-size:16px}
-  .w{padding:0 20px}
-  nav .de{display:none}
-  .hero{padding-top:22px}
-  .cta{flex-direction:column;align-items:stretch}
-  .cta .btn{width:100%}
-  .demo{margin-top:36px}
-  .tela{border-radius:18px;aspect-ratio:4/3}
-  .tg{top:10px;left:10px;font-size:11.5px;padding:5px 10px}
-  .refb{left:10px;bottom:10px;gap:9px;padding:5px 12px 5px 5px;border-radius:12px}
-  .refb img{width:45px;height:30px;border-radius:7px}
-  .refb b{font-size:12.5px}.refb small{font-size:8.5px}
-  .orig{right:10px;bottom:auto;top:10px;font-size:11.5px;padding:8px 12px}
-  .orig .l{display:none}.orig .c{display:inline}
-  .painel{padding:14px 12px 10px;border-radius:18px}
-  .refs{grid-template-columns:repeat(3,1fr);gap:14px 10px}
-  .rf .nm{font-size:11.5px;margin-top:7px}
-  .int{gap:12px;margin-top:14px;padding-top:10px}
-  .int input{height:36px}
-  h2{font-size:clamp(26px,7.4vw,33px);max-width:17ch;line-height:1.12}
-  .sec-p{font-size:16px;max-width:33ch}
-  .sh .mono{margin-bottom:14px}
-  .dores{margin-top:30px}
-  .dores li{font-size:16.5px;padding:18px 4px}
-  .fluxo,.passos,.pts,.ctrl,.duo{margin-top:34px}
-  .ba{margin-top:34px;aspect-ratio:4/3;border-radius:16px}
-  .ba .et{top:10px;font-size:11.5px;padding:5px 10px}.ba .et.l{left:10px}.ba .et.r{right:10px}
-  .gal{grid-template-columns:repeat(2,1fr);gap:14px 10px}
-  .gal figcaption{font-size:12.5px;margin-top:7px}
-  .aula{padding:36px 20px;border-radius:22px}
-  .aula ul{flex-direction:column;align-items:center;gap:12px}
-  .cx{padding:24px 20px;border-radius:20px}
-  .oferta .in{padding:42px 20px 30px}
-  .oferta h2{max-width:13ch}
-  .inc{grid-template-columns:1fr;max-width:300px;gap:12px}
-  .oferta .btn{width:100%;min-width:0}
-  .gar{gap:14px;padding:16px}
-  summary{font-size:16px;padding:18px 2px}
-  .fim h2{font-size:clamp(30px,9vw,40px);max-width:12ch}
+@media (min-width:761px){.fixo{display:none}}
+@media (min-width:1000px){
+  .topo{padding-top:24px}
+  .topo h1{font-size:50px;max-width:20ch}
+  .palco{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:28px;align-items:center;margin-top:22px;text-align:center}
+  .palco .pl{margin:0}
+  .palco .oferta{margin:0}
+  .palco .pl.vertical{justify-self:center}
 }
-@media (max-width:350px){
-  .w{padding:0 16px}
-  h1{font-size:35px}
-  .cta .btn{font-size:15.5px;padding:16px 10px}
-  .rf .nm{font-size:10.5px}
-  .refb small{display:none}
-}
-@media (min-width:861px){.fixo{display:none}}
-@media (prefers-reduced-motion:reduce){.rv{transform:none;transition:opacity .3s}html{scroll-behavior:auto}}
+@keyframes aro{0%{transform:scale(.92);opacity:.9}100%{transform:scale(1.35);opacity:0}}
+@keyframes vivo{0%{box-shadow:0 0 0 0 rgba(255,111,174,.6)}100%{box-shadow:0 0 0 8px rgba(255,111,174,0)}}
+@media (prefers-reduced-motion:reduce){.pl .somon .pilula::before,.pl .somon .vivo i{animation:none}html{scroll-behavior:auto}}
 </style>
-<script src="/pixel.js"></script>
-<script src="https://metrics.basefl.com/t.js" data-key="pk_live_c3392e6c67a34797baf70e0604f3fa4f" data-endpoint="https://metrics.basefl.com" data-reserva="https://edge.central.automatizesolucoes.com" data-dominios="basefl.com,reelsacademy.com.br,ofernandoluz.com" data-endpoints="basefl.com=https://metrics.basefl.com,reelsacademy.com.br=https://metrics.reelsacademy.com.br,ofernandoluz.com=https://metrics.ofernandoluz.com" defer></script>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="mg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="298" y2="231"><stop offset="0" stop-color="#FFB347"/><stop offset=".38" stop-color="#FF6FAE"/><stop offset=".7" stop-color="#B45CFF"/><stop offset="1" stop-color="#5AB8FF"/></linearGradient></defs></svg>
-<style>
-.okb{display:flex;align-items:center;justify-content:center;gap:10px;margin:18px auto 0;max-width:560px;padding:11px 16px;border-radius:14px;background:rgba(127,206,143,.10);border:1px solid rgba(127,206,143,.35);color:#bfe9c8;font-size:15px;font-weight:600}
-.okb i{flex:none;width:20px;height:20px;border-radius:50%;background:#7fce8f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='%230b1a10' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
-.hero{padding-top:22px} h1{font-size:clamp(32px,6vw,58px);max-width:16ch}
-.nao{display:block;margin:16px auto 0;color:var(--mute);font-size:15px;text-underline-offset:3px}
-.oferta{margin-top:44px} footer{padding-bottom:110px}
-.btn.gu{font-family:var(--f);min-height:58px;min-width:min(100%,360px)} .btn.gu svg{width:28px;height:28px} .btn.gu svg path{fill:#14070e}
-.um{color:var(--dim);font-size:13.5px;margin-top:14px}
-</style>
-<div class="w">
-  <nav><span><span class="mood" aria-label="Mood">M<svg viewBox="0 0 414 231" aria-hidden="true"><circle cx="115.5" cy="115.5" r="115.5" fill="url(#mg)"/><circle cx="298" cy="115.5" r="99.9" fill="none" stroke="currentColor" stroke-width="31.2"/></svg>d</span></span><span class="de">Base FL</span><div class="sp"></div></nav>
-  <div class="okb"><i></i>Compra confirmada. Seu acesso aos Títulos Dinâmicos chega no e-mail.</div>
-  <header class="hero">
-    <span class="mono kick">O passo seguinte dos LUTs</span>
-    <h1>E quando a cor que você quer <em>não está em nenhum pack?</em></h1>
-    <p class="lead">Um pack de LUTs traz looks prontos. O <b>Mood</b> cria a LUT da cor que você escolher: mostre um vídeo com a cor que você gosta, mostre o seu, e baixe a LUT pronta para o CapCut. Sem saber color grading.</p>
-    <div class="cta"><a class="btn" href="#oferta" data-comprar>Sim, quero o Mood · R$ 97</a></div>
-    <div class="demo" id="demo">
-      <div class="tela" id="tela">
-        <video id="vid" muted loop playsinline webkit-playsinline preload="metadata" poster="/conheca/mood/assets/natureza.jpg?v=3" width="1280" height="720" disablepictureinpicture disableremoteplayback tabindex="-1" aria-label="Vídeo de um lago entre montanhas, usado na demonstração"></video>
-        <canvas id="gl" aria-hidden="true"></canvas>
-        <img class="fb" id="fb" alt="" width="480" height="270" hidden>
-        <span class="tg" id="tg">Com o Mood</span>
-        <div class="refb"><img id="rM" src="/conheca/mood/assets/ref-natural.jpg?v=3" width="360" height="240" alt=""><span><small>Referência</small><b id="rN">Natural Film</b></span></div>
-        <button class="orig" id="orig" type="button" aria-label="Segure para ver o vídeo original"><span class="l">Segure para ver o original</span><span class="c">Segure: original</span></button>
-      </div>
-      <div class="painel">
-        <span class="mono rot">Escolha uma referência</span>
-        <div class="refs" id="refs" role="radiogroup" aria-label="Referências de cor">
-          <button class="rf on" type="button" role="radio" aria-checked="true" data-id="natural" data-n="Natural Film"><span class="mi"><img src="/conheca/mood/assets/ref-natural.jpg?v=3" width="360" height="240" alt="" decoding="async"></span><span class="nm">Natural Film</span></button>
-          <button class="rf" type="button" role="radio" aria-checked="false" data-id="golden" data-n="Golden Hour"><span class="mi"><img src="/conheca/mood/assets/ref-golden.jpg?v=3" width="360" height="240" alt="" decoding="async"></span><span class="nm">Golden Hour</span></button>
-          <button class="rf" type="button" role="radio" aria-checked="false" data-id="moody" data-n="Moody Green"><span class="mi"><img src="/conheca/mood/assets/ref-moody.jpg?v=3" width="360" height="240" alt="" decoding="async"></span><span class="nm">Moody Green</span></button>
-          <button class="rf" type="button" role="radio" aria-checked="false" data-id="clean" data-n="Clean Cinematic"><span class="mi"><img src="/conheca/mood/assets/ref-clean.jpg?v=3" width="360" height="240" alt="" decoding="async"></span><span class="nm">Clean Cinematic</span></button>
-          <button class="rf" type="button" role="radio" aria-checked="false" data-id="warm" data-n="Warm Film"><span class="mi"><img src="/conheca/mood/assets/ref-warm.jpg?v=3" width="360" height="240" alt="" decoding="async"></span><span class="nm">Warm Film</span></button>
-          <button class="rf" type="button" role="radio" aria-checked="false" data-id="cool" data-n="Cool Cinematic"><span class="mi"><img src="/conheca/mood/assets/ref-cool.jpg?v=3" width="360" height="240" alt="" decoding="async"></span><span class="nm">Cool Cinematic</span></button>
-        </div>
-        <label class="int"><span>Intensidade</span><input type="range" id="int" min="0" max="100" value="65" aria-label="Intensidade do look"><output id="intv">65%</output></label>
-      </div>
-      <p class="real">Vídeo real, sem tratamento. Cada look é a LUT que o Mood criou a partir da foto de referência.</p>
+
+<div class="ok-bar" role="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span><b>Compra confirmada.</b> Seus Títulos Dinâmicos chegam no seu e-mail.</span></div>
+
+<main>
+<section class="topo w">
+  <div class="marca"><span class="mood">Mood</span><span class="de">BASE FL</span></div>
+  <p class="rot">Antes de continuar · adicione ao seu pedido</p>
+  <h1>Os títulos você já tem. Agora falta a cor.</h1>
+  <p class="sub">Com o Mood você mostra um vídeo com a cor que gosta, mostra o seu, e baixa a LUT pronta para o seu editor.</p>
+
+  <div class="palco">
+  <div class="pl" id="pl">
+    <video id="pv" src="https://aulas.basefl.com/upssel.mp4" muted autoplay playsinline webkit-playsinline disablepictureinpicture preload="auto"></video>
+    <button class="somon" id="somon" type="button" aria-label="Ativar o som e ver o vídeo do começo"><span class="vivo"><i></i>Seu vídeo já começou</span><span class="pilula"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>Toque para ativar o som</span></button>
+    <button class="capa" id="capa" type="button" aria-label="Ver o vídeo"><span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4c0 .8.9 1.3 1.6.9l11.3-7.2c.6-.4.6-1.3 0-1.7L8.6 3.9C7.9 3.5 7 4 7 4.8z"/></svg></span></button>
+    <div class="mbarra" aria-hidden="true"></div>
+    <div class="ctl">
+      <button class="bt" id="pToca" type="button" aria-label="Pausar"></button>
+      <div class="barra" id="pBarra" role="slider" aria-label="Posição do vídeo" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><div class="trilho"><div class="feito"></div></div></div>
+      <button class="bt" id="pSom" type="button" aria-label="Tirar o som"></button>
+      <button class="bt" id="pTela" type="button" aria-label="Tela cheia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></svg></button>
     </div>
-  </header>
+    <div class="falha" role="alert">Não deu para carregar o vídeo agora. A oferta continua logo abaixo.</div>
+  </div>
 
-  <div class="oferta rv" id="oferta"><div class="in">
-    <span class="mono kick">Acesso de 1 ano</span>
-    <h2>Adicione o Mood ao seu pedido.</h2>
-    <div class="preco"><small>R$</small>97</div>
-    <p class="parc">à vista, ou <b>12x de R$ 9,97</b></p>
-    <div class="inc"><span>7 dias de garantia</span><span>LUTs ilimitadas durante 1 ano</span><span>Cria no celular e no computador</span><span>Aula ensinando a usar</span><span>Aparece liberado no mesmo app</span></div>
-    <!-- Botão de upsell de 1 clique da Greenn. NÃO mexer no atributo data-greenn-upsell. -->
-    <button class="btn gu" data-greenn-upsell="6786" data-loading="false" onclick="startLoading(this)">Sim, quero o Mood</button>
-    <a class="nao" id="not-buy-link" href="https://basefl.com/instalar/" rel="noopener noreferrer">Não, obrigado. Quero só os Títulos Dinâmicos.</a>
-    <p class="um">Um clique e pronto: usa o mesmo pagamento da compra que você acabou de fazer.</p>
-    <div class="gar-fl"><div class="selo-fl" role="img" aria-label="Garantia incondicional de 7 dias" style="--selo-tam:150px"><svg viewBox="0 0 300 300" aria-hidden="true"><circle cx="150" cy="150" r="147"/><path id="selo-c" fill="none" d="M150 150m-128 0a128 128 0 1 1 256 0a128 128 0 1 1 -256 0"/><text><textPath href="#selo-c" textLength="804" lengthAdjust="spacing">7 DIAS · RISCO ZERO · GARANTIA INCONDICIONAL · </textPath></text></svg><div class="selo-disco"><b>7</b><span>DIAS</span></div></div><div class="gar-t"><span class="gar-k">Garantia de 7 dias</span><span class="gar-h">Teste por 7 dias. Risco zero.</span><p>Vale para o Mood também. Não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</p></div></div>
-  </div></div>
-  <footer><a href="https://basefl.com/">Base FL</a> · o ecossistema do editor de vídeo<br><a href="https://basefl.com/termos/">Termos de uso</a> · <a href="https://basefl.com/privacidade/">Privacidade</a></footer>
-</div>
-<div class="fixo" id="fixo"><span><b>Mood · R$ 97</b>ou 12x de R$ 9,97</span><a class="btn" href="#oferta" data-comprar>Sim, quero</a></div>
-<div class="toast" id="toast"></div>
-<script> window.startLoading = function(button) { const originalHTML = button.innerHTML; button.setAttribute('data-loading', 'true'); button.innerHTML = ` <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"> <path fill="#ffffff" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/> <path fill="#ffffff" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"> <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/> </path> </svg>`; setTimeout(() => { button.setAttribute('data-loading', 'false'); button.innerHTML = originalHTML; }, 3000); }; (function (w, d, s, t) { if (w._greennUp) return; w._greennUp = t; var f = d.getElementsByTagName(s)[0], j = d.createElement(s); j.async = true; j.src = "https://payfast.greenn.com.br/assets/upsell.js?v=" + t; f.parentNode.insertBefore(j, f); })(window, document, "script", Date.now()); </script>
+  <div class="oferta" id="oferta">
+    <p class="mono">Mood · acesso de 1 ano</p>
+    <h3>Adicione o Mood ao seu pedido</h3>
+    <div class="preco" aria-label="79 reais"><small>R$</small><span>79</span></div>
+    <p class="parc">à vista, ou 12x de R$ 8,12</p>
+    <!-- Botão de upsell de 1 clique da Greenn (upsell 7205 · Mood R$ 79). NÃO mexer no atributo data-greenn-upsell. -->
+    <button class="gu" data-greenn-upsell="7205" data-loading="false" onclick="startLoading(this)">Sim, quero o Mood</button>
+    <p class="um">Um clique: usa o mesmo cartão da compra dos Títulos. Pagou no Pix? Dá para escolher outra forma de pagamento.</p>
+    <div class="aviso"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span><b>Funciona no computador</b> (CapCut, Premiere, DaVinci, Final Cut). Não funciona no CapCut do celular.</span></div>
+    <p class="gar-mini"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>7 dias de garantia</p>
+    <a class="nao" id="not-buy-link" href="https://basefl.com/instalar/">Não, obrigado. Quero só os Títulos Dinâmicos.</a>
+  </div>
+  </div>
+</section>
+
+<section class="sec w">
+  <div class="cab">
+    <span class="rot">Veja no meu vídeo</span>
+    <h2>Toque numa referência e veja a cor mudar.</h2>
+    <p class="sub">Vídeo meu, sem tratamento. Cada cor é a LUT que o Mood fez a partir da referência. Arraste para comparar.</p>
+  </div>
+  <div class="demo">
+    <div class="quadro"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i>
+      <div class="cmp" id="cmp">
+        <video id="dDep" src="/lut/demo/natural.mp4" poster="/lut/demo/natural.webp" muted loop playsinline webkit-playsinline disablepictureinpicture preload="none" aria-hidden="true"></video>
+        <video id="dAnt" class="antes" src="/lut/demo/normal-709.mp4" poster="/lut/demo/normal-709.webp" muted loop playsinline webkit-playsinline disablepictureinpicture preload="none" aria-hidden="true"></video>
+        <div class="linha" aria-hidden="true"><span class="alca"><svg viewBox="0 0 24 24"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg></span></div>
+        <span class="tag l" id="tAnt">Seu vídeo · Normal</span><span class="tag r" id="tDep">LUT · Natural</span>
+        <input type="range" min="0" max="100" step="1" value="50" aria-label="Comparar o vídeo sem cor com o vídeo com a LUT">
+      </div>
+    </div>
+    <div class="grav" role="group" aria-label="Como o vídeo foi gravado"><span class="mono">Gravou como?</span><div><button type="button" data-g="normal-709" data-n="Normal" aria-pressed="true">Normal</button><button type="button" data-g="antes" data-n="Log" aria-pressed="false">Log</button></div></div>
+    <div class="looks" role="group" aria-label="Escolha uma referência">
+      <button class="look" type="button" data-k="natural" data-n="Natural" aria-pressed="true"><img src="/lut/demo/ref-natural.webp" alt="" width="150" height="150" loading="lazy"><span>Natural</span></button>
+      <button class="look" type="button" data-k="dourado" data-n="Dourado" aria-pressed="false"><img src="/lut/demo/ref-dourado.webp" alt="" width="150" height="150" loading="lazy"><span>Dourado</span></button>
+      <button class="look" type="button" data-k="urbano" data-n="Urbano" aria-pressed="false"><img src="/lut/demo/ref-urbano.webp" alt="" width="150" height="150" loading="lazy"><span>Urbano</span></button>
+      <button class="look" type="button" data-k="pastel" data-n="Pastel" aria-pressed="false"><img src="/lut/demo/ref-pastel.webp" alt="" width="150" height="150" loading="lazy"><span>Pastel</span></button>
+    </div>
+    <p class="leg">Funciona gravando normal ou em Log (Apple Log, S-Log2, S-Log3).</p>
+  </div>
+</section>
+
+<section class="sec w">
+  <div class="cab"><span class="rot">Como funciona</span><h2>Três passos, sem saber color grading.</h2></div>
+  <ol class="passos">
+    <li><b>01</b><h3>Escolha a cor</h3><p>Coloque um print ou um vídeo com a cor que você quer copiar.</p></li>
+    <li><b>02</b><h3>Mostre o seu vídeo</h3><p>Do jeito que saiu da câmera ou do celular. O Mood lê as cores dos dois.</p></li>
+    <li><b>03</b><h3>Baixe a LUT</h3><p>Ajuste a intensidade, baixe o arquivo .cube e aplique no seu editor do computador.</p></li>
+  </ol>
+</section>
+
+<section class="sec w">
+  <div class="duas">
+    <div class="cx"><h3>O que você leva</h3>
+      <ul class="lista">
+        <li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>LUTs ilimitadas durante 1 ano</li>
+        <li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>CapCut do computador, Premiere, DaVinci e Final Cut</li>
+        <li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Vídeo normal ou em Log</li>
+        <li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Checagem automática e pele protegida</li>
+        <li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Liberado na mesma conta Base FL dos Títulos</li>
+      </ul>
+    </div>
+    <div class="cx"><h3>Pra quem é</h3>
+      <ul class="lista">
+        <li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Quem edita no computador e quer uma cor específica sem ficar ajustando na mão</li>
+        <li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Quem viu um vídeo com uma cor bonita e quer igual no seu</li>
+        <li class="n"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>Não é pra quem edita só no CapCut do celular: ele não aceita LUT importada</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="sec w">
+    <div class="gar-fl"><div class="selo-fl" role="img" aria-label="Garantia incondicional de 7 dias" style="--selo-tam:150px"><svg viewBox="0 0 300 300" aria-hidden="true"><circle cx="150" cy="150" r="147"/><path id="selo-c" fill="none" d="M150 150m-128 0a128 128 0 1 1 256 0a128 128 0 1 1 -256 0"/><text><textPath href="#selo-c" textLength="804" lengthAdjust="spacing">7 DIAS · RISCO ZERO · GARANTIA INCONDICIONAL · </textPath></text></svg><div class="selo-disco"><b>7</b><span>DIAS</span></div></div><div class="gar-t"><span class="gar-k">Garantia de 7 dias</span><span class="gar-h">Teste por 7 dias. Risco zero.</span><p>Não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</p></div></div>
+</section>
+
+<section class="sec w">
+  <div class="cab"><span class="rot">Perguntas</span><h2>Antes de decidir</h2></div>
+  <div class="faq">
+    <details><summary>Preciso preencher meus dados de novo?</summary><p>Não. Se você pagou os Títulos no cartão, o Mood entra com um clique, no mesmo cartão. Se pagou no Pix, dá para escolher outra forma de pagamento.</p></details>
+    <details><summary>Funciona no celular?</summary><p>Você pode criar a LUT pelo celular, mas ela é aplicada no editor do computador: CapCut, Premiere, DaVinci ou Final Cut. O CapCut do celular não aceita LUT importada.</p></details>
+    <details><summary>Preciso entender de cor?</summary><p>Não. Você escolhe uma referência e o Mood monta a LUT. Se quiser, ajusta a intensidade e a pele antes de baixar.</p></details>
+    <details><summary>Onde eu acesso depois?</summary><p>O Mood aparece liberado na mesma conta Base FL em que estão os seus Títulos Dinâmicos, com o mesmo e-mail da compra.</p></details>
+    <details><summary>E se eu não gostar?</summary><p>Você tem 7 dias de garantia. Dentro desse prazo é só pedir o reembolso e você recebe o valor de volta.</p></details>
+  </div>
+</section>
+
+<section class="fim w">
+  <h2>Os títulos já estão no seu pedido. Quer a cor junto?</h2>
+  <p class="sub" style="margin:12px auto 22px">Mood por R$ 79, ou 12x de R$ 8,12. Um clique e pronto.</p>
+  <a class="gu" href="#oferta" style="text-decoration:none">Ver a oferta</a>
+  <div><a class="nao" href="https://basefl.com/instalar/">Não, obrigado. Quero só os Títulos Dinâmicos.</a></div>
+</section>
+</main>
+
+<footer class="rodape w">Base FL · o ecossistema do editor de vídeo · <a href="https://basefl.com/termos/">Termos de uso</a> · <a href="https://basefl.com/privacidade/">Privacidade</a></footer>
+
+<div class="fixo" id="fixo" aria-hidden="true"><span><b>Mood · R$ 79</b>ou 12x de R$ 8,12</span><a href="#oferta" tabindex="-1">Sim, quero</a></div>
+
+<script src="/pixel.js"></script>
+<script src="https://metrics.basefl.com/t.js" data-key="pk_live_c3392e6c67a34797baf70e0604f3fa4f" data-endpoint="https://metrics.basefl.com" data-reserva="https://edge.central.automatizesolucoes.com" data-dominios="basefl.com,reelsacademy.com.br,ofernandoluz.com" data-endpoints="basefl.com=https://metrics.basefl.com,reelsacademy.com.br=https://metrics.reelsacademy.com.br,ofernandoluz.com=https://metrics.ofernandoluz.com" defer></script>
+<script> window.startLoading = function(button) { const originalHTML = button.innerHTML; button.setAttribute('data-loading', 'true'); button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path fill="#14070e" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/><path fill="#14070e" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></svg>`; try { window.FLPixel && FLPixel.checkout(); } catch (e) {} setTimeout(() => { button.setAttribute('data-loading', 'false'); button.innerHTML = originalHTML; }, 3000); }; (function (w, d, s, t) { if (w._greennUp) return; w._greennUp = t; var f = d.getElementsByTagName(s)[0], j = d.createElement(s); j.async = true; j.src = "https://payfast.greenn.com.br/assets/upsell.js?v=" + t; f.parentNode.insertBefore(j, f); })(window, document, "script", Date.now()); </script>
 <script>
-// ====== COLE AQUI o link de checkout da Greenn ======
-const CHECKOUT = '';
-const PRODUTO = 'mood';
-// ====================================================
-const $ = s => document.querySelector(s);
-function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2400); }
-const DE = new URLSearchParams(location.search).get('de') || 'upsell';
-function linkCompra(){   // link de compra com a origem Base FL (utm); ?de=app quando vem do app
-  if (!/^https?:\/\//.test(CHECKOUT)) return '';
-  const u = new URL(CHECKOUT);
-  u.searchParams.set('utm_source', 'basefl'); u.searchParams.set('utm_medium', DE); u.searchParams.set('utm_campaign', PRODUTO); u.searchParams.set('src', 'basefl-' + DE);
-  return u.toString();
-}
-document.querySelectorAll('[data-comprar]').forEach(b => b.addEventListener('click', e => {
-  const l = linkCompra();
-  if (l){ e.preventDefault(); window.FLPixel && FLPixel.checkout(); location.href = l; return; }
-  if (b.getAttribute('href') === '#'){ e.preventDefault(); toast('Link de compra em breve.'); }   // sem checkout ainda: os outros botões só rolam até a oferta
-}));
-const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); } }), { threshold:.12 });
-document.querySelectorAll('.rv').forEach(el => io.observe(el));
-// barra fixa do celular: aparece depois da primeira tela e some quando a oferta está visível
-let passouTopo = false, naOferta = false; const fixo = $('#fixo'), atualizaFixo = () => fixo.classList.toggle('on', passouTopo && !naOferta);
-new IntersectionObserver(es => { passouTopo = !es[0].isIntersecting; atualizaFixo(); }).observe($('.hero .cta'));
-new IntersectionObserver(es => { naOferta = es[0].isIntersecting; atualizaFixo(); }, { threshold:.2 }).observe($('#oferta'));
-
-// ===================== antes e depois (arrastar) =====================
 (() => {
-  const ba = $('#ba'); if (!ba) return;
-  const r = ba.querySelector('input'), poe = () => ba.style.setProperty('--x', r.value + '%');
-  let tocou = false; r.addEventListener('input', () => { tocou = true; poe(); }); poe();
-  // um empurrãozinho quando aparece, para mostrar que dá para arrastar
-  const ob = new IntersectionObserver(es => { if (!es[0].isIntersecting) return; ob.disconnect();
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const t0 = performance.now(), q = t => { if (tocou) return; const k = Math.min(1, (t - t0) / 1600); r.value = 50 - 16 * Math.sin(k * Math.PI * 2) * (1 - k * .4); poe(); if (k < 1) requestAnimationFrame(q); else { r.value = 50; poe(); } };
-    setTimeout(() => requestAnimationFrame(q), 500);
-  }, { threshold:.6 }); ob.observe(ba);
-})();
+  const $ = s => document.querySelector(s);
+  // "Não, obrigado" leva junto os parâmetros da compra (a página de acesso pode precisar deles)
+  try { const q = location.search; if (q) document.querySelectorAll('a.nao').forEach(a => { a.href = a.href.split('?')[0] + q; }); } catch {}
 
-// ===================== a demonstração =====================
-// O vídeo roda de verdade. As LUTs (uma por referência) foram criadas no Mood e ficam em looks.png;
-// aqui a página só aplica a LUT em cada quadro do vídeo, como o editor faria.
-(() => {
-  const demo = $('#demo'); if (!demo) return;
-  const AS = '/conheca/mood/assets/', VER = '?v=3', NA = 17, DUR = 520;
-  const tela = $('#tela'), v = $('#vid'), cv = $('#gl'), fb = $('#fb'), tg = $('#tg'), rM = $('#rM'), rN = $('#rN'), int = $('#int'), intv = $('#intv'), orig = $('#orig');
-  const bts = [...demo.querySelectorAll('.rf')], NL = bts.length;
-  const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let atual = 0, antes = 0, t0 = -1e9, forca = int.value / 100, forcaS = forca, ver = 0, verAlvo = 0, mexeu = false, visivel = false, estreou = false;
-  let gl = null, modo = '', U = {}, ultT = -1, temQuadro = false, raf = 0, ultima = 0;
-
-  // ---- o vídeo: versão leve no celular; toca sozinho quando aparece ----
+  // ===== player do vídeo do topo: começa mudo e tocando; o toque liga o som do começo =====
+  const IC = {
+    play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4c0 .8.9 1.3 1.6.9l11.3-7.2c.6-.4.6-1.3 0-1.7L8.6 3.9C7.9 3.5 7 4 7 4.8z"/></svg>',
+    pausa: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4.5" width="4.2" height="15" rx="1.4"/><rect x="13.8" y="4.5" width="4.2" height="15" rx="1.4"/></svg>',
+    som: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>',
+    mudo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>'
+  };
+  const pl = $('#pl'), v = $('#pv'), bT = $('#pToca'), bS = $('#pSom'), barra = $('#pBarra');
+  let quieto = 0;
+  const pinta = () => { const p = v.duration ? v.currentTime / v.duration : 0; pl.style.setProperty('--p', p); barra.setAttribute('aria-valuenow', Math.round(p * 100)); };
+  const icones = () => { bT.innerHTML = v.paused ? IC.play : IC.pausa; bT.setAttribute('aria-label', v.paused ? 'Tocar' : 'Pausar'); const m = v.muted; bS.innerHTML = m ? IC.mudo : IC.som; bS.setAttribute('aria-label', m ? 'Ligar o som' : 'Tirar o som'); };
+  const acorda = () => { pl.classList.remove('quieto'); clearTimeout(quieto); quieto = setTimeout(() => { if (!v.paused) pl.classList.add('quieto'); }, 2800); };
+  const toca = () => { const p = v.play(); if (p && p.catch) p.catch(e => { if (e && e.name === 'NotAllowedError'){ pl.classList.remove('mudo'); pl.classList.add('parado'); } }); };
   v.muted = true; v.defaultMuted = true;
-  v.src = AS + (Math.min(innerWidth, screen.width || 9999) < 700 ? 'natureza-m.mp4' : 'natureza.mp4') + VER;
-  const toca = () => { if (visivel && !document.hidden && v.paused){ const p = v.play(); if (p && p.catch) p.catch(() => {}); } };
-  ['touchstart', 'pointerdown', 'scroll'].forEach(ev => addEventListener(ev, toca, { passive:true }));   // se o navegador segurou o autoplay, o primeiro toque solta
-  document.addEventListener('visibilitychange', toca);
-  const capa = new Image(); capa.decoding = 'async'; capa.src = AS + 'natureza.jpg' + VER;
+  v.addEventListener('loadedmetadata', () => { if (v.videoHeight > v.videoWidth) pl.classList.add('vertical'); pinta(); });
+  v.addEventListener('playing', () => { if (v.muted && !pl.dataset.som) pl.classList.add('mudo'); pl.classList.remove('parado'); icones(); });
+  ['play', 'pause', 'volumechange'].forEach(e => v.addEventListener(e, icones));
+  v.addEventListener('timeupdate', pinta);
+  v.addEventListener('ended', () => { pl.classList.remove('quieto'); icones(); });
+  v.addEventListener('error', () => pl.classList.add('erro'));
+  const ligaSom = () => { pl.dataset.som = '1'; pl.classList.remove('mudo', 'parado'); v.muted = false; if (v.volume === 0) v.volume = 1; try { v.currentTime = 0; } catch {} toca(); icones(); acorda(); };
+  $('#somon').onclick = ligaSom;
+  $('#capa').onclick = ligaSom;
+  v.addEventListener('click', () => { if (pl.classList.contains('mudo')) return ligaSom(); if (pl.classList.contains('quieto')) return acorda(); v.paused ? toca() : v.pause(); acorda(); });
+  bT.onclick = () => { v.paused ? toca() : v.pause(); acorda(); };
+  bS.onclick = () => { v.muted = !v.muted; acorda(); };
+  $('#pTela').onclick = () => { const d = document; if (d.fullscreenElement) return d.exitFullscreen(); if (pl.requestFullscreen) pl.requestFullscreen().catch(() => { try { v.webkitEnterFullscreen(); } catch {} }); else try { v.webkitEnterFullscreen(); } catch {} };
+  const pos = x => { const r = barra.getBoundingClientRect(); return Math.min(1, Math.max(0, (x - r.left) / r.width)); };
+  let arr = false;
+  barra.addEventListener('pointerdown', e => { if (!v.duration) return; arr = true; try { barra.setPointerCapture(e.pointerId); } catch {} pl.style.setProperty('--p', pos(e.clientX)); acorda(); });
+  barra.addEventListener('pointermove', e => { if (arr) pl.style.setProperty('--p', pos(e.clientX)); });
+  const solta = e => { if (!arr) return; arr = false; v.currentTime = pos(e.clientX) * v.duration; acorda(); };
+  barra.addEventListener('pointerup', solta); barra.addEventListener('pointercancel', solta);
+  barra.addEventListener('keydown', e => { if (e.key === 'ArrowRight') v.currentTime += 5; if (e.key === 'ArrowLeft') v.currentTime -= 5; });
+  pl.addEventListener('pointermove', e => { if (e.pointerType === 'mouse') acorda(); });
+  // iPhone em pouca bateria bloqueia o autoplay: começa no primeiro toque na página
+  const destrava = () => { if (v.paused && !pl.dataset.som && !v.ended) toca(); };
+  ['touchstart', 'scroll'].forEach(ev => addEventListener(ev, destrava, { once:true, passive:true }));
+  icones(); toca();
 
-  // ---- WebGL: aplica a LUT em cada quadro ----
-  const FRAG = 'uniform sampler2D v,l;uniform float a,b,t,k;varying vec2 u;const float n=' + NA + '.,nl=' + NL + '.;'
-    + 'vec3 lk(vec3 c,float r){float z=c.b*(n-1.),z0=floor(z),z1=min(z0+1.,n-1.);float x=(c.r*(n-1.)+.5)/(n*n),y=(r*n+c.g*(n-1.)+.5)/(n*nl);return mix(texture2D(l,vec2(x+z0/n,y)).rgb,texture2D(l,vec2(x+z1/n,y)).rgb,z-z0);}'
-    + 'void main(){vec3 c=clamp(texture2D(v,u).rgb,0.,1.);gl_FragColor=vec4(mix(c,mix(lk(c,a),lk(c,b),t),k),1.);}';
-  function ligaGL(atlas){
-    const g = cv.getContext('webgl', { alpha:false, antialias:false, powerPreference:'low-power' }); if (!g) return false;
-    const alta = g.getShaderPrecisionFormat(g.FRAGMENT_SHADER, g.HIGH_FLOAT).precision > 0;
-    const sh = (tp, src) => { const s = g.createShader(tp); g.shaderSource(s, src); g.compileShader(s); if (!g.getShaderParameter(s, g.COMPILE_STATUS)) throw new Error('shader'); return s; };
-    const pr = g.createProgram();
-    g.attachShader(pr, sh(g.VERTEX_SHADER, 'attribute vec2 p;uniform vec2 e;varying vec2 u;void main(){u=vec2(.5+p.x*.5*e.x,.5-p.y*.5*e.y);gl_Position=vec4(p,0.,1.);}'));
-    g.attachShader(pr, sh(g.FRAGMENT_SHADER, 'precision ' + (alta ? 'highp' : 'mediump') + ' float;' + FRAG));
-    g.linkProgram(pr); if (!g.getProgramParameter(pr, g.LINK_STATUS)) throw new Error('link'); g.useProgram(pr);
-    g.bindBuffer(g.ARRAY_BUFFER, g.createBuffer()); g.bufferData(g.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), g.STATIC_DRAW);
-    const loc = g.getAttribLocation(pr, 'p'); g.enableVertexAttribArray(loc); g.vertexAttribPointer(loc, 2, g.FLOAT, false, 0, 0);
-    g.pixelStorei(g.UNPACK_COLORSPACE_CONVERSION_WEBGL, g.NONE); g.pixelStorei(g.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
-    const tex = un => { const x = g.createTexture(); g.activeTexture(g.TEXTURE0 + un); g.bindTexture(g.TEXTURE_2D, x); for (const [k, val] of [[g.TEXTURE_MIN_FILTER, g.LINEAR], [g.TEXTURE_MAG_FILTER, g.LINEAR], [g.TEXTURE_WRAP_S, g.CLAMP_TO_EDGE], [g.TEXTURE_WRAP_T, g.CLAMP_TO_EDGE]]) g.texParameteri(g.TEXTURE_2D, k, val); return x; };
-    tex(1); g.texImage2D(g.TEXTURE_2D, 0, g.RGBA, g.RGBA, g.UNSIGNED_BYTE, atlas);
-    tex(0); g.texImage2D(g.TEXTURE_2D, 0, g.RGBA, 1, 1, 0, g.RGBA, g.UNSIGNED_BYTE, new Uint8Array([10, 11, 11, 255]));
-    for (const n of ['v', 'l', 'a', 'b', 't', 'k', 'e']) U[n] = g.getUniformLocation(pr, n);
-    g.uniform1i(U.v, 0); g.uniform1i(U.l, 1);
-    cv.addEventListener('webglcontextlost', e => { e.preventDefault(); gl = null; semGL(); });
-    gl = g; return true;
-  }
-  function mede(){   // tamanho do desenho e recorte (preenche a moldura, como object-fit: cover)
-    if (!gl) return; const q = tela.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2), k = Math.min(1, 1280 / (q.width * d));
-    const w = Math.max(2, Math.round(q.width * d * k)), h = Math.max(2, Math.round(q.height * d * k));
-    if (cv.width !== w || cv.height !== h){ cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
-    const ca = w / h, va = 16 / 9; gl.uniform2f(U.e, ca < va ? ca / va : 1, ca < va ? 1 : va / ca);
-  }
-  function quadro(agora){
-    raf = 0; if (!visivel) return;
-    const k = Math.min(1, (agora - t0) / DUR), te = k * k * (3 - 2 * k);
-    ver += (verAlvo - ver) * .2; if (Math.abs(verAlvo - ver) < .003) ver = verAlvo;
-    forcaS += (forca - forcaS) * .3;
-    if (gl){
-      try {
-        gl.activeTexture(gl.TEXTURE0);
-        if (v.readyState >= 2 && v.videoWidth){ if (v.currentTime !== ultT){ gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, v); ultT = v.currentTime; temQuadro = true; } }
-        else if (!temQuadro && capa.complete && capa.naturalWidth){ gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, capa); temQuadro = true; ultT = -1; }
-        if (temQuadro){ gl.uniform1f(U.a, antes); gl.uniform1f(U.b, atual); gl.uniform1f(U.t, te); gl.uniform1f(U.k, forcaS * ver); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); cv.style.opacity = 1; }
-      } catch { gl = null; semGL(); }
-    } else if (modo === 'img') fb.style.opacity = Math.min(1, forcaS / .65) * ver;
-    raf = requestAnimationFrame(quadro);
-  }
-  const roda = () => { if (!raf && visivel) raf = requestAnimationFrame(quadro); };
-  function semGL(){   // sem WebGL: mostra a cena parada com o look (as mesmas LUTs, já aplicadas)
-    modo = 'img'; cv.hidden = true; v.pause(); v.removeAttribute('src'); v.poster = AS + 'cena.jpg' + VER; fb.hidden = false; fb.src = AS + 'g-' + bts[atual].dataset.id + '.jpg' + VER; roda();
-  }
-  cv.style.opacity = 0; cv.style.transition = 'opacity .3s';
-  const atlas = new Image();
-  atlas.onload = () => { try { if (ligaGL(atlas)){ modo = 'gl'; mede(); roda(); } else semGL(); } catch { gl = null; semGL(); } };
-  atlas.onerror = semGL; atlas.src = AS + 'looks.png' + VER;
-  if ('ResizeObserver' in window) new ResizeObserver(mede).observe(tela); else addEventListener('resize', mede);
+  // ===== comparador com referências (os vídeos do /lut/demo) =====
+  const cmp = $('#cmp'), inp = cmp.querySelector('input'), dA = $('#dAnt'), dD = $('#dDep'), D = '/lut/demo/';
+  inp.addEventListener('input', () => cmp.style.setProperty('--c', inp.value + '%'));
+  const tocaDemo = () => { [dA, dD].forEach(x => { try { const p = x.play(); if (p && p.catch) p.catch(() => {}); } catch {} }); };
+  const sinc = () => { if (dD.readyState >= 2 && Math.abs(dD.currentTime - dA.currentTime) > .08) dD.currentTime = dA.currentTime; };
+  dA.addEventListener('timeupdate', sinc);
+  try { new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ [dA, dD].forEach(x => { if (x.preload === 'none'){ x.preload = 'auto'; x.load(); } }); tocaDemo(); } else { dA.pause(); dD.pause(); } }), { rootMargin:'200px' }).observe(cmp); } catch { tocaDemo(); }
+  const troca = (vid, arq) => { const t = dA.currentTime; vid.poster = D + arq + '.webp'; vid.src = D + arq + '.mp4'; vid.addEventListener('loadeddata', () => { try { vid.currentTime = t; } catch {} tocaDemo(); }, { once:true }); };
+  document.querySelectorAll('.look').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.look').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    troca(dD, b.dataset.k); $('#tDep').textContent = 'LUT · ' + b.dataset.n;
+  });
+  document.querySelectorAll('.grav button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.grav button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    troca(dA, b.dataset.g); $('#tAnt').textContent = 'Seu vídeo · ' + b.dataset.n;
+  });
 
-  // ---- trocar de referência (transição suave) ----
-  function escolhe(i){
-    if (i === atual) return;
-    antes = atual; atual = i; t0 = performance.now(); ultima = Date.now();
-    bts.forEach((b, k) => { b.classList.toggle('on', k === i); b.setAttribute('aria-checked', k === i); });
-    rN.textContent = bts[i].dataset.n; rM.src = bts[i].querySelector('img').src;
-    if (modo === 'img') fb.src = AS + 'g-' + bts[i].dataset.id + '.jpg' + VER;
-  }
-  bts.forEach((b, i) => b.addEventListener('click', () => { mexeu = true; mostra(1); escolhe(i); }));
-  $('#refs').addEventListener('keydown', e => { const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return; e.preventDefault(); mexeu = true; const i = (atual + d + NL) % NL; escolhe(i); bts[i].focus(); });
-  // ---- intensidade ----
-  const poeInt = () => { forca = int.value / 100; intv.textContent = int.value + '%'; int.style.setProperty('--p', int.value + '%'); };
-  int.addEventListener('input', () => { mexeu = true; mostra(1); poeInt(); }); poeInt();
-  // ---- segurar para ver o original ----
-  function mostra(x, seg){ verAlvo = x; tg.textContent = x ? 'Com o Mood' : 'Original'; orig.classList.toggle('on', !x && !!seg); }
-  const solta = () => mostra(1);
-  orig.addEventListener('pointerdown', e => { e.preventDefault(); mexeu = true; try { orig.setPointerCapture(e.pointerId); } catch {} mostra(0, 1); });
-  ['pointerup', 'pointercancel', 'lostpointercapture', 'blur'].forEach(ev => orig.addEventListener(ev, solta));
-  orig.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); mostra(0, 1); } });
-  orig.addEventListener('keyup', solta);
-  orig.addEventListener('contextmenu', e => e.preventDefault());
-
-  // ---- quando aparece: mostra o original por um instante e revela o look; depois passeia pelas referências ----
-  mostra(reduz ? 1 : 0); if (reduz) ver = 1;
-  new IntersectionObserver(es => {
-    visivel = es[0].isIntersecting;
-    if (visivel){ toca(); roda(); if (!estreou){ estreou = true; setTimeout(() => { if (verAlvo === 0 && !orig.classList.contains('on')) mostra(1); ultima = Date.now(); }, 1300); } }
-    else if (!v.paused) v.pause();
-  }, { threshold:.35 }).observe(tela);
-  if (!reduz) setInterval(() => { if (!mexeu && visivel && ultima && verAlvo === 1 && !document.hidden && Date.now() - ultima > 3600) escolhe((atual + 1) % NL); }, 400);
+  // ===== barra fixa do celular: aparece depois da oferta e some quando ela está na tela =====
+  const fixo = $('#fixo'), of = $('#oferta'); let passou = false, vendo = true;
+  const atualiza = () => fixo.classList.toggle('on', passou && !vendo);
+  try { new IntersectionObserver(es => es.forEach(e => { vendo = e.isIntersecting; passou = passou || (!e.isIntersecting && e.boundingClientRect.top < 0); atualiza(); })).observe(of); } catch {}
 })();
 </script>
 </body>
