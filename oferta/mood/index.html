@@ -497,11 +497,12 @@ window.FLEv = (() => {
   const q = new URLSearchParams(location.search); let metodo = null, viu = false;
   const manda = (nome, extra) => { try { fetch(URL_, { method:'POST', keepalive:true, headers:{ 'Content-Type':'application/json', apikey:KEY, Authorization:'Bearer ' + KEY }, body: JSON.stringify({ p_nome:nome, p_pack:'fl-lut', p_visitante:vis, p_dados:Object.assign({ oferta:'7205', metodo, de:q.get('utm_source') || null }, extra || {}) }) }).catch(() => {}); } catch {} };
   document.addEventListener('click', e => {
-    const t = e.target.closest && e.target.closest('[data-greenn-upsell], #altCk, a.nao');
+    const t = e.target.closest && e.target.closest('[data-greenn-upsell], #altCk, a.fl-outro, a.nao');
     if (!t) return;
-    manda(t.matches('[data-greenn-upsell]') ? 'upsell_aceitou' : t.id === 'altCk' ? 'upsell_alt' : 'upsell_recusou', { onde: t.closest('.fim') ? 'fim' : t.closest('.fixo') ? 'barra' : 'topo' });
+    manda(t.matches('[data-greenn-upsell]') ? 'upsell_aceitou' : (t.id === 'altCk' || t.classList.contains('fl-outro')) ? 'upsell_alt' : 'upsell_recusou', { onde: t.classList.contains('fl-outro') ? 'erro' : t.closest('.fim') ? 'fim' : t.closest('.fixo') ? 'barra' : 'topo' });
   }, true);
-  return { metodo: m => { metodo = m ? String(m).toUpperCase() : null; }, viu: () => { if (viu) return; viu = true; manda('upsell_viu'); } };
+  let errou = false;
+  return { metodo: m => { metodo = m ? String(m).toUpperCase() : null; }, viu: () => { if (viu) return; viu = true; manda('upsell_viu'); }, erro: txt => { if (errou) return; errou = true; manda('upsell_erro', { msg: txt }); } };
 })();
 </script>
 <script src="https://metrics.basefl.com/t.js" data-key="pk_live_c3392e6c67a34797baf70e0604f3fa4f" data-endpoint="https://metrics.basefl.com" data-reserva="https://edge.central.automatizesolucoes.com" data-dominios="basefl.com,reelsacademy.com.br,ofernandoluz.com" data-endpoints="basefl.com=https://metrics.basefl.com,reelsacademy.com.br=https://metrics.reelsacademy.com.br,ofernandoluz.com=https://metrics.ofernandoluz.com" defer></script>
@@ -665,6 +666,7 @@ window.FLEv = (() => {
       a.textContent = 'Pagar de outro jeito (Apple Pay, Google Pay, Pix ou outro cartão)';
       a.style.cssText = 'display:block;margin-top:16px;padding:14px 16px;border-radius:6px;background:#007c5d;color:#fff;font:600 15px Montserrat,sans-serif;text-align:center;text-decoration:none';
       box.appendChild(a);
+      try { window.FLEv && FLEv.erro(box.textContent.replace(/\s+/g, ' ').trim().slice(0, 160)); } catch {}
     };
     try { new MutationObserver(socorro).observe(document.body, { childList:true, subtree:true, characterData:true }); } catch {}
   })();
