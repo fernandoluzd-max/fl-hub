@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Títulos Dinâmicos · Base FL</title>
+<style>html,body{background:#0D0F0E;color:#9A968A;font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;margin:0}p{text-align:center;margin-top:40vh}a{color:#F4F0E4}</style>
+</head>
+<body>
+<p>Abrindo os Títulos Dinâmicos… <a id="ir" href="/conheca/legendas/?de=whatsapp-ra">toque aqui se não abrir</a></p>
+<script>
+// Link do WhatsApp (Reels Academy -> Títulos): basefl.com/t/?t=CÓDIGO
+// Registra a abertura na Central do WhatsApp e leva à página de vendas dos Títulos com a origem no checkout.
+(() => {
+  const q = new URLSearchParams(location.search), t = q.get('t') || '';
+  const ok = /^[a-f0-9]{12,40}$/.test(t);
+  const u = new URL('/conheca/legendas/', location.origin);
+  u.searchParams.set('de', 'whatsapp-ra');
+  u.searchParams.set('utm_source', 'whatsapp');
+  u.searchParams.set('utm_medium', 'disparo');
+  u.searchParams.set('utm_campaign', 'reels_academy_titulos');
+  if (ok) u.searchParams.set('utm_content', t.slice(0, 12));
+  u.searchParams.set('src', 'disparo-whatsapp-ra');
+  document.getElementById('ir').href = u.toString();
+  const vai = () => location.replace(u.toString());
+  if (!ok) return vai();
+  const a = new URL('https://otlaexuqyavpzxwzcsfo.supabase.co/functions/v1/camp/ir');
+  a.searchParams.set('t', t); a.searchParams.set('o', 'whatsapp'); a.searchParams.set('d', 'abriu');
+  let foi = false; const segue = () => { if (!foi) { foi = true; vai(); } };
+  try { fetch(a.toString(), { mode: 'no-cors', keepalive: true, cache: 'no-store' }).then(segue, segue); } catch { segue(); }
+  setTimeout(segue, 700);
+})();
+</script>
+</body>
+</html>
