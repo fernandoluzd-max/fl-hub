@@ -3,8 +3,8 @@
 -- das 8h às 22h59, no máximo 40 por dia, 1 vez por pessoa, nunca para quem já tem os Títulos ou pediu para sair.
 
 -- 1) campanha
-insert into public.camp_config (id, pausado, wpp_pos_compra)
-values ('titulos_ra', false, true)
+insert into public.camp_config (id, produto_greenn, pausado, wpp_pos_compra, pagina)
+values ('titulos_ra', '195639', false, true, 'https://basefl.com/conheca/legendas/')   -- produto_greenn: quem comprar os Títulos sai da fila na hora
 on conflict (id) do nothing;
 
 -- 2) chave secreta do webhook da Kiwify (fica só no banco; ninguém lê pela API)
