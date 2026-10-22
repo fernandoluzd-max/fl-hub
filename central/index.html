@@ -185,7 +185,7 @@ tr:last-child td{border-bottom:0}
       </section>
     </div>
 
-    <p class="nota">Tudo aqui vem dos acessos reais. "Abriu" conta quando a página do link carrega; "Clicaram para comprar" conta o clique que leva ao checkout (intenção de compra); "Sem clicar" é quem abriu e não clicou para comprar no período. Desde 21/10 à noite a página não tem mais teste grátis. Pessoas são contadas uma vez por período, mesmo que abram várias vezes. Compra = venda do Mood paga na Greenn, com o mesmo e-mail, depois do clique. Os toques em "Manda o áudio" passaram a ser registrados em 21/10 às 20h. Atualiza sozinho a cada 15 segundos.</p>
+    <p class="nota">Tudo aqui vem dos acessos reais. "Abriu" conta quando a página do link carrega; "Clicaram para comprar" conta o clique que leva ao checkout (intenção de compra); "Sem clicar" é quem abriu e não clicou para comprar no período. Desde 21/10 à noite a página não tem mais teste grátis. Pessoas são contadas uma vez por período, mesmo que abram várias vezes. Compra = venda do Mood paga na Greenn, com o mesmo e-mail, depois do clique. "Tocaram no botão" conta quem tocou em "Quero conhecer" (mensagem nova, desde 22/10) ou em "Manda o áudio" (mensagem antiga, desde 21/10 às 20h). Atualiza sozinho a cada 15 segundos.</p>
   </main>
 </div>
 
@@ -203,7 +203,7 @@ tr:last-child td{border-bottom:0}
   const inicioDia = d => new Date(d + 'T00:00:00-03:00');
   const somaDias = (d, k) => diaSP(inicioDia(d).getTime() + k * 864e5 + 3600e3);
   const COR = { abriu: 'var(--abriu)', teste: 'var(--teste)', checkout: 'var(--compra)', audio: 'var(--audio)' };
-  const TX = { abriu: 'abriu a página', teste: 'tocou em Testar grátis (página antiga)', checkout: 'clicou para comprar', audio: 'pediu o áudio' };
+  const TX = { abriu: 'abriu a página', teste: 'tocou em Testar grátis (página antiga)', checkout: 'clicou para comprar', audio: 'tocou no botão da mensagem' };
 
   let ultimoDado = null, rz = null;
   let periodo = 'hoje', ultimo = null, vistos = new Set(), timer = null, ocupado = false, ultimaAtualizacao = 0;
@@ -223,7 +223,7 @@ tr:last-child td{border-bottom:0}
     const escolheram = k.escolheram;
     const passos = [
       ['Mensagens entregues', 'disparo com o vídeo', k.enviados, 'var(--mute)'],
-      ['Pediram o áudio', 'contando desde 21/10, 20h', k.audio, 'var(--audio)'],
+      ['Tocaram no botão', '"Quero conhecer" ou "Manda o áudio"', k.audio, 'var(--audio)'],
       ['Abriram a página', 'pessoas únicas', k.visitantes, 'var(--abriu)'],
       ['Clicaram para comprar', 'intenção de compra · foram ao checkout', k.checkout, 'var(--compra)'],
       ['Compraram o Mood', 'pago na Greenn', k.compras, 'var(--venda)']
@@ -326,7 +326,7 @@ tr:last-child td{border-bottom:0}
     const c = d.campanhas || [];
     if (!c.length) { $('camps').innerHTML = '<p class="vazio">Nenhum disparo no período.</p>'; return; }
     const maxI = Math.max(1, ...c.map(x => pct(x.checkout, x.visitantes) || 0));
-    $('camps').innerHTML = `<table><thead><tr><th>Disparo</th><th>Entregues</th><th>Áudio</th><th>Abriram</th><th>Clicaram p/ comprar</th><th>Sem clicar</th><th>Compras</th><th>Intenção</th></tr></thead><tbody>` +
+    $('camps').innerHTML = `<table><thead><tr><th>Disparo</th><th>Entregues</th><th>Tocaram no botão</th><th>Abriram</th><th>Clicaram p/ comprar</th><th>Sem clicar</th><th>Compras</th><th>Intenção</th></tr></thead><tbody>` +
       c.map(x => { const i = pct(x.checkout, x.visitantes);
         return `<tr><td class="cn">${esc(x.camp)}</td><td>${n(x.enviados)}</td><td>${n(x.audio)}</td><td>${n(x.visitantes)}</td><td>${n(x.checkout)}</td><td>${n(x.nenhum)}</td><td>${n(x.compras)}</td>
         <td>${i == null ? '—' : `<span class="barrinha" style="width:${Math.round(i / maxI * 44)}px"></span>${i}%`}</td></tr>`; }).join('') +
