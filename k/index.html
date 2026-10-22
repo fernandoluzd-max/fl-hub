@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Kit Freelancer · Base FL</title>
+<style>html,body{background:#0D0F0E;color:#9A968A;font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;margin:0}p{text-align:center;margin-top:40vh}a{color:#F4F0E4}</style>
+</head>
+<body>
+<p>Abrindo o Kit Freelancer… <a id="ir" href="/conheca/kit-freelancer/?de=whatsapp-kit">toque aqui se não abrir</a></p>
+<script>
+// Link do WhatsApp (perfil quente -> Kit Freelancer): basefl.com/k/?t=CÓDIGO
+// Registra a abertura na Central do WhatsApp e leva à página do Kit Freelancer com a origem no checkout.
+(() => {
+  const q = new URLSearchParams(location.search), t = q.get('t') || '';
+  const ok = /^[a-f0-9]{12,40}$/.test(t);
+  const u = new URL('/conheca/kit-freelancer/', location.origin);
+  u.searchParams.set('de', 'whatsapp-kit');
+  u.searchParams.set('utm_source', 'whatsapp');
+  u.searchParams.set('utm_medium', 'disparo');
+  u.searchParams.set('utm_campaign', 'perfil_kit_freelancer');
+  if (ok) u.searchParams.set('utm_content', t.slice(0, 12));
+  u.searchParams.set('src', 'disparo-whatsapp-kit');
+  document.getElementById('ir').href = u.toString();
+  const vai = () => location.replace(u.toString());
+  if (!ok) return vai();
+  const a = new URL('https://otlaexuqyavpzxwzcsfo.supabase.co/functions/v1/camp/ir');
+  a.searchParams.set('t', t); a.searchParams.set('o', 'whatsapp'); a.searchParams.set('d', 'abriu');
+  let foi = false; const segue = () => { if (!foi) { foi = true; vai(); } };
+  try { fetch(a.toString(), { mode: 'no-cors', keepalive: true, cache: 'no-store' }).then(segue, segue); } catch { segue(); }
+  setTimeout(segue, 700);
+})();
+</script>
+</body>
+</html>
