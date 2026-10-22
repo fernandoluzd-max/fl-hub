@@ -1307,14 +1307,28 @@ function mede(){
 function confere(){
   // o limite acompanha a referência: se ela mesma é bem saturada ou tem pretos esmagados de propósito, isso é o look, não defeito
   const lim = limites(); M.lim = lim;
+  // antes, um defeito de qualquer tipo cortava cor E luz juntas (o mesmo botão A.forca para as duas),
+  // mesmo quando só uma das duas causava o problema — e cortar a luz à toa tira contraste sem necessidade.
+  // a cor é quem mais contribui pra quase todo defeito medido aqui (inclusive estouro de brilho: a própria
+  // cor empurrada junto também força o recorte de RGB), então ela cede primeiro; a luz só cede por último,
+  // se reduzir a cor sozinha não bastar — assim o contraste só é sacrificado quando é mesmo preciso.
   const passa = q => q.estouro <= lim.estouro && q.sat <= lim.sat && (q.brancos == null || q.brancos <= lim.brancos) && (q.pele == null || q.pele <= lim.pele);
-  let q = mede(), f = A.forca; M.qa0 = q; M.reduziu = 0;
-  while (!passa(q) && A.forca > 40){ A.forca -= 10; montaLUT(); q = mede(); }
-  M.reduziu = f - A.forca; M.qa = q; PADRAO_SESSAO = A.forca;
+  let q = mede(); M.qa0 = q;
+  const cor0 = A.cor, luz0 = A.luz;
+  // passo fino (5 em 5, até 20%): acha um ponto mais perto do ideal do que pulando de 10 em 10,
+  // e ainda segura os casos extremos que antes ficavam presos reprovados em 40%
+  while (!passa(q) && A.cor > 20){ A.cor -= 5; montaLUT(); q = mede(); }
+  while (!passa(q) && A.luz > 20){ A.luz -= 5; montaLUT(); q = mede(); }
+  M.reduziuCor = cor0 - A.cor; M.reduziuLuz = luz0 - A.luz; M.reduziu = M.reduziuCor || M.reduziuLuz;
+  M.qa = q; SESSAO_COR = A.cor; SESSAO_LUZ = A.luz;
 }
-let PADRAO_SESSAO = 100;
+let SESSAO_COR = 100, SESSAO_LUZ = 100;
 function limites(){ const s = M.s || 0;
-  return { estouro: Math.max(QA_LIM.estouro, (M.refClip || 0) + 1), sat: Math.max(QA_LIM.sat, Math.min(2, (M.refSat || 1) * 1.1)), brancos: QA_LIM.brancos * (1 + 2 * s), pele: QA_LIM.pele * (1 + s) }; }
+  // o teto de saturação (antes travado em ×2 sempre) agora acompanha um pouco mais o quanto a referência
+  // realmente pede (M.refSat): só sobe quando o vídeo é bem mais "lavado" que a referência — é exatamente
+  // o caso de vídeo em Log/lavado recebendo uma referência colorida, o pior caso do banco de teste — e mesmo
+  // assim fica bem abaixo do teto por pixel que a proteção já permite (PROT.satMax, até 3,2×)
+  return { estouro: Math.max(QA_LIM.estouro, (M.refClip || 0) + 1), sat: Math.max(QA_LIM.sat, Math.min(2.35, (M.refSat || 1) * 1.1)), brancos: QA_LIM.brancos * (1 + 2 * s), pele: QA_LIM.pele * (1 + s) }; }
 function qaHtml(q){ const QA_LIM = M.lim || limites();
   const linha = (ok, t, v) => `<div><b style="color:${ok ? '#7BE0A0' : '#FFB347'}">${ok ? '✓' : '!'}</b><span>${t}</span><small>${v}</small></div>`;
   return linha(q.estouro <= QA_LIM.estouro, 'Sem estourar brancos nem esmagar pretos', (q.estouro > 0 ? '+' : '') + q.estouro.toFixed(1) + '% de pixels no limite')
@@ -1386,7 +1400,8 @@ function passo2(){
   let hMed = 0, tScope = 'wf';
   const scopes = () => {};
   const qa = () => { const q = mede(); $('#qa').innerHTML = qaHtml(q);
-    $('#qaN').textContent = (M.reduziu && A.forca === PADRAO_SESSAO ? `A intensidade começou em ${A.forca}% porque em 100% a checagem achou um problema. ` : '') + (M.fora ? `${M.fora} quadro(s) da referência muito diferente(s) do resto foram ignorados.` : ''); };
+    const avisos = []; if (M.reduziuCor && A.cor === SESSAO_COR) avisos.push(`a cor em ${A.cor}%`); if (M.reduziuLuz && A.luz === SESSAO_LUZ) avisos.push(`a luz em ${A.luz}%`);
+    $('#qaN').textContent = (avisos.length ? `Como em 100% a checagem achou um problema, começou com ${avisos.join(' e ')}. ` : '') + (M.fora ? `${M.fora} quadro(s) da referência muito diferente(s) do resto foram ignorados.` : ''); };
   const medeTudo = () => {
     const s = semelhanca(); $('#pct').textContent = s + '%'; $('#anel').style.setProperty('--p', s + '%');
     $('#medT').textContent = s >= 88 ? 'Muito parecido com a referência' : s >= 72 ? 'Parecido com a referência' : s >= 50 ? 'Lembra a referência' : 'Ainda longe da referência';

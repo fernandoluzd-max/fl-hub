@@ -1,0 +1,57 @@
+rotulo,id,categoria,nota,semelhanca,de_sombra,de_meio,de_alta,contraste,sat_razao,pele_dh_graus,pele_dcroma,defeitos,defeitos_desc,suavidade_g1,suavidade_passes,forca_final,reduziu_qa,tempo_ms_normal,tempo_ms_cpu4x,cube_valido,cube_linhas,previa_igual_cube_deMedio,previa_igual_cube_deMax
+antes,interior-pele,"Pessoa falando, ambiente interno (pele é o principal)",80,66,1.59,5.87,6.06,5.91,1.03,0.17,3.78,0,,2.24,1,100,0,298.7,1260.5,true,35937,0.38,1.87
+antes,exterior-dia-ceu,Externo de dia com céu,71,59,9.49,12.58,6.03,5.93,1.07,,,0,,2.38,1,100,0,291.4,1152.5,true,35937,0.4,1.76
+antes,noite-baixa-luz,Noite / pouca luz,57,43,9.48,9.89,4.87,10.69,0.45,,,0,,2.29,1,60,40,230.5,890.8,true,35937,0.4,1.66
+antes,log-lavado,"Vídeo bem lavado (baixo contraste, baixa saturação)",42,42,,15.86,10.02,21.57,0.29,,,1,saturação acima do limite (x2.25 > x2.00),1.71,1,40,60,288.8,1137.1,true,35937,0.36,0.91
+antes,ref-saturada,Referência muito saturada (laranja e azul),60,49,7.73,11.32,12.76,11.85,0.62,8.75,2.74,0,,2.35,1,100,0,313.9,1177.8,true,35937,0.4,1.71
+antes,ref-pastel,Referência dessaturada / pastel,65,51,3.51,10.35,11.61,10.43,0.98,6.7,7.03,0,,1.33,1,100,0,273.6,1083.8,true,35937,0.39,1.71
+antes,cenas-diferentes,Cenas bem diferentes entre vídeo e referência,66,57,3.08,11.19,16.81,6.34,0.75,,,0,,1.61,1,100,0,294.7,1144,true,35937,0.41,1.71
+antes,mesma-cena,Mesma cena (caso fácil),94,95,1.29,1.07,0.95,0.77,0.87,2.49,0.07,0,,1.55,1,80,20,279.6,1082.9,true,35937,0.36,1.56
+qa-passo-fino,interior-pele,"Pessoa falando, ambiente interno (pele é o principal)",80,66,1.59,5.87,6.06,5.91,1.03,0.17,3.78,0,,2.24,1,100,0,298,1205.5,true,35937,0.38,1.87
+qa-passo-fino,exterior-dia-ceu,Externo de dia com céu,71,59,9.49,12.58,6.03,5.93,1.07,,,0,,2.38,1,100,0,296.7,1157.5,true,35937,0.4,1.76
+qa-passo-fino,noite-baixa-luz,Noite / pouca luz,58,43,9.5,7.63,4.09,10.58,0.46,,,0,,2.29,1,65,35,234.7,896,true,35937,0.4,1.72
+qa-passo-fino,log-lavado,"Vídeo bem lavado (baixo contraste, baixa saturação)",43,41,,17.25,10.45,22.84,0.25,,,0,,1.71,1,30,70,295.7,1147,true,35937,0.35,0.92
+qa-passo-fino,ref-saturada,Referência muito saturada (laranja e azul),60,49,7.73,11.32,12.76,11.85,0.62,8.75,2.74,0,,2.35,1,100,0,309.5,1185.4,true,35937,0.4,1.71
+qa-passo-fino,ref-pastel,Referência dessaturada / pastel,65,51,3.51,10.35,11.61,10.43,0.98,6.7,7.03,0,,1.33,1,100,0,274.2,1063.1,true,35937,0.39,1.71
+qa-passo-fino,cenas-diferentes,Cenas bem diferentes entre vídeo e referência,66,57,3.08,11.19,16.81,6.34,0.75,,,0,,1.61,1,100,0,288.9,1158.7,true,35937,0.41,1.71
+qa-passo-fino,mesma-cena,Mesma cena (caso fácil),95,95,1.01,0.88,0.83,0.62,0.9,3.2,0.27,0,,1.55,1,85,15,280.9,1085.1,true,35937,0.36,1.56
+sat-cap-2.35,interior-pele,"Pessoa falando, ambiente interno (pele é o principal)",80,66,1.59,5.87,6.06,5.91,1.03,0.17,3.78,0,,2.24,1,100,0,302.7,1174.4,true,35937,0.38,1.87
+sat-cap-2.35,exterior-dia-ceu,Externo de dia com céu,71,59,9.49,12.58,6.03,5.93,1.07,,,0,,2.38,1,100,0,294.9,1159.9,true,35937,0.4,1.76
+sat-cap-2.35,noite-baixa-luz,Noite / pouca luz,58,43,9.5,7.63,4.09,10.58,0.46,,,0,,2.29,1,65,35,233.7,888.3,true,35937,0.4,1.72
+sat-cap-2.35,log-lavado,"Vídeo bem lavado (baixo contraste, baixa saturação)",45,42,,15.86,10.02,21.57,0.29,,,0,,1.71,1,40,60,290.4,1134.6,true,35937,0.36,0.91
+sat-cap-2.35,ref-saturada,Referência muito saturada (laranja e azul),60,49,7.73,11.32,12.76,11.85,0.62,8.75,2.74,0,,2.35,1,100,0,302.5,1175.1,true,35937,0.4,1.71
+sat-cap-2.35,ref-pastel,Referência dessaturada / pastel,65,51,3.51,10.35,11.61,10.43,0.98,6.7,7.03,0,,1.33,1,100,0,266.9,1065.8,true,35937,0.39,1.71
+sat-cap-2.35,cenas-diferentes,Cenas bem diferentes entre vídeo e referência,66,57,3.08,11.19,16.81,6.34,0.75,,,0,,1.61,1,100,0,288.8,1133.9,true,35937,0.41,1.71
+sat-cap-2.35,mesma-cena,Mesma cena (caso fácil),96,97,0.3,0.49,0.57,0.21,0.99,5.2,0.87,0,,1.55,1,100,0,278.4,1082,true,35937,0.36,1.73
+final,interior-pele,"Pessoa falando, ambiente interno (pele é o principal)",80,66,1.59,5.87,6.06,5.91,1.03,0.17,3.78,0,,2.24,1,100,0,299.3,1174.9,true,35937,0.38,1.87
+final,exterior-dia-ceu,Externo de dia com céu,71,59,9.49,12.58,6.03,5.93,1.07,,,0,,2.38,1,100,0,296.6,1162.7,true,35937,0.4,1.76
+final,noite-baixa-luz,Noite / pouca luz,58,43,9.5,7.63,4.09,10.58,0.46,,,0,,2.29,1,65,35,234.4,892.8,true,35937,0.4,1.72
+final,log-lavado,"Vídeo bem lavado (baixo contraste, baixa saturação)",45,42,,15.86,10.02,21.57,0.29,,,0,,1.71,1,40,60,287.3,1126.6,true,35937,0.36,0.91
+final,ref-saturada,Referência muito saturada (laranja e azul),60,49,7.73,11.32,12.76,11.85,0.62,8.75,2.74,0,,2.35,1,100,0,297.8,1170.9,true,35937,0.4,1.71
+final,ref-pastel,Referência dessaturada / pastel,65,51,3.51,10.35,11.61,10.43,0.98,6.7,7.03,0,,1.33,1,100,0,273.8,1049.7,true,35937,0.39,1.71
+final,cenas-diferentes,Cenas bem diferentes entre vídeo e referência,66,57,3.08,11.19,16.81,6.34,0.75,,,0,,1.61,1,100,0,304.7,1134.6,true,35937,0.41,1.71
+final,mesma-cena,Mesma cena (caso fácil),96,97,0.3,0.49,0.57,0.21,0.99,5.2,0.87,0,,1.55,1,100,0,278,1090.8,true,35937,0.36,1.73
+diagnostico-base,interior-pele,"Pessoa falando, ambiente interno (pele é o principal)",80,66,1.59,5.87,6.06,5.91,1.03,0.17,3.78,0,,2.24,1,100,0,302.5,1241.6,true,35937,0.38,1.87
+diagnostico-base,exterior-dia-ceu,Externo de dia com céu,71,59,9.49,12.58,6.03,5.93,1.07,,,0,,2.38,1,100,0,300.5,1219.4,true,35937,0.4,1.76
+diagnostico-base,noite-baixa-luz,Noite / pouca luz,58,43,9.5,7.63,4.09,10.58,0.46,,,0,,2.29,1,65,35,232,977.3,true,35937,0.4,1.72
+diagnostico-base,log-lavado,"Vídeo bem lavado (baixo contraste, baixa saturação)",45,42,,15.86,10.02,21.57,0.29,,,0,,1.71,1,40,60,338,1154.1,true,35937,0.36,0.91
+diagnostico-base,ref-saturada,Referência muito saturada (laranja e azul),60,49,7.73,11.32,12.76,11.85,0.62,8.75,2.74,0,,2.35,1,100,0,303.9,1187.6,true,35937,0.4,1.71
+diagnostico-base,ref-pastel,Referência dessaturada / pastel,65,51,3.51,10.35,11.61,10.43,0.98,6.7,7.03,0,,1.33,1,100,0,273.2,1056.1,true,35937,0.39,1.71
+diagnostico-base,cenas-diferentes,Cenas bem diferentes entre vídeo e referência,66,57,3.08,11.19,16.81,6.34,0.75,,,0,,1.61,1,100,0,341.1,1269.3,true,35937,0.41,1.71
+diagnostico-base,mesma-cena,Mesma cena (caso fácil),96,97,0.3,0.49,0.57,0.21,0.99,5.2,0.87,0,,1.55,1,100,0,323.8,1152.1,true,35937,0.36,1.73
+base-12-pares,val-log-frio,"Vídeo lavado/log (2º caso, fonte e direção de cor diferentes de log-lavado)",51,46,,9.8,8.99,20.13,0.28,,,0,,1.73,1,30,70,282.5,1258.4,true,35937,0.37,1.1
+base-12-pares,val-noite-rua2,"Noite / pouca luz (2º caso, fonte e referência diferentes de noite-baixa-luz)",69,61,11.33,1.62,1.06,1.64,0.36,,,0,,1.43,1,100,0,278.6,1203.8,true,35937,0.48,1.64
+base-12-pares,val-retrato-fria,"Retrato com pele nos dois lados, referência de grade fria (cobertura: pele quase não é testada fora de mesma-cena)",54,46,13.78,18.91,7.97,6.13,0.5,,,0,,1.88,1,35,65,293.2,1116.2,true,35937,0.33,1.42
+base-12-pares,val-externo-nublado,"Externo nublado / dessaturado (luz difusa, sem sol forte)",80,77,3.2,7.02,7.96,4.3,0.83,,,0,,2.22,1,100,0,287.2,1111.7,true,35937,0.39,1.85
+cor-primeiro-luz-por-ultimo,interior-pele,"Pessoa falando, ambiente interno (pele é o principal)",80,66,1.59,5.87,6.06,5.91,1.03,0.17,3.78,0,,2.24,1,100,0,312.1,1233.2,true,35937,0.38,1.87
+cor-primeiro-luz-por-ultimo,exterior-dia-ceu,Externo de dia com céu,71,59,9.49,12.58,6.03,5.93,1.07,,,0,,2.38,1,100,0,304.2,1227.4,true,35937,0.4,1.76
+cor-primeiro-luz-por-ultimo,noite-baixa-luz,Noite / pouca luz,59,45,8.77,7.24,,9.86,0.52,,,0,,2.29,1,100,20,242.2,895.3,true,35937,0.41,1.79
+cor-primeiro-luz-por-ultimo,log-lavado,"Vídeo bem lavado (baixo contraste, baixa saturação)",51,46,,13.05,8.78,13.97,0.29,,,0,,1.71,1,100,60,316.5,1187.8,true,35937,0.39,1.21
+cor-primeiro-luz-por-ultimo,ref-saturada,Referência muito saturada (laranja e azul),60,49,7.73,11.32,12.76,11.85,0.62,8.75,2.74,0,,2.35,1,100,0,312.5,1319.5,true,35937,0.4,1.71
+cor-primeiro-luz-por-ultimo,ref-pastel,Referência dessaturada / pastel,65,51,3.51,10.35,11.61,10.43,0.98,6.7,7.03,0,,1.33,1,100,0,275.5,1086.9,true,35937,0.39,1.71
+cor-primeiro-luz-por-ultimo,cenas-diferentes,Cenas bem diferentes entre vídeo e referência,66,57,3.08,11.19,16.81,6.34,0.75,,,0,,1.61,1,100,0,291.1,1172.8,true,35937,0.41,1.71
+cor-primeiro-luz-por-ultimo,mesma-cena,Mesma cena (caso fácil),96,97,0.3,0.49,0.57,0.21,0.99,5.2,0.87,0,,1.55,1,100,0,279.8,1096.4,true,35937,0.36,1.73
+cor-primeiro-luz-por-ultimo,val-log-frio,"Vídeo lavado/log (2º caso, fonte e direção de cor diferentes de log-lavado)",51,49,14.73,14.17,7.92,14.26,0.28,,,0,,1.73,1,100,70,282.5,1089.2,true,35937,0.38,1.23
+cor-primeiro-luz-por-ultimo,val-noite-rua2,"Noite / pouca luz (2º caso, fonte e referência diferentes de noite-baixa-luz)",69,61,11.33,1.62,1.06,1.64,0.36,,,0,,1.43,1,100,0,280.2,1116.2,true,35937,0.48,1.64
+cor-primeiro-luz-por-ultimo,val-retrato-fria,"Retrato com pele nos dois lados, referência de grade fria (cobertura: pele quase não é testada fora de mesma-cena)",56,49,14.55,20.11,7.29,1.95,0.5,,,0,,1.88,1,100,65,284.9,1168.5,true,35937,0.36,1.4
+cor-primeiro-luz-por-ultimo,val-externo-nublado,"Externo nublado / dessaturado (luz difusa, sem sol forte)",80,77,3.2,7.02,7.96,4.3,0.83,,,0,,2.22,1,100,0,289.3,1142.8,true,35937,0.39,1.85

@@ -1,0 +1,10 @@
+# Saída de cada rodada (.cube, PNGs de cada passo, resumo.json por rodada): são gerados de novo
+# a cada "node testes-cor/rodar.js" e ficam grandes rápido — não fazem sentido versionados.
+# O que importa fica fora daqui: resultados.csv (histórico das rodadas) e comparacoes/ (as imagens
+# lado a lado do estado atual, regeradas a cada rodada "oficial" e usadas no relatório).
+out/
+
+# Saída dos experimentos descartáveis (testes-cor/experimentos/*.js): JSONs e PNGs de diagnóstico,
+# gerados de novo a cada rodada de cada script. O que importa é o script em si (fica versionado) e
+# o que foi aprendido (vai pro relatorio-cor/DIAGNOSTICO.md) — não os arquivos de saída.
+experimentos/saida/
