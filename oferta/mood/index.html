@@ -350,6 +350,113 @@ a.gu{text-decoration:none}
 .hero-cta{max-width:420px;margin:22px auto 0;text-align:center}
 .hero-cta .gar-mini{margin-top:10px}
 @media (max-width:760px){.bens,.quem{grid-template-columns:1fr}.bem{grid-template-columns:60px 1fr}.bem img{width:60px;height:60px}}
+
+/* ===== No dia a dia: problema -> Mood -> solução ===== */
+.placar{display:flex;align-items:center;justify-content:center;gap:12px;margin:-6px auto 18px;font:700 12px var(--m);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.placar b{color:var(--ink)}
+.pts{display:flex;gap:6px}
+.pts i{width:22px;height:6px;border-radius:9px;background:var(--line2);transition:background .4s,box-shadow .4s}
+.pts i.on{background:var(--ambar);box-shadow:0 0 12px rgba(242,165,65,.55)}
+.dds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.dd{position:relative;display:grid;grid-template-rows:auto 1fr auto;gap:14px;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:border-color .4s,transform .25s,box-shadow .4s}
+.dd:hover{transform:translateY(-2px)}
+.dd.ok{border-color:rgba(242,165,65,.45);box-shadow:0 18px 50px -34px rgba(242,165,65,.7)}
+.dd .tx h3{font-size:19px;font-weight:800;margin-bottom:4px}
+.dd .tx p{color:var(--mute);font-size:15px}
+.dd .ps{display:none}
+.dd.ok .pp{display:none}
+.dd.ok .ps{display:block;color:var(--ink)}
+.vira{position:relative;display:grid;grid-template-columns:1fr 1fr;padding:3px;border:1px solid var(--line2);border-radius:999px;background:var(--bg);cursor:pointer;font:700 13.5px var(--f);color:var(--mute)}
+.vira span{position:relative;z-index:1;min-height:38px;display:grid;place-items:center;transition:color .3s}
+.vira::before{content:"";position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:999px;background:var(--panel2);border:1px solid var(--line2);transition:transform .45s cubic-bezier(.3,1.3,.5,1),background .3s}
+.vira span:first-child{color:var(--ink)}
+.dd.ok .vira::before{transform:translateX(100%);background:var(--grad);border-color:transparent}
+.dd.ok .vira span:first-child{color:var(--mute)}
+.dd.ok .vira span:last-child{color:#14070e}
+.dd.cutuca:not(.ok) .vira{animation:cutuca 1.6s ease-in-out infinite}
+@keyframes cutuca{0%,100%{box-shadow:0 0 0 0 rgba(242,165,65,0)}50%{box-shadow:0 0 0 5px rgba(242,165,65,.22)}}
+
+.cena{position:relative;height:172px;border-radius:14px;background:var(--bg);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:16px;padding:14px;overflow:hidden}
+.th{position:relative;width:104px;height:130px;flex:none;border-radius:10px;overflow:hidden;background:#000}
+.th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 25%}
+.th .s,.th .lk{opacity:0;transition:opacity .6s}
+.ctl{flex:1;max-width:170px;display:grid;gap:9px}
+.sl small{display:block;font:700 9.5px var(--m);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+.sl span{position:relative;display:block;height:4px;border-radius:9px;background:var(--line2)}
+.sl b{position:absolute;top:50%;left:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--ink);box-shadow:0 1px 6px rgba(0,0,0,.5);transition:left .7s cubic-bezier(.3,1.2,.4,1),background .4s}
+.roda{position:relative;width:46px;height:46px;border-radius:50%;background:conic-gradient(#ff5a5a,#ffd25a,#7cff6b,#5ae0ff,#6b7cff,#e05aff,#ff5a5a);margin-bottom:2px;-webkit-mask:radial-gradient(circle,transparent 9px,#000 10px);mask:radial-gradient(circle,transparent 9px,#000 10px)}
+.roda i{position:absolute;width:8px;height:8px;border-radius:50%;background:#fff;border:2px solid #111;left:50%;top:6px;margin-left:-4px}
+.cena .ok{position:absolute;left:10px;bottom:10px;padding:4px 9px;border-radius:999px;background:rgba(10,11,11,.82);font:700 10px var(--m);letter-spacing:.06em;font-style:normal;color:var(--ok);opacity:0;transform:translateY(6px);transition:opacity .35s .5s,transform .45s .5s}
+
+/* 1 · cor: tudo mexendo, nada assenta */
+.dd[data-k="cor"].vis:not(.ok) .th .p{animation:chuta 2.6s steps(1) infinite}
+@keyframes chuta{0%{filter:hue-rotate(0) saturate(1)}20%{filter:hue-rotate(-28deg) saturate(1.7)}40%{filter:hue-rotate(35deg) saturate(.6) contrast(1.3)}60%{filter:hue-rotate(80deg) saturate(1.3)}80%{filter:sepia(.5) contrast(.8)}}
+.dd.vis:not(.ok) .s1 b{animation:sl1 2.6s ease-in-out infinite}
+.dd.vis:not(.ok) .s2 b{animation:sl2 2.1s ease-in-out infinite}
+.dd.vis:not(.ok) .s3 b{animation:sl3 3s ease-in-out infinite}
+@keyframes sl1{0%,100%{left:20%}35%{left:85%}65%{left:40%}}
+@keyframes sl2{0%,100%{left:75%}40%{left:10%}70%{left:60%}}
+@keyframes sl3{0%,100%{left:35%}30%{left:15%}60%{left:90%}}
+.dd[data-k="cor"].vis:not(.ok) .roda i{animation:roda 2.4s linear infinite;transform-origin:4px 17px}
+@keyframes roda{0%{transform:rotate(0)}30%{transform:rotate(140deg)}55%{transform:rotate(60deg)}100%{transform:rotate(360deg)}}
+.dd.ok .s1 b{left:62%;background:var(--ambar)}.dd.ok .s2 b{left:44%;background:var(--ambar)}.dd.ok .s3 b{left:57%;background:var(--ambar)}
+.dd[data-k="cor"].ok .roda i{transform:rotate(38deg);transform-origin:4px 17px;transition:transform .7s}
+.dd.ok .th .s{opacity:1}
+.dd.ok .cena .ok{opacity:1;transform:none}
+
+/* 2 · tempo: o relógio corre, o anel nunca fecha */
+.anel{position:relative;width:118px;height:118px;flex:none}
+.anel svg{width:100%;height:100%;transform:rotate(-90deg)}
+.anel circle{fill:none;stroke:var(--line2);stroke-width:7}
+.anel .v{stroke:var(--nada,#ff8f7a);stroke-linecap:round;stroke-dasharray:264;stroke-dashoffset:264;transition:stroke-dashoffset .8s cubic-bezier(.3,.9,.3,1),stroke .4s}
+.dd[data-k="tempo"].vis:not(.ok) .anel .v{animation:quase 3.2s cubic-bezier(.2,.7,.3,1) infinite}
+@keyframes quase{0%{stroke-dashoffset:264}80%{stroke-dashoffset:52}100%{stroke-dashoffset:52;opacity:.2}}
+.anel .rel{position:absolute;inset:0;display:grid;place-items:center;font:700 17px var(--m);color:var(--ink)}
+.dd[data-k="tempo"].ok .anel .v{stroke:var(--ambar);stroke-dashoffset:0}
+.st{font:700 11px var(--m);letter-spacing:.08em;text-transform:uppercase}
+.st.p{color:#ff8f7a}.st.s{color:var(--ok);display:none}
+.dd.ok .st.p{display:none}.dd.ok .st.s{display:block}
+
+/* 3 · referência: a cor atravessa para o seu vídeo */
+.cena figure{margin:0;text-align:center}
+.cena figcaption{margin-top:6px;font:700 9.5px var(--m);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.rf img{width:84px;height:84px;border-radius:10px;object-fit:cover;display:block}
+.vd .th{width:84px;height:105px}
+.via{position:relative;flex:1;max-width:120px;height:2px;background:repeating-linear-gradient(90deg,var(--line2) 0 5px,transparent 5px 10px);margin-bottom:18px}
+.via .q{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--line2);font:800 13px var(--f);font-style:normal;color:var(--mute);transition:opacity .3s,transform .3s}
+.dd[data-k="ref"].vis:not(.ok) .via .q{animation:duvida 1.8s ease-in-out infinite}
+@keyframes duvida{50%{transform:translateY(-4px)}}
+.via .g{position:absolute;top:-5px;left:0;width:12px;height:12px;border-radius:50%;opacity:0}
+.g1{background:#1f6f78}.g2{background:#f0a35c}.g3{background:#2b3c52}.g4{background:#d9c7a8}
+.vd .c2{display:none;color:var(--ok)}.dd.ok .vd .c1{display:none}.dd.ok .vd .c2{display:inline}
+.dd[data-k="ref"].ok .via{background:repeating-linear-gradient(90deg,var(--ambar) 0 5px,transparent 5px 10px)}
+.dd[data-k="ref"].ok .via .q{opacity:0;transform:scale(.4)}
+.dd[data-k="ref"].ok .via .g{animation:viaja 1s cubic-bezier(.5,0,.3,1) both}
+.dd[data-k="ref"].ok .g2{animation-delay:.12s}.dd[data-k="ref"].ok .g3{animation-delay:.24s}.dd[data-k="ref"].ok .g4{animation-delay:.36s}
+@keyframes viaja{0%{left:0;opacity:0;transform:scale(.5)}15%{opacity:1;transform:scale(1)}85%{opacity:1}100%{left:calc(100% - 12px);opacity:0;transform:scale(.4)}}
+.dd[data-k="ref"] .th .s{clip-path:inset(0 100% 0 0);opacity:1;transition:clip-path 0s}
+.dd[data-k="ref"].ok .th .s{clip-path:inset(0 0 0 0);transition:clip-path .9s 1s cubic-bezier(.65,0,.35,1)}
+
+/* 4 · estilos: na mão recomeça; com o Mood troca num toque */
+.dd[data-k="estilos"] .cena{flex-direction:row}
+.dd[data-k="estilos"] .th{width:104px}
+.refaz{position:absolute;left:6px;right:6px;bottom:6px;padding:4px 6px;border-radius:7px;background:rgba(10,11,11,.82);font:700 8.5px var(--m);letter-spacing:.05em;text-transform:uppercase;color:#ff8f7a;text-align:center;transition:opacity .3s}
+.dd[data-k="estilos"].vis:not(.ok) .th .p{animation:recomeca 2.4s ease-in-out infinite}
+@keyframes recomeca{0%,100%{filter:none}45%{filter:saturate(1.6) hue-rotate(-20deg)}55%{filter:blur(2px) brightness(.6)}}
+.dd[data-k="estilos"].ok .refaz{opacity:0}
+.dd[data-k="estilos"] .lk.on{opacity:1}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:150px}
+.chips button{min-height:36px;border:1px solid var(--line2);border-radius:10px;background:var(--panel);color:var(--mute);font:700 12.5px var(--f);cursor:pointer;transition:background .25s,color .25s,border-color .25s,transform .15s}
+.chips button:active{transform:scale(.95)}
+.chips button.on{background:var(--ink);color:#111312;border-color:var(--ink)}
+
+.dd-fim{margin:22px auto 0;max-width:460px;text-align:center}
+.dd-fim p{font:700 18px/1.35 var(--d);margin-bottom:14px}
+.dd-fim:not([hidden]){animation:sobe .5s cubic-bezier(.3,1.2,.4,1)}
+@keyframes sobe{from{opacity:0;transform:translateY(10px)}}
+@media (max-width:760px){.dds{grid-template-columns:1fr}.cena{height:160px;gap:12px}.th{width:96px;height:120px}}
+@media (hover:none){.dd:hover{transform:none}}
+@media (prefers-reduced-motion:reduce){.dd *,.dd *::before,.dd::before{animation:none!important;transition-duration:.01s!important;transition-delay:0s!important}.dd-fim{animation:none!important}}
 </style>
 </head>
 <body>
@@ -471,9 +578,43 @@ a.gu{text-decoration:none}
   </div>
 </section>
 
-<section class="sec w">
-  <div class="cab"><span class="rot">No dia a dia</span><h2>O que muda na sua edição.</h2></div>
-  <div class="bens"><div class="bem"><img src="/lut/demo/ref-natural.webp" alt="" width="150" height="150" loading="lazy"><div><h3>Não sabe colorir?</h3><p>Comece por uma referência. A parte técnica fica com o Mood.</p></div></div><div class="bem"><img src="/lut/demo/ref-dourado.webp" alt="" width="150" height="150" loading="lazy"><div><h3>Perde tempo ajustando cor?</h3><p>A LUT sai em menos de um minuto e serve para a série inteira.</p></div></div><div class="bem"><img src="/lut/demo/ref-urbano.webp" alt="" width="150" height="150" loading="lazy"><div><h3>Gostou da cor de outro vídeo?</h3><p>Use um print dele como referência e leve aquele clima para o seu.</p></div></div><div class="bem"><img src="/lut/demo/ref-pastel.webp" alt="" width="150" height="150" loading="lazy"><div><h3>Quer experimentar estilos?</h3><p>Troque a referência e veja outro clima no mesmo vídeo.</p></div></div></div>
+<section class="sec w" id="diaadia">
+  <div class="cab"><span class="rot">No dia a dia</span><h2>O que muda na sua edição.</h2>
+    <p class="sub">Quatro situações que todo editor conhece. Toque em <b>Com o Mood</b> e veja cada uma se resolver.</p></div>
+  <div class="placar" aria-live="polite"><span class="pts"><i></i><i></i><i></i><i></i></span><span class="pt-t"><b id="ddN">0</b> de 4 resolvidas</span></div>
+  <div class="dds">
+    <article class="dd" data-k="cor">
+      <div class="cena"><div class="th"><img class="p" src="/lut/demo/normal-709.webp" alt="" width="540" height="676" loading="lazy"><img class="s" src="/lut/demo/dourado.webp" alt="" width="540" height="676" loading="lazy"></div>
+      <div class="ctl"><div class="roda"><i></i></div>
+        <div class="sl s1"><small>Temperatura</small><span><b></b></span></div>
+        <div class="sl s2"><small>Saturação</small><span><b></b></span></div>
+        <div class="sl s3"><small>Contraste</small><span><b></b></span></div></div>
+      <em class="ok">Cor da referência ✓</em></div>
+      <div class="tx"><h3>Não sabe colorir?</h3><p class="pp">Mexe em tudo, e a cor não chega.</p><p class="ps">Escolha uma referência. A parte técnica fica com o Mood.</p></div>
+      <button class="vira" type="button" aria-pressed="false"><span>Sem o Mood</span><span>Com o Mood</span></button>
+    </article>
+    <article class="dd" data-k="tempo">
+      <div class="cena"><div class="anel"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42"/><circle class="v" cx="50" cy="50" r="42"/></svg><b class="rel">00:00</b></div>
+      <div class="ctl"><small class="st p">Ajustando na mão…</small><small class="st s">LUT pronta ✓</small>
+        <div class="sl s1"><span><b></b></span></div><div class="sl s2"><span><b></b></span></div><div class="sl s3"><span><b></b></span></div></div></div>
+      <div class="tx"><h3>Perde tempo ajustando cor?</h3><p class="pp">Meia hora mexendo, e ainda não ficou bom.</p><p class="ps">A LUT sai em menos de um minuto e serve para a série inteira.</p></div>
+      <button class="vira" type="button" aria-pressed="false"><span>Sem o Mood</span><span>Com o Mood</span></button>
+    </article>
+    <article class="dd" data-k="ref">
+      <div class="cena"><figure class="rf"><img src="/lut/demo/ref-urbano.webp" alt="" width="300" height="300" loading="lazy"><figcaption>Referência</figcaption></figure>
+      <div class="via"><i class="q">?</i><i class="g g1"></i><i class="g g2"></i><i class="g g3"></i><i class="g g4"></i></div>
+      <figure class="vd"><div class="th"><img class="p" src="/lut/demo/normal-709.webp" alt="" width="540" height="676" loading="lazy"><img class="s" src="/lut/demo/urbano.webp" alt="" width="540" height="676" loading="lazy"></div><figcaption><span class="c1">Seu vídeo</span><span class="c2">Com a cor dela ✓</span></figcaption></figure></div>
+      <div class="tx"><h3>Gostou da cor de outro vídeo?</h3><p class="pp">Você vê a cor, mas não sabe como chegar nela.</p><p class="ps">Use um print dele como referência e leve aquele clima para o seu.</p></div>
+      <button class="vira" type="button" aria-pressed="false"><span>Sem o Mood</span><span>Com o Mood</span></button>
+    </article>
+    <article class="dd" data-k="estilos">
+      <div class="cena"><div class="th"><img class="p" src="/lut/demo/normal-709.webp" alt="" width="540" height="676" loading="lazy"><img class="lk" data-l="natural" src="/lut/demo/natural.webp" alt="" width="540" height="676" loading="lazy"><img class="lk" data-l="dourado" src="/lut/demo/dourado.webp" alt="" width="540" height="676" loading="lazy"><img class="lk" data-l="urbano" src="/lut/demo/urbano.webp" alt="" width="540" height="676" loading="lazy"><img class="lk" data-l="pastel" src="/lut/demo/pastel.webp" alt="" width="540" height="676" loading="lazy"><span class="refaz">Refazendo ajustes…</span></div>
+      <div class="chips"><button type="button" data-l="natural">Natural</button><button type="button" data-l="dourado">Dourado</button><button type="button" data-l="urbano">Urbano</button><button type="button" data-l="pastel">Pastel</button></div></div>
+      <div class="tx"><h3>Quer experimentar estilos?</h3><p class="pp">Na mão, cada estilo é recomeçar os ajustes do zero.</p><p class="ps">Troque a referência e veja outro clima no mesmo vídeo. Toque nos estilos.</p></div>
+      <button class="vira" type="button" aria-pressed="false"><span>Sem o Mood</span><span>Com o Mood</span></button>
+    </article>
+  </div>
+  <div class="dd-fim" id="ddFim" hidden><p>As quatro resolvidas. É isso que o Mood faz na sua edição.</p><a class="gu" href="#oferta">Quero meu Mood</a></div>
 </section>
 
 <section class="sec w">
@@ -719,6 +860,44 @@ window.FLEv = (() => {
   const fixo = $('#fixo'), of = $('#oferta'); let passou = false, vendo = true;
   const atualiza = () => fixo.classList.toggle('on', passou && !vendo);
   try { new IntersectionObserver(es => es.forEach(e => { vendo = e.isIntersecting; passou = passou || (!e.isIntersecting && e.boundingClientRect.top < 0); atualiza(); })).observe(of); } catch {}
+})();
+</script>
+<script id="dd-js">
+/* No dia a dia: cada card troca Sem o Mood / Com o Mood; o placar conta quantas a pessoa resolveu. */
+(() => {
+  const sec = document.getElementById('diaadia'); if (!sec) return;
+  const cards = [...sec.querySelectorAll('.dd')], pts = [...sec.querySelectorAll('.pts i')], N = document.getElementById('ddN'), fim = document.getElementById('ddFim');
+  const feitos = new Set(), calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ev = (n, d) => { try { window.FLMood && FLMood(n, d); } catch {} };
+  const placar = () => { N.textContent = feitos.size; pts.forEach((p, i) => p.classList.toggle('on', i < feitos.size)); if (feitos.size === 4 && fim.hidden) { fim.hidden = false; ev('mood_diaadia_completo'); } };
+  // relógio do card "tempo": corre rápido enquanto está sem o Mood
+  const rel = sec.querySelector('.dd[data-k="tempo"] .rel'); let seg = 0, tRel = 0;
+  const fmt = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+  const relogio = on => { clearInterval(tRel); if (!on) return; tRel = setInterval(() => { seg = (seg + 23) % 2700; rel.textContent = fmt(seg); }, 80); };
+  // estilos: com o Mood os looks se alternam sozinhos até a pessoa tocar num
+  const est = sec.querySelector('.dd[data-k="estilos"]'), lks = [...est.querySelectorAll('.lk')], chs = [...est.querySelectorAll('.chips button')];
+  let iL = 0, tL = 0, tocouL = false;
+  const look = k => { lks.forEach(l => l.classList.toggle('on', l.dataset.l === k)); chs.forEach(c => c.classList.toggle('on', c.dataset.l === k)); };
+  const roda = on => { clearInterval(tL); if (!on || tocouL || calmo) return; tL = setInterval(() => { iL = (iL + 1) % 4; look(lks[iL].dataset.l); }, 1300); };
+  const vira = (c, ok) => {
+    c.classList.toggle('ok', ok); c.classList.remove('cutuca');
+    c.querySelector('.vira').setAttribute('aria-pressed', ok ? 'true' : 'false');
+    const k = c.dataset.k;
+    if (k === 'tempo') { relogio(!ok && c.classList.contains('vis') && !calmo); if (ok) rel.textContent = '48 s'; }
+    if (k === 'estilos') { if (ok) { look(lks[iL].dataset.l); roda(c.classList.contains('vis')); } else { clearInterval(tL); lks.forEach(l => l.classList.remove('on')); chs.forEach(x => x.classList.remove('on')); } }
+    if (ok && !feitos.has(k)) { feitos.add(k); ev('mood_diaadia', { card: k }); placar(); }
+  };
+  cards.forEach(c => c.querySelector('.vira').addEventListener('click', () => vira(c, !c.classList.contains('ok'))));
+  chs.forEach(b => b.addEventListener('click', () => { tocouL = true; clearInterval(tL); iL = lks.findIndex(l => l.dataset.l === b.dataset.l); if (!est.classList.contains('ok')) vira(est, true); look(b.dataset.l); }));
+  // só anima o que está na tela; depois de 3,5 s parado, o botão dá um sinal discreto
+  const cut = new Map();
+  try { const io = new IntersectionObserver(es => es.forEach(e => {
+    const c = e.target, k = c.dataset.k; c.classList.toggle('vis', e.isIntersecting);
+    if (k === 'tempo') relogio(e.isIntersecting && !c.classList.contains('ok') && !calmo);
+    if (k === 'estilos') roda(e.isIntersecting && c.classList.contains('ok'));
+    clearTimeout(cut.get(c));
+    if (e.isIntersecting && !c.classList.contains('ok')) cut.set(c, setTimeout(() => c.classList.add('cutuca'), 3500));
+  }), { threshold:.45 }); cards.forEach(c => io.observe(c)); } catch { cards.forEach(c => c.classList.add('vis')); }
 })();
 </script>
 </body>
