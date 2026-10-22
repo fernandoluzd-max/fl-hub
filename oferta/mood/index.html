@@ -45,7 +45,7 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
 .ok-bar svg{flex:none;width:18px;height:18px;color:var(--ok)}
 
 /* topo */
-.topo{padding:28px 0 18px;text-align:center}
+.topo{padding-top:28px;padding-bottom:18px;text-align:center}
 .marca{display:inline-flex;align-items:center;gap:10px;margin-bottom:22px}
 .marca .mood{font:850 24px/1 var(--d);letter-spacing:-.02em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .marca .de{font:700 10.5px var(--m);letter-spacing:.16em;color:var(--dim);padding-left:10px;border-left:1px solid var(--line)}
@@ -107,7 +107,7 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
 .gar-mini svg{width:16px;height:16px;color:var(--ok)}
 
 /* seções */
-.sec{padding:64px 0 0}
+.sec{padding-top:64px}
 .cab{text-align:center;max-width:640px;margin:0 auto 26px}
 .cab .rot{display:block;margin-bottom:10px}
 .cab .sub{margin:10px auto 0}
@@ -270,7 +270,7 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
 .faq details[open] summary::after{content:"–"}
 .faq p{color:var(--mute);font-size:15.5px;padding:0 0 16px}
 
-.fim{text-align:center;padding:64px 0 120px}
+.fim{text-align:center;padding-top:64px;padding-bottom:120px}
 .fim .gu{max-width:420px}
 .rodape{border-top:1px solid var(--line);padding:22px 0 calc(90px + env(safe-area-inset-bottom));text-align:center;color:var(--dim);font-size:13px}
 .rodape a{color:var(--mute)}
@@ -316,6 +316,34 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
 @keyframes aro{0%{transform:scale(.92);opacity:.9}100%{transform:scale(1.35);opacity:0}}
 @keyframes vivo{0%{box-shadow:0 0 0 0 rgba(255,111,174,.6)}100%{box-shadow:0 0 0 8px rgba(255,111,174,0)}}
 @media (prefers-reduced-motion:reduce){.pl .somon .pilula::before,.pl .somon .vivo i{animation:none}html{scroll-behavior:auto}}
+
+/* ===== seções de venda (WhatsApp, bio e upsell) ===== */
+.dores{max-width:760px;margin:0 auto;display:grid;gap:10px}
+.dor{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;font-size:16px}
+.dor b{flex:none;font:700 12px var(--m);color:var(--ambar);padding-top:4px}
+.virada{max-width:640px;margin:22px auto 0;text-align:center;font:700 clamp(19px,2.6vw,23px)/1.35 var(--d);letter-spacing:-.01em}
+.virada em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bens{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.bem{display:grid;grid-template-columns:74px 1fr;gap:16px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px}
+.bem img{width:74px;height:74px;border-radius:12px;object-fit:cover}
+.bem h3{font-size:18px;font-weight:800;margin-bottom:4px}
+.bem p{color:var(--mute);font-size:15px}
+.quem{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.qm{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}
+.qm h3{font-size:17px;font-weight:800;margin-bottom:6px}
+.qm p{color:var(--mute);font-size:15px}
+.nao-e{max-width:760px;margin:14px auto 0;display:grid;gap:8px}
+.nao-e li{list-style:none;display:flex;gap:10px;align-items:flex-start;color:var(--mute);font-size:15px}
+.nao-e svg{flex:none;width:18px;height:18px;margin-top:3px;fill:none;stroke:var(--dim);stroke-width:2.4;stroke-linecap:round}
+.esperar .lista li{font-size:15px}
+.esperar .cx.v .lista svg{stroke:var(--ambar)}
+.editor{max-width:760px;margin:12px auto 0;display:flex;gap:12px;align-items:flex-start;background:var(--panel2);border:1px solid var(--line);border-radius:16px;padding:16px 18px;font-size:15px;color:var(--mute)}
+.editor svg{flex:none;width:22px;height:22px;color:var(--ambar);margin-top:1px}
+.editor b{color:var(--ink)}
+.leva{max-width:560px;margin:0 auto}
+.oferta .sob{margin-top:10px;font-size:13.5px;color:var(--mute)}
+a.gu{text-decoration:none}
+@media (max-width:760px){.bens,.quem{grid-template-columns:1fr}.bem{grid-template-columns:60px 1fr}.bem img{width:60px;height:60px}}
 </style>
 </head>
 <body>
@@ -326,12 +354,12 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
 <section class="topo w">
   <div class="marca"><span class="mood">Mood</span><span class="de">BASE FL</span></div>
   <p class="rot">Antes de continuar · adicione ao seu pedido</p>
-  <h1>Tua cor de filme em 3 cliques</h1>
-  <p class="sub">Escolhe um vídeo com a cor que tu gosta, sobe o teu e aplica a mesma cor no teu editor.</p>
+  <h1>Facilitou os títulos. Agora facilite a cor.</h1>
+  <p class="sub">Com o Mood você usa um vídeo com a cor que gosta como referência e aplica no seu. Sem mexer em curva, roda de cor ou temperatura.</p>
   <div class="passos3" aria-label="Como funciona">
-    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg>Escolhe a referência</span><i aria-hidden="true">→</i>
-    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Sobe o teu vídeo</span><i aria-hidden="true">→</i>
-    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Aplica no editor</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg>Escolha a referência</span><i aria-hidden="true">→</i>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Envie o seu vídeo</span><i aria-hidden="true">→</i>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Aplique no editor</span>
   </div>
 
   <div class="palco">
@@ -345,7 +373,7 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
     <div class="preco" aria-label="79 reais"><small>R$</small><span>79</span></div>
     <p class="parc">à vista, ou 12x de R$ 8,12</p>
     <!-- Botão de upsell de 1 clique da Greenn (upsell 7205 · Mood R$ 79). NÃO mexer no atributo data-greenn-upsell. -->
-    <button class="gu" data-greenn-upsell="7205" data-loading="false" onclick="startLoading(this)">Sim, quero o Mood</button>
+    <button class="gu" data-greenn-upsell="7205" data-loading="false" onclick="startLoading(this)">Sim, quero meu Mood</button>
     <p class="um">Um clique: usa o mesmo cartão da compra dos Títulos.<br>Pagou com Pix, Apple Pay ou Google Pay? <a class="alt" id="altCk" href="https://payfast.greenn.com.br/195947/offer/yf7yxj?ch_id=144304&amp;utm_source=greenn&amp;utm_medium=upsell&amp;utm_campaign=mood-upsell-79&amp;utm_content=checkout-alternativo">Compre por aqui</a>, mesmo preço.</p>
     <div class="aviso"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span><b>Funciona no computador:</b> CapCut, Premiere, DaVinci, Final Cut. Não funciona no CapCut do celular.</span></div>
     <p class="gar-mini"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>7 dias de garantia</p>
@@ -438,28 +466,38 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
 </section>
 
 <section class="sec w">
+  <div class="cab"><span class="rot">No dia a dia</span><h2>O que muda na sua edição.</h2></div>
+  <div class="bens"><div class="bem"><img src="/lut/demo/ref-natural.webp" alt="" width="150" height="150" loading="lazy"><div><h3>Não sabe colorir?</h3><p>Comece por uma referência. A parte técnica fica com o Mood.</p></div></div><div class="bem"><img src="/lut/demo/ref-dourado.webp" alt="" width="150" height="150" loading="lazy"><div><h3>Perde tempo ajustando cor?</h3><p>A LUT sai em menos de um minuto e serve para a série inteira.</p></div></div><div class="bem"><img src="/lut/demo/ref-urbano.webp" alt="" width="150" height="150" loading="lazy"><div><h3>Gostou da cor de outro vídeo?</h3><p>Use um print dele como referência e leve aquele clima para o seu.</p></div></div><div class="bem"><img src="/lut/demo/ref-pastel.webp" alt="" width="150" height="150" loading="lazy"><div><h3>Quer experimentar estilos?</h3><p>Troque a referência e veja outro clima no mesmo vídeo.</p></div></div></div>
+</section>
+
+<section class="sec w">
+  <div class="cab"><span class="rot">Pra quem é</span><h2>Pra quem é o Mood?</h2></div>
+  <div class="quem"><div class="qm"><h3>Não sabe fazer color grade</h3><p>Quer o vídeo mais bonito, mas não sabe por onde começar a mexer na cor.</p></div><div class="qm"><h3>Criador de conteúdo</h3><p>Grava e posta toda semana e não pode perder meia hora acertando cor.</p></div><div class="qm"><h3>Editor iniciante</h3><p>Já edita, mas ainda não domina correção e tratamento de cor.</p></div><div class="qm"><h3>Não curte a parte técnica</h3><p>Não quer aprender curva, roda de cor e temperatura só para o vídeo ficar bonito.</p></div><div class="qm"><h3>Editor que quer agilidade</h3><p>Já sabe editar e quer chegar num estilo mais rápido, partindo de uma referência.</p></div><div class="qm"><h3>Viu uma cor bonita por aí</h3><p>Achou um vídeo ou foto com uma cor linda e quer algo parecido no seu.</p></div></div>
+  <ul class="nao-e">
+    <li><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Não é pra quem edita só no CapCut do celular:</b> ele não aceita LUT importada.</span></li>
+    <li><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Não é pra quem espera um vídeo idêntico à referência</b> em qualquer gravação. Leia o que esperar logo abaixo.</span></li>
+  </ul>
+</section>
+
+<section class="sec w esperar">
+  <div class="cab"><span class="rot">Sem promessa milagrosa</span><h2>O que esperar do resultado.</h2>
+    <p class="sub">O Mood leva o clima da referência para o seu vídeo. Quanto mais parecidas as duas cenas, mais perto o resultado fica.</p></div>
   <div class="duas">
-    <div class="cx"><h3>O que você leva</h3>
-      <ul class="lista">
-        <li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>LUTs ilimitadas durante 1 ano</li>
-        <li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>CapCut do computador, Premiere, DaVinci e Final Cut</li>
-        <li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Vídeo normal ou em Log</li>
-        <li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Checagem automática e pele protegida</li>
-        <li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Liberado na mesma conta Base FL dos Títulos</li>
-      </ul>
-    </div>
-    <div class="cx"><h3>Pra quem é</h3>
-      <ul class="lista">
-        <li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Quem edita no computador e quer uma cor específica sem ficar ajustando na mão</li>
-        <li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Quem viu um vídeo com uma cor bonita e quer igual no seu</li>
-        <li class="n"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>Não é pra quem edita só no CapCut do celular: ele não aceita LUT importada</li>
-      </ul>
-    </div>
+    <div class="cx"><h3>Fica melhor quando</h3><ul class="lista"><li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Luz parecida: dia com dia, ambiente interno com interno</li><li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Vídeo bem exposto, nem escuro nem estourado</li><li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Cenas do mesmo tipo: pessoa com pessoa, rua com rua</li></ul></div>
+    <div class="cx v"><h3>Pode variar quando</h3><ul class="lista"><li class="s"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>Luz muito diferente entre a referência e o seu vídeo</li><li class="s"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>Vídeo muito escuro, estourado ou com pouca qualidade</li><li class="s"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>Referência com filtro pesado ou efeito exagerado</li></ul></div>
+  </div>
+  <div class="editor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+    <span><b>Como chega no seu editor:</b> o Mood gera uma LUT (arquivo .cube). Você aplica no CapCut do computador, no Premiere, no DaVinci ou no Final Cut. Dá para criar a LUT pelo celular, mas ela é aplicada no computador.</span></div>
+</section>
+
+<section class="sec w">
+  <div class="cx leva"><h3>O que você leva</h3>
+    <ul class="lista"><li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>LUTs ilimitadas durante 1 ano</li><li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>CapCut do computador, Premiere, DaVinci e Final Cut</li><li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Vídeo normal ou em Log</li><li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Pele protegida e ajuste de intensidade</li><li class="s"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Liberado na mesma conta Base FL dos Títulos</li></ul>
   </div>
 </section>
 
 <section class="sec w">
-    <div class="gar-fl"><div class="selo-fl" role="img" aria-label="Garantia incondicional de 7 dias" style="--selo-tam:150px"><svg viewBox="0 0 300 300" aria-hidden="true"><circle cx="150" cy="150" r="147"/><path id="selo-c" fill="none" d="M150 150m-128 0a128 128 0 1 1 256 0a128 128 0 1 1 -256 0"/><text><textPath href="#selo-c" textLength="804" lengthAdjust="spacing">7 DIAS · RISCO ZERO · GARANTIA INCONDICIONAL · </textPath></text></svg><div class="selo-disco"><b>7</b><span>DIAS</span></div></div><div class="gar-t"><span class="gar-k">Garantia de 7 dias</span><span class="gar-h">Teste por 7 dias. Risco zero.</span><p>Não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</p></div></div>
+    <div class="gar-fl"><div class="selo-fl" role="img" aria-label="Garantia incondicional de 7 dias" style="--selo-tam:150px"><svg viewBox="0 0 300 300" aria-hidden="true"><circle cx="150" cy="150" r="147"/><path id="selo-c" fill="none" d="M150 150m-128 0a128 128 0 1 1 256 0a128 128 0 1 1 -256 0"/><text><textPath href="#selo-c" textLength="804" lengthAdjust="spacing">7 DIAS · RISCO ZERO · GARANTIA INCONDICIONAL · </textPath></text></svg><div class="selo-disco"><b>7</b><span>DIAS</span></div></div><div class="gar-t"><span class="gar-k">Garantia de 7 dias</span><span class="gar-h">Use por 7 dias. Risco zero.</span><p>Não era o que esperava? Peça o reembolso nesse prazo e receba o valor de volta.</p></div></div>
 </section>
 
 <section class="sec w">

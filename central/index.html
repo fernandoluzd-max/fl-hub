@@ -164,7 +164,7 @@ tr:last-child td{border-bottom:0}
     <div class="grade">
       <section class="bloco">
         <h2 id="serieT">Movimento</h2>
-        <div class="leg"><span><i style="background:var(--abriu)"></i>Abriu a página</span><span><i style="background:var(--teste)"></i>Testar grátis</span><span><i style="background:var(--compra)"></i>Quero comprar</span></div>
+        <div class="leg"><span><i style="background:var(--abriu)"></i>Abriu a página</span><span><i style="background:var(--compra)"></i>Clicou para comprar</span></div>
         <div id="serie"></div>
       </section>
       <section class="bloco">
@@ -185,7 +185,7 @@ tr:last-child td{border-bottom:0}
       </section>
     </div>
 
-    <p class="nota">Tudo aqui vem dos acessos reais. "Abriu" conta quando a página do link carrega; "Testar grátis" e "Quero comprar" contam no toque do botão; "Sem escolher" é quem abriu e não tocou em nenhum dos dois no período. Pessoas são contadas uma vez por período, mesmo que abram várias vezes. Compra = venda do Mood paga na Greenn, com o mesmo e-mail, depois do clique. Os toques em "Manda o áudio" passaram a ser registrados em 21/10 às 20h. Atualiza sozinho a cada 15 segundos.</p>
+    <p class="nota">Tudo aqui vem dos acessos reais. "Abriu" conta quando a página do link carrega; "Clicaram para comprar" conta o clique que leva ao checkout (intenção de compra); "Sem clicar" é quem abriu e não clicou para comprar no período. Desde 21/10 à noite a página não tem mais teste grátis. Pessoas são contadas uma vez por período, mesmo que abram várias vezes. Compra = venda do Mood paga na Greenn, com o mesmo e-mail, depois do clique. Os toques em "Manda o áudio" passaram a ser registrados em 21/10 às 20h. Atualiza sozinho a cada 15 segundos.</p>
   </main>
 </div>
 
@@ -203,7 +203,7 @@ tr:last-child td{border-bottom:0}
   const inicioDia = d => new Date(d + 'T00:00:00-03:00');
   const somaDias = (d, k) => diaSP(inicioDia(d).getTime() + k * 864e5 + 3600e3);
   const COR = { abriu: 'var(--abriu)', teste: 'var(--teste)', checkout: 'var(--compra)', audio: 'var(--audio)' };
-  const TX = { abriu: 'abriu a página', teste: 'tocou em Testar grátis', checkout: 'tocou em Quero comprar', audio: 'pediu o áudio' };
+  const TX = { abriu: 'abriu a página', teste: 'tocou em Testar grátis (página antiga)', checkout: 'clicou para comprar', audio: 'pediu o áudio' };
 
   let ultimoDado = null, rz = null;
   let periodo = 'hoje', ultimo = null, vistos = new Set(), timer = null, ocupado = false, ultimaAtualizacao = 0;
@@ -225,7 +225,7 @@ tr:last-child td{border-bottom:0}
       ['Mensagens entregues', 'disparo com o vídeo', k.enviados, 'var(--mute)'],
       ['Pediram o áudio', 'contando desde 21/10, 20h', k.audio, 'var(--audio)'],
       ['Abriram a página', 'pessoas únicas', k.visitantes, 'var(--abriu)'],
-      ['Escolheram um botão', 'abriram e tocaram em um dos dois', escolheram, 'var(--teste)'],
+      ['Clicaram para comprar', 'intenção de compra · foram ao checkout', k.checkout, 'var(--compra)'],
       ['Compraram o Mood', 'pago na Greenn', k.compras, 'var(--venda)']
     ];
     const topo = Math.max(1, ...passos.map(p => p[2]));
@@ -240,19 +240,17 @@ tr:last-child td{border-bottom:0}
     }).join('');
     const vis = k.visitantes;
     const ramo = `<div class="ramo">
-      <div style="border-color:var(--teste)"><small>Testar grátis</small><b>${n(k.teste)}</b><small>${pctTx(k.teste_ab, vis)} de quem abriu</small></div>
-      <div style="border-color:var(--compra)"><small>Quero comprar</small><b>${n(k.checkout)}</b><small>${pctTx(k.checkout_ab, vis)} de quem abriu</small></div>
-      <div style="border-color:var(--nada)"><small>Saiu sem escolher</small><b>${n(k.nenhum)}</b><small>${pctTx(k.nenhum, vis)} de quem abriu</small></div></div>`;
+      <div style="border-color:var(--compra)"><small>Clicaram para comprar</small><b>${n(k.checkout)}</b><small>${pctTx(k.checkout_ab, vis)} de quem abriu</small></div>
+      <div style="border-color:var(--nada)"><small>Saíram sem clicar</small><b>${n(k.nenhum)}</b><small>${pctTx(k.nenhum, vis)} de quem abriu</small></div></div>`;
     $('funil').innerHTML = linhas + ramo;
   }
 
   function kpis(k) {
-    const vis = k.visitantes, lider = k.teste === k.checkout ? '' : (k.teste > k.checkout ? 'teste' : 'checkout');
+    const vis = k.visitantes;
     const c = [
       ['Cliques no link', n(k.aberturas), `${n(vis)} pessoas únicas`, 'var(--abriu)', ''],
-      ['Testar grátis', n(k.teste), `${pctTx(k.teste_ab, vis)} de quem abriu · ${n(k.cliques_teste)} toques`, 'var(--teste)', lider === 'teste' ? 'lider' : ''],
-      ['Quero comprar', n(k.checkout), `${pctTx(k.checkout_ab, vis)} de quem abriu · ${n(k.cliques_checkout)} toques`, 'var(--compra)', lider === 'checkout' ? 'lider' : ''],
-      ['Sem escolher', n(k.nenhum), `${pctTx(k.nenhum, vis)} de quem abriu`, 'var(--nada)', ''],
+      ['Clicaram para comprar', n(k.checkout), `${pctTx(k.checkout_ab, vis)} de quem abriu · ${n(k.cliques_checkout)} cliques`, 'var(--compra)', ''],
+      ['Saíram sem clicar', n(k.nenhum), `${pctTx(k.nenhum, vis)} de quem abriu`, 'var(--nada)', ''],
       ['Compras do Mood', n(k.compras), `${pctTx(k.compras, vis)} de quem abriu`, 'var(--venda)', '']
     ];
     $('kpis').innerHTML = c.map(([r, v, s, cor, cls]) => `<div class="k ${cls}"><span class="r"><i style="background:${cor}"></i>${r}</span><b>${v}</b><small>${s}</small></div>`).join('');
@@ -262,11 +260,9 @@ tr:last-child td{border-bottom:0}
     const vis = k.visitantes, f = [];
     if (!k.enviados && !vis && !k.audio) { $('leitura').innerHTML = `Nenhum movimento ${rot} ainda.`; return; }
     f.push(`<b>${n(vis)}</b> ${vis === 1 ? 'pessoa abriu' : 'pessoas abriram'} a página ${rot}`);
-    if (k.teste || k.checkout) {
-      const lider = k.teste === k.checkout ? null : k.teste > k.checkout ? 'Testar grátis' : 'Quero comprar';
-      f.push(lider ? `<b>${lider}</b> é o botão mais tocado (${n(Math.max(k.teste, k.checkout))} contra ${n(Math.min(k.teste, k.checkout))})` : `os dois botões estão empatados (${n(k.teste)} cada)`);
-    }
-    if (vis) f.push(`<b>${pctTx(k.nenhum, vis)}</b> abriram e saíram sem escolher`);
+    if (k.checkout) f.push(`<b>${n(k.checkout)}</b> ${k.checkout === 1 ? 'clicou' : 'clicaram'} para comprar (${pctTx(k.checkout_ab, vis)} de quem abriu)`);
+    if (vis) f.push(`<b>${pctTx(k.nenhum, vis)}</b> abriram e saíram sem clicar`);
+    if (k.checkout) f.push(`<b>${pctTx(k.compras, k.checkout)}</b> de quem clicou concluiu a compra`);
     if (k.compras) f.push(`<b>${n(k.compras)}</b> ${k.compras === 1 ? 'compra' : 'compras'} do Mood`);
     $('leitura').innerHTML = f.join('; ') + '.';
   }
@@ -285,11 +281,11 @@ tr:last-child td{border-bottom:0}
     const bs = buckets(iv, d.passo), m = {};
     (d.serie || []).forEach(x => { (m[x.b] = m[x.b] || {})[x.t] = x.n; });
     $('serieT').textContent = d.passo === 'hour' ? 'Movimento por hora' : 'Movimento por dia';
-    const tipos = ['abriu', 'teste', 'checkout'];
+    const tipos = ['abriu', 'checkout'];
     const max = Math.max(1, ...bs.flatMap(b => tipos.map(t => (m[b] || {})[t] || 0)));
     if (!bs.length || !bs.some(b => m[b])) { $('serie').innerHTML = '<p class="vazio">Sem cliques no período.</p>'; return; }
     const W = Math.max(300, $('serie').clientWidth || 640), H = W < 500 ? 180 : 210, pl = 26, pb = 22, iw = W - pl - 4, ih = H - pb - 8, bw = iw / bs.length;
-    const g = Math.max(1, Math.min(6, bw / 4.5)), barw = Math.max(1.5, (bw - g * 2) / 3);
+    const g = Math.max(1, Math.min(6, bw / 4.5)), barw = Math.max(1.5, (bw - g * 2) / 2);
     let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="max-width:100%;height:auto" role="img" aria-label="Cliques por ${d.passo === 'hour' ? 'hora' : 'dia'}">`;
     const passoY = max <= 4 ? 1 : Math.ceil(max / 4);
     for (let y = 0; y <= max; y += passoY) { const yy = 8 + ih - y / max * ih; s += `<line x1="${pl}" x2="${W}" y1="${yy}" y2="${yy}" stroke="#272D29"/><text x="${pl - 6}" y="${yy + 4}" text-anchor="end">${y}</text>`; }
@@ -329,12 +325,12 @@ tr:last-child td{border-bottom:0}
   function camps(d) {
     const c = d.campanhas || [];
     if (!c.length) { $('camps').innerHTML = '<p class="vazio">Nenhum disparo no período.</p>'; return; }
-    const maxI = Math.max(1, ...c.map(x => pct(x.escolheram, x.visitantes) || 0));
-    $('camps').innerHTML = `<table><thead><tr><th>Disparo</th><th>Entregues</th><th>Áudio</th><th>Abriram</th><th>Testar</th><th>Comprar</th><th>Sem escolher</th><th>Compras</th><th>Interesse</th></tr></thead><tbody>` +
-      c.map(x => { const i = pct(x.escolheram, x.visitantes);
-        return `<tr><td class="cn">${esc(x.camp)}</td><td>${n(x.enviados)}</td><td>${n(x.audio)}</td><td>${n(x.visitantes)}</td><td>${n(x.teste)}</td><td>${n(x.checkout)}</td><td>${n(x.nenhum)}</td><td>${n(x.compras)}</td>
+    const maxI = Math.max(1, ...c.map(x => pct(x.checkout, x.visitantes) || 0));
+    $('camps').innerHTML = `<table><thead><tr><th>Disparo</th><th>Entregues</th><th>Áudio</th><th>Abriram</th><th>Clicaram p/ comprar</th><th>Sem clicar</th><th>Compras</th><th>Intenção</th></tr></thead><tbody>` +
+      c.map(x => { const i = pct(x.checkout, x.visitantes);
+        return `<tr><td class="cn">${esc(x.camp)}</td><td>${n(x.enviados)}</td><td>${n(x.audio)}</td><td>${n(x.visitantes)}</td><td>${n(x.checkout)}</td><td>${n(x.nenhum)}</td><td>${n(x.compras)}</td>
         <td>${i == null ? '—' : `<span class="barrinha" style="width:${Math.round(i / maxI * 44)}px"></span>${i}%`}</td></tr>`; }).join('') +
-      `</tbody></table><p class="pico">Interesse = quem abriu e tocou em algum botão.</p>`;
+      `</tbody></table><p class="pico">Intenção = quem abriu a página e clicou para comprar.</p>`;
   }
 
   function feed(d) {
