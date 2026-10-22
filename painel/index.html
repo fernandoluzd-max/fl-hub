@@ -61,7 +61,7 @@ header .sp{flex:1}
 
 /* ---------- quadro ---------- */
 .board{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 18px 120px;max-width:1400px;margin:0 auto;scrollbar-width:thin;scrollbar-color:#2c332e transparent}
-.col{flex:0 0 min(84vw,300px);scroll-snap-align:start;background:rgba(21,24,22,.6);border:1px solid var(--line);border-radius:18px;display:flex;flex-direction:column;max-height:calc(100vh - 260px);min-height:220px;transition:border-color .15s,background .15s}
+.col{flex:0 0 min(84vw,300px);scroll-snap-align:start;background:rgba(21,24,22,.6);border:1px solid var(--line);border-radius:18px;display:flex;flex-direction:column;max-height:calc(100vh - 480px);min-height:220px;transition:border-color .15s,background .15s}
 .col.alvo{border-color:var(--cor);background:color-mix(in srgb,var(--cor) 8%,rgba(21,24,22,.6))}
 .ch{display:flex;align-items:baseline;gap:8px;padding:12px 14px 10px;border-bottom:1px solid var(--line);position:relative}
 .ch::before{content:"";position:absolute;left:14px;right:14px;top:0;height:3px;border-radius:0 0 3px 3px;background:var(--cor)}
@@ -69,7 +69,7 @@ header .sp{flex:1}
 .ch .n{color:var(--mute);font-size:12.5px;font-variant-numeric:tabular-nums}
 .ch .sp{flex:1}
 .ch .soma{color:var(--mute);font-size:12.5px;font-variant-numeric:tabular-nums}
-.cards{display:flex;flex-direction:column;gap:8px;padding:10px;overflow-y:auto;flex:1}
+.cards{display:flex;flex-direction:column;gap:8px;padding:10px;overflow-y:auto;flex:1;min-height:0}
 .vazio{color:var(--dim);font-size:13px;text-align:center;padding:18px 8px;border:1px dashed var(--line);border-radius:12px}
 .card{position:relative;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:11px 12px 10px;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:pan-x pan-y;transition:transform .15s,border-color .15s,opacity .2s}
 .card:hover{border-color:#3a443c}
@@ -152,8 +152,8 @@ textarea{min-height:70px;resize:vertical}
 .hide{display:none!important}
 @media (min-width:900px){
   .board{scroll-snap-type:none}
-  .board{gap:10px}
-  .col{flex:1 1 0;min-width:190px;max-height:calc(100vh - 230px)}
+  .board{gap:10px;padding-bottom:24px}
+  .col{flex:1 1 0;min-width:190px;max-height:calc(100vh - 480px)}
   .folha{bottom:auto;top:50%;border-radius:24px;border-bottom:1px solid var(--line);transform:translate(0,-46%) scale(.97);opacity:0;pointer-events:none;transition:all .22s}
   .folha.on{transform:translate(0,-50%);opacity:1;pointer-events:auto}
   .folha .pega{display:none}
