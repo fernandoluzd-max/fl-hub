@@ -173,4 +173,4 @@ lado dos 8 pares) e `node testes-cor/teste-ui.js` (testa o fluxo da interface em
 
 ## Pull request
 
-<!-- LINK_DO_PR -->
+https://github.com/fernandoluzd-max/fl-hub/pull/2
