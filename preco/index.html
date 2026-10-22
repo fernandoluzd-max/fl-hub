@@ -450,7 +450,7 @@ function totais(c, n){
   const ed = c.ed ? c.ed.ref * n * (1 - desc) : 0, gr = c.gr ? c.gr.ref : 0;
   const ref = arred(ed + gr);
   return { ref, min:arred(ref*.85), max:arred(ref*1.25), cada: c.ed ? arred(ed/n) : 0, desc,
-           horas: meiaHora((c.ed ? c.ed.horas*n*(1-desc) : 0) + (c.gr ? c.gr.horas : 0)) };
+           horas: meiaHora((c.ed ? c.ed.horas*n*(1-desc*1.5) : 0) + (c.gr ? c.gr.horas : 0)) };
 }
 function porque(c){
   const nv = NIVEL[store.get('fl_nivel') || 'medio'].t.toLowerCase();
