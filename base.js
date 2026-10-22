@@ -338,6 +338,15 @@
     return f.fim;
   }
   function sair() { grava(null); limpaEstado(); avisa(); }
+  // entrada sem a folha padrão (páginas de login próprias, ex.: /mood/login/): mesmas regras e mesmas chamadas do login() acima
+  var auth = {
+    // só manda código para e-mail que tem compra; se o banco não responder a pergunta, segue como o login() faz
+    temCompra: function (email) { return cru('/rest/v1/rpc/pub_tem_compra', { method: 'POST', body: { p_email: email } }).then(function (t) { return t !== false; }, function (e) { if (e.status === 0) throw e; return true; }); },
+    envia: function (email) { cofre.set('fl_email', email); return cru('/auth/v1/otp', { method: 'POST', body: { email: email, create_user: true } }); },
+    // valida o código, grava a sessão e relê os produtos da conta no servidor (quem decide o acesso é a conta, não o código)
+    confirma: function (email, token) { return cru('/auth/v1/verify', { method: 'POST', body: { type: 'email', email: email, token: token } }).then(function (r) { grava(deAuth(r, email)); evento('login'); return carrega(true); }); },
+    ultimoEmail: function () { return cofre.get('fl_email') || ''; }
+  };
 
   // ---------- OFERTA: a regra única de "o que esta conta tem, o que falta e o que faz sentido oferecer" ----------
   // Todas as telas (ferramentas, páginas de venda, app) perguntam aqui. Nada de preço ou regra solta em outra tela.
@@ -425,7 +434,7 @@
     SUPA: SUPA, CAT: CAT, produto: function (k) { return POR_KEY[k] || POR_PACK[k] || null; }, jornada: JORNADA,
     eu: E, sessao: le, email: function () { var s = le(); return s ? s.email : ''; },
     pronto: null, carrega: carrega, tem: tem, vencido: vencido, dias: diasRestantes,
-    api: api, rpc: rpc, envia: envia, arquivo: arquivo, traduz: traduz, login: login, sair: sair, aoMudar: function (f) { ouvintes.push(f); },
+    api: api, rpc: rpc, envia: envia, arquivo: arquivo, traduz: traduz, login: login, sair: sair, auth: auth, aoMudar: function (f) { ouvintes.push(f); },
     evento: evento, teste: teste, comprar: comprar, linkCompra: linkCompra, oferta: oferta, calculaOferta: calculaOferta, nomes: nomes, proximo: proximo, trilha: trilha, trabalhoDaUrl: trabalhoDaUrl,
     folha: abreFolha, fechaFolha: fechaFolha, esc: esc, brl: brl, cofre: cofre
   };

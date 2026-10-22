@@ -374,7 +374,7 @@ def hero_venda(rot, h1, sub, cta):
   {PASSOS3}
   <p class="dica">Toque numa referência e veja a cor mudar no meu vídeo. Arraste para comparar.</p>
   {DEMO}
-  <div class="hero-cta"><a class="gu" id="heroCta" href="#oferta">{cta}</a>{GARMINI}<a class="ja" href="/app/?entrar=1">Já comprou? Entre para usar o Mood</a></div>
+  <div class="hero-cta"><a class="gu" id="heroCta" href="#oferta">{cta}</a>{GARMINI}<a class="ja" href="/mood/login/">Já comprou? Entre para usar o Mood</a></div>
 </section>'''
 
 def oferta_pub(titulo, cta, href):

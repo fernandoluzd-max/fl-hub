@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Entrar no Mood — Base FL</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Entre no Mood com o e-mail da compra.">
+<meta name="theme-color" content="#0C0D0D">
+<link rel="icon" type="image/svg+xml" href="/lut/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/lut/favicon-32.png">
+<link rel="apple-touch-icon" href="/lut/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="/lut/demo/normal-709.webp">
+<!--
+  Login do Mood (basefl.com/mood/login/)
+  Conceito: entrar no Mood é acender a sala de cor. O monitor de referência à esquerda já está corrigindo o vídeo
+  enquanto a pessoa digita; quando o acesso é confirmado, a imagem "fecha" na cor e a ferramenta abre.
+  Autenticação: a mesma da Base FL (base.js -> Base.auth): código por e-mail (Supabase OTP), sessão única fl_sess.
+  Quem decide o acesso é a conta (Base.tem('fl-lut') depois de reler os produtos no servidor), não o código.
+-->
+<style>
+:root{
+  --bg:#0C0D0D; --bg2:#111312; --panel:#161918; --panel2:#1D2120; --line:#272C2A; --line2:#363C39;
+  --ink:#F4F0E4; --mute:#B3B4A2; --dim:#8A8B7F; --ambar:#F2A541; --ok:#7FCE8F; --erro:#FF8F7A;
+  --grad:linear-gradient(125deg,#FFB347,#FF6FAE 38%,#B45CFF 70%,#5AB8FF);
+  --d:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --f:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --m:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.2,.8,.2,1); --mola:cubic-bezier(.3,1.25,.45,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg)}
+body{color:var(--ink);font:16px/1.5 var(--f);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button,input{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:10px}
+
+.tela{min-height:100svh;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(400px,.85fr)}
+
+/* ================= monitor (a sala de cor) ================= */
+.mon{position:relative;overflow:hidden;background:#070808;display:grid;place-items:center;padding:clamp(24px,4vw,56px)}
+.mon::before{content:"";position:absolute;inset:-20%;background:radial-gradient(40% 45% at 50% 55%,var(--brilho,rgba(242,165,65,.18)),transparent 70%);transition:background 1.2s var(--ease);pointer-events:none}
+.grade{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;mask:radial-gradient(70% 70% at 50% 50%,#000,transparent);pointer-events:none}
+.quadro{position:relative;width:min(100%,460px);z-index:1}
+.hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font:700 10.5px var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.hud .rec{display:inline-flex;align-items:center;gap:7px;color:var(--mute)}
+.hud .rec i{width:7px;height:7px;border-radius:50%;background:var(--ambar);box-shadow:0 0 10px var(--ambar);animation:pisca 1.6s ease-in-out infinite}
+@keyframes pisca{50%{opacity:.3}}
+.tc{font-variant-numeric:tabular-nums}
+.img{position:relative;aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:#000;box-shadow:0 0 0 1px rgba(255,255,255,.07),0 40px 90px -40px rgba(0,0,0,.9)}
+.img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 24%}
+.img .lk{clip-path:inset(0 100% 0 0)}
+.img .lk.on{clip-path:inset(0 0 0 0);transition:clip-path 1.5s cubic-bezier(.65,0,.35,1)}
+.img .lk.sai{clip-path:inset(0 0 0 0);z-index:0}
+.img .lk.on{z-index:1}
+.fio{position:absolute;top:0;bottom:0;left:0;width:2px;background:#fff;box-shadow:0 0 18px 3px rgba(255,255,255,.55);z-index:3;opacity:0;pointer-events:none}
+.fio.vai{animation:fio 1.5s cubic-bezier(.65,0,.35,1)}
+@keyframes fio{0%{left:0;opacity:1}92%{opacity:1}100%{left:100%;opacity:0}}
+.cantos i{position:absolute;width:16px;height:16px;border:0 solid rgba(255,255,255,.55);z-index:4}
+.cantos i:nth-child(1){top:10px;left:10px;border-top-width:1.5px;border-left-width:1.5px}
+.cantos i:nth-child(2){top:10px;right:10px;border-top-width:1.5px;border-right-width:1.5px}
+.cantos i:nth-child(3){bottom:10px;left:10px;border-bottom-width:1.5px;border-left-width:1.5px}
+.cantos i:nth-child(4){bottom:10px;right:10px;border-bottom-width:1.5px;border-right-width:1.5px}
+.tag{position:absolute;left:14px;bottom:14px;z-index:4;display:flex;align-items:center;gap:10px;padding:6px 12px 6px 6px;border-radius:999px;background:rgba(8,9,9,.84);font:700 11px var(--m);letter-spacing:.1em;text-transform:uppercase}
+.tag img{position:static;width:26px;height:26px;border-radius:50%;object-fit:cover}
+.tag span{transition:opacity .3s}
+.base{display:flex;align-items:center;gap:12px;margin-top:14px}
+.paleta{flex:1;display:flex;gap:5px}
+.paleta i{flex:1;height:10px;border-radius:3px;background:var(--line2);transition:background .9s var(--ease)}
+.refs{display:flex;gap:6px}
+.refs b{width:30px;height:30px;border-radius:8px;overflow:hidden;opacity:.45;transition:opacity .4s,transform .4s var(--mola),box-shadow .4s}
+.refs b.on{opacity:1;transform:translateY(-2px);box-shadow:0 0 0 1.5px var(--ink)}
+.refs img{width:100%;height:100%;object-fit:cover;display:block}
+.liberado{position:absolute;inset:0;z-index:5;display:grid;place-content:center;justify-items:center;gap:10px;background:radial-gradient(60% 50% at 50% 55%,rgba(8,9,9,.55),rgba(8,9,9,.1));opacity:0;transition:opacity .6s var(--ease);pointer-events:none}
+.liberado .sl{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:var(--grad);box-shadow:0 16px 50px -10px rgba(180,92,255,.7);transform:scale(.6);transition:transform .7s var(--mola)}
+.liberado .sl svg{width:30px;height:30px;stroke:#14070e;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.liberado b{font:800 13px var(--m);letter-spacing:.16em;text-transform:uppercase}
+.tela[data-e="ok"] .liberado{opacity:1}
+.tela[data-e="ok"] .liberado .sl{transform:none}
+
+/* ================= painel ================= */
+.painel{position:relative;display:flex;flex-direction:column;background:var(--bg2);border-left:1px solid var(--line);padding:clamp(28px,4vw,56px) clamp(24px,4vw,64px) calc(28px + env(safe-area-inset-bottom))}
+.topo{display:flex;align-items:center;justify-content:space-between}
+.marca{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.marca .mood{font:850 26px/1 var(--d);letter-spacing:-.02em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.marca .de{font:700 10.5px var(--m);letter-spacing:.16em;color:var(--dim);padding-left:10px;border-left:1px solid var(--line2)}
+.passos{display:flex;align-items:center;gap:8px;font:700 10.5px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.passos span{display:inline-flex;align-items:center;gap:6px;transition:color .3s}
+.passos span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--line2);transition:background .3s,box-shadow .3s}
+.passos span.on{color:var(--ink)}
+.passos span.on::before{background:var(--ambar);box-shadow:0 0 10px rgba(242,165,65,.8)}
+.passos span.feito::before{background:var(--ok)}
+
+.palco{flex:1;display:grid;align-content:center;padding:40px 0 24px;max-width:420px;width:100%;margin:0 auto}
+.etapa{grid-area:1/1;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .45s var(--ease),transform .55s var(--ease),visibility 0s .45s}
+.etapa.on{opacity:1;visibility:visible;transform:none;transition:opacity .45s var(--ease) .08s,transform .55s var(--ease) .08s,visibility 0s}
+.rot{display:block;margin-bottom:12px;font:700 11px var(--m);letter-spacing:.16em;text-transform:uppercase;color:var(--ambar)}
+h1{font:850 clamp(30px,3.4vw,42px)/1.04 var(--d);letter-spacing:-.025em;text-wrap:balance}
+.sub{margin-top:12px;color:var(--mute);font-size:16px;text-wrap:pretty}
+.sub b{color:var(--ink);font-weight:700;word-break:break-all}
+
+.campo{position:relative;margin-top:28px}
+.campo label{display:block;margin-bottom:8px;font:700 11px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.inp{width:100%;height:58px;padding:0 18px;border:1px solid var(--line2);border-radius:14px;background:var(--panel);font-size:17px;outline:none;transition:border-color .2s,box-shadow .2s,background .2s}
+.inp::placeholder{color:#6B6E64}
+.inp:focus{border-color:rgba(242,165,65,.8);box-shadow:0 0 0 4px rgba(242,165,65,.14);background:var(--panel2)}
+.inp.ruim{border-color:var(--erro);box-shadow:0 0 0 4px rgba(255,143,122,.12)}
+
+/* 8 casas do código: um input real por baixo (cola, preenchimento automático do iPhone/Android, leitor de tela) */
+.codigo{position:relative;margin-top:28px}
+.codigo input{position:absolute;inset:0;width:100%;height:100%;opacity:0;font-size:16px;letter-spacing:1em;caret-color:transparent;border:0;background:none;z-index:2;cursor:text}
+.casas{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:7px}
+.casas i{position:relative;height:60px;border:1px solid var(--line2);border-radius:12px;background:var(--panel);display:grid;place-items:center;font:700 24px var(--m);font-style:normal;font-variant-numeric:tabular-nums;transition:border-color .2s,background .2s,transform .25s var(--mola),box-shadow .2s}
+.casas i:nth-child(4){margin-right:6px}
+.casas i.cheia{border-color:var(--line2);background:var(--panel2);animation:entra .28s var(--mola)}
+@keyframes entra{from{transform:scale(.86)}}
+.codigo.foco .casas i.atual{border-color:rgba(242,165,65,.85);box-shadow:0 0 0 4px rgba(242,165,65,.14)}
+.codigo.foco .casas i.atual::after{content:"";width:2px;height:26px;background:var(--ambar);animation:pisca 1s steps(1) infinite}
+.codigo.checando .casas i{border-color:transparent;background:linear-gradient(var(--panel2),var(--panel2)) padding-box,linear-gradient(90deg,var(--line2),var(--ambar),var(--line2)) border-box;background-size:100% 100%,300% 100%;animation:varre 1s linear infinite}
+@keyframes varre{to{background-position:0 0,-300% 0}}
+.codigo.ruim .casas{animation:treme .42s}
+.codigo.ruim .casas i{border-color:var(--erro)}
+@keyframes treme{20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}
+.codigo.certo .casas i{border-color:rgba(127,206,143,.8);color:var(--ok)}
+
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;margin-top:16px;border:0;border-radius:14px;background:var(--ink);color:#111312;font:800 16.5px var(--f);text-decoration:none;cursor:pointer;overflow:hidden;transition:transform .15s,filter .2s,background .3s}
+.btn:hover{filter:brightness(.94)}
+.btn:active{transform:scale(.985)}
+.btn[disabled]{cursor:default;filter:none}
+.btn.grad[disabled]:not(.carregando){background:var(--panel2);color:var(--dim);box-shadow:inset 0 0 0 1px var(--line2)}
+.btn.grad{background:var(--grad);color:#14070e}
+.btn.fantasma{background:transparent;color:var(--ink);border:1px solid var(--line2)}
+.btn .gira{width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(17,19,18,.25);border-top-color:#111312;animation:gira .7s linear infinite;display:none}
+.btn.carregando .gira{display:block}
+.btn.carregando .tx{opacity:.7}
+@keyframes gira{to{transform:rotate(360deg)}}
+
+.linhas{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin-top:16px;font-size:14px;color:var(--mute)}
+.lnk{border:0;background:none;padding:6px 0;color:var(--mute);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.lnk:hover{color:var(--ink)}
+.lnk[disabled]{text-decoration:none;cursor:default;color:var(--dim)}
+.msg{min-height:22px;margin-top:12px;font-size:14.5px;color:var(--erro)}
+.msg.ok{color:var(--ok)}
+.dica{display:flex;gap:10px;align-items:flex-start;margin-top:18px;padding:12px 14px;border-radius:12px;background:var(--panel);border:1px solid var(--line);font-size:13.5px;color:var(--mute)}
+.dica svg{flex:none;width:18px;height:18px;margin-top:1px;stroke:var(--ambar);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.ico{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;margin-bottom:22px;background:var(--panel);border:1px solid var(--line2)}
+.ico svg{width:26px;height:26px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ico.ok{background:rgba(127,206,143,.1);border-color:rgba(127,206,143,.35)}.ico.ok svg{stroke:var(--ok)}
+.ico.aviso{background:rgba(242,165,65,.1);border-color:rgba(242,165,65,.35)}.ico.aviso svg{stroke:var(--ambar)}
+.ico.erro{background:rgba(255,143,122,.08);border-color:rgba(255,143,122,.3)}.ico.erro svg{stroke:var(--erro)}
+.barra{height:4px;margin-top:26px;border-radius:9px;background:var(--line);overflow:hidden}
+.barra b{display:block;height:100%;width:0;border-radius:inherit;background:var(--grad)}
+.etapa.on .barra b{animation:enche 1.3s var(--ease) forwards}
+@keyframes enche{to{width:100%}}
+
+.rodape{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--dim)}
+.rodape a{color:var(--dim);text-underline-offset:3px}
+.rodape a:hover{color:var(--ink)}
+.offline{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translate(-50%,20px);z-index:20;padding:10px 16px;border-radius:999px;background:#2a1714;border:1px solid rgba(255,143,122,.35);color:var(--erro);font-size:14px;opacity:0;pointer-events:none;transition:opacity .3s,transform .4s var(--mola)}
+.offline.on{opacity:1;transform:translate(-50%,0)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ================= celular ================= */
+@media (max-width:900px){
+  .tela{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  .mon{padding:calc(14px + env(safe-area-inset-top)) 18px 26px}
+  .quadro{width:min(100%,520px);display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:14px;align-items:center}
+  .hud{grid-column:1/-1}
+  .img{width:96px;aspect-ratio:4/5;border-radius:12px}
+  .cantos i{width:10px;height:10px}.cantos i:nth-child(1),.cantos i:nth-child(2){top:6px}.cantos i:nth-child(3),.cantos i:nth-child(4){bottom:6px}.cantos i:nth-child(1),.cantos i:nth-child(3){left:6px}.cantos i:nth-child(2),.cantos i:nth-child(4){right:6px}
+  .tag{display:none}
+  .base{margin-top:0;flex-direction:column;align-items:stretch;gap:10px}
+  .liberado .sl{width:40px;height:40px}.liberado .sl svg{width:20px;height:20px}.liberado b{display:none}
+  .painel{border-left:0;border-top:1px solid var(--line);border-radius:24px 24px 0 0;margin-top:-14px;padding:22px 20px calc(22px + env(safe-area-inset-bottom))}
+  .palco{align-content:start;padding:30px 0 22px}
+  .casas{gap:5px}
+  .casas i{height:52px;font-size:21px;border-radius:10px}
+  .casas i:nth-child(4){margin-right:4px}
+}
+@media (max-width:360px){.casas i{height:46px;font-size:19px}.passos{display:none}}
+@media (prefers-reduced-motion:reduce){.etapa,.etapa.on{transition-duration:.01s}.grade{display:none}}
+</style>
+</head>
+<body>
+<div class="tela" id="tela" data-e="email">
+
+  <!-- monitor: o Mood corrigindo o vídeo enquanto a pessoa entra -->
+  <section class="mon" aria-hidden="true">
+    <div class="grade"></div>
+    <div class="quadro">
+      <div class="hud"><span class="rec"><i></i>Mood · ao vivo</span><span class="tc" id="tc">00:00:00:00</span></div>
+      <div class="img" id="img">
+        <img src="/lut/demo/normal-709.webp" alt="" width="540" height="676">
+        <img class="lk" data-k="natural" src="/lut/demo/natural.webp" alt="" width="540" height="676">
+        <img class="lk" data-k="dourado" src="/lut/demo/dourado.webp" alt="" width="540" height="676" loading="lazy">
+        <img class="lk" data-k="urbano" src="/lut/demo/urbano.webp" alt="" width="540" height="676" loading="lazy">
+        <img class="lk" data-k="pastel" src="/lut/demo/pastel.webp" alt="" width="540" height="676" loading="lazy">
+        <i class="fio" id="fio"></i>
+        <span class="cantos"><i></i><i></i><i></i><i></i></span>
+        <span class="tag"><img id="tagImg" src="/lut/demo/ref-natural.webp" alt=""><span id="tagTx">Ref · Natural</span></span>
+        <div class="liberado"><span class="sl"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><b>Acesso liberado</b></div>
+      </div>
+      <div class="base">
+        <div class="paleta" id="paleta"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="refs" id="refs">
+          <b data-k="natural"><img src="/lut/demo/ref-natural.webp" alt=""></b><b data-k="dourado"><img src="/lut/demo/ref-dourado.webp" alt=""></b><b data-k="urbano"><img src="/lut/demo/ref-urbano.webp" alt=""></b><b data-k="pastel"><img src="/lut/demo/ref-pastel.webp" alt=""></b>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- painel de entrada -->
+  <main class="painel">
+    <div class="topo">
+      <a class="marca" href="/conheca/mood/?de=login" aria-label="Mood, da Base FL"><span class="mood">Mood</span><span class="de">BASE FL</span></a>
+      <div class="passos" aria-hidden="true"><span id="p1" class="on">E-mail</span><span id="p2">Código</span><span id="p3">Entrar</span></div>
+    </div>
+
+    <div class="palco" aria-live="polite">
+
+      <!-- verificando sessão -->
+      <section class="etapa" data-e="carregando">
+        <span class="rot">Um instante</span>
+        <h1>Abrindo o Mood…</h1>
+        <div class="barra"><b></b></div>
+      </section>
+
+      <!-- 1 · e-mail -->
+      <section class="etapa on" data-e="email">
+        <span class="rot">Área do cliente</span>
+        <h1>Entre no Mood.</h1>
+        <p class="sub">Use o e-mail da compra. Mandamos um código de 8 dígitos para você entrar, sem senha.</p>
+        <form id="fEmail" novalidate>
+          <div class="campo">
+            <label for="email">Seu e-mail</label>
+            <input class="inp" id="email" type="email" inputmode="email" autocomplete="email" autocapitalize="none" spellcheck="false" placeholder="voce@email.com" required>
+          </div>
+          <div class="msg" id="mEmail" role="alert"></div>
+          <button class="btn grad" id="bEmail" type="submit"><span class="tx">Receber código</span><span class="gira"></span></button>
+        </form>
+        <div class="linhas"><span>Ainda não tem o Mood?</span><a class="lnk" href="/conheca/mood/?de=login">Conhecer o Mood</a></div>
+      </section>
+
+      <!-- 2 · código -->
+      <section class="etapa" data-e="codigo">
+        <span class="rot">Confira seu e-mail</span>
+        <h1>Digite o código.</h1>
+        <p class="sub">Enviamos 8 dígitos para <b id="emailTx"></b>.</p>
+        <form id="fCod" novalidate>
+          <div class="codigo" id="codigo">
+            <label class="sr" for="cod">Código de 8 dígitos</label>
+            <input id="cod" inputmode="numeric" autocomplete="one-time-code" maxlength="10" pattern="[0-9]*">
+            <div class="casas" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="msg" id="mCod" role="alert"></div>
+          <button class="btn grad" id="bCod" type="submit" disabled><span class="tx">Entrar no Mood</span><span class="gira"></span></button>
+        </form>
+        <div class="linhas"><button class="lnk" id="reenvia" type="button" disabled>Reenviar código em 60 s</button><button class="lnk" id="troca" type="button">Usar outro e-mail</button></div>
+        <div class="dica"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg><span>Não chegou? Procure por "Base FL" no e-mail e confira as pastas Spam, Promoções e Lixeira. O código vale por alguns minutos.</span></div>
+      </section>
+
+      <!-- 3 · deu certo -->
+      <section class="etapa" data-e="ok">
+        <div class="ico ok"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div>
+        <span class="rot" style="color:var(--ok)">Acesso liberado</span>
+        <h1 id="okT">Tudo pronto.</h1>
+        <p class="sub">Abrindo a sua sala de cor…</p>
+        <div class="barra"><b></b></div>
+      </section>
+
+      <!-- sem compra com esse e-mail -->
+      <section class="etapa" data-e="semcompra">
+        <div class="ico aviso"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
+        <h1>Não achamos uma compra com esse e-mail.</h1>
+        <p class="sub">Confira se é o mesmo e-mail que você usou no pagamento (<b id="scEmail"></b>). Se acabou de comprar, espere 1 minuto e tente de novo.</p>
+        <button class="btn" type="button" data-volta>Tentar outro e-mail</button>
+        <a class="btn fantasma" href="/conheca/mood/?de=login">Conhecer o Mood</a>
+      </section>
+
+      <!-- entrou, mas a conta não tem o Mood -->
+      <section class="etapa" data-e="semmood">
+        <div class="ico aviso"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+        <h1>Esse e-mail ainda não tem o Mood.</h1>
+        <p class="sub">Você entrou como <b class="quem"></b>, mas o Mood não está liberado nessa conta. Se comprou com outro e-mail, entre com ele.</p>
+        <a class="btn grad" href="/conheca/mood/?de=login-sem-acesso">Conhecer o Mood</a>
+        <button class="btn fantasma" type="button" data-sair>Entrar com outro e-mail</button>
+      </section>
+
+      <!-- acesso venceu -->
+      <section class="etapa" data-e="vencido">
+        <div class="ico aviso"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div>
+        <h1>Seu acesso ao Mood terminou.</h1>
+        <p class="sub">A conta <b class="quem"></b> teve o Mood, mas o período de acesso acabou. As LUTs que você já baixou continuam funcionando.</p>
+        <a class="btn grad" href="/conheca/mood/?de=login-renovar">Renovar o Mood</a>
+        <button class="btn fantasma" type="button" data-sair>Entrar com outro e-mail</button>
+      </section>
+
+      <!-- já tem sessão com o Mood -->
+      <section class="etapa" data-e="devolta">
+        <div class="ico ok"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div>
+        <span class="rot" style="color:var(--ok)">Você já está conectado</span>
+        <h1>Bem-vindo de volta.</h1>
+        <p class="sub">Entrando como <b class="quem"></b>.</p>
+        <div class="barra"><b></b></div>
+        <div class="linhas"><span></span><button class="lnk" type="button" data-sair>Não é você? Trocar conta</button></div>
+      </section>
+
+    </div>
+
+    <div class="rodape"><span>Precisa de ajuda? <a href="https://wa.me/5547996974735?text=Oi!%20Comprei%20o%20Mood%20e%20preciso%20de%20ajuda%20para%20acessar." target="_blank" rel="noopener">Fale com o suporte</a></span><span><a href="https://basefl.com/termos/">Termos</a> · <a href="https://basefl.com/privacidade/">Privacidade</a></span></div>
+  </main>
+</div>
+<div class="offline" id="offline" role="status">Sem conexão. Confira a internet e tente de novo.</div>
+
+<script src="/catalogo.js"></script>
+<script src="/base.js"></script>
+<script>
+(() => {
+  const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+  const PACK = 'fl-lut', DESTINO = '/lut/', N = 8;
+  const tela = $('#tela');
+  const ev = (n, d) => { try { Base.evento(n, PACK, d); } catch (e) {} };
+
+  // ================= monitor: troca de referência em loop, com a cortina da LUT =================
+  const lks = $$('.img .lk'), refs = $$('#refs b'), fio = $('#fio'), pal = $$('#paleta i');
+  const NOMES = { natural: 'Natural', dourado: 'Dourado', urbano: 'Urbano', pastel: 'Pastel' };
+  const BRILHO = { natural: 'rgba(160,190,140,.16)', dourado: 'rgba(242,165,65,.2)', urbano: 'rgba(70,150,170,.2)', pastel: 'rgba(230,160,190,.18)' };
+  const cores = {};
+  const tira = (img, k) => { try {
+    const c = document.createElement('canvas'), x = c.getContext('2d', { willReadFrequently: true }); c.width = c.height = 20; x.drawImage(img, 0, 0, 20, 20);
+    const d = x.getImageData(0, 0, 20, 20).data, px = [];
+    for (let i = 0; i < d.length; i += 4) px.push([d[i], d[i + 1], d[i + 2], d[i] * .3 + d[i + 1] * .59 + d[i + 2] * .11]);
+    px.sort((a, b) => a[3] - b[3]);
+    cores[k] = [0, 1, 2, 3, 4].map(j => { const f = px.slice(Math.floor(px.length * j / 5), Math.floor(px.length * (j + 1) / 5)), m = n => Math.round(f.reduce((t, p) => t + p[n], 0) / f.length); return `rgb(${m(0)},${m(1)},${m(2)})`; });
+  } catch (e) {} };
+  refs.forEach(b => { const im = b.querySelector('img'), k = b.dataset.k; if (im.complete && im.naturalWidth) tira(im, k); else im.addEventListener('load', () => tira(im, k), { once: true }); });
+  const ORDEM = ['natural', 'dourado', 'urbano', 'pastel'];
+  let iL = -1, tL = 0, parado = false;
+  const mostra = k => {
+    lks.forEach(l => { l.classList.remove('sai'); if (l.classList.contains('on')) { l.classList.remove('on'); l.classList.add('sai'); } });
+    const novo = lks.find(l => l.dataset.k === k); void novo.offsetWidth; novo.classList.add('on');
+    setTimeout(() => lks.forEach(l => { if (l !== novo) l.classList.remove('sai'); }), 1600);
+    fio.classList.remove('vai'); void fio.offsetWidth; fio.classList.add('vai');
+    refs.forEach(b => b.classList.toggle('on', b.dataset.k === k));
+    $('#tagImg').src = '/lut/demo/ref-' + k + '.webp'; $('#tagTx').textContent = 'Ref · ' + NOMES[k];
+    (cores[k] || []).forEach((c, i) => pal[i].style.background = c);
+    document.querySelector('.mon').style.setProperty('--brilho', BRILHO[k]);
+  };
+  const ciclo = () => { if (parado || document.hidden) return; iL = (iL + 1) % ORDEM.length; mostra(ORDEM[iL]); };
+  setTimeout(() => { ciclo(); tL = setInterval(ciclo, 4200); }, 500);
+  // timecode a 24 fps
+  const tc = $('#tc'), t0 = performance.now();
+  const p2 = n => String(n).padStart(2, '0');
+  (function relogio() { const f = Math.floor((performance.now() - t0) / 1000 * 24), s = Math.floor(f / 24); tc.textContent = `00:${p2(Math.floor(s / 60) % 60)}:${p2(s % 60)}:${p2(f % 24)}`; requestAnimationFrame(relogio); })();
+
+  // ================= etapas =================
+  const PASSO = { carregando: 0, email: 1, codigo: 2, semcompra: 1, ok: 3, semmood: 3, vencido: 3, devolta: 3 };
+  const vai = (e, foco) => {
+    tela.dataset.e = e;
+    $$('.etapa').forEach(s => s.classList.toggle('on', s.dataset.e === e));
+    const p = PASSO[e];
+    [1, 2, 3].forEach(i => { const el = $('#p' + i); el.classList.toggle('on', i === p); el.classList.toggle('feito', i < p); });
+    if (foco) setTimeout(() => { try { foco.focus({ preventScroll: true }); } catch (x) {} }, 420);
+  };
+  const quem = em => $$('.quem').forEach(b => b.textContent = em);
+  const carregandoBtn = (b, on) => { b.classList.toggle('carregando', on); b.disabled = on; };
+
+  // offline / sem conexão
+  const off = $('#offline');
+  const semRede = () => { off.classList.add('on'); clearTimeout(off._t); off._t = setTimeout(() => off.classList.remove('on'), 4200); };
+  addEventListener('offline', semRede);
+  addEventListener('online', () => off.classList.remove('on'));
+  const eRede = e => e && (e.status === 0 || /conex/i.test(e.message || ''));
+
+  // depois de entrar: decide pelo que a CONTA tem (relida no servidor), nunca só pelo código
+  let tVai = 0;
+  const decide = (deLogin) => {
+    const em = (Base.sessao() || {}).email || Base.auth.ultimoEmail(); quem(em);
+    if (Base.tem(PACK)) {
+      parado = true; clearInterval(tL);
+      if (deLogin) { $('#okT').textContent = 'Tudo pronto.'; vai('ok'); ev('mood_login_ok'); } else vai('devolta');
+      tVai = setTimeout(() => location.replace(DESTINO), deLogin ? 1400 : 1300);
+      return;
+    }
+    if (Base.vencido(PACK)) { vai('vencido'); ev('mood_login_vencido'); return; }
+    vai('semmood'); ev('mood_login_sem_mood');
+  };
+
+  // ================= 1 · e-mail =================
+  const fEmail = $('#fEmail'), email = $('#email'), mEmail = $('#mEmail'), bEmail = $('#bEmail');
+  let EMAIL = '';
+  email.value = Base.auth.ultimoEmail();
+  email.addEventListener('input', () => { email.classList.remove('ruim'); mEmail.textContent = ''; });
+  fEmail.addEventListener('submit', e => {
+    e.preventDefault();
+    const v = email.value.trim().toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) { email.classList.add('ruim'); mEmail.textContent = 'Digite um e-mail válido, como voce@email.com.'; email.focus(); return; }
+    EMAIL = v; carregandoBtn(bEmail, true); mEmail.textContent = '';
+    Base.auth.temCompra(v).then(tem => {
+      if (!tem) { $('#scEmail').textContent = v; vai('semcompra'); ev('mood_login_sem_compra'); return; }
+      return Base.auth.envia(v).then(() => { $('#emailTx').textContent = v; limpaCod(); vai('codigo', cod); conta(); ev('mood_login_codigo'); });
+    }).catch(err => { if (eRede(err)) semRede(); mEmail.textContent = eRede(err) ? 'Sem conexão. Confira a internet e tente de novo.' : (err.message || 'Não deu para enviar o código agora. Tente de novo.'); })
+      .finally(() => carregandoBtn(bEmail, false));
+  });
+
+  // ================= 2 · código =================
+  const fCod = $('#fCod'), cod = $('#cod'), box = $('#codigo'), casas = $$('.casas i'), mCod = $('#mCod'), bCod = $('#bCod');
+  const pinta = () => {
+    const v = cod.value;
+    casas.forEach((c, i) => { const d = v[i] || ''; if (c.textContent !== d) { c.textContent = d; c.classList.toggle('cheia', !!d); } c.classList.toggle('atual', i === Math.min(v.length, N - 1) && v.length < N); });
+    bCod.disabled = v.length < 6;
+  };
+  const limpaCod = () => { cod.value = ''; box.classList.remove('ruim', 'certo', 'checando'); mCod.textContent = ''; mCod.className = 'msg'; pinta(); };
+  cod.addEventListener('input', () => {
+    const v = cod.value.replace(/\D/g, '').slice(0, N);
+    if (v !== cod.value) cod.value = v;
+    box.classList.remove('ruim'); mCod.textContent = '';
+    pinta();
+    if (v.length === N) fCod.requestSubmit ? fCod.requestSubmit() : fCod.dispatchEvent(new Event('submit', { cancelable: true }));
+  });
+  cod.addEventListener('focus', () => box.classList.add('foco'));
+  cod.addEventListener('blur', () => box.classList.remove('foco'));
+  // o cursor sempre vai para o fim (as casas são só a aparência do campo)
+  cod.addEventListener('keyup', () => { try { cod.setSelectionRange(cod.value.length, cod.value.length); } catch (e) {} });
+  let checando = false;
+  fCod.addEventListener('submit', e => {
+    e.preventDefault();
+    if (checando) return;
+    const t = cod.value.replace(/\D/g, '');
+    if (t.length < 6) { mCod.textContent = 'Digite os 8 dígitos que chegaram no e-mail.'; return; }
+    checando = true; box.classList.add('checando'); carregandoBtn(bCod, true); cod.blur();
+    Base.auth.confirma(EMAIL, t).then(() => {
+      box.classList.remove('checando'); box.classList.add('certo');
+      decide(true);
+    }).catch(err => {
+      box.classList.remove('checando');
+      if (eRede(err)) { semRede(); mCod.textContent = 'Sem conexão. Seu código continua aí: confira a internet e toque em Entrar.'; }
+      else {
+        box.classList.remove('ruim'); void box.offsetWidth; box.classList.add('ruim');
+        mCod.textContent = /inválido|expirado|invalid|expired/i.test(err.message) ? 'Código errado ou vencido. Confira os números ou peça um novo.' : (err.message || 'Não deu para entrar agora. Tente de novo.');
+        if (navigator.vibrate) try { navigator.vibrate(60); } catch (x) {}
+        ev('mood_login_codigo_errado');
+        setTimeout(() => { cod.value = ''; pinta(); cod.focus(); }, 650);
+      }
+    }).finally(() => { checando = false; carregandoBtn(bCod, cod.value.length < 6); });
+  });
+
+  // reenviar: só depois de 60 s, e só quando a pessoa pede
+  const re = $('#reenvia'); let tRe = 0;
+  const conta = () => {
+    clearInterval(tRe); let s = 60; re.disabled = true; re.textContent = `Reenviar código em ${s} s`;
+    tRe = setInterval(() => { s--; if (s > 0) re.textContent = `Reenviar código em ${s} s`; else { clearInterval(tRe); re.disabled = false; re.textContent = 'Reenviar código'; } }, 1000);
+  };
+  re.addEventListener('click', () => {
+    re.disabled = true; re.textContent = 'Enviando…'; mCod.className = 'msg'; mCod.textContent = '';
+    Base.auth.envia(EMAIL).then(() => { limpaCod(); mCod.className = 'msg ok'; mCod.textContent = 'Código novo enviado. Use o mais recente.'; conta(); cod.focus(); ev('mood_login_reenvio'); },
+      err => { if (eRede(err)) semRede(); mCod.textContent = eRede(err) ? 'Sem conexão. Tente de novo em instantes.' : err.message; re.disabled = false; re.textContent = 'Reenviar código'; });
+  });
+  $('#troca').addEventListener('click', () => { clearInterval(tRe); vai('email', email); });
+  $$('[data-volta]').forEach(b => b.addEventListener('click', () => vai('email', email)));
+  $$('[data-sair]').forEach(b => b.addEventListener('click', () => { clearTimeout(tVai); try { Base.sair(); } catch (e) {} parado = false; if (!tL) tL = setInterval(ciclo, 4200); email.value = ''; vai('email', email); }));
+  // tocar em qualquer lugar das casas foca o campo
+  box.addEventListener('click', () => cod.focus());
+
+  // ================= quem já está conectado entra direto =================
+  if (Base.sessao()) {
+    vai('carregando');
+    let resolvido = false;
+    const segue = () => { if (resolvido) return; resolvido = true; if (Base.sessao()) decide(false); else vai('email', email); };
+    Promise.resolve(Base.pronto).then(segue, segue);
+    setTimeout(segue, 4000);   // sem resposta do servidor: decide com o que este aparelho já sabe
+  } else {
+    setTimeout(() => { if (!matchMedia('(max-width:900px)').matches) email.focus(); }, 300);
+  }
+  ev('mood_login_viu');
+})();
+</script>
+</body>
+</html>
