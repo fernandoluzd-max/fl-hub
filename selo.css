@@ -11,7 +11,7 @@
 .selo-disco b{font-family:"Archivo",system-ui,sans-serif;font-weight:800;font-stretch:100%;font-size:39cqw;line-height:.82;color:#F6F1E6;letter-spacing:-.02em;margin-top:-3cqw;text-shadow:0 1px 0 rgba(0,0,0,.08)}
 .selo-disco span{font-size:8cqw;font-weight:700;letter-spacing:.22em;margin:3.5cqw 0 0 .22em;color:#17130a;color:color-mix(in srgb,var(--s) 14%,#0d0b08)}
 @keyframes selo-gira{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion:reduce){.selo-fl svg{animation:none}}
+@media (prefers-reduced-motion:reduce){.selo-fl svg{animation-duration:90s}}   /* com "Reduzir movimento" (iPhone) gira mais devagar, não para */
 /* bloco de garantia com o selo (título e texto ao lado, ou embaixo no celular) */
 .gar-fl{display:flex;align-items:center;justify-content:center;gap:30px;max-width:600px;margin:34px auto 0;text-align:left}
 .gar-fl .gar-t{min-width:0}

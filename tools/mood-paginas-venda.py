@@ -238,7 +238,6 @@ DD_CSS = '''
 @keyframes sobe{from{opacity:0;transform:translateY(10px)}}
 @media (max-width:760px){.dds{grid-template-columns:1fr}.cena{height:160px;gap:12px}.th{width:96px;height:120px}}
 @media (hover:none){.dd:hover{transform:none}}
-@media (prefers-reduced-motion:reduce){.dd *,.dd *::before,.dd::before{animation:none!important;transition-duration:.01s!important;transition-delay:0s!important}.dd-fim{animation:none!important}}
 '''
 
 DD_JS = '''<script id="dd-js">
@@ -246,7 +245,7 @@ DD_JS = '''<script id="dd-js">
 (() => {
   const sec = document.getElementById('diaadia'); if (!sec) return;
   const cards = [...sec.querySelectorAll('.dd')], pts = [...sec.querySelectorAll('.pts i')], N = document.getElementById('ddN'), fim = document.getElementById('ddFim');
-  const feitos = new Set(), calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const feitos = new Set(), calmo = false;   // anima também com "Reduzir movimento" do iPhone: as cenas são a explicação
   const ev = (n, d) => { try { window.FLMood && FLMood(n, d); } catch {} };
   const placar = () => { N.textContent = feitos.size; pts.forEach((p, i) => p.classList.toggle('on', i < feitos.size)); if (feitos.size === 4 && fim.hidden) { fim.hidden = false; ev('mood_diaadia_completo'); } };
   // relógio do card "tempo": corre rápido enquanto está sem o Mood

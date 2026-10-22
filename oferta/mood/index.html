@@ -239,9 +239,6 @@ h2{font-weight:800;font-size:clamp(26px,4.4vw,40px)}
   .eds span{flex:1 1 40%;font-size:10.5px}
   .etapas button{padding:14px 16px}
 }
-@media (prefers-reduced-motion:reduce){
-  .fluxo *,.fluxo *::before,.fluxo *::after{transition-duration:0s!important;transition-delay:0s!important;animation:none!important}
-}
 
 /* inclui + pra quem */
 .duas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
@@ -456,7 +453,6 @@ a.gu{text-decoration:none}
 @keyframes sobe{from{opacity:0;transform:translateY(10px)}}
 @media (max-width:760px){.dds{grid-template-columns:1fr}.cena{height:160px;gap:12px}.th{width:96px;height:120px}}
 @media (hover:none){.dd:hover{transform:none}}
-@media (prefers-reduced-motion:reduce){.dd *,.dd *::before,.dd::before{animation:none!important;transition-duration:.01s!important;transition-delay:0s!important}.dd-fim{animation:none!important}}
 </style>
 </head>
 <body>
@@ -762,7 +758,8 @@ window.FLEv = (() => {
     const fx = $('#fluxo'); if (!fx) return;
     const bts = [...fx.querySelectorAll('.etapas button')], st = $('#fxSt'), pct = $('#fxPct');
     const TEMPO = [0, 3400, 3600, 5600], ROT = ['', 'Escolhendo a cor', 'Lendo as cores', 'LUT pronta'];
-    const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // a demonstração é o conteúdo (passos curtos, sem movimento de tela): roda também com "Reduzir movimento" do iPhone
+    const calmo = false;
     let at = 0, tm = 0, cont = 0, visivel = false, ini = 0, resta = 0;
     // paleta tirada da própria referência
     const ref = $('#fxRef'), sw = fx.querySelectorAll('.paleta i');
@@ -867,7 +864,7 @@ window.FLEv = (() => {
 (() => {
   const sec = document.getElementById('diaadia'); if (!sec) return;
   const cards = [...sec.querySelectorAll('.dd')], pts = [...sec.querySelectorAll('.pts i')], N = document.getElementById('ddN'), fim = document.getElementById('ddFim');
-  const feitos = new Set(), calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const feitos = new Set(), calmo = false;   // anima também com "Reduzir movimento" do iPhone: as cenas são a explicação
   const ev = (n, d) => { try { window.FLMood && FLMood(n, d); } catch {} };
   const placar = () => { N.textContent = feitos.size; pts.forEach((p, i) => p.classList.toggle('on', i < feitos.size)); if (feitos.size === 4 && fim.hidden) { fim.hidden = false; ev('mood_diaadia_completo'); } };
   // relógio do card "tempo": corre rápido enquanto está sem o Mood
