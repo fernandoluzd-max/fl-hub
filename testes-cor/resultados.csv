@@ -43,3 +43,15 @@ base-12-pares,val-log-frio,"Vídeo lavado/log (2º caso, fonte e direção de co
 base-12-pares,val-noite-rua2,"Noite / pouca luz (2º caso, fonte e referência diferentes de noite-baixa-luz)",69,61,11.33,1.62,1.06,1.64,0.36,,,0,,1.43,1,100,0,278.6,1203.8,true,35937,0.48,1.64
 base-12-pares,val-retrato-fria,"Retrato com pele nos dois lados, referência de grade fria (cobertura: pele quase não é testada fora de mesma-cena)",54,46,13.78,18.91,7.97,6.13,0.5,,,0,,1.88,1,35,65,293.2,1116.2,true,35937,0.33,1.42
 base-12-pares,val-externo-nublado,"Externo nublado / dessaturado (luz difusa, sem sol forte)",80,77,3.2,7.02,7.96,4.3,0.83,,,0,,2.22,1,100,0,287.2,1111.7,true,35937,0.39,1.85
+cor-primeiro-luz-por-ultimo,interior-pele,"Pessoa falando, ambiente interno (pele é o principal)",80,66,1.59,5.87,6.06,5.91,1.03,0.17,3.78,0,,2.24,1,100,0,312.1,1233.2,true,35937,0.38,1.87
+cor-primeiro-luz-por-ultimo,exterior-dia-ceu,Externo de dia com céu,71,59,9.49,12.58,6.03,5.93,1.07,,,0,,2.38,1,100,0,304.2,1227.4,true,35937,0.4,1.76
+cor-primeiro-luz-por-ultimo,noite-baixa-luz,Noite / pouca luz,59,45,8.77,7.24,,9.86,0.52,,,0,,2.29,1,100,20,242.2,895.3,true,35937,0.41,1.79
+cor-primeiro-luz-por-ultimo,log-lavado,"Vídeo bem lavado (baixo contraste, baixa saturação)",51,46,,13.05,8.78,13.97,0.29,,,0,,1.71,1,100,60,316.5,1187.8,true,35937,0.39,1.21
+cor-primeiro-luz-por-ultimo,ref-saturada,Referência muito saturada (laranja e azul),60,49,7.73,11.32,12.76,11.85,0.62,8.75,2.74,0,,2.35,1,100,0,312.5,1319.5,true,35937,0.4,1.71
+cor-primeiro-luz-por-ultimo,ref-pastel,Referência dessaturada / pastel,65,51,3.51,10.35,11.61,10.43,0.98,6.7,7.03,0,,1.33,1,100,0,275.5,1086.9,true,35937,0.39,1.71
+cor-primeiro-luz-por-ultimo,cenas-diferentes,Cenas bem diferentes entre vídeo e referência,66,57,3.08,11.19,16.81,6.34,0.75,,,0,,1.61,1,100,0,291.1,1172.8,true,35937,0.41,1.71
+cor-primeiro-luz-por-ultimo,mesma-cena,Mesma cena (caso fácil),96,97,0.3,0.49,0.57,0.21,0.99,5.2,0.87,0,,1.55,1,100,0,279.8,1096.4,true,35937,0.36,1.73
+cor-primeiro-luz-por-ultimo,val-log-frio,"Vídeo lavado/log (2º caso, fonte e direção de cor diferentes de log-lavado)",51,49,14.73,14.17,7.92,14.26,0.28,,,0,,1.73,1,100,70,282.5,1089.2,true,35937,0.38,1.23
+cor-primeiro-luz-por-ultimo,val-noite-rua2,"Noite / pouca luz (2º caso, fonte e referência diferentes de noite-baixa-luz)",69,61,11.33,1.62,1.06,1.64,0.36,,,0,,1.43,1,100,0,280.2,1116.2,true,35937,0.48,1.64
+cor-primeiro-luz-por-ultimo,val-retrato-fria,"Retrato com pele nos dois lados, referência de grade fria (cobertura: pele quase não é testada fora de mesma-cena)",56,49,14.55,20.11,7.29,1.95,0.5,,,0,,1.88,1,100,65,284.9,1168.5,true,35937,0.36,1.4
+cor-primeiro-luz-por-ultimo,val-externo-nublado,"Externo nublado / dessaturado (luz difusa, sem sol forte)",80,77,3.2,7.02,7.96,4.3,0.83,,,0,,2.22,1,100,0,289.3,1142.8,true,35937,0.39,1.85
