@@ -30,6 +30,10 @@ header h1 small{display:block;font-size:12.5px;font-weight:500;font-stretch:100%
 .vivo i{width:8px;height:8px;border-radius:50%;background:var(--dim)}
 .vivo.on i{background:var(--teste);box-shadow:0 0 0 0 rgba(127,206,143,.6);animation:pulso 2s infinite}
 @keyframes pulso{70%{box-shadow:0 0 0 7px rgba(127,206,143,0)}100%{box-shadow:0 0 0 0 rgba(127,206,143,0)}}
+.avisoBt{background:none;border:1px solid var(--line);border-radius:9px;color:var(--mute);font-size:12.5px;padding:5px 9px;cursor:pointer}
+.avisoBt.on{border-color:rgba(127,206,143,.5);color:var(--teste)}
+.venda{position:fixed;left:50%;top:16px;transform:translate(-50%,-140%);background:var(--compra);color:#17130B;font-weight:800;font-stretch:110%;border-radius:14px;padding:12px 18px;box-shadow:0 10px 30px rgba(0,0,0,.45);z-index:50;transition:transform .35s cubic-bezier(.2,.8,.2,1);max-width:calc(100% - 32px);text-align:center}
+.venda.on{transform:translate(-50%,0)}
 .sair{background:none;border:0;color:var(--dim);font-size:12.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 
 .filtros{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:18px}
@@ -134,6 +138,7 @@ tr:last-child td{border-bottom:0}
     <header>
       <h1>Central do WhatsApp<small>Quem recebeu, abriu a página e escolheu um botão</small></h1>
       <span class="vivo" id="vivo"><i></i><span id="vivoTx">Carregando…</span></span>
+      <button class="avisoBt" id="avisoBt" title="Avisa com som e notificação quando sair uma venda do Mood vinda do WhatsApp">🔔 Avisar vendas</button>
       <button class="sair" id="sair">Sair</button>
     </header>
 
@@ -205,7 +210,18 @@ tr:last-child td{border-bottom:0}
   const COR = { abriu: 'var(--abriu)', teste: 'var(--teste)', checkout: 'var(--compra)', audio: 'var(--audio)' };
   const TX = { abriu: 'abriu a página', teste: 'tocou em Testar grátis (página antiga)', checkout: 'clicou para comprar', audio: 'tocou no botão da mensagem' };
 
-  let ultimoDado = null, rz = null;
+  let ultimoDado = null, rz = null, comprasAntes = null, chaveAntes = '';
+  const temNotif = 'Notification' in window;
+  function marcaAviso() { const on = temNotif && Notification.permission === 'granted'; $('avisoBt').classList.toggle('on', on); $('avisoBt').textContent = on ? '🔔 Avisos de venda ligados' : '🔔 Avisar vendas'; }
+  function somVenda() { try { const c = new (window.AudioContext || window.webkitAudioContext)(); [[988, 0], [1319, .12]].forEach(([f, t]) => { const o = c.createOscillator(), g = c.createGain(); o.type = 'triangle'; o.frequency.value = f; g.gain.setValueAtTime(.0001, c.currentTime + t); g.gain.exponentialRampToValueAtTime(.25, c.currentTime + t + .02); g.gain.exponentialRampToValueAtTime(.0001, c.currentTime + t + .5); o.connect(g).connect(c.destination); o.start(c.currentTime + t); o.stop(c.currentTime + t + .55); }); } catch {} }
+  function avisaVenda(novas, total) {
+    const tx = novas === 1 ? 'Nova venda do Mood pelo WhatsApp! 🎉' : novas + ' novas vendas do Mood pelo WhatsApp! 🎉';
+    let el = document.getElementById('venda'); if (!el) { el = document.createElement('div'); el.id = 'venda'; el.className = 'venda'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
+    el.textContent = tx + ' Total no período: ' + total; el.classList.add('on'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('on'), 12000);
+    somVenda();
+    const t0 = document.title; let n = 0; clearInterval(window._pisca); window._pisca = setInterval(() => { document.title = (n++ % 2) ? t0.replace(/^💰 [^·]*· /, '') : '💰 Venda! · ' + t0.replace(/^💰 [^·]*· /, ''); if (n > 20 || !document.hidden && n > 6) { clearInterval(window._pisca); document.title = t0.replace(/^💰 [^·]*· /, ''); } }, 1000);
+    if (temNotif && Notification.permission === 'granted') { try { new Notification('💰 Venda do Mood', { body: tx.replace(' 🎉', ''), icon: '/icones/painel.png', tag: 'venda-mood' }); } catch {} }
+  }
   let periodo = 'hoje', ultimo = null, vistos = new Set(), timer = null, ocupado = false, ultimaAtualizacao = 0;
 
   function intervalo() {
@@ -355,6 +371,9 @@ tr:last-child td{border-bottom:0}
       const d = await Base.rpc('central_wpp', { p_de: iv.de.toISOString(), p_ate: iv.ate.toISOString(), p_testes: $('testes').checked });
       $('erro').hidden = true;
       const k = d.kpi;
+      const chave = periodo + '|' + $('de').value + '|' + $('ate').value + '|' + $('testes').checked;
+      if (chave === chaveAntes && comprasAntes != null && k.compras > comprasAntes) avisaVenda(k.compras - comprasAntes, k.compras);
+      comprasAntes = k.compras; chaveAntes = chave;
       leitura(k, iv.rot); funil(k); kpis(k); serie(d, iv); horas(d); camps(d); feed(d); ultimoDado = [d, iv];
       ultimaAtualizacao = Date.now(); marcaVivo(iv);
     } catch (e) {
@@ -379,6 +398,8 @@ tr:last-child td{border-bottom:0}
   // ---------- acesso ----------
   function mostraPorta(msg) { $('app').hidden = true; $('porta').hidden = false; if (msg) $('portaTx').textContent = msg; clearInterval(timer); }
   function semAcesso() { mostraPorta(`O e-mail ${Base.email()} não tem acesso a esta central. Entre com o e-mail autorizado.`); Base.sair(); }
+  $('avisoBt').onclick = async () => { if (!temNotif) { somVenda(); return; } if (Notification.permission !== 'granted') { try { await Notification.requestPermission(); } catch {} } marcaAviso(); if (Notification.permission === 'granted') { try { new Notification('Avisos ligados', { body: 'Quando sair uma venda do Mood pelo WhatsApp, você recebe um aviso aqui.', icon: '/icones/painel.png' }); } catch {} somVenda(); } };
+  marcaAviso();
   function abre() { $('porta').hidden = true; $('app').hidden = false; vistos = new Set(); carrega(); agenda(); }
 
   $('entrar').onclick = async () => { const ok = await Base.login(); if (ok || Base.sessao()) abre(); };
