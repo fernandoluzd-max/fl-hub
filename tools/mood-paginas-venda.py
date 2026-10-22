@@ -489,6 +489,9 @@ B_HREF = CK + '&utm_source=instagram&utm_medium=bio&utm_campaign=mood&utm_conten
 b_js = js_eventos('bio') + '''  // ?de= (bio-instagram, app, site…) vira utm_medium/src no checkout, como antes
   const de = new URLSearchParams(location.search).get('de');
   if (de && /^[a-z0-9-]{2,40}$/i.test(de)) document.querySelectorAll('[data-compra]').forEach(a => { const u = new URL(a.href); u.searchParams.set('utm_medium', de); u.searchParams.set('src', 'basefl-' + de); a.href = u.toString(); });
+  // utm_* e src que chegam no link (ex.: bio do Instagram) passam direto para o checkout
+  const qq = new URLSearchParams(location.search), passa = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'src'].filter(k => /^[A-Za-z0-9_.-]{1,60}$/.test(qq.get(k) || ''));
+  if (passa.length) document.querySelectorAll('[data-compra]').forEach(a => { const u = new URL(a.href); passa.forEach(k => u.searchParams.set(k, qq.get(k))); a.href = u.toString(); });
 '''
 b_corpo = '\n\n'.join([
     hero_venda('Colorização por referência',
