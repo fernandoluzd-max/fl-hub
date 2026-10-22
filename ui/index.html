@@ -312,6 +312,7 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
 <script src="avisos-dados.js"></script>
 <script src="avisos.js"></script>
 <script src="aval.js"></script>
+<script src="perfil.js"></script>
 <script>
 // ===== tema (escuro/claro) e atividade recolhida: lembra a escolha =====
 const pref = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch {} } };
@@ -379,6 +380,9 @@ async function api(path, { method='GET', body, auth=true } = {}){
   return j;
 }
 
+// perfil do aluno: 3 perguntas no primeiro acesso (perfil.js)
+function perguntaPerfil(){ if (!window.Perfil || !sess) return; Perfil.init({ app: 'desktop', rpc: (nome, args) => api('/rest/v1/rpc/' + nome, { method: 'POST', body: args || {} }) }); Perfil.talvez(); }
+
 // ----- sessão -----
 async function saveSess(s){ sess = s; await invoke('session_set', { data: s ? JSON.stringify(s) : '' }); }
 async function loadSess(){ try { const t = await invoke('session_get'); sess = t ? JSON.parse(t) : null; } catch { sess = null; } }
@@ -428,7 +432,7 @@ $('#l-go').onclick = async () => {
       const token = $('#l-code').value.replace(/\D/g,'');
       if (token.length < 6) throw new Error('Digite o código que chegou no e-mail.');
       const r = await api('/auth/v1/verify', { method:'POST', body:{ type:'email', email: loginEmail, token }, auth:false });
-      await saveSess(fromAuth(r)); showLogin(false); await loadCatalog(); render(); if (window.Aulas) Aulas.recarrega();
+      await saveSess(fromAuth(r)); showLogin(false); await loadCatalog(); render(); if (window.Aulas) Aulas.recarrega(); perguntaPerfil();
       step('Conectado como ' + sess.email, 'ok');
     }
   } catch(e){ $('#l-err').textContent = traduz(e.message); }
@@ -802,7 +806,7 @@ T.event.listen('progress', e => { const t = String(e.payload); step(t, /^aviso/i
 
 (async () => {
   await loadSess();
-  if (sess && await validSess()){ showLogin(false); await loadCatalog(); }
+  if (sess && await validSess()){ showLogin(false); await loadCatalog(); perguntaPerfil(); }
   else { showLogin(true); loginStage(false); }
   if (window.Aulas) Aulas.recarrega();
   await refresh();

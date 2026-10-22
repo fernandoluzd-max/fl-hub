@@ -109,6 +109,20 @@ tr:last-child td{border-bottom:0}
 .porta p{color:var(--mute);margin-bottom:18px}
 .bt{border:0;border-radius:12px;background:var(--ink);color:var(--bg);font-weight:750;padding:12px 22px;cursor:pointer}
 .erro{color:var(--nada);font-size:13.5px;margin:-8px 0 14px}
+.pf-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:4px 0 14px}
+.pf-seg button{background:var(--panel2);border:1px solid var(--line);border-top:3px solid;border-radius:14px;padding:12px 14px;text-align:left;color:var(--ink);font:inherit;cursor:pointer}
+.pf-seg button[aria-pressed=true]{border-color:var(--ink);border-top-color:inherit;background:#222823}
+.pf-seg b{display:block;font-size:26px;font-weight:800;font-stretch:112%;line-height:1.1}
+.pf-seg small{display:block;color:var(--mute);font-size:12.5px}
+.pf-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+.pf-cols h3{font-size:13px;color:var(--mute);font-weight:600;margin-bottom:8px}
+.pf-l{display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-size:13.5px;margin-bottom:6px}
+.pf-l .barrinha{grid-column:1/-1;margin:0;height:5px;background:var(--abriu)}
+.pf-acoes{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.pf-acoes .bt{padding:9px 14px;font-size:13.5px}
+.pf-acoes span{color:var(--mute);font-size:12.5px}
+@media (max-width:640px){.pf-seg,.pf-cols{grid-template-columns:1fr}}
+.bt:disabled{opacity:.4;cursor:default}
 [hidden]{display:none!important}
 
 @media (max-width:980px){.kpis{grid-template-columns:repeat(3,1fr)}.grade{grid-template-columns:1fr}}
@@ -190,7 +204,16 @@ tr:last-child td{border-bottom:0}
       </section>
     </div>
 
-    <p class="nota">Tudo aqui vem dos acessos reais. "Abriu" conta quando a página do link carrega; "Clicaram para comprar" conta o clique que leva ao checkout (intenção de compra); "Sem clicar" é quem abriu e não clicou para comprar no período. Desde 21/10 à noite a página não tem mais teste grátis. Pessoas são contadas uma vez por período, mesmo que abram várias vezes. Compra = venda do Mood paga na Greenn, com o mesmo e-mail, depois do clique. "Tocaram no botão" conta quem tocou em "Quero conhecer" (mensagem nova, desde 22/10) ou em "Manda o áudio" (mensagem antiga, desde 21/10 às 20h). Atualiza sozinho a cada 15 segundos.</p>
+    <section class="bloco" id="perfis" style="margin-bottom:14px">
+      <h2>Perfis dos alunos</h2>
+      <p class="pico" id="pfResumo" style="margin:-4px 0 12px"></p>
+      <div class="pf-seg" id="pfSeg"></div>
+      <div class="pf-cols" id="pfCols"></div>
+      <div class="pf-acoes"><button class="bt" id="pfCsv" type="button">Baixar lista (CSV)</button><span id="pfCsvTx"></span></div>
+      <div class="tab" id="pfLista"></div>
+    </section>
+
+    <p class="nota">Tudo aqui vem dos acessos reais. "Abriu" conta quando a página do link carrega; "Clicaram para comprar" conta o clique que leva ao checkout (intenção de compra); "Sem clicar" é quem abriu e não clicou para comprar no período. Desde 21/10 à noite a página não tem mais teste grátis. Pessoas são contadas uma vez por período, mesmo que abram várias vezes. Compra = venda do Mood paga na Greenn, com o mesmo e-mail, depois do clique. "Tocaram no botão" conta quem tocou em "Quero conhecer" (mensagem nova, desde 22/10) ou em "Manda o áudio" (mensagem antiga, desde 21/10 às 20h). Atualiza sozinho a cada 15 segundos. Perfis dos alunos: respostas das 3 perguntas do primeiro acesso ao app Base FL (computador e site). Quente = atende clientes ou agência e quer ajuda para cobrar ou organizar; morno = atende clientes, agência ou está aprendendo; frio = edita para as próprias redes. Telefone e produtos vêm das compras na Greenn com o mesmo e-mail; "saiu" marca quem pediu para não receber WhatsApp.</p>
   </main>
 </div>
 
@@ -395,12 +418,52 @@ tr:last-child td{border-bottom:0}
     timer = setInterval(() => { if (!document.hidden && intervalo().vivo) carrega(true); }, 15000);
   }
 
+
+  // ---------- perfis dos alunos ----------
+  const PF = {
+    seg: { quente: ['Quentes', 'Oferecer o Kit Freelancer', 'var(--compra)'], morno: ['Mornos', 'Nutrir antes de oferecer', 'var(--abriu)'], frio: ['Frios', 'Editam para as próprias redes', 'var(--dim)'] },
+    quem: { clientes: 'Para clientes', agencia: 'Agência ou produtora', redes: 'Próprias redes', aprendendo: 'Aprendendo' },
+    editor: { capcut_pc: 'CapCut computador', capcut_cel: 'CapCut celular', premiere: 'Premiere', davinci: 'DaVinci', finalcut: 'Final Cut', outro: 'Outro' },
+    ajuda: { cobrar: 'Cobrar e orçar', organizar: 'Organizar clientes', rapido: 'Editar mais rápido', bonito: 'Vídeos mais bonitos', clientes: 'Conseguir clientes' }
+  };
+  let pfDados = null, pfSel = 'quente';
+  const pfNome = (m, v) => String(v || '').split(', ').filter(Boolean).map(x => m[x] || x).join(', ');
+  function pfFiltrada() { return (pfDados?.lista || []).filter(l => l.segmento === pfSel); }
+  function pfDesenha() {
+    const d = pfDados; if (!d) return; const r = d.resumo;
+    $('pfResumo').innerHTML = `<b>${r.responderam}</b> responderam · <b>${r.pularam}</b> deixaram para depois`;
+    $('pfSeg').innerHTML = Object.entries(PF.seg).map(([k, [t, s, c]]) => `<button type="button" data-s="${k}" aria-pressed="${k === pfSel}" style="border-top-color:${c}"><b>${r[k] || 0}</b>${t}<small>${s}</small></button>`).join('');
+    $('pfSeg').querySelectorAll('button').forEach(b => b.onclick = () => { pfSel = b.dataset.s; pfDesenha(); });
+    const col = (tit, obj, m, tot) => { const it = Object.entries(obj || {}).sort((a, b) => b[1] - a[1]);
+      return `<div><h3>${tit}</h3>${it.length ? it.map(([k, n]) => `<div class="pf-l"><span>${esc(m[k] || k)}</span><b>${n}</b><span class="barrinha" style="width:${Math.max(3, Math.round(n / Math.max(1, tot) * 100))}%"></span></div>`).join('') : '<p class="vazio" style="padding:10px 0">Ainda sem respostas</p>'}</div>`; };
+    $('pfCols').innerHTML = col('Edita para quem', d.quem, PF.quem, r.responderam) + col('Editor', d.editor, PF.editor, r.responderam) + col('O que mais ajudaria', d.ajuda, PF.ajuda, r.responderam);
+    const L = pfFiltrada();
+    $('pfCsvTx').textContent = L.length ? `${L.length} na lista ${PF.seg[pfSel][0].toLowerCase()}` : '';
+    $('pfCsv').disabled = !L.length;
+    $('pfLista').innerHTML = L.length ? `<table><thead><tr><th>E-mail</th><th>Telefone</th><th>Edita para</th><th>Editor</th><th>Quer ajuda com</th><th>Já comprou</th><th>Kit</th><th>Respondeu</th></tr></thead><tbody>${L.map(l => `<tr><td class="cn">${esc(l.email)}${l.saiu_whatsapp ? ' <small style="color:var(--nada)">saiu</small>' : ''}</td><td>${esc(l.telefone || '—')}</td><td>${esc(PF.quem[l.quem] || l.quem || '')}</td><td>${esc(PF.editor[l.editor] || l.editor || '')}</td><td>${esc(pfNome(PF.ajuda, l.ajuda))}</td><td style="white-space:normal;max-width:240px">${esc(l.produtos || '—')}</td><td>${l.tem_kit ? 'Sim' : '—'}</td><td>${esc(new Date(new Date(l.respondido_em).getTime() + SP).toISOString().slice(0, 10).split('-').reverse().join('/'))}</td></tr>`).join('')}</tbody></table>`
+      : '<p class="vazio">Ninguém nesta lista ainda. As respostas aparecem aqui assim que os alunos abrirem o app.</p>';
+  }
+  async function carregaPerfis() {
+    try { pfDados = await Base.rpc('central_perfis', {}); pfDesenha(); }
+    catch (e) { $('pfResumo').textContent = 'Não consegui carregar os perfis agora (' + e.message + ').'; }
+  }
+  $('pfCsv').onclick = () => {
+    const L = pfFiltrada(); if (!L.length) return;
+    const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+    const linhas = [['email', 'telefone', 'lista', 'edita_para', 'editor', 'quer_ajuda_com', 'ja_comprou', 'tem_kit', 'saiu_whatsapp', 'respondeu_em'].join(';')]
+      .concat(L.map(l => [l.email, l.telefone, l.segmento, PF.quem[l.quem] || l.quem, PF.editor[l.editor] || l.editor, pfNome(PF.ajuda, l.ajuda), l.produtos, l.tem_kit ? 'sim' : 'nao', l.saiu_whatsapp ? 'sim' : 'nao', l.respondido_em].map(q).join(';')));
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['\ufeff' + linhas.join('\r\n')], { type: 'text/csv;charset=utf-8' }));
+    a.download = `alunos-${pfSel}-${diaSP()}.csv`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  };
+  setInterval(() => { if (!document.hidden && !$('app').hidden) carregaPerfis(); }, 60000);
+
   // ---------- acesso ----------
   function mostraPorta(msg) { $('app').hidden = true; $('porta').hidden = false; if (msg) $('portaTx').textContent = msg; clearInterval(timer); }
   function semAcesso() { mostraPorta(`O e-mail ${Base.email()} não tem acesso a esta central. Entre com o e-mail autorizado.`); Base.sair(); }
   $('avisoBt').onclick = async () => { if (!temNotif) { somVenda(); return; } if (Notification.permission !== 'granted') { try { await Notification.requestPermission(); } catch {} } marcaAviso(); if (Notification.permission === 'granted') { try { new Notification('Avisos ligados', { body: 'Quando sair uma venda do Mood pelo WhatsApp, você recebe um aviso aqui.', icon: '/icones/painel.png' }); } catch {} somVenda(); } };
   marcaAviso();
-  function abre() { $('porta').hidden = true; $('app').hidden = false; vistos = new Set(); carrega(); agenda();
+  function abre() { $('porta').hidden = true; $('app').hidden = false; vistos = new Set(); carrega(); agenda(); carregaPerfis();
     if (/[?&]teste=aviso/.test(location.search)) setTimeout(() => avisaVenda(1, 0, true), 3000); }
 
   $('entrar').onclick = async () => { const ok = await Base.login(); if (ok || Base.sessao()) abre(); };

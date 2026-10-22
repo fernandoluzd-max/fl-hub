@@ -161,6 +161,7 @@ h2{font-family:var(--d);font-weight:800;font-size:19px;letter-spacing:-.01em;mar
 <script src="/base.js"></script>
 <script src="/aulas.js"></script>
 <script src="/avisos.js"></script>
+<script src="/perfil.js"></script>
 <script src="/app/pwa.js"></script>
 <script>
 const $ = s => document.querySelector(s), esc = Base.esc, C = window.CATALOGO, POR = Object.fromEntries(C.produtos.map(p => [p.key, p]));
@@ -243,10 +244,17 @@ $('#manda').onclick = async () => {
 };
 (async () => {
   try { await Base.pronto; await Base.carrega(); } catch (e) {}
-  desenha();
+  desenha(); perguntaPerfil();
   if (!Base.sessao() && new URLSearchParams(location.search).get('entrar')) $('#entrar').click();
 })();
-Base.aoMudar(() => desenha());
+// perfil do aluno: 3 perguntas no primeiro acesso (perfil.js), uma vez por login
+let perfilVisto = '';
+function perguntaPerfil() {
+  const s = Base.sessao(), em = s && (s.email || (s.user && s.user.email) || 'x');
+  if (!window.Perfil || !s || perfilVisto === em) return;
+  perfilVisto = em; Perfil.init({ app: 'web', rpc: (n, a) => Base.rpc(n, a) }); Perfil.talvez();
+}
+Base.aoMudar(() => { desenha(); perguntaPerfil(); });
 if (window.Aulas) Aulas.aoCarregar(() => { if (!$('#tudo').hidden) desenha(); });
 </script>
 </body>
