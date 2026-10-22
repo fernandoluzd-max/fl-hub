@@ -2,6 +2,7 @@
   {
     "id": "interior-pele",
     "categoria": "Pessoa falando, ambiente interno (pele é o principal)",
+    "conjunto": "treino",
     "video": "testes-cor/pares/interior-pele/video.mp4",
     "referencia": "lut/demo/ref-dourado.webp",
     "temPessoa": true,
@@ -10,6 +11,7 @@
   {
     "id": "exterior-dia-ceu",
     "categoria": "Externo de dia com céu",
+    "conjunto": "treino",
     "video": "lut/demo/normal-709.mp4",
     "referencia": "lut/demo/ref-urbano.webp",
     "temPessoa": true,
@@ -18,6 +20,7 @@
   {
     "id": "noite-baixa-luz",
     "categoria": "Noite / pouca luz",
+    "conjunto": "treino",
     "video": "testes-cor/pares/noite-baixa-luz/video.mp4",
     "referencia": "testes-cor/pares/noite-baixa-luz/referencia.jpg",
     "temPessoa": true,
@@ -26,6 +29,7 @@
   {
     "id": "log-lavado",
     "categoria": "Vídeo bem lavado (baixo contraste, baixa saturação)",
+    "conjunto": "treino",
     "video": "testes-cor/pares/log-lavado/video.mp4",
     "referencia": "lut/demo/ref-dourado.webp",
     "temPessoa": true,
@@ -34,6 +38,7 @@
   {
     "id": "ref-saturada",
     "categoria": "Referência muito saturada (laranja e azul)",
+    "conjunto": "treino",
     "video": "lut/demo/urbano.mp4",
     "referencia": "lut/demo/ref-dourado.webp",
     "temPessoa": true,
@@ -42,6 +47,7 @@
   {
     "id": "ref-pastel",
     "categoria": "Referência dessaturada / pastel",
+    "conjunto": "treino",
     "video": "lut/demo/natural.mp4",
     "referencia": "lut/demo/ref-pastel.webp",
     "temPessoa": true,
@@ -50,6 +56,7 @@
   {
     "id": "cenas-diferentes",
     "categoria": "Cenas bem diferentes entre vídeo e referência",
+    "conjunto": "treino",
     "video": "lut/demo/pastel.mp4",
     "referencia": "lut/demo/ref-natural.webp",
     "temPessoa": true,
@@ -58,9 +65,46 @@
   {
     "id": "mesma-cena",
     "categoria": "Mesma cena (caso fácil)",
+    "conjunto": "treino",
     "video": "lut/demo/antes.mp4",
     "referencia": "testes-cor/pares/mesma-cena/referencia.jpg",
     "temPessoa": true,
     "obs": "referência é um frame do próprio antes.mp4, só regradeado (mais contraste/saturação/quente) — tem que ficar quase perfeito"
+  },
+  {
+    "id": "val-log-frio",
+    "categoria": "Vídeo lavado/log (2º caso, fonte e direção de cor diferentes de log-lavado)",
+    "conjunto": "validacao",
+    "video": "testes-cor/pares/val-log-frio/video.mp4",
+    "referencia": "testes-cor/pares/val-log-frio/referencia.webp",
+    "temPessoa": true,
+    "obs": "urbano.mp4 achatado (contraste e saturação bem reduzidos, pretos levantados) recebendo ref-urbano.webp (referência fria/teal, não dourada) — serve pra checar se uma ideia testada em log-lavado generaliza para outro vídeo lavado e outra direção de cor (fria, não quente)"
+  },
+  {
+    "id": "val-noite-rua2",
+    "categoria": "Noite / pouca luz (2º caso, fonte e referência diferentes de noite-baixa-luz)",
+    "conjunto": "validacao",
+    "video": "testes-cor/pares/val-noite-rua2/video.mp4",
+    "referencia": "testes-cor/pares/val-noite-rua2/referencia.jpg",
+    "temPessoa": true,
+    "obs": "normal-709.mp4 escurecido (vídeo, fonte diferente de noite-baixa-luz) e uma still azul-escura derivada de dourado.webp via colorbalance (referência) — 2º caso de pouca luz, pra checar generalização"
+  },
+  {
+    "id": "val-retrato-fria",
+    "categoria": "Retrato com pele nos dois lados, referência de grade fria (cobertura: pele quase não é testada fora de mesma-cena)",
+    "conjunto": "validacao",
+    "video": "testes-cor/pares/val-retrato-fria/video.mp4",
+    "referencia": "testes-cor/pares/val-retrato-fria/referencia.jpg",
+    "temPessoa": true,
+    "obs": "natural.mp4 como veio (vídeo) e um frame do urbano.mp4 em outro ângulo/luz, regradeado frio via colorbalance (referência, também com pele) — nenhum par do treino tem pele real nos dois lados fora de mesma-cena (caso fácil); este cobre esse buraco"
+  },
+  {
+    "id": "val-externo-nublado",
+    "categoria": "Externo nublado / dessaturado (luz difusa, sem sol forte)",
+    "conjunto": "validacao",
+    "video": "testes-cor/pares/val-externo-nublado/video.mp4",
+    "referencia": "testes-cor/pares/val-externo-nublado/referencia.jpg",
+    "temPessoa": true,
+    "obs": "pastel.mp4 dessaturado e achatado (vídeo) e ref-natural.webp dessaturada e puxada pro cinza-azulado (referência) — condição de luz (nublado) que não existia no treino"
   }
 ]
