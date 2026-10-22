@@ -1,0 +1,66 @@
+[
+  {
+    "id": "interior-pele",
+    "categoria": "Pessoa falando, ambiente interno (pele é o principal)",
+    "video": "testes-cor/pares/interior-pele/video.mp4",
+    "referencia": "lut/demo/ref-dourado.webp",
+    "temPessoa": true,
+    "obs": "antes.mp4 recortado mais perto do rosto e com WB/contraste simulando luz interna (tungstênio, baixo contraste)"
+  },
+  {
+    "id": "exterior-dia-ceu",
+    "categoria": "Externo de dia com céu",
+    "video": "lut/demo/normal-709.mp4",
+    "referencia": "lut/demo/ref-urbano.webp",
+    "temPessoa": true,
+    "obs": "vídeo externo (pátio, céu visível) recebendo o look urbano/teal da referência"
+  },
+  {
+    "id": "noite-baixa-luz",
+    "categoria": "Noite / pouca luz",
+    "video": "testes-cor/pares/noite-baixa-luz/video.mp4",
+    "referencia": "testes-cor/pares/noite-baixa-luz/referencia.jpg",
+    "temPessoa": true,
+    "obs": "antes.mp4 escurecido (vídeo) e ref-urbano.webp escurecida e puxada pro azul/teal (referência) para simular cena noturna"
+  },
+  {
+    "id": "log-lavado",
+    "categoria": "Vídeo bem lavado (baixo contraste, baixa saturação)",
+    "video": "testes-cor/pares/log-lavado/video.mp4",
+    "referencia": "lut/demo/ref-dourado.webp",
+    "temPessoa": true,
+    "obs": "antes.mp4 com contraste e saturação bem reduzidos (simula perfil plano/Log sem curva de câmera real) recebendo referência bem colorida"
+  },
+  {
+    "id": "ref-saturada",
+    "categoria": "Referência muito saturada (laranja e azul)",
+    "video": "lut/demo/urbano.mp4",
+    "referencia": "lut/demo/ref-dourado.webp",
+    "temPessoa": true,
+    "obs": "referência de campo ao entardecer (laranja forte + céu azulado)"
+  },
+  {
+    "id": "ref-pastel",
+    "categoria": "Referência dessaturada / pastel",
+    "video": "lut/demo/natural.mp4",
+    "referencia": "lut/demo/ref-pastel.webp",
+    "temPessoa": true,
+    "obs": "referência de praia ao entardecer, tons pastéis e pouco saturados"
+  },
+  {
+    "id": "cenas-diferentes",
+    "categoria": "Cenas bem diferentes entre vídeo e referência",
+    "video": "lut/demo/pastel.mp4",
+    "referencia": "lut/demo/ref-natural.webp",
+    "temPessoa": true,
+    "obs": "referência é foto de um cachorro ao ar livre, sem nenhuma relação de conteúdo com o vídeo da pessoa"
+  },
+  {
+    "id": "mesma-cena",
+    "categoria": "Mesma cena (caso fácil)",
+    "video": "lut/demo/antes.mp4",
+    "referencia": "testes-cor/pares/mesma-cena/referencia.jpg",
+    "temPessoa": true,
+    "obs": "referência é um frame do próprio antes.mp4, só regradeado (mais contraste/saturação/quente) — tem que ficar quase perfeito"
+  }
+]
