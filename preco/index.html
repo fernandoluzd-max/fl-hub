@@ -379,9 +379,9 @@ function pergunta(){
   const tot = totalPrevisto();
   let h = TRAB ? `<div class="para-quem">Preço para <b>${esc(TRAB.cliente?.nome || 'cliente')}</b><button class="link" id="soltar">calcular outro</button></div>` : '';
   h += `<div class="tc">${pos > 0 ? '<button class="back" id="voltar">← Voltar</button>' : ''}<span class="sp"></span><span>${String(pos+1).padStart(2,'0')} / ${String(tot).padStart(2,'0')}</span></div>`;
-  h += `<h1>${q.h}</h1>` + (q.s ? `<p class="sub">${q.s}</p>` : '<div style="height:16px"></div>');
+  h += `<h1 id="pergunta-titulo">${q.h}</h1>` + (q.s ? `<p class="sub">${q.s}</p>` : '<div style="height:16px"></div>');
   if (q.input){
-    h += `<div class="field"><span>R$</span><input id="extra" inputmode="decimal" placeholder="0" value="${+R.gExtra||''}"></div>
+    h += `<div class="field"><span>R$</span><input id="extra" inputmode="decimal" aria-labelledby="pergunta-titulo" placeholder="0" value="${+R.gExtra||''}"></div>
           <div class="row"><button class="btn ghost" id="pular">Não tenho</button><button class="btn" id="seguir">Continuar</button></div>`;
   } else {
     h += '<div class="opts">' + q.o.map(([v,t,s,ic]) => `<button class="opt${q.big?' big':''}" style="--cor:${cor(id)}" data-v="${v}">${ic?`<span class="ic">${ic}</span>`:''}<span><b>${t}</b>${s?`<small>${s}</small>`:''}</span></button>`).join('') + '</div>';
