@@ -1316,7 +1316,11 @@ function confere(){
 }
 let PADRAO_SESSAO = 100;
 function limites(){ const s = M.s || 0;
-  return { estouro: Math.max(QA_LIM.estouro, (M.refClip || 0) + 1), sat: Math.max(QA_LIM.sat, Math.min(2, (M.refSat || 1) * 1.1)), brancos: QA_LIM.brancos * (1 + 2 * s), pele: QA_LIM.pele * (1 + s) }; }
+  // o teto de saturação (antes travado em ×2 sempre) agora acompanha um pouco mais o quanto a referência
+  // realmente pede (M.refSat): só sobe quando o vídeo é bem mais "lavado" que a referência — é exatamente
+  // o caso de vídeo em Log/lavado recebendo uma referência colorida, o pior caso do banco de teste — e mesmo
+  // assim fica bem abaixo do teto por pixel que a proteção já permite (PROT.satMax, até 3,2×)
+  return { estouro: Math.max(QA_LIM.estouro, (M.refClip || 0) + 1), sat: Math.max(QA_LIM.sat, Math.min(2.35, (M.refSat || 1) * 1.1)), brancos: QA_LIM.brancos * (1 + 2 * s), pele: QA_LIM.pele * (1 + s) }; }
 function qaHtml(q){ const QA_LIM = M.lim || limites();
   const linha = (ok, t, v) => `<div><b style="color:${ok ? '#7BE0A0' : '#FFB347'}">${ok ? '✓' : '!'}</b><span>${t}</span><small>${v}</small></div>`;
   return linha(q.estouro <= QA_LIM.estouro, 'Sem estourar brancos nem esmagar pretos', (q.estouro > 0 ? '+' : '') + q.estouro.toFixed(1) + '% de pixels no limite')
