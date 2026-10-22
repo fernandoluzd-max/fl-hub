@@ -1309,7 +1309,9 @@ function confere(){
   const lim = limites(); M.lim = lim;
   const passa = q => q.estouro <= lim.estouro && q.sat <= lim.sat && (q.brancos == null || q.brancos <= lim.brancos) && (q.pele == null || q.pele <= lim.pele);
   let q = mede(), f = A.forca; M.qa0 = q; M.reduziu = 0;
-  while (!passa(q) && A.forca > 40){ A.forca -= 10; montaLUT(); q = mede(); }
+  // passo fino (5 em 5, até 20%): acha um ponto mais perto do ideal do que pulando de 10 em 10,
+  // e ainda segura os casos extremos que antes ficavam presos reprovados em 40%
+  while (!passa(q) && A.forca > 20){ A.forca -= 5; montaLUT(); q = mede(); }
   M.reduziu = f - A.forca; M.qa = q; PADRAO_SESSAO = A.forca;
 }
 let PADRAO_SESSAO = 100;
