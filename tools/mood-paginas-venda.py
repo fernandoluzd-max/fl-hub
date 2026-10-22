@@ -69,6 +69,8 @@ a.gu{text-decoration:none}
 @media (max-width:760px){.topo .cmp{aspect-ratio:auto;height:44svh}}
 .hero-cta{max-width:420px;margin:22px auto 0;text-align:center}
 .hero-cta .gar-mini{margin-top:10px}
+.ja{display:inline-block;margin-top:6px;padding:8px 6px;font-size:13.5px;color:var(--mute);text-underline-offset:3px}
+.ja:hover{color:var(--ink)}
 @media (max-width:760px){.bens,.quem{grid-template-columns:1fr}.bem{grid-template-columns:60px 1fr}.bem img{width:60px;height:60px}}
 '''
 
@@ -372,7 +374,7 @@ def hero_venda(rot, h1, sub, cta):
   {PASSOS3}
   <p class="dica">Toque numa referência e veja a cor mudar no meu vídeo. Arraste para comparar.</p>
   {DEMO}
-  <div class="hero-cta"><a class="gu" id="heroCta" href="#oferta">{cta}</a>{GARMINI}</div>
+  <div class="hero-cta"><a class="gu" id="heroCta" href="#oferta">{cta}</a>{GARMINI}<a class="ja" href="/app/?entrar=1">Já comprou? Entre para usar o Mood</a></div>
 </section>'''
 
 def oferta_pub(titulo, cta, href):
@@ -484,10 +486,10 @@ v = pagina('Mood · Base FL', 'Uma ferramenta para acertar a cor do seu vídeo u
 (R / 'v/index.html').write_text(poe_js(v), encoding='utf-8')
 
 # ================= Bio do Instagram =================
-B_HREF = CK + '&utm_source=instagram&utm_medium=bio&utm_campaign=mood&utm_content=pagina'
+B_HREF = CK + '&utm_source=basefl&utm_medium=pagina&utm_campaign=mood&utm_content=pagina'   # a origem vem do link: ?de=… ou utm_* (bio, app, site)
 b_js = js_eventos('bio') + '''  // ?de= (bio-instagram, app, site…) vira utm_medium/src no checkout, como antes
   const de = new URLSearchParams(location.search).get('de');
-  if (de && /^[a-z0-9-]{2,40}$/i.test(de)) document.querySelectorAll('[data-compra]').forEach(a => { const u = new URL(a.href); u.searchParams.set('utm_medium', de); u.searchParams.set('src', 'basefl-' + de); a.href = u.toString(); });
+  if (de && /^[a-z0-9-]{2,40}$/i.test(de)) document.querySelectorAll('[data-compra]').forEach(a => { const u = new URL(a.href); u.searchParams.set('utm_source', de === 'bio-instagram' ? 'instagram' : 'basefl'); u.searchParams.set('utm_medium', de); u.searchParams.set('src', 'basefl-' + de); a.href = u.toString(); });
   // utm_* e src que chegam no link (ex.: bio do Instagram) passam direto para o checkout
   const qq = new URLSearchParams(location.search), passa = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'src'].filter(k => /^[A-Za-z0-9_.-]{1,60}$/.test(qq.get(k) || ''));
   if (passa.length) document.querySelectorAll('[data-compra]').forEach(a => { const u = new URL(a.href); passa.forEach(k => u.searchParams.set(k, qq.get(k))); a.href = u.toString(); });
