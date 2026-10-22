@@ -63,8 +63,20 @@ CSS = '''
 .leva{max-width:560px;margin:0 auto}
 .oferta .sob{margin-top:10px;font-size:13.5px;color:var(--mute)}
 a.gu{text-decoration:none}
+.dica{margin:18px auto 10px;font:700 11px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--ambar);text-align:center}
+.topo .demo{margin-top:6px;max-width:400px}
+.topo .demo .looks{order:-1}
+@media (max-width:760px){.topo .cmp{aspect-ratio:auto;height:44svh}}
+.hero-cta{max-width:420px;margin:22px auto 0;text-align:center}
+.hero-cta .gar-mini{margin-top:10px}
 @media (max-width:760px){.bens,.quem{grid-template-columns:1fr}.bem{grid-template-columns:60px 1fr}.bem img{width:60px;height:60px}}
 '''
+
+def poe_css(t):
+    """troca (ou coloca) o bloco de CSS das seções de venda, sempre na versão atual deste gerador"""
+    i = t.find('\n/* ===== seções de venda')
+    if i >= 0: t = t[:i] + t[t.index('</style>', i):]
+    return t.replace('</style>', CSS + '</style>', 1)
 
 # ---------------- seções novas ----------------
 def sec_dores(titulo, linhas, virada):
@@ -127,14 +139,14 @@ def sec_leva(itens, cta, href):
     li = ''.join(f'<li class="s">{OK}{x}</li>' for x in itens)
     return f'''<section class="sec w">
   <div class="cab"><span class="rot">A oferta</span><h2>Tudo o que vem no Mood.</h2></div>
-  <div class="oferta leva" id="oferta2">
+  <div class="oferta leva" id="oferta">
     <p class="mono">Mood · acesso de 1 ano</p>
     <ul class="lista" style="text-align:left;margin:6px 0 18px">{li}</ul>
     <div class="preco" aria-label="79 reais"><small>R$</small><span>79</span></div>
     <p class="parc">à vista, ou 12x de R$ 8,12</p>
     <a class="gu" href="{href}" data-compra="oferta">{cta}</a>
     <p class="sob">Pix ou cartão. O acesso chega no seu e-mail logo depois do pagamento.</p>
-    {GARMINI}
+    {AVISO}
   </div>
 </section>'''
 
@@ -170,6 +182,19 @@ def hero(rot, h1, sub, oferta_html):
   </div>
 </section>'''
 
+DEMO = SEC_CMP[SEC_CMP.index('<div class="demo">'):SEC_CMP.rindex('</section>')].rstrip()
+def hero_venda(rot, h1, sub, cta):
+    return f'''<section class="topo w">
+  <div class="marca"><span class="mood">Mood</span><span class="de">BASE FL</span></div>
+  <p class="rot">{rot}</p>
+  <h1>{h1}</h1>
+  <p class="sub">{sub}</p>
+  {PASSOS3}
+  <p class="dica">Toque numa referência e veja a cor mudar no meu vídeo. Arraste para comparar.</p>
+  {DEMO}
+  <div class="hero-cta"><a class="gu" id="heroCta" href="#oferta">{cta}</a>{GARMINI}</div>
+</section>'''
+
 def oferta_pub(titulo, cta, href):
     return f'''  <div class="oferta" id="oferta">
     <p class="mono">Mood · acesso de 1 ano</p>
@@ -184,30 +209,30 @@ def oferta_pub(titulo, cta, href):
 
 LEVA = ['LUTs ilimitadas durante 1 ano', 'Videoaula mostrando como usar', 'CapCut do computador, Premiere, DaVinci e Final Cut', 'Vídeo normal ou em Log', 'Pele protegida e ajuste de intensidade', '7 dias de garantia']
 
-def pagina(titulo_html, desc, og, corpo, fim_h2, fim_sub, cta_fim, href, js_compra, rodape_fixo_cta):
+def pagina(titulo_html, desc, og, corpo, fim_h2, fim_sub, cta_fim, href, js_compra, rodape_fixo_cta, venda=False):
     h = HEAD
     h = re.sub(r'<title>.*?</title>', f'<title>{titulo_html}</title>', h, flags=re.S)
     h = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{desc}">', h)
     h = h.replace('<link rel="preload" as="video" href="https://aulas.basefl.com/upssel.mp4" type="video/mp4">', '<link rel="preload" as="video" href="/oferta/mood/antes-depois.mp4" type="video/mp4">')
     h = h.replace('/* Upsell do Mood depois da compra dos Títulos Dinâmicos (Greenn, 1 clique · upsell 7205 · oferta R$ 79). */', '/* Página de vendas do Mood (100% venda). Gerada a partir de /oferta/mood/ — estilos compartilhados. */')
     if og: h = h.replace('<meta name="theme-color"', og + '\n<meta name="theme-color"')
-    if '/* ===== seções de venda' not in h: h = h.replace('</style>', CSS + '</style>')
+    h = poe_css(h)
     return f'''{h}</head>
 <body>
 
 <main>
 {corpo}
 
-<section class="fim w">
+{'' if venda else f"""<section class="fim w">
   <h2>{fim_h2}</h2>
   <p class="sub" style="margin:12px auto 22px">{fim_sub}</p>
   <a class="gu" href="{href}" data-compra="fim">{cta_fim}</a>
-</section>
+</section>"""}
 </main>
 
 <footer class="rodape w">Base FL · o ecossistema do editor de vídeo · <a href="https://basefl.com/termos/">Termos de uso</a> · <a href="https://basefl.com/privacidade/">Privacidade</a></footer>
 
-<div class="fixo" id="fixo" aria-hidden="true"><span><b>Mood · R$ 79</b>ou 12x de R$ 8,12</span><a href="{href}" tabindex="-1" data-compra="barra">{rodape_fixo_cta}</a></div>
+{FIXO_VENDA.replace('CTA', rodape_fixo_cta) if venda else f'<div class="fixo" id="fixo" aria-hidden="true"><span><b>Mood · R$ 79</b>ou 12x de R$ 8,12</span><a href="{href}" tabindex="-1" data-compra="barra">{rodape_fixo_cta}</a></div>'}
 
 <script src="/pixel.js"></script>
 {METRICS}
@@ -215,10 +240,20 @@ def pagina(titulo_html, desc, og, corpo, fim_h2, fim_sub, cta_fim, href, js_comp
 (() => {{
   const $ = s => document.querySelector(s);
 {js_compra}
-{JS_CMP}{JS_FLX}{JS_FIX}}})();
+{JS_CMP}{JS_FLX}{JS_FIX_VENDA if venda else JS_FIX}}})();
 </script>
 </body>
 </html>
+'''
+
+FIXO_VENDA = '<div class="fixo" id="fixo" aria-hidden="true"><span><b>Mood</b>Cor bonita sem saber color grade</span><a href="#oferta" tabindex="-1">CTA</a></div>'
+JS_FIX_VENDA = '''  // ===== barra fixa do celular: aparece depois do botão do topo e some quando a oferta (no fim) está na tela =====
+  const fixo = $('#fixo'), hc = $('#heroCta'), of = $('#oferta'); let passou = false, vendo = false;
+  const atualiza = () => fixo.classList.toggle('on', passou && !vendo);
+  try {
+    new IntersectionObserver(es => es.forEach(e => { passou = !e.isIntersecting && e.boundingClientRect.top < 0; atualiza(); })).observe(hc);
+    new IntersectionObserver(es => es.forEach(e => { vendo = e.isIntersecting; atualiza(); })).observe(of);
+  } catch {}
 '''
 
 # eventos de intenção de compra (mesmo banco/visitante da página de upsell): mood_pagina_viu · mood_compra_clique
@@ -250,21 +285,21 @@ v_js = js_eventos('whatsapp') + '''  // ===== link do disparo (basefl.com/v/?t=C
   }
 '''
 v_corpo = '\n\n'.join([
-    hero('Uma ferramenta nova, feita por mim',
+    hero_venda('Uma ferramenta nova, feita por mim',
          'Criei uma ferramenta para acertar a cor dos seus vídeos.',
          'Você mostra um vídeo com a cor que gosta, mostra o seu, e o Mood cria a LUT pronta para o seu editor.',
-         oferta_pub('Garanta seu acesso', 'Quero facilitar minhas edições', V_HREF)),
+         'Quero facilitar minhas edições'),
     sec_dores('Você grava, edita… e trava na cor.', [
         'Mexe em contraste, saturação e temperatura, e a imagem fica diferente, não melhor.',
         'Vê um vídeo com uma cor linda e não faz ideia de como chegar nela.',
         'Perde meia hora num ajuste que no fim nem ficou bom.'],
         'Foi pra isso que eu fiz o Mood: <em>você mostra a cor que quer</em>, ele faz a parte técnica.'),
-    SEC_CMP, SEC_FLX, sec_bens(), sec_quem(), sec_esperar(),
-    sec_leva(LEVA, 'Quero meu Mood', V_HREF), SEC_GAR, sec_faq(FAQ_PUB)])
+    SEC_FLX, sec_bens(), sec_quem(), sec_esperar(), sec_faq(FAQ_PUB),
+    sec_leva(LEVA, 'Garantir meu acesso', V_HREF), SEC_GAR])
 v = pagina('Mood · Base FL', 'Uma ferramenta para acertar a cor do seu vídeo usando outro vídeo como referência.',
     '<meta property="og:title" content="Mood · Base FL">\n<meta property="og:description" content="Cor bonita no seu vídeo, sem saber color grade.">\n<meta property="og:image" content="https://basefl.com/lut/demo/og-mood.jpg">',
     v_corpo, 'Sua próxima edição já pode sair com a cor que você gosta.', 'Mood por R$ 79, ou 12x de R$ 8,12. Com 7 dias de garantia.',
-    'Garantir meu acesso', V_HREF, v_js, 'Quero meu Mood')
+    'Garantir meu acesso', V_HREF, v_js, 'Quero meu Mood', venda=True)
 (R / 'v/index.html').write_text(v, encoding='utf-8')
 
 # ================= Bio do Instagram =================
@@ -274,21 +309,21 @@ b_js = js_eventos('bio') + '''  // ?de= (bio-instagram, app, site…) vira utm_m
   if (de && /^[a-z0-9-]{2,40}$/i.test(de)) document.querySelectorAll('[data-compra]').forEach(a => { const u = new URL(a.href); u.searchParams.set('utm_medium', de); u.searchParams.set('src', 'basefl-' + de); a.href = u.toString(); });
 '''
 b_corpo = '\n\n'.join([
-    hero('Colorização por referência',
+    hero_venda('Colorização por referência',
          'Cor bonita no seu vídeo, sem precisar saber color grade.',
          'Escolha um vídeo ou uma foto com a cor que você gosta. O Mood usa essa referência para criar a LUT do seu vídeo.',
-         oferta_pub('Garanta seu acesso', 'Quero meu Mood', B_HREF)),
+         'Quero meu Mood'),
     sec_dores('Você grava, edita… e trava na cor.', [
         'Mexe em contraste, saturação e temperatura, e a imagem fica diferente, não melhor.',
         'Salva referências no Instagram e no Pinterest, mas não consegue levar aquilo para o seu vídeo.',
         'Perde meia hora num ajuste que no fim nem ficou bom.'],
         'O Mood troca o ajuste no escuro por uma referência: <em>você mostra a cor que quer</em>, ele faz a parte técnica.'),
-    SEC_CMP, SEC_FLX, sec_bens(), sec_quem(), sec_esperar(),
-    sec_leva(LEVA, 'Quero meu Mood', B_HREF), SEC_GAR, sec_faq(FAQ_PUB)])
+    SEC_FLX, sec_bens(), sec_quem(), sec_esperar(), sec_faq(FAQ_PUB),
+    sec_leva(LEVA, 'Garantir meu acesso', B_HREF), SEC_GAR])
 b = pagina('Mood — cor bonita no seu vídeo, sem saber color grade · Base FL', 'Use um vídeo ou foto como referência e crie a LUT do seu vídeo. Para CapCut no computador, Premiere, DaVinci e Final Cut.',
     '<meta property="og:title" content="Mood · Base FL">\n<meta property="og:description" content="Cor bonita no seu vídeo, sem precisar saber color grade.">\n<meta property="og:image" content="https://basefl.com/lut/demo/og-mood.jpg">',
     b_corpo, 'Sua próxima edição já pode sair com a cor que você gosta.', 'Mood por R$ 79, ou 12x de R$ 8,12. Com 7 dias de garantia.',
-    'Garantir meu acesso', B_HREF, b_js, 'Quero meu Mood')
+    'Garantir meu acesso', B_HREF, b_js, 'Quero meu Mood', venda=True)
 b = b.replace('<meta name="robots" content="noindex, nofollow">\n', '')
 (R / 'conheca/mood/index.html').write_text(b, encoding='utf-8')
 
@@ -296,20 +331,21 @@ b = b.replace('<meta name="robots" content="noindex, nofollow">\n', '')
 u = base
 def tr(a, c, n=1):
     global u
+    if a not in u and c in u: return          # já aplicado (gerador roda de novo sobre a página pronta)
     if u.count(a) != n: sys.exit(f'upsell: âncora {u.count(a)}x: {a[:90]!r}')
     u = u.replace(a, c)
 h1 = re.search(r'(<section class="topo w">.*?<h1>)(.*?)(</h1>\s*<p class="sub">)(.*?)(</p>)', u, re.S)
 u = u[:h1.start(2)] + 'Facilitou os títulos. Agora facilite a cor.' + u[h1.end(2):h1.start(4)] + 'Com o Mood você usa um vídeo com a cor que gosta como referência e aplica no seu. Sem mexer em curva, roda de cor ou temperatura.' + u[h1.end(4):]
 tr('onclick="startLoading(this)">Sim, quero o Mood</button>', 'onclick="startLoading(this)">Sim, quero meu Mood</button>')
-if '/* ===== seções de venda' not in u: u = u.replace('</style>', CSS + '</style>', 1)
+u = poe_css(u)
 # seções do meio: depois do "Como funciona", benefícios + pra quem é + o que esperar (no lugar do bloco "O que você leva / Pra quem é")
-duas = entre(u, '<section class="sec w">\n  <div class="duas">', '</section>')
+duas = entre(u, '<section class="sec w">\n  <div class="duas">', '</section>') if '<section class="sec w">\n  <div class="duas">' in u else None
 leva_up = '''<section class="sec w">
   <div class="cx leva"><h3>O que você leva</h3>
     <ul class="lista">''' + ''.join(f'<li class="s">{OK}{x}</li>' for x in ['LUTs ilimitadas durante 1 ano', 'CapCut do computador, Premiere, DaVinci e Final Cut', 'Vídeo normal ou em Log', 'Pele protegida e ajuste de intensidade', 'Liberado na mesma conta Base FL dos Títulos']) + '''</ul>
   </div>
 </section>'''
-u = u.replace(duas, '\n\n'.join([sec_bens(), sec_quem(), sec_esperar(), leva_up]))
+if duas: u = u.replace(duas, '\n\n'.join([sec_bens(), sec_quem(), sec_esperar(), leva_up]))
 u = u.replace('Teste por 7 dias. Risco zero.', 'Use por 7 dias. Risco zero.')
 (R / 'oferta/mood/index.html').write_text(u, encoding='utf-8')
 print('ok')
