@@ -61,7 +61,7 @@ header .sp{flex:1}
 
 /* ---------- quadro ---------- */
 .board{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 18px 120px;max-width:1400px;margin:0 auto;scrollbar-width:thin;scrollbar-color:#2c332e transparent}
-.col{flex:0 0 min(84vw,300px);scroll-snap-align:start;background:rgba(21,24,22,.6);border:1px solid var(--line);border-radius:18px;display:flex;flex-direction:column;max-height:calc(100vh - 480px);min-height:220px;transition:border-color .15s,background .15s}
+.col{flex:0 0 min(84vw,300px);scroll-snap-align:start;background:rgba(21,24,22,.6);border:1px solid var(--line);border-radius:18px;display:flex;flex-direction:column;max-height:calc(100vh - 260px);min-height:220px;transition:border-color .15s,background .15s}
 .col.alvo{border-color:var(--cor);background:color-mix(in srgb,var(--cor) 8%,rgba(21,24,22,.6))}
 .ch{display:flex;align-items:baseline;gap:8px;padding:12px 14px 10px;border-bottom:1px solid var(--line);position:relative}
 .ch::before{content:"";position:absolute;left:14px;right:14px;top:0;height:3px;border-radius:0 0 3px 3px;background:var(--cor)}
@@ -89,7 +89,7 @@ header .sp{flex:1}
 .av{position:absolute;right:8px;top:8px;width:30px;height:30px;border-radius:10px;border:1px solid var(--line);background:var(--bg);display:grid;place-items:center;cursor:pointer;color:var(--mute);font-size:15px;transition:all .15s}
 .av:hover{color:var(--ink);border-color:var(--cor);background:color-mix(in srgb,var(--cor) 20%,var(--bg))}
 .voa{position:fixed;z-index:40;pointer-events:none;box-shadow:0 18px 40px rgba(0,0,0,.5);transform:rotate(2deg)}
-.fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:20;display:flex;align-items:center;gap:8px;cursor:pointer;background:var(--accent);color:var(--accent-ink);border:0;border-radius:18px;padding:15px 20px;font-weight:800;font-size:15.5px;box-shadow:0 12px 30px rgba(242,165,65,.28)}
+.fab{display:flex;align-items:center;gap:8px;cursor:pointer;background:var(--accent);color:var(--accent-ink);border:0;border-radius:18px;padding:13px 18px;font-weight:800;font-size:15px;box-shadow:0 12px 30px rgba(242,165,65,.28);white-space:nowrap}
 .fab:active{transform:scale(.97)}
 
 /* ---------- folha (detalhes / nova) ---------- */
@@ -125,7 +125,8 @@ textarea{min-height:70px;resize:vertical}
 .revctl .revs i{width:10px;height:10px}
 .revctl span{flex:1;font-size:14px}
 .revctl button{cursor:pointer;width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-size:18px;font-weight:700}
-.tabs{display:inline-flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:14px}
+.tabsRow{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.tabs{display:inline-flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px}
 .tab{cursor:pointer;border:0;background:transparent;color:var(--mute);font-weight:750;font-size:14px;border-radius:10px;padding:9px 16px}
 .tab.on{background:var(--ink);color:var(--bg)}
 .ferr{max-width:1400px;margin:0 auto;padding:0 18px 120px}
@@ -152,8 +153,8 @@ textarea{min-height:70px;resize:vertical}
 .hide{display:none!important}
 @media (min-width:900px){
   .board{scroll-snap-type:none}
-  .board{gap:10px;padding-bottom:24px}
-  .col{flex:1 1 0;min-width:190px;max-height:calc(100vh - 480px)}
+  .board{gap:10px}
+  .col{flex:1 1 0;min-width:190px;max-height:calc(100vh - 230px)}
   .folha{bottom:auto;top:50%;border-radius:24px;border-bottom:1px solid var(--line);transform:translate(0,-46%) scale(.97);opacity:0;pointer-events:none;transition:all .22s}
   .folha.on{transform:translate(0,-50%);opacity:1;pointer-events:auto}
   .folha .pega{display:none}
@@ -196,13 +197,15 @@ textarea{min-height:70px;resize:vertical}
     <button class="link" id="conta"></button>
   </header>
   <div class="aviso" id="aviso"><span id="avisoTx"></span><button id="avisoBt"></button></div>
-  <div class="tabs" role="tablist"><button class="tab" data-aba="trab" role="tab">Trabalhos</button><button class="tab" data-aba="ferr" role="tab">Custos fixos</button></div>
+  <div class="tabsRow">
+    <div class="tabs" role="tablist"><button class="tab" data-aba="trab" role="tab">Trabalhos</button><button class="tab" data-aba="ferr" role="tab">Custos fixos</button></div>
+    <button class="fab hide" id="fab">＋ Nova demanda</button>
+  </div>
   <div class="mes" id="mes"></div>
 </div>
 <div class="filtro" id="filtro"></div>
 <div class="board" id="board"></div>
 <div class="ferr hide" id="ferr"></div>
-<button class="fab hide" id="fab">＋ Nova demanda</button>
 <div class="veu" id="veu"></div>
 <div class="folha" id="folha"></div>
 <div class="toast" id="toast"></div>
