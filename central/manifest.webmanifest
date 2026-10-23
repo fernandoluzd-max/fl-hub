@@ -1,0 +1,16 @@
+{
+  "name": "Central Base FL",
+  "short_name": "Base FL",
+  "description": "Central de acompanhamento comercial do WhatsApp — Base FL",
+  "start_url": "/central/",
+  "scope": "/central/",
+  "display": "standalone",
+  "background_color": "#0D0F0E",
+  "theme_color": "#0D0F0E",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "icones/android-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icones/android-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icones/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

@@ -1,0 +1,15 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Central Base FL">
+  <rect width="512" height="512" rx="96" fill="#0D0F0E"/>
+  <!-- monograma FL: formas geométricas (não depende de fonte) -->
+  <g fill="#F2A541">
+    <!-- F -->
+    <rect x="124" y="113" width="48" height="286"/>
+    <rect x="124" y="113" width="120" height="48"/>
+    <rect x="124" y="232" width="96" height="48"/>
+    <!-- L -->
+    <rect x="268" y="113" width="48" height="286"/>
+    <rect x="268" y="351" width="120" height="48"/>
+  </g>
+  <!-- marca de "ao vivo" -->
+  <circle cx="398" cy="358" r="26" fill="#7fce8f"/>
+</svg>
