@@ -517,7 +517,7 @@
     const tela = iniciarTela(app, cliente, "referencias");
     tela.appendChild(
       h("div", { class: "tela-cabeca" }, [
-        h("div", {}, [h("h1", {}, "Referências de " + cliente.nome), h("p", { class: "sub" }, "Envie o logo e algumas fotos/prints do cliente. A gente lê as cores direto dessas imagens, no seu navegador — nada sai daqui.")]),
+        h("div", {}, [h("h1", {}, "Referências de " + cliente.nome), h("p", { class: "sub" }, "Envie o logo e prints do que o cliente JÁ publica — o feed do Instagram dele é o melhor material. Quanto mais fiel ao que ele já posta, mais fiel fica a direção de estilo. A gente lê as cores direto dessas imagens, no seu navegador — nada sai daqui.")]),
       ])
     );
 
@@ -560,7 +560,8 @@
 
       // --- imagens ---
       const blocoImgs = h("div", { class: "cartao espaco-topo" });
-      blocoImgs.appendChild(h("h3", { style: { marginBottom: "12px" } }, "Fotos ou prints (até 5)"));
+      blocoImgs.appendChild(h("h3", { style: { marginBottom: "6px" } }, "Prints do Instagram do cliente (até 5)"));
+      blocoImgs.appendChild(h("p", { class: "texto-apagado", style: { marginBottom: "12px" } }, "O ideal: print do feed/grid, de um story destacado ou de uma foto que já represente a marca. Evite referência genérica de concorrente — o objetivo é ler o que o cliente JÁ é, não inventar algo novo."));
       const miniaturasImgs = h("div", { class: "miniaturas" });
       cliente.referencias.imagensBlobs.forEach((blob, idx) => {
         const url = URL.createObjectURL(blob);
