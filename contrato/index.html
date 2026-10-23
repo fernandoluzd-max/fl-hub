@@ -65,6 +65,7 @@ textarea{min-height:88px;resize:vertical;line-height:1.4}
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;cursor:pointer;font-weight:750;font-size:16px;border-radius:16px;padding:16px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);margin-top:18px;transition:transform .12s,filter .15s;text-decoration:none}
 .btn:active{transform:scale(.98)}.btn:hover{filter:brightness(1.06)}
 .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.perigo{background:transparent;color:#ff8f7a;border-color:rgba(255,143,122,.35)}
 .row{display:flex;gap:10px}.row .btn{flex:1}
 .err{color:#ff8f7a;font-size:14px;min-height:20px;margin-top:8px}
 .assinar{background:var(--panel);border:1px solid var(--accent);border-radius:18px;padding:18px 16px;margin-bottom:10px}
@@ -548,7 +549,8 @@ function enviado(novo){
     ${aceito ? '' : '<div class="row"><button class="btn zap" id="mandar" style="margin-top:8px">Mandar no WhatsApp</button></div>'}
     <div class="row"><button class="btn ghost" id="cop">Copiar link</button><button class="btn ghost" id="ver">${aceito ? 'Abrir o contrato assinado' : 'Ver como o cliente vê'}</button></div>
     <div id="prox"></div>
-    <div class="row">${aceito ? '' : '<button class="btn ghost" id="refazer">Mudar o contrato</button>'}<button class="btn ghost" id="novo">Novo contrato</button></div>`);
+    <div class="row">${aceito ? '' : '<button class="btn ghost" id="refazer">Mudar o contrato</button>'}<button class="btn ghost" id="novo">Novo contrato</button></div>
+    ${aceito ? '' : '<button class="btn perigo" id="excluir">Apagar este contrato</button>'}`);
   if (Base.tem('fl-painel')){
     const f = document.createElement('div'); f.className = 'feito';
     f.innerHTML = t.demanda_feita ? `<span>✓</span><span><b>Já está no seu Base Demandas</b>${aceito ? ', em “Fechado”' : ''}. Prazo, revisões e pagamento ficam lá. <a href="/painel/">Abrir</a></span>` : `<span>→</span><span><b>Organizar este trabalho.</b> <a href="#" id="org">Pôr no Base Demandas</a></span>`;
@@ -564,6 +566,13 @@ function enviado(novo){
     window.open('https://api.whatsapp.com/send?' + (tel ? 'phone=' + tel + '&' : '') + 'text=' + encodeURIComponent(msg), '_blank');
   };
   if ($('#refazer')) $('#refazer').onclick = () => { $('#dock').classList.remove('hide'); doContratoSalvo(t); passo = PASSOS.length; monta(false); };
+  if ($('#excluir')) $('#excluir').onclick = async e => {
+    const b = e.currentTarget;
+    if (!b._conf){ b._conf = true; b.textContent = 'Toque de novo para apagar'; setTimeout(() => { b._conf = false; b.textContent = 'Apagar este contrato'; }, 3000); return; }
+    b.disabled = true; b.textContent = 'Apagando…';
+    try { await Base.rpc('trabalho_marcar', { p_id:t.id, p_acao:'apagar' }); await Base.carrega(true); toast('Contrato apagado'); novoContrato(); }
+    catch(err){ toast(Base.traduz(err.message)); b.disabled = false; b._conf = false; b.textContent = 'Apagar este contrato'; }
+  };
 }
 function doContratoSalvo(t){
   const c = t.contrato || {}, r = c.resumo || {};
