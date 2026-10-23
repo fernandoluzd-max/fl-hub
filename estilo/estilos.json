@@ -221,7 +221,7 @@
       "nome": "Natural",
       "resumo": "Sem filtro, sem pressa: a credibilidade vem de parecer verdadeiro.",
       "personalidade": { "sobrioVibrante": -0.3, "classicoModerno": -0.2, "serioLeve": 0.3 },
-      "nichosRecomendados": ["saúde", "gastronomia", "educação", "beleza"],
+      "nichosRecomendados": ["saúde", "gastronomia", "educação", "beleza", "imobiliário"],
       "nichosEvitar": ["moda"],
       "paleta": {
         "fundo":    { "saturacaoMin": 5,  "saturacaoMax": 18, "luminosidadeMin": 12, "luminosidadeMax": 22 },
