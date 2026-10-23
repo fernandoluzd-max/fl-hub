@@ -148,14 +148,18 @@ textarea{min-height:88px;resize:vertical;line-height:1.4}
   .wrap{max-width:none;padding:0}.papel{box-shadow:none;border-radius:0;padding:0;background:#fff;font-size:11.5pt}
   .papel .cl{filter:none!important;opacity:1!important;transform:none!important}
 }
-.rec{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:8px;transition:border-color .15s}
+.rec{display:flex;align-items:center;gap:8px;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:8px;transition:border-color .15s}
 .rec:hover{border-color:#3a443c}
+.rec .abrir{display:flex;align-items:center;gap:12px;flex:1;min-width:0;text-align:left;cursor:pointer;background:none;border:0;padding:0;margin:0;font:inherit;color:inherit}
 .rec .tx{flex:1;min-width:0}
 .rec b{display:block;font-size:15.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rec small{display:block;color:var(--mute);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rec .st{flex:none;font-size:11.5px;font-weight:750;border-radius:8px;padding:3px 8px;border:1px solid var(--line);color:var(--mute);white-space:nowrap}
 .rec .st.ok{color:#0c1a10;background:#7fce8f;border-color:#7fce8f}
 .rec .st.at{color:var(--accent-ink);background:var(--accent);border-color:var(--accent)}
+.rec .del{flex:none;width:32px;height:32px;border-radius:10px;border:1px solid var(--line);background:var(--bg);display:grid;place-items:center;cursor:pointer;color:var(--mute);font-size:14px;padding:0;transition:all .15s}
+.rec .del:hover{color:#ff8f7a;border-color:rgba(255,143,122,.5)}
+.rec .del.confirma{width:auto;padding:0 10px;color:#ff8f7a;border-color:rgba(255,143,122,.5);background:rgba(255,143,122,.12);font-size:12.5px;font-weight:750}
 .esp{margin-top:22px}.esp h2{margin:0 0 8px;font-size:14px;color:var(--mute);font-weight:700}
 .linkbox{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px dashed rgba(242,165,65,.5);border-radius:14px;padding:12px 14px;margin:14px 0 4px;font-size:14px;overflow:hidden}
 .linkbox code{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:13px/1.4 ui-monospace,Menlo,monospace;color:var(--ink)}
@@ -311,8 +315,9 @@ function mostra(){
     if (!TRAB && acesso && Base.eu.jornada){
       const apr = Base.eu.trabalhos.filter(t => t.proposta_status === 'aprovada' && !t.contrato_status).slice(0, 4);
       const env = Base.eu.trabalhos.filter(t => t.contrato_status).slice(0, 4);
-      if (apr.length) listas += `<div class="esp"><h2>Aprovados, falta o contrato</h2>${apr.map(t => `<button class="rec" data-t="${t.id}"><span class="tx"><b>${esc(t.cliente?.nome || 'Cliente')}</b><small>${Base.brl(t.valor)} · aprovou ${esc(quandoCurto(t.atualizado_em))}</small></span><span class="st at">Gerar</span></button>`).join('')}</div>`;
-      if (env.length) listas += `<div class="esp"><h2>Contratos enviados</h2>${env.map(t => `<button class="rec" data-t="${t.id}"><span class="tx"><b>${esc(t.cliente?.nome || 'Cliente')}</b><small>${t.valor ? Base.brl(t.valor) + ' · ' : ''}${esc(quandoCurto(t.contrato_em))}</small></span><span class="st ${t.contrato_status === 'aceito' ? 'ok' : ''}">${t.contrato_status === 'aceito' ? 'Aceito' : 'Aguardando'}</span></button>`).join('')}</div>`;
+      const linhaRec = (t, st) => `<div class="rec"><button class="abrir" data-t="${t.id}"><span class="tx"><b>${esc(t.cliente?.nome || 'Cliente')}</b><small>${st.sub}</small></span></button><span class="st ${st.cls}">${st.txt}</span><button class="del" data-t="${t.id}" title="Apagar" aria-label="Apagar ${esc(t.cliente?.nome || 'este item')}">🗑</button></div>`;
+      if (apr.length) listas += `<div class="esp"><h2>Aprovados, falta o contrato</h2>${apr.map(t => linhaRec(t, { sub:`${Base.brl(t.valor)} · aprovou ${esc(quandoCurto(t.atualizado_em))}`, cls:'at', txt:'Gerar' })).join('')}</div>`;
+      if (env.length) listas += `<div class="esp"><h2>Contratos enviados</h2>${env.map(t => linhaRec(t, { sub:`${t.valor ? Base.brl(t.valor) + ' · ' : ''}${esc(quandoCurto(t.contrato_em))}`, cls: t.contrato_status === 'aceito' ? 'ok' : '', txt: t.contrato_status === 'aceito' ? 'Aceito' : 'Aguardando' })).join('')}</div>`;
     }
     tela((TRAB ? `<div class="para-quem">Contrato para <b>${esc(TRAB.cliente?.nome || 'cliente')}</b><button class="link" id="soltar">fazer outro</button></div>` : '') +
       cab('Que tipo de contrato você precisa?', TRAB ? 'Já trouxe os dados da proposta. É só conferir.' : veioDoOrcamento ? 'Já trouxe os dados do seu último orçamento. É só conferir.' : 'Responda 6 passos rápidos. Seu contrato fica pronto em 2 minutos.') +
@@ -321,7 +326,13 @@ function mostra(){
         <button class="opt" data-v="completo"><span class="ic">📄</span><span><b>Contrato completo</b><small>Documento com 8 cláusulas, também em PDF. Ideal para trabalhos maiores ou empresas.</small></span></button>
       </div>` + listas);
     document.querySelectorAll('.opt').forEach(b => b.onclick = () => { D.formato = b.dataset.v; vibra(8); if (!acesso && !avisouDemo){ avisouDemo = true; Base.evento('demo_started', PACK); } avanca(); });
-    document.querySelectorAll('.rec[data-t]').forEach(b => b.onclick = () => abreTrabalho(b.dataset.t));
+    document.querySelectorAll('.rec .abrir[data-t]').forEach(b => b.onclick = () => abreTrabalho(b.dataset.t));
+    document.querySelectorAll('.rec .del[data-t]').forEach(b => b.onclick = () => {
+      if (!b._conf){ b._conf = true; b.classList.add('confirma'); b.textContent = 'Apagar?'; setTimeout(() => { if (b._conf){ b._conf = false; b.classList.remove('confirma'); b.textContent = '🗑'; } }, 3000); return; }
+      b.disabled = true; b.textContent = '…';
+      Base.rpc('trabalho_marcar', { p_id:b.dataset.t, p_acao:'apagar' }).then(async () => { await Base.carrega(true); toast('Apagado'); mostra(); },
+        err => { toast(Base.traduz(err.message)); b.disabled = false; b._conf = false; b.classList.remove('confirma'); b.textContent = '🗑'; });
+    });
     if ($('#soltar')) $('#soltar').onclick = novoContrato;
   }
   if (p === 'partes'){
@@ -550,7 +561,7 @@ function enviado(novo){
     <div class="row"><button class="btn ghost" id="cop">Copiar link</button><button class="btn ghost" id="ver">${aceito ? 'Abrir o contrato assinado' : 'Ver como o cliente vê'}</button></div>
     <div id="prox"></div>
     <div class="row">${aceito ? '' : '<button class="btn ghost" id="refazer">Mudar o contrato</button>'}<button class="btn ghost" id="novo">Novo contrato</button></div>
-    ${aceito ? '' : '<button class="btn perigo" id="excluir">Apagar este contrato</button>'}`);
+    <button class="btn perigo" id="excluir">Apagar este contrato</button>`);
   if (Base.tem('fl-painel')){
     const f = document.createElement('div'); f.className = 'feito';
     f.innerHTML = t.demanda_feita ? `<span>✓</span><span><b>Já está no seu Base Demandas</b>${aceito ? ', em “Fechado”' : ''}. Prazo, revisões e pagamento ficam lá. <a href="/painel/">Abrir</a></span>` : `<span>→</span><span><b>Organizar este trabalho.</b> <a href="#" id="org">Pôr no Base Demandas</a></span>`;
