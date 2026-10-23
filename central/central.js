@@ -418,10 +418,13 @@
   // ========================================================================
   const Alerts = (() => {
     let ultimaChave = '';
-    function avalia({ kitPausaMotivo, erroConexao }) {
+    function avalia({ kitPausaMotivo, erroConexao, storageFalhou }) {
       const lista = [];
       if (erroConexao) lista.push({ nivel: 'critico', texto: 'Não foi possível atualizar agora. Mostrando as últimas informações disponíveis.' });
       if (kitPausaMotivo) lista.push({ nivel: 'atencao', texto: 'Kit Freelancer pausado: ' + kitPausaMotivo });
+      // fica persistente mesmo depois de uma atualização bem-sucedida — diferente do #erro de
+      // conexão, que é limpo a cada poll que der certo (ver Review Focus do plano, Tarefa 11)
+      if (storageFalhou) lista.push({ nivel: 'info', texto: 'O armazenamento deste navegador não está disponível agora; preferências e metas não serão salvas nesta sessão.' });
       return lista;
     }
     function render(lista) {
@@ -480,7 +483,7 @@
       ultimoDado = [d, iv]; ultimoAnterior = dAnt;
       ultimaAtualizacao = Date.now(); marcaVivo(iv);
       saude(ultimoKitPausado, ultimoKitMotivo);
-      Alerts.render(Alerts.avalia({ kitPausaMotivo: ultimoKitPausado ? ultimoKitMotivo : null, erroConexao: false }));
+      Alerts.render(Alerts.avalia({ kitPausaMotivo: ultimoKitPausado ? ultimoKitMotivo : null, erroConexao: false, storageFalhou: Prefs.falhouArmazenamento() }));
       ultimaAtividade = mesclaAtividade(d.recentes, ultimoPerfisFeed, ultimoKitLista, ultimoKitPausado ? ultimoKitMotivo : null);
       atividadeRender(ultimaAtividade);
     } catch (e) {
@@ -491,7 +494,7 @@
       $('erro').hidden = false; $('erro').textContent = 'Não consegui atualizar agora (' + e.message + '). Tento de novo em 15 segundos.';
       $('vivoTx').textContent = 'Sem conexão';
       saude(ultimoKitPausado, ultimoKitMotivo);
-      Alerts.render(Alerts.avalia({ kitPausaMotivo: ultimoKitPausado ? ultimoKitMotivo : null, erroConexao: true }));
+      Alerts.render(Alerts.avalia({ kitPausaMotivo: ultimoKitPausado ? ultimoKitMotivo : null, erroConexao: true, storageFalhou: Prefs.falhouArmazenamento() }));
     } finally { ocupadoVisao = false; }
   }
   let sequenciaCarregada = false;
@@ -614,7 +617,6 @@
     $('custom').classList.toggle('on', state.periodo === 'custom');
     if (p0.de) $('de').value = p0.de; if (p0.ate) $('ate').value = p0.ate;
     $('testes').checked = state.testes;
-    if (Prefs.falhouArmazenamento()) { $('erro').hidden = false; $('erro').textContent = 'O armazenamento deste navegador não está disponível agora; preferências e metas não serão salvas nesta sessão.'; }
   })();
 
   if (Base.sessao()) abre(); else mostraPorta();
