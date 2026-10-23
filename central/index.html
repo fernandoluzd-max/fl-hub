@@ -122,6 +122,17 @@ tr:last-child td{border-bottom:0}
 .pf-acoes .bt{padding:9px 14px;font-size:13.5px}
 .pf-acoes span{color:var(--mute);font-size:12.5px}
 @media (max-width:640px){.pf-seg,.pf-cols{grid-template-columns:1fr}}
+.grade-meio{grid-template-columns:1fr 1fr}
+.kit-st{font-size:13px;color:var(--mute);margin:-4px 0 12px}.kit-st b{color:var(--ink)}.kit-st .off{color:var(--nada)}
+.kit-n{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.kit-n div{background:var(--panel2);border-radius:12px;padding:9px 11px}
+.kit-n b{display:block;font-size:22px;font-weight:800;font-stretch:112%;line-height:1.15}
+.kit-n small{color:var(--mute);font-size:12px}
+.pf-chip{display:inline-block;font-size:11.5px;font-weight:700;border-radius:999px;padding:1px 8px;margin-right:4px;vertical-align:1px}
+.pf-chip.quente{background:rgba(242,165,65,.18);color:var(--compra)}.pf-chip.morno{background:rgba(143,184,255,.16);color:var(--abriu)}.pf-chip.frio{background:var(--panel2);color:var(--mute)}
+.ok{color:var(--teste);font-weight:700}
+@media (max-width:980px){.grade-meio{grid-template-columns:1fr}}
+@media (max-width:640px){.kit-n{grid-template-columns:1fr 1fr}}
 .bt:disabled{opacity:.4;cursor:default}
 [hidden]{display:none!important}
 
@@ -204,6 +215,19 @@ tr:last-child td{border-bottom:0}
       </section>
     </div>
 
+    <div class="grade grade-meio">
+      <section class="bloco">
+        <h2>Respostas do perfil, ao vivo</h2>
+        <ul class="feed" id="pfFeed"></ul>
+      </section>
+      <section class="bloco">
+        <h2>Kit Freelancer · disparo automático</h2>
+        <p class="kit-st" id="kitSt"></p>
+        <div class="kit-n" id="kitN"></div>
+        <div class="tab" id="kitLista"></div>
+      </section>
+    </div>
+
     <section class="bloco" id="perfis" style="margin-bottom:14px">
       <h2>Perfis dos alunos</h2>
       <p class="pico" id="pfResumo" style="margin:-4px 0 12px"></p>
@@ -213,7 +237,7 @@ tr:last-child td{border-bottom:0}
       <div class="tab" id="pfLista"></div>
     </section>
 
-    <p class="nota">Tudo aqui vem dos acessos reais. "Abriu" conta quando a página do link carrega; "Clicaram para comprar" conta o clique que leva ao checkout (intenção de compra); "Sem clicar" é quem abriu e não clicou para comprar no período. Desde 21/10 à noite a página não tem mais teste grátis. Pessoas são contadas uma vez por período, mesmo que abram várias vezes. Compra = venda do Mood paga na Greenn, com o mesmo e-mail, depois do clique. "Tocaram no botão" conta quem tocou em "Quero conhecer" (mensagem nova, desde 22/10) ou em "Manda o áudio" (mensagem antiga, desde 21/10 às 20h). Atualiza sozinho a cada 15 segundos. Perfis dos alunos: respostas das 3 perguntas do primeiro acesso ao app Base FL (computador e site). Quente = atende clientes ou agência e quer ajuda para cobrar ou organizar; morno = atende clientes, agência ou está aprendendo; frio = edita para as próprias redes. Telefone e produtos vêm das compras na Greenn com o mesmo e-mail; "saiu" marca quem pediu para não receber WhatsApp.</p>
+    <p class="nota">Tudo aqui vem dos acessos reais. "Abriu" conta quando a página do link carrega; "Clicaram para comprar" conta o clique que leva ao checkout (intenção de compra); "Sem clicar" é quem abriu e não clicou para comprar no período. Desde 21/10 à noite a página não tem mais teste grátis. Pessoas são contadas uma vez por período, mesmo que abram várias vezes. Compra = venda do Mood paga na Greenn, com o mesmo e-mail, depois do clique. "Tocaram no botão" conta quem tocou em "Quero conhecer" (mensagem nova, desde 22/10) ou em "Manda o áudio" (mensagem antiga, desde 21/10 às 20h). Atualiza sozinho a cada 15 segundos. Perfis dos alunos: respostas das 3 perguntas do primeiro acesso ao app Base FL (computador e site). Quente = atende clientes ou agência e quer ajuda para cobrar ou organizar; morno = atende clientes, agência ou está aprendendo; frio = edita para as próprias redes. Telefone e produtos vêm das compras na Greenn com o mesmo e-mail; "saiu" marca quem pediu para não receber WhatsApp. Kit Freelancer: só alunos reais (testes ficam de fora); "Quero ver" é o toque no botão da mensagem, "Abriu" é a página do Kit carregada pelo link, "Comprou" é venda do Kit paga na Greenn com o mesmo e-mail depois do envio.</p>
   </main>
 </div>
 
@@ -443,8 +467,36 @@ tr:last-child td{border-bottom:0}
     $('pfLista').innerHTML = L.length ? `<table><thead><tr><th>E-mail</th><th>Telefone</th><th>Edita para</th><th>Editor</th><th>Quer ajuda com</th><th>Já comprou</th><th>Kit</th><th>Respondeu</th></tr></thead><tbody>${L.map(l => `<tr><td class="cn">${esc(l.email)}${l.saiu_whatsapp ? ' <small style="color:var(--nada)">saiu</small>' : ''}</td><td>${esc(l.telefone || '—')}</td><td>${esc(PF.quem[l.quem] || l.quem || '')}</td><td>${esc(PF.editor[l.editor] || l.editor || '')}</td><td>${esc(pfNome(PF.ajuda, l.ajuda))}</td><td style="white-space:normal;max-width:240px">${esc(l.produtos || '—')}</td><td>${l.tem_kit ? 'Sim' : '—'}</td><td>${esc(new Date(new Date(l.respondido_em).getTime() + SP).toISOString().slice(0, 10).split('-').reverse().join('/'))}</td></tr>`).join('')}</tbody></table>`
       : '<p class="vazio">Ninguém nesta lista ainda. As respostas aparecem aqui assim que os alunos abrirem o app.</p>';
   }
+
+  // ---------- respostas ao vivo + disparo do Kit ----------
+  const quando = iso => { if (!iso) return ''; const t = new Date(Date.parse(iso) + SP).toISOString(), dia = t.slice(0, 10), h = t.slice(11, 16); return dia === diaSP() ? h : `${dia.slice(8, 10)}/${dia.slice(5, 7)} ${h}`; };
+  let pfVistos = null;
+  function avisaResposta(r) {
+    let el = document.getElementById('venda'); if (!el) { el = document.createElement('div'); el.id = 'venda'; el.className = 'venda'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
+    el.textContent = `Nova resposta: ${r.nome || 'aluno'} · ${PF.seg[r.segmento] ? PF.seg[r.segmento][0].replace(/s$/, '') : ''}`; el.classList.add('on'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('on'), 8000);
+  }
+  function pfFeed(d) {
+    const F = d.feed || [], chave = r => r.t + '|' + r.email + '|' + r.em, primeira = pfVistos == null;
+    const novos = primeira ? new Set() : new Set(F.filter(r => !pfVistos.has(chave(r))).map(chave));
+    pfVistos = new Set(F.map(chave));
+    if (!primeira) { const r = F.find(x => novos.has(chave(x)) && x.t === 'respondeu'); if (r) avisaResposta(r); }
+    $('pfFeed').innerHTML = F.length ? F.map(r => `<li class="${novos.has(chave(r)) ? 'novo' : ''}"><time>${quando(r.em)}</time><span><span class="q">${esc(r.nome || 'Aluno')}</span> ${r.t === 'respondeu'
+      ? `respondeu ${r.app === 'web' ? 'no site' : 'no app'}<span class="c"><span class="pf-chip ${esc(r.segmento)}">${esc(PF.seg[r.segmento] ? PF.seg[r.segmento][0].replace(/s$/, '') : '')}</span>${esc(PF.quem[r.quem] || '')} · ${esc(PF.editor[r.editor] || '')} · ${esc(pfNome(PF.ajuda, r.ajuda))}</span>`
+      : `deixou para depois<span class="c">volta a ver as perguntas em 12 horas</span>`}</span></li>`).join('')
+      : '<li><span></span><span class="vazio" style="padding:10px 0">Ainda sem respostas.</span></li>';
+  }
+  const KST = { reservado: 'Enviando', enviado: 'Enviada', entregue: 'Entregue', lido: 'Lida', falhou: 'Falhou' };
+  function kitDesenha(d) {
+    const k = d.kit; if (!k) return;
+    $('kitSt').innerHTML = k.ligado ? '<b>Ligado.</b> Quem responde como quente recebe a mensagem 24 horas depois, das 8h às 22h.' : `<span class="off"><b>Pausado.</b> ${esc(k.pausa_motivo || 'Envio desligado.')}</span>`;
+    const it = [['Na fila', k.na_fila], ['Enviadas', k.enviados], ['Entregues', k.entregues], ['Lidas', k.lidos], ['Tocaram em Quero ver', k.tocaram], ['Abriram a página', k.abriram], ['Compraram', k.compraram], ['Pediram para sair', k.sairam]];
+    $('kitN').innerHTML = it.map(([t, v]) => `<div><b>${n(v)}</b><small>${t}</small></div>`).join('');
+    const L = k.lista || [], si = b => b ? '<span class="ok">✓</span>' : '—';
+    $('kitLista').innerHTML = L.length ? `<table style="min-width:440px"><thead><tr><th>Aluno</th><th>Situação</th><th>Quero ver</th><th>Abriu</th><th>Comprou</th></tr></thead><tbody>${L.map(r => `<tr><td class="cn">${esc(r.nome || r.email)}${r.saiu ? ' <small style="color:var(--nada)">saiu</small>' : ''}</td><td>${r.envio ? esc(KST[r.envio] || r.envio) + ' · ' + quando(r.enviado_em) : 'Na fila · envia ' + quando(r.envia_em)}</td><td>${si(r.tocou)}</td><td>${si(r.abriu)}</td><td>${si(r.comprou)}</td></tr>`).join('')}</tbody></table>`
+      : '<p class="vazio">Ninguém na fila ainda.</p>';
+  }
   async function carregaPerfis() {
-    try { pfDados = await Base.rpc('central_perfis', {}); pfDesenha(); }
+    try { pfDados = await Base.rpc('central_perfis', {}); pfDesenha(); pfFeed(pfDados); kitDesenha(pfDados); }
     catch (e) { $('pfResumo').textContent = 'Não consegui carregar os perfis agora (' + e.message + ').'; }
   }
   $('pfCsv').onclick = () => {
@@ -456,7 +508,7 @@ tr:last-child td{border-bottom:0}
     a.href = URL.createObjectURL(new Blob(['\ufeff' + linhas.join('\r\n')], { type: 'text/csv;charset=utf-8' }));
     a.download = `alunos-${pfSel}-${diaSP()}.csv`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   };
-  setInterval(() => { if (!document.hidden && !$('app').hidden) carregaPerfis(); }, 60000);
+  setInterval(() => { if (!document.hidden && !$('app').hidden) carregaPerfis(); }, 15000);
 
   // ---------- acesso ----------
   function mostraPorta(msg) { $('app').hidden = true; $('porta').hidden = false; if (msg) $('portaTx').textContent = msg; clearInterval(timer); }
