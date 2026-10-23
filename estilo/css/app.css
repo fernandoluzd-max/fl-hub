@@ -41,7 +41,7 @@ img,video,canvas{display:block;max-width:100%}
 
 /* ---------- layout geral ---------- */
 #app{min-height:100vh;display:flex;flex-direction:column}
-.topbar{display:flex;align-items:center;gap:16px;padding:16px var(--lado);border-bottom:1px solid var(--linha);background:var(--fundo2);flex-wrap:wrap}
+.topbar{display:flex;align-items:center;gap:16px;padding:16px var(--lado);border-bottom:1px solid var(--linha);background:var(--fundo2);flex-wrap:wrap;position:sticky;top:0;z-index:50}
 .topbar .marca{font-family:var(--d);font-weight:800;font-stretch:112%;font-size:17px;display:flex;align-items:center;gap:8px}
 .topbar .marca .ponto{width:9px;height:9px;border-radius:50%;background:var(--ambar)}
 .topbar nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}

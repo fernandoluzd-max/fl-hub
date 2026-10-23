@@ -1098,6 +1098,10 @@
         cliente.versoes.length >= 1 ? h("button", { class: "botao pequeno", onclick: () => { mostrarComparacao = !mostrarComparacao; montar(); } }, mostrarComparacao ? "Fechar comparação" : "Comparar versões") : null,
       ]));
 
+      palco.appendChild(
+        h("div", { class: "espaco-topo" }, h("a", { href: "#/motion/" + cliente.id, class: "botao primario" }, "Tudo certo — ver o motion →"))
+      );
+
       if (mostrarComparacao) {
         palco.appendChild(await montarComparacao());
       }
