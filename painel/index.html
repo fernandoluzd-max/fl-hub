@@ -69,7 +69,7 @@ header .sp{flex:1}
 .ch .n{color:var(--mute);font-size:12.5px;font-variant-numeric:tabular-nums}
 .ch .sp{flex:1}
 .ch .soma{color:var(--mute);font-size:12.5px;font-variant-numeric:tabular-nums}
-.cards{display:flex;flex-direction:column;gap:8px;padding:10px;overflow-y:auto;flex:1}
+.cards{display:flex;flex-direction:column;gap:8px;padding:10px;overflow-y:auto;flex:1;min-height:0}
 .vazio{color:var(--dim);font-size:13px;text-align:center;padding:18px 8px;border:1px dashed var(--line);border-radius:12px}
 .card{position:relative;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:11px 12px 10px;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:pan-x pan-y;transition:transform .15s,border-color .15s,opacity .2s}
 .card:hover{border-color:#3a443c}
@@ -89,7 +89,7 @@ header .sp{flex:1}
 .av{position:absolute;right:8px;top:8px;width:30px;height:30px;border-radius:10px;border:1px solid var(--line);background:var(--bg);display:grid;place-items:center;cursor:pointer;color:var(--mute);font-size:15px;transition:all .15s}
 .av:hover{color:var(--ink);border-color:var(--cor);background:color-mix(in srgb,var(--cor) 20%,var(--bg))}
 .voa{position:fixed;z-index:40;pointer-events:none;box-shadow:0 18px 40px rgba(0,0,0,.5);transform:rotate(2deg)}
-.fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:20;display:flex;align-items:center;gap:8px;cursor:pointer;background:var(--accent);color:var(--accent-ink);border:0;border-radius:18px;padding:15px 20px;font-weight:800;font-size:15.5px;box-shadow:0 12px 30px rgba(242,165,65,.28)}
+.fab{display:flex;align-items:center;gap:8px;cursor:pointer;background:var(--accent);color:var(--accent-ink);border:0;border-radius:18px;padding:13px 18px;font-weight:800;font-size:15px;box-shadow:0 12px 30px rgba(242,165,65,.28);white-space:nowrap}
 .fab:active{transform:scale(.97)}
 
 /* ---------- folha (detalhes / nova) ---------- */
@@ -125,7 +125,8 @@ textarea{min-height:70px;resize:vertical}
 .revctl .revs i{width:10px;height:10px}
 .revctl span{flex:1;font-size:14px}
 .revctl button{cursor:pointer;width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-size:18px;font-weight:700}
-.tabs{display:inline-flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:14px}
+.tabsRow{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.tabs{display:inline-flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px}
 .tab{cursor:pointer;border:0;background:transparent;color:var(--mute);font-weight:750;font-size:14px;border-radius:10px;padding:9px 16px}
 .tab.on{background:var(--ink);color:var(--bg)}
 .ferr{max-width:1400px;margin:0 auto;padding:0 18px 120px}
@@ -196,16 +197,18 @@ textarea{min-height:70px;resize:vertical}
     <button class="link" id="conta"></button>
   </header>
   <div class="aviso" id="aviso"><span id="avisoTx"></span><button id="avisoBt"></button></div>
-  <div class="tabs" role="tablist"><button class="tab" data-aba="trab" role="tab">Trabalhos</button><button class="tab" data-aba="ferr" role="tab">Custos fixos</button></div>
+  <div class="tabsRow">
+    <div class="tabs" role="tablist"><button class="tab" data-aba="trab" role="tab">Trabalhos</button><button class="tab" data-aba="ferr" role="tab">Custos fixos</button></div>
+    <button class="fab hide" id="fab">＋ Nova demanda</button>
+  </div>
   <div class="mes" id="mes"></div>
 </div>
 <div class="filtro" id="filtro"></div>
 <div class="board" id="board"></div>
 <div class="ferr hide" id="ferr"></div>
-<button class="fab hide" id="fab">＋ Nova demanda</button>
 <div class="veu" id="veu"></div>
 <div class="folha" id="folha"></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <canvas id="festa"></canvas>
 
 <script src="/catalogo.js"></script>
