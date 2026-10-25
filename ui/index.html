@@ -201,6 +201,14 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
 .kitx-m{font-size:12px;color:var(--sub);min-height:17px;display:flex;align-items:center;gap:6px}
 .kitx-i .btns{margin-top:auto;padding-top:6px}.kitx-i .btns button{flex:1;padding:9px 10px;font-size:13px}
 :root[data-tema="claro"] .kitx-i>small,:root[data-tema="claro"] .kitx-s{filter:brightness(.7) saturate(1.3)}
+/* 4 CAMADAS: card do conjunto (Títulos, Som, Cor, Movimento) — só para quem tem os 4 */
+.cam-p{display:flex;flex-direction:column;gap:6px}
+.cam-bar{height:8px;border-radius:99px;background:color-mix(in srgb,var(--card) 50%,#000);overflow:hidden;border:1px solid var(--line)}
+.cam-bar i{display:block;height:100%;width:0;background:rgb(var(--c));transition:width .4s ease}
+.cam-p small{font-size:12.5px;color:var(--sub)}
+.kitx-i.atual{outline:2px solid rgba(var(--c),.9);outline-offset:-2px}
+.kitx-i .cam-n{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--sub)}
+.termo ul.termo-l{margin:0 0 0 18px;font-size:13.5px;color:var(--sub)}
 .btns .cta{background:rgb(var(--c));color:#141615;box-shadow:0 10px 24px -10px rgba(var(--c),.9);transition:filter .15s,transform .15s}
 .btns .cta:hover{filter:brightness(1.08);transform:translateY(-1px)}
 
@@ -247,7 +255,7 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
       <div class="status">
         <div class="pill"><span class="dot" id="d-found"></span><span id="t-found">Procurando o CapCut…</span></div>
         <div class="pill"><span class="dot" id="d-run"></span><span id="t-run">…</span></div>
-      </div></div><div class="cards"></div></section>
+      </div></div><div class="kitx" id="s-camadas" hidden></div><div class="cards"></div></section>
     <section class="sec" id="s-ferramentas"><div class="sec-h"><div><h2>Ferramentas</h2><p id="s-ferr-sub">Para precificar, fechar e organizar seus trabalhos.</p></div><span class="sp" style="flex:1"></span><button class="up" id="s-ferr-up" hidden></button></div>
       <div class="kitx" id="s-kit" hidden></div>
       <div class="cards"></div></section>
@@ -313,6 +321,7 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
 <script src="avisos.js"></script>
 <script src="aval.js"></script>
 <script src="perfil.js"></script>
+<script src="camadas.js"></script>
 <script>
 // ===== tema (escuro/claro) e atividade recolhida: lembra a escolha =====
 const pref = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch {} } };
@@ -552,6 +561,7 @@ function btn(txt, cls, fn){ const b = document.createElement('button'); b.classN
 
 function render(){
   document.querySelectorAll('#grid .cards').forEach(c => c.innerHTML = '');
+  renderCamadas();
   if (!sess) return;
   const daJornada = CAT.kit.packs.filter(k => cat?.owned?.has(k)).length;
   // oferta de conjunto: a mesma regra do site (catálogo). Só aparece para quem já tem alguma e ainda faz sentido.
@@ -725,22 +735,102 @@ const erroInstala = e => { const m = String(e.message || e); return /not found|o
 // ----- condições de uso: lê, marca a caixa e confirma. Vale por produto e por versão do texto; fica registrado no servidor. -----
 const TERMO = '2026-10c';          // mude só quando o texto das condições mudar de verdade: todo mundo aceita de novo
 let aceitos = new Set();
-function pedeAceite(p){
-  if (aceitos.has(p.packId)) return Promise.resolve(true);
+function pedeAceite(p){ return pedeAceiteVarios([p]); }
+// Aceite único: a MESMA tela e o MESMO texto do aceite individual, listando os produtos.
+// Continua registrando no servidor um aceite por produto (quem, o quê, quando, qual versão) — nada de proteção a menos.
+function pedeAceiteVarios(lista){
+  const falta = lista.filter(p => !aceitos.has(p.packId));
+  if (!falta.length) return Promise.resolve(true);
   return new Promise(fim => {
-    const m = $('#termo'), ok = $('#t-ok'), vai = $('#t-vai');
-    $('#t-prod').textContent = 'Condições de uso · ' + p.name; ok.checked = false; vai.disabled = true; m.querySelector('.termo').classList.remove('ok'); m.classList.add('show'); ok.focus();
-    const fecha = r => { m.classList.remove('show'); ok.onchange = vai.onclick = $('#t-nao').onclick = null; fim(r); };
-    ok.onchange = () => { vai.disabled = !ok.checked; m.querySelector('.termo').classList.toggle('ok', ok.checked); };
+    const m = $('#termo'), ok = $('#t-ok'), vai = $('#t-vai'), caixa = m.querySelector('.termo');
+    $('#t-prod').textContent = 'Condições de uso · ' + (falta.length === 1 ? falta[0].name : falta.length + ' produtos');
+    caixa.querySelector('.termo-l')?.remove();
+    if (falta.length > 1){   // deixa claro a quais produtos o aceite vale
+      const ul = document.createElement('ul'); ul.className = 'termo-l';
+      falta.forEach(p => { const li = document.createElement('li'); li.textContent = p.name; ul.appendChild(li); });
+      caixa.querySelector('.termo-c').before(ul);
+    }
+    ok.checked = false; vai.disabled = true; caixa.classList.remove('ok'); m.classList.add('show'); ok.focus();
+    const fecha = r => { m.classList.remove('show'); caixa.querySelector('.termo-l')?.remove(); ok.onchange = vai.onclick = $('#t-nao').onclick = null; fim(r); };
+    ok.onchange = () => { vai.disabled = !ok.checked; caixa.classList.toggle('ok', ok.checked); };
     $('#t-nao').onclick = () => fecha(false);
     vai.onclick = async () => {
       if (!ok.checked) return; vai.disabled = true;
-      // o registro vai para o servidor (quem, o quê, quando, qual versão). Se o servidor ainda não tiver a tabela, a instalação segue e o aceite vale nesta sessão.
-      try { await api('/rest/v1/rpc/aceite_registrar', { method:'POST', body:{ p_pack: p.packId, p_versao: TERMO, p_app: state?.version || '' } }); }
-      catch(e){ if (e.status === 401 || e.status === 403){ step(traduz(e.message), 'err'); return fecha(false); } }
-      aceitos.add(p.packId); fecha(true);
+      // o registro vai para o servidor (quem, o quê, quando, qual versão), um por produto. Se o servidor ainda não tiver a tabela, a instalação segue e o aceite vale nesta sessão.
+      for (const p of falta){
+        try { await api('/rest/v1/rpc/aceite_registrar', { method:'POST', body:{ p_pack: p.packId, p_versao: TERMO, p_app: state?.version || '' } }); }
+        catch(e){ if (e.status === 401 || e.status === 403){ step(traduz(e.message), 'err'); return fecha(false); } }
+        aceitos.add(p.packId);
+      }
+      fecha(true);
     };
   });
+}
+// ===== 4 CAMADAS: Títulos · Som · Cor · Movimento num botão só (lógica pura em camadas.js) =====
+// Só aparece para quem tem os 4 liberados. Instala em sequência pela MESMA rotina dos cards individuais
+// (baixaEInstala → install_remote → núcleo com backup e desfazer). Os Assets vão por último (download maior).
+let camProg = null;   // { feitas, total, atual } enquanto instala
+function renderCamadas(){
+  const box = $('#s-camadas'); if (!box) return;
+  const C = window.Camadas;
+  const ok = !!(sess && C && cat && state && C.elegivel(PRODUCTS, cat.owned, cat.packs || []));
+  box.hidden = !ok; box.innerHTML = ''; if (!ok) return;
+  const lista = C.partes(PRODUCTS, cat.packs, state.installed || []), rot = C.rotuloBotao(lista);
+  const prontas = lista.filter(x => x.estado === 'ok').length;
+  box.style.setProperty('--c', '242,165,65');
+  box.innerHTML = `<div class="kitx-h"><div class="icon">${icone('legendas')}</div>
+    <div class="kitx-t"><span class="kitx-s">4 Camadas</span><h3>Títulos · Som · Cor · Movimento</h3>
+      <p>As 4 camadas do acabamento do seu vídeo, instaladas no CapCut em sequência. O que já estiver instalado é pulado.</p></div>
+    <div class="kitx-c"></div></div>
+    <div class="cam-p"><div class="cam-bar"><i></i></div><small></small></div><div class="kitx-g"></div>`;
+  const pct = camProg ? Math.round(100 * camProg.feitas / camProg.total) : Math.round(100 * prontas / lista.length);
+  box.querySelector('.cam-bar i').style.width = pct + '%';
+  box.querySelector('.cam-p small').textContent = camProg ? (camProg.atual || '') : prontas === lista.length ? 'As 4 camadas estão instaladas.' : prontas + ' de 4 camadas instaladas.';
+  const c = box.querySelector('.kitx-c');
+  if (rot){
+    const b = btn(camProg ? 'Instalando…' : state.capcut_running ? 'Feche o CapCut para instalar' : rot, 'primary cta', () => doInstallCamadas());
+    if (state.capcut_running || camProg) b.disabled = true;
+    c.appendChild(b);
+  } else c.innerHTML = '<span class="kitx-ok"><span class="dot ok"></span>Tudo instalado</span>';
+  lista.forEach(x => {
+    const li = document.createElement('div'), atual = camProg && camProg.key === x.key;
+    li.className = 'kitx-i k-' + x.key + (x.estado === 'ok' ? ' on' : '') + (atual ? ' atual' : ''); li.style.setProperty('--c', x.p.cor);
+    li.innerHTML = `<div class="kitx-n"><i>${x.n}</i><img src="icones/${x.key}.png" alt="" width="48" height="48" draggable="false"></div>
+      <span class="cam-n">Camada ${x.n} · ${x.camada}</span><b>${escTxt(x.p.name)}</b>
+      <span class="kitx-m">${atual ? '<span class="dot warn"></span>Instalando…' : x.estado === 'ok' ? '<span class="dot ok"></span>Instalado · v' + escTxt(x.inst.version) : x.estado === 'nova' ? '<span class="dot warn"></span>Versão nova disponível' : '<span class="dot"></span>Não instalado'}</span>`;
+    box.querySelector('.kitx-g').appendChild(li);
+  });
+}
+async function doInstallCamadas(){
+  const C = window.Camadas;
+  state = await invoke('status');
+  if (state.capcut_running){ step('Feche o CapCut (no Mac: ⌘Q) antes de instalar as 4 camadas.', 'warn'); render(); return; }
+  const lista = C.partes(PRODUCTS, cat.packs, state.installed || []), plano = C.plano(lista);
+  if (!plano.length){ step('As 4 camadas já estão instaladas e atualizadas.', 'ok'); return; }
+  if (!(await pedeAceiteVarios(plano.map(x => x.p)))) return;
+  busy = true; camProg = { feitas: lista.length - plano.length, total: lista.length, atual: '', key: null }; render();
+  let instaladas = 0, falhou = null;
+  try {
+    if (!(await validSess())) throw new Error('Sua sessão expirou. Entre de novo.');
+    for (const x of plano){
+      // confere o CapCut ANTES de cada camada (o aluno pode ter aberto no meio): para com segurança, sem começar a próxima
+      const st = await invoke('status'); if (st.capcut_running) throw new Error('O CapCut está aberto.');
+      camProg.key = x.key; camProg.atual = C.rotuloEtapa(x, lista.length) + (x.key === 'assets' ? ' — download grande, pode levar alguns minutos' : '');
+      render(); step(camProg.atual, 'run');
+      await baixaEInstala(x.p, x.srv);
+      instaladas++; camProg.feitas++; try { state = await invoke('status'); } catch {} render();   // a camada pronta já aparece como instalada
+    }
+  } catch(e){ falhou = e; }
+  busy = false; camProg = null;
+  if (falhou){
+    // a camada que estava em andamento NÃO deve ficar com ✓ na atividade
+    document.querySelectorAll('#log .step.run').forEach(d => { d.className = 'step err'; d.querySelector('i').textContent = '!'; });
+    const ex = C.explicaErro(falhou.message || falhou);
+    step((instaladas ? instaladas + ' camada' + (instaladas > 1 ? 's' : '') + ' instalada' + (instaladas > 1 ? 's' : '') + ' e mantida' + (instaladas > 1 ? 's' : '') + '. ' : '') + ex.texto, ex.tipo === 'outro' ? 'err' : 'warn');
+  } else {
+    step('Pronto! Abra o CapCut: títulos, sons e animações estão nas predefinições, e os LUTs em Ajuste › Seus › LUT.', 'ok');
+  }
+  await refresh(); if (instaladas) convidaAvaliar();
 }
 async function doInstallKit(p){   // um clique: títulos + efeitos sonoros + LUTs
   if (state.capcut_running){ step('Feche o CapCut antes de instalar.', 'warn'); return; }
