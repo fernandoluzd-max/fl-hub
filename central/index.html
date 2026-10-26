@@ -40,6 +40,7 @@
     <nav class="tabs" role="tablist" aria-label="Seções da Central">
       <button role="tab" id="tabbtn-visao" aria-controls="tab-visao" aria-selected="true" data-tab="visao">Visão geral</button>
       <button role="tab" id="tabbtn-disparos" aria-controls="tab-disparos" aria-selected="false" data-tab="disparos" tabindex="-1">Disparos</button>
+      <button role="tab" id="tabbtn-custos" aria-controls="tab-custos" aria-selected="false" data-tab="custos" tabindex="-1">Custos</button>
       <button role="tab" id="tabbtn-alunos" aria-controls="tab-alunos" aria-selected="false" data-tab="alunos" tabindex="-1">Alunos</button>
       <button role="tab" id="tabbtn-atividade" aria-controls="tab-atividade" aria-selected="false" data-tab="atividade" tabindex="-1">Atividade</button>
     </nav>
@@ -114,6 +115,25 @@
         <p class="kit-st" id="kitSt"></p>
         <div class="kit-n" id="kitN"></div>
         <div class="tab" id="kitLista"></div>
+      </section>
+    </section>
+
+    <section role="tabpanel" id="tab-custos" class="tabpanel" aria-labelledby="tabbtn-custos" hidden>
+      <section class="kpis" id="custoKpis" aria-label="Custos do WhatsApp"></section>
+      <div class="grade">
+        <section class="bloco">
+          <h2>Custo por disparo</h2>
+          <div class="tab" id="custoDisparos"></div>
+        </section>
+        <section class="bloco">
+          <h2>Custo por dia · últimos 30 dias</h2>
+          <div id="custoDias"></div>
+        </section>
+      </div>
+      <section class="bloco">
+        <h2>Cada mensagem cobrada</h2>
+        <p class="pico" id="custoNota" style="margin:-4px 0 10px"></p>
+        <div class="tab" id="custoLista"></div>
       </section>
     </section>
 

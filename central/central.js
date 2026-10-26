@@ -57,7 +57,7 @@
   // ========================================================================
   // abas
   // ========================================================================
-  const TABS = ['visao', 'disparos', 'alunos', 'atividade'];
+  const TABS = ['visao', 'disparos', 'custos', 'alunos', 'atividade'];
   function mostraAba(tab, foco) {
     if (!TABS.includes(tab)) tab = 'visao';
     state.tab = tab; Prefs.set({ tab });
@@ -475,6 +475,7 @@
       comprasAntes = k.compras; chaveAntes = chave;
       leitura(k, iv.rot); funil(k, 'funil'); kpis(k, kAnt); serie(d, iv); horas(d); campResumo(d.campanhas); disparosGrid(d.campanhas, dAnt?.campanhas); feedPreview(d.recentes);
       metaWidget(k.compras);
+      carregaCustos(iv, minhaSeq);
       const ctx = { temRespostaQuente: ultimoPerfisQuente, algumaCampanha100: (d.campanhas || []).some(c => c.enviados >= 100) };
       const metaAtual = Goals.get(), bateu = metaAtual ? k.compras >= metaAtual.valor : false;
       const novasConquistas = Achievements.avalia(k, ctx, bateu);
@@ -496,6 +497,32 @@
       saude(ultimoKitPausado, ultimoKitMotivo);
       Alerts.render(Alerts.avalia({ kitPausaMotivo: ultimoKitPausado ? ultimoKitMotivo : null, erroConexao: true, storageFalhou: Prefs.falhouArmazenamento() }));
     } finally { ocupadoVisao = false; }
+  }
+
+  // ========================================================================
+  // custos do WhatsApp (em reais; preço oficial da Meta x dólar em central_config)
+  // ========================================================================
+  const brl = v => (+v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const CAT = { marketing: 'Marketing', utilidade: 'Utilidade' };
+  const hora = iso => { const t = new Date(Date.parse(iso) + SP).toISOString(); return `${t.slice(8, 10)}/${t.slice(5, 7)} ${t.slice(11, 16)}`; };
+  async function carregaCustos(iv, seq) {
+    let c; try { c = await Base.rpc('central_custos', { p_de: iv.de.toISOString(), p_ate: iv.ate.toISOString() }); } catch (e) { $('custoNota').textContent = 'Não consegui carregar os custos agora (' + e.message + ').'; return; }
+    if (seq !== seqVisao) return;
+    const p = c.periodo, t = c.total, cf = c.config;
+    const desde = t.desde ? new Date(Date.parse(t.desde) + SP).toISOString().slice(0, 10).split('-').reverse().join('/') : '—';
+    $('custoKpis').innerHTML = [
+      ['Gasto ' + iv.rot, brl(p.total), `${n(p.mensagens)} mensagens entregues`],
+      ['Gasto desde o início', brl(t.total), `${n(t.mensagens)} mensagens desde ${desde}`],
+      ['Ofertas (marketing)', n(p.marketing), `${brl(cf.marketing_brl)} cada · ${brl(p.marketing * cf.marketing_brl)} ${iv.rot}`],
+      ['Acesso (utilidade)', n(p.utilidade), `${brl(cf.utilidade_brl)} cada · ${brl(p.utilidade * cf.utilidade_brl)} ${iv.rot}`]
+    ].map(([r, v, s]) => `<div class="k"><div class="r">${esc(r)}</div><b>${esc(v)}</b><small>${esc(s)}</small></div>`).join('');
+    const D = c.por_disparo || [];
+    $('custoDisparos').innerHTML = D.length ? `<table style="min-width:480px"><thead><tr><th>Disparo</th><th>Tipo</th><th>Msgs ${esc(iv.rot)}</th><th>Gasto ${esc(iv.rot)}</th><th>Gasto total</th></tr></thead><tbody>${D.map(x => `<tr><td class="cn">${esc(x.disparo)}</td><td>${esc(CAT[x.categoria] || x.categoria)}</td><td>${n(x.qtd_periodo)}</td><td>${brl(x.brl_periodo)}</td><td><b>${brl(x.total_brl)}</b></td></tr>`).join('')}<tr><td class="cn">Total</td><td></td><td>${n(p.mensagens)}</td><td><b>${brl(p.total)}</b></td><td><b>${brl(t.total)}</b></td></tr></tbody></table>` : '<p class="vazio">Nenhuma mensagem cobrada ainda.</p>';
+    const dias = c.por_dia || [], mx = Math.max(1, ...dias.map(d => +d.brl));
+    $('custoDias').innerHTML = dias.length ? dias.slice().reverse().map(d => `<div style="display:grid;grid-template-columns:52px 1fr 78px;gap:8px;align-items:center;font-size:12.5px;margin:3px 0"><span style="color:var(--mute)">${d.dia.slice(8, 10)}/${d.dia.slice(5, 7)}</span><span style="height:8px;border-radius:4px;background:var(--compra);width:${Math.max(2, Math.round(d.brl / mx * 100))}%"></span><span style="text-align:right">${brl(d.brl)}</span></div>`).join('') : '<p class="vazio">Sem gastos nos últimos 30 dias.</p>';
+    const L = (c.ultimas || []).filter(u => $('testes').checked || !u.teste);
+    $('custoNota').textContent = `Valor por mensagem entregue, pela tabela oficial da Meta para o Brasil, com o dólar a ${brl(cf.dolar)}. Mostra as últimas ${n(L.length)} do período. Respostas que o robô manda depois que a pessoa toca no botão não entram: dentro da janela de 24 horas elas não têm custo de modelo.`;
+    $('custoLista').innerHTML = L.length ? `<table style="min-width:520px"><thead><tr><th>Quando</th><th>Para</th><th>Disparo</th><th>Tipo</th><th>Valor</th></tr></thead><tbody>${L.map(u => `<tr><td>${hora(u.em)}</td><td class="cn">${esc(u.nome)}${u.teste ? ' <small style="color:var(--mute)">teste</small>' : ''}</td><td>${esc(u.disparo)}</td><td>${esc(CAT[u.categoria] || u.categoria)}</td><td>${brl(u.brl)}</td></tr>`).join('')}</tbody></table>` : '<p class="vazio">Nenhuma mensagem cobrada no período.</p>';
   }
   let sequenciaCarregada = false;
   function marcaVivo(iv) {
