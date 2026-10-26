@@ -475,7 +475,7 @@
       comprasAntes = k.compras; chaveAntes = chave;
       leitura(k, iv.rot); funil(k, 'funil'); kpis(k, kAnt); serie(d, iv); horas(d); campResumo(d.campanhas); disparosGrid(d.campanhas, dAnt?.campanhas); feedPreview(d.recentes);
       metaWidget(k.compras);
-      carregaCustos(iv, minhaSeq);
+      carregaCustos(iv, minhaSeq); carregaBalanco(iv, minhaSeq);
       const ctx = { temRespostaQuente: ultimoPerfisQuente, algumaCampanha100: (d.campanhas || []).some(c => c.enviados >= 100) };
       const metaAtual = Goals.get(), bateu = metaAtual ? k.compras >= metaAtual.valor : false;
       const novasConquistas = Achievements.avalia(k, ctx, bateu);
@@ -505,6 +505,23 @@
   const brl = v => (+v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   const CAT = { marketing: 'Marketing', utilidade: 'Utilidade' };
   const hora = iso => { const t = new Date(Date.parse(iso) + SP).toISOString(); return `${t.slice(8, 10)}/${t.slice(5, 7)} ${t.slice(11, 16)}`; };
+  const vezes = x => x == null ? '—' : x.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + 'x';
+  async function carregaBalanco(iv, seq) {
+    let b; try { b = await Base.rpc('central_balanco', { p_de: iv.de.toISOString(), p_ate: iv.ate.toISOString() }); } catch (e) { $('balNota').textContent = 'Não consegui calcular o balanço agora (' + e.message + ').'; return; }
+    if (seq !== seqVisao) return;
+    const tot = arr => (arr || []).find(x => x.disparo === '__total__') || { mensagens: 0, custo: 0, vendas: 0, faturamento: 0 };
+    const P = tot(b.periodo), T = tot(b.total);
+    const cpa = x => x.vendas > 0 ? brl(x.custo / x.vendas) : '—', ret = x => x.custo > 0 ? vezes(x.faturamento / x.custo) : '—';
+    $('balKpis').innerHTML = [
+      ['Vendas pelo WhatsApp ' + iv.rot, n(P.vendas), `${brl(P.faturamento)} em vendas`],
+      ['Gasto ' + iv.rot, brl(P.custo), `${n(P.mensagens)} mensagens`],
+      ['Custo por venda', cpa(P), P.vendas ? 'quanto custou trazer cada venda' : 'nenhuma venda no período'],
+      ['Retorno', ret(P), P.custo > 0 ? `cada R$ 1 gasto voltou ${P.vendas ? brl(P.faturamento / P.custo) : 'R$ 0,00'}` : '—']
+    ].map(([r, v, s2]) => `<div class="k"><div class="r">${esc(r)}</div><b>${esc(v)}</b><small>${esc(s2)}</small></div>`).join('');
+    const L = (b.periodo || []).filter(x => x.disparo !== '__total__');
+    $('balTabela').innerHTML = L.length ? `<table style="min-width:640px"><thead><tr><th>Disparo</th><th>Mensagens</th><th>Vendas</th><th>Conversão</th><th>Gasto</th><th>Custo por venda</th><th>Vendido</th><th>Retorno</th></tr></thead><tbody>${L.map(x => `<tr><td class="cn">${esc(x.disparo)}</td><td>${n(x.mensagens)}</td><td>${n(x.vendas)}</td><td>${/^Primeiro acesso|^Testes/.test(x.disparo) ? '—' : pctTx(x.vendas, x.mensagens)}</td><td>${brl(x.custo)}</td><td>${cpa(x)}</td><td>${brl(x.faturamento)}</td><td><b>${/^Primeiro acesso|^Testes/.test(x.disparo) ? '—' : ret(x)}</b></td></tr>`).join('')}<tr><td class="cn">Total</td><td>${n(P.mensagens)}</td><td>${n(P.vendas)}</td><td>${pctTx(P.vendas, P.mensagens)}</td><td>${brl(P.custo)}</td><td>${cpa(P)}</td><td>${brl(P.faturamento)}</td><td><b>${ret(P)}</b></td></tr></tbody></table>` : '<p class="vazio">Nenhuma mensagem no período.</p>';
+    $('balNota').textContent = `Desde o início: ${n(T.vendas)} vendas, ${brl(T.faturamento)} vendidos, ${brl(T.custo)} gastos, custo por venda ${cpa(T)}, retorno ${ret(T)}. Venda conta quando a pessoa compra o produto oferecido (ou qualquer produto, nas recuperações) com o mesmo e-mail em até 7 dias depois da mensagem. Valor vendido pelo preço de tabela, sem a taxa da Greenn e sem impostos. Primeiro acesso é custo de operação, não de venda. No total, cada venda conta uma vez, mesmo que mais de um disparo tenha falado com a pessoa.`;
+  }
   async function carregaCustos(iv, seq) {
     let c; try { c = await Base.rpc('central_custos', { p_de: iv.de.toISOString(), p_ate: iv.ate.toISOString() }); } catch (e) { $('custoNota').textContent = 'Não consegui carregar os custos agora (' + e.message + ').'; return; }
     if (seq !== seqVisao) return;
