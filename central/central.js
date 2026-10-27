@@ -509,6 +509,7 @@
   async function carregaBalanco(iv, seq) {
     let b; try { b = await Base.rpc('central_balanco', { p_de: iv.de.toISOString(), p_ate: iv.ate.toISOString() }); } catch (e) { $('balNota').textContent = 'Não consegui calcular o balanço agora (' + e.message + ').'; return; }
     if (seq !== seqVisao) return;
+    ultimoBalanco = b;
     const tot = arr => (arr || []).find(x => x.disparo === '__total__') || { mensagens: 0, custo: 0, vendas: 0, faturamento: 0 };
     const P = tot(b.periodo), T = tot(b.total);
     const cpa = x => x.vendas > 0 ? brl(x.custo / x.vendas) : '—', ret = x => x.custo > 0 ? vezes(x.faturamento / x.custo) : '—';
@@ -525,6 +526,7 @@
   async function carregaCustos(iv, seq) {
     let c; try { c = await Base.rpc('central_custos', { p_de: iv.de.toISOString(), p_ate: iv.ate.toISOString() }); } catch (e) { $('custoNota').textContent = 'Não consegui carregar os custos agora (' + e.message + ').'; return; }
     if (seq !== seqVisao) return;
+    ultimoCustos = c;
     const p = c.periodo, t = c.total, cf = c.config;
     const desde = t.desde ? new Date(Date.parse(t.desde) + SP).toISOString().slice(0, 10).split('-').reverse().join('/') : '—';
     $('custoKpis').innerHTML = [
@@ -541,6 +543,89 @@
     $('custoNota').textContent = `Valor por mensagem entregue, pela tabela oficial da Meta para o Brasil, com o dólar a ${brl(cf.dolar)}. Mostra as últimas ${n(L.length)} do período. Respostas que o robô manda depois que a pessoa toca no botão não entram: dentro da janela de 24 horas elas não têm custo de modelo.`;
     $('custoLista').innerHTML = L.length ? `<table style="min-width:520px"><thead><tr><th>Quando</th><th>Para</th><th>Disparo</th><th>Tipo</th><th>Valor</th></tr></thead><tbody>${L.map(u => `<tr><td>${hora(u.em)}</td><td class="cn">${esc(u.nome)}${u.teste ? ' <small style="color:var(--mute)">teste</small>' : ''}</td><td>${esc(u.disparo)}</td><td>${esc(CAT[u.categoria] || u.categoria)}</td><td>${brl(u.brl)}</td></tr>`).join('')}</tbody></table>` : '<p class="vazio">Nenhuma mensagem cobrada no período.</p>';
   }
+
+  // ========================================================================
+  // relatório para análise (Markdown, sem nomes, e-mails ou telefones)
+  // ========================================================================
+  let ultimoCustos = null, ultimoBalanco = null;
+  function relatorio() {
+    if (!ultimoDado) return null;
+    const [d, iv] = ultimoDado, k = d.kpi || {}, a = ultimoAnterior?.kpi || null;
+    const dt = x => new Date(x.getTime() + SP).toISOString().slice(0, 16).replace('T', ' ').replace(/^(\d+)-(\d+)-(\d+)/, '$3/$2/$1');
+    const comp = (v, w) => w == null ? '' : ` (período anterior: ${n(w)})`;
+    const L = [];
+    L.push('# Relatório da Central WhatsApp · Base FL', '');
+    L.push(`Gerado em ${dt(new Date())} · Período: ${iv.rot} (de ${dt(iv.de)} até ${dt(new Date(Math.min(Date.now(), iv.ate.getTime())))})${$('testes').checked ? ' · inclui meus testes' : ' · sem os meus testes'}`, '');
+    L.push('## Contexto do negócio', '');
+    L.push('- A Base FL vende produtos digitais para editores de vídeo e criadores de conteúdo que usam principalmente o CapCut do computador. Muitos prestam serviço para clientes.');
+    L.push('- Produtos e preços atuais: Títulos Dinâmicos R$ 47 (vitalício, porta de entrada, ~13 vendas/dia por tráfego pago); complementos de R$ 17 no checkout dos Títulos (Efeitos Sonoros, LUTs, Base FL Assets), que saem em 34% a 42% dos pedidos; Mood R$ 79 (1 ano, cor do vídeo por referência); Kit Freelancer R$ 97 (1 ano: briefing, preço, contrato e organizador); Reels Academy (curso principal, vendido na Kiwify).');
+    L.push('- WhatsApp oficial da Meta: mensagem de oferta (marketing) custa cerca de R$ 0,32 entregue; mensagem de acesso (utilidade), cerca de R$ 0,03.');
+    L.push('- Disparos: "Mood · base de alunos" (oferta do Mood para alunos antigos, em ondas); "Pós-compra" (oferta do Mood 30 min depois de uma compra); "Reels Academy → Títulos" (30 min depois da compra do curso); "Kit Freelancer (perfil)" (24 h depois de o aluno responder no app que atende clientes e quer cobrar/organizar); recuperações de Pix e de checkout; "Primeiro acesso" (mensagem de utilidade com o acesso ao produto, não é oferta).');
+    L.push('- Regras da marca: sem preço riscado ("de R$ X por R$ Y"), sem urgência ou contagem falsa, sem teste grátis, sem números inventados. Mensagens sem gíria forçada.', '');
+    L.push(`## Resumo do período (${iv.rot})`, '');
+    L.push(`- Mensagens de oferta enviadas: ${n(k.enviados)}${comp(k.enviados, a?.enviados)}`);
+    L.push(`- Lidas: ${n(k.lidos)}${comp(k.lidos, a?.lidos)}`);
+    L.push(`- Tocaram no botão da mensagem: ${n(k.audio)}${comp(k.audio, a?.audio)}`);
+    L.push(`- Abriram a página de venda: ${n(k.visitantes)} pessoas (${n(k.aberturas)} aberturas)${comp(k.visitantes, a?.visitantes)}`);
+    L.push(`- Clicaram para comprar: ${n(k.checkout)}${comp(k.checkout, a?.checkout)}`);
+    L.push(`- Compras atribuídas (Mood/Títulos, mesmo e-mail, depois do clique): ${n(k.compras)}${comp(k.compras, a?.compras)}`);
+    L.push(`- Taxas: leram ${pctTx(k.lidos, k.enviados)} · tocaram ${pctTx(k.audio, k.enviados)} · abriram a página ${pctTx(k.visitantes, k.enviados)} · clicaram para comprar ${pctTx(k.checkout, k.visitantes)} das visitas · compraram ${pctTx(k.compras, k.visitantes)} das visitas`, '');
+    const C = d.campanhas || [];
+    if (C.length) {
+      L.push('## Funil por disparo', '', '| Disparo | Enviados | Tocaram no botão | Abriram a página | Clicaram para comprar | Compras |', '| --- | --- | --- | --- | --- | --- |');
+      C.forEach(c => L.push(`| ${c.camp} | ${n(c.enviados)} | ${n(c.audio)} | ${n(c.visitantes)} | ${n(c.checkout)} | ${n(c.compras)} |`));
+      L.push('');
+    }
+    const B = ultimoBalanco;
+    if (B) {
+      const tot = arr => (arr || []).find(x => x.disparo === '__total__') || {};
+      const P = tot(B.periodo), T = tot(B.total), ret = x => x.custo > 0 ? (x.faturamento / x.custo).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + 'x' : '—';
+      L.push('## Custo e retorno do WhatsApp', '', 'Venda atribuída = compra com o mesmo e-mail em até 7 dias depois da mensagem (do produto oferecido; nas recuperações, qualquer produto). Valor pelo preço de tabela, sem taxas.', '');
+      L.push('| Disparo | Mensagens | Gasto | Vendas | Pessoas que compraram | Vendido | Custo por venda | Retorno |', '| --- | --- | --- | --- | --- | --- | --- | --- |');
+      (B.periodo || []).filter(x => x.disparo !== '__total__').forEach(x => L.push(`| ${x.disparo} | ${n(x.mensagens)} | ${brl(x.custo)} | ${n(x.vendas)} | ${n(x.compradores)} | ${brl(x.faturamento)} | ${x.vendas ? brl(x.custo / x.vendas) : '—'} | ${ret(x)} |`));
+      L.push(`| **Total ${iv.rot}** | ${n(P.mensagens)} | ${brl(P.custo)} | ${n(P.vendas)} | ${n(P.compradores)} | ${brl(P.faturamento)} | ${P.vendas ? brl(P.custo / P.vendas) : '—'} | ${ret(P)} |`, '');
+      L.push(`Desde o início do registro: ${n(T.mensagens)} mensagens, ${brl(T.custo)} gastos, ${n(T.vendas)} vendas, ${brl(T.faturamento)} vendidos, retorno ${ret(T)}.`, '');
+    }
+    const Cu = ultimoCustos;
+    if (Cu && (Cu.por_dia || []).length) {
+      L.push('## Gasto por dia (últimos 30 dias)', '', '| Dia | Mensagens | Gasto |', '| --- | --- | --- |');
+      Cu.por_dia.forEach(x => L.push(`| ${x.dia.slice(8, 10)}/${x.dia.slice(5, 7)} | ${n(x.qtd)} | ${brl(x.brl)} |`));
+      L.push('');
+    }
+    const H = (d.horas || []).slice().sort((x, y) => y.n - x.n).slice(0, 5);
+    if (H.length) L.push('## Horários com mais movimento no período', '', H.map(h => `- ${String(h.h).padStart(2, '0')}h: ${n(h.n)} ações`).join('\n'), '');
+    const pf = pfDados;
+    if (pf) {
+      const r = pf.resumo || {}, lista = (o, m) => Object.entries(o || {}).sort((x, y) => y[1] - x[1]).map(([kk, v]) => `${m[kk] || kk} ${n(v)}`).join(' · ') || '—';
+      L.push('## Alunos que responderam o perfil no app (total atual)', '');
+      L.push(`- Responderam: ${n(r.responderam)} · deixaram para depois: ${n(r.pularam)}`);
+      L.push(`- Listas: quente ${n(r.quente)} · morno ${n(r.morno)} · frio ${n(r.frio)} (quente = atende clientes/agência e quer ajuda para cobrar ou organizar)`);
+      L.push(`- Edita para quem: ${lista(pf.quem, PF.quem)}`);
+      L.push(`- Editor: ${lista(pf.editor, PF.editor)}`);
+      L.push(`- O que mais ajudaria (até 2 por pessoa): ${lista(pf.ajuda, PF.ajuda)}`, '');
+      const kt = pf.kit;
+      if (kt) L.push('## Kit Freelancer · disparo automático (total atual)', '', `- Situação: ${kt.ligado ? 'ligado' : 'pausado' + (kt.pausa_motivo ? ' (' + kt.pausa_motivo + ')' : '')}. Regra: só envia 24 h depois da resposta e nunca menos de 7 dias depois de outra oferta.`, `- Na fila ${n(kt.na_fila)} · enviadas ${n(kt.enviados)} · entregues ${n(kt.entregues)} · lidas ${n(kt.lidos)} · tocaram em "Quero ver" ${n(kt.tocaram)} · abriram a página ${n(kt.abriram)} · compraram ${n(kt.compraram)} · pediram para sair ${n(kt.sairam)}`, '');
+    }
+    L.push('## O que eu quero da análise', '');
+    L.push('Você é um estrategista de vendas de produtos digitais. Com base só nesses números:');
+    L.push('1. O que está funcionando e deve ganhar mais investimento.');
+    L.push('2. O que está gastando dinheiro sem retorno e deve ser pausado ou mudado.');
+    L.push('3. Até 5 ações concretas, em ordem de prioridade, para vender mais pelo WhatsApp nas próximas 2 semanas: o que fazer, para quem, qual mensagem ou oferta, o impacto esperado e como medir na Central.');
+    L.push('4. Quais dados faltam para decidir melhor.');
+    L.push('Respeite as regras da marca acima. Separe o que é fato (vem da tabela) do que é hipótese sua.');
+    return L.join('\n');
+  }
+  $('relBt').onclick = () => {
+    const t = relatorio(); if (!t) return;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([t], { type: 'text/markdown;charset=utf-8' }));
+    a.download = `relatorio-central-${diaSP()}.md`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  };
+  $('relCopia').onclick = async () => {
+    const t = relatorio(); if (!t) return; const b = $('relCopia');
+    try { await navigator.clipboard.writeText(t); b.textContent = 'Copiado'; } catch { b.textContent = 'Não consegui copiar'; }
+    setTimeout(() => { b.textContent = 'Copiar'; }, 2500);
+  };
   let sequenciaCarregada = false;
   function marcaVivo(iv) {
     if (!ultimaAtualizacao) return;
