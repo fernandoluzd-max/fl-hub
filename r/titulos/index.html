@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Retomar pedido · Títulos Dinâmicos</title>
+<style>html,body{background:#0D0F0E;color:#9A968A;font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;margin:0}p{text-align:center;margin-top:40vh;padding:0 16px}a{color:#F4F0E4}</style>
+</head>
+<body>
+<p>Abrindo o seu pedido… <a id="ir" href="https://payfast.greenn.com.br/195639/offer/hb5yXQ?ch_id=144301">toque aqui se não abrir</a></p>
+<script>
+// Botão "Retomar pedido" das mensagens de recuperação no WhatsApp: leva direto ao checkout dos Títulos (com os complementos de sempre).
+(() => {
+  const u = new URL('https://payfast.greenn.com.br/195639/offer/hb5yXQ');
+  const p = { ch_id: '144301', b_id_1: '38puzs5', b_offer_1: 'ZxTsRT', b_id_2: 'qujz4kq', b_offer_2: '4mBBtQ', b_id_3: 'kbncn9f', b_offer_3: 'LSLxch',
+              utm_source: 'whatsapp', utm_medium: 'recuperacao', utm_campaign: 'checkout_abandonado', src: 'recup-whatsapp' };
+  Object.entries(p).forEach(([k, v]) => u.searchParams.set(k, v));
+  document.getElementById('ir').href = u.toString();
+  location.replace(u.toString());
+})();
+</script>
+</body>
+</html>
