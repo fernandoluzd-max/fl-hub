@@ -11,15 +11,31 @@ const GRAPH = "https://graph.facebook.com/v21.0/" + WA_PHONE_ID + "/messages";
 const json = (o: unknown, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { "content-type": "application/json" } });
 const nome1 = (n: string | null) => (String(n ?? "").trim().split(/\s+/)[0] || "").replace(/[^\p{L}'-]/gu, "").slice(0, 20);
 
-async function manda(to: string, modelo: string, nome: string, extra: unknown[] = []) {
+const tel8 = (t: string) => String(t ?? "").replace(/\D/g, "").slice(-8);
+type Res = { ok: boolean; wamid: string | null; erro: string | null; duplicado?: boolean };
+
+// TRAVA_DUPLICADO: reserva a chave ANTES de enviar. Já reservada = não envia de novo.
+// A reserva só é desfeita quando a Meta responde com erro claro (a mensagem não saiu).
+// Se a conexão cair (resposta incerta), a reserva fica: melhor não reenviar do que mandar 2 vezes.
+async function manda(chave: string, to: string, modelo: string, nome: string, extra: unknown[] = []): Promise<Res> {
+  const { data: livre, error } = await db.rpc("wpp_reservar", { p_chave: chave });
+  if (error) return { ok: false, wamid: null, erro: "trava: " + error.message, duplicado: true };
+  if (livre !== true) return { ok: false, wamid: null, erro: "ja enviado (trava)", duplicado: true };
   const components: unknown[] = [...extra, { type: "body", parameters: [{ type: "text", text: nome || "tudo bem" }] }];
-  const r = await fetch(GRAPH, { method: "POST", headers: { Authorization: "Bearer " + WA_TOKEN, "Content-Type": "application/json" },
-    body: JSON.stringify({ messaging_product: "whatsapp", to, type: "template", template: { name: modelo, language: { code: "pt_BR" }, components } }) });
-  const j = await r.json().catch(() => ({}));
-  const wamid = j?.messages?.[0]?.id ?? null;
-  return { ok: r.ok && !!wamid, wamid, erro: r.ok ? null : JSON.stringify(j?.error ?? j).slice(0, 300) };
+  try {
+    const r = await fetch(GRAPH, { method: "POST", headers: { Authorization: "Bearer " + WA_TOKEN, "Content-Type": "application/json" },
+      body: JSON.stringify({ messaging_product: "whatsapp", to, type: "template", template: { name: modelo, language: { code: "pt_BR" }, components } }),
+      signal: AbortSignal.timeout(20000) });
+    const j = await r.json().catch(() => ({}));
+    const wamid = j?.messages?.[0]?.id ?? null;
+    if (!r.ok && !wamid) await db.rpc("wpp_liberar", { p_chave: chave });
+    return { ok: r.ok && !!wamid, wamid, erro: r.ok ? null : JSON.stringify(j?.error ?? j).slice(0, 300) };
+  } catch (e) {
+    return { ok: false, wamid: null, erro: "incerto (conexao): " + String(e).slice(0, 120) };
+  }
 }
-async function registra(tipo: string, l: { sale_id?: string | null; email?: string | null; telefone: string }, r: { ok: boolean; wamid: string | null; erro: string | null }) {
+async function registra(tipo: string, l: { sale_id?: string | null; email?: string | null; telefone: string }, r: Res) {
+  if (r.duplicado) { console.log("WPP_DUPLICADO_BLOQUEADO", tipo); return; }
   await db.from("wpp_enviados").insert({ tipo, sale_id: l.sale_id ?? null, email: l.email ?? null, telefone: l.telefone, status: r.ok ? "enviado" : "erro: " + (r.erro ?? ""), meta_msg_id: r.wamid });
 }
 
@@ -38,30 +54,32 @@ Deno.serve(async (req) => {
     const tel = t?.[0]?.telefone;
     if (!tel) return json({ erro: "numero de teste nao encontrado" }, 404);
     const linha = { telefone: tel, email: null, sale_id: null };
+    // testes: a mesma chamada repetida em até 10 min (ex.: conexão caiu e tentou de novo) não envia outra vez
+    const ct = "teste_" + teste + ":" + tel8(tel) + ":" + Math.floor(Date.now() / 600000);
     let r;
-    if (teste === "pix") r = await manda(tel, "recup_pix_util", "Fernando");
-    else if (teste === "madrugada") r = await manda(tel, "recup_abandono_link", "Fernando");
-    else if (teste === "audio") r = await manda(tel, "mood_alunos_audio", "Fernando", [{ type: "header", parameters: [{ type: "video", video: { link: "https://basefl.com/alunos/mood/assets/wa/disparo.mp4" } }] }]);
+    if (teste === "pix") r = await manda(ct, tel, "recup_pix_util", "Fernando");
+    else if (teste === "madrugada") r = await manda(ct, tel, "recup_abandono_link", "Fernando");
+    else if (teste === "audio") r = await manda(ct, tel, "mood_alunos_audio", "Fernando", [{ type: "header", parameters: [{ type: "video", video: { link: "https://basefl.com/alunos/mood/assets/wa/disparo.mp4" } }] }]);
     else return json({ erro: "teste desconhecido (use pix, madrugada ou audio)" }, 400);
     await registra("teste_" + teste, linha, r);
     return json({ teste, ...r });
   }
 
-  const out: Record<string, number> = { pix2: 0, madrugada: 0, falhou: 0 };
+  const out: Record<string, number> = { pix2: 0, madrugada: 0, falhou: 0, bloqueado: 0 };
   const { data: p2, error: e1 } = await db.rpc("recup_pix_2_fila", { p_forcar: false });
   if (e1) console.error("PIX2_FILA", e1.message);
   for (const l of (p2 ?? []) as Array<{ sale_id: string; email: string; telefone: string; nome: string }>) {
-    const r = await manda(l.telefone, "recup_pix_util", nome1(l.nome));
-    await registra("recup_pix_2", l, r); r.ok ? out.pix2++ : out.falhou++;
+    const r = await manda("recup_pix_2:" + tel8(l.telefone), l.telefone, "recup_pix_util", nome1(l.nome));
+    await registra("recup_pix_2", l, r); r.ok ? out.pix2++ : r.duplicado ? out.bloqueado++ : out.falhou++;
     await new Promise((x) => setTimeout(x, 300));
   }
   const { data: md, error: e2 } = await db.rpc("recup_madrugada_fila", { p_forcar: false });
   if (e2) console.error("MADRUGADA_FILA", e2.message);
   for (const l of (md ?? []) as Array<{ sale_id: string; email: string; telefone: string; nome: string }>) {
-    const r = await manda(l.telefone, "recup_abandono_link", nome1(l.nome));
-    await registra("recup_lead_madrugada", l, r); r.ok ? out.madrugada++ : out.falhou++;
+    const r = await manda("recup_lead_madrugada:" + tel8(l.telefone), l.telefone, "recup_abandono_link", nome1(l.nome));
+    await registra("recup_lead_madrugada", l, r); r.ok ? out.madrugada++ : r.duplicado ? out.bloqueado++ : out.falhou++;
     await new Promise((x) => setTimeout(x, 300));
   }
-  if (out.pix2 || out.madrugada || out.falhou) console.log("RECUP_WPP", JSON.stringify(out));
+  if (out.pix2 || out.madrugada || out.falhou || out.bloqueado) console.log("RECUP_WPP", JSON.stringify(out));
   return json(out);
 });
