@@ -593,7 +593,7 @@
       L.push('');
     }
     const H = (d.horas || []).slice().sort((x, y) => y.n - x.n).slice(0, 5);
-    if (H.length) L.push('## Horários com mais movimento no período', '', H.map(h => `- ${String(h.h).padStart(2, '0')}h: ${n(h.n)} ações`).join('\n'), '');
+    if (H.length) L.push('## Horários com mais movimento no período', '', H.map(h => `- ${String(h.h).padStart(2, '0')}h: ${n(h.n)} ${h.n == 1 ? "ação" : "ações"}`).join('\n'), '');
     const pf = pfDados;
     if (pf) {
       const r = pf.resumo || {}, lista = (o, m) => Object.entries(o || {}).sort((x, y) => y[1] - x[1]).map(([kk, v]) => `${m[kk] || kk} ${n(v)}`).join(' · ') || '—';
