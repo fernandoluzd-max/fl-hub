@@ -599,7 +599,7 @@
       const r = pf.resumo || {}, lista = (o, m) => Object.entries(o || {}).sort((x, y) => y[1] - x[1]).map(([kk, v]) => `${m[kk] || kk} ${n(v)}`).join(' · ') || '—';
       L.push('## Alunos que responderam o perfil no app (total atual)', '');
       L.push(`- Responderam: ${n(r.responderam)} · deixaram para depois: ${n(r.pularam)}`);
-      L.push(`- Listas: quente ${n(r.quente)} · morno ${n(r.morno)} · frio ${n(r.frio)} (quente = atende clientes/agência e quer ajuda para cobrar ou organizar)`);
+      L.push(`- Listas: quente ${n(r.quente)} · morno ${n(r.morno)} · frio ${n(r.frio)} (quente = pediu ajuda para cobrar, organizar clientes ou conseguir clientes)`);
       L.push(`- Edita para quem: ${lista(pf.quem, PF.quem)}`);
       L.push(`- Editor: ${lista(pf.editor, PF.editor)}`);
       L.push(`- O que mais ajudaria (até 2 por pessoa): ${lista(pf.ajuda, PF.ajuda)}`, '');
