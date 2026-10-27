@@ -13,7 +13,7 @@
   const somaDias = (d, k) => diaSP(inicioDia(d).getTime() + k * 864e5 + 3600e3);
   const reduzMovimento = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
   const COR = { abriu: 'var(--abriu)', teste: 'var(--teste)', checkout: 'var(--compra)', audio: 'var(--audio)' };
-  const TX = { abriu: 'abriu a página', teste: 'tocou em Testar grátis (página antiga)', checkout: 'clicou para comprar', audio: 'tocou no botão da mensagem' };
+  const TX = { abriu: 'abriu a página', teste: 'tocou em Teste a ferramenta', checkout: 'clicou para comprar', audio: 'tocou no botão da mensagem' };
 
   // ========================================================================
   // Prefs — localStorage centralizado, resiliente (Tarefas 1 + 11)
@@ -150,6 +150,7 @@
     const vis = k.visitantes;
     const c = [
       ['Cliques no link', k.aberturas, kAnt?.aberturas, `${n(vis)} pessoas únicas`, 'var(--abriu)'],
+      ['Testaram a ferramenta', k.teste, kAnt?.teste, `${pctTx(k.teste_ab, vis)} de quem abriu · aula antes do teste`, 'var(--teste)'],
       ['Clicaram para comprar', k.checkout, kAnt?.checkout, `${pctTx(k.checkout_ab, vis)} de quem abriu · ${n(k.cliques_checkout)} cliques`, 'var(--compra)'],
       ['Saíram sem clicar', k.nenhum, kAnt?.nenhum, `${pctTx(k.nenhum, vis)} de quem abriu`, 'var(--nada)'],
       ['Compras', k.compras, kAnt?.compras, `${pctTx(k.compras, vis)} de quem abriu`, 'var(--venda)']
@@ -196,11 +197,11 @@
     const bs = buckets(iv, d.passo), m = {};
     (d.serie || []).forEach(x => { (m[x.b] = m[x.b] || {})[x.t] = x.n; });
     $('serieT').textContent = d.passo === 'hour' ? 'Movimento por hora' : 'Movimento por dia';
-    const tipos = ['abriu', 'checkout'];
+    const tipos = ['abriu', 'teste', 'checkout'];
     const max = Math.max(1, ...bs.flatMap(b => tipos.map(t => (m[b] || {})[t] || 0)));
     if (!bs.length || !bs.some(b => m[b])) { $('serie').innerHTML = '<p class="vazio">Sem cliques no período.</p>'; return; }
     const W = Math.max(300, $('serie').clientWidth || 640), H = W < 500 ? 180 : 210, pl = 26, pb = 22, iw = W - pl - 4, ih = H - pb - 8, bw = iw / bs.length;
-    const g = Math.max(1, Math.min(6, bw / 4.5)), barw = Math.max(1.5, (bw - g * 2) / 2);
+    const g = Math.max(1, Math.min(6, bw / 4.5)), barw = Math.max(1.5, (bw - g * 2) / tipos.length);
     let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="max-width:100%;height:auto" role="img" aria-label="Cliques por ${d.passo === 'hour' ? 'hora' : 'dia'}">`;
     const passoY = max <= 4 ? 1 : Math.ceil(max / 4);
     for (let y = 0; y <= max; y += passoY) { const yy = 8 + ih - y / max * ih; s += `<line x1="${pl}" x2="${W}" y1="${yy}" y2="${yy}" stroke="#272D29"/><text x="${pl - 6}" y="${yy + 4}" text-anchor="end">${y}</text>`; }

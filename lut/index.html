@@ -1628,7 +1628,7 @@ function montaPlayer(){
   // o botão de seguir para o teste aparece sozinho depois de ~10 s de aula com som (30 s sem som; ou na hora, se o vídeo não carregar)
   let ouvido = 0, ult = 0;
   const libera = () => { const b = $('#ja-vi'); if (b && b.hidden){ b.hidden = false; b.classList.add('surge'); } };
-  v.addEventListener('timeupdate', () => { const t = v.currentTime; if (!v.paused && t > ult && t - ult < 1.5) ouvido += (t - ult) / (v.playbackRate || 1) * (v.muted ? 1 / 3 : 1); ult = t; if (t > 0) ultT = t; if (ouvido >= 10) libera(); });
+  v.addEventListener('timeupdate', () => { const t = v.currentTime; if (!v.paused && t > ult && t - ult < 1.5) ouvido += (t - ult) / (v.playbackRate || 1) * (v.muted && !AULA_DIRETA ? 1 / 3 : 1); ult = t; if (t > 0) ultT = t; if (ouvido >= 10) libera(); });
   v.addEventListener('seeking', () => { ult = v.currentTime; });
 
   // falhas: tenta recarregar sozinho (rede), depois mostra um estado claro com "Tentar de novo" e libera o teste
@@ -2028,11 +2028,13 @@ function credencialPublica(){
 }
 atualizaFita();
 const VEIO_TESTE = /[?&](aluno|teste)=1/.test(location.search);
+// ?aula=1 (botão "Teste a ferramenta" da página do WhatsApp): abre direto na aula, sem a tela de boas-vindas; o botão de testar aparece com 10 s de aula, com ou sem som
+const AULA_DIRETA = /[?&]aula=1/.test(location.search);
 // ?direto=1 (link do WhatsApp pós-compra): abre direto no teste, sem a aula. A aula continua no botão "Ver a aula".
 const DIRETO = (() => { try { if (new URLSearchParams(location.search).get('direto') === '1') sessionStorage.setItem('mood_direto', '1'); return sessionStorage.getItem('mood_direto') === '1'; } catch { return false; } })();
-botaoConta(); if ((acesso && !VEIO_TESTE) || (DIRETO && !acesso)) passo1(); else if (!recepcaoAluno()) aulaIntro();
+botaoConta(); if ((acesso && !VEIO_TESTE && !AULA_DIRETA) || (DIRETO && !acesso && !AULA_DIRETA)) passo1(); else if (AULA_DIRETA || !recepcaoAluno()) aulaIntro();
 document.addEventListener('click', e => { if (e.target.closest && e.target.closest('#rever')){ evAula('aula_teste_rever'); aulaIntro(); } });
-Base.pronto.then(() => { sincAcesso(); if ($('.fim')) passo3(); else if (acesso && !VEIO_TESTE && $('#pl')) { if (paraPlayer){ paraPlayer(); paraPlayer = null; } passo1(); } });
+Base.pronto.then(() => { sincAcesso(); if ($('.fim')) passo3(); else if (acesso && !VEIO_TESTE && !AULA_DIRETA && $('#pl')) { if (paraPlayer){ paraPlayer(); paraPlayer = null; } passo1(); } });
 Base.aoMudar(() => { const era = acesso; sincAcesso(); if (era !== acesso && $('.fim')) passo3(); });
 // Vindo da página de obrigado (?entrar=1): abre o login na hora. Quem já tem acesso neste aparelho cai direto na ferramenta.
 if (/[?&]entrar=1/.test(location.search)) Base.pronto.then(async () => {

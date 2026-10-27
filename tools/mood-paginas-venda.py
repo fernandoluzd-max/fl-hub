@@ -69,6 +69,14 @@ a.gu{text-decoration:none}
 @media (max-width:760px){.topo .cmp{aspect-ratio:auto;height:44svh}}
 .hero-cta{max-width:420px;margin:22px auto 0;text-align:center}
 .hero-cta .gar-mini{margin-top:10px}
+.teste-bt{position:relative;gap:12px;font-size:19px;min-height:64px;box-shadow:0 18px 50px -14px rgba(255,111,174,.6);animation:chama 2.6s ease-in-out infinite}
+.teste-bt svg{width:20px;height:20px}
+@keyframes chama{0%,100%{box-shadow:0 18px 50px -14px rgba(255,111,174,.55)}50%{box-shadow:0 18px 60px -8px rgba(180,92,255,.75)}}
+.teste-topo{max-width:420px;margin:20px auto 4px}
+.teste-tx{margin:10px auto 0;max-width:34ch;font-size:13.5px;color:var(--mute)}
+.gu.claro{background:var(--ink);color:#111312}
+.teste-lk{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:8px 4px;font-weight:700;font-size:15px;color:var(--ink);text-underline-offset:3px}
+.teste-lk svg{width:16px;height:16px;color:var(--ambar)}
 .ja{display:inline-block;margin-top:6px;padding:8px 6px;font-size:13.5px;color:var(--mute);text-underline-offset:3px}
 .ja:hover{color:var(--ink)}
 @media (max-width:760px){.bens,.quem{grid-template-columns:1fr}.bem{grid-template-columns:60px 1fr}.bem img{width:60px;height:60px}}
@@ -317,7 +325,7 @@ def sec_esperar():
     <span><b>Como chega no seu editor:</b> o Mood gera uma LUT (arquivo .cube). Você aplica no CapCut do computador, no Premiere, no DaVinci ou no Final Cut. Dá para criar a LUT pelo celular, mas ela é aplicada no computador.</span></div>
 </section>'''
 
-def sec_leva(itens, cta, href):
+def sec_leva(itens, cta, href, teste=None):
     li = ''.join(f'<li class="s">{OK}{x}</li>' for x in itens)
     return f'''<section class="sec w">
   <div class="cab"><span class="rot">A oferta</span><h2>Tudo o que vem no Mood.</h2></div>
@@ -328,6 +336,7 @@ def sec_leva(itens, cta, href):
     <p class="parc">à vista, ou 12x de R$ 8,12</p>
     <a class="gu" href="{href}" data-compra="oferta">{cta}</a>
     <p class="sob">Pix ou cartão. O acesso chega no seu e-mail logo depois do pagamento.</p>
+    {f'<a class="teste-lk" href="{teste}" data-teste="oferta">{PLAY}Prefere testar antes? Teste a ferramenta</a>' if teste else ''}
     {AVISO}
   </div>
 </section>'''
@@ -365,12 +374,15 @@ def hero(rot, h1, sub, oferta_html):
 </section>'''
 
 DEMO = SEC_CMP[SEC_CMP.index('<div class="demo">'):SEC_CMP.rindex('</section>')].rstrip()
-def hero_venda(rot, h1, sub, cta):
+PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6c0 .8.9 1.3 1.6.8l10.6-6.8c.6-.4.6-1.3 0-1.7L9.6 4.4C8.9 3.9 8 4.4 8 5.2z"/></svg>'
+TESTE_V = '/lut/?aula=1&utm_source=whatsapp&utm_medium=disparo&utm_campaign=mood&utm_content=teste'
+def hero_venda(rot, h1, sub, cta, teste=None):
     return f'''<section class="topo w">
   <div class="marca"><span class="mood">Mood</span><span class="de">BASE FL</span></div>
   <p class="rot">{rot}</p>
   <h1>{h1}</h1>
   <p class="sub">{sub}</p>
+  {(f'<div class="teste-topo"><a class="gu teste-bt" href="{teste}" data-teste="topo">{PLAY}Teste a ferramenta</a><p class="teste-tx">Começa com uma aula rápida minha mostrando como tirar o melhor resultado.</p></div>') if teste else ''}
   {PASSOS3}
   <p class="dica">Toque numa referência e veja a cor mudar no meu vídeo. Arraste para comparar.</p>
   {DEMO}
@@ -449,6 +461,7 @@ def js_eventos(origem):
     return (nome, extra) => { try { fetch(URL_, { method:'POST', keepalive:true, headers:{ 'Content-Type':'application/json', apikey:KEY, Authorization:'Bearer ' + KEY }, body: JSON.stringify({ p_nome:nome, p_pack:'fl-lut', p_visitante:vis, p_dados:Object.assign({ origem:ORIGEM }, extra || {}) }) }).catch(() => {}); } catch {} };
   })();
   window.FLMood = EV;
+  document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-teste]'); if (b) EV('mood_teste_clique', { onde: b.dataset.teste }); }, true);
   EV('mood_pagina_viu');
   document.addEventListener('click', e => {
     const b = e.target.closest && e.target.closest('[data-compra]'); if (!b) return;
@@ -464,6 +477,7 @@ v_js = js_eventos('whatsapp') + '''  // ===== link do disparo (basefl.com/v/?t=C
   if (/^[a-f0-9]{12,40}$/.test(t)) {
     const ir = d => { const u = new URL('https://otlaexuqyavpzxwzcsfo.supabase.co/functions/v1/camp/ir'); u.searchParams.set('t', t); u.searchParams.set('o', 'whatsapp'); u.searchParams.set('d', d); return u.toString(); };
     document.querySelectorAll('[data-compra]').forEach(a => a.href = ir('checkout'));
+    document.querySelectorAll('[data-teste]').forEach(a => a.addEventListener('click', () => { try { fetch(ir('teste'), { mode:'no-cors', keepalive:true, cache:'no-store' }).catch(() => {}); } catch {} }));
     try { fetch(ir('abriu'), { mode:'no-cors', keepalive:true, cache:'no-store' }).catch(() => {}); } catch {}
   }
 '''
@@ -471,14 +485,14 @@ v_corpo = '\n\n'.join([
     hero_venda('Uma ferramenta nova, feita por mim',
          'Criei uma ferramenta para acertar a cor dos seus vídeos.',
          'Você mostra um vídeo com a cor que gosta, mostra o seu, e o Mood cria a LUT pronta para o seu editor.',
-         'Quero facilitar minhas edições'),
+         'Quero facilitar minhas edições', teste=TESTE_V),
     sec_dores('Você grava, edita… e trava na cor.', [
         'Mexe em contraste, saturação e temperatura, e a imagem fica diferente, não melhor.',
         'Vê um vídeo com uma cor linda e não faz ideia de como chegar nela.',
         'Perde meia hora num ajuste que no fim nem ficou bom.'],
         'Foi pra isso que eu fiz o Mood: <em>você mostra a cor que quer</em>, ele faz a parte técnica.'),
     SEC_FLX, sec_bens(), sec_quem(), sec_esperar(), sec_faq(FAQ_PUB),
-    sec_leva(LEVA, 'Garantir meu acesso', V_HREF), SEC_GAR])
+    sec_leva(LEVA, 'Garantir meu acesso', V_HREF, teste=TESTE_V), SEC_GAR])
 v = pagina('Mood · Base FL', 'Uma ferramenta para acertar a cor do seu vídeo usando outro vídeo como referência.',
     '<meta property="og:title" content="Mood · Base FL">\n<meta property="og:description" content="Cor bonita no seu vídeo, sem saber color grade.">\n<meta property="og:image" content="https://basefl.com/lut/demo/og-mood.jpg">',
     v_corpo, 'Sua próxima edição já pode sair com a cor que você gosta.', 'Mood por R$ 79, ou 12x de R$ 8,12. Com 7 dias de garantia.',
