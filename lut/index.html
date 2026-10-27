@@ -1487,9 +1487,12 @@ function botaoConta(){
 // Para trocar o vídeo, mude AULA_URL. Os eventos vão para a função "evento" do Supabase (aula_teste_*).
 // versão para web: 38 MB, H.264 + AAC, com o índice no início do arquivo (começa a tocar sem baixar tudo).
 // O original (mood.mp4, 201 MB) tinha o índice no fim: o celular precisava baixar muito antes de tocar.
-const AULA_URL = 'https://aulas.basefl.com/mood-web.mp4';
-const AULA_CAPA = '/lut/aula-capa.jpg';
-const VEL_INICIAL = 1.5;   // velocidade com que a aula começa (a pessoa pode trocar no player)
+// Botão "Teste a ferramenta" da página do WhatsApp (?aula=1): mostra o vídeo upssel.mp4 (5:40), do começo, em velocidade normal.
+const AULA_WPP = /[?&]aula=1/.test(location.search);
+const AULA_URL = AULA_WPP ? 'https://aulas.basefl.com/upssel.mp4' : 'https://aulas.basefl.com/mood-web.mp4';
+const AULA_CAPA = AULA_WPP ? '' : '/lut/aula-capa.jpg';
+const AULA_MIN = AULA_WPP ? '6 min' : '8 min';
+const VEL_INICIAL = AULA_WPP ? 1 : 1.5;   // velocidade com que a aula começa (a pessoa pode trocar no player)
 const AULA_VISTA = 'mood_aula_vista';
 const IC_AULA = {
   play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4c0 .8.9 1.3 1.6.9l11.3-7.2c.6-.4.6-1.3 0-1.7L8.6 3.9C7.9 3.5 7 4 7 4.8z"/></svg>',
@@ -1506,7 +1509,7 @@ let paraPlayer = null;   // desliga os atalhos de teclado do player quando sai d
 function aulaIntro(){
   passos(-1);
   tela(`<div class="intro">
-    <div class="sobre-t"><span class="mono">Antes de testar · 8 min</span></div>
+    <div class="sobre-t"><span class="mono">Antes de testar · ${AULA_MIN}</span></div>
     <h1>Tem um jeito certo de usar o Mood. <em>Assista antes.</em></h1>
     <p class="sub">Nessa aula eu mostro, passo a passo, como escolher a referência e preparar o seu vídeo para o Mood acertar a cor.</p>
     <p class="nota"><i></i><span>Testar de qualquer jeito costuma dar um resultado fraco. Com esses cuidados, a diferença aparece na hora.</span></p>
@@ -1598,7 +1601,7 @@ function montaPlayer(){
   $('#psomon').onclick = e => { e.stopPropagation(); ligaSom(); };
 
   // a prévia muda começa no gancho (3:53, já ensinando na prática); com som, a aula sempre começa do 0:00
-  const GANCHO = 233;
+  const GANCHO = AULA_WPP ? 0 : 233;   // o vídeo do WhatsApp começa do início
   let previa = false;
   const vaiProGancho = () => { if (inicio && !pl.classList.contains('mudo-auto')) return; try { v.currentTime = GANCHO; previa = true; } catch {} };
   const mudoAuto = () => { v.muted = true; v.defaultMuted = true;
@@ -1812,7 +1815,7 @@ passos = function(at){
   const box = $('#passos');
   if (at === -2){ box.innerHTML = ''; box.hidden = true; return; }
   box.hidden = false;
-  const n = at === -1 ? 1 : at + 2, nomes = ['', 'Aula · 8 min', 'Sua prova', 'Resultado', 'Sua LUT'];
+  const n = at === -1 ? 1 : at + 2, nomes = ['', 'Aula · ' + AULA_MIN, 'Sua prova', 'Resultado', 'Sua LUT'];
   box.innerHTML = `<p class="al-prog">Prova de cor · <b>${n}/4 ${nomes[n]}</b></p><p class="al-segs" aria-hidden="true">${[1, 2, 3, 4].map(i => `<i class="${i === n ? 'at' : i < n ? 'ok' : ''}"></i>`).join('')}</p>`;
 };
 
