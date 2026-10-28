@@ -349,7 +349,7 @@ const NO_APP = {
 };
 const PRODUCTS = Object.keys(NO_APP).map(k => { const c = POR_KEY[k]; return { ...NO_APP[k], key:k, packId:c.pack, name:c.nome, desc:c.desc, cor:c.cor, preco:'R$ ' + c.preco, acesso:c.acesso, gancho:c.gancho, inclui:c.inclui, soKit:c.so_no_kit, bonusTxt:c.bonus_txt, web: c.url ? 'https://basefl.com' + c.url : undefined }; });
 // Bônus extra dos Títulos Dinâmicos: só um link (pacote de recursos no Drive do Fernando). Abre no navegador, só para quem comprou.
-const RECURSOS_BONUS = { name:'Backgrounds e Overlays', bonusTxt:'Backgrounds e overlays para as suas edições', cor:'120,200,120', link:'https://drive.google.com/drive/folders/1HRHtanh9406IWcrNwhesN2P5uF1p5Wyv', icone:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M24 7 41 15 24 23 7 15 24 7Z"/><path d="M8 24 24 31.5 40 24"/><path d="M8 32.5 24 40 40 32.5"/></svg>' };
+const RECURSOS_BONUS = { name:'Backgrounds e Overlays', bonusTxt:'Backgrounds e overlays para as suas edições', cor:'120,200,120', link:(POR_KEY.legendas && POR_KEY.legendas.bonus_drive) || 'https://drive.google.com/drive/folders/1O5JPqg5FUSrnxb8xw-37pjVXsOIBx8-c', icone:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M24 7 41 15 24 23 7 15 24 7Z"/><path d="M8 24 24 31.5 40 24"/><path d="M8 32.5 24 40 40 32.5"/></svg>' };
 
 // ===== Servidor (chave pública: pode ficar no app) =====
 const SUPA = { url: 'https://otlaexuqyavpzxwzcsfo.supabase.co', key: 'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
