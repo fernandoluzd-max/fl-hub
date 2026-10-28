@@ -176,7 +176,6 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
 .bon-g>:last-child:nth-child(odd){grid-column:1/-1}
 .bon-i{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px;min-width:0}
 .bon-i img{border-radius:11px;flex:none}
-.bon-i .bon-ic{width:44px;height:44px;border-radius:11px;flex:none;display:grid;place-items:center;background:rgba(var(--b),.16);color:rgb(var(--b))}.bon-i .bon-ic svg{width:24px;height:24px}
 .bon-ic{flex:none;width:44px;height:44px;border-radius:11px;display:grid;place-items:center;background:rgba(120,200,120,.14);color:#96c860}.bon-ic svg{width:26px;height:26px}
 .bon-i span{flex:1;min-width:0}.bon-i b{display:block;font-size:14px;font-weight:700}.bon-i small{display:block;font-size:12px;color:var(--sub);line-height:1.3}
 .bon-i em{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgb(var(--c));border:1px solid rgba(var(--c),.45);border-radius:99px;padding:3px 8px}
@@ -350,13 +349,11 @@ const NO_APP = {
 };
 const PRODUCTS = Object.keys(NO_APP).map(k => { const c = POR_KEY[k]; return { ...NO_APP[k], key:k, packId:c.pack, name:c.nome, desc:c.desc, cor:c.cor, preco:'R$ ' + c.preco, acesso:c.acesso, gancho:c.gancho, inclui:c.inclui, soKit:c.so_no_kit, bonusTxt:c.bonus_txt, web: c.url ? 'https://basefl.com' + c.url : undefined }; });
 // Bônus extra dos Títulos Dinâmicos: só um link (pacote de recursos no Drive do Fernando). Abre no navegador, só para quem comprou.
-// Ícones simples para as pastas de bônus (cada pasta do Drive vira uma linha)
-const IC_PASTA = { antes:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16"/><path d="M6 15l2.5-3 2 2.5"/><path d="M14 15l2-2.5 2.5 2.5"/></svg>',
-  camadas:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 21 7.5 12 12 3 7.5Z"/><path d="M3 12l9 4.5 9-4.5"/><path d="M3 16.5 12 21l9-4.5"/></svg>',
-  musica:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>' };
+// Ícones das pastas de bônus: arquivos em ui/icones/ no mesmo estilo dos outros produtos (bonus-antes, bonus-overlays, bonus-musicas)
+const IC_PASTA = { antes:'bonus-antes', camadas:'bonus-overlays', musica:'bonus-musicas' };   // nome no catálogo -> arquivo
 const PASTAS_BONUS = (Array.isArray(POR_KEY.legendas && POR_KEY.legendas.bonus_pastas) && POR_KEY.legendas.bonus_pastas.length ? POR_KEY.legendas.bonus_pastas : [{"nome": "Templates de antes e depois", "txt": "Modelos prontos para mostrar o antes e depois", "link": "https://drive.google.com/drive/folders/17NuCzt4fPhLnOPQo9t8TlMKxYoQ1Ixb4", "icone": "antes"}, {"nome": "Overlays e texturas", "txt": "Camadas e texturas para o acabamento das edições", "link": "https://drive.google.com/drive/folders/1O5JPqg5FUSrnxb8xw-37pjVXsOIBx8-c", "icone": "camadas"}, {"nome": "Músicas", "txt": "Trilhas para usar nas suas edições", "link": "https://drive.google.com/drive/folders/1XGkz8eSQM1AHYIrQRCrrERKiP7Ra-o7u", "icone": "musica"}])
   .filter(x => x && /^https:\/\/drive\.google\.com\//.test(String(x.link || '')))
-  .map(x => ({ name:String(x.nome || 'Pasta de bônus'), bonusTxt:String(x.txt || ''), link:String(x.link), ic:IC_PASTA[x.icone] || IC_PASTA.camadas, cor:'120,200,120' }));
+  .map(x => ({ name:String(x.nome || 'Pasta de bônus'), bonusTxt:String(x.txt || ''), link:String(x.link), ic:IC_PASTA[x.icone] || 'bonus-overlays', cor:'120,200,120' }));
 
 // ===== Servidor (chave pública: pode ficar no app) =====
 const SUPA = { url: 'https://otlaexuqyavpzxwzcsfo.supabase.co', key: 'sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR' };
@@ -634,7 +631,7 @@ function render(){
       }
       for (const x of extraBonus){   // bônus que é só um link (ex.: pacote de recursos no Drive); abre no navegador, só para quem comprou
         const tem = !!cat?.owned?.has('fl-legendas'), li = document.createElement('div'); li.className = 'bon-i'; li.style.setProperty('--b', x.cor);
-        li.innerHTML = `<span class="bon-ic">${x.ic}</span><span><b>${escTxt(x.name)}</b><small>${escTxt(x.bonusTxt)}</small></span>`;
+        li.innerHTML = `<img src="icones/${x.ic}.png" alt="" width="44" height="44" draggable="false"><span><b>${escTxt(x.name)}</b><small>${escTxt(x.bonusTxt)}</small></span>`;
         if (tem) li.appendChild(btn('Abrir', 'ghost bon-b', () => T.opener.openUrl(x.link)));
         else { const t = document.createElement('em'); t.textContent = 'Bônus'; li.appendChild(t); }
         bx.querySelector('.bon-g').appendChild(li);
