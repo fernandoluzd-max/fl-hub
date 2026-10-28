@@ -51,6 +51,8 @@ REGRA = r"""window.CATALOGO_OFERTA = function (tem) {
 if __name__ == '__main__':
     c = carrega()
     js = '// GERADO por tools/gera_catalogo.py a partir de catalogo.json. Não edite aqui.\nwindow.CATALOGO = ' + json.dumps(c, ensure_ascii=False, separators=(',', ':')) + ';\n' + REGRA
+    _ao_vivo = os.path.join(RAIZ, 'tools', 'catalogo_app_ao_vivo.js')
+    if os.path.exists(_ao_vivo): js += '\n' + open(_ao_vivo, encoding='utf-8').read()
     for destino in ('catalogo.js', os.path.join('ui', 'catalogo.js')):
         with open(os.path.join(RAIZ, destino), 'w', encoding='utf-8') as f:
             f.write(js)
