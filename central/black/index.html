@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel da Black · Base FL</title>
+<link rel="icon" type="image/svg+xml" href="../icones/icon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../icones/apple-touch-icon-180.png">
+<meta name="theme-color" content="#0D0F0E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0D0F0E;--card:#151816;--line:#262c28;--ink:#F4F0E4;--mute:#9A968A;--dim:#5f5c55;--acc:#F2A541;--acc2:#F7C27A;--ok:#7bd88f;--grupo:#7bd88f;--vis:#8fb3ff;--buy:#F2A541;
+  --f:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:15px/1.45 var(--f);min-height:100vh;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:22px 16px 60px}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+h1{font-size:26px;font-weight:800;letter-spacing:-.02em;font-stretch:90%}
+.sub{color:var(--mute);font-size:13.5px;margin-top:2px}
+.st{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:99px;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--card)}
+.st i{width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 4px rgba(242,165,65,.18)}
+.st.aberta i{background:var(--ok);box-shadow:0 0 0 4px rgba(123,216,143,.18)}
+.st.encerrada i{background:var(--dim);box-shadow:none}
+.bt{appearance:none;border:0;cursor:pointer;font:700 14px var(--f);padding:11px 16px;border-radius:12px;background:var(--acc);color:#17130B}
+.bt.sec{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.bt:focus-visible,input:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.k{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 16px 14px;position:relative;overflow:hidden}
+.k b{display:block;font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;margin:8px 0 6px}
+.k span{font-size:13px;color:var(--mute)}
+.k small{display:block;font-size:12.5px;color:var(--dim);margin-top:4px}
+.k::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c,var(--acc))}
+.grid2{display:grid;grid-template-columns:1.2fr 1fr;gap:12px;margin-top:12px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.box h2{font-size:15px;font-weight:800;margin-bottom:4px}
+.box p.d{font-size:12.5px;color:var(--mute);margin-bottom:14px}
+.funil{display:flex;flex-direction:column;gap:10px}
+.fx{display:grid;grid-template-columns:130px 1fr 64px;align-items:center;gap:10px;font-size:13.5px}
+.fx .barra{height:26px;background:#1d211f;border-radius:8px;overflow:hidden}
+.fx .barra i{display:block;height:100%;border-radius:8px;background:var(--c);min-width:2px;transition:width .6s cubic-bezier(.16,1,.3,1)}
+.fx em{font-style:normal;font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.fx .pc{display:block;font-size:11.5px;color:var(--dim);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{color:var(--dim);font-weight:600;font-size:12px;text-align:left;padding:0 6px 8px;border-bottom:1px solid var(--line)}
+td{padding:9px 6px;border-bottom:1px solid #1d211f;font-variant-numeric:tabular-nums}
+td.n,th.n{text-align:right}
+.tag{display:inline-block;font-size:11.5px;color:var(--mute);background:#1d211f;border-radius:6px;padding:1px 6px;margin-left:6px}
+.mini{display:inline-block;height:6px;border-radius:3px;background:var(--grupo);vertical-align:middle;margin-right:6px}
+.chart{display:flex;align-items:flex-end;gap:6px;height:180px;padding-top:10px;border-bottom:1px solid var(--line)}
+.col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.pair{display:flex;align-items:flex-end;gap:2px;height:100%;width:100%;justify-content:center}
+.pair i{display:block;width:44%;max-width:16px;border-radius:4px 4px 0 0;min-height:2px}
+.pair i.v{background:var(--vis)}.pair i.g{background:var(--grupo)}
+.lbl{display:flex;gap:6px}.lbl span{flex:1;min-width:0;text-align:center;font-size:11px;color:var(--dim);padding-top:6px;white-space:nowrap;overflow:hidden}
+.leg{display:flex;gap:14px;font-size:12px;color:var(--mute);margin-top:10px}.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.manual{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.manual input{width:130px;font:700 18px var(--f);padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#0f1211;color:var(--ink)}
+.msg{font-size:13px;color:var(--mute);min-height:18px;margin-top:8px}
+.vazio{color:var(--dim);font-size:13px;padding:14px 0}
+.porta{min-height:70vh;display:grid;place-items:center;text-align:center}
+.porta .cx{max-width:360px}.porta h1{margin-bottom:8px}.porta p{color:var(--mute);margin-bottom:18px}
+@media (max-width:860px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:1fr}.k b{font-size:32px}}
+@media (max-width:420px){.fx{grid-template-columns:96px 1fr 52px;font-size:12.5px}}
+@media (prefers-reduced-motion:reduce){.fx .barra i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="porta" id="porta" hidden>
+    <div class="cx">
+      <h1>Painel da Black</h1>
+      <p id="portaTx">Entre com o seu e-mail para ver os números da campanha.</p>
+      <button class="bt" id="entrar">Entrar</button>
+    </div>
+  </section>
+
+  <main id="app" hidden>
+    <header>
+      <div>
+        <h1>Black dos alunos</h1>
+        <p class="sub" id="atual">Carregando…</p>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <span class="st" id="estado"><i></i><span>—</span></span>
+        <button class="bt sec" id="atualiza">Atualizar</button>
+      </div>
+    </header>
+
+    <section class="kpis" aria-label="Resumo">
+      <div class="k" style="--c:var(--vis)"><span>Visitaram a página</span><b id="kVis">—</b><small>pessoas diferentes</small></div>
+      <div class="k" style="--c:var(--grupo)"><span>Clicaram no grupo</span><b id="kCli">—</b><small id="kCliPc">&nbsp;</small></div>
+      <div class="k" style="--c:var(--ok)"><span>Pessoas no grupo</span><b id="kGrupo">—</b><small id="kGrupoDia">contagem manual</small></div>
+      <div class="k" style="--c:var(--buy)"><span>Clicaram em comprar</span><b id="kBuy">—</b><small>a partir da abertura</small></div>
+    </section>
+
+    <div class="grid2">
+      <section class="box">
+        <h2>Do link até a compra</h2>
+        <p class="d">Cada barra mostra quantas pessoas chegaram até aquela etapa.</p>
+        <div class="funil" id="funil"></div>
+      </section>
+      <section class="box">
+        <h2>Pessoas no grupo</h2>
+        <p class="d">O WhatsApp não informa quem entrou. Conte 1 vez por dia no grupo e anote aqui.</p>
+        <div class="manual">
+          <label for="nGrupo" style="font-size:13px;color:var(--mute)">Participantes hoje</label>
+          <input id="nGrupo" type="number" inputmode="numeric" min="0" step="1" placeholder="0">
+          <button class="bt" id="salvaGrupo">Anotar</button>
+        </div>
+        <p class="msg" id="grupoMsg" role="status"></p>
+        <div id="grupoHist"></div>
+      </section>
+    </div>
+
+    <section class="box" style="margin-top:12px">
+      <h2>De onde as pessoas vêm</h2>
+      <p class="d">Pela origem do link que a pessoa tocou (convite, grupo, stories, e-mail…).</p>
+      <div id="origens"></div>
+    </section>
+
+    <div class="grid2">
+      <section class="box">
+        <h2>Dia a dia</h2>
+        <p class="d">Visitantes e cliques no grupo por dia.</p>
+        <div id="dias"></div>
+        <div class="leg"><span><i style="background:var(--vis)"></i>Visitaram</span><span><i style="background:var(--grupo)"></i>Clicaram no grupo</span></div>
+      </section>
+      <section class="box">
+        <h2>Botões mais tocados</h2>
+        <p class="d">Qual botão da página levou mais gente.</p>
+        <div id="botoes"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script src="/catalogo.js"></script>
+<script src="/base.js"></script>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const ABRE = new Date('2026-11-19T20:00:00-03:00'), FECHA = new Date('2026-11-30T23:59:59-03:00');
+  const NOMES = { whatsapp: 'WhatsApp (convite)', grupo: 'Grupo', instagram: 'Instagram', email: 'E-mail', direto: 'Direto / sem origem' };
+  const MEIOS = { convite: 'convite', lembrete: 'lembrete', abertura: 'abertura', stories: 'stories', bio: 'link da bio' };
+  const n = v => (Number(v) || 0).toLocaleString('pt-BR');
+  const pc = (a, b) => b > 0 ? Math.round(a / b * 100) + '%' : '—';
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const hoje = () => new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10);
+  const dm = d => { const p = String(d).slice(0, 10).split('-'); return p[2] + '/' + p[1]; };
+  let dados = null;
+
+  function estado() {
+    const a = Date.now(), el = $('estado');
+    const [cls, tx] = a < ABRE ? ['', 'Pré-lançamento · abre 19/11 às 20h'] : a <= FECHA ? ['aberta', 'Aberta · fecha 30/11 às 23h59'] : ['encerrada', 'Encerrada'];
+    el.className = 'st ' + cls; el.querySelector('span').textContent = tx;
+  }
+
+  function desenha() {
+    const t = dados.totais || {}, g = dados.grupo || [];
+    const ult = g.length ? g[g.length - 1] : null;
+    $('kVis').textContent = n(t.visitantes);
+    $('kCli').textContent = n(t.grupo);
+    $('kCliPc').textContent = t.visitantes ? pc(t.grupo, t.visitantes) + ' de quem visitou' : ' ';
+    $('kGrupo').textContent = ult ? n(ult.participantes) : '—';
+    $('kGrupoDia').textContent = ult ? 'contagem manual · ' + dm(ult.dia) : 'contagem manual · ainda sem anotação';
+    $('kBuy').textContent = n(t.checkout);
+
+    const etapas = [
+      ['Visitaram a página', t.visitantes, 'var(--vis)'],
+      ['Clicaram no grupo', t.grupo, 'var(--grupo)'],
+      ['Estão no grupo', ult ? ult.participantes : 0, 'var(--ok)'],
+      ['Clicaram em comprar', t.checkout, 'var(--buy)']
+    ];
+    const max = Math.max(1, ...etapas.map(e => Number(e[1]) || 0));
+    $('funil').innerHTML = etapas.map((e, i) => {
+      const v = Number(e[1]) || 0, prev = i ? Number(etapas[i - 1][1]) || 0 : 0;
+      return '<div class="fx"><span>' + e[0] + (i ? '<span class="pc">' + pc(v, prev) + ' da etapa anterior</span>' : '') + '</span>' +
+        '<div class="barra"><i style="--c:' + e[2] + ';width:' + (v / max * 100) + '%"></i></div><em>' + n(v) + '</em></div>';
+    }).join('');
+
+    const os = (dados.origens || []).filter(o => o.visitantes || o.grupo || o.checkout);
+    const mo = Math.max(1, ...os.map(o => o.grupo || 0));
+    $('origens').innerHTML = os.length ? '<table><thead><tr><th>Origem</th><th class="n">Visitaram</th><th class="n">Clicaram no grupo</th><th class="n">Taxa</th><th class="n">Comprar</th></tr></thead><tbody>' +
+      os.map(o => '<tr><td>' + esc(NOMES[o.origem] || o.origem) + (o.meio ? '<span class="tag">' + esc(MEIOS[o.meio] || o.meio) + '</span>' : '') + '</td>' +
+        '<td class="n">' + n(o.visitantes) + '</td><td class="n"><span class="mini" style="width:' + Math.round((o.grupo || 0) / mo * 60) + 'px"></span>' + n(o.grupo) + '</td>' +
+        '<td class="n">' + pc(o.grupo, o.visitantes) + '</td><td class="n">' + n(o.checkout) + '</td></tr>').join('') + '</tbody></table>'
+      : '<p class="vazio">Ainda ninguém visitou a página.</p>';
+
+    const ds = (dados.dias || []).slice(-14);
+    const md = Math.max(1, ...ds.map(d => Math.max(d.visitantes || 0, d.grupo || 0)));
+    $('dias').innerHTML = ds.length ? '<div class="chart">' + ds.map(d => '<div class="col" title="' + dm(d.dia) + ': ' + n(d.visitantes) + ' visitaram, ' + n(d.grupo) + ' clicaram no grupo"><div class="pair"><i class="v" style="height:' + (d.visitantes / md * 100) + '%"></i><i class="g" style="height:' + (d.grupo / md * 100) + '%"></i></div></div>').join('') +
+      '</div><div class="lbl">' + ds.map(d => '<span>' + dm(d.dia) + '</span>').join('') + '</div>' : '<p class="vazio">Sem dados ainda.</p>';
+
+    const NB = { hero: 'Topo da página', contador: 'Contador', oferta: 'Oferta', final: 'Final da página' };
+    const bs = dados.botoes || [];
+    $('botoes').innerHTML = bs.length ? '<table><tbody>' + bs.slice(0, 8).map(b => '<tr><td>' + esc(NB[b.cta] || b.cta) + '<span class="tag">' + (b.evento === 'checkout' ? 'comprar' : 'grupo') + '</span></td><td class="n">' + n(b.cliques) + '</td></tr>').join('') + '</tbody></table>' : '<p class="vazio">Nenhum clique ainda.</p>';
+
+    $('grupoHist').innerHTML = g.length ? '<table style="margin-top:12px"><thead><tr><th>Dia</th><th class="n">Participantes</th><th class="n">Variação</th></tr></thead><tbody>' +
+      g.slice().reverse().slice(0, 7).map((x, i, arr) => { const ant = arr[i + 1]; const dv = ant ? x.participantes - ant.participantes : null;
+        return '<tr><td>' + dm(x.dia) + '</td><td class="n">' + n(x.participantes) + '</td><td class="n" style="color:' + (dv > 0 ? 'var(--ok)' : 'var(--mute)') + '">' + (dv == null ? '—' : (dv > 0 ? '+' : '') + n(dv)) + '</td></tr>'; }).join('') + '</tbody></table>' : '';
+    $('atual').textContent = 'Atualizado às ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + ' · atualiza sozinho a cada minuto';
+  }
+
+  async function carrega() {
+    try { dados = await Base.rpc('black_painel', {}); estado(); desenha(); }
+    catch (e) { $('atual').textContent = /sem_acesso/.test(e.message) ? 'Este e-mail não tem acesso ao painel.' : 'Não consegui carregar agora (' + e.message + ').'; }
+  }
+
+  $('salvaGrupo').onclick = async () => {
+    const v = parseInt($('nGrupo').value, 10);
+    if (!(v >= 0)) { $('grupoMsg').textContent = 'Digite o número de participantes.'; return; }
+    $('salvaGrupo').disabled = true;
+    try { await Base.rpc('black_grupo_salvar', { p_dia: hoje(), p_participantes: v }); $('grupoMsg').textContent = 'Anotado: ' + n(v) + ' pessoas hoje.'; $('nGrupo').value = ''; await carrega(); }
+    catch (e) { $('grupoMsg').textContent = 'Não consegui anotar (' + e.message + ').'; }
+    $('salvaGrupo').disabled = false;
+  };
+  $('atualiza').onclick = carrega;
+
+  function abre() { $('porta').hidden = true; $('app').hidden = false; carrega(); setInterval(carrega, 60000); }
+  $('entrar').onclick = async () => { const ok = await Base.login(); if (ok || Base.sessao()) abre(); };
+  if (Base.sessao()) abre(); else $('porta').hidden = false;
+})();
+</script>
+</body>
+</html>
