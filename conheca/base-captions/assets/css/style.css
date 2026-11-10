@@ -2225,6 +2225,13 @@ s.risca.conta::after{transition-delay:.05s!important}
   .bc-txt p{max-width:34ch;margin-left:auto;margin-right:auto}
   .bc-txt .cpt-bc{display:none}
 }
+/* ===== Selo "Funciona no CapCut gratuito" (topo e oferta) ===== */
+.gratis{display:flex;align-items:center;justify-content:center;gap:8px;width:fit-content;margin:12px auto 0;padding:7px 14px 7px 10px;border-radius:99px;border:1px solid rgba(123,216,143,.35);background:rgba(123,216,143,.08);font-size:13.5px;line-height:1.3;color:var(--muted);text-align:center}
+.gratis b{color:var(--text);font-weight:700}
+.gratis .ki{flex:none;width:18px;height:18px;padding:2px;border-radius:50%;background:var(--ok,#4ade80);color:#0b1a0f;stroke:currentColor;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.gratis-of{margin-top:10px}
+@media (max-width:520px){.gratis-pro{display:none}}
+@media (max-width:380px){.gratis{font-size:12.5px;padding:6px 12px 6px 8px}}
 /* ===== Faixa "Oferta de lançamento" (fica no topo junto com o cabeçalho) ===== */
 html{scroll-padding-top:110px}
 .faixa{overflow:hidden;background:linear-gradient(90deg,var(--acc-deep),var(--acc) 30%,var(--acc-hi) 50%,var(--acc) 70%,var(--acc-deep));color:var(--acc-ink);border-bottom:1px solid rgba(0,0,0,.25)}

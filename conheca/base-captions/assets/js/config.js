@@ -54,7 +54,7 @@ window.PACK_CONFIG = {
 
   // PERGUNTAS EXTRAS DO FAQ: escreva a resposta entre as aspas de "r". Pergunta com resposta vazia não aparece.
   FAQ_EXTRA: [
-    { p: "Funciona no CapCut gratuito?", r: "Funciona. As legendas entram como texto normal do CapCut e os títulos não usam recurso pago. Não precisa do CapCut Pro.", segunda: true },     // esta entra como 2ª pergunta do FAQ
+    { p: "Funciona no CapCut gratuito ou precisa do CapCut Pro?", r: "Funciona no CapCut gratuito. Você não precisa assinar o CapCut Pro: as legendas, os títulos, os efeitos sonoros e o zoom funcionam na versão grátis do CapCut para computador.", segunda: true },     // esta entra como 2ª pergunta do FAQ
     { p: "As fontes têm acento?", r: "Têm. As legendas são geradas em português, com acentos e ç, e as fontes dos estilos mostram tudo certinho." },
     { p: "Funciona em vídeo horizontal?", r: "Funciona. O Base Captions foi testado em vídeos verticais (9:16), horizontais (16:9) e 3:4, e posiciona a legenda conforme o formato." },
     { p: "O app Base FL é seguro?", r: "É. Você entra com o e-mail da compra e um código, sem senha. O app só mexe nas pastas do CapCut para instalar, e a transcrição é feita no seu próprio computador: o seu vídeo não é enviado para lugar nenhum." },
