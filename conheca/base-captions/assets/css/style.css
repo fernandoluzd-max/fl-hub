@@ -2214,6 +2214,17 @@ s.risca.conta::after{transition-delay:.05s!important}
 /* ---- selo: gira no ritmo normal ---- */
 .gar-fl .selo-fl svg{animation-duration:44s}
 
+/* ===== Refinos 10/11: cards abaixo do vídeo, textos centralizados no celular ===== */
+.hero-demo .cpt-hero{margin:16px auto 0;width:100%;max-width:440px}
+@media (min-width:900px){.hero-demo .cpt-hero{max-width:min(380px,calc((100vh - 170px)*9/16));grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media (max-width:899px){
+  .hero-demo .cpt-hero{max-width:min(92vw,400px)}
+  .bc-txt{text-align:center}
+  .bc-txt .eyebrow{display:flex;justify-content:center;text-align:center;margin-left:auto;margin-right:auto}
+  .bc-txt .h2{max-width:15ch;margin-left:auto;margin-right:auto}
+  .bc-txt p{max-width:34ch;margin-left:auto;margin-right:auto}
+  .bc-txt .cpt-bc{display:none}
+}
 /* ===== Faixa "Oferta de lançamento" (fica no topo junto com o cabeçalho) ===== */
 html{scroll-padding-top:110px}
 .faixa{overflow:hidden;background:linear-gradient(90deg,var(--acc-deep),var(--acc) 30%,var(--acc-hi) 50%,var(--acc) 70%,var(--acc-deep));color:var(--acc-ink);border-bottom:1px solid rgba(0,0,0,.25)}
