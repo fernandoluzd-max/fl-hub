@@ -2217,11 +2217,12 @@ s.risca.conta::after{transition-delay:.05s!important}
 /* ===== Faixa "Oferta de lançamento" (fica no topo junto com o cabeçalho) ===== */
 html{scroll-padding-top:110px}
 .faixa{overflow:hidden;background:linear-gradient(90deg,var(--acc-deep),var(--acc) 30%,var(--acc-hi) 50%,var(--acc) 70%,var(--acc-deep));color:var(--acc-ink);border-bottom:1px solid rgba(0,0,0,.25)}
-.faixa-trilho{display:flex;width:max-content;animation:faixa-anda 38s linear infinite}
+.faixa-trilho{display:flex;width:max-content;will-change:transform;-webkit-animation:faixa-anda 38s linear infinite;animation:faixa-anda 38s linear infinite}
 .faixa-i{display:flex;align-items:center;flex-shrink:0;gap:18px;padding:9px 18px 9px 0;font-family:var(--display);font-size:13.5px;font-weight:600;letter-spacing:.01em;white-space:nowrap}
 .faixa-i b{font-weight:800}
 .faixa-i i{font-style:normal;font-size:11px;opacity:.55}
-.faixa:hover .faixa-trilho{animation-play-state:paused}
-@keyframes faixa-anda{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media (prefers-reduced-motion:reduce){.faixa-trilho{animation:none}}
+@media (hover:hover) and (pointer:fine){.faixa:hover .faixa-trilho{animation-play-state:paused}}
+@-webkit-keyframes faixa-anda{from{-webkit-transform:translate3d(0,0,0)}to{-webkit-transform:translate3d(-50%,0,0)}}
+@keyframes faixa-anda{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+@media (prefers-reduced-motion:reduce){.faixa-trilho{-webkit-animation-duration:70s;animation-duration:70s}}
 @media (max-width:560px){.faixa-i{font-size:12.5px;gap:14px;padding:8px 14px 8px 0}}
