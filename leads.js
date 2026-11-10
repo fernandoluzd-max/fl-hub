@@ -1,6 +1,6 @@
 /* Base FL — envio de leads das páginas de venda.
    Uso: FLLead.salvar({ nome, email, celular, origem: 'base-captions', motivo: 'so-celular' })
-   Grava pela função salvar_lead do Supabase. A tabela fica trancada:
+   Grava pela função salvar_lead do Supabase (supabase/68-leads.sql). A tabela fica trancada:
    a página só consegue enviar, nunca ler a lista. As UTMs da URL vão junto. */
 (function () {
   'use strict';
