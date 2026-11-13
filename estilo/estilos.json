@@ -1,0 +1,328 @@
+{
+  "estilos": [
+    {
+      "id": "alto-padrao",
+      "nome": "Alto Padrão",
+      "resumo": "Luxo que não precisa gritar: cada corte parece caro porque é contido.",
+      "personalidade": { "sobrioVibrante": -0.8, "classicoModerno": -0.6, "serioLeve": -0.7 },
+      "nichosRecomendados": ["imobiliário", "advocacia", "beleza", "moda"],
+      "nichosEvitar": ["fitness"],
+      "paleta": {
+        "fundo":    { "saturacaoMin": 0,  "saturacaoMax": 12, "luminosidadeMin": 6,  "luminosidadeMax": 14 },
+        "texto":    { "saturacaoMin": 0,  "saturacaoMax": 8,  "luminosidadeMin": 88, "luminosidadeMax": 97 },
+        "destaque": { "saturacaoMin": 35, "saturacaoMax": 60, "luminosidadeMin": 45, "luminosidadeMax": 62 },
+        "apoio":    { "saturacaoMin": 5,  "saturacaoMax": 20, "luminosidadeMin": 35, "luminosidadeMax": 50 }
+      },
+      "fontes": [
+        { "titulo": "Playfair Display",  "texto": "Lora",          "recomendado": true },
+        { "titulo": "Libre Baskerville", "texto": "Crimson Text",  "recomendado": false },
+        { "titulo": "Fraunces",          "texto": "Spectral",      "recomendado": false }
+      ],
+      "legenda": {
+        "posicao": "centro-baixo",
+        "tamanhoRelativo": "pequena",
+        "formato": "nenhum",
+        "corDestaquePalavra": "destaque",
+        "animacaoDestaque": "fade",
+        "maiusculas": false
+      },
+      "titulo": {
+        "peso": 700,
+        "caixaAlta": false,
+        "espacamentoLetras": "-0.01em",
+        "elementoGrafico": "linha fina dourada centrada, nascendo do meio e abrindo para os lados, abaixo do título"
+      },
+      "motion": {
+        "duracaoEntradaMs": 1100,
+        "duracaoSaidaMs": 900,
+        "atrasoEntreElementosMs": 220,
+        "easingEntrada": "cubic-bezier(0.16,1,0.3,1)",
+        "easingSaida": "cubic-bezier(0.7,0,0.84,0)"
+      },
+      "corDoVideo": {
+        "temperatura": 10,
+        "contraste": 15,
+        "saturacao": -12,
+        "preservarTonsDePele": true,
+        "descricao": "Contraste suave, tons quentes contidos, pele protegida — cara de revista impressa, não de filtro de celular."
+      },
+      "regrasEdicao": [
+        "Cortes espaçados, sem pressa — deixe cada plano respirar.",
+        "Zoom quase imperceptível, nunca brusco.",
+        "Música instrumental discreta, piano ou cordas, bem baixa.",
+        "Transições por corte simples ou fade longo, nunca efeitos chamativos.",
+        "Texto aparece pouco e some rápido — menos é mais."
+      ]
+    },
+    {
+      "id": "moderno",
+      "nome": "Moderno",
+      "resumo": "Design limpo e direto, feito pra parecer que a marca já nasceu digital.",
+      "personalidade": { "sobrioVibrante": 0.1, "classicoModerno": 0.8, "serioLeve": 0.2 },
+      "nichosRecomendados": ["educação", "imobiliário", "moda", "saúde"],
+      "nichosEvitar": ["advocacia"],
+      "paleta": {
+        "fundo":    { "saturacaoMin": 0,  "saturacaoMax": 10, "luminosidadeMin": 8,  "luminosidadeMax": 16 },
+        "texto":    { "saturacaoMin": 0,  "saturacaoMax": 10, "luminosidadeMin": 90, "luminosidadeMax": 98 },
+        "destaque": { "saturacaoMin": 55, "saturacaoMax": 85, "luminosidadeMin": 50, "luminosidadeMax": 65 },
+        "apoio":    { "saturacaoMin": 15, "saturacaoMax": 35, "luminosidadeMin": 40, "luminosidadeMax": 55 }
+      },
+      "fontes": [
+        { "titulo": "Space Grotesk", "texto": "Public Sans", "recomendado": true },
+        { "titulo": "Archivo",       "texto": "Work Sans",   "recomendado": false },
+        { "titulo": "Sora",          "texto": "Inter",       "recomendado": false }
+      ],
+      "legenda": {
+        "posicao": "centro-baixo",
+        "tamanhoRelativo": "média",
+        "formato": "caixa",
+        "corDestaquePalavra": "destaque",
+        "animacaoDestaque": "escala",
+        "maiusculas": false
+      },
+      "titulo": {
+        "peso": 800,
+        "caixaAlta": false,
+        "espacamentoLetras": "-0.02em",
+        "elementoGrafico": "retângulo fino de destaque atrás de uma palavra-chave do título"
+      },
+      "motion": {
+        "duracaoEntradaMs": 450,
+        "duracaoSaidaMs": 380,
+        "atrasoEntreElementosMs": 140,
+        "easingEntrada": "cubic-bezier(0.22,1,0.36,1)",
+        "easingSaida": "cubic-bezier(0.55,0,0.55,0.2)"
+      },
+      "corDoVideo": {
+        "temperatura": 0,
+        "contraste": 20,
+        "saturacao": 0,
+        "preservarTonsDePele": true,
+        "descricao": "Contraste limpo, cor neutra e precisa — sem puxar para nostalgia, sem exagero."
+      },
+      "regrasEdicao": [
+        "Ritmo ágil, corte no tempo exato da fala.",
+        "Zoom sutil para dar energia sem cansar.",
+        "Música eletrônica leve ou beat minimalista.",
+        "Transições retas, sem floreio — corte seco ou slide curto.",
+        "Destaques de texto aparecem no meio da frase, não só no início."
+      ]
+    },
+    {
+      "id": "proximo",
+      "nome": "Próximo",
+      "resumo": "A sensação de estar conversando com alguém de confiança, não assistindo um anúncio.",
+      "personalidade": { "sobrioVibrante": 0.3, "classicoModerno": 0.0, "serioLeve": 0.8 },
+      "nichosRecomendados": ["saúde", "educação", "beleza", "gastronomia"],
+      "nichosEvitar": ["advocacia"],
+      "paleta": {
+        "fundo":    { "saturacaoMin": 5,  "saturacaoMax": 20, "luminosidadeMin": 10, "luminosidadeMax": 20 },
+        "texto":    { "saturacaoMin": 0,  "saturacaoMax": 12, "luminosidadeMin": 90, "luminosidadeMax": 98 },
+        "destaque": { "saturacaoMin": 40, "saturacaoMax": 70, "luminosidadeMin": 55, "luminosidadeMax": 70 },
+        "apoio":    { "saturacaoMin": 10, "saturacaoMax": 30, "luminosidadeMin": 45, "luminosidadeMax": 60 }
+      },
+      "fontes": [
+        { "titulo": "Epilogue",             "texto": "Spectral",    "recomendado": false },
+        { "titulo": "Bricolage Grotesque",  "texto": "Public Sans","recomendado": true },
+        { "titulo": "Manrope",              "texto": "Work Sans",  "recomendado": false }
+      ],
+      "legenda": {
+        "posicao": "centro-baixo",
+        "tamanhoRelativo": "média",
+        "formato": "contorno",
+        "corDestaquePalavra": "destaque",
+        "animacaoDestaque": "sublinhado",
+        "maiusculas": false
+      },
+      "titulo": {
+        "peso": 700,
+        "caixaAlta": false,
+        "espacamentoLetras": "0em",
+        "elementoGrafico": "sublinhado levemente ondulado sob a primeira linha do título"
+      },
+      "motion": {
+        "duracaoEntradaMs": 600,
+        "duracaoSaidaMs": 500,
+        "atrasoEntreElementosMs": 180,
+        "easingEntrada": "cubic-bezier(0.33,1,0.68,1)",
+        "easingSaida": "cubic-bezier(0.32,0,0.67,0)"
+      },
+      "corDoVideo": {
+        "temperatura": 15,
+        "contraste": 8,
+        "saturacao": 5,
+        "preservarTonsDePele": true,
+        "descricao": "Levemente quente e aconchegante, contraste moderado — como luz de fim de tarde em casa."
+      },
+      "regrasEdicao": [
+        "Corte no ritmo da conversa, como se fosse um amigo falando.",
+        "Zoom leve para acompanhar a emoção da fala.",
+        "Música acústica ou pop suave, com espaço para a voz.",
+        "Transições suaves, tipo fade curto entre falas.",
+        "Legenda aparece palavra por palavra, no tempo da voz."
+      ]
+    },
+    {
+      "id": "impacto",
+      "nome": "Impacto",
+      "resumo": "Tudo na tela compete por atenção e ganha — ritmo de arena, não de vitrine.",
+      "personalidade": { "sobrioVibrante": 0.9, "classicoModerno": 0.5, "serioLeve": 0.4 },
+      "nichosRecomendados": ["fitness", "gastronomia", "moda", "educação"],
+      "nichosEvitar": ["advocacia", "imobiliário"],
+      "paleta": {
+        "fundo":    { "saturacaoMin": 0,  "saturacaoMax": 15, "luminosidadeMin": 4,  "luminosidadeMax": 10 },
+        "texto":    { "saturacaoMin": 0,  "saturacaoMax": 10, "luminosidadeMin": 92, "luminosidadeMax": 99 },
+        "destaque": { "saturacaoMin": 70, "saturacaoMax": 100,"luminosidadeMin": 50, "luminosidadeMax": 62 },
+        "apoio":    { "saturacaoMin": 40, "saturacaoMax": 70, "luminosidadeMin": 35, "luminosidadeMax": 50 }
+      },
+      "fontes": [
+        { "titulo": "Archivo",             "texto": "Public Sans", "recomendado": true },
+        { "titulo": "Bricolage Grotesque", "texto": "Manrope",     "recomendado": false },
+        { "titulo": "Space Grotesk",       "texto": "Inter",       "recomendado": false }
+      ],
+      "legenda": {
+        "posicao": "centro",
+        "tamanhoRelativo": "grande",
+        "formato": "caixa",
+        "corDestaquePalavra": "destaque",
+        "animacaoDestaque": "escala",
+        "maiusculas": true
+      },
+      "titulo": {
+        "peso": 900,
+        "caixaAlta": true,
+        "espacamentoLetras": "-0.01em",
+        "elementoGrafico": "bloco de cor sólido atrás do título, levemente rotacionado"
+      },
+      "motion": {
+        "duracaoEntradaMs": 240,
+        "duracaoSaidaMs": 200,
+        "atrasoEntreElementosMs": 80,
+        "easingEntrada": "cubic-bezier(0.34,1.56,0.64,1)",
+        "easingSaida": "cubic-bezier(0.36,0,0.66,-0.56)"
+      },
+      "corDoVideo": {
+        "temperatura": 5,
+        "contraste": 48,
+        "saturacao": 42,
+        "preservarTonsDePele": false,
+        "descricao": "Contraste alto, cor saturada ao máximo — tudo grita, até a sombra."
+      },
+      "regrasEdicao": [
+        "Corte seco, no batimento da música — nada de enrolar.",
+        "Zoom rápido e chamativo nos momentos-chave.",
+        "Música com beat forte, bem no volume.",
+        "Transições com flash ou corte duro, sem suavizar.",
+        "Legenda grita: tudo em caixa alta, destaque pulsando."
+      ]
+    },
+    {
+      "id": "natural",
+      "nome": "Natural",
+      "resumo": "Sem filtro, sem pressa: a credibilidade vem de parecer verdadeiro.",
+      "personalidade": { "sobrioVibrante": -0.3, "classicoModerno": -0.2, "serioLeve": 0.3 },
+      "nichosRecomendados": ["saúde", "gastronomia", "educação", "beleza", "imobiliário"],
+      "nichosEvitar": ["moda"],
+      "paleta": {
+        "fundo":    { "saturacaoMin": 5,  "saturacaoMax": 18, "luminosidadeMin": 12, "luminosidadeMax": 22 },
+        "texto":    { "saturacaoMin": 0,  "saturacaoMax": 15, "luminosidadeMin": 85, "luminosidadeMax": 95 },
+        "destaque": { "saturacaoMin": 25, "saturacaoMax": 50, "luminosidadeMin": 45, "luminosidadeMax": 60 },
+        "apoio":    { "saturacaoMin": 10, "saturacaoMax": 25, "luminosidadeMin": 40, "luminosidadeMax": 55 }
+      },
+      "fontes": [
+        { "titulo": "Newsreader", "texto": "Work Sans",   "recomendado": true },
+        { "titulo": "Spectral",   "texto": "Inter",       "recomendado": false },
+        { "titulo": "Lora",       "texto": "Public Sans", "recomendado": false }
+      ],
+      "legenda": {
+        "posicao": "inferior-esquerda",
+        "tamanhoRelativo": "pequena",
+        "formato": "nenhum",
+        "corDestaquePalavra": "apoio",
+        "animacaoDestaque": "fade",
+        "maiusculas": false
+      },
+      "titulo": {
+        "peso": 600,
+        "caixaAlta": false,
+        "espacamentoLetras": "0.01em",
+        "elementoGrafico": "traço orgânico fino, como uma pincelada, abaixo do título"
+      },
+      "motion": {
+        "duracaoEntradaMs": 650,
+        "duracaoSaidaMs": 550,
+        "atrasoEntreElementosMs": 200,
+        "easingEntrada": "cubic-bezier(0.25,0.46,0.45,0.94)",
+        "easingSaida": "cubic-bezier(0.55,0.06,0.68,0.19)"
+      },
+      "corDoVideo": {
+        "temperatura": 12,
+        "contraste": 4,
+        "saturacao": -22,
+        "preservarTonsDePele": true,
+        "descricao": "Pouca saturação, tom levemente quente, sem contraste artificial — câmera sem filtro, só ajustada com cuidado."
+      },
+      "regrasEdicao": [
+        "Corte respeita o tempo real da cena, sem pressa artificial.",
+        "Zoom mínimo ou nenhum — deixe a imagem falar.",
+        "Som ambiente real ou música instrumental bem discreta.",
+        "Transições por corte direto, nada de efeito.",
+        "Legenda pequena e discreta, não disputa com a imagem."
+      ]
+    },
+    {
+      "id": "editorial",
+      "nome": "Editorial",
+      "resumo": "Clima de capa de revista — cada frame é composição, não registro.",
+      "personalidade": { "sobrioVibrante": -0.5, "classicoModerno": 0.3, "serioLeve": -0.8 },
+      "nichosRecomendados": ["moda", "beleza", "imobiliário", "advocacia"],
+      "nichosEvitar": ["fitness", "gastronomia"],
+      "paleta": {
+        "fundo":    { "saturacaoMin": 0, "saturacaoMax": 8,  "luminosidadeMin": 3,  "luminosidadeMax": 9  },
+        "texto":    { "saturacaoMin": 0, "saturacaoMax": 6,  "luminosidadeMin": 90, "luminosidadeMax": 97 },
+        "destaque": { "saturacaoMin": 20,"saturacaoMax": 45, "luminosidadeMin": 40, "luminosidadeMax": 55 },
+        "apoio":    { "saturacaoMin": 0, "saturacaoMax": 12, "luminosidadeMin": 25, "luminosidadeMax": 40 }
+      },
+      "fontes": [
+        { "titulo": "Instrument Serif", "texto": "Manrope",    "recomendado": true },
+        { "titulo": "DM Serif Display", "texto": "Work Sans",  "recomendado": false },
+        { "titulo": "Cormorant",        "texto": "Public Sans","recomendado": false }
+      ],
+      "legenda": {
+        "posicao": "inferior-esquerda",
+        "tamanhoRelativo": "pequena",
+        "formato": "contorno",
+        "corDestaquePalavra": "destaque",
+        "animacaoDestaque": "sublinhado",
+        "maiusculas": true
+      },
+      "titulo": {
+        "peso": 500,
+        "caixaAlta": false,
+        "espacamentoLetras": "0.04em",
+        "elementoGrafico": "linha vertical fina ao lado do título, estilo capa de revista"
+      },
+      "motion": {
+        "duracaoEntradaMs": 700,
+        "duracaoSaidaMs": 600,
+        "atrasoEntreElementosMs": 180,
+        "easingEntrada": "cubic-bezier(0.22,1,0.36,1)",
+        "easingSaida": "cubic-bezier(0.64,0,0.78,0)"
+      },
+      "corDoVideo": {
+        "temperatura": -15,
+        "contraste": 38,
+        "saturacao": -32,
+        "preservarTonsDePele": false,
+        "descricao": "Contraste duro, sombras fechadas, cor dessaturada e fria — clima de cinema, não de rede social."
+      },
+      "regrasEdicao": [
+        "Corte seco e preciso, como virar página de revista.",
+        "Pouco ou nenhum zoom — cada plano é uma 'foto' bem composta.",
+        "Música minimalista, tensão controlada, quase cinematográfica.",
+        "Transições por corte direto ou fade rápido para preto.",
+        "Legenda discreta, canto inferior, sempre em caixa alta."
+      ]
+    }
+  ]
+}
