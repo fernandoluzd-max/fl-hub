@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Confirmando o seu pedido — Base FL</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A0A09">
+<style>
+/* Página de obrigado do Base Captions (Greenn → link externo). NÃO decide preço: só pergunta ao servidor qual é a página da pessoa e vai para ela. */
+:root{--bg:#0A0A09;--card:#14120E;--line:rgba(227,194,122,.28);--gold:#E3C27A;--txt:#F4F0E4;--sub:#B8B09A}
+*{box-sizing:border-box;margin:0}
+body{min-height:100vh;display:grid;place-items:center;padding:24px 16px;background:radial-gradient(70% 45% at 50% 0%,rgba(227,194,122,.16),transparent 70%),var(--bg);color:var(--txt);font-family:-apple-system,"Helvetica Neue",Segoe UI,Roboto,sans-serif}
+.cx{width:min(520px,100%);padding:34px 28px;border:1px solid var(--line);border-radius:24px;background:var(--card);text-align:center;box-shadow:0 30px 90px rgba(0,0,0,.6)}
+.ok{display:inline-grid;place-items:center;width:54px;height:54px;border-radius:50%;background:rgba(127,206,143,.14);color:#7FCE8F;font-size:28px;font-weight:700}
+h1{margin:16px 0 8px;font-size:24px;line-height:1.2}
+p{color:var(--sub);font-size:15px;line-height:1.5}
+.spin{width:26px;height:26px;margin:22px auto 0;border:3px solid rgba(227,194,122,.25);border-top-color:var(--gold);border-radius:50%;animation:g .9s linear infinite}
+@keyframes g{to{transform:rotate(360deg)}}
+.acoes{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+a.bt{display:block;padding:15px 18px;border-radius:14px;background:var(--gold);color:#120E05;font-weight:800;text-decoration:none}
+a.sec{display:block;padding:10px;color:var(--sub);font-size:14px;text-decoration:none}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+</style>
+</head>
+<body>
+<main class="cx" role="status" aria-live="polite">
+  <div class="ok" aria-hidden="true">✓</div>
+  <h1 id="t">Pedido recebido!</h1>
+  <p id="s">Estamos confirmando o seu pedido para preparar a sua condição exclusiva de aluno.</p>
+  <div class="spin" id="sp" aria-hidden="true"></div>
+  <div class="acoes" id="ac" hidden>
+    <a class="bt" id="bi" href="https://basefl.com/instalar/">Instalar o Base Captions</a>
+  </div>
+</main>
+<script>
+(function () {
+  'use strict';
+  var API = 'https://otlaexuqyavpzxwzcsfo.supabase.co/functions/v1/completa-api/upsell';
+  var INSTALAR = 'https://basefl.com/instalar/';
+  var PAGINA_OK = /^\/completa\/(black-friday|natal)\/[0-3]\/$/;                 // só vai para as 8 páginas oficiais
+  var CODIGO_OK = /^[a-f0-9]{32,80}$/;
+  var MAX_MS = 25000, PASSO_MS = 2000, inicio = Date.now(), parar = false;
+  var q = location.search || '';                                                // token/s_id da Greenn seguem junto no "instalar" (o 1 clique do downsell precisa)
+  function el(i) { return document.getElementById(i); }
+  function visitante() {
+    var v = null; try { v = localStorage.getItem('fl_vis'); } catch (e) {}
+    if (!v) { var m = document.cookie.match('(?:^|; )fl_vis=([^;]*)'); v = m ? decodeURIComponent(m[1]) : null; }
+    return v && /^v[a-z0-9]{10,30}$/.test(v) ? v : null;
+  }
+  function fim(titulo, texto) {                                                  // sem oferta (já completou, Mood, pedido não achado): leva ao app, sem preço nenhum
+    parar = true; el('t').textContent = titulo; el('s').textContent = texto; el('sp').hidden = true; el('ac').hidden = false; el('bi').href = INSTALAR + q;
+  }
+  function vai(r) {
+    var u = String(r.url_pagina || ''), c = String(r.codigo || '');
+    if (!PAGINA_OK.test(u) || !CODIGO_OK.test(c)) return fim('Pedido confirmado!', 'Seu acesso já está liberado. Instale o Base Captions para começar.');
+    var camp = r.campanha === 'natal2026' ? 'NATAL_BASEFL_2026' : 'BF_BASEFL_2026';
+    parar = true; location.replace(u + '?t=' + encodeURIComponent(c) + '&utm_source=greenn&utm_medium=upsell&utm_campaign=' + camp + '&utm_content=obrigado');
+  }
+  function tenta() {
+    if (parar) return;
+    var fv = visitante(); if (!fv) return fim('Pedido confirmado!', 'Seu acesso já está liberado. Instale o Base Captions para começar.');
+    var ctl = window.AbortController ? new AbortController() : null; var to = setTimeout(function () { if (ctl) ctl.abort(); }, 8000);
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fl_vis: fv }), cache: 'no-store', signal: ctl ? ctl.signal : undefined })
+      .then(function (r) { return r.json(); })
+      .then(function (r) {
+        clearTimeout(to); if (parar) return;
+        var acabou = Date.now() - inicio >= MAX_MS;
+        if (r && r.estado === 'oferta' && (r.estavel || acabou)) return vai(r);        // estável = os order bumps já chegaram; no limite de tempo vai mesmo (a página confere de novo antes do checkout)
+        if (r && (r.estado === 'aguardando' || r.estado === 'oferta') && !acabou) return setTimeout(tenta, PASSO_MS);
+        if (r && r.estado === 'aguardando') return fim('Estamos aguardando o pagamento', 'Assim que ele for confirmado, o seu acesso é liberado e você recebe um e-mail. Depois é só instalar o Base Captions.');
+        fim('Pedido confirmado!', 'Seu acesso já está liberado. Instale o Base Captions para começar.');
+      })
+      .catch(function () { clearTimeout(to); if (parar) return; if (Date.now() - inicio < MAX_MS) setTimeout(tenta, PASSO_MS); else fim('Pedido confirmado!', 'Seu acesso já está liberado. Instale o Base Captions para começar.'); });
+  }
+  tenta();
+})();
+</script>
+</body>
+</html>

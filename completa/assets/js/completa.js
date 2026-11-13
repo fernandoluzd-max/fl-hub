@@ -165,11 +165,16 @@
   }
   function desenhaJa(dd) {
     var ul = $("[data-ja]"); if (!ul) return;
-    ul.innerHTML = dd.possui.map(function (id) {
-      var p = P[id], extra = C.extras.indexOf(id) > -1;
-      return '<li class="ja-c rv in"' + (extra ? " data-extra" : "") + ">" + img(p.icone, 52) + '<div><b>' + esc(p.nome) + "</b><small>" + esc(p.sub) + '</small><span class="ja-tem">' + ico("i-ok") + "Você já tem</span></div></li>";
-    }).join("");
-    var n = $("[data-ja-nota]"); if (n) n.textContent = dd.possui.length + " itens na sua conta. Nenhum deles entra na conta desta oferta.";
+    var BONUS = ["titulos", "materiais-titulos", "caseup", "chronocut"];   // bônus OFICIAIS da compra original do Base Captions: sempre "já possui", nunca entram na conta desta oferta
+    var li = function (id, rotulo) { var p = P[id], extra = C.extras.indexOf(id) > -1;
+      return '<li class="ja-c rv in"' + (extra ? " data-extra" : "") + (rotulo === "Bônus liberado" ? " data-bonus" : "") + ">" + img(p.icone, 52) + '<div><b>' + esc(p.nome) + "</b><small>" + esc(p.sub) + '</small><span class="ja-tem">' + ico("i-ok") + rotulo + "</span></div></li>"; };
+    var principais = dd.possui.filter(function (id) { return BONUS.indexOf(id) < 0; }), bonus = BONUS.filter(function (id) { return dd.possui.indexOf(id) > -1; });
+    ul.innerHTML = principais.map(function (id) { return li(id, "Você já tem"); }).join("");
+    var velho = document.querySelector(".ja-bonus-bloco"); if (velho) velho.remove();
+    if (bonus.length) { var bloco = document.createElement("div"); bloco.className = "ja-bonus-bloco";
+      bloco.innerHTML = '<p class="ja-sep"><span>Bônus do Base Captions · incluídos na sua compra original</span></p><ul class="ja ja-bonus" aria-label="Bônus do Base Captions já liberados">' + bonus.map(function (id) { return li(id, "Bônus liberado"); }).join("") + "</ul>";
+      ul.insertAdjacentElement("afterend", bloco); }
+    var n = $("[data-ja-nota]"); if (n) n.textContent = principais.length + " itens e " + bonus.length + " bônus oficiais já estão na sua conta. Nenhum deles entra na conta desta oferta, e nada é cobrado de novo.";
   }
   function cardProduto(id, V) {
     var p = P[id], ref = V.referencia && V.referencia[id] != null ? +V.referencia[id] : p.referencia;

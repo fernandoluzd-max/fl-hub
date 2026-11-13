@@ -583,3 +583,6 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .ct-u b.virou{animation:none}
   .tile[data-t="falta"].acende .tile-ic img{animation-duration:2.6s}
 }
+
+.ja-bonus-bloco{max-width:880px;margin:26px auto 0}.ja-sep{margin:0 0 14px;display:flex;align-items:center;gap:12px;margin:10px 0 2px;color:var(--acc,#FFE14D);font:700 11.5px var(--mono,monospace);letter-spacing:.14em;text-transform:uppercase}.ja-sep::before,.ja-sep::after{content:"";flex:1;height:1px;background:currentColor;opacity:.28}.ja-sep span{flex:none;text-align:center}
+.ja-c[data-bonus] .ja-tem{opacity:.92}
