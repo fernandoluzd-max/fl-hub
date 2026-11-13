@@ -8,9 +8,9 @@
   var PRODUTOS = {
     'legendas': ['Títulos Dinâmicos', '195639'], 'efeitos-sonoros': ['Efeitos Sonoros', '195814'], 'luts': ['LUTs', '195812'], 'mood': ['Mood', '195947'], 'assets': ['Base FL Assets', '198176'],
     'kit-freelancer': ['Kit Freelancer', '195949'], 'gerador-de-briefing': ['Gerador de Briefing', '195949'], 'quanto-cobrar': ['Quanto Cobrar?', '195949'],
-    'gerador-de-contrato': ['Gerador de Contrato', '195949'], 'financas-e-demandas': ['Base Demandas', '195949'], 'caseup': ['CaseUp', '195639']
+    'gerador-de-contrato': ['Gerador de Contrato', '195949'], 'financas-e-demandas': ['Base Demandas', '195949'], 'caseup': ['CaseUp', '195639'], 'captions': ['Base Captions', '203539']
   };
-  var m = /^\/(conheca|oferta|alunos)\/([a-z0-9-]+)\//.exec(location.pathname), p = m && PRODUTOS[m[2]];
+  var m = /^\/(conheca|oferta|alunos)\/([a-z0-9-]+)\/|^\/(captions)\//.exec(location.pathname), p = m && PRODUTOS[m[2] || m[3]];
   var dados = p ? { content_name: p[0], content_ids: [p[1]], content_type: 'product', content_category: 'Base FL' } : null;
   try {
     !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };

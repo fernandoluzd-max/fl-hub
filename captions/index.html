@@ -763,7 +763,7 @@ function salvarLeadCelular(email){
   var m=document.getElementById('bfl-av'); if(!m) return;
   var alvo=null, liberado=false, timer=null;
   var form=m.querySelector('form'), campo=m.querySelector('.campo'), msg=m.querySelector('.msg'), enviar=form.querySelector('.go');
-  function px(nome){ try{ if(typeof window.fbq==='function') window.fbq('trackCustom',nome); }catch(e){} }
+  function px(nome){ try{ if(typeof window.fbq==='function'){ window.fbq('trackCustom',nome); if(nome==='LeadCelular') window.fbq('track','Lead',{content_name:'Base Captions',content_category:'Base FL'}); } }catch(e){} }
   var pc=document.getElementById('bfl-pc'), cel=document.getElementById('bfl-cel'), segue=m.querySelector('[data-segue]'), seguir=m.querySelector('[data-acao="confirmar"]');
   function tela(nome){
     m.querySelectorAll('.tela').forEach(function(t){ t.classList.toggle('at', t.getAttribute('data-tela')===nome); });
