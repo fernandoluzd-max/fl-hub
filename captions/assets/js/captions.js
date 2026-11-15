@@ -381,7 +381,7 @@
   function virada() {
     var box = $("[data-vir]"); if (!box) return;
     var palco = $("[data-vir-palco]", box), ul = $("[data-vir-orbita]", box);
-    var ITENS = [["Títulos Dinâmicos", "assets/img/icones/titulos.webp"], ["CaseUp", "assets/img/icones/caseup.webp"], ["ChronoCut", "assets/img/icones/chronocut.webp"], ["Backgrounds & Overlays", "assets/img/icones/pack.webp"], ["Aulas", ""]];
+    var ITENS = [["CaseUp", "assets/img/icones/caseup.webp"], ["ChronoCut", "assets/img/icones/chronocut.webp"], ["Pack de Animações", "assets/img/icones/pack.webp"], ["Aulas", ""]];
     ul.innerHTML = ITENS.map(function (it, k) {
       return '<li style="--k:' + k + '"><span class="oc">' + (it[1] ? '<img src="' + it[1] + '" alt="" width="120" height="120" loading="lazy" decoding="async">' : '<span class="oc-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.6 5.4v13.2L19 12z" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/></svg></span>') +
         "</span><small>" + it[0].replace("&", "&amp;") + "</small></li>";

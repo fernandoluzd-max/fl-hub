@@ -4,17 +4,17 @@
    ========================================================================== */
 window.PACK_CONFIG = {
   // Link do checkout (Greenn). Os botões de compra passam antes pelo aviso "só computador".
-  CHECKOUT_URL: "https://payfast.greenn.com.br/203539?ch_id=145200&b_id_1=195814&b_offer_1=ZxTsRT&b_id_2=195812&b_offer_2=4mBBtQ&b_id_3=198176&b_offer_3=LSLxch",
+  CHECKOUT_URL: "https://payfast.greenn.com.br/203539/offer/2Ibej2?ch_id=145200&b_id_1=195814&b_offer_1=ZxTsRT&b_id_2=195812&b_offer_2=4mBBtQ&b_id_3=198176&b_offer_3=LSLxch",
 
   // Preço (só o número, sem "R$")
-  PRECO: "67",
+  PRECO: "47",
 
   // FAIXA DE LANÇAMENTO, fixa no topo (passa devagar, sem parar). Deixe FAIXA_ATIVA: false para tirar.
-  // FAIXA_PARCELAS: condição real do checkout da Greenn (conferida em 13/11: 12x de R$ 6,89, com tarifa da Greenn).
+  // FAIXA_PARCELAS: condição real do checkout da Greenn (conferida em 15/11: 12x de R$ 4,83, com tarifa da Greenn).
   //   Se a Greenn mudar a tarifa, atualize aqui. Vazio, a parcela não aparece.
   // FAIXA_TEMPO_LIMITADO: deixe true só enquanto a condição de lançamento estiver valendo.
   FAIXA_ATIVA: true,
-  FAIXA_PARCELAS: "ou 12x de R$ 6,89 no cartão",
+  FAIXA_PARCELAS: "ou 12x de R$ 4,83 no cartão",
   FAIXA_TEMPO_LIMITADO: true,
 
   // Quantidade de títulos do pack. Enquanto QUANTIDADE_EXATA for false, a página escreve "+70".
@@ -91,7 +91,7 @@ window.PACK_CONFIG = {
 
   // PERGUNTAS EXTRAS DO FAQ: escreva a resposta entre as aspas de "r". Pergunta com resposta vazia não aparece.
   FAQ_EXTRA: [
-    { p: "Funciona no CapCut gratuito?", r: "Funciona. O Base Captions e os Títulos Dinâmicos funcionam no CapCut gratuito do computador. Você não precisa assinar o CapCut Pro.", segunda: true, gratuito: true },
+    { p: "Funciona no CapCut gratuito?", r: "Funciona. O Base Captions funciona no CapCut gratuito do computador. Você não precisa assinar o CapCut Pro.", segunda: true, gratuito: true },
     { p: "As fontes têm acento?", r: "" },
     { p: "Funciona em vídeo horizontal?", r: "" },
     { p: "O app Base FL é seguro?", r: "" },
