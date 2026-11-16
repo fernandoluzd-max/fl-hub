@@ -57,7 +57,7 @@
         : 'Ainda não está na sua conta do Base FL. Conheça quando quiser.');
       nota.style.fontSize = '12.5px'; c.appendChild(nota);
       var ir = function () { abre(PAGINA); };
-      b.appendChild(botao('Conhecer o Base Captions  →', 'primary cta', ir)); c.appendChild(b);
+      b.appendChild(botao('Conhecer o Base Captions', 'primary cta', ir)); c.appendChild(b);
       c.onclick = function (e) { if (!e.target.closest('button')) ir(); };
     }
     cards.appendChild(c);
