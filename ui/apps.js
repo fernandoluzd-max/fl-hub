@@ -12,7 +12,7 @@
     links: { mac: BASE + 'Base-Captions-Mac.dmg', win: BASE + 'Base-Captions-Windows.exe' } };
   var PACK_TITULOS = 'fl-legendas', PRECO = 47;               // preço oficial do Base Captions (o mesmo da Greenn, produto 203539)
   var PAGINA = 'https://basefl.com/conheca/base-captions/?de=app';
-  var CHAVE_AVISO = 'fl_apps_aviso_v1';                      // guardado neste aparelho: o aviso aparece uma vez só
+  var CHAVE_AVISO = 'fl_apps_banner_v1';                     // guardado neste aparelho: depois que a pessoa fecha o banner, ele não volta
   var reais = function (n) { return 'R$ ' + String(Number(n)).replace('.', ','); };
   var CADEADO = '<svg viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
 
@@ -61,32 +61,32 @@
       c.onclick = function (e) { if (!e.target.closest('button')) ir(); };
     }
     cards.appendChild(c);
-    aviso(o, est);
+    banner(o, est);
   }
 
-  /** Aviso de primeira abertura: aparece UMA vez neste aparelho (marca como visto no momento em que é mostrado) e nunca atrapalha o uso. */
-  function aviso(o, est) {
-    if (document.getElementById('apps-aviso') || mem.get(CHAVE_AVISO)) return;
-    mem.set(CHAVE_AVISO, '1');
+  /** Banner de destaque no topo da tela inicial (sem vídeo). Texto diferente para quem tem e para quem não tem o Base Captions.
+   *  Fica até a pessoa fechar no X; depois de fechado não volta mais neste aparelho. */
+  function banner(o, est) {
+    var box = document.getElementById('apps-banner'); if (!box) return;
+    box.textContent = '';
+    if (mem.get(CHAVE_AVISO)) { box.hidden = true; return; }
+    box.hidden = false;
     var tem = est === 'captions' || est === 'ambos', abre = o.abre;
-    var fundo = el('div'); fundo.id = 'apps-aviso'; fundo.setAttribute('role', 'dialog'); fundo.setAttribute('aria-modal', 'true');
-    fundo.style.cssText = 'position:fixed;inset:0;z-index:9200;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(8,9,9,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)';
-    var cx = el('div'); cx.style.cssText = 'max-width:440px;width:100%;background:var(--card,#151816);color:var(--ink,#F4F0E4);border:1px solid rgba(255,225,77,.45);border-radius:20px;padding:26px 24px 22px;box-shadow:0 30px 80px -30px rgba(0,0,0,.9);font-family:inherit;text-align:center';
-    var ic = el('img'); ic.src = APP.icone; ic.alt = ''; ic.width = 64; ic.height = 64; ic.style.cssText = 'border-radius:16px;margin-bottom:12px'; cx.appendChild(ic);
-    var h = el('h3', null, 'Novo no Base FL: o Base Captions!'); h.style.cssText = 'margin:0 0 10px;font-size:19px;line-height:1.25'; cx.appendChild(h);
-    var t1 = tem
-      ? 'O Base Captions é uma ferramenta do Base FL e já está liberada na sua conta. Para usar, baixe o programa e entre com este mesmo e-mail.'
-      : 'O Base Captions é a nova ferramenta do Base FL para legendas automáticas no CapCut Desktop. Ela tem compra própria e o programa é baixado à parte.';
-    var t2 = 'Seus produtos continuam vinculados à sua conta do Base FL. Você encontra o Base Captions na seção Ferramentas novas.';
-    [t1, t2].forEach(function (s) { var p = el('p', null, s); p.style.cssText = 'margin:0 0 10px;font-size:14px;line-height:1.5;color:var(--mute,#B5B1A5)'; cx.appendChild(p); });
-    var fecha = function () { if (fundo.parentNode) fundo.parentNode.removeChild(fundo); document.removeEventListener('keydown', tecla); };
-    function tecla(e) { if (e.key === 'Escape') fecha(); }
-    var bs = el('div'); bs.style.cssText = 'display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px';
-    if (tem) { var meu = so() || 'mac'; bs.appendChild(botao(meu === 'win' ? 'Baixar para Windows' : 'Baixar para Mac', 'primary', function () { abre(APP.links[meu]); fecha(); })); }
-    else bs.appendChild(botao('Conhecer o Base Captions', 'primary', function () { abre(PAGINA); fecha(); }));
-    bs.appendChild(botao('Entendi', 'ghost', fecha)); cx.appendChild(bs);
-    fundo.appendChild(cx); fundo.onclick = function (e) { if (e.target === fundo) fecha(); }; document.addEventListener('keydown', tecla);
-    document.body.appendChild(fundo);
+    var b = el('div', 'ab'); b.setAttribute('role', 'region'); b.setAttribute('aria-label', 'Novidade: Base Captions');
+    var ic = el('img', 'ab-ic'); ic.src = APP.icone; ic.alt = ''; ic.width = 64; ic.height = 64; ic.draggable = false; b.appendChild(ic);
+    var tx = el('div', 'ab-tx');
+    tx.appendChild(el('span', 'ab-sel', tem ? 'Liberado na sua conta' : 'Novidade no Base FL'));
+    tx.appendChild(el('h3', null, tem ? 'Seu Base Captions está liberado!' : 'Chegou o Base Captions: legendas automáticas no CapCut'));
+    tx.appendChild(el('p', null, tem
+      ? 'É a ferramenta de legendas do Base FL. Baixe o programa, instale e entre com este mesmo e-mail. Seus outros produtos continuam aqui.'
+      : 'Uma ferramenta nova do Base FL: legendas prontas em poucos cliques. ' + reais(PRECO) + ' · acesso por 1 ano. Seus produtos atuais continuam aqui.'));
+    b.appendChild(tx);
+    var ac = el('div', 'ab-ac');
+    if (tem) { var meu = so() || 'mac'; ac.appendChild(botao(meu === 'win' ? 'Baixar para Windows' : 'Baixar para Mac', 'primary', function () { abre(APP.links[meu]); })); }
+    else ac.appendChild(botao('Conhecer o Base Captions  →', 'primary', function () { abre(PAGINA); }));
+    b.appendChild(ac);
+    var x = botao('×', 'ab-x', function () { mem.set(CHAVE_AVISO, '1'); box.hidden = true; box.textContent = ''; }); x.setAttribute('aria-label', 'Fechar aviso'); b.appendChild(x);
+    box.appendChild(b);
   }
   window.AppsFL = { desenha: desenha, _estado: estado, _app: APP, _so: so, _preco: PRECO, _chave: CHAVE_AVISO };
 })();
