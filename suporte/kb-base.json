@@ -10,7 +10,8 @@
    "Reels Academy é o curso de edição do Fernando, vendido na Kiwify. É outro produto, com outro suporte. Os Títulos Dinâmicos são vendidos à parte, no Base FL.",
    "Base Captions gera legendas automáticas e entrega um projeto editável no CapCut Desktop. Títulos Dinâmicos são estilos prontos de título, gancho e destaque de fala, instalados no CapCut. São produtos diferentes, vendidos separadamente: ter um NÃO libera o outro. Os Títulos Dinâmicos NÃO são legenda automática.",
    "O app Base FL e o app Base Captions não são o CapCut e não têm vínculo com o CapCut. O Base Captions tem requisitos próprios (Windows 10/11; Mac com Apple Silicon M1+ e macOS 13+). Os requisitos do app Base FL não valem para ele.",
-   "Quem chega perguntando de legenda automática ou vindo de anúncio do Base Captions: priorize o Base Captions. Quem pergunta dos Títulos, do Base FL ou de outro produto: responda sobre aquele produto. Não empurre o Base Captions em todo atendimento."
+   "Quem chega perguntando de legenda automática ou vindo de anúncio do Base Captions: priorize o Base Captions. Quem pergunta dos Títulos, do Base FL ou de outro produto: responda sobre aquele produto. Não empurre o Base Captions em todo atendimento.",
+   "Vocabulário: diga 'o Base Captions, a ferramenta de legendas do Base FL' e 'o aplicativo Base FL'. NÃO diga 'novo aplicativo', 'outro app' nem trate Base FL e Base Captions como duas marcas ou duas escolhas. O programa do Base Captions é baixado à parte, mas entra com o mesmo e-mail da compra."
   ],
   "garantia": "7 dias de garantia em todos os produtos, contados da compra, sem precisar justificar. O reembolso é pedido pela própria Greenn (no e-mail da compra) ou pelo suporte no WhatsApp. O valor volta pelo mesmo meio de pagamento, nos prazos da Greenn e da operadora. Com o reembolso, o acesso ao produto e aos bônus daquela compra se encerra.",
   "licenca": "Pode usar os materiais em quantos vídeos quiser, seus ou de clientes, inclusive pagos. Não pode revender, repassar ou compartilhar os arquivos nem o acesso da conta.",
@@ -23,7 +24,8 @@
    "privacidade": "https://basefl.com/privacidade/",
    "captions": "https://basefl.com/captions/?de=whatsapp",
    "captions_instalar": "https://basefl.com/captions/obrigado/"
-  }
+  },
+  "ecossistema": "Base FL é a marca e o ecossistema de ferramentas do Fernando Luz. O aplicativo Base FL é o app original (kits e packs no CapCut: Títulos Dinâmicos, Efeitos Sonoros, LUTs etc.) e continua existindo. O Base Captions é uma ferramenta do ecossistema Base FL (legendas automáticas no CapCut Desktop) que tem programa próprio, baixado à parte. É a mesma conta e o mesmo e-mail nos dois: não é outra marca e a pessoa não precisa escolher entre os dois. O que a pessoa pode usar depende só do que ela comprou. Quem comprou o Base Captions encontra o botão de baixar no aplicativo Base FL (aviso no topo e cartão em 'Ferramentas novas', a partir da versão 0.10.32) e pelo link de instalação do Base Captions."
  },
  "produtos": {
   "legendas": {
@@ -275,7 +277,7 @@
     "app base fl",
     "aplicativo base fl"
    ],
-   "o_que_e": "App gratuito para Mac e Windows. Entra com o e-mail da compra (código por e-mail, sem senha). O que a pessoa comprou aparece com Instalar ou Abrir; o resto aparece com Conhecer. Também tem as aulas, e um botão Diagnóstico para suporte.",
+   "o_que_e": "App gratuito para Mac e Windows. Entra com o e-mail da compra (código por e-mail, sem senha). O que a pessoa comprou aparece com Instalar ou Abrir; o resto aparece com Conhecer. Também tem as aulas, e um botão Diagnóstico para suporte. Na versão 0.10.32 ou mais nova, também mostra o Base Captions: quem comprou vê o botão de baixar; quem não comprou vê o cartão com cadeado e a página do produto.",
    "download": "https://basefl.com/instalar/?de=whatsapp",
    "requisitos": "Mac: macOS 10.15 ou mais novo (Intel e Apple Silicon). Windows: 10 ou 11, sem precisar de senha de administrador.",
    "celular": "No celular existe o Base FL como app de tela inicial (pela página de instalar), para as ferramentas e aulas. Os kits do CapCut (Títulos, Efeitos, LUTs) só instalam no computador.",
@@ -366,7 +368,8 @@
      "q": "Quanto tempo leva para legendar?",
      "a": "Nao tem um tempo fixo: depende do computador e do tamanho do video. Dica: se vai usar so um trecho, corte antes e coloque so a parte que quer legendar."
     }
-   ]
+   ],
+   "onde_encontrar": "É uma ferramenta do Base FL com programa próprio. Quem comprou baixa pelo link de instalação do Base Captions ou pelo aplicativo Base FL (aviso no topo e cartão em 'Ferramentas novas', versão 0.10.32 ou mais nova) e entra com o mesmo e-mail da compra."
   }
  },
  "problemas": [
@@ -817,7 +820,10 @@
     "titulos dinamicos incluso",
     "tenho direito ao captions",
     "vem com os titulos",
-    "ja comprei os titulos"
+    "ja comprei os titulos",
+    "tenho direito ao base captions",
+    "direito ao base captions",
+    "titulos incluem o captions"
    ],
    "passos": [
     "Base Captions e Titulos Dinamicos sao produtos separados. Um nao libera o outro.",
@@ -881,6 +887,60 @@
     "No Windows (10 ou 11) funciona normalmente."
    ],
    "escalar_quando": "Nunca para o requisito (é limitação da versão atual). Se a pessoa pedir versão para Intel, diga que anotou o interesse e não prometa prazo."
+  },
+  {
+   "id": "captions_nao_aparece_no_basefl",
+   "sinais": [
+    "nao aparece no base fl",
+    "cade o captions",
+    "nao achei o captions",
+    "comprei o captions mas nao aparece",
+    "preciso baixar outro aplicativo",
+    "captions nao esta no app",
+    "onde encontro minhas legendas automaticas",
+    "onde fica o captions"
+   ],
+   "passos": [
+    "O Base Captions é uma ferramenta do Base FL, mas tem programa próprio, baixado à parte. Ele não instala dentro do aplicativo Base FL.",
+    "Confira pela compra se a pessoa tem o Base Captions. Se tiver, envie o link de instalação do Base Captions e explique que entra com o mesmo e-mail da compra.",
+    "Se ela usa o aplicativo Base FL na versão 0.10.32 ou mais nova, avise que lá também tem o botão de baixar (aviso no topo e cartão em Ferramentas novas).",
+    "Se a consulta de compra NÃO mostrar o Base Captions, não diga que foi liberado: explique que ainda não consta na conta e envie a página do produto se ela quiser conhecer."
+   ],
+   "escalar_quando": "A pessoa diz que pagou o Base Captions e a consulta de compra não mostra a licença."
+  },
+  {
+   "id": "basefl_atualizou_captions_nao_apareceu",
+   "sinais": [
+    "ja atualizei o base fl",
+    "atualizei e nao apareceu",
+    "atualizei o app e nao tem captions",
+    "nao apareceu depois de atualizar",
+    "atualizacao do base fl"
+   ],
+   "passos": [
+    "Peça para olhar o rodapé do aplicativo Base FL: precisa estar na versão 0.10.32 ou mais nova. Se estiver abaixo, envie o link de instalar o Base FL.",
+    "Na 0.10.32 o Base Captions aparece no cartão 'Ferramentas novas'. O aviso amarelo no topo some para sempre quando a pessoa clica no X, mas o cartão continua.",
+    "Se o cartão mostra cadeado, a conta não tem o Base Captions: confira pela compra e pelo e-mail usado no app. Não prometa liberação sem a consulta de compra.",
+    "Lembre que o programa do Base Captions é baixado à parte: o botão do cartão leva ao instalador."
+   ],
+   "escalar_quando": "A versão está correta, a compra do Base Captions consta e mesmo assim o cartão mostra cadeado."
+  },
+  {
+   "id": "captions_e_basefl_onde_acessar",
+   "sinais": [
+    "tenho os dois produtos",
+    "onde acesso cada um",
+    "preciso baixar outro app",
+    "base fl e base captions sao diferentes",
+    "qual a diferenca do base fl e base captions",
+    "o captions e outra marca"
+   ],
+   "passos": [
+    "Explique em uma frase: Base FL é o ecossistema; o aplicativo Base FL guarda os kits e packs no CapCut (Títulos, Efeitos Sonoros, LUTs); o Base Captions é a ferramenta de legendas automáticas, com programa próprio.",
+    "É a mesma conta: entra com o mesmo e-mail da compra nos dois. Cada um mostra o que a pessoa comprou.",
+    "Títulos Dinâmicos e Base Captions são produtos separados: um não libera o outro. Só confirme o que a pessoa tem depois da consulta de compra."
+   ],
+   "escalar_quando": "A pessoa insiste que comprou um produto que a consulta de compra não mostra."
   }
  ],
  "politicas_do_atendimento": [
@@ -892,6 +952,7 @@
   "Base Captions e Títulos Dinâmicos são produtos separados. Nunca diga que os Títulos estão incluídos no Base Captions (nem o contrário), a não ser que a consulta de compra mostre a licença daquele produto.",
   "Nunca oriente a pessoa a desligar o antivírus (nem por alguns minutos) nem a restaurar arquivo da quarentena para o Base Captions. Peça a mensagem exata, confirme que o arquivo veio do link oficial e, se houver nome de ameaça ou antivírus apagou o arquivo, encaminhe para a equipe.",
   "Base Captions: não prometa tempo fixo de processamento, não afirme número de computadores permitidos nem preço de renovação, e não invente requisitos de RAM/processador. Se não souber, diga que vai confirmar com a equipe.",
-  "Não ofereça produto durante problema técnico ou reclamação. Se a pessoa recusar, não insista. Se já tem o produto, não ofereça de novo."
+  "Não ofereça produto durante problema técnico ou reclamação. Se a pessoa recusar, não insista. Se já tem o produto, não ofereça de novo.",
+  "Vocabulário do ecossistema: Base FL é a marca; 'aplicativo Base FL' é o app original; 'Base Captions' é uma ferramenta do Base FL com programa próprio. Nunca fale em 'novo aplicativo' nem sugira que a pessoa precisa escolher entre os dois. Antes de dizer que algo está liberado, use a consulta de compra."
  ]
 }
