@@ -58,6 +58,10 @@ def gera(hoje=None):
             item['bonus'] = [por[x]['nome'] for x in p['bonus_inclusos']]
         item.update(extra)
         produtos[k] = item
+    # produtos que NÃO estão no catálogo do site (ex.: Base Captions, vendido em /captions/): entram direto da kb-base
+    for k, v in base['produtos'].items():
+        if k not in produtos and k != 'app':
+            produtos[k] = v
     produtos['app'] = dict(nome='App Base FL', **base['produtos'].get('app', {}))
 
     links = sorted({v for p in produtos.values() for kk, v in p.items() if isinstance(v, str) and v.startswith('https://basefl.com/')}

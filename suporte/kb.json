@@ -1,7 +1,7 @@
 {
- "versao": "2026-10-27.e13061c3",
- "gerado_em": "2026-10-27",
- "revisar_ate": "2026-12-11",
+ "versao": "2026-11-16.7fe36117",
+ "gerado_em": "2026-11-16",
+ "revisar_ate": "2026-12-31",
  "empresa": {
   "marca": "Base FL",
   "dono": "Fernando Luz",
@@ -9,8 +9,9 @@
   "o_que_e": "Base FL é o ecossistema do editor de vídeo do Fernando Luz: um app gratuito (Mac e Windows) que instala os kits no CapCut do computador e reúne ferramentas para atender cliente, que abrem no navegador (computador ou celular). A pessoa compra só o que quiser; tudo o que compra aparece liberado no mesmo app, entrando com o e-mail da compra.",
   "nao_confundir": [
    "Reels Academy é o curso de edição do Fernando, vendido na Kiwify. É outro produto, com outro suporte. Os Títulos Dinâmicos são vendidos à parte, no Base FL.",
-   "Títulos Dinâmicos NÃO é legenda automática. Legenda automática o próprio CapCut faz. Os Títulos são estilos prontos de título, gancho e destaque de fala.",
-   "O app Base FL não é o CapCut e não tem vínculo com o CapCut."
+   "Base Captions gera legendas automáticas e entrega um projeto editável no CapCut Desktop. Títulos Dinâmicos são estilos prontos de título, gancho e destaque de fala, instalados no CapCut. São produtos diferentes, vendidos separadamente: ter um NÃO libera o outro. Os Títulos Dinâmicos NÃO são legenda automática.",
+   "O app Base FL e o app Base Captions não são o CapCut e não têm vínculo com o CapCut. O Base Captions tem requisitos próprios (Windows 10/11; Mac com Apple Silicon M1+ e macOS 13+). Os requisitos do app Base FL não valem para ele.",
+   "Quem chega perguntando de legenda automática ou vindo de anúncio do Base Captions: priorize o Base Captions. Quem pergunta dos Títulos, do Base FL ou de outro produto: responda sobre aquele produto. Não empurre o Base Captions em todo atendimento."
   ],
   "garantia": "7 dias de garantia em todos os produtos, contados da compra, sem precisar justificar. O reembolso é pedido pela própria Greenn (no e-mail da compra) ou pelo suporte no WhatsApp. O valor volta pelo mesmo meio de pagamento, nos prazos da Greenn e da operadora. Com o reembolso, o acesso ao produto e aos bônus daquela compra se encerra.",
   "licenca": "Pode usar os materiais em quantos vídeos quiser, seus ou de clientes, inclusive pagos. Não pode revender, repassar ou compartilhar os arquivos nem o acesso da conta.",
@@ -20,7 +21,9 @@
    "instalar": "https://basefl.com/instalar/?de=whatsapp",
    "inicio": "https://basefl.com/?de=whatsapp",
    "termos": "https://basefl.com/termos/",
-   "privacidade": "https://basefl.com/privacidade/"
+   "privacidade": "https://basefl.com/privacidade/",
+   "captions": "https://basefl.com/captions/?de=whatsapp",
+   "captions_instalar": "https://basefl.com/captions/obrigado/"
   }
  },
  "produtos": {
@@ -141,10 +144,10 @@
   "case": {
    "nome": "CaseUp",
    "tipo": "ferramenta",
-   "acesso": "junto com os Títulos Dinâmicos",
+   "acesso": "bônus dos Títulos Dinâmicos e do Base Captions",
    "gancho": "Portfólio e link da bio",
    "resumo": "Seus melhores vídeos e os seus links numa página só. Serve de portfólio para o cliente e de link da bio.",
-   "venda": "Não é vendido separado: vem de bônus com Títulos Dinâmicos.",
+   "venda": "Não é vendido separado: vem de bônus com os Títulos Dinâmicos e com o Base Captions.",
    "pagina": "https://basefl.com/conheca/legendas/?de=whatsapp",
    "apelidos": [
     "caseup",
@@ -154,16 +157,16 @@
     "link da bio"
    ],
    "o_que_e": "Portfólio e link da bio numa página só: cola os links dos vídeos (Instagram, TikTok, YouTube, Vimeo, Google Drive), coloca botões (WhatsApp, Instagram) e publica em basefl.com/seunome.",
-   "como_obter": "Não é vendido separado: é bônus dos Títulos Dinâmicos (1 ano).",
+   "como_obter": "Não é vendido separado: é bônus dos Títulos Dinâmicos (1 ano) e também do Base Captions.",
    "url_ferramenta": "https://basefl.com/case/"
   },
   "timer": {
    "nome": "ChronoCut",
    "tipo": "ferramenta",
-   "acesso": "junto com os Títulos Dinâmicos",
+   "acesso": "bônus dos Títulos Dinâmicos e do Base Captions",
    "gancho": "Quanto tempo esse vídeo leva de verdade?",
    "resumo": "O timer do editor: tempo por projeto e por etapa, revisões e exportações à parte, e o seu valor por hora.",
-   "venda": "Não é vendido separado: vem de bônus com Títulos Dinâmicos.",
+   "venda": "Não é vendido separado: vem de bônus com os Títulos Dinâmicos e com o Base Captions.",
    "pagina": "https://basefl.com/conheca/legendas/?de=whatsapp",
    "apelidos": [
     "chronocut",
@@ -172,7 +175,7 @@
     "timer"
    ],
    "o_que_e": "O timer do editor: tempo por projeto e por etapa, revisões e exportações à parte, e o valor por hora.",
-   "como_obter": "Não é vendido separado: é bônus dos Títulos Dinâmicos (1 ano).",
+   "como_obter": "Não é vendido separado: é bônus dos Títulos Dinâmicos (1 ano) e também do Base Captions.",
    "url_ferramenta": "https://basefl.com/timer/"
   },
   "legendas": {
@@ -251,6 +254,10 @@
      "q": "Vem no Reels Academy?",
      "a": "Não. Os Títulos Dinâmicos são vendidos à parte, no Base FL."
     }
+   ],
+   "desambiguar": "Se a pessoa falar em 'legenda automática', 'gerar legenda' ou 'app de legenda', é o Base Captions. 'Pack de legendas', 'legendas animadas' e títulos prontos são os Títulos Dinâmicos. Se ficar ambíguo, pergunte em uma frase: 'É a legenda automática (Base Captions) ou os títulos animados prontos (Títulos Dinâmicos)?'",
+   "nao_inclui": [
+    "Base Captions (produto separado, R$ 47)"
    ]
   },
   "sons": {
@@ -368,6 +375,93 @@
    "compatibilidade": "Abre no navegador, no computador ou no celular. Também aparece no app Base FL.",
    "acesso_detalhe": "1 ano, com atualizações do período. Perto de vencer, o app avisa e dá para renovar.",
    "privacidade_cliente": "O cliente final só vê o que a pessoa manda (briefing, proposta, contrato). Horas e valor por hora ficam só com o editor."
+  },
+  "captions": {
+   "nome": "Base Captions",
+   "tipo": "aplicativo",
+   "acesso": "12 meses (pagamento único, não é assinatura)",
+   "gancho": "Legendas automáticas que chegam prontas e editáveis no CapCut",
+   "resumo": "App para Windows e Mac (chip Apple) que transcreve o vídeo e entrega um projeto editável no CapCut Desktop, com legendas em estilos prontos.",
+   "preco": 47,
+   "venda": "R$ 47 à vista ou 12x de R$ 4,83 no cartão. Acesso de 12 meses. Garantia de 7 dias.",
+   "pagina": "https://basefl.com/captions/?de=whatsapp",
+   "pagina_compra": "https://basefl.com/captions/?de=whatsapp",
+   "apelidos": [
+    "base captions",
+    "captions",
+    "caption",
+    "bas captions",
+    "base caption",
+    "legenda automatica",
+    "legendas automaticas",
+    "legenda automática",
+    "legendas automáticas",
+    "legendar video",
+    "legendar vídeo",
+    "gerar legenda",
+    "gerar legendas",
+    "app de legenda",
+    "app de legendas",
+    "legenda no capcut",
+    "legendas no capcut automaticas"
+   ],
+   "o_que_e": "App para Mac e Windows. A pessoa escolhe o video, o app transcreve a fala e cria um projeto no CapCut Desktop com as legendas ja no estilo escolhido. Depois abre no CapCut e edita como qualquer projeto.",
+   "inclui": [
+    "8 estilos de legenda",
+    "ajuste de fonte, tamanho, altura, largura e caracteres por bloco",
+    "correção do texto antes de gerar",
+    "projeto editável no CapCut Desktop",
+    "extras: cortes dinâmicos e zoom dinâmico",
+    "bônus: CaseUp",
+    "bônus: ChronoCut",
+    "bônus: Pack de Animações",
+    "aula de treinamento dentro do app"
+   ],
+   "nao_inclui": [
+    "Títulos Dinâmicos (produto separado, R$ 47)",
+    "edição automática completa do vídeo"
+   ],
+   "custos": "Nao exige assinatura do Claude nem do ChatGPT e nao cobra por token nem por video.",
+   "tempo": "Nao prometer tempo fixo. Depende do computador, da duracao e do tamanho do video.",
+   "compatibilidade": "CapCut para computador (Desktop). Windows 10 ou 11, e Mac com chip Apple (M1 ou mais novo) com macOS 13 ou mais novo. NÃO funciona no CapCut do celular. Mac com Intel não é suportado nesta versão.",
+   "requisitos": "Windows 10/11. Mac: Apple Silicon (M1 ou superior) e macOS 13+. Não existe número mínimo de RAM/processador documentado: não invente. Estes requisitos NÃO são os do app Base FL.",
+   "qualificacao": "Tu edita no CapCut do computador? (Windows ou Mac com chip Apple)",
+   "instalar": "https://basefl.com/captions/obrigado/",
+   "como_comprar": "Compra pela página. No checkout, os Títulos Dinâmicos (R$ 47), o Base FL Assets, os Efeitos Sonoros e as LUTs (R$ 17 cada) aparecem como complementos opcionais, nada vem marcado.",
+   "bumps_do_checkout": [
+    "Títulos Dinâmicos R$ 47",
+    "Base FL Assets R$ 17",
+    "Efeitos Sonoros R$ 17",
+    "LUTs R$ 17"
+   ],
+   "licenciamento": {
+    "duracao": "12 meses a partir da compra (pagamento unico).",
+    "login": "E-mail da compra + codigo de 8 digitos enviado por e-mail (sem senha).",
+    "depois_do_vencimento": "O app deixa de liberar e mostra o link de compra. Nao ha preco de renovacao nem periodo de tolerancia documentados. PENDENTE confirmar a regra comercial; a IA so informa que o acesso termina em 12 meses e que e preciso adquirir de novo.",
+    "computadores": "Nao ha limite tecnico de computadores: a licenca e do e-mail. Uso pessoal; nao repassar o acesso (termos). PENDENTE confirmar se esse e o desejado.",
+    "troca_ou_formatacao": "Instalar de novo e entrar com e-mail e codigo. Nao precisa reativar nada.",
+    "sem_internet": "Funciona por ate 7 dias sem internet desde a ultima verificacao.",
+    "reembolso": "Com reembolso a licenca e revogada e o app deixa de liberar."
+   },
+   "relacao_com_titulos": "Base Captions e Títulos Dinâmicos são produtos separados: comprar um NÃO libera o outro. Quem tem os Títulos não tem o Captions e vice-versa. Só diga que um está incluído se a consulta de compra mostrar a licença daquele produto.",
+   "faq": [
+    {
+     "q": "Os Titulos Dinamicos estao incluidos?",
+     "a": "Nao. Os Titulos Dinamicos sao um produto complementar, vendido separadamente. O Base Captions ja vem com os estilos de legenda e as funcoes da compra. Se quiser adicionar os Titulos tambem, posso te enviar o link."
+    },
+    {
+     "q": "Preciso de assinatura de IA ou pago por video?",
+     "a": "Nao. Sem assinatura do Claude ou ChatGPT e sem cobranca por token ou por video."
+    },
+    {
+     "q": "Funciona no celular?",
+     "a": "Nao. E para o CapCut do computador (Mac ou Windows)."
+    },
+    {
+     "q": "Quanto tempo leva para legendar?",
+     "a": "Nao tem um tempo fixo: depende do computador e do tamanho do video. Dica: se vai usar so um trecho, corte antes e coloque so a parte que quer legendar."
+    }
+   ]
   },
   "app": {
    "nome": "App Base FL",
@@ -532,7 +626,8 @@
    ],
    "passos": [
     "Mac: abrir o .dmg, arrastar o Base FL para Aplicativos; na pasta Aplicativos, botão direito no Base FL › Abrir › Abrir de novo na janela de aviso.",
-    "Windows: na tela azul \"O Windows protegeu o computador\", clicar em Mais informações › Executar assim mesmo."
+    "Windows: na tela azul \"O Windows protegeu o computador\", clicar em Mais informações › Executar assim mesmo.",
+    "(No Base Captions, siga o caso captions_gatekeeper / captions_smartscreen: Mac só com Apple Silicon e macOS 13+.)"
    ],
    "escalar_quando": "Mesmo assim não abre; peça print da mensagem."
   },
@@ -556,6 +651,7 @@
     "erro ao instalar no windows"
    ],
    "passos": [
+    "(Este passo a passo é só do instalador do app Base FL. Para o Base Captions NÃO use: veja captions_antivirus_apagou e captions_smartscreen, que nunca pedem para desligar o antivírus.)",
     "É o antivírus bloqueando o instalador, porque o app é novo e ele ainda não conhece. O arquivo não tem defeito.",
     "Apague os arquivos Base-FL-Windows da pasta Downloads e baixe de novo em basefl.com/instalar.",
     "Abra o antivírus (McAfee, Avast, AVG, Norton…) e desligue a proteção/varredura em tempo real por 15 minutos.",
@@ -660,6 +756,197 @@
     "Títulos, Efeitos Sonoros e LUTs são vitalícios."
    ],
    "escalar_quando": "Venceu antes do prazo ou cobrança duplicada."
+  },
+  {
+   "id": "captions_smartscreen",
+   "sinais": [
+    "smartscreen",
+    "windows protegeu seu computador",
+    "editor desconhecido",
+    "publicador desconhecido",
+    "tela azul",
+    "aplicativo nao reconhecido",
+    "app nao reconhecido"
+   ],
+   "passos": [
+    "Pergunte qual e a mensagem exata (peca print) e se o arquivo veio do link oficial de download do Base Captions.",
+    "Distinga: aviso AZUL de reputacao do SmartScreen (editor desconhecido / Windows protegeu seu computador) e DIFERENTE de uma deteccao de ameaca com nome.",
+    "Se for aviso de reputacao e o arquivo veio do link oficial: explique que o instalador ainda nao tem assinatura de editor reconhecida, o que por si so nao prova que seja perigoso nem seguro; oriente Mais informacoes > Executar assim mesmo, apenas para esse arquivo.",
+    "Nunca peca para desligar o antivirus ou o Windows Defender, nem por alguns minutos."
+   ],
+   "escalar_quando": "Aparecer nome de ameaca/virus, o arquivo nao veio do link oficial, ou a pessoa nao conseguir confirmar a origem."
+  },
+  {
+   "id": "captions_antivirus_apagou",
+   "sinais": [
+    "antivirus apagou",
+    "antivirus excluiu",
+    "quarentena",
+    "arquivo sumiu",
+    "defender removeu",
+    "ameaca removida"
+   ],
+   "passos": [
+    "Pergunte o nome do antivirus e a mensagem exata (peca print) e confirme que o arquivo veio do link oficial.",
+    "Nao oriente restaurar da quarentena, liberar o arquivo nem desligar o antivirus.",
+    "Diferencie aviso de reputacao (arquivo desconhecido) de deteccao com nome de ameaca.",
+    "Registre o antivirus, a mensagem e a versao e encaminhe para analise tecnica."
+   ],
+   "escalar_quando": "Sempre que o antivirus apagou ou bloqueou o arquivo: encaminhar com print e versao."
+  },
+  {
+   "id": "captions_gatekeeper",
+   "sinais": [
+    "desenvolvedor nao verificado",
+    "nao foi possivel verificar",
+    "app danificado",
+    "esta danificado",
+    "nao pode ser aberto",
+    "gatekeeper",
+    "mac bloqueou",
+    "baixado da internet"
+   ],
+   "passos": [
+    "Pergunte a versao do macOS, se o Mac tem chip Apple (M1 ou mais novo) ou Intel, e a mensagem exata (peca print).",
+    "Se for aviso de desenvolvedor nao verificado: abra Ajustes do Sistema > Privacidade e Seguranca, role ate a mensagem sobre o Base Captions e clique em Abrir assim mesmo.",
+    "Confirme que o arquivo veio do link oficial.",
+    "Mac Intel ou macOS anterior ao 13: informe que o Base Captions nao e suportado nessa configuracao nesta versao.",
+    "Se for aviso de desenvolvedor nao verificado: Ajustes do Sistema > Privacidade e Seguranca, role ate a mensagem sobre o Base Captions e clique em Abrir assim mesmo.",
+    "Nunca oriente desativar o Gatekeeper nem rodar comandos para remover quarentena."
+   ],
+   "escalar_quando": "A mensagem for 'danificado' mesmo apos baixar de novo pelo link oficial."
+  },
+  {
+   "id": "captions_nao_gera",
+   "sinais": [
+    "nao gera",
+    "nao gerou",
+    "legenda nao aparece",
+    "travou",
+    "ficou parado",
+    "demorando",
+    "lento",
+    "85%",
+    "nao termina"
+   ],
+   "passos": [
+    "Pergunte: duracao do video, Windows ou Mac e se travou em alguma porcentagem. Se ja informou, nao pergunte de novo.",
+    "Explique sem culpar: o tempo depende do processador, da memoria, da duracao e do tamanho do video.",
+    "Dicas: fechar programas pesados, ver espaco livre e testar um trecho curto. Se vai usar so uma parte, corte antes e importe so esse trecho.",
+    "Se um video curto tambem trava, trate como possivel problema do app (registrar versao e sistema)."
+   ],
+   "escalar_quando": "Video curto trava de forma repetida, ou erro desconhecido. Peca print e versao do app antes de encaminhar."
+  },
+  {
+   "id": "captions_licenca",
+   "sinais": [
+    "licenca nao funciona",
+    "pede senha",
+    "nao consigo entrar",
+    "nao recebi o acesso",
+    "nao ativa",
+    "troquei de computador",
+    "formatei",
+    "outro computador",
+    "pagamento aprovado e nao liberou"
+   ],
+   "passos": [
+    "O app entra com o e-mail da compra e codigo por e-mail (sem senha). Confirme o e-mail da compra.",
+    "Consulte a compra pelo e-mail. Pagamento pendente: explique Pix/cartao/boleto. Aprovado e nao liberou: escale com o e-mail.",
+    "Troca/formatacao de computador e numero de dispositivos: PENDENTE, nao afirme regra; encaminhe."
+   ],
+   "escalar_quando": "Compra aprovada sem licenca, ou qualquer duvida de dispositivos/reativacao."
+  },
+  {
+   "id": "captions_capcut_nao_abre",
+   "sinais": [
+    "projeto nao abre",
+    "projeto vazio",
+    "nao aparece no capcut",
+    "capcut nao mostra",
+    "video nao encontrado",
+    "midia perdida",
+    "fonte faltando",
+    "pasta de rascunhos"
+   ],
+   "passos": [
+    "Pergunte se o CapCut Desktop estava fechado ao gerar e qual versao do CapCut usa.",
+    "Confirme que o app e o CapCut usam a mesma pasta de rascunhos (inclusive pasta personalizada).",
+    "Video nao encontrado: confirmar que o arquivo original continua no mesmo lugar.",
+    "Fonte ausente: instalar as fontes pela tela do app."
+   ],
+   "escalar_quando": "Persistir depois de gerar de novo com o CapCut fechado. Peca print do CapCut."
+  },
+  {
+   "id": "captions_legenda_errada",
+   "sinais": [
+    "palavra errada",
+    "legenda errada",
+    "idioma errado",
+    "pontuacao",
+    "adiantada",
+    "atrasada",
+    "dessincronizada",
+    "cortada",
+    "fonte pequena",
+    "fonte grande",
+    "espacamento",
+    "posicao"
+   ],
+   "passos": [
+    "Palavras erradas: corrigir o texto no app antes de gerar, ou no CapCut depois.",
+    "Idioma errado: conferir o idioma escolhido no app.",
+    "Tamanho/posicao/palavras por bloco: usar os ajustes de altura, largura e caracteres do app.",
+    "Dessincronizacao: pedir print e o trecho do video."
+   ],
+   "escalar_quando": "Dessincronizacao persistente ou legenda que difere do preview. Registrar versao do app e sistema."
+  },
+  {
+   "id": "captions_vs_titulos",
+   "sinais": [
+    "cade meus titulos",
+    "titulos dinamicos incluso",
+    "tenho direito ao captions",
+    "vem com os titulos",
+    "ja comprei os titulos"
+   ],
+   "passos": [
+    "Base Captions e Titulos Dinamicos sao produtos separados. Um nao libera o outro.",
+    "Confira pelo e-mail o que a pessoa ja tem. Nao ofereca o que ja foi comprado.",
+    "Se faltar um deles e a pessoa tiver interesse, envie o link rastreado do produto."
+   ],
+   "escalar_quando": "A oferta original prometeu algo diferente do que esta aqui, ou a pessoa reclama de promessa."
+  },
+  {
+   "id": "captions_aulas_por_produto",
+   "sinais": [
+    "aula dos titulos",
+    "onde estao as aulas",
+    "nao vejo a aula",
+    "aula do captions"
+   ],
+   "passos": [
+    "O comprador do Base Captions tem o aplicativo e a aula de treinamento do Base Captions.",
+    "As aulas dos Titulos Dinamicos so aparecem para quem tem os Titulos Dinamicos. Quem tem os dois ve as duas.",
+    "Consulte a compra pelo e-mail antes de afirmar quem tem o que."
+   ],
+   "escalar_quando": "Comprou o produto e a aula nao aparece depois de sair e entrar de novo no app."
+  },
+  {
+   "id": "captions_vencimento",
+   "sinais": [
+    "venceu o base captions",
+    "acesso do captions venceu",
+    "captions expirou",
+    "licenca vencida",
+    "licença vencida",
+    "vencida"
+   ],
+   "passos": [
+    "O acesso do Base Captions é de 12 meses a partir da compra. Depois disso o app deixa de liberar e mostra o link para adquirir de novo.",
+    "Não existe, por enquanto, regra de renovação com preço especial: não prometa desconto nem prazo extra. Encaminhe para a equipe se a pessoa reclamar que venceu antes dos 12 meses."
+   ],
+   "escalar_quando": "Venceu antes dos 12 meses ou cobrança duplicada."
   }
  ],
  "politicas": [
@@ -667,11 +954,17 @@
   "Nunca diga que liberou acesso, fez reembolso, trocou e-mail ou conferiu pagamento sem uma confirmação do sistema. Quando depender de pessoa, encaminhe para a equipe.",
   "Reembolso: a garantia de 7 dias é um direito, nunca dificulte. Pergunte o motivo uma vez e tente resolver uma vez quando a base tiver a solução; se a pessoa confirmar que quer, encaminhe para a equipe sem questionar mais.",
   "Não invente botão, menu ou recurso. Se não souber, peça um print ou encaminhe.",
-  "Não prometa prazo de atendimento humano."
+  "Não prometa prazo de atendimento humano.",
+  "Base Captions e Títulos Dinâmicos são produtos separados. Nunca diga que os Títulos estão incluídos no Base Captions (nem o contrário), a não ser que a consulta de compra mostre a licença daquele produto.",
+  "Nunca oriente a pessoa a desligar o antivírus (nem por alguns minutos) nem a restaurar arquivo da quarentena para o Base Captions. Peça a mensagem exata, confirme que o arquivo veio do link oficial e, se houver nome de ameaça ou antivírus apagou o arquivo, encaminhe para a equipe.",
+  "Base Captions: não prometa tempo fixo de processamento, não afirme número de computadores permitidos nem preço de renovação, e não invente requisitos de RAM/processador. Se não souber, diga que vai confirmar com a equipe.",
+  "Não ofereça produto durante problema técnico ou reclamação. Se a pessoa recusar, não insista. Se já tem o produto, não ofereça de novo."
  ],
  "links_oficiais": [
   "https://basefl.com/?de=whatsapp",
   "https://basefl.com/briefing/",
+  "https://basefl.com/captions/?de=whatsapp",
+  "https://basefl.com/captions/obrigado/",
   "https://basefl.com/case/",
   "https://basefl.com/conheca/assets/?de=whatsapp",
   "https://basefl.com/conheca/efeitos-sonoros/?de=whatsapp",
