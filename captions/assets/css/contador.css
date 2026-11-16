@@ -1,16 +1,29 @@
-/* Contador de alunos ao vivo (Base FL) — só aparece quando o número chega do servidor */
-.topo-alunos{display:inline-flex;align-items:center;gap:9px;padding:6px 14px 6px 11px;border-radius:99px;border:1px solid rgba(255,225,77,.35);background:linear-gradient(180deg,rgba(255,225,77,.14),rgba(255,225,77,.05));color:var(--branco);font-family:var(--mono);line-height:1;position:relative;white-space:nowrap}
+/* Contador de alunos ao vivo (Base FL), estilo Flip Clock. Só aparece quando o número chega do servidor. */
+.topo-alunos{display:inline-flex;align-items:center;gap:10px;padding:5px 14px 5px 11px;border-radius:12px;border:1px solid rgba(255,225,77,.30);background:linear-gradient(180deg,rgba(255,225,77,.10),rgba(255,225,77,.03));color:var(--branco);font-family:var(--mono);line-height:1;position:relative;white-space:nowrap}
 .topo-alunos[hidden]{display:none}
 .topo-alunos .al-ponto{position:relative;flex:none;width:8px;height:8px;border-radius:50%;background:#3ddc84;box-shadow:0 0 10px #3ddc84}
 .topo-alunos .al-ponto::after{content:"";position:absolute;inset:0;border-radius:50%;background:#3ddc84;animation:pulso 2s ease-out infinite}
-.topo-alunos .al-num{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.01em;color:var(--vermelho);font-variant-numeric:tabular-nums}
-.topo-alunos .al-rot{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--prata)}
-.topo-alunos .al-mais{position:absolute;right:10px;top:-4px;font-family:var(--mono);font-weight:800;font-size:12px;color:#3ddc84;opacity:0;pointer-events:none}
+.topo-alunos .al-rot{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--prata);line-height:1.2;text-align:left}
+.topo-alunos .al-mais{position:absolute;right:10px;top:-8px;font-family:var(--mono);font-weight:800;font-size:12px;color:#3ddc84;opacity:0;pointer-events:none}
 .topo-alunos.sobe{animation:alSobe .7s ease-out}
 .topo-alunos.sobe .al-mais{animation:alMais 1.6s ease-out}
+.flip{display:inline-flex;align-items:center;gap:3px}
+.flip .fsep{font-family:var(--display);font-weight:800;font-size:15px;color:var(--vermelho);opacity:.8;margin:0 -1px;align-self:flex-end;padding-bottom:3px}
+.fd{--w:20px;--h:28px;position:relative;width:var(--w);height:var(--h);font-family:var(--display);font-weight:800;font-size:19px;color:var(--vermelho);perspective:180px;font-variant-numeric:tabular-nums}
+.fd>div{position:absolute;left:0;width:100%;height:50%;overflow:hidden;background:#1d201f;backface-visibility:hidden}
+.fd span{position:absolute;left:0;right:0;height:var(--h);line-height:var(--h);text-align:center}
+.fd .t,.fd .ft{top:0;border-radius:4px 4px 0 0;border-bottom:1px solid #050606;transform-origin:bottom}
+.fd .b,.fd .fb{bottom:0;border-radius:0 0 4px 4px;background:#161918;transform-origin:top}
+.fd .t span,.fd .ft span{top:0}.fd .b span,.fd .fb span{bottom:0}
+.fd .ft,.fd .fb{display:none;z-index:2}
+.fd.go .ft{display:block;animation:fdTop .17s ease-in forwards}
+.fd.go .fb{display:block;transform:rotateX(90deg);animation:fdBot .17s .17s ease-out forwards}
+.fd::after{content:"";position:absolute;left:0;right:0;top:calc(50% - .5px);height:1px;background:rgba(0,0,0,.65);z-index:3}
+@keyframes fdTop{0%{transform:rotateX(0)}100%{transform:rotateX(-90deg)}}
+@keyframes fdBot{0%{transform:rotateX(90deg)}100%{transform:rotateX(0)}}
 @keyframes alSobe{0%{box-shadow:0 0 0 0 rgba(255,225,77,.55)}100%{box-shadow:0 0 0 14px rgba(255,225,77,0)}}
 @keyframes alMais{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-16px)}}
 .topo-in.com-alunos .topo-st{display:none}
 @media (min-width:640px){.topo-in.com-alunos .topo-st{display:inline-flex}}
-@media (max-width:400px){.topo-alunos{padding:6px 11px 6px 9px;gap:7px}.topo-alunos .al-num{font-size:15px}.topo-alunos .al-rot{font-size:9.5px;letter-spacing:.06em}}
-@media (prefers-reduced-motion:reduce){.topo-alunos .al-ponto::after,.topo-alunos.sobe,.topo-alunos.sobe .al-mais{animation:none}}
+@media (max-width:400px){.topo-alunos{padding:5px 9px 5px 8px;gap:7px}.fd{--w:16px;--h:24px;font-size:16px}.topo-alunos .al-rot{font-size:8.5px;letter-spacing:.05em;max-width:52px;white-space:normal}}
+@media (prefers-reduced-motion:reduce){.topo-alunos .al-ponto::after,.topo-alunos.sobe,.topo-alunos.sobe .al-mais,.fd.go .ft,.fd.go .fb{animation:none}}
