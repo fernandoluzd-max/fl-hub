@@ -243,6 +243,7 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
       <div class="banner" id="banner"></div>
     <!-- recados em vídeo da plataforma: a lista vem de avisos.json (ver avisos.js) -->
     <section class="sec" id="s-avisos" hidden></section>
+    <section class="sec" id="s-apps" hidden><div class="sec-h"><div><h2>Aplicativos</h2><p>Programas independentes, que você instala à parte. Seus produtos continuam ligados à sua conta.</p></div></div><div class="cards"></div></section>
     <section class="sec" id="s-kits"><div class="sec-h"><div><h2>Kits</h2><p>Materiais prontos que instalam direto no seu CapCut.</p></div>
       <div class="status">
         <div class="pill"><span class="dot" id="d-found"></span><span id="t-found">Procurando o CapCut…</span></div>
@@ -308,6 +309,7 @@ button.aula[data-aula=feito]::after{content:"✓";margin-left:2px;color:#7fce8f;
      Sem internet ou se o site falhar, usa a cópia que veio junto com o app. -->
 <script src="https://basefl.com/catalogo.js" onerror="window.CATALOGO=null"></script>
 <script>if (!window.CATALOGO || !Array.isArray(window.CATALOGO.produtos) || !window.CATALOGO.kit || !['legendas','sons','luts','assets','briefing','preco','contrato','painel','mood','case','timer'].every(function (k) { return window.CATALOGO.produtos.some(function (p) { return p.key === k; }); })) { window.CATALOGO = null; document.write('<script src="catalogo.js"><\/script>'); }</script>
+<script src="apps.js"></script>
 <script src="aulas.js"></script>
 <script src="avisos-dados.js"></script>
 <script src="avisos.js"></script>
@@ -557,6 +559,7 @@ function btn(txt, cls, fn){ const b = document.createElement('button'); b.classN
 function render(){
   document.querySelectorAll('#grid .cards').forEach(c => c.innerHTML = '');
   if (!sess) return;
+  if (window.AppsFL) window.AppsFL.desenha({ ok: !!cat && !catErr, owned: cat?.owned, abre: u => T.opener.openUrl(u) });       // seção Aplicativos: Base Captions liberado (com licença) ou cartão com cadeado e convite de upgrade
   const daJornada = CAT.kit.packs.filter(k => cat?.owned?.has(k)).length;
   // oferta de conjunto: a mesma regra do site (catálogo). Só aparece para quem já tem alguma e ainda faz sentido.
   const of = window.CATALOGO_OFERTA ? window.CATALOGO_OFERTA(k => !!cat?.owned?.has(k)) : null, up = $('#s-ferr-up');
