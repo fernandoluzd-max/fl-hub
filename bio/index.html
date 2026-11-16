@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Base Captions</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0D0F0E">
+<link rel="icon" href="/favicon.png">
+<meta http-equiv="refresh" content="0;url=/captions/?utm_source=link-bio&amp;utm_medium=instagram&amp;utm_campaign=bio">
+<style>html,body{margin:0;height:100%;background:#0D0F0E;color:#F4F0E4;font:16px -apple-system,Segoe UI,Roboto,sans-serif;display:flex;align-items:center;justify-content:center}a{color:#FFE14D}</style>
+<script>
+/* Link curto da bio do Instagram: leva para a página do Base Captions marcando a origem (utm_source=link-bio).
+   Mantém qualquer outro parâmetro que já viesse no link (ex.: fbclid). */
+(function () {
+  try {
+    var p = new URLSearchParams(location.search);
+    if (!p.has('utm_source')) p.set('utm_source', 'link-bio');
+    if (!p.has('utm_medium')) p.set('utm_medium', 'instagram');
+    if (!p.has('utm_campaign')) p.set('utm_campaign', 'bio');
+    location.replace('/captions/?' + p.toString());
+  } catch (e) {}
+})();
+</script>
+</head>
+<body><a href="/captions/?utm_source=link-bio&amp;utm_medium=instagram&amp;utm_campaign=bio">Abrir o Base Captions</a></body>
+</html>
