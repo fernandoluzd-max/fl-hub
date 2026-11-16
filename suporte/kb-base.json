@@ -11,7 +11,8 @@
    "Base Captions gera legendas automáticas e entrega um projeto editável no CapCut Desktop. Títulos Dinâmicos são estilos prontos de título, gancho e destaque de fala, instalados no CapCut. São produtos diferentes, vendidos separadamente: ter um NÃO libera o outro. Os Títulos Dinâmicos NÃO são legenda automática.",
    "O app Base FL e o app Base Captions não são o CapCut e não têm vínculo com o CapCut. O Base Captions tem requisitos próprios (Windows 10/11; Mac com Apple Silicon M1+ e macOS 13+). Os requisitos do app Base FL não valem para ele.",
    "Quem chega perguntando de legenda automática ou vindo de anúncio do Base Captions: priorize o Base Captions. Quem pergunta dos Títulos, do Base FL ou de outro produto: responda sobre aquele produto. Não empurre o Base Captions em todo atendimento.",
-   "Vocabulário: diga 'o Base Captions, a ferramenta de legendas do Base FL' e 'o aplicativo Base FL'. NÃO diga 'novo aplicativo', 'outro app' nem trate Base FL e Base Captions como duas marcas ou duas escolhas. O programa do Base Captions é baixado à parte, mas entra com o mesmo e-mail da compra."
+   "Vocabulário: diga 'o Base Captions, a ferramenta de legendas do Base FL' e 'o aplicativo Base FL'. NÃO diga 'novo aplicativo', 'outro app' nem trate Base FL e Base Captions como duas marcas ou duas escolhas. O programa do Base Captions é baixado à parte, mas entra com o mesmo e-mail da compra.",
+   "Reels Academy é um produto separado. Desde 16/11/2026 quem comprou o Reels Academy NÃO tem mais direito aos Títulos Dinâmicos nem a outros produtos do Base FL: cada produto é vendido à parte."
   ],
   "garantia": "7 dias de garantia em todos os produtos, contados da compra, sem precisar justificar. O reembolso é pedido pela própria Greenn (no e-mail da compra) ou pelo suporte no WhatsApp. O valor volta pelo mesmo meio de pagamento, nos prazos da Greenn e da operadora. Com o reembolso, o acesso ao produto e aos bônus daquela compra se encerra.",
   "licenca": "Pode usar os materiais em quantos vídeos quiser, seus ou de clientes, inclusive pagos. Não pode revender, repassar ou compartilhar os arquivos nem o acesso da conta.",
@@ -25,7 +26,8 @@
    "captions": "https://basefl.com/captions/?de=whatsapp",
    "captions_instalar": "https://basefl.com/captions/obrigado/"
   },
-  "ecossistema": "Base FL é a marca e o ecossistema de ferramentas do Fernando Luz. O aplicativo Base FL é o app original (kits e packs no CapCut: Títulos Dinâmicos, Efeitos Sonoros, LUTs etc.) e continua existindo. O Base Captions é uma ferramenta do ecossistema Base FL (legendas automáticas no CapCut Desktop) que tem programa próprio, baixado à parte. É a mesma conta e o mesmo e-mail nos dois: não é outra marca e a pessoa não precisa escolher entre os dois. O que a pessoa pode usar depende só do que ela comprou. Quem comprou o Base Captions encontra o botão de baixar no aplicativo Base FL (aviso no topo e cartão em 'Ferramentas novas', a partir da versão 0.10.32) e pelo link de instalação do Base Captions."
+  "ecossistema": "Base FL é a marca e o ecossistema de ferramentas do Fernando Luz. O aplicativo Base FL é o app original (kits e packs no CapCut: Títulos Dinâmicos, Efeitos Sonoros, LUTs etc.) e continua existindo. O Base Captions é uma ferramenta do ecossistema Base FL (legendas automáticas no CapCut Desktop) que tem programa próprio, baixado à parte. É a mesma conta e o mesmo e-mail nos dois: não é outra marca e a pessoa não precisa escolher entre os dois. O que a pessoa pode usar depende só do que ela comprou. Quem comprou o Base Captions encontra o botão de baixar no aplicativo Base FL (aviso no topo e cartão em 'Ferramentas novas', a partir da versão 0.10.32) e pelo link de instalação do Base Captions.",
+  "nota_fiscal": "O nome que aparece na fatura do cartão e na nota fiscal é FL Treinamentos (compras pela Greenn)."
  },
  "produtos": {
   "legendas": {
@@ -90,6 +92,10 @@
     {
      "q": "Vem no Reels Academy?",
      "a": "Não. Os Títulos Dinâmicos são vendidos à parte, no Base FL."
+    },
+    {
+     "q": "Funciona no CapCut gratuito?",
+     "a": "Sim. Nos testes que fizemos funciona no CapCut gratuito, sem limitação que a gente tenha encontrado. Continua sendo só no CapCut do computador (Windows ou Mac)."
     }
    ],
    "desambiguar": "Se a pessoa falar em 'legenda automática', 'gerar legenda' ou 'app de legenda', é o Base Captions. 'Pack de legendas', 'legendas animadas' e títulos prontos são os Títulos Dinâmicos. Se ficar ambíguo, pergunte em uma frase: 'É a legenda automática (Base Captions) ou os títulos animados prontos (Títulos Dinâmicos)?'",
@@ -367,6 +373,18 @@
     {
      "q": "Quanto tempo leva para legendar?",
      "a": "Nao tem um tempo fixo: depende do computador e do tamanho do video. Dica: se vai usar so um trecho, corte antes e coloque so a parte que quer legendar."
+    },
+    {
+     "q": "Funciona no CapCut gratuito?",
+     "a": "Sim. Nos testes que fizemos funciona no CapCut gratuito, sem limitação que a gente tenha encontrado."
+    },
+    {
+     "q": "Posso colocar um vídeo bruto, com pausas?",
+     "a": "Pode. O app seleciona sozinho as pausas e as palavras repetidas, você faz um ajuste fino (por exemplo, escolher qual palavra repetida manter) e depois manda tudo para o projeto no CapCut."
+    },
+    {
+     "q": "Dá para mudar fonte, letra, posição e cor depois?",
+     "a": "Dá. O projeto chega no CapCut com a timeline pronta e você edita como se fosse do zero: fonte, letra, posição, cor, tudo."
     }
    ],
    "onde_encontrar": "É uma ferramenta do Base FL com programa próprio. Quem comprou baixa pelo link de instalação do Base Captions ou pelo aplicativo Base FL (aviso no topo e cartão em 'Ferramentas novas', versão 0.10.32 ou mais nova) e entra com o mesmo e-mail da compra."
@@ -941,6 +959,179 @@
     "Títulos Dinâmicos e Base Captions são produtos separados: um não libera o outro. Só confirme o que a pessoa tem depois da consulta de compra."
    ],
    "escalar_quando": "A pessoa insiste que comprou um produto que a consulta de compra não mostra."
+  },
+  {
+   "id": "capcut_gratuito",
+   "sinais": [
+    "capcut gratis",
+    "capcut free",
+    "capcut gratuito",
+    "funciona no capcut free",
+    "versao gratuita do capcut",
+    "preciso do capcut pro",
+    "capcut pago"
+   ],
+   "passos": [
+    "Sim, funciona no CapCut gratuito, tanto os Títulos Dinâmicos quanto o Base Captions.",
+    "Pode avisar que, nos testes que foram feitos, não apareceu limitação. Se a pessoa encontrar alguma, peça um print e chame a equipe.",
+    "Lembre: só no CapCut do computador (Windows ou Mac), não no celular."
+   ],
+   "escalar_quando": "A pessoa diz que no CapCut gratuito algo não funciona."
+  },
+  {
+   "id": "captions_video_bruto_e_edicao",
+   "sinais": [
+    "video bruto",
+    "corta as pausas",
+    "corta silencio",
+    "tira as pausas",
+    "corte automatico",
+    "palavras repetidas",
+    "ja vem editado",
+    "ja vem a timeline",
+    "editar depois no capcut",
+    "mudar a fonte depois",
+    "alterar a fonte depois",
+    "mudar a cor da legenda",
+    "mudar a posicao da legenda",
+    "da pra editar depois",
+    "edito 100% depois"
+   ],
+   "passos": [
+    "Pode colocar um vídeo bruto no Base Captions: o app seleciona sozinho as pausas e as palavras repetidas.",
+    "Depois a pessoa faz um ajuste fino (por exemplo, escolher qual palavra repetida manter) e manda para o projeto no CapCut.",
+    "No CapCut a timeline já chega pronta e dá para mudar fonte, letra, posição, cor, tudo, como se fosse editar do zero."
+   ],
+   "escalar_quando": "A pessoa relata que algo desse fluxo não funcionou: peça um print e use [[EQUIPE: ...]]."
+  },
+  {
+   "id": "windows_defender_apagou_basefl",
+   "sinais": [
+    "defender excluiu",
+    "defender apagou",
+    "defender exclui",
+    "diz que e virus",
+    "encontrado um virus",
+    "windows defender",
+    "o antivirus apagou o app",
+    "excluiu o app base fl"
+   ],
+   "passos": [
+    "Se o assunto for o Base Captions, use os casos captions_antivirus_apagou e captions_smartscreen (nunca peça para desligar o antivírus).",
+    "Se for o aplicativo Base FL: Chame a equipe: avise que vai anotar o atendimento e chamar um atendente (a equipe é avisada) e coloque [[EQUIPE: motivo curto]]. NÃO tente resolver sozinho.",
+    "Peça só o e-mail da compra e o print do aviso, para a equipe já chegar com o contexto."
+   ],
+   "escalar_quando": "Sempre: este caso vai para a equipe."
+  },
+  {
+   "id": "instalacao_trava_timeout",
+   "sinais": [
+    "nao sai do 75",
+    "travou no 75",
+    "operation aborted",
+    "aborted due to timeout",
+    "instalacao travada",
+    "nao termina de instalar",
+    "fica carregando na instalacao",
+    "demora muito para baixar"
+   ],
+   "passos": [
+    "Pode ser internet lenta ou instável. Não tente resolver por mensagem: Chame a equipe: avise que vai anotar o atendimento e chamar um atendente (a equipe é avisada) e coloque [[EQUIPE: motivo curto]]. NÃO tente resolver sozinho.",
+    "Peça o print do erro (ou o texto do botão Diagnóstico para suporte do app) para a equipe já chegar com o contexto."
+   ],
+   "escalar_quando": "Sempre: este caso vai para a equipe."
+  },
+  {
+   "id": "capcut_atualizacao_necessaria",
+   "sinais": [
+    "atualizacao necessaria",
+    "atualize o capcut",
+    "nao tem a versao recente",
+    "versao do capcut",
+    "qual versao do capcut",
+    "versao anterior do capcut",
+    "capcut desatualizado"
+   ],
+   "passos": [
+    "Para tudo funcionar, o CapCut precisa estar na versão 9.8 ou mais nova.",
+    "Peça a versão que a pessoa está usando. Se for menor que a 9.8, oriente a atualizar o CapCut para a versão mais recente do computador e abrir de novo.",
+    "Se já estiver na 9.8 ou mais nova e o aviso continuar, peça um print e use [[EQUIPE: aviso de atualização do CapCut persiste]]."
+   ],
+   "escalar_quando": "O aviso continua mesmo na versão 9.8 ou mais nova."
+  },
+  {
+   "id": "reels_academy_titulos",
+   "sinais": [
+    "reels academy",
+    "direito aos titulos",
+    "comprei o curso",
+    "virou pago",
+    "aluno do reels",
+    "o curso tem os titulos",
+    "curso inclui os titulos",
+    "era de graca para aluno"
+   ],
+   "passos": [
+    "O Reels Academy é um produto separado, com outro suporte. Desde 16/11/2026 quem comprou o Reels Academy não tem mais direito aos Títulos Dinâmicos nem a outros produtos do Base FL.",
+    "Os Títulos Dinâmicos são vendidos à parte. Se a pessoa quiser, ofereça o link rastreado dos Títulos.",
+    "Não prometa exceção. Se a pessoa insistir que a compra prometia os Títulos, use [[EQUIPE: aluno Reels Academy pede os Títulos]]."
+   ],
+   "escalar_quando": "A pessoa afirma que na compra foi prometido acesso aos Títulos."
+  },
+  {
+   "id": "fatura_nota_fiscal",
+   "sinais": [
+    "nota fiscal",
+    "fatura do cartao",
+    "nome na fatura",
+    "aparece na fatura",
+    "cobranca no cartao",
+    "nome da cobranca",
+    "preciso da fatura"
+   ],
+   "passos": [
+    "O nome que aparece na fatura do cartão e na nota fiscal é FL Treinamentos (compras pela Greenn).",
+    "Para pedir a nota fiscal: peça o e-mail da compra e Chame a equipe: avise que vai anotar o atendimento e chamar um atendente (a equipe é avisada) e coloque [[EQUIPE: motivo curto]]. "
+   ],
+   "escalar_quando": "Pedido de nota fiscal ou dúvida de cobrança que a pessoa não reconhece."
+  },
+  {
+   "id": "animacao_curta_nao_estende",
+   "sinais": [
+    "animacao muito curta",
+    "animacoes curtas",
+    "nao consigo estender",
+    "nao estende",
+    "aumentar o tempo do texto",
+    "texto mais tempo na tela",
+    "clipe composto",
+    "desfazer o clipe composto",
+    "duracao do titulo",
+    "0,3 segundos"
+   ],
+   "passos": [
+    "Este caso vai para a equipe. Chame a equipe: avise que vai anotar o atendimento e chamar um atendente (a equipe é avisada) e coloque [[EQUIPE: motivo curto]]. NÃO tente resolver sozinho.",
+    "Se tiver, peça o print ou o nome do título que a pessoa está usando."
+   ],
+   "escalar_quando": "Sempre: este caso vai para a equipe."
+  },
+  {
+   "id": "ver_modelos_antes_de_comprar",
+   "sinais": [
+    "ver os modelos",
+    "ver todos os modelos",
+    "me mostra os modelos",
+    "amostra dos titulos",
+    "previa dos titulos",
+    "tem video dos modelos",
+    "ver como sao os titulos",
+    "quero ver antes de comprar"
+   ],
+   "passos": [
+    "Envie o link da página dos Títulos Dinâmicos para a pessoa ver os modelos.",
+    "Se ela quiser mais do que a página mostra, anote e use [[EQUIPE: pede ver todos os modelos antes de comprar]]."
+   ],
+   "escalar_quando": "A pessoa pede para ver todos os modelos e a página não basta."
   }
  ],
  "politicas_do_atendimento": [
@@ -953,6 +1144,7 @@
   "Nunca oriente a pessoa a desligar o antivírus (nem por alguns minutos) nem a restaurar arquivo da quarentena para o Base Captions. Peça a mensagem exata, confirme que o arquivo veio do link oficial e, se houver nome de ameaça ou antivírus apagou o arquivo, encaminhe para a equipe.",
   "Base Captions: não prometa tempo fixo de processamento, não afirme número de computadores permitidos nem preço de renovação, e não invente requisitos de RAM/processador. Se não souber, diga que vai confirmar com a equipe.",
   "Não ofereça produto durante problema técnico ou reclamação. Se a pessoa recusar, não insista. Se já tem o produto, não ofereça de novo.",
-  "Vocabulário do ecossistema: Base FL é a marca; 'aplicativo Base FL' é o app original; 'Base Captions' é uma ferramenta do Base FL com programa próprio. Nunca fale em 'novo aplicativo' nem sugira que a pessoa precisa escolher entre os dois. Antes de dizer que algo está liberado, use a consulta de compra."
+  "Vocabulário do ecossistema: Base FL é a marca; 'aplicativo Base FL' é o app original; 'Base Captions' é uma ferramenta do Base FL com programa próprio. Nunca fale em 'novo aplicativo' nem sugira que a pessoa precisa escolher entre os dois. Antes de dizer que algo está liberado, use a consulta de compra.",
+  "Casos que SEMPRE vão para a equipe (não tente resolver): Windows Defender apagando o app Base FL, instalação travada ou com timeout, animações curtas que não estendem e pedido de nota fiscal. Diga que vai anotar o atendimento e chamar um atendente, e coloque [[EQUIPE: motivo curto]]."
  ]
 }
