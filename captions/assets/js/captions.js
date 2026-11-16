@@ -261,7 +261,7 @@
       if (box.classList.contains("bloqueado")) mostraPrevia(k);
       if (manual) { auto = false; box.classList.add("parado"); clearTimeout(timer); evento("estilo", { estilo: k + 1, nome: E[k].nome }); }
       toca(k);
-      num.textContent = pad(k + 1) + " / " + pad(E.length); nome.textContent = E[k].nome;
+      num.textContent = pad(k + 1); nome.textContent = E[k].nome;
       botoesT.forEach(function (b, n) { b.setAttribute("aria-selected", n === k ? "true" : "false"); b.tabIndex = n === k ? 0 : -1; });
       var bt = botoesT[k], alvo = bt.offsetLeft - (lista.clientWidth - bt.offsetWidth) / 2;
       if (lista.scrollWidth > lista.clientWidth) lista.scrollTo({ left: alvo, behavior: calmoG ? "auto" : "smooth" });
