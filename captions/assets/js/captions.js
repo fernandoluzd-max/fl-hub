@@ -57,6 +57,19 @@
     try { if (tem) sessionStorage.setItem("bc_utm", JSON.stringify(o)); else o = JSON.parse(sessionStorage.getItem("bc_utm") || "{}"); } catch (e) {}
     return o;
   })();
+  /* ---------- Registro de visitas e cliques em "comprar" (painel da Central). Só números, sem dado pessoal. ---------- */
+  var RPC_VISITA = "https://otlaexuqyavpzxwzcsfo.supabase.co/rest/v1/rpc/captions_visita", CHAVE_VISITA = "sb_publishable_bAaw1t6NpZEgH8ePBztQWg_tE4kDfQR";
+  function visitante() {
+    var v = null; try { v = localStorage.getItem("fl_vis"); } catch (e) {}
+    if (!v) { v = "v" + Math.random().toString(36).slice(2, 12) + Date.now().toString(36); try { localStorage.setItem("fl_vis", v); } catch (e) {} }
+    return v;
+  }
+  function registra(tipo) {
+    try {
+      fetch(RPC_VISITA, { method: "POST", keepalive: true, headers: { apikey: CHAVE_VISITA, "Content-Type": "application/json" },
+        body: JSON.stringify({ p_tipo: tipo, p_visitante: visitante(), p_src: UTM.utm_source || "direto", p_med: UTM.utm_medium || "", p_camp: UTM.utm_campaign || "", p_cont: UTM.utm_content || "" }) }).catch(function () {});
+    } catch (e) {}
+  }
   function evento(nome, extra) {
     var o = { event: nome, produto: "base_captions", pagina: "captions" }, k;
     for (k in UTM) o[k] = UTM[k];
@@ -85,7 +98,7 @@
     // os botões de compra guardam o checkout em data-destino: o aviso "só computador" abre antes e depois segue para lá
     $$("[data-checkout]").forEach(function (a) {
       if (/^https?:/i.test(href)) { a.setAttribute("data-destino", href); a.setAttribute("href", "#oferta"); } else a.setAttribute("href", href);
-      a.addEventListener("click", function () { evento("cta_checkout", { posicao: a.getAttribute("data-cta") }); });
+      a.addEventListener("click", function () { evento("cta_checkout", { posicao: a.getAttribute("data-cta") }); registra("checkout"); });
     });
     if (CFG.PRECO) $$("[data-preco]").forEach(function (el) { el.textContent = CFG.PRECO; });
     if (CFG.QUANTIDADE_DE_PRESETS) $$("[data-qtd]").forEach(function (el) { el.textContent = CFG.QUANTIDADE_DE_PRESETS; });
@@ -841,6 +854,7 @@
   function init() {
     config(); faixa(); ancoras(); aparece(); riscas(); vsl(); grifos(); chips(); estilos(); tres(); tempo(); virada(); titulos(); aula(); barra(); demo();
     setTimeout(medicao, 600);
+    try { if (!sessionStorage.getItem("bc_vis_ok")) { sessionStorage.setItem("bc_vis_ok", "1"); registra("visita"); } } catch (e) { registra("visita"); }
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Disparo Base Captions · Base FL</title>
+<link rel="icon" type="image/svg+xml" href="../icones/icon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../icones/apple-touch-icon-180.png">
+<meta name="theme-color" content="#0D0F0E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0D0F0E;--card:#151816;--line:#262c28;--ink:#F4F0E4;--mute:#9A968A;--dim:#5f5c55;--acc:#F2A541;--acc2:#F7C27A;--ok:#7bd88f;--grupo:#7bd88f;--vis:#8fb3ff;--buy:#F2A541;
+  --f:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:15px/1.45 var(--f);min-height:100vh;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:22px 16px 60px}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+h1{font-size:26px;font-weight:800;letter-spacing:-.02em;font-stretch:90%}
+.sub{color:var(--mute);font-size:13.5px;margin-top:2px}
+.st{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:99px;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--card)}
+.st i{width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 4px rgba(242,165,65,.18)}
+.st.aberta i{background:var(--ok);box-shadow:0 0 0 4px rgba(123,216,143,.18)}
+.st.encerrada i{background:var(--dim);box-shadow:none}
+.bt{appearance:none;border:0;cursor:pointer;font:700 14px var(--f);padding:11px 16px;border-radius:12px;background:var(--acc);color:#17130B}
+.bt.sec{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.bt:focus-visible,input:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.k{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 16px 14px;position:relative;overflow:hidden}
+.k b{display:block;font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;margin:8px 0 6px}
+.k span{font-size:13px;color:var(--mute)}
+.k small{display:block;font-size:12.5px;color:var(--dim);margin-top:4px}
+.k::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c,var(--acc))}
+.grid2{display:grid;grid-template-columns:1.2fr 1fr;gap:12px;margin-top:12px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.box h2{font-size:15px;font-weight:800;margin-bottom:4px}
+.box p.d{font-size:12.5px;color:var(--mute);margin-bottom:14px}
+.funil{display:flex;flex-direction:column;gap:10px}
+.fx{display:grid;grid-template-columns:130px 1fr 64px;align-items:center;gap:10px;font-size:13.5px}
+.fx .barra{height:26px;background:#1d211f;border-radius:8px;overflow:hidden}
+.fx .barra i{display:block;height:100%;border-radius:8px;background:var(--c);min-width:2px;transition:width .6s cubic-bezier(.16,1,.3,1)}
+.fx em{font-style:normal;font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.fx .pc{display:block;font-size:11.5px;color:var(--dim);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{color:var(--dim);font-weight:600;font-size:12px;text-align:left;padding:0 6px 8px;border-bottom:1px solid var(--line)}
+td{padding:9px 6px;border-bottom:1px solid #1d211f;font-variant-numeric:tabular-nums}
+td.n,th.n{text-align:right}
+.tag{display:inline-block;font-size:11.5px;color:var(--mute);background:#1d211f;border-radius:6px;padding:1px 6px;margin-left:6px}
+.mini{display:inline-block;height:6px;border-radius:3px;background:var(--grupo);vertical-align:middle;margin-right:6px}
+.chart{display:flex;align-items:flex-end;gap:6px;height:180px;padding-top:10px;border-bottom:1px solid var(--line)}
+.col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.pair{display:flex;align-items:flex-end;gap:2px;height:100%;width:100%;justify-content:center}
+.pair i{display:block;width:44%;max-width:16px;border-radius:4px 4px 0 0;min-height:2px}
+.pair i.v{background:var(--vis)}.pair i.g{background:var(--grupo)}
+.lbl{display:flex;gap:6px}.lbl span{flex:1;min-width:0;text-align:center;font-size:11px;color:var(--dim);padding-top:6px;white-space:nowrap;overflow:hidden}
+.leg{display:flex;gap:14px;font-size:12px;color:var(--mute);margin-top:10px}.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.manual{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.manual input{width:130px;font:700 18px var(--f);padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#0f1211;color:var(--ink)}
+.msg{font-size:13px;color:var(--mute);min-height:18px;margin-top:8px}
+.vazio{color:var(--dim);font-size:13px;padding:14px 0}
+.porta{min-height:70vh;display:grid;place-items:center;text-align:center}
+.porta .cx{max-width:360px}.porta h1{margin-bottom:8px}.porta p{color:var(--mute);margin-bottom:18px}
+@media (max-width:860px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:1fr}.k b{font-size:32px}}
+@media (max-width:420px){.fx{grid-template-columns:96px 1fr 52px;font-size:12.5px}}
+@media (prefers-reduced-motion:reduce){.fx .barra i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="porta" id="porta" hidden>
+    <div class="cx"><h1>Disparo · Base Captions</h1><p>Entre com o seu e-mail para acompanhar ao vivo.</p><button class="bt" id="entrar">Entrar</button></div>
+  </section>
+  <main id="app" hidden>
+    <header>
+      <div><h1>Disparo · Base Captions</h1><p class="sub" id="atual">Carregando…</p></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="st aberta" id="estado"><i></i><span>ao vivo</span></span><button class="bt sec" id="atualiza">Atualizar</button></div>
+    </header>
+    <section class="kpis">
+      <div class="k" style="--c:var(--vis)"><span>Mensagens enviadas</span><b id="kEnv">—</b><small id="kFalha">&nbsp;</small></div>
+      <div class="k" style="--c:var(--grupo)"><span>Visitaram a página</span><b id="kVis">—</b><small id="kVisPc">&nbsp;</small></div>
+      <div class="k" style="--c:var(--buy)"><span>Clicaram em comprar</span><b id="kCli">—</b><small id="kCliPc">&nbsp;</small></div>
+      <div class="k" style="--c:var(--ok)"><span>Vendas</span><b id="kVen">—</b><small id="kVenPc">&nbsp;</small></div>
+    </section>
+    <section class="kpis">
+      <div class="k" style="--c:var(--ok)"><span>Receita</span><b id="kRec">—</b><small>vendas pagas deste disparo</small></div>
+      <div class="k" style="--c:var(--dim)"><span>Gasto estimado</span><b id="kCusto">—</b><small id="kCustoMsg">&nbsp;</small></div>
+      <div class="k" style="--c:var(--acc)"><span>ROAS</span><b id="kRoas">—</b><small>receita ÷ gasto</small></div>
+      <div class="k" style="--c:var(--vis)"><span>Custo por venda</span><b id="kCpv">—</b><small>gasto ÷ vendas</small></div>
+    </section>
+    <div class="grid2">
+      <section class="box"><h2>Do envio até a venda</h2><p class="d">Quantas pessoas chegaram em cada etapa.</p><div class="funil" id="funil"></div></section>
+      <section class="box"><h2>Pedidos por situação</h2><p class="d">Pix gerado, aguardando, pagos, recusados…</p><div id="status"></div><h2 style="margin-top:16px">Vendas</h2><div id="vendas"></div></section>
+    </div>
+    <section class="box" style="margin-top:12px"><h2>Movimento minuto a minuto</h2><p class="d">Visitas e cliques em comprar, de 10 em 10 minutos (últimas 6 horas).</p><div id="serie"></div><div class="leg"><span><i style="background:var(--vis)"></i>Visitaram</span><span><i style="background:var(--buy)"></i>Clicaram em comprar</span></div></section>
+    <p class="sub" style="margin-top:14px">Cliques no link = visitas à página com a marca <b>venda-disparo</b>. O gasto é estimado (R$ por mensagem de marketing x enviadas). Entrega e leitura não são medidas neste disparo.</p>
+  </main>
+</div>
+<script src="/catalogo.js"></script>
+<script src="/base.js"></script>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const n = v => (Number(v) || 0).toLocaleString('pt-BR');
+  const r = v => 'R$ ' + (Number(v) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const pc = (a, b) => b > 0 ? (a / b * 100).toFixed(1).replace('.', ',') + '%' : '—';
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const NS = { paid: 'Pago', waiting_payment: 'Aguardando pagamento', refused: 'Recusado', refunded: 'Reembolsado', chargedback: 'Estorno', canceled: 'Cancelado', abandoned: 'Abandonou' };
+  let d = null;
+  function desenha() {
+    const env = d.enviados || 0, vis = d.visitantes || 0, cli = d.pessoas_comprar || 0, ven = d.vendas || 0, custo = Number(d.custo) || 0, rec = Number(d.receita) || 0;
+    $('kEnv').textContent = n(env); $('kFalha').textContent = d.falhas ? n(d.falhas) + ' falharam' : 'nenhuma falha';
+    $('kVis').textContent = n(vis); $('kVisPc').textContent = env ? pc(vis, env) + ' das enviadas' : ' ';
+    $('kCli').textContent = n(d.cliques_comprar); $('kCliPc').textContent = vis ? n(cli) + ' pessoas · ' + pc(cli, vis) + ' de quem visitou' : ' ';
+    $('kVen').textContent = n(ven); $('kVenPc').textContent = env ? pc(ven, env) + ' das enviadas' : ' ';
+    $('kRec').textContent = r(rec); $('kCusto').textContent = r(custo); $('kCustoMsg').textContent = 'R$ ' + (Number(d.custo_msg) || 0).toFixed(3).replace('.', ',') + ' por mensagem';
+    $('kRoas').textContent = custo > 0 ? (rec / custo).toFixed(1).replace('.', ',') + 'x' : '—';
+    $('kCpv').textContent = ven > 0 ? r(custo / ven) : '—';
+    const et = [['Mensagens enviadas', env, 'var(--vis)'], ['Visitaram a página', vis, 'var(--grupo)'], ['Clicaram em comprar', cli, 'var(--buy)'], ['Pedidos feitos', d.pedidos, 'var(--acc2)'], ['Vendas pagas', ven, 'var(--ok)']];
+    const max = Math.max(1, ...et.map(e => Number(e[1]) || 0));
+    $('funil').innerHTML = et.map((e, i) => { const v = Number(e[1]) || 0, prev = i ? Number(et[i - 1][1]) || 0 : 0;
+      return '<div class="fx"><span>' + e[0] + (i ? '<span class="pc">' + pc(v, prev) + ' da etapa anterior</span>' : '') + '</span><div class="barra"><i style="--c:' + e[2] + ';width:' + (v / max * 100) + '%"></i></div><em>' + n(v) + '</em></div>'; }).join('');
+    const ps = Object.entries(d.pedidos_por_status || {});
+    $('status').innerHTML = ps.length ? '<table><tbody>' + ps.map(([k, v]) => '<tr><td>' + esc(NS[k] || k) + '</td><td class="n">' + n(v) + '</td></tr>').join('') + '</tbody></table>' : '<p class="vazio">Nenhum pedido ainda.</p>';
+    const vs = d.vendas_lista || [];
+    $('vendas').innerHTML = vs.length ? '<table><tbody>' + vs.slice(0, 10).map(v => '<tr><td>' + new Date(v.em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + ' · ' + esc(v.produto) + '</td><td class="n">' + r(v.valor) + '</td></tr>').join('') + '</tbody></table>' : '<p class="vazio">Ainda sem vendas.</p>';
+    const ser = d.serie || [], bs = [...new Set(ser.map(x => x.b))].sort();
+    const val = (b, t) => (ser.find(x => x.b === b && x.t === t) || {}).n || 0;
+    const mx = Math.max(1, ...bs.map(b => Math.max(val(b, 'visita'), val(b, 'checkout'))));
+    $('serie').innerHTML = bs.length ? '<div class="chart">' + bs.map(b => '<div class="col" title="' + b + ': ' + val(b, 'visita') + ' visitas, ' + val(b, 'checkout') + ' cliques"><div class="pair"><i class="v" style="height:' + val(b, 'visita') / mx * 100 + '%"></i><i class="g" style="background:var(--buy);height:' + val(b, 'checkout') / mx * 100 + '%"></i></div></div>').join('') + '</div><div class="lbl">' + bs.map(b => '<span>' + b + '</span>').join('') + '</div>' : '<p class="vazio">Sem movimento ainda.</p>';
+    $('atual').textContent = 'Atualizado às ' + new Date().toLocaleTimeString('pt-BR') + ' · atualiza sozinho a cada 15 segundos' + (d.inicio ? ' · disparo começou às ' + new Date(d.inicio).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : ' · ainda não começou');
+  }
+  async function carrega() {
+    try { d = await Base.rpc('central_disparo', { p_src: 'venda-disparo' }); desenha(); }
+    catch (e) { $('atual').textContent = /sem_acesso/.test(e.message) ? 'Este e-mail não tem acesso ao painel.' : 'Não consegui carregar agora (' + e.message + ').'; }
+  }
+  $('atualiza').onclick = carrega;
+  function abre() { $('porta').hidden = true; $('app').hidden = false; carrega(); setInterval(carrega, 15000); }
+  $('entrar').onclick = async () => { const ok = await Base.login(); if (ok || Base.sessao()) abre(); };
+  if (Base.sessao()) abre(); else $('porta').hidden = false;
+})();
+</script>
+</body>
+</html>
