@@ -10,6 +10,7 @@
 
   // página -> como a pessoa pergunta
   var PAGINAS = {
+    'captions': 'Oi! Gostaria de saber mais sobre o Base Captions.',
     'legendas': 'Oi! Gostaria de saber mais sobre os Títulos Dinâmicos.',
     'kit-freelancer': 'Oi! Gostaria de saber como funciona o Kit Freelancer.',
     'mood': 'Oi! Gostaria de saber como funciona o Mood.',
@@ -31,6 +32,7 @@
     var propria = el && el.getAttribute('data-msg');
     if (propria) return propria;
     var partes = location.pathname.split('/').filter(Boolean);
+    if (partes[0] === 'captions' && partes[1] === 'obrigado') return 'Oi! Preciso de ajuda com o Base Captions.';
     var chave = partes[0] === 'conheca' ? partes[1] : partes[0];
     return PAGINAS[chave] || PADRAO;
   }
