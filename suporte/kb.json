@@ -1,5 +1,5 @@
 {
- "versao": "2026-11-16.7fe36117",
+ "versao": "2026-11-16.50e18ae7",
  "gerado_em": "2026-11-16",
  "revisar_ate": "2026-12-31",
  "empresa": {
@@ -766,7 +766,14 @@
     "publicador desconhecido",
     "tela azul",
     "aplicativo nao reconhecido",
-    "app nao reconhecido"
+    "app nao reconhecido",
+    "windows protegeu o computador",
+    "windows protegeu",
+    "protegeu seu pc",
+    "protegeu o pc",
+    "windows disse que",
+    "tela azul do windows",
+    "aviso do windows"
    ],
    "passos": [
     "Pergunte qual e a mensagem exata (peca print) e se o arquivo veio do link oficial de download do Base Captions.",
@@ -784,7 +791,19 @@
     "quarentena",
     "arquivo sumiu",
     "defender removeu",
-    "ameaca removida"
+    "ameaca removida",
+    "virus",
+    "vírus",
+    "tem virus",
+    "tem vírus",
+    "malware",
+    "trojan",
+    "ameaca",
+    "ameaça",
+    "contem virus",
+    "contém vírus",
+    "detectou",
+    "bloqueou o arquivo"
    ],
    "passos": [
     "Pergunte o nome do antivirus e a mensagem exata (peca print) e confirme que o arquivo veio do link oficial.",
@@ -947,6 +966,31 @@
     "Não existe, por enquanto, regra de renovação com preço especial: não prometa desconto nem prazo extra. Encaminhe para a equipe se a pessoa reclamar que venceu antes dos 12 meses."
    ],
    "escalar_quando": "Venceu antes dos 12 meses ou cobrança duplicada."
+  },
+  {
+   "id": "captions_mac_intel",
+   "sinais": [
+    "mac intel",
+    "processador intel",
+    "chip intel",
+    "com intel",
+    "mac antigo",
+    "macbook antigo",
+    "macos antigo",
+    "macos 12",
+    "macos 11",
+    "macos 10",
+    "funciona no mac",
+    "roda no mac",
+    "serve pro mac",
+    "serve para mac"
+   ],
+   "passos": [
+    "O Base Captions roda em Mac com chip Apple (M1 ou mais novo) e macOS 13 ou mais novo. Mac com processador Intel NÃO é suportado nesta versão.",
+    "Se a pessoa não sabe qual Mac tem: menu Apple > Sobre este Mac; em 'Chip' aparece Apple M1/M2/M3/M4; em 'Processador' aparece Intel.",
+    "No Windows (10 ou 11) funciona normalmente."
+   ],
+   "escalar_quando": "Nunca para o requisito (é limitação da versão atual). Se a pessoa pedir versão para Intel, diga que anotou o interesse e não prometa prazo."
   }
  ],
  "politicas": [
