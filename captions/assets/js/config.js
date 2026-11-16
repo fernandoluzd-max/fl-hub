@@ -22,7 +22,7 @@ window.PACK_CONFIG = {
   QUANTIDADE_EXATA: false,
 
   // Links do rodapé
-  LINK_SUPORTE: "https://wa.me/5547996974735?text=Oi!%20Preciso%20de%20ajuda%20com%20o%20Base%20FL.",
+  LINK_SUPORTE: "https://wa.me/5547996974735?text=Oi!%20Preciso%20de%20ajuda%20com%20o%20Base%20Captions.",
   LINK_INSTAGRAM: "https://www.instagram.com/fernandoluz.d/",
 
   // Garantia, em dias. Deixe "" para não mostrar o bloco de garantia na oferta.
