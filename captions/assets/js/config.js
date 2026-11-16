@@ -4,7 +4,7 @@
    ========================================================================== */
 window.PACK_CONFIG = {
   // Link do checkout (Greenn). Os botões de compra passam antes pelo aviso "só computador".
-  CHECKOUT_URL: "https://payfast.greenn.com.br/203539/offer/2Ibej2?ch_id=145200&b_id_1=195814&b_offer_1=ZxTsRT&b_id_2=195812&b_offer_2=4mBBtQ&b_id_3=198176&b_offer_3=LSLxch",
+  CHECKOUT_URL: "https://payfast.greenn.com.br/203539/offer/2Ibej2?ch_id=145200&b_id_1=195814&b_offer_1=ZxTsRT&b_id_2=195812&b_offer_2=4mBBtQ&b_id_3=198176&b_offer_3=LSLxch&b_id_4=195639&b_offer_4=NZxF1I",
 
   // Preço (só o número, sem "R$")
   PRECO: "47",
