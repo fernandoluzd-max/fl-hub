@@ -449,6 +449,16 @@ $('#l-back').onclick = () => loginStage(false);
 $('#logout').onclick = async () => { await saveSess(null); cat = null; loginStage(false); showLogin(true); };
 
 // ----- catálogo do aluno -----
+// Medição da migração (Base FL → ecossistema): grava UM evento 'login' por abertura do app, marcado com app='basefl' (o Captions marcará 'captions').
+// Usa a mesma função e a mesma tabela de eventos do site; falha em silêncio e nunca atrapalha o uso.
+let usoMarcado = false;
+function marcaUso(){
+  if (usoMarcado) return; usoMarcado = true;
+  try {
+    let v = pref.get('fl_vis'); if (!v){ v = 'v' + Math.random().toString(36).slice(2, 12) + Date.now().toString(36); pref.set('fl_vis', v); }
+    api('/rest/v1/rpc/evento', { method:'POST', body:{ p_nome:'login', p_pack:null, p_visitante:v, p_dados:{ app:'basefl', so:String(state?.system || ''), v:String(state?.version || '') } } }).catch(() => {});
+  } catch {}
+}
 async function loadCatalog(){
   catErr = '';
   try {
@@ -465,6 +475,7 @@ async function loadCatalog(){
             vencidos: new Set(lic.filter(l => l.status === 'active' && !valida(l)).map(l => l.pack_id)),
             revogados: new Set(lic.filter(l => l.status === 'revoked').map(l => l.pack_id)),   // reembolso/cancelamento: o app remove do CapCut
             vence: Object.fromEntries(lic.filter(l => valida(l) && l.expires_at).map(l => [l.pack_id, new Date(l.expires_at)])) };
+    marcaUso();
   } catch(e){ catErr = traduz(e.message); if (e.status === 401){ await saveSess(null); showLogin(true); } }
 }
 
