@@ -81,7 +81,7 @@ td.n,th.n{text-align:right}
     <section class="kpis">
       <div class="k" style="--c:var(--vis)"><span>Mensagens enviadas</span><b id="kEnv">—</b><small id="kFalha">&nbsp;</small></div>
       <div class="k" style="--c:var(--grupo)"><span>Visitaram a página</span><b id="kVis">—</b><small id="kVisPc">&nbsp;</small></div>
-      <div class="k" style="--c:var(--buy)"><span>Clicaram em comprar</span><b id="kCli">—</b><small id="kCliPc">&nbsp;</small></div>
+      <div class="k" style="--c:var(--buy)"><span>Foram para o checkout</span><b id="kCli">—</b><small id="kCliPc">&nbsp;</small></div>
       <div class="k" style="--c:var(--ok)"><span>Vendas</span><b id="kVen">—</b><small id="kVenPc">&nbsp;</small></div>
     </section>
     <section class="kpis">
@@ -94,8 +94,8 @@ td.n,th.n{text-align:right}
       <section class="box"><h2>Do envio até a venda</h2><p class="d">Quantas pessoas chegaram em cada etapa.</p><div class="funil" id="funil"></div></section>
       <section class="box"><h2>Pedidos por situação</h2><p class="d">Pix gerado, aguardando, pagos, recusados…</p><div id="status"></div><h2 style="margin-top:16px">Vendas</h2><div id="vendas"></div></section>
     </div>
-    <section class="box" style="margin-top:12px"><h2>Movimento minuto a minuto</h2><p class="d">Visitas e cliques em comprar, de 10 em 10 minutos (últimas 6 horas).</p><div id="serie"></div><div class="leg"><span><i style="background:var(--vis)"></i>Visitaram</span><span><i style="background:var(--buy)"></i>Clicaram em comprar</span></div></section>
-    <p class="sub" style="margin-top:14px">Cliques no link = visitas à página com a marca <b>venda-disparo</b>. O gasto é estimado (R$ por mensagem de marketing x enviadas). Entrega e leitura não são medidas neste disparo.</p>
+    <section class="box" style="margin-top:12px"><h2>Movimento minuto a minuto</h2><p class="d">Visitas e idas ao checkout, de 10 em 10 minutos (últimas 6 horas).</p><div id="serie"></div><div class="leg"><span><i style="background:var(--vis)"></i>Visitaram</span><span><i style="background:var(--buy)"></i>Foram para o checkout</span></div></section>
+    <p class="sub" style="margin-top:14px">Cliques no link = visitas à página com a marca <b>venda-disparo</b>. "Foram para o checkout" conta quem confirmou o aviso do computador e seguiu para a Greenn. O gasto é estimado (R$ por mensagem de marketing x enviadas). Entrega e leitura não são medidas neste disparo.</p>
   </main>
 </div>
 <script src="/catalogo.js"></script>
@@ -118,7 +118,7 @@ td.n,th.n{text-align:right}
     $('kRec').textContent = r(rec); $('kCusto').textContent = r(custo); $('kCustoMsg').textContent = 'R$ ' + (Number(d.custo_msg) || 0).toFixed(3).replace('.', ',') + ' por mensagem';
     $('kRoas').textContent = custo > 0 ? (rec / custo).toFixed(1).replace('.', ',') + 'x' : '—';
     $('kCpv').textContent = ven > 0 ? r(custo / ven) : '—';
-    const et = [['Mensagens enviadas', env, 'var(--vis)'], ['Visitaram a página', vis, 'var(--grupo)'], ['Clicaram em comprar', cli, 'var(--buy)'], ['Pedidos feitos', d.pedidos, 'var(--acc2)'], ['Vendas pagas', ven, 'var(--ok)']];
+    const et = [['Mensagens enviadas', env, 'var(--vis)'], ['Visitaram a página', vis, 'var(--grupo)'], ['Foram para o checkout', cli, 'var(--buy)'], ['Pedidos feitos', d.pedidos, 'var(--acc2)'], ['Vendas pagas', ven, 'var(--ok)']];
     const max = Math.max(1, ...et.map(e => Number(e[1]) || 0));
     $('funil').innerHTML = et.map((e, i) => { const v = Number(e[1]) || 0, prev = i ? Number(et[i - 1][1]) || 0 : 0;
       return '<div class="fx"><span>' + e[0] + (i ? '<span class="pc">' + pc(v, prev) + ' da etapa anterior</span>' : '') + '</span><div class="barra"><i style="--c:' + e[2] + ';width:' + (v / max * 100) + '%"></i></div><em>' + n(v) + '</em></div>'; }).join('');
