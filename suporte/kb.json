@@ -1,5 +1,5 @@
 {
- "versao": "2026-11-17.5eae304c",
+ "versao": "2026-11-17.8c64dd18",
  "gerado_em": "2026-11-17",
  "revisar_ate": "2027-01-01",
  "empresa": {
@@ -414,7 +414,12 @@
     "app de legenda",
     "app de legendas",
     "legenda no capcut",
-    "legendas no capcut automaticas"
+    "legendas no capcut automaticas",
+    "aplicativo de legenda",
+    "so a legenda",
+    "somente a legenda",
+    "esse de 47",
+    "o de 47"
    ],
    "o_que_e": "App para Mac e Windows. A pessoa escolhe o video, o app transcreve a fala e cria um projeto no CapCut Desktop com as legendas ja no estilo escolhido. Depois abre no CapCut e edita como qualquer projeto.",
    "inclui": [
@@ -483,6 +488,14 @@
     {
      "q": "Dá para mudar fonte, letra, posição e cor depois?",
      "a": "Dá. O projeto chega no CapCut com a timeline pronta e você edita como se fosse do zero: fonte, letra, posição, cor, tudo."
+    },
+    {
+     "q": "Se eu comprar hoje já posso usar hoje?",
+     "a": "Pode. Pix e cartão aprovados liberam o acesso na hora (boleto só depois de compensar). Depois é só baixar o app e entrar com o e-mail da compra."
+    },
+    {
+     "q": "Tem vídeo mostrando como funciona?",
+     "a": "Tem sim: a página do Base Captions tem o vídeo mostrando como funciona. Envie o link da página do Base Captions."
     }
    ],
    "onde_encontrar": "É uma ferramenta do Base FL com programa próprio. Quem comprou baixa pelo link de instalação do Base Captions ou pelo aplicativo Base FL (aviso no topo e cartão em 'Ferramentas novas', versão 0.10.32 ou mais nova) e entra com o mesmo e-mail da compra.",
@@ -1233,7 +1246,8 @@
    ],
    "passos": [
     "Este caso vai para a equipe. Chame a equipe: avise que vai anotar o atendimento e chamar um atendente (a equipe é avisada) e coloque [[EQUIPE: motivo curto]]. NÃO tente resolver sozinho.",
-    "Se tiver, peça o print ou o nome do título que a pessoa está usando."
+    "Se tiver, peça o print ou o nome do título que a pessoa está usando.",
+    "Dica que um aluno encontrou (NÃO confirmada pela equipe): desfazer o clipe composto no CapCut e esticar os clipes de dentro. Não prometa isso como solução; ofereça só como algo que alguém tentou e diga que a equipe confirma."
    ],
    "escalar_quando": "Sempre: este caso vai para a equipe."
   },
@@ -1357,6 +1371,27 @@
     "Windows com o aviso 'O Windows protegeu o computador': Mais informações > Executar assim mesmo (normal: o app ainda não tem certificado de assinatura). Pergunte primeiro se é Windows ou Mac."
    ],
    "escalar_quando": "O instalador não baixa ou não abre mesmo seguindo os passos."
+  },
+  {
+   "id": "captions_quantos_computadores",
+   "sinais": [
+    "quantos computadores",
+    "em quantos computadores",
+    "dois computadores",
+    "outro computador",
+    "trocar de computador",
+    "mudar de computador",
+    "instalar nos dois",
+    "mac e pc",
+    "limite de maquinas",
+    "posso instalar em mais de um"
+   ],
+   "passos": [
+    "Não afirme número de computadores nem diga que é ilimitado.",
+    "Pode dizer: é só baixar o app no outro computador e entrar com o mesmo e-mail da compra e o código que chega por e-mail; não precisa comprar de novo para reinstalar.",
+    "Para a quantidade de computadores: 'sobre a quantidade de máquinas, vou confirmar com a equipe' e use [[EQUIPE: dúvida sobre quantidade de computadores da licença do Base Captions]]. Lembre: no Mac só chip Apple (M1+) e macOS 13+; no PC, Windows 10 ou 11."
+   ],
+   "escalar_quando": "A pessoa insiste em saber o número exato de computadores."
   }
  ],
  "politicas": [
@@ -1376,7 +1411,12 @@
   "Base Captions: nunca peça para limpar pasta, desinstalar o app ou apagar arquivo. Instalar a versão nova por cima resolve. Não prometa prazo que a gente não definiu. A equipe atende de segunda a sexta, das 10h às 17h.",
   "Voz do atendimento do Base Captions: informal do sul ('tu'), curta, no máximo 1 emoji, nenhum emoji com aluno irritado.",
   "Comandos de PowerShell no WhatsApp: o sublinhado (_) é apagado pelo WhatsApp; os comandos desta base já estão escritos sem ele. Envie o comando exatamente como está, sem reescrever. Se o aluno colar o resultado no PowerShell em vez da conversa, não tem problema: explique de novo 'Ctrl+V aqui na conversa do WhatsApp'.",
-  "Base Captions, quando passar para a equipe: o erro continua depois do que está escrito, o erro é diferente dos casos conhecidos (peça print da tela inteira, o texto do 'Ver detalhes' e se é Windows ou Mac; diga que vai confirmar com a equipe e quando ela atende; não invente causa), o aluno reclama do visual de um estilo, ou é reembolso, cobrança ou acesso à conta."
+  "Base Captions, quando passar para a equipe: o erro continua depois do que está escrito, o erro é diferente dos casos conhecidos (peça print da tela inteira, o texto do 'Ver detalhes' e se é Windows ou Mac; diga que vai confirmar com a equipe e quando ela atende; não invente causa), o aluno reclama do visual de um estilo, ou é reembolso, cobrança ou acesso à conta.",
+  "Link certo do Base Captions: https://basefl.com/captions/?de=whatsapp. Quando a pessoa pedir 'o link da legenda', 'a legenda automática' ou 'o de R$ 47', mande SEMPRE o do Base Captions. Nunca mande a página dos Títulos Dinâmicos nem a do Kit Freelancer nesses casos: legenda automática = Base Captions; Títulos Dinâmicos são estilos prontos e outro produto.",
+  "Dispositivos: nunca diga quantos computadores a licença permite nem que é 'ilimitado' ou 'quantos tu quiser'. Pode dizer que dá para instalar de novo em outro computador entrando com o mesmo e-mail da compra; sobre a quantidade de máquinas, diga que vai confirmar com a equipe.",
+  "Pré-venda do Base Captions: antes de mandar o link, confirme duas coisas, uma por vez: se a pessoa edita no CapCut do computador e, se for Mac, se é chip Apple (M1 ou mais novo) com macOS 13+. Mac com processador Intel NÃO é suportado; clientes já compraram sem saber e pediram reembolso.",
+  "Não registre nem ofereça cancelamento ou reembolso que a pessoa não pediu. Se ela disser que não quer cancelar, siga só com o que ela pediu. Se comprou o produto errado e quer outro, confirme o que ela quer e mande o link do produto certo.",
+  "Quando a pessoa diz que na hora da compra 'não encontrou' o que comprou, nunca afirme que ela comprou algo que a consulta de compra não mostrou. Se o anúncio mostrava o Base Captions, explique que ele é um produto à parte, com compra própria, e envie o link dele."
  ],
  "links_oficiais": [
   "https://basefl.com/?de=whatsapp",
