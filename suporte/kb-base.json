@@ -24,7 +24,10 @@
    "termos": "https://basefl.com/termos/",
    "privacidade": "https://basefl.com/privacidade/",
    "captions": "https://basefl.com/captions/?de=whatsapp",
-   "captions_instalar": "https://basefl.com/captions/obrigado/"
+   "captions_instalar": "https://basefl.com/captions/obrigado/",
+   "captions_instalar_windows": "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.exe",
+   "captions_instalar_windows_zip": "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.zip",
+   "captions_instalar_mac": "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac.dmg"
   },
   "ecossistema": "Base FL é a marca e o ecossistema de ferramentas do Fernando Luz. O aplicativo Base FL é o app original (kits e packs no CapCut: Títulos Dinâmicos, Efeitos Sonoros, LUTs etc.) e continua existindo. O Base Captions é uma ferramenta do ecossistema Base FL (legendas automáticas no CapCut Desktop) que tem programa próprio, baixado à parte. É a mesma conta e o mesmo e-mail nos dois: não é outra marca e a pessoa não precisa escolher entre os dois. O que a pessoa pode usar depende só do que ela comprou. Quem comprou o Base Captions encontra o botão de baixar no aplicativo Base FL (aviso no topo e cartão em 'Ferramentas novas', a partir da versão 0.10.32) e pelo link de instalação do Base Captions.",
   "nota_fiscal": "O nome que aparece na fatura do cartão e na nota fiscal é FL Treinamentos (compras pela Greenn)."
@@ -387,7 +390,11 @@
      "a": "Dá. O projeto chega no CapCut com a timeline pronta e você edita como se fosse do zero: fonte, letra, posição, cor, tudo."
     }
    ],
-   "onde_encontrar": "É uma ferramenta do Base FL com programa próprio. Quem comprou baixa pelo link de instalação do Base Captions ou pelo aplicativo Base FL (aviso no topo e cartão em 'Ferramentas novas', versão 0.10.32 ou mais nova) e entra com o mesmo e-mail da compra."
+   "onde_encontrar": "É uma ferramenta do Base FL com programa próprio. Quem comprou baixa pelo link de instalação do Base Captions ou pelo aplicativo Base FL (aviso no topo e cartão em 'Ferramentas novas', versão 0.10.32 ou mais nova) e entra com o mesmo e-mail da compra.",
+   "atualizar": "Quem já tinha o Base Captions não recebe aviso de atualização (a versão continua 1.0.0). Para esses, a resposta é sempre: baixar o link do instalador e instalar por cima, sem desinstalar. Quem comprou a partir de 17/11/2026 já baixa a versão corrigida.",
+   "instalar_windows": "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.exe",
+   "instalar_windows_zip": "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.zip",
+   "instalar_mac": "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac.dmg"
   }
  },
  "problemas": [
@@ -1026,20 +1033,25 @@
   {
    "id": "instalacao_trava_timeout",
    "sinais": [
-    "nao sai do 75",
-    "travou no 75",
-    "operation aborted",
     "aborted due to timeout",
-    "instalacao travada",
-    "nao termina de instalar",
+    "aborted due to timeout ao instalar o pack",
+    "baixando 14",
+    "demora muito para baixar",
     "fica carregando na instalacao",
-    "demora muito para baixar"
+    "instalacao travada",
+    "nao sai do 75",
+    "nao termina de instalar",
+    "operation aborted",
+    "pack trava ao baixar",
+    "the operation was aborted due to timeout",
+    "travou no 75"
    ],
    "passos": [
-    "Pode ser internet lenta ou instável. Não tente resolver por mensagem: Chame a equipe: avise que vai anotar o atendimento e chamar um atendente (a equipe é avisada) e coloque [[EQUIPE: motivo curto]]. NÃO tente resolver sozinho.",
-    "Peça o print do erro (ou o texto do botão Diagnóstico para suporte do app) para a equipe já chegar com o contexto."
+    "Se for o download de um pack pelo Base Captions (ex.: Base FL Assets; 'Baixando… 14%' e depois 'The operation was aborted due to timeout'): o app tinha um limite fixo de 10 minutos para o download inteiro e estourava com internet lenta. Corrigido e publicado em 16/11: agora só desiste se ficar parado 60 segundos e retoma de onde parou se a conexão cair.",
+    "Resposta: 'Achei o motivo: o download estava desistindo cedo demais quando a internet é mais lenta. Já corrigi. Baixa a versão nova e instala por cima: [link do instalador]. Depois tenta instalar de novo e me avisa se concluiu.' Sugira Wi-Fi mais perto do roteador ou cabo (isso pode funcionar até na versão antiga).",
+    "Para qualquer OUTRA instalação travada (não é esse download de pack): Chame a equipe: avise que vai anotar o atendimento e chamar um atendente (a equipe é avisada) e coloque [[EQUIPE: motivo curto]]. Peça o print do erro ou o texto do botão Diagnóstico para suporte."
    ],
-   "escalar_quando": "Sempre: este caso vai para a equipe."
+   "escalar_quando": "O download continua falhando mesmo na versão nova, ou a instalação travada não é o download de pack."
   },
   {
    "id": "capcut_atualizacao_necessaria",
@@ -1132,6 +1144,109 @@
     "Se ela quiser mais do que a página mostra, anote e use [[EQUIPE: pede ver todos os modelos antes de comprar]]."
    ],
    "escalar_quando": "A pessoa pede para ver todos os modelos e a página não basta."
+  },
+  {
+   "id": "captions_capcut_nao_encontrado_win",
+   "sinais": [
+    "capcut nao encontrado neste computador",
+    "capcut nao foi encontrado",
+    "aviso vermelho do capcut",
+    "nao acha o capcut",
+    "capcut nao encontrado no windows"
+   ],
+   "passos": [
+    "Vale só para o Base Captions no Windows (o app antigo Base FL tem outro caso).",
+    "Causa: o app só procurava o CapCut em uma estrutura de pastas; quem tem o CapCut no layout antigo (versões direto em AppData\\Local\\CapCut\\) não era reconhecido. Corrigido e publicado em 16/11 (testado por 1 aluno no Windows real).",
+    "Resposta: 'Já identifiquei o que está acontecendo: o teu CapCut está numa estrutura de pastas diferente da que o app esperava. Não é erro teu. Já corrigi. Baixa a versão nova e instala por cima da que tu já tem, sem desinstalar: [link do instalador Windows]. Depois abre o app e me conta se o aviso vermelho sumiu.'",
+    "Se o Windows mostrar 'O Windows protegeu o computador': Mais informações > Executar assim mesmo (é normal: o app ainda não tem certificado de assinatura).",
+    "Se continuar: peça este diagnóstico no PowerShell (só lê, não muda nada) e passe a resposta para a equipe: $r=@(\"pasta padrao:\");$r+=(Get-ChildItem \"$env:LOCALAPPDATA\\CapCut\" -ErrorAction SilentlyContinue|ForEach-Object{$PSItem.Name});$r+=\"CapCut.exe:\";$r+=(Get-ChildItem \"$env:LOCALAPPDATA\",\"$env:ProgramFiles\",${env:ProgramFiles(x86)} -Filter CapCut.exe -Recurse -Depth 5 -ErrorAction SilentlyContinue|ForEach-Object{$PSItem.FullName});$r|Out-String|Set-Clipboard;$r"
+   ],
+   "escalar_quando": "O aviso continua depois de instalar a versão nova por cima."
+  },
+  {
+   "id": "captions_transcricao_falhou",
+   "sinais": [
+    "nao consegui transcrever a fala",
+    "whisper.cpp nao gerou resultado",
+    "a transcricao falhou neste trecho",
+    "trava em transcrever a fala",
+    "transcrever a fala 0/3",
+    "nao transcreve",
+    "transcricao nao funciona"
+   ],
+   "passos": [
+    "Vale para o Base Captions no Windows. Causa confirmada em caso real: o nome de usuário do Windows tem acento (ex.: 'João Vítor') e o programa de transcrição trava quando o caminho do modelo tem acento. Não é o vídeo, o áudio, a memória nem o antivírus.",
+    "Corrigido e publicado em 17/11: o app agora usa um caminho sem acento sozinho. Quem já tinha o app precisa instalar a versão nova por cima.",
+    "Pergunte primeiro: o nome da pasta do usuário (C:\\Users\\NOME) tem acento?",
+    "Se tiver: 'Achei o motivo: o teu nome de usuário do Windows tem acento e o programa de transcrição não aceita isso. Já corrigi no app. Baixa a versão nova e instala por cima: [link do instalador Windows]. Depois tenta o vídeo de novo.'",
+    "Se o Windows mostrar 'O Windows protegeu o computador': Mais informações > Executar assim mesmo (é normal: o app ainda não tem certificado de assinatura).",
+    "Contorno imediato (para quem não pode esperar), no PowerShell. Resultado esperado: 'codigo de saida: 0 | json criado: True | modelo copiado: True'. Depois fechar o Base Captions por completo e abrir de novo: $d=\"$env:PUBLIC\\BaseCaptions\";New-Item -ItemType Directory -Force $d|Out-Null;$src=(Get-ChildItem $env:APPDATA -Filter ggml-small.bin -Recurse -Depth 4 -ErrorAction SilentlyContinue|Select-Object -First 1).FullName;Copy-Item $src \"$d\\ggml-small.bin\" -Force;[Environment]::SetEnvironmentVariable(('BASEFL'+[char]95+'WHISPER'+[char]95+'MODEL'),\"$d\\ggml-small.bin\",'User');$w=(Get-ChildItem \"$env:LOCALAPPDATA\\Programs\" -Filter whisper-cli.exe -Recurse -Depth 6 -ErrorAction SilentlyContinue|Select-Object -First 1).FullName;$t=\"$env:TEMP\\teste-fala.wav\";& \"$(Split-Path $w)\\ffmpeg.exe\" -loglevel error -y -f lavfi -i \"sine=frequency=300:duration=3\" -ar 16000 -ac 1 $t 2>$null;& $w -m \"$d\\ggml-small.bin\" -l pt -ojf -nfa -nf -np -ng $t 2>$null|Out-Null;$r=\"codigo de saida: $LASTEXITCODE | json criado: $(Test-Path ($t+'.json')) | modelo copiado: $(Test-Path \"$d\\ggml-small.bin\")\";$r|Set-Clipboard;$r",
+    "Se NÃO for acento: peça o texto do 'Ver detalhes' (agora mostra o código de saída do programa) e passe para a equipe."
+   ],
+   "escalar_quando": "Não é acento no nome de usuário, ou continua depois da versão nova."
+  },
+  {
+   "id": "captions_fonte_do_estilo",
+   "sinais": [
+    "nao tem a fonte instalada",
+    "falta a fonte do estilo",
+    "estilo pede fonte",
+    "estilo coolvetica",
+    "coolvetica",
+    "cooper black",
+    "serif bold",
+    "fonte do estilo",
+    "nao consigo usar o estilo por causa da fonte"
+   ],
+   "passos": [
+    "Coolvetica usa uma fonte comercial (Coolvetica) e o Serif Bold usa a Cooper Black. Essas fontes NÃO podem ser distribuídas com o app (a licença não permite). Nunca envie o arquivo da fonte para o aluno nem coloque no app.",
+    "Já resolvido na versão publicada em 16/11: sem a Coolvetica, o app usa a Nunito Bold (livre, vem dentro do app); sem a Cooper Black, usa a Georgia Bold (já vem no Windows e no Mac). Quem tem a fonte original continua com ela. As fontes livres (Inter, Playfair, EB Garamond, Nunito) se instalam sozinhas quando o app abre.",
+    "Resposta: 'Esses estilos usam fontes que não podem vir dentro do app por licença. Na versão nova o app usa uma fonte parecida e livre no lugar, sozinho, sem tu instalar nada. Baixa a versão nova e instala por cima: [link do instalador].'",
+    "Atenção: o visual do Coolvetica com a Nunito ainda não foi conferido numa legenda real. Se o aluno reclamar do visual desse estilo, avise que vai confirmar com a equipe e use [[EQUIPE: reclamação do visual do estilo Coolvetica com a Nunito]]."
+   ],
+   "escalar_quando": "O aluno reclama do visual do estilo, ou o problema continua com a versão nova."
+  },
+  {
+   "id": "captions_active_timeline_invalid",
+   "sinais": [
+    "a verificacao previa da edicao falhou",
+    "verificacao previa da edicao",
+    "active-timeline-invalid",
+    "active timeline pointer",
+    "timeline pointer is missing",
+    "enviar para o capcut deu erro",
+    "nada foi alterado"
+   ],
+   "passos": [
+    "Significado: o projeto vazio criado no CapCut ainda não está pronto para o app gravar (falta um arquivo de controle). 'Nada foi alterado' é verdade: nada foi mexido no projeto. Causa provável (não confirmada): o CapCut não terminou de salvar o projeto vazio ou ainda estava aberto em segundo plano (ícone perto do relógio).",
+    "Não existe correção no app ainda: uma aluna resolveu sozinha (fechou, abriu e funcionou).",
+    "Passo a passo, UM passo por vez: 1) fechar o CapCut por completo, inclusive o ícone perto do relógio; 2) abrir o CapCut, abrir o projeto vazio e esperar carregar, e fechar de novo por completo; 3) no app, clicar em Atualizar lista, escolher o projeto e gerar de novo.",
+    "Resposta: 'Esse aviso quer dizer que o projeto vazio ainda não ficou pronto no CapCut. Tenta assim: fecha o CapCut por completo (inclusive o ícone perto do relógio), abre de novo, abre o projeto vazio e espera ele carregar, e fecha por completo de novo. Depois volta no app, clica em Atualizar lista, escolhe o projeto e tenta gerar. Me conta se passou.'",
+    "Se ainda der erro: peça este diagnóstico no PowerShell (só lê, não muda nada) e passe para a equipe: $p=\"$env:LOCALAPPDATA\\CapCut\\User Data\\Projects\\com.lveditor.draft\";$r=@(\"pasta existe: $(Test-Path $p)\");$r+=\"versoes: $((Get-ChildItem \"$env:LOCALAPPDATA\\CapCut\",\"$env:LOCALAPPDATA\\CapCut\\Apps\" -Directory -ErrorAction SilentlyContinue|Where-Object{$PSItem.Name -match '^\\d'}|ForEach-Object{$PSItem.Name}) -join ', ')\";Get-ChildItem $p -Directory -ErrorAction SilentlyContinue|ForEach-Object{$q=$PSItem.FullName;$r+=\"== $($PSItem.Name) | tem Timelines/project.json: $(Test-Path \"$q\\Timelines\\project.json\") | link simbolico: $([bool]($PSItem.Attributes -band [IO.FileAttributes]::ReparsePoint)) | arquivos: $((Get-ChildItem $q -ErrorAction SilentlyContinue|ForEach-Object{$PSItem.Name}) -join ', ')\"};$r|Out-String|Set-Clipboard;$r"
+   ],
+   "escalar_quando": "O erro continua depois do passo a passo."
+  },
+  {
+   "id": "captions_link_instalador",
+   "sinais": [
+    "link do instalador",
+    "link do windows",
+    "link do mac",
+    "onde baixo o base captions",
+    "como baixo o captions",
+    "baixar o base captions",
+    "instalador do captions",
+    "versao nova do captions",
+    "atualizar o base captions",
+    "nao recebi aviso de atualizacao"
+   ],
+   "passos": [
+    "Windows: https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.exe (se o antivírus bloquear, o compactado: https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.zip).",
+    "Mac (chip Apple): https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac.dmg",
+    "Quem já tinha o Base Captions NÃO recebe aviso de atualização (a versão continua 1.0.0): baixe o link acima e instale por cima, sem desinstalar.",
+    "Windows com o aviso 'O Windows protegeu o computador': Mais informações > Executar assim mesmo (normal: o app ainda não tem certificado de assinatura). Pergunte primeiro se é Windows ou Mac."
+   ],
+   "escalar_quando": "O instalador não baixa ou não abre mesmo seguindo os passos."
   }
  ],
  "politicas_do_atendimento": [
@@ -1145,6 +1260,12 @@
   "Base Captions: não prometa tempo fixo de processamento, não afirme número de computadores permitidos nem preço de renovação, e não invente requisitos de RAM/processador. Se não souber, diga que vai confirmar com a equipe.",
   "Não ofereça produto durante problema técnico ou reclamação. Se a pessoa recusar, não insista. Se já tem o produto, não ofereça de novo.",
   "Vocabulário do ecossistema: Base FL é a marca; 'aplicativo Base FL' é o app original; 'Base Captions' é uma ferramenta do Base FL com programa próprio. Nunca fale em 'novo aplicativo' nem sugira que a pessoa precisa escolher entre os dois. Antes de dizer que algo está liberado, use a consulta de compra.",
-  "Casos que SEMPRE vão para a equipe (não tente resolver): Windows Defender apagando o app Base FL, instalação travada ou com timeout, animações curtas que não estendem e pedido de nota fiscal. Diga que vai anotar o atendimento e chamar um atendente, e coloque [[EQUIPE: motivo curto]]."
+  "Casos que SEMPRE vão para a equipe (não tente resolver): Windows Defender apagando o app Base FL, instalação travada ou com timeout, animações curtas que não estendem e pedido de nota fiscal. Diga que vai anotar o atendimento e chamar um atendente, e coloque [[EQUIPE: motivo curto]].",
+  "Base Captions é o app de legendas para o CapCut Desktop (Windows e Mac). Se o aluno mandar print do app, o problema é do Base Captions e a gente cobre: nunca responda 'isso a Base FL não cobre diretamente'.",
+  "Base Captions: leia a mensagem de erro do print antes de perguntar qualquer coisa. Pergunte UMA coisa por vez, dizendo exatamente onde clicar. A primeira pergunta é: Windows ou Mac?",
+  "Base Captions: nunca peça para limpar pasta, desinstalar o app ou apagar arquivo. Instalar a versão nova por cima resolve. Não prometa prazo que a gente não definiu. A equipe atende de segunda a sexta, das 10h às 17h.",
+  "Voz do atendimento do Base Captions: informal do sul ('tu'), curta, no máximo 1 emoji, nenhum emoji com aluno irritado.",
+  "Comandos de PowerShell no WhatsApp: o sublinhado (_) é apagado pelo WhatsApp; os comandos desta base já estão escritos sem ele. Envie o comando exatamente como está, sem reescrever. Se o aluno colar o resultado no PowerShell em vez da conversa, não tem problema: explique de novo 'Ctrl+V aqui na conversa do WhatsApp'.",
+  "Base Captions, quando passar para a equipe: o erro continua depois do que está escrito, o erro é diferente dos casos conhecidos (peça print da tela inteira, o texto do 'Ver detalhes' e se é Windows ou Mac; diga que vai confirmar com a equipe e quando ela atende; não invente causa), o aluno reclama do visual de um estilo, ou é reembolso, cobrança ou acesso à conta."
  ]
 }
