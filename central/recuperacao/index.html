@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Recuperação de vendas · Base FL</title>
+<link rel="icon" type="image/svg+xml" href="../icones/icon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../icones/apple-touch-icon-180.png">
+<meta name="theme-color" content="#0D0F0E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0D0F0E;--card:#151816;--line:#262c28;--ink:#F4F0E4;--mute:#9A968A;--dim:#5f5c55;--acc:#F2A541;--acc2:#F7C27A;--ok:#7bd88f;--grupo:#7bd88f;--vis:#8fb3ff;--buy:#F2A541;
+  --f:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:15px/1.45 var(--f);min-height:100vh;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:22px 16px 60px}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+h1{font-size:26px;font-weight:800;letter-spacing:-.02em;font-stretch:90%}
+.sub{color:var(--mute);font-size:13.5px;margin-top:2px}
+.st{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:99px;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--card)}
+.st i{width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 4px rgba(242,165,65,.18)}
+.st.aberta i{background:var(--ok);box-shadow:0 0 0 4px rgba(123,216,143,.18)}
+.st.encerrada i{background:var(--dim);box-shadow:none}
+.bt{appearance:none;border:0;cursor:pointer;font:700 14px var(--f);padding:11px 16px;border-radius:12px;background:var(--acc);color:#17130B}
+.bt.sec{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.bt:focus-visible,input:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.k{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 16px 14px;position:relative;overflow:hidden}
+.k b{display:block;font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;margin:8px 0 6px}
+.k span{font-size:13px;color:var(--mute)}
+.k small{display:block;font-size:12.5px;color:var(--dim);margin-top:4px}
+.k::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c,var(--acc))}
+.grid2{display:grid;grid-template-columns:1.2fr 1fr;gap:12px;margin-top:12px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.box h2{font-size:15px;font-weight:800;margin-bottom:4px}
+.box p.d{font-size:12.5px;color:var(--mute);margin-bottom:14px}
+.funil{display:flex;flex-direction:column;gap:10px}
+.fx{display:grid;grid-template-columns:130px 1fr 64px;align-items:center;gap:10px;font-size:13.5px}
+.fx .barra{height:26px;background:#1d211f;border-radius:8px;overflow:hidden}
+.fx .barra i{display:block;height:100%;border-radius:8px;background:var(--c);min-width:2px;transition:width .6s cubic-bezier(.16,1,.3,1)}
+.fx em{font-style:normal;font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.fx .pc{display:block;font-size:11.5px;color:var(--dim);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{color:var(--dim);font-weight:600;font-size:12px;text-align:left;padding:0 6px 8px;border-bottom:1px solid var(--line)}
+td{padding:9px 6px;border-bottom:1px solid #1d211f;font-variant-numeric:tabular-nums}
+td.n,th.n{text-align:right}
+.tag{display:inline-block;font-size:11.5px;color:var(--mute);background:#1d211f;border-radius:6px;padding:1px 6px;margin-left:6px}
+.mini{display:inline-block;height:6px;border-radius:3px;background:var(--grupo);vertical-align:middle;margin-right:6px}
+.chart{display:flex;align-items:flex-end;gap:6px;height:180px;padding-top:10px;border-bottom:1px solid var(--line)}
+.col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.pair{display:flex;align-items:flex-end;gap:2px;height:100%;width:100%;justify-content:center}
+.pair i{display:block;width:44%;max-width:16px;border-radius:4px 4px 0 0;min-height:2px}
+.pair i.v{background:var(--vis)}.pair i.g{background:var(--grupo)}
+.lbl{display:flex;gap:6px}.lbl span{flex:1;min-width:0;text-align:center;font-size:11px;color:var(--dim);padding-top:6px;white-space:nowrap;overflow:hidden}
+.leg{display:flex;gap:14px;font-size:12px;color:var(--mute);margin-top:10px}.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.manual{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.manual input{width:130px;font:700 18px var(--f);padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#0f1211;color:var(--ink)}
+.msg{font-size:13px;color:var(--mute);min-height:18px;margin-top:8px}
+.vazio{color:var(--dim);font-size:13px;padding:14px 0}
+.porta{min-height:70vh;display:grid;place-items:center;text-align:center}
+.porta .cx{max-width:360px}.porta h1{margin-bottom:8px}.porta p{color:var(--mute);margin-bottom:18px}
+@media (max-width:860px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:1fr}.k b{font-size:32px}}
+@media (max-width:420px){.fx{grid-template-columns:96px 1fr 52px;font-size:12.5px}}
+@media (prefers-reduced-motion:reduce){.fx .barra i{transition:none}}
+.kpis3{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.per{display:inline-flex;gap:4px}.per button{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--mute);font:700 13px var(--f);padding:8px 12px;border-radius:10px;cursor:pointer}
+.per button[aria-pressed=true]{background:var(--acc);color:#17130B;border-color:var(--acc)}
+.fl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.fc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.fc h3{font-size:13.5px;font-weight:800;margin-bottom:8px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:#1d211f;color:var(--mute)}
+.pill.on{background:rgba(123,216,143,.15);color:var(--ok)}.pill.off{background:rgba(242,120,100,.15);color:#f27864}
+.fc .big{font-size:30px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1}
+.fc small{display:block;font-size:12.5px;color:var(--mute);margin-top:6px}
+.dica{background:#1a1d15;border:1px solid #3a3320;border-radius:14px;padding:14px 16px;font-size:14px;margin-bottom:12px;color:var(--ink)}
+.dica b{color:var(--acc2)}
+td.ok{color:var(--ok);font-weight:700}td.no{color:#f27864;font-weight:700}
+.scroll{overflow-x:auto}
+@media (max-width:860px){.kpis3,.fl{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="porta" id="porta" hidden>
+    <div class="cx"><h1>Recuperação de vendas</h1><p>Entre com o seu e-mail para acompanhar ao vivo.</p><button class="bt" id="entrar">Entrar</button></div>
+  </section>
+  <main id="app" hidden>
+    <header>
+      <div><h1>Recuperação de vendas</h1><p class="sub" id="atual">Carregando…</p></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="per" id="per" role="group" aria-label="Período"><button data-h="24" aria-pressed="false">24 horas</button><button data-h="72" aria-pressed="true">3 dias</button><button data-h="168" aria-pressed="false">7 dias</button></div><button class="bt sec" id="atualiza">Atualizar</button></div>
+    </header>
+    <div class="dica" id="dica" hidden></div>
+    <section class="kpis3">
+      <div class="k" style="--c:var(--vis)"><span>Mensagens de recuperação</span><b id="kEnv">—</b><small id="kFalha">&nbsp;</small></div>
+      <div class="k" style="--c:var(--ok)"><span>Pagaram depois da mensagem</span><b id="kRec">—</b><small id="kRecPc">&nbsp;</small></div>
+      <div class="k" style="--c:var(--acc)"><span>Receita recuperada</span><b id="kRes">—</b><small>pago em até 48 h depois do aviso</small></div>
+      <div class="k" style="--c:var(--grupo)"><span>Funciona de verdade?</span><b id="kCtl">—</b><small id="kCtlMsg">&nbsp;</small></div>
+    </section>
+    <h2 style="font-size:15px;margin:18px 0 10px">Cada recuperação ao vivo</h2>
+    <section class="fl" id="fluxos"></section>
+    <section class="box" style="margin-top:12px"><h2>Vendas pendentes: quem pagou e quem não pagou</h2><p class="d">Pix gerado e ainda marcado como "aguardando pagamento". Conta por pessoa, não por Pix: quem gerou 2 Pix aparece uma vez.</p><div class="scroll" id="pend"></div></section>
+    <div class="grid2">
+      <section class="box"><h2>Carrinho abandonado</h2><p class="d">Quem abriu o checkout e saiu sem gerar Pix.</p><div class="scroll" id="aband"></div></section>
+      <section class="box"><h2>Mensagens por hora (24 h)</h2><p class="d">Mostra se o robô está rodando.</p><div id="serie"></div></section>
+    </div>
+    <section class="box" style="margin-top:12px"><h2>Quem está em aberto agora</h2><p class="d">Pessoas que geraram Pix e ainda não pagaram (mais recentes primeiro).</p><div class="scroll" id="abertos"></div></section>
+    <p class="sub" style="margin-top:14px">Como o rastreio funciona: cada mensagem enviada fica registrada; "pagou depois" = a mesma pessoa (telefone ou e-mail) teve uma compra paga do mesmo produto em até 48 horas depois da mensagem. O "grupo de controle" são 15% dos Pix que de propósito não recebem mensagem, para comparar com quem recebeu. Quem pediu SAIR não entra.</p>
+  </main>
+</div>
+<script src="/catalogo.js"></script>
+<script src="/base.js"></script>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const n = v => (Number(v) || 0).toLocaleString('pt-BR');
+  const r = v => 'R$ ' + (Number(v) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  const pc = (a, b) => b > 0 ? (a / b * 100).toFixed(1).replace('.', ',') + '%' : '—';
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const PROD = { '203539': 'Base Captions', '195639': 'Títulos', '198176': 'Assets' };
+  const FLX = [['recup_pix_1', 'Pix gerado · 1ª mensagem', 'recup_captions_pix'], ['recup_lead_1', 'Carrinho abandonado', 'recup_captions_abandono'], ['recup_pix_2', 'Pix · 2ª mensagem (20–48 h)', 'recup_pix_2'], ['recup_lead_madrugada', 'Abandono da madrugada', 'recup_madrugada']];
+  let horas = 72, d = null, timer = null;
+  const hhmm = t => new Date(t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+  const ha = t => { if (!t) return 'nunca'; const m = Math.round((Date.now() - new Date(t)) / 60000); return m < 1 ? 'agora' : m < 60 ? 'há ' + m + ' min' : m < 1440 ? 'há ' + Math.floor(m / 60) + ' h' : 'há ' + Math.floor(m / 1440) + ' d'; };
+  function desenha() {
+    const fl = d.fluxos || [], tot = fl.reduce((a, f) => a + f.enviados, 0), fal = fl.reduce((a, f) => a + f.falhas, 0), rec = fl.reduce((a, f) => a + f.recuperados, 0), res = fl.reduce((a, f) => a + Number(f.receita || 0), 0);
+    $('kEnv').textContent = n(tot); $('kFalha').textContent = fal ? n(fal) + ' falharam' : 'nenhuma falha';
+    $('kRec').textContent = n(rec); $('kRecPc').textContent = tot ? pc(rec, tot) + ' das mensagens' : ' ';
+    $('kRes').textContent = r(res);
+    const c = d.controle || {}; const tr = c.tratados || 0, ct = c.controle || 0;
+    $('kCtl').textContent = tr ? pc(c.tratados_pagaram, tr) : '—';
+    $('kCtlMsg').textContent = ct ? 'pagaram com mensagem · sem mensagem: ' + pc(c.controle_pagaram, ct) + ' (' + n(ct) + ' pessoas, amostra pequena)' : 'pagaram depois da 1ª mensagem do Pix';
+    $('fluxos').innerHTML = FLX.map(([t, nome, ch]) => { const f = fl.find(x => x.tipo === t) || { enviados: 0, falhas: 0, recuperados: 0, receita: 0 }; const on = d.chaves && Number(d.chaves[ch]) === 1;
+      const ativo = t === 'recup_pix_1' || t === 'recup_lead_1' ? true : on;
+      return '<div class="fc"><h3>' + nome + '<span class="pill ' + (ativo ? 'on' : 'off') + '">' + (ativo ? 'ligada' : 'desligada') + '</span></h3><div class="big">' + n(f.enviados) + '</div><small>enviadas · ' + (f.falhas ? '<b style="color:#f27864">' + n(f.falhas) + ' falhas</b>' : '0 falhas') + '</small><small>Pagaram depois: <b>' + n(f.recuperados) + '</b> (' + r(f.receita) + ')</small><small>Última: ' + ha(f.ultimo) + '</small></div>'; }).join('');
+    const pe = d.pendentes || [];
+    $('pend').innerHTML = pe.length ? '<table><thead><tr><th>Produto</th><th class="n">Pessoas</th><th class="n">Pix gerados</th><th class="n">Gerou 2x</th><th class="n">Já pagaram</th><th class="n">Pagaram em 30 min</th><th class="n">Pagaram após aviso</th><th class="n">Não pagaram</th><th class="n">Sem aviso</th><th class="n">Em aberto</th></tr></thead><tbody>' + pe.map(p => '<tr><td>' + esc(PROD[p.product_id] || p.product_id) + '</td><td class="n">' + n(p.pessoas) + '</td><td class="n">' + n(p.pix_gerados) + '</td><td class="n">' + n(p.gerou_2x) + '</td><td class="n ok">' + n(p.pagou) + ' <span class="tag">' + pc(p.pagou, p.pessoas) + '</span></td><td class="n">' + n(p.pagou_ate_30min) + '</td><td class="n">' + n(p.pagou_apos_recuperacao) + '</td><td class="n no">' + n(p.nao_pagou) + '</td><td class="n">' + n(p.nao_pagou_sem_recup) + '</td><td class="n">' + r(p.valor_em_aberto) + '</td></tr>').join('') + '</tbody></table>' : '<p class="vazio">Sem Pix pendentes neste período.</p>';
+    const cap = pe.find(p => p.product_id === '203539');
+    const dica = $('dica'); if (cap && cap.pessoas) { dica.hidden = false; dica.innerHTML = '<b>Por que tanta venda pendente?</b> No Base Captions, ' + n(cap.pessoas) + ' pessoas geraram Pix e <b>' + n(cap.pagou) + ' já pagaram (' + pc(cap.pagou, cap.pessoas) + ')</b>, ' + n(cap.pagou_ate_30min) + ' delas em até 30 minutos. O Pix aparece como "pendente" por alguns minutos e só vira pago quando a pessoa abre o banco. O que ficou de fato sem pagar são ' + n(cap.nao_pagou) + ' pessoas (' + r(cap.valor_em_aberto) + ').'; } else dica.hidden = true;
+    const ab = d.abandonos || [];
+    $('aband').innerHTML = ab.length ? '<table><thead><tr><th>Produto</th><th class="n">Abandonaram</th><th class="n">Receberam aviso</th><th class="n">Compraram</th><th class="n">Compraram com aviso</th></tr></thead><tbody>' + ab.map(a => '<tr><td>' + esc(PROD[a.product_id] || a.product_id) + '</td><td class="n">' + n(a.pessoas) + '</td><td class="n">' + n(a.receberam) + '</td><td class="n ok">' + n(a.compraram) + '</td><td class="n">' + n(a.compraram_com_msg) + '</td></tr>').join('') + '</tbody></table>' : '<p class="vazio">Nenhum abandono neste período.</p>';
+    const ser = d.serie || [], bs = [...new Set(ser.map(x => x.b))];
+    const tt = b => ser.filter(x => x.b === b).reduce((a, x) => a + x.n, 0); const mx = Math.max(1, ...bs.map(tt));
+    $('serie').innerHTML = bs.length ? '<div class="chart">' + bs.map(b => '<div class="col" title="' + b + ': ' + tt(b) + ' mensagens"><div class="pair"><i class="g" style="width:60%;max-width:22px;height:' + tt(b) / mx * 100 + '%"></i></div></div>').join('') + '</div><div class="lbl">' + bs.map(b => '<span>' + b + '</span>').join('') + '</div>' : '<p class="vazio">Nenhuma mensagem nas últimas 24 horas.</p>';
+    const ao = d.abertos || [];
+    $('abertos').innerHTML = ao.length ? '<table><thead><tr><th>Pessoa</th><th>Produto</th><th class="n">Valor</th><th class="n">Pix</th><th>Gerou em</th><th>Aviso</th></tr></thead><tbody>' + ao.map(a => '<tr><td>' + esc(a.nome || '—') + ' <span class="tag">…' + esc(a.t4) + '</span></td><td>' + esc(PROD[a.product_id] || a.product_id) + '</td><td class="n">' + r(a.valor) + '</td><td class="n">' + n(a.pix) + '</td><td>' + hhmm(a.primeiro) + '</td><td>' + (a.saiu ? 'pediu para sair' : a.recup_em ? 'enviado ' + ha(a.recup_em) : '<span style="color:var(--dim)">sem aviso ainda</span>') + '</td></tr>').join('') + '</tbody></table>' : '<p class="vazio">Ninguém em aberto.</p>';
+    $('atual').textContent = 'Atualizado às ' + new Date().toLocaleTimeString('pt-BR') + ' · atualiza sozinho a cada 30 segundos · última hora: ' + n(d.ultima_hora) + ' mensagens';
+  }
+  async function carrega() {
+    try { d = await Base.rpc('central_recuperacao', { p_horas: horas }); desenha(); }
+    catch (e) { $('atual').textContent = /sem_acesso/.test(e.message) ? 'Este e-mail não tem acesso ao painel.' : 'Não consegui carregar agora (' + e.message + ').'; }
+  }
+  $('atualiza').onclick = carrega;
+  document.querySelectorAll('#per button').forEach(b => b.onclick = () => { horas = Number(b.dataset.h); document.querySelectorAll('#per button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false')); carrega(); });
+  function abre() { $('porta').hidden = true; $('app').hidden = false; carrega(); timer = setInterval(carrega, 30000); }
+  $('entrar').onclick = async () => { const ok = await Base.login(); if (ok || Base.sessao()) abre(); };
+  if (Base.sessao()) abre(); else $('porta').hidden = false;
+})();
+</script>
+</body>
+</html>
