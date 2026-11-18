@@ -321,6 +321,7 @@ main{overflow-x:hidden;overflow-x:clip}
       </div>
       <p class="status" data-status role="status" aria-live="polite"></p>
       <p class="av rv d1" data-av><svg aria-hidden="true"><use href="#i-escudo"/></svg><span><i class="av-k">Windows</i>O antivírus bloqueou o instalador? <a data-os="zip" href="https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.zip">Baixe a versão em .zip</a>, extraia a pasta e abra o Base Captions.exe.</span></p>
+      <p class="av rv d1" data-av-mac><svg aria-hidden="true"><use href="#i-escudo"/></svg><span><i class="av-k">Mac</i>Seu Mac é mais antigo, com chip Intel? <a data-os="mac-intel" href="https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac-Intel.dmg">Baixe a versão para Mac Intel</a> (macOS 13 ou mais novo; para ver o chip: menu Apple › Sobre este Mac). Se o Mac não abrir o app (erro -10810 ou “operação não permitida”), abra o Terminal e cole: <code>xattr -dr com.apple.quarantine "/Applications/Base Captions.app"</code></span></p>
     </div>
   </section>
 
@@ -372,6 +373,11 @@ main{overflow-x:hidden;overflow-x:clip}
     return "";
   }
   var so = sistema();
+  /* [18/11] Mac Intel x chip Apple: Chrome/Edge informam a arquitetura; Safari costuma mascarar. Sem certeza, fica o instalador de chip Apple e o link do Intel logo abaixo. */
+  function chipIntel() { return new Promise(function (res) { var feito = false; function fim(v) { if (!feito) { feito = true; res(v); } } setTimeout(function () { fim(null); }, 1500);
+    try { var u = navigator.userAgentData; if (u && u.getHighEntropyValues) u.getHighEntropyValues(["architecture"]).then(function (h) { if (h.architecture === "x86") fim(true); else if (h.architecture === "arm") fim(false); }).catch(function () {}); } catch (e) {}
+    try { var c = document.createElement("canvas"), g = c.getContext("webgl"), x = g && g.getExtension("WEBGL_debug_renderer_info"), r = x ? String(g.getParameter(x.UNMASKED_RENDERER_WEBGL)) : ""; if (/Apple M\d/i.test(r)) fim(false); else if (/Intel|AMD|Radeon|NVIDIA/i.test(r)) fim(true); } catch (e) {} }); }
+  if (so === "mac") chipIntel().then(function (intel) { if (intel !== true) return; var m = $(".dl[data-os=\"mac\"]"); if (!m) return; m.setAttribute("href", "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac-Intel.dmg"); var t = m.querySelector(".dl-tx b"); if (t) t.textContent = "Baixar para Mac (Intel)"; });
   if (so) $$(".dl[data-os]").forEach(function (a) { a.classList.add(a.getAttribute("data-os") === so ? "destaque" : "outro"); });
   $$("a[data-os]").forEach(function (a) { a.addEventListener("click", function () { evento("download_app", { arquivo: a.getAttribute("data-os"), sistema: so || "outro" }); }); });
 
