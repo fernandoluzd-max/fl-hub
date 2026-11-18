@@ -227,6 +227,27 @@ main{overflow-x:hidden;overflow-x:clip}
 .vel-ls button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
 @media (max-width:420px){.vel-ls button{min-width:42px;font-size:11.5px}.b{width:40px}}
 @media (max-width:420px){.dl-grade .dl{gap:11px;padding:12px 14px 12px 12px}.dl-grade .dl .dl-ic{width:44px;height:44px}.dl-grade .dl .dl-go{width:32px;height:32px}}
+
+/* [18/11] 3 botões (Mac chip Apple / Mac Intel / Windows) + cartões de ajuda com botão de cor diferente */
+.dl-grade{max-width:1000px}
+@media (min-width:640px){.dl-grade{grid-template-columns:1fr}}
+@media (min-width:1000px){.dl-grade{grid-template-columns:repeat(3,1fr)}}
+.dl-grade .dl.destaque{order:0}
+.dl-grade .dl .dl-tx b{white-space:normal}
+.dl-grade .dl .dl-tx small{display:block;margin-top:5px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.04em;opacity:.75;text-transform:none}
+.qual-mac{max-width:760px;margin:16px auto 0;text-align:center;font-size:14.5px;line-height:1.55;color:var(--muted)}
+.qual-mac b{color:var(--branco)}
+.aj-grade{display:grid;gap:14px;max-width:1000px;margin:22px auto 0}
+@media (min-width:800px){.aj-grade{grid-template-columns:1fr 1fr}}
+.aj{padding:18px 20px;border-radius:18px;border:1px solid rgba(120,170,255,.35);background:linear-gradient(180deg,rgba(40,60,100,.28),rgba(20,26,40,.5));text-align:left}
+.aj-k{display:inline-block;margin-bottom:8px;padding:3px 9px;border-radius:99px;background:rgba(120,170,255,.18);font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#a9c8ff}
+.aj b{display:block;font-family:var(--display);font-weight:800;font-size:17px;color:var(--branco)}
+.aj p{margin:8px 0 12px;font-size:14.5px;line-height:1.55;color:var(--muted)}
+.aj p b{display:inline;font-size:inherit;font-family:inherit}
+.aj code{display:block;margin:0 0 12px;padding:10px 12px;border-radius:10px;background:rgba(0,0,0,.45);font-size:12.5px;line-height:1.45;color:#dfe9ff;word-break:break-all;user-select:all}
+.aj-bt{display:inline-block;padding:11px 18px;border-radius:12px;border:0;background:#a9c8ff;color:#0e1522;font-family:var(--display);font-weight:800;font-size:14.5px;text-decoration:none;cursor:pointer}
+.aj-bt:hover{background:#c4daff}
+.aj-bt:focus-visible{outline:3px solid var(--branco);outline-offset:3px}
 </style>
 </head>
 <body>
@@ -308,20 +329,40 @@ main{overflow-x:hidden;overflow-x:clip}
       <div class="dl-grade rv">
         <a class="dl" data-os="mac" href="https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac.dmg">
           <span class="dl-ic"><svg aria-hidden="true"><use href="#i-apple"/></svg></span>
-          <span class="dl-tx"><b>Baixar para Mac</b></span>
+          <span class="dl-tx"><b>Baixar para Mac</b><small>Chip Apple (M1, M2, M3…)</small></span>
+          <span class="dl-go" aria-hidden="true"><svg class="a-baixa"><use href="#i-baixa"/></svg><svg class="a-ok"><use href="#i-check"/></svg></span>
+          <em class="dl-tag">Seu sistema</em>
+        </a>
+        <a class="dl" data-os="mac-intel" href="https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac-Intel.dmg">
+          <span class="dl-ic"><svg aria-hidden="true"><use href="#i-apple"/></svg></span>
+          <span class="dl-tx"><b>Baixar para Mac Intel</b><small>Mac com chip Intel (macOS 13+)</small></span>
           <span class="dl-go" aria-hidden="true"><svg class="a-baixa"><use href="#i-baixa"/></svg><svg class="a-ok"><use href="#i-check"/></svg></span>
           <em class="dl-tag">Seu sistema</em>
         </a>
         <a class="dl" data-os="win" href="https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.exe">
           <span class="dl-ic"><svg aria-hidden="true"><use href="#i-windows"/></svg></span>
-          <span class="dl-tx"><b>Baixar para Windows</b></span>
+          <span class="dl-tx"><b>Baixar para Windows</b><small>Computador com Windows</small></span>
           <span class="dl-go" aria-hidden="true"><svg class="a-baixa"><use href="#i-baixa"/></svg><svg class="a-ok"><use href="#i-check"/></svg></span>
           <em class="dl-tag">Seu sistema</em>
         </a>
       </div>
+      <p class="qual-mac rv">Tem um Mac e não sabe qual escolher? Clique na maçã no canto da tela › <b>Sobre este Mac</b>. Se aparecer <b>“Chip Apple M…”</b>, baixe o primeiro botão. Se aparecer <b>“Intel”</b>, baixe o segundo.</p>
       <p class="status" data-status role="status" aria-live="polite"></p>
-      <p class="av rv d1" data-av><svg aria-hidden="true"><use href="#i-escudo"/></svg><span><i class="av-k">Windows</i>O antivírus bloqueou o instalador? <a data-os="zip" href="https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.zip">Baixe a versão em .zip</a>, extraia a pasta e abra o Base Captions.exe.</span></p>
-      <p class="av rv d1" data-av-mac><svg aria-hidden="true"><use href="#i-escudo"/></svg><span><i class="av-k">Mac</i>Seu Mac é mais antigo, com chip Intel? <a data-os="mac-intel" href="https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac-Intel.dmg">Baixe a versão para Mac Intel</a> (macOS 13 ou mais novo; para ver o chip: menu Apple › Sobre este Mac). Se o Mac não abrir o app (erro -10810 ou “operação não permitida”), abra o Terminal e cole: <code>xattr -dr com.apple.quarantine "/Applications/Base Captions.app"</code></span></p>
+      <div class="aj-grade rv d1">
+        <div class="aj aj-win">
+          <span class="aj-k">Windows</span>
+          <b>O antivírus bloqueou o download?</b>
+          <p>Alguns antivírus bloqueiam arquivos .exe. A versão em .zip é o mesmo programa, só compactada: baixe, extraia a pasta e abra o <i>Base Captions.exe</i>.</p>
+          <a class="aj-bt" data-os="zip" href="https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.zip">Baixar a versão .zip</a>
+        </div>
+        <div class="aj aj-mac">
+          <span class="aj-k">Mac</span>
+          <b>O Mac não deixa abrir o app?</b>
+          <p>Se aparecer o erro -10810 ou “operação não permitida”, o Mac bloqueou o arquivo por ter vindo da internet. Abra o <b>Terminal</b> (aperte ⌘ + espaço e digite Terminal), copie o comando abaixo, cole lá e aperte Enter. Depois abra o Base Captions de novo.</p>
+          <code data-cmd>xattr -dr com.apple.quarantine "/Applications/Base Captions.app"</code>
+          <button class="aj-bt" type="button" data-copia-cmd>Copiar comando</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -377,7 +418,10 @@ main{overflow-x:hidden;overflow-x:clip}
   function chipIntel() { return new Promise(function (res) { var feito = false; function fim(v) { if (!feito) { feito = true; res(v); } } setTimeout(function () { fim(null); }, 1500);
     try { var u = navigator.userAgentData; if (u && u.getHighEntropyValues) u.getHighEntropyValues(["architecture"]).then(function (h) { if (h.architecture === "x86") fim(true); else if (h.architecture === "arm") fim(false); }).catch(function () {}); } catch (e) {}
     try { var c = document.createElement("canvas"), g = c.getContext("webgl"), x = g && g.getExtension("WEBGL_debug_renderer_info"), r = x ? String(g.getParameter(x.UNMASKED_RENDERER_WEBGL)) : ""; if (/Apple M\d/i.test(r)) fim(false); else if (/Intel|AMD|Radeon|NVIDIA/i.test(r)) fim(true); } catch (e) {} }); }
-  if (so === "mac") chipIntel().then(function (intel) { if (intel !== true) return; var m = $(".dl[data-os=\"mac\"]"); if (!m) return; m.setAttribute("href", "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac-Intel.dmg"); var t = m.querySelector(".dl-tx b"); if (t) t.textContent = "Baixar para Mac (Intel)"; });
+  if (so === "mac") chipIntel().then(function (intel) { if (intel !== true) return; var a = $(".dl[data-os=\"mac\"]"), b = $(".dl[data-os=\"mac-intel\"]"); if (!a || !b) return; a.classList.remove("destaque"); a.classList.add("outro"); b.classList.remove("outro"); b.classList.add("destaque"); });
+  var cp = $("[data-copia-cmd]"), cmd = $("[data-cmd]");
+  if (cp && cmd) cp.addEventListener("click", function () { var t = cmd.textContent; var ok = function () { cp.textContent = "Copiado! Agora cole no Terminal"; setTimeout(function () { cp.textContent = "Copiar comando"; }, 4000); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, function () { window.prompt("Copie o comando:", t); }); else window.prompt("Copie o comando:", t); });
   if (so) $$(".dl[data-os]").forEach(function (a) { a.classList.add(a.getAttribute("data-os") === so ? "destaque" : "outro"); });
   $$("a[data-os]").forEach(function (a) { a.addEventListener("click", function () { evento("download_app", { arquivo: a.getAttribute("data-os"), sistema: so || "outro" }); }); });
 
