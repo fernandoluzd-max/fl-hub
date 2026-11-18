@@ -100,6 +100,12 @@ td.ok{color:var(--ok);font-weight:700}td.no{color:#f27864;font-weight:700}
       <div class="k" style="--c:var(--acc)"><span>Receita recuperada</span><b id="kRes">—</b><small>pago em até 48 h depois do aviso</small></div>
       <div class="k" style="--c:var(--grupo)"><span>Funciona de verdade?</span><b id="kCtl">—</b><small id="kCtlMsg">&nbsp;</small></div>
     </section>
+    <section class="kpis3">
+      <div class="k" style="--c:var(--dim)"><span>Custo das mensagens</span><b id="cTot">—</b><small id="cTotMsg">&nbsp;</small></div>
+      <div class="k" style="--c:var(--vis)"><span>Custo por mensagem</span><b id="cMed">—</b><small>média entre Pix (utilidade) e carrinho (marketing)</small></div>
+      <div class="k" style="--c:var(--buy)"><span>Custo por resultado</span><b id="cRes">—</b><small id="cResMsg">gasto ÷ quem pagou depois</small></div>
+      <div class="k" style="--c:var(--ok)"><span>ROAS</span><b id="cRoas">—</b><small>receita recuperada ÷ gasto</small></div>
+    </section>
     <h2 style="font-size:15px;margin:18px 0 10px">Cada recuperação ao vivo</h2>
     <section class="fl" id="fluxos"></section>
     <section class="box" style="margin-top:12px"><h2>Vendas pendentes: quem pagou e quem não pagou</h2><p class="d">Pix gerado e ainda marcado como "aguardando pagamento". Conta por pessoa, não por Pix: quem gerou 2 Pix aparece uma vez.</p><div class="scroll" id="pend"></div></section>
@@ -108,7 +114,7 @@ td.ok{color:var(--ok);font-weight:700}td.no{color:#f27864;font-weight:700}
       <section class="box"><h2>Mensagens por hora (24 h)</h2><p class="d">Mostra se o robô está rodando.</p><div id="serie"></div></section>
     </div>
     <section class="box" style="margin-top:12px"><h2>Quem está em aberto agora</h2><p class="d">Pessoas que geraram Pix e ainda não pagaram (mais recentes primeiro).</p><div class="scroll" id="abertos"></div></section>
-    <p class="sub" style="margin-top:14px">Como o rastreio funciona: cada mensagem enviada fica registrada; "pagou depois" = a mesma pessoa (telefone ou e-mail) teve uma compra paga do mesmo produto em até 48 horas depois da mensagem. O "grupo de controle" são 15% dos Pix que de propósito não recebem mensagem, para comparar com quem recebeu. Quem pediu SAIR não entra.</p>
+    <p class="sub" style="margin-top:14px">Como o rastreio funciona: cada mensagem enviada fica registrada; "pagou depois" = a mesma pessoa (telefone ou e-mail) teve uma compra paga do mesmo produto em até 48 horas depois da mensagem. O "grupo de controle" são 15% dos Pix que de propósito não recebem mensagem, para comparar com quem recebeu. Quem pediu SAIR não entra. Custo = mensagens enviadas × preço da Meta por categoria (Pix = utilidade; carrinho abandonado = marketing) × dólar, valores editáveis em central_config. O ROAS conta toda a receita de quem pagou depois do aviso; parte dessas pessoas pagaria de qualquer jeito, por isso compare também com o grupo de controle.</p>
   </main>
 </div>
 <script src="/catalogo.js"></script>
@@ -118,6 +124,7 @@ td.ok{color:var(--ok);font-weight:700}td.no{color:#f27864;font-weight:700}
   const $ = id => document.getElementById(id);
   const n = v => (Number(v) || 0).toLocaleString('pt-BR');
   const r = v => 'R$ ' + (Number(v) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  const rc = v => 'R$ ' + (Number(v) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const pc = (a, b) => b > 0 ? (a / b * 100).toFixed(1).replace('.', ',') + '%' : '—';
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const PROD = { '203539': 'Base Captions', '195639': 'Títulos', '198176': 'Assets' };
@@ -133,9 +140,15 @@ td.ok{color:var(--ok);font-weight:700}td.no{color:#f27864;font-weight:700}
     const c = d.controle || {}; const tr = c.tratados || 0, ct = c.controle || 0;
     $('kCtl').textContent = tr ? pc(c.tratados_pagaram, tr) : '—';
     $('kCtlMsg').textContent = ct ? 'pagaram com mensagem · sem mensagem: ' + pc(c.controle_pagaram, ct) + ' (' + n(ct) + ' pessoas, amostra pequena)' : 'pagaram depois da 1ª mensagem do Pix';
+    const cu = d.custo || { por_tipo: [], custo_total: 0 }, ct2 = Number(cu.custo_total) || 0;
+    $('cTot').textContent = rc(ct2); $('cTotMsg').textContent = 'US$ ' + (Number(cu.usd_marketing) || 0).toFixed(4).replace('.', ',') + ' marketing · US$ ' + (Number(cu.usd_utilidade) || 0).toFixed(4).replace('.', ',') + ' utilidade · dólar R$ ' + (Number(cu.dolar) || 0).toFixed(2).replace('.', ',');
+    $('cMed').textContent = tot ? rc(ct2 / tot) : '—';
+    $('cRes').textContent = rec ? rc(ct2 / rec) : '—'; $('cResMsg').textContent = rec ? 'gasto ÷ ' + n(rec) + ' que pagaram depois' : 'ninguém pagou depois ainda';
+    $('cRoas').textContent = ct2 > 0 ? (res / ct2).toFixed(1).replace('.', ',') + 'x' : '—';
+    const custoDe = t => ((cu.por_tipo || []).find(x => x.tipo === t) || {}).custo || 0;
     $('fluxos').innerHTML = FLX.map(([t, nome, ch]) => { const f = fl.find(x => x.tipo === t) || { enviados: 0, falhas: 0, recuperados: 0, receita: 0 }; const on = d.chaves && Number(d.chaves[ch]) === 1;
       const ativo = t === 'recup_pix_1' || t === 'recup_lead_1' ? true : on;
-      return '<div class="fc"><h3>' + nome + '<span class="pill ' + (ativo ? 'on' : 'off') + '">' + (ativo ? 'ligada' : 'desligada') + '</span></h3><div class="big">' + n(f.enviados) + '</div><small>enviadas · ' + (f.falhas ? '<b style="color:#f27864">' + n(f.falhas) + ' falhas</b>' : '0 falhas') + '</small><small>Pagaram depois: <b>' + n(f.recuperados) + '</b> (' + r(f.receita) + ')</small><small>Última: ' + ha(f.ultimo) + '</small></div>'; }).join('');
+      return '<div class="fc"><h3>' + nome + '<span class="pill ' + (ativo ? 'on' : 'off') + '">' + (ativo ? 'ligada' : 'desligada') + '</span></h3><div class="big">' + n(f.enviados) + '</div><small>enviadas · ' + (f.falhas ? '<b style="color:#f27864">' + n(f.falhas) + ' falhas</b>' : '0 falhas') + '</small><small>Pagaram depois: <b>' + n(f.recuperados) + '</b> (' + r(f.receita) + ')</small><small>Custo: <b>' + rc(custoDe(t)) + '</b> · Última: ' + ha(f.ultimo) + '</small></div>'; }).join('');
     const pe = d.pendentes || [];
     $('pend').innerHTML = pe.length ? '<table><thead><tr><th>Produto</th><th class="n">Pessoas</th><th class="n">Pix gerados</th><th class="n">Gerou 2x</th><th class="n">Já pagaram</th><th class="n">Pagaram em 30 min</th><th class="n">Pagaram após aviso</th><th class="n">Não pagaram</th><th class="n">Sem aviso</th><th class="n">Em aberto</th></tr></thead><tbody>' + pe.map(p => '<tr><td>' + esc(PROD[p.product_id] || p.product_id) + '</td><td class="n">' + n(p.pessoas) + '</td><td class="n">' + n(p.pix_gerados) + '</td><td class="n">' + n(p.gerou_2x) + '</td><td class="n ok">' + n(p.pagou) + ' <span class="tag">' + pc(p.pagou, p.pessoas) + '</span></td><td class="n">' + n(p.pagou_ate_30min) + '</td><td class="n">' + n(p.pagou_apos_recuperacao) + '</td><td class="n no">' + n(p.nao_pagou) + '</td><td class="n">' + n(p.nao_pagou_sem_recup) + '</td><td class="n">' + r(p.valor_em_aberto) + '</td></tr>').join('') + '</tbody></table>' : '<p class="vazio">Sem Pix pendentes neste período.</p>';
     const cap = pe.find(p => p.product_id === '203539');
@@ -150,7 +163,7 @@ td.ok{color:var(--ok);font-weight:700}td.no{color:#f27864;font-weight:700}
     $('atual').textContent = 'Atualizado às ' + new Date().toLocaleTimeString('pt-BR') + ' · atualiza sozinho a cada 30 segundos · última hora: ' + n(d.ultima_hora) + ' mensagens';
   }
   async function carrega() {
-    try { d = await Base.rpc('central_recuperacao', { p_horas: horas }); desenha(); }
+    try { const [x, y] = await Promise.all([Base.rpc('central_recuperacao', { p_horas: horas }), Base.rpc('central_recuperacao_custo', { p_horas: horas }).catch(() => null)]); d = x; d.custo = y; desenha(); }
     catch (e) { $('atual').textContent = /sem_acesso/.test(e.message) ? 'Este e-mail não tem acesso ao painel.' : 'Não consegui carregar agora (' + e.message + ').'; }
   }
   $('atualiza').onclick = carrega;
