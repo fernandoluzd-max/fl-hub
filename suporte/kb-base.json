@@ -1387,6 +1387,33 @@
     "Não diga que mudou nada nos estilos Dynamic Bold, Editorial Amarelo ou Mint Pop: eles mantêm o comportamento de antes."
    ],
    "escalar_quando": "A legenda sai com cor errada mesmo na versão nova. Peça print do CapCut."
+  },
+  {
+   "id": "assets_fundo_nao_transparente",
+   "sinais": [
+    "fundo preto",
+    "fundo nao transparente",
+    "fundo nao fica transparente",
+    "nao fica transparente",
+    "nao esta transparente",
+    "nao esta ficando transparente",
+    "sem transparencia",
+    "retangulo preto",
+    "quadrado preto",
+    "tarja preta",
+    "fundo preto na animacao",
+    "animacao com fundo preto",
+    "animacao fica preta"
+   ],
+   "passos": [
+    "Vale para o Base FL Assets (animações que ficam por cima do vídeo). As animações são arquivos de vídeo .mov com fundo transparente, instalados como predefinições do CapCut do computador. O esperado é aparecer só a animação por cima do vídeo, sem retângulo preto.",
+    "A causa NÃO está confirmada. Não afirme que é o Mac, o Windows, o CapCut ou o arquivo. Se a pessoa mandou print, diga o que viu no print (por exemplo, um retângulo preto atravessando o vídeo) e peça os dados abaixo, UM por vez.",
+    "Pergunte: 1) é Mac ou Windows (no Mac: menu Apple > Sobre este Mac; se Mac, chip Apple ou Intel); 2) qual a versão do CapCut (Configurações > Sobre). O CapCut precisa estar na versão 9.8 ou mais nova: se estiver abaixo, oriente atualizar o CapCut do computador e testar de novo.",
+    "Peça um teste: colocar outra animação de outra pasta (por exemplo uma seta) por cima de um vídeo e dizer se o fundo também fica preto ou só naquela animação. Peça também o nome da animação que deu problema (nome e pasta).",
+    "Não prometa correção, prazo, nem troca de arquivo. Não peça para desinstalar nada. Não ensine truque de mistura/blend: ainda não foi validado com este pack.",
+    "Quando tiver sistema, versão do CapCut, o resultado do teste e o nome da animação, marque [[EQUIPE: Base FL Assets com fundo preto em vez de transparente (informar sistema, versão do CapCut, animação e resultado do teste)]] e diga que a equipe vai analisar no próximo período de atendimento."
+   ],
+   "escalar_quando": "Sempre que a pessoa já passou sistema, versão do CapCut e o teste, ou se já está na versão 9.8+ e continua com fundo preto."
   }
  ],
  "politicas_do_atendimento": [
