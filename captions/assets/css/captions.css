@@ -328,7 +328,7 @@ html[data-estado="encerrada"] .ct-quando{display:none}
 .citacao cite{display:block;margin-top:16px;font-style:normal;font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--vermelho)}
 .cmt-cab{margin:64px auto 0;max-width:620px;text-align:center}
 .cmts{margin:22px calc(var(--gut) * -1) 0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000201 8%,#000201 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000201 8%,#000201 92%,transparent)}
-.cmts-trilho{display:flex;align-items:flex-start;gap:12px;width:max-content;animation:faixa 60s linear infinite}
+.cmts-trilho{display:flex;align-items:flex-start;gap:12px;width:max-content;animation:faixa 130s linear infinite}
 .cmts-trilho img{width:300px;height:auto;border-radius:16px;border:1px solid var(--linha)}
 .cmts:hover .cmts-trilho,.cmts.parado .cmts-trilho{animation-play-state:paused}
 @media (min-width:900px){.cmts{margin-inline:0}.cmts-trilho img{width:360px}}
