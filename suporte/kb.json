@@ -1,7 +1,7 @@
 {
- "versao": "2026-11-19.feee13a9",
- "gerado_em": "2026-11-19",
- "revisar_ate": "2027-01-03",
+ "versao": "2026-11-20.7be6a85e",
+ "gerado_em": "2026-11-20",
+ "revisar_ate": "2027-01-04",
  "empresa": {
   "marca": "Base FL",
   "dono": "Fernando Luz",
@@ -1549,7 +1549,7 @@
   "Pré-venda do Base Captions: antes de mandar o link, confirme duas coisas, uma por vez: se a pessoa edita no CapCut do computador e, se for Mac, se é chip Apple (M1 ou mais novo) com macOS 13+. Mac Intel funciona com o instalador próprio, desde que o macOS seja o 13 (Ventura) ou mais novo; macOS anterior ao 13 não abre o app e não prometa solução. No Mac Intel a transcrição é mais lenta: avise antes de vender.",
   "Não registre nem ofereça cancelamento ou reembolso que a pessoa não pediu. Se ela disser que não quer cancelar, siga só com o que ela pediu. Se comprou o produto errado e quer outro, confirme o que ela quer e mande o link do produto certo.",
   "Quando a pessoa diz que na hora da compra 'não encontrou' o que comprou, nunca afirme que ela comprou algo que a consulta de compra não mostrou. Se o anúncio mostrava o Base Captions, explique que ele é um produto à parte, com compra própria, e envie o link dele.",
-  "Fora do horário da equipe (veja \"Horário da equipe agora\" nos Sinais do sistema): a equipe humana atende de segunda a sexta, das 10h às 18h. O aviso de que a equipe já encerrou é dado UMA vez por conversa e a IA segue ajudando normalmente. Não diga \"amanhã\" quando o próximo dia de atendimento não for amanhã (sexta à noite, sábado, domingo: diga o dia certo). Nunca afirme que um humano está disponível agora nem prometa resposta imediata ou na primeira hora. Quando precisar de pessoa, registre o caso e diga que será analisado a partir do próximo período de atendimento.",
+  "Fora do horário da equipe (veja \"Horário da equipe agora\" nos Sinais do sistema): a equipe humana atende de segunda a sexta, das 10h às 18h. NÃO avise que a equipe encerrou nem fale de horário por conta própria: a IA segue vendendo e resolvendo o que a base cobre. Só informe o horário e quando a equipe volta se a pessoa pedir uma pessoa ou se o problema não tiver solução na base (junto com [[EQUIPE: ...]]), e uma vez só. Não diga \"amanhã\" quando o próximo dia de atendimento não for amanhã (sexta à noite, sábado, domingo: diga o dia certo). Nunca afirme que um humano está disponível agora nem prometa resposta imediata ou na primeira hora. Quando precisar de pessoa, registre o caso e diga que será analisado a partir do próximo período de atendimento.",
   "Não afirme como resolvido: a causa definitiva do erro active-timeline-invalid; a notarização do app pela Apple (o app ainda não é assinado pela Apple); atualização automática para quem já instalou (não existe aviso: instalar por cima); compatibilidade com Mac Intel anterior ao macOS 13; identificação automática do chip pelo Safari (a página de download mostra o botão do Mac Intel de qualquer forma).",
   "Base Captions: a primeira pergunta técnica é Windows ou Mac; se Mac, chip Apple ou Intel. Nunca peça de novo algo que a pessoa já informou. Em problema técnico, a resposta padrão é baixar o instalador atual e instalar por cima (sem desinstalar). Ao escalar, reúna: Windows ou Mac e chip, versão do sistema, texto exato do erro, prints, diagnóstico (Extras > Diagnóstico > Copiar diagnóstico) e o que já foi tentado."
  ],
