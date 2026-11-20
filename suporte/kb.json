@@ -1,5 +1,5 @@
 {
- "versao": "2026-11-20.7be6a85e",
+ "versao": "2026-11-20.214efa64",
  "gerado_em": "2026-11-20",
  "revisar_ate": "2027-01-04",
  "empresa": {
@@ -877,17 +877,25 @@
     "operacao nao permitida",
     "nao permitida",
     "nao e compativel com o seu tipo de mac",
-    "tipo de mac"
+    "tipo de mac",
+    "so aparece ok",
+    "aparece so ok",
+    "app nao pode ser aberto",
+    "nao consigo abrir o base captions",
+    "nao abre no mac",
+    "mac nao abre",
+    "abrir assim mesmo",
+    "privacidade e seguranca"
    ],
    "passos": [
-    "Pergunte a versão do macOS, se o Mac tem chip Apple (M1 ou mais novo) ou Intel (menu Apple > Sobre este Mac) e a mensagem exata (peça print).",
-    "Se o app não é compatível com o tipo de Mac: chip Apple usa o instalador Mac normal; Intel usa o instalador Mac Intel e precisa de macOS 13 ou mais novo. Links: https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac.dmg (chip Apple) e https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac-Intel.dmg (Intel).",
-    "Primeira tentativa: botão direito no Base Captions > Abrir > confirmar. Em Ajustes do Sistema > Privacidade e Segurança também dá para clicar em Abrir assim mesmo.",
-    "Se aparecer o erro -10810, \"operação não permitida\" ou o app não abrir (o Mac bloqueia arquivos baixados da internet ou do WhatsApp porque o app ainda não é assinado pela Apple): SÓ se o arquivo veio da página oficial ou do Fernando, peça para abrir o Terminal (cmd + espaço, digitar Terminal), colar este comando e apertar Enter, depois abrir o app de novo: xattr -dr com.apple.quarantine \"/Applications/Base Captions.app\"",
-    "Explique que esse comando só libera o Base Captions. Nunca indique o comando para arquivo baixado de fonte desconhecida e nunca oriente desativar o Gatekeeper do sistema.",
-    "Mac Intel com macOS anterior ao 13: o app não abre nessa configuração. Não prometa solução nem prazo; encaminhe para a equipe."
+    "No Mac, nunca mande o comando do Terminal de cara. Siga as etapas, UMA pergunta por vez, e use o print: se o print já mostra o chip e o macOS, não pergunte de novo.",
+    "Etapa 1: se a pessoa só disse \"não abre\" ou \"não instala\", peça um print do aviso. Se ainda não se sabe o Mac, peça print de menu Apple > Sobre este Mac: \"Chip Apple M1/M2/M3/M4\" usa o instalador Mac; \"Processador Intel\" usa o instalador Mac Intel (precisa de macOS 13 ou mais novo).",
+    "Etapa 2, pelo texto do aviso: (a) \"não é compatível com o seu tipo de Mac\": instalador errado para o chip. Chip Apple: https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac.dmg ; Intel: https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac-Intel.dmg . Não é caso de Terminal. (b) \"não pode ser aberto porque a Apple não pode verificar\" ou \"desenvolvedor não identificado\", COM opção nos Ajustes: Ajustes do Sistema > Privacidade e Segurança > rolar até o fim > Abrir Mesmo Assim. (c) Mac Intel com macOS anterior ao 13: não abre; não prometa solução, encaminhe.",
+    "Etapa 3, só se o aviso for \"O aplicativo Base Captions não pode ser aberto\" com apenas o botão OK e nada em Privacidade e Segurança, OU o erro -10810 / \"operação não permitida\", E o arquivo veio da página oficial ou do Fernando: peça para clicar OK, abrir o Terminal (Command + Espaço, digitar Terminal, Enter), colar a linha abaixo e dar Enter (não aparece nada, é normal; se pedir senha é a do Mac e ela não aparece enquanto digita) e abrir o Base Captions de novo. Explique em 1 linha que o comando só tira a marca de \"baixado da internet\" do Base Captions, não desliga a proteção do Mac. Mande o comando sozinho em uma mensagem separada, para copiar: xattr -dr com.apple.quarantine /Applications/Base\\ Captions.app . O app precisa estar na pasta Aplicativos: se abriu direto do .dmg, arrastar para Aplicativos primeiro.",
+    "Etapa 4: uma tentativa de comando só. Se continuar sem abrir, peça novo print e encaminhe; não repita o mesmo comando nem mande reinstalar sem motivo. Aviso \"está danificado\": baixar de novo pela página oficial https://basefl.com/captions/obrigado/ ; se repetir, encaminhe.",
+    "Proibido: desativar o Gatekeeper (spctl --master-disable) ou qualquer comando que não esteja aqui. O app ainda não é assinado pela Apple, por isso o aviso existe: não prometa que vai parar de aparecer."
    ],
-   "escalar_quando": "A mensagem for \"danificado\" mesmo após baixar de novo pelo link oficial, o Mac for Intel com macOS anterior ao 13, ou o app continuar sem abrir depois do comando."
+   "escalar_quando": "Mac Intel com macOS anterior ao 13, \"danificado\" depois de baixar de novo pela página oficial, ou o app continua sem abrir depois do comando. Reúna: chip e macOS, texto exato do aviso, print e o que já foi tentado."
   },
   {
    "id": "captions_nao_gera",
@@ -951,7 +959,7 @@
     "Pergunte se o CapCut Desktop estava fechado ao gerar e qual versao do CapCut usa.",
     "Confirme que o app e o CapCut usam a mesma pasta de rascunhos (inclusive pasta personalizada).",
     "Video nao encontrado: confirmar que o arquivo original continua no mesmo lugar.",
-    "Fonte ausente: instalar as fontes pela tela do app."
+    "Fonte ausente: clicar em Instalar fontes na tela \"Vamos preparar suas fontes!\" (ela aparece sozinha quando falta fonte), fechar o CapCut por completo e abrir de novo."
    ],
    "escalar_quando": "Persistir depois de gerar de novo com o CapCut fechado. Peca print do CapCut."
   },
@@ -1302,11 +1310,16 @@
     "capcut nao foi encontrado",
     "aviso vermelho do capcut",
     "nao acha o capcut",
-    "capcut nao encontrado no windows"
+    "capcut nao encontrado no windows",
+    "capcut em outro disco",
+    "capcut no disco e",
+    "capcut instalado no d",
+    "capcut em outra unidade"
    ],
    "passos": [
     "Vale só para o Base Captions no Windows (o app antigo Base FL tem outro caso).",
     "Causa: o app só procurava o CapCut em uma estrutura de pastas; quem tem o CapCut no layout antigo (versões direto em AppData\\Local\\CapCut\\) não era reconhecido. Corrigido e publicado em 16/11 (testado por 1 aluno no Windows real).",
+    "Existe uma 2ª causa, também corrigida e validada em 1 PC (19/11): o CapCut instalado em OUTRO DISCO (por exemplo E:\\CP\\CapCut). A versão atual do app encontra o CapCut nesses casos. Peça para instalar a versão atual por cima: https://basefl.com/captions/obrigado/",
     "Resposta: 'Já identifiquei o que está acontecendo: o teu CapCut está numa estrutura de pastas diferente da que o app esperava. Não é erro teu. Já corrigi. Baixa a versão nova e instala por cima da que tu já tem, sem desinstalar: [link do instalador Windows]. Depois abre o app e me conta se o aviso vermelho sumiu.'",
     "Se o Windows mostrar 'O Windows protegeu o computador': Mais informações > Executar assim mesmo (é normal: o app ainda não tem certificado de assinatura).",
     "Se continuar: peça este diagnóstico no PowerShell (só lê, não muda nada) e passe a resposta para a equipe: $r=@(\"pasta padrao:\");$r+=(Get-ChildItem \"$env:LOCALAPPDATA\\CapCut\" -ErrorAction SilentlyContinue|ForEach-Object{$PSItem.Name});$r+=\"CapCut.exe:\";$r+=(Get-ChildItem \"$env:LOCALAPPDATA\",\"$env:ProgramFiles\",${env:ProgramFiles(x86)} -Filter CapCut.exe -Recurse -Depth 5 -ErrorAction SilentlyContinue|ForEach-Object{$PSItem.FullName});$r|Out-String|Set-Clipboard;$r"
@@ -1355,14 +1368,13 @@
     "apple garamond"
    ],
    "passos": [
-    "Coolvetica usa uma fonte comercial (Coolvetica) e o Serif Bold usa a Cooper Black. Essas fontes NÃO podem ser distribuídas com o app (a licença não permite). Nunca envie o arquivo da fonte para o aluno nem coloque no app.",
-    "Já resolvido na versão publicada em 16/11: sem a Coolvetica, o app usa a Nunito Bold (livre, vem dentro do app); sem a Cooper Black, usa a Georgia Bold (já vem no Windows e no Mac). Quem tem a fonte original continua com ela. As fontes livres (Inter, Playfair, EB Garamond, Nunito) se instalam sozinhas quando o app abre.",
-    "Fontes livres que o app instala sozinho: Inter, EB Garamond, Playfair e Nunito. Fontes comerciais que NÃO vão dentro do app por licença: Neue Haas, Apple Garamond, Cooper Black e Coolvetica. Substitutas: Coolvetica vira Nunito Bold, Serif Bold usa Georgia, e o Fernando Luz Style usa fontes livres. Desde 18/11 o Fernando Luz Style não é mais trocado em silêncio pelo Padrão em Mac sem a Neue Haas. O aviso \"Fonte não instalada neste Mac\" só aparece quando falta uma fonte sem substituta.",
-    "Depois que as fontes são instaladas, o CapCut precisa ser fechado e aberto de novo para enxergar. Se a pessoa diz \"as fontes não foram instaladas\": pergunte QUAL fonte e peça um print. Se for uma das pagas, explique o que está acima. Se for uma fonte LIVRE (Inter, EB Garamond, Playfair, Nunito), encaminhe para a equipe.",
-    "Resposta: 'Esses estilos usam fontes que não podem vir dentro do app por licença. Na versão nova o app usa uma fonte parecida e livre no lugar, sozinho, sem tu instalar nada. Baixa a versão nova e instala por cima: [link do instalador].'",
-    "Atenção: o visual do Coolvetica com a Nunito ainda não foi conferido numa legenda real. Se o aluno reclamar do visual desse estilo, avise que vai confirmar com a equipe e use [[EQUIPE: reclamação do visual do estilo Coolvetica com a Nunito]]."
+    "Vale para o Base Captions. Na primeira abertura depois de instalar, o app mostra \"Vamos preparar suas fontes!\". A pessoa clica em Instalar fontes e o app instala as fontes de todos os estilos, inclusive as originais (Neue Haas, Apple Garamond, Cooper Black, Coolvetica). Não pede senha de administrador. Resultado certo: \"Tudo pronto! Suas fontes estão configuradas.\"",
+    "Depois de instalar as fontes, o CapCut precisa ser FECHADO por completo e aberto de novo, senão ele não enxerga. Projeto antigo não muda: gerar de novo em um projeto vazio novo.",
+    "Se a legenda saiu com fonte diferente do modelo, pergunte UMA coisa por vez: 1) baixou o instalador depois de 19/11 à noite (ou apareceu a tela \"Vamos preparar suas fontes!\")? Se não, mande a página https://basefl.com/captions/obrigado/ e peça para instalar por cima, sem desinstalar. 2) clicou em Instalar fontes e apareceu \"Tudo pronto\"? 3) fechou e abriu o CapCut? 4) gerou de novo em projeto vazio novo?",
+    "Se aparecer \"Faltam fontes neste computador\": o app oferece instalar de novo; é só clicar. Se aparecer \"Não conseguimos instalar as fontes\": fechar o CapCut, conferir espaço livre no disco e clicar em Tentar novamente. Depois da 2ª falha existe \"Continuar sem as fontes\" (a legenda pode sair com outra fonte).",
+    "Nunca diga que alguma fonte é paga ou que não pode vir no app. Nunca envie arquivo de fonte. Quem pede \"o kit de fontes\" com versão antiga: orientar a versão atual e o botão Instalar fontes."
    ],
-   "escalar_quando": "O aluno reclama do visual do estilo, ou o problema continua com a versão nova."
+   "escalar_quando": "A fonte continua errada depois de instalar a versão atual, clicar em Instalar fontes, reabrir o CapCut e gerar em projeto novo; ou a instalação das fontes falhou 2 vezes. Peça print do CapCut e da tela das fontes."
   },
   {
    "id": "captions_active_timeline_invalid",
@@ -1487,16 +1499,22 @@
     "ficou marrom",
     "ficou escuro",
     "cor da legenda errada",
-    "letra marrom"
+    "letra marrom",
+    "legenda ficou escura",
+    "legenda mudou de cor",
+    "cor da legenda mudou",
+    "cor diferente do modelo",
+    "legenda sumiu no fundo claro",
+    "fundo claro",
+    "dynamic bold escuro",
+    "editorial amarelo escuro"
    ],
    "passos": [
-    "Vale só para o estilo Fernando Luz Style. Causa: o estilo escurecia o texto quando o fundo do vídeo era claro. Corrigido em 18/11: a cor agora é sempre a do estilo.",
-    "Esperado: texto branco, e a palavra de destaque em creme ou amarelo claro.",
-    "Oriente baixar o instalador atual e instalar por cima (sem desinstalar).",
-    "Se depois da versão nova a legenda continuar diferente, peça um print do CapCut e encaminhe para a equipe.",
-    "Não diga que mudou nada nos estilos Dynamic Bold, Editorial Amarelo ou Mint Pop: eles mantêm o comportamento de antes."
+    "Vale para TODOS os estilos do Base Captions. Causa antiga: o texto escurecia (marrom ou preto) quando o fundo do vídeo era claro; acontecia no Fernando Luz Style, no Dynamic Bold e no Editorial Amarelo. Corrigido: a cor agora é sempre a do estilo, validado em 2 computadores de alunos.",
+    "Resposta: baixar o instalador atual e instalar por cima (sem desinstalar): https://basefl.com/captions/obrigado/ . Depois gerar de novo em um projeto vazio novo (projeto antigo não muda).",
+    "Se depois disso a legenda continuar com cor errada, peça um print do CapCut e o estilo escolhido, e encaminhe para a equipe."
    ],
-   "escalar_quando": "A legenda sai com cor errada mesmo na versão nova. Peça print do CapCut."
+   "escalar_quando": "A legenda sai com cor errada mesmo na versão atual. Peça print do CapCut e o nome do estilo."
   },
   {
    "id": "assets_fundo_nao_transparente",
