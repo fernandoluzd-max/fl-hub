@@ -192,20 +192,20 @@
     var box = $("[data-ev]"), E = CFG.ESTILOS || []; if (!box || !E.length) return;
     var lista = $("[data-ev-lista]", box), quadro = $("[data-ev-quadro]", box), nome = $("[data-ev-nome]", box), num = $("[data-ev-num]", box), barra = $("[data-ev-barra]", box);
     var i = 0, timer = null, auto = true, visivel = false, camadas = [], token = 0, adiado = null, falhas = {};
-    var primeira = $(".ev-capa", quadro);
+    var primeira = $(".ev-capa", quadro); var lang = "pt";
+    function src(e, tipo) { return lang === "en" && e[tipo + "En"] ? e[tipo + "En"] : (e[tipo] || e.img); }          /* PT por padrão; EN usa a mesma amostra em inglês (se faltar, cai no PT) */
     E.forEach(function (e, k) {
       var im = k === 0 ? primeira : document.createElement("div");
       if (k) {
         im.className = "ev-capa"; im.setAttribute("aria-hidden", "true");
-        im.innerHTML = '<span class="ev-capa-n">Estilo ' + pad(k + 1) + '</span><b class="ev-capa-nome">' + e.nome + '</b>' +
-          '<img class="ev-capa-am" src="' + e.img + '" alt="" loading="lazy" decoding="async">';
+        im.innerHTML = '<img class="ev-capa-full" src="' + (e.poster || e.img) + '" alt="" loading="lazy" decoding="async">';
         quadro.insertBefore(im, primeira.nextSibling);
       }
       camadas[k] = im;
       var b = document.createElement("button");
       b.type = "button"; b.className = "ev-t"; b.setAttribute("role", "tab"); b.setAttribute("aria-selected", k === 0 ? "true" : "false"); b.tabIndex = k === 0 ? 0 : -1;
       b.setAttribute("aria-label", "Estilo " + (k + 1) + " de " + E.length + ": " + e.nome);
-      b.innerHTML = '<i class="ev-t-capa"><img src="' + e.img + '" alt="" loading="lazy" decoding="async"></i><span>' + pad(k + 1) + "</span><small>" + e.nome + "</small>";
+      b.innerHTML = '<i class="ev-t-capa"><img src="' + (e.poster || e.img) + '" alt="" loading="lazy" decoding="async"></i><span>' + pad(k + 1) + "</span><small>" + e.nome + "</small>";   /* [21/11] capas/vídeos em PT ou EN: ver idioma() */
       b.addEventListener("click", function () { vai(k, true); });
       lista.appendChild(b);
     });
@@ -230,7 +230,7 @@
     // sem vídeo (rede, bloqueio ou a prévia privada): fica a capa, troca no tempo e oferece abrir o vídeo
     function falhou(k) {
       quadro.classList.remove("carrega", "tocando");
-      if (abrir && E[k].video) { abrir.href = E[k].video; abrir.hidden = false; }
+      if (abrir && E[k].video) { abrir.href = src(E[k], "video"); abrir.hidden = false; }
       if (auto && visivel) { clearTimeout(timer); timer = setTimeout(function () { vai(i + 1, false); }, 3600); }
     }
     function toca(k) {
@@ -248,7 +248,7 @@
       quadro.classList.remove("tocando");                                         // a capa do estilo novo cobre o vídeo antigo na hora
       adiado = setTimeout(function () {                                           // espera a capa cobrir; toque rápido cancela este e vale o próximo
         if (t !== token) return;
-        v._k = k; v.preload = "auto"; v.src = e.video;                           // trocar o src descarta o download e o quadro anterior
+        v._k = k; v.preload = "auto"; v.src = src(e, "video");                           // trocar o src descarta o download e o quadro anterior
         quadro.classList.add("carrega");
         var q = v.play(); if (q && q.catch) q.catch(bloqueou(t));
       }, tocava ? 130 : 0);
@@ -279,6 +279,15 @@
       var bt = botoesT[k], alvo = bt.offsetLeft - (lista.clientWidth - bt.offsetWidth) / 2;
       if (lista.scrollWidth > lista.clientWidth) lista.scrollTo({ left: alvo, behavior: calmoG ? "auto" : "smooth" });
     }
+    var langBtns = $$("[data-ev-lang]", box);          /* [21/11] Português / English: troca as capas e o vídeo da amostra (a mesma amostra, traduzida) */
+    function troca(l) {
+      if (l === lang) return; lang = l;
+      langBtns.forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-ev-lang") === l ? "true" : "false"); });
+      camadas.forEach(function (c, n) { var im = $("img", c); if (im) im.src = src(E[n], "poster"); });
+      botoesT.forEach(function (b, n) { var im = $("img", b); if (im) im.src = src(E[n], "poster"); });
+      v._k = -1; falhas = {}; if (abrir) abrir.hidden = true; toca(i); evento("idioma", { idioma: l });
+    }
+    langBtns.forEach(function (b) { b.addEventListener("click", function () { troca(b.getAttribute("data-ev-lang")); }); });
     var bp = $("[data-ev-play]", box);
     if (bp) bp.addEventListener("click", function () { box.classList.remove("bloqueado"); var q = v.play(); if (q && q.catch) q.catch(function () {}); if (!v.getAttribute("src")) toca(i); });
     $("[data-ev-ant]", box).addEventListener("click", function () { vai(i - 1, true); });
@@ -764,14 +773,19 @@
   }
 
   /* ---------- Base Captions: demonstração animada, com as telas reais do app ----------
-     6 etapas em loop (importar, estilo, cortes, extras, gerar, pronto), igual no celular e no computador.
+     6 etapas em loop (importar, legenda, extras, processar, CapCut, pronto), igual no celular e no computador.
      Roda sempre, mesmo com "Reduzir movimento" ligado (decisão do produto). Só gasta enquanto está na tela. */
   function demo() {
     var box = $("#bcDemo"); if (!box) return;
     var win = $(".bcd-win", box), v = $(".bcd-cv video", box), cur = $(".bcd-cur", box), file = $(".bcd-file", box);
     var drop = $(".bcd-drop", box), cont = $(".bcd-cont", box), tiles = $$(".bcd-grade li", box), nav = $$(".bcd-nav li", box), passos = $$(".bcd-passos button", box);
-    var nome = $(".bcd-nome", box), lLeg = $(".bcd-leg .bcd-row", box), lCor = $(".bcd-cor .bcd-row", box), opc = $$(".bcd-opc li", box), ext = $$(".bcd-ext .bcd-row", box);
-    var DUR = [3700, 6200, 4200, 4000, 3600, 3200], NOMES = ["Contraponto", "Dynamic Bold", "Minimal Bold", "Serif Bold"];
+    var nome = $(".bcd-nome", box), lLeg = $(".bcd-leg .bcd-row", box), lCor = $(".bcd-cor .bcd-row", box), opc = $$(".bcd-opc li", box), ext = $$(".bcd-cor .bcd-xr", box);
+    var DUR = [3700, 7800, 5200, 5600, 3600, 3400], NOMES = ["Fernando Luz Style", "Dynamic Bold", "Minimal Bold", "Smart Type", "Editorial Amarelo", "Mint Pop", "Coolvetica Yellow Glow"];
+    var pr = $$(".bcd-pr li", box), pct = $(".bcd-pct", box), pPT = $('.bcd-lang i[data-l="pt"]', box), pEN = $('.bcd-lang i[data-l="en"]', box), PCTS = ["8%", "30%", "55%", "80%", "100%"];
+    function idioma(l) {          /* PT / EN: a mesma troca do app (as amostras dos estilos mudam de idioma) */
+      liga(pPT, l === "pt"); liga(pEN, l === "en");
+      tiles.forEach(function (t) { var im = $("img", t), u = t.getAttribute("data-" + l); if (im && u && im.getAttribute("src") !== u) im.setAttribute("src", u); });
+    }
     var e = 0, timer = null, subs = [], naTela = false, posto = false, larg = 0;
     function carrega() { if (posto || !CFG.VIDEO_COM_PACK) return; posto = true; v.src = CFG.VIDEO_COM_PACK; v.preload = "auto"; }
     function depois(ms, fn) { subs.push(setTimeout(fn, ms)); }
@@ -795,7 +809,9 @@
       if (n >= 2) mostra(0); else nome.classList.remove("on");
       liga(lCor, n >= 3); box.classList.toggle("cortou", n >= 3);
       opc[0].classList.toggle("sel", n < 3); opc[1].classList.toggle("sel", n >= 3);
-      ext.forEach(function (x) { liga(x, n >= 4); });
+      ext.forEach(function (x) { liga(x, n >= 3); });
+      pr.forEach(function (x) { x.classList.remove("run"); x.classList.toggle("ok", n > 3); }); if (pct) pct.textContent = n > 3 ? "100%" : "0%";
+      if (n !== 1) idioma("pt");
     }
     function vai(n) {
       limpa(); e = n; box.setAttribute("data-s", n + 1); box.style.setProperty("--dur", DUR[n] + "ms");
@@ -810,23 +826,27 @@
         depois(1750, function () { box.classList.add("lido"); });
         clica(cont, 2300);
       }
-      if (n === 1) {                   // liga a legenda, passa por dois estilos, escolhe o Contraponto, pausa e continua
+      if (n === 1) {                   // liga a legenda, passa por dois estilos, escolhe o Fernando Luz Style, troca para inglês e volta para português
+        idioma("pt");
         clica($(".tg", lLeg), 100, function () { liga(lLeg, true); });
         mira(tiles[1], 950, function () { foco(1); mostra(1); });
-        mira(tiles[3], 1850, function () { foco(3); mostra(3); });
-        clica(tiles[0], 2850, function () { foco(0); escolhe(0); mostra(0); });
-        depois(4400, function () { foco(-1); });
-        clica(cont, 4700);
+        mira(tiles[5], 1800, function () { foco(5); mostra(5); });
+        clica(tiles[0], 2700, function () { foco(0); escolhe(0); mostra(0); });
+        depois(3500, function () { foco(-1); });
+        clica(pEN, 3800, function () { idioma("en"); });
+        clica(pPT, 5000, function () { idioma("pt"); });
+        clica(cont, 6500);
       }
-      if (n === 2) {                   // liga os cortes de silêncio (os silêncios somem da onda) e escolhe o J-Cut
+      if (n === 2) {                   // Extras: liga os cortes de silêncio (os silêncios somem da onda), escolhe o J-Cut e liga o zoom dinâmico
         clica($(".tg", lCor), 100, function () { liga(lCor, true); box.classList.add("cortou"); });
-        clica(opc[1], 1500, function () { opc[0].classList.remove("sel"); opc[1].classList.add("sel"); });
-        clica(cont, 2850);
+        clica(opc[1], 1300, function () { opc[0].classList.remove("sel"); opc[1].classList.add("sel"); });
+        clica($(".tg", ext[0]), 2500, function () { liga(ext[0], true); });
+        clica(cont, 4000);
       }
-      if (n === 3) {                   // zoom dinâmico e efeito sonoro
-        clica($(".tg", ext[0]), 100, function () { liga(ext[0], true); });
-        clica($(".tg", ext[1]), 1300, function () { liga(ext[1], true); });
-        clica(cont, 2600);
+      if (n === 3) {                   // Processar: as etapas acendem uma a uma e a barra enche
+        pr.forEach(function (x, k) { depois(350 + k * 900, function () { if (k) { pr[k - 1].classList.remove("run"); pr[k - 1].classList.add("ok"); } x.classList.add("run"); if (pct) pct.textContent = PCTS[k]; }); });
+        depois(350 + pr.length * 900, function () { pr[pr.length - 1].classList.remove("run"); pr[pr.length - 1].classList.add("ok"); if (pct) pct.textContent = "100%"; });
+        clica(cont, 4900);
       }
       if (n === 4) { carrega(); try { v.currentTime = 0; } catch (x) {} toca(); }
       if (n === 5) { carrega(); toca(); }

@@ -56,18 +56,19 @@ window.PACK_CONFIG = {
   // Vídeo gerado pelo Base Captions (estilo Contraponto): usado na demonstração e nas três funções.
   VIDEO_COM_PACK: "assets/video/com-pack.mp4",
 
-  // OS 8 ESTILOS. img: um pedaço real da legenda ("como você desejar."), recortado do vídeo do estilo.
-  // video: o mesmo trecho legendado pelo Base Captions em cada estilo. Só carrega quando a pessoa toca no estilo.
+  // OS ESTILOS ATUAIS do app (21/11/2026; Serif Bold fora da página). img/video = amostra em português; imgEn/videoEn = a mesma amostra em inglês (o app troca ao clicar em EN).
+  // poster/video/videoEn = o estilo aplicado no vídeo do Fernando (motor do app, ~9 s); img = capa neutra (usada nos cartões pequenos). Só carrega o vídeo quando a pessoa toca no estilo.
   ESTILOS: [
-    { nome: "Contraponto",  img: "assets/img/estilos/amostra-1.webp", video: "https://aulas.basefl.com/1.mp4", previa: "assets/img/previas/estilo-1.webp" },
-    { nome: "Dynamic Bold", img: "assets/img/estilos/amostra-2.webp", video: "https://aulas.basefl.com/2.mp4", previa: "assets/img/previas/estilo-2.webp" },
-    { nome: "Minimal Bold", img: "assets/img/estilos/amostra-3.webp", video: "https://aulas.basefl.com/3.mp4", previa: "assets/img/previas/estilo-3.webp" },
-    { nome: "Serif Bold",   img: "assets/img/estilos/amostra-4.webp", video: "https://aulas.basefl.com/4.mp4", previa: "assets/img/previas/estilo-4.webp" },
-    { nome: "Estilo 5",     img: "assets/img/estilos/amostra-5.webp", video: "https://aulas.basefl.com/5.mp4", previa: "assets/img/previas/estilo-5.webp" },
-    { nome: "Estilo 6",     img: "assets/img/estilos/amostra-6.webp", video: "https://aulas.basefl.com/6.mp4", previa: "assets/img/previas/estilo-6.webp" },
-    { nome: "Estilo 7",     img: "assets/img/estilos/amostra-7.webp", video: "https://aulas.basefl.com/7.mp4", previa: "assets/img/previas/estilo-7.webp" },
-    { nome: "Estilo 8",     img: "assets/img/estilos/amostra-8.webp", video: "https://aulas.basefl.com/8.mp4", previa: "assets/img/previas/estilo-8.webp" }
+    { nome: "Fernando Luz Style", img: "assets/img/estilos-novos/fernando-luz-style.jpg", imgEn: "assets/img/estilos-novos/fernando-luz-style-en.jpg", poster: "assets/img/estilos-video/fernando-luz-style.jpg", posterEn: "assets/img/estilos-video/fernando-luz-style-en.jpg", video: "assets/video/estilos-v2/fernando-luz-style.mp4", videoEn: "assets/video/estilos-v2/fernando-luz-style-en.mp4" },
+    { nome: "Dynamic Bold", img: "assets/img/estilos-novos/dynamic-bold.jpg", imgEn: "assets/img/estilos-novos/dynamic-bold-en.jpg", poster: "assets/img/estilos-video/dynamic-bold.jpg", posterEn: "assets/img/estilos-video/dynamic-bold-en.jpg", video: "assets/video/estilos-v2/dynamic-bold.mp4", videoEn: "assets/video/estilos-v2/dynamic-bold-en.mp4" },
+    { nome: "Minimal Bold", img: "assets/img/estilos-novos/minimal-bold.jpg", imgEn: "assets/img/estilos-novos/minimal-bold-en.jpg", poster: "assets/img/estilos-video/minimal-bold.jpg", posterEn: "assets/img/estilos-video/minimal-bold-en.jpg", video: "assets/video/estilos-v2/minimal-bold.mp4", videoEn: "assets/video/estilos-v2/minimal-bold-en.mp4" },
+    { nome: "Smart Type", img: "assets/img/estilos-novos/smart-type.jpg", imgEn: "assets/img/estilos-novos/smart-type-en.jpg", poster: "assets/img/estilos-video/smart-type.jpg", posterEn: "assets/img/estilos-video/smart-type-en.jpg", video: "assets/video/estilos-v2/smart-type.mp4", videoEn: "assets/video/estilos-v2/smart-type-en.mp4" },
+    { nome: "Editorial Amarelo", img: "assets/img/estilos-novos/editorial-amarelo.jpg", imgEn: "assets/img/estilos-novos/editorial-amarelo-en.jpg", poster: "assets/img/estilos-video/editorial-amarelo.jpg", posterEn: "assets/img/estilos-video/editorial-amarelo-en.jpg", video: "assets/video/estilos-v2/editorial-amarelo.mp4", videoEn: "assets/video/estilos-v2/editorial-amarelo-en.mp4" },
+    { nome: "Mint Pop", img: "assets/img/estilos-novos/mint-pop.jpg", imgEn: "assets/img/estilos-novos/mint-pop-en.jpg", poster: "assets/img/estilos-video/mint-pop.jpg", posterEn: "assets/img/estilos-video/mint-pop-en.jpg", video: "assets/video/estilos-v2/mint-pop.mp4", videoEn: "assets/video/estilos-v2/mint-pop-en.mp4" },
+    { nome: "Coolvetica Yellow Glow", img: "assets/img/estilos-novos/coolvetica.jpg", imgEn: "assets/img/estilos-novos/coolvetica-en.jpg", poster: "assets/img/estilos-video/coolvetica.jpg", posterEn: "assets/img/estilos-video/coolvetica-en.jpg", video: "assets/video/estilos-v2/coolvetica.mp4", videoEn: "assets/video/estilos-v2/coolvetica-en.mp4" }
   ],
+
+
 
   // TÍTULOS DINÂMICOS em movimento (gravados direto do CapCut). Arquivos pequenos: tocam sozinhos.
   TITULOS: [
