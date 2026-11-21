@@ -1582,3 +1582,10 @@ html:not(.js) .grifo{background-size:100% 100%}
   .bcd-grade li b{font-size:7.5px;padding:10px 4px 4px}
 }
 @media (max-width:599px){.bcd-grade li b{display:none}}
+
+/* ===== [21/11/2026 v2] amostras aplicadas no vídeo (vertical, como antes) ===== */
+.ev-quadro{width:min(70vw,330px);aspect-ratio:9/16;border-radius:24px}
+.ev-t{width:76px}
+.ev-t-capa{width:76px;height:96px;border-radius:12px}
+.ev-t img{width:76px;height:96px}
+.ev-t .ev-t-capa img{width:100%;height:100%;object-fit:cover}

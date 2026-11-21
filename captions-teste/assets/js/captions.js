@@ -193,19 +193,19 @@
     var lista = $("[data-ev-lista]", box), quadro = $("[data-ev-quadro]", box), nome = $("[data-ev-nome]", box), num = $("[data-ev-num]", box), barra = $("[data-ev-barra]", box);
     var i = 0, timer = null, auto = true, visivel = false, camadas = [], token = 0, adiado = null, falhas = {};
     var primeira = $(".ev-capa", quadro); var lang = "pt";
-    function src(e, tipo) { return lang === "en" && e[tipo + "En"] ? e[tipo + "En"] : e[tipo]; }          /* PT por padrão; EN usa a mesma amostra em inglês (se faltar, cai no PT) */
+    function src(e, tipo) { return lang === "en" && e[tipo + "En"] ? e[tipo + "En"] : (e[tipo] || e.img); }          /* PT por padrão; EN usa a mesma amostra em inglês (se faltar, cai no PT) */
     E.forEach(function (e, k) {
       var im = k === 0 ? primeira : document.createElement("div");
       if (k) {
         im.className = "ev-capa"; im.setAttribute("aria-hidden", "true");
-        im.innerHTML = '<img class="ev-capa-full" src="' + e.img + '" alt="" loading="lazy" decoding="async">';
+        im.innerHTML = '<img class="ev-capa-full" src="' + (e.poster || e.img) + '" alt="" loading="lazy" decoding="async">';
         quadro.insertBefore(im, primeira.nextSibling);
       }
       camadas[k] = im;
       var b = document.createElement("button");
       b.type = "button"; b.className = "ev-t"; b.setAttribute("role", "tab"); b.setAttribute("aria-selected", k === 0 ? "true" : "false"); b.tabIndex = k === 0 ? 0 : -1;
       b.setAttribute("aria-label", "Estilo " + (k + 1) + " de " + E.length + ": " + e.nome);
-      b.innerHTML = '<i class="ev-t-capa"><img src="' + e.img + '" alt="" loading="lazy" decoding="async"></i><span>' + pad(k + 1) + "</span><small>" + e.nome + "</small>";   /* [21/11] capas/vídeos em PT ou EN: ver idioma() */
+      b.innerHTML = '<i class="ev-t-capa"><img src="' + (e.poster || e.img) + '" alt="" loading="lazy" decoding="async"></i><span>' + pad(k + 1) + "</span><small>" + e.nome + "</small>";   /* [21/11] capas/vídeos em PT ou EN: ver idioma() */
       b.addEventListener("click", function () { vai(k, true); });
       lista.appendChild(b);
     });
@@ -283,8 +283,8 @@
     function troca(l) {
       if (l === lang) return; lang = l;
       langBtns.forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-ev-lang") === l ? "true" : "false"); });
-      camadas.forEach(function (c, n) { var im = $("img", c); if (im) im.src = src(E[n], "img"); });
-      botoesT.forEach(function (b, n) { var im = $("img", b); if (im) im.src = src(E[n], "img"); });
+      camadas.forEach(function (c, n) { var im = $("img", c); if (im) im.src = src(E[n], "poster"); });
+      botoesT.forEach(function (b, n) { var im = $("img", b); if (im) im.src = src(E[n], "poster"); });
       v._k = -1; falhas = {}; if (abrir) abrir.hidden = true; toca(i); evento("idioma", { idioma: l });
     }
     langBtns.forEach(function (b) { b.addEventListener("click", function () { troca(b.getAttribute("data-ev-lang")); }); });
@@ -780,7 +780,7 @@
     var win = $(".bcd-win", box), v = $(".bcd-cv video", box), cur = $(".bcd-cur", box), file = $(".bcd-file", box);
     var drop = $(".bcd-drop", box), cont = $(".bcd-cont", box), tiles = $$(".bcd-grade li", box), nav = $$(".bcd-nav li", box), passos = $$(".bcd-passos button", box);
     var nome = $(".bcd-nome", box), lLeg = $(".bcd-leg .bcd-row", box), lCor = $(".bcd-cor .bcd-row", box), opc = $$(".bcd-opc li", box), ext = $$(".bcd-cor .bcd-xr", box);
-    var DUR = [3700, 7800, 5200, 5600, 3600, 3400], NOMES = ["Fernando Luz Style", "Dynamic Bold", "Minimal Bold", "Serif Bold", "Smart Type", "Editorial Amarelo", "Mint Pop", "Coolvetica Yellow Glow"];
+    var DUR = [3700, 7800, 5200, 5600, 3600, 3400], NOMES = ["Fernando Luz Style", "Dynamic Bold", "Minimal Bold", "Smart Type", "Editorial Amarelo", "Mint Pop", "Coolvetica Yellow Glow"];
     var pr = $$(".bcd-pr li", box), pct = $(".bcd-pct", box), pPT = $('.bcd-lang i[data-l="pt"]', box), pEN = $('.bcd-lang i[data-l="en"]', box), PCTS = ["8%", "30%", "55%", "80%", "100%"];
     function idioma(l) {          /* PT / EN: a mesma troca do app (as amostras dos estilos mudam de idioma) */
       liga(pPT, l === "pt"); liga(pEN, l === "en");
@@ -830,7 +830,7 @@
         idioma("pt");
         clica($(".tg", lLeg), 100, function () { liga(lLeg, true); });
         mira(tiles[1], 950, function () { foco(1); mostra(1); });
-        mira(tiles[6], 1800, function () { foco(6); mostra(6); });
+        mira(tiles[5], 1800, function () { foco(5); mostra(5); });
         clica(tiles[0], 2700, function () { foco(0); escolhe(0); mostra(0); });
         depois(3500, function () { foco(-1); });
         clica(pEN, 3800, function () { idioma("en"); });
