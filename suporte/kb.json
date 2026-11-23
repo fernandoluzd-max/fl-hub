@@ -1,7 +1,7 @@
 {
- "versao": "2026-11-20.214efa64",
- "gerado_em": "2026-11-20",
- "revisar_ate": "2027-01-04",
+ "versao": "2026-11-23.edcb7da6",
+ "gerado_em": "2026-11-23",
+ "revisar_ate": "2027-01-07",
  "empresa": {
   "marca": "Base FL",
   "dono": "Fernando Luz",
@@ -10,7 +10,7 @@
   "nao_confundir": [
    "Reels Academy é o curso de edição do Fernando, vendido na Kiwify. É outro produto, com outro suporte. Os Títulos Dinâmicos são vendidos à parte, no Base FL.",
    "Base Captions gera legendas automáticas e entrega um projeto editável no CapCut Desktop. Títulos Dinâmicos são estilos prontos de título, gancho e destaque de fala, instalados no CapCut. São produtos diferentes, vendidos separadamente: ter um NÃO libera o outro. Os Títulos Dinâmicos NÃO são legenda automática.",
-   "O app Base FL e o app Base Captions não são o CapCut e não têm vínculo com o CapCut. O Base Captions tem requisitos próprios (Windows 10/11; Mac com chip Apple ou Intel, com macOS 13 ou mais novo). Os requisitos do app Base FL não valem para ele.",
+   "O app Base FL e o app Base Captions não são o CapCut e não têm vínculo com o CapCut. O Base Captions tem requisitos próprios (Windows 10/11; Mac com chip Apple e macOS 13 ou mais novo, ou Mac Intel com macOS 12 ou mais novo). Os requisitos do app Base FL não valem para ele.",
    "Quem chega perguntando de legenda automática ou vindo de anúncio do Base Captions: priorize o Base Captions. Quem pergunta dos Títulos, do Base FL ou de outro produto: responda sobre aquele produto. Não empurre o Base Captions em todo atendimento.",
    "Vocabulário: diga 'o Base Captions, a ferramenta de legendas do Base FL' e 'o aplicativo Base FL'. NÃO diga 'novo aplicativo', 'outro app' nem trate Base FL e Base Captions como duas marcas ou duas escolhas. O programa do Base Captions é baixado à parte, mas entra com o mesmo e-mail da compra.",
    "Reels Academy é um produto separado. Desde 16/11/2026 quem comprou o Reels Academy NÃO tem mais direito aos Títulos Dinâmicos nem a outros produtos do Base FL: cada produto é vendido à parte."
@@ -26,10 +26,10 @@
    "privacidade": "https://basefl.com/privacidade/",
    "captions": "https://basefl.com/captions/?de=whatsapp",
    "captions_instalar": "https://basefl.com/captions/obrigado/",
-   "captions_instalar_windows": "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.exe",
-   "captions_instalar_windows_zip": "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.zip",
-   "captions_instalar_mac": "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac.dmg",
-   "captions_instalar_mac_intel": "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac-Intel.dmg"
+   "captions_instalar_windows": "https://basefl.com/captions/obrigado/",
+   "captions_instalar_windows_zip": "https://basefl.com/captions/obrigado/",
+   "captions_instalar_mac": "https://basefl.com/captions/obrigado/",
+   "captions_instalar_mac_intel": "https://basefl.com/captions/obrigado/"
   },
   "ecossistema": "Base FL é a marca e o ecossistema de ferramentas do Fernando Luz. O aplicativo Base FL é o app original (kits e packs no CapCut: Títulos Dinâmicos, Efeitos Sonoros, LUTs etc.) e continua existindo. O Base Captions é uma ferramenta do ecossistema Base FL (legendas automáticas no CapCut Desktop) que tem programa próprio, baixado à parte. É a mesma conta e o mesmo e-mail nos dois: não é outra marca e a pessoa não precisa escolher entre os dois. O que a pessoa pode usar depende só do que ela comprou. Quem comprou o Base Captions encontra o botão de baixar no aplicativo Base FL (aviso no topo e cartão em 'Ferramentas novas', a partir da versão 0.10.32) e pelo link de instalação do Base Captions.",
   "nota_fiscal": "O nome que aparece na fatura do cartão e na nota fiscal é FL Treinamentos (compras pela Greenn)."
@@ -440,8 +440,8 @@
    ],
    "custos": "Nao exige assinatura do Claude nem do ChatGPT e nao cobra por token nem por video.",
    "tempo": "Nao prometer tempo fixo. Depende do computador, da duracao e do tamanho do video.",
-   "compatibilidade": "CapCut para computador (Desktop). Windows 10 ou 11, e Mac com macOS 13 (Ventura) ou mais novo, com chip Apple (M1 ou mais novo) ou Intel. NÃO funciona no CapCut do celular. Mac Intel com macOS anterior ao 13 não é suportado. No Mac Intel a transcrição é mais lenta (usa só o processador): avise antes, para não parecer que travou.",
-   "requisitos": "Windows 10/11. Mac: macOS 13 ou mais novo, chip Apple (instalador Mac) ou Intel (instalador Mac Intel). Não existe número mínimo de RAM/processador documentado: não invente. Estes requisitos NÃO são os do app Base FL.",
+   "compatibilidade": "CapCut para computador (Desktop). Windows 10 ou 11; Mac com chip Apple (M1 ou mais novo) e macOS 13 (Ventura) ou mais novo; Mac Intel com macOS 12 (Monterey) ou mais novo. NÃO funciona no CapCut do celular. Mac Intel com macOS 11 ou anterior não é suportado. No Mac Intel a transcrição é mais lenta (usa só o processador): avise antes, para não parecer que travou.",
+   "requisitos": "Windows 10/11. Mac: chip Apple com macOS 13 ou mais novo (instalador Mac) ou Intel com macOS 12 ou mais novo (instalador Mac Intel). Não existe número mínimo de RAM/processador documentado: não invente. Estes requisitos NÃO são os do app Base FL.",
    "qualificacao": "Tu edita no CapCut do computador? (Windows ou Mac)",
    "instalar": "https://basefl.com/captions/obrigado/",
    "como_comprar": "Compra pela página. No checkout, os Títulos Dinâmicos (R$ 47), o Base FL Assets, os Efeitos Sonoros e as LUTs (R$ 17 cada) aparecem como complementos opcionais, nada vem marcado.",
@@ -501,10 +501,10 @@
    ],
    "onde_encontrar": "É uma ferramenta do Base FL com programa próprio. Quem comprou baixa pelo link de instalação do Base Captions ou pelo aplicativo Base FL (aviso no topo e cartão em 'Ferramentas novas', versão 0.10.32 ou mais nova) e entra com o mesmo e-mail da compra.",
    "atualizar": "Quem já tinha o Base Captions não recebe aviso de atualização (a versão continua 1.0.0). Para esses, a resposta é sempre: baixar o link do instalador e instalar por cima, sem desinstalar. Em 18/11/2026 foi publicada a versão final (que continua com o número 1.0.0): todo download novo já é a versão corrigida. Priorize a página oficial de download e use o link direto só quando precisar resolver um problema específico.",
-   "instalar_windows": "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.exe",
-   "instalar_windows_zip": "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.zip",
-   "instalar_mac": "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac.dmg",
-   "instalar_mac_intel": "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac-Intel.dmg"
+   "instalar_windows": "https://basefl.com/captions/obrigado/",
+   "instalar_windows_zip": "https://basefl.com/captions/obrigado/",
+   "instalar_mac": "https://basefl.com/captions/obrigado/",
+   "instalar_mac_intel": "https://basefl.com/captions/obrigado/"
   },
   "app": {
    "nome": "App Base FL",
@@ -670,7 +670,7 @@
    "passos": [
     "Mac: abrir o .dmg, arrastar o Base FL para Aplicativos; na pasta Aplicativos, botão direito no Base FL › Abrir › Abrir de novo na janela de aviso.",
     "Windows: na tela azul \"O Windows protegeu o computador\", clicar em Mais informações › Executar assim mesmo.",
-    "(No Base Captions, siga o caso captions_gatekeeper / captions_smartscreen: Mac com macOS 13+, chip Apple ou Intel.)"
+    "(No Base Captions, siga o caso captions_gatekeeper / captions_smartscreen: Mac com chip Apple e macOS 13+, ou Intel com macOS 12+.)"
    ],
    "escalar_quando": "Mesmo assim não abre; peça print da mensagem."
   },
@@ -855,7 +855,7 @@
    "passos": [
     "Pergunte o nome do antivirus e a mensagem exata (peca print) e confirme que o arquivo veio do link oficial.",
     "Nao oriente restaurar da quarentena, liberar o arquivo nem desligar o antivirus.",
-    "Se o antivírus só bloqueou o instalador .exe (no download ou na instalação) e NÃO mostrou nome de ameaça: ofereça o instalador compactado (.zip) e explique que é o mesmo programa: baixar, extrair a pasta e abrir o Base Captions.exe. Windows ZIP: https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.zip Nunca peça para desligar o antivírus.",
+    "Se o antivírus só bloqueou o instalador .exe (no download ou na instalação) e NÃO mostrou nome de ameaça: ofereça o instalador compactado (.zip) e explique que é o mesmo programa: baixar, extrair a pasta e abrir o Base Captions.exe. Windows ZIP: https://basefl.com/captions/obrigado/ Nunca peça para desligar o antivírus.",
     "Diferencie aviso de reputacao (arquivo desconhecido) de deteccao com nome de ameaca.",
     "Registre o antivirus, a mensagem e a versao e encaminhe para analise tecnica."
    ],
@@ -889,13 +889,13 @@
    ],
    "passos": [
     "No Mac, nunca mande o comando do Terminal de cara. Siga as etapas, UMA pergunta por vez, e use o print: se o print já mostra o chip e o macOS, não pergunte de novo.",
-    "Etapa 1: se a pessoa só disse \"não abre\" ou \"não instala\", peça um print do aviso. Se ainda não se sabe o Mac, peça print de menu Apple > Sobre este Mac: \"Chip Apple M1/M2/M3/M4\" usa o instalador Mac; \"Processador Intel\" usa o instalador Mac Intel (precisa de macOS 13 ou mais novo).",
-    "Etapa 2, pelo texto do aviso: (a) \"não é compatível com o seu tipo de Mac\": instalador errado para o chip. Chip Apple: https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac.dmg ; Intel: https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac-Intel.dmg . Não é caso de Terminal. (b) \"não pode ser aberto porque a Apple não pode verificar\" ou \"desenvolvedor não identificado\", COM opção nos Ajustes: Ajustes do Sistema > Privacidade e Segurança > rolar até o fim > Abrir Mesmo Assim. (c) Mac Intel com macOS anterior ao 13: não abre; não prometa solução, encaminhe.",
+    "Etapa 1: se a pessoa só disse \"não abre\" ou \"não instala\", peça um print do aviso. Se ainda não se sabe o Mac, peça print de menu Apple > Sobre este Mac: \"Chip Apple M1/M2/M3/M4\" usa o instalador Mac; \"Processador Intel\" usa o instalador Mac Intel (precisa de macOS 12 ou mais novo).",
+    "Etapa 2, pelo texto do aviso: (a) \"não é compatível com o seu tipo de Mac\": instalador errado para o chip. Chip Apple: https://basefl.com/captions/obrigado/ ; Intel: https://basefl.com/captions/obrigado/ . Não é caso de Terminal. (b) \"não pode ser aberto porque a Apple não pode verificar\" ou \"desenvolvedor não identificado\", COM opção nos Ajustes: Ajustes do Sistema > Privacidade e Segurança > rolar até o fim > Abrir Mesmo Assim. (c) Mac Intel com macOS 11 ou anterior: não abre; não prometa solução, encaminhe.",
     "Etapa 3, só se o aviso for \"O aplicativo Base Captions não pode ser aberto\" com apenas o botão OK e nada em Privacidade e Segurança, OU o erro -10810 / \"operação não permitida\", E o arquivo veio da página oficial ou do Fernando: peça para clicar OK, abrir o Terminal (Command + Espaço, digitar Terminal, Enter), colar a linha abaixo e dar Enter (não aparece nada, é normal; se pedir senha é a do Mac e ela não aparece enquanto digita) e abrir o Base Captions de novo. Explique em 1 linha que o comando só tira a marca de \"baixado da internet\" do Base Captions, não desliga a proteção do Mac. Mande o comando sozinho em uma mensagem separada, para copiar: xattr -dr com.apple.quarantine /Applications/Base\\ Captions.app . O app precisa estar na pasta Aplicativos: se abriu direto do .dmg, arrastar para Aplicativos primeiro.",
     "Etapa 4: uma tentativa de comando só. Se continuar sem abrir, peça novo print e encaminhe; não repita o mesmo comando nem mande reinstalar sem motivo. Aviso \"está danificado\": baixar de novo pela página oficial https://basefl.com/captions/obrigado/ ; se repetir, encaminhe.",
     "Proibido: desativar o Gatekeeper (spctl --master-disable) ou qualquer comando que não esteja aqui. O app ainda não é assinado pela Apple, por isso o aviso existe: não prometa que vai parar de aparecer."
    ],
-   "escalar_quando": "Mac Intel com macOS anterior ao 13, \"danificado\" depois de baixar de novo pela página oficial, ou o app continua sem abrir depois do comando. Reúna: chip e macOS, texto exato do aviso, print e o que já foi tentado."
+   "escalar_quando": "Mac Intel com macOS 11 ou anterior, \"danificado\" depois de baixar de novo pela página oficial, ou o app continua sem abrir depois do comando. Reúna: chip e macOS, texto exato do aviso, print e o que já foi tentado."
   },
   {
    "id": "captions_nao_gera",
@@ -1058,17 +1058,19 @@
     "tipo de mac",
     "nao e compativel com o seu",
     "macos 13",
-    "ventura"
+    "ventura",
+    "macos 12",
+    "monterey"
    ],
    "passos": [
-    "Existe instalador próprio do Base Captions para Mac Intel, e ele precisa de macOS 13 (Ventura) ou mais novo. Link: https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac-Intel.dmg Mac com chip Apple (M1, M2, M3...) usa o instalador Mac normal: https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac.dmg",
+    "Existe instalador próprio do Base Captions para Mac Intel, e ele precisa de macOS 12 (Monterey) ou mais novo. Link: https://basefl.com/captions/obrigado/ Mac com chip Apple (M1, M2, M3...) usa o instalador Mac normal: https://basefl.com/captions/obrigado/",
     "Se a pessoa não sabe qual Mac tem: menu Apple > Sobre este Mac; em \"Chip\" aparece Apple M1/M2/M3/M4; em \"Processador\" aparece Intel. Mostre o macOS na mesma tela.",
     "No Mac Intel a transcrição é mais lenta, porque usa só o processador. Avise ANTES, para o aluno não achar que travou. Não prometa tempo.",
-    "Se o macOS for anterior ao 13: o app não abre nessa configuração. Não prometa solução nem prazo.",
+    "Se o macOS for o 11 ou anterior: o app não abre nessa configuração. Não prometa solução nem prazo.",
     "Aviso da página: o navegador Safari costuma esconder o chip do Mac, então a página de download mostra o botão do Mac Intel de qualquer forma.",
     "No Windows (10 ou 11) funciona normalmente."
    ],
-   "escalar_quando": "Mac Intel com macOS anterior ao 13 (sem prometer correção) ou o app não abre mesmo com o instalador certo e os passos do caso captions_gatekeeper."
+   "escalar_quando": "Mac Intel com macOS 11 ou anterior (sem prometer correção) ou o app não abre mesmo com o instalador certo e os passos do caso captions_gatekeeper."
   },
   {
    "id": "captions_nao_aparece_no_basefl",
@@ -1418,9 +1420,9 @@
    "passos": [
     "Sempre priorize a página oficial de download: https://basefl.com/captions/obrigado/ (ela mostra o botão certo para cada sistema). Use o link direto só quando precisar resolver um problema específico.",
     "Pergunte primeiro: Windows ou Mac? Se Mac, chip Apple ou Intel (menu Apple > Sobre este Mac)?",
-    "Windows: https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.exe (se o antivírus bloquear, o compactado .zip: https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.zip).",
-    "Mac com chip Apple (M1, M2, M3...): https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac.dmg",
-    "Mac Intel (precisa de macOS 13 ou mais novo): https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac-Intel.dmg",
+    "Windows: https://basefl.com/captions/obrigado/ (se o antivírus bloquear, o compactado .zip: https://basefl.com/captions/obrigado/).",
+    "Mac com chip Apple (M1, M2, M3...): https://basefl.com/captions/obrigado/",
+    "Mac Intel (precisa de macOS 12 ou mais novo): https://basefl.com/captions/obrigado/",
     "Quem já tinha o Base Captions NÃO recebe aviso de atualização (a versão continua 1.0.0): baixe o instalador atual e instale por cima, sem desinstalar e sem limpar nada.",
     "Windows com o aviso \"O Windows protegeu o computador\": Mais informações > Executar assim mesmo (normal: o app ainda não tem certificado de assinatura)."
    ],
@@ -1443,7 +1445,7 @@
    "passos": [
     "Não afirme número de computadores nem diga que é ilimitado.",
     "Pode dizer: é só baixar o app no outro computador e entrar com o mesmo e-mail da compra e o código que chega por e-mail; não precisa comprar de novo para reinstalar.",
-    "Para a quantidade de computadores: 'sobre a quantidade de máquinas, vou confirmar com a equipe' e use [[EQUIPE: dúvida sobre quantidade de computadores da licença do Base Captions]]. Lembre: no Mac, macOS 13+ (chip Apple ou Intel); no PC, Windows 10 ou 11."
+    "Para a quantidade de computadores: 'sobre a quantidade de máquinas, vou confirmar com a equipe' e use [[EQUIPE: dúvida sobre quantidade de computadores da licença do Base Captions]]. Lembre: no Mac, chip Apple com macOS 13+ ou Intel com macOS 12+; no PC, Windows 10 ou 11."
    ],
    "escalar_quando": "A pessoa insiste em saber o número exato de computadores."
   },
@@ -1462,7 +1464,7 @@
    ],
    "passos": [
     "Vale para o Base Captions no Windows. Causa: o app não conseguia confirmar que o CapCut estava fechado (o comando tasklist do Windows não funciona naquele PC). Corrigido e publicado em 18/11, validado em um PC real: o app usa outras formas de checar e, se não conseguir, mostra um aviso na tela em vez de apagar o botão.",
-    "Passo 1: baixe a versão atual do instalador e instale por cima, sem desinstalar: https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.exe (ou a página https://basefl.com/captions/obrigado/).",
+    "Passo 1: baixe a versão atual do instalador e instale por cima, sem desinstalar: https://basefl.com/captions/obrigado/ (ou a página https://basefl.com/captions/obrigado/).",
     "Passo 2: peça para fechar o CapCut por completo, inclusive o ícone perto do relógio, abrir o Base Captions, ir até a etapa do CapCut e clicar em \"Atualizar lista\". Um passo por vez.",
     "Se continuar: peça um print da tela da etapa CapCut e o texto de Extras > Diagnóstico > Copiar diagnóstico, cole na conversa e encaminhe para a equipe."
    ],
@@ -1484,7 +1486,7 @@
    "passos": [
     "Vale para o Base Captions no Windows. Em alguns Windows com defeito o app demorava antes de mostrar a janela. Corrigido em 18/11; um aluno confirmou que ficou mais fluido.",
     "A primeira abertura de qualquer instalação é mais lenta; as seguintes ficam mais rápidas. Instalar em SSD ajuda. Não prometa tempo exato.",
-    "Oriente baixar o instalador atual e instalar por cima: https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.exe. Se continuar travado, peça o diagnóstico (Extras > Diagnóstico > Copiar diagnóstico) e encaminhe."
+    "Oriente baixar o instalador atual e instalar por cima: https://basefl.com/captions/obrigado/ Se continuar travado, peça o diagnóstico (Extras > Diagnóstico > Copiar diagnóstico) e encaminhe."
    ],
    "escalar_quando": "Continua travado ou lento depois da versão atual. Peça o diagnóstico."
   },
@@ -1564,11 +1566,11 @@
   "Base Captions, quando passar para a equipe: o erro continua depois do que está escrito, o erro é diferente dos casos conhecidos (peça print da tela inteira, o texto do 'Ver detalhes' e se é Windows ou Mac; diga que vai confirmar com a equipe e quando ela atende; não invente causa), o aluno reclama do visual de um estilo, ou é reembolso, cobrança ou acesso à conta.",
   "Link certo do Base Captions: https://basefl.com/captions/?de=whatsapp. Quando a pessoa pedir 'o link da legenda', 'a legenda automática' ou 'o de R$ 47', mande SEMPRE o do Base Captions. Nunca mande a página dos Títulos Dinâmicos nem a do Kit Freelancer nesses casos: legenda automática = Base Captions; Títulos Dinâmicos são estilos prontos e outro produto.",
   "Dispositivos: nunca diga quantos computadores a licença permite nem que é 'ilimitado' ou 'quantos tu quiser'. Pode dizer que dá para instalar de novo em outro computador entrando com o mesmo e-mail da compra; sobre a quantidade de máquinas, diga que vai confirmar com a equipe.",
-  "Pré-venda do Base Captions: antes de mandar o link, confirme duas coisas, uma por vez: se a pessoa edita no CapCut do computador e, se for Mac, se é chip Apple (M1 ou mais novo) com macOS 13+. Mac Intel funciona com o instalador próprio, desde que o macOS seja o 13 (Ventura) ou mais novo; macOS anterior ao 13 não abre o app e não prometa solução. No Mac Intel a transcrição é mais lenta: avise antes de vender.",
+  "Pré-venda do Base Captions: antes de mandar o link, confirme duas coisas, uma por vez: se a pessoa edita no CapCut do computador e, se for Mac, se é chip Apple (M1 ou mais novo) com macOS 13+. Mac Intel funciona com o instalador próprio, desde que o macOS seja o 12 (Monterey) ou mais novo; macOS 11 ou anterior não abre o app e não prometa solução. No Mac Intel a transcrição é mais lenta: avise antes de vender.",
   "Não registre nem ofereça cancelamento ou reembolso que a pessoa não pediu. Se ela disser que não quer cancelar, siga só com o que ela pediu. Se comprou o produto errado e quer outro, confirme o que ela quer e mande o link do produto certo.",
   "Quando a pessoa diz que na hora da compra 'não encontrou' o que comprou, nunca afirme que ela comprou algo que a consulta de compra não mostrou. Se o anúncio mostrava o Base Captions, explique que ele é um produto à parte, com compra própria, e envie o link dele.",
   "Fora do horário da equipe (veja \"Horário da equipe agora\" nos Sinais do sistema): a equipe humana atende de segunda a sexta, das 10h às 18h. NÃO avise que a equipe encerrou nem fale de horário por conta própria: a IA segue vendendo e resolvendo o que a base cobre. Só informe o horário e quando a equipe volta se a pessoa pedir uma pessoa ou se o problema não tiver solução na base (junto com [[EQUIPE: ...]]), e uma vez só. Não diga \"amanhã\" quando o próximo dia de atendimento não for amanhã (sexta à noite, sábado, domingo: diga o dia certo). Nunca afirme que um humano está disponível agora nem prometa resposta imediata ou na primeira hora. Quando precisar de pessoa, registre o caso e diga que será analisado a partir do próximo período de atendimento.",
-  "Não afirme como resolvido: a causa definitiva do erro active-timeline-invalid; a notarização do app pela Apple (o app ainda não é assinado pela Apple); atualização automática para quem já instalou (não existe aviso: instalar por cima); compatibilidade com Mac Intel anterior ao macOS 13; identificação automática do chip pelo Safari (a página de download mostra o botão do Mac Intel de qualquer forma).",
+  "Não afirme como resolvido: a causa definitiva do erro active-timeline-invalid; a notarização do app pela Apple (o app ainda não é assinado pela Apple); atualização automática para quem já instalou (não existe aviso: instalar por cima); compatibilidade com Mac Intel com macOS 11 ou anterior; identificação automática do chip pelo Safari (a página de download mostra o botão do Mac Intel de qualquer forma).",
   "Base Captions: a primeira pergunta técnica é Windows ou Mac; se Mac, chip Apple ou Intel. Nunca peça de novo algo que a pessoa já informou. Em problema técnico, a resposta padrão é baixar o instalador atual e instalar por cima (sem desinstalar). Ao escalar, reúna: Windows ou Mac e chip, versão do sistema, texto exato do erro, prints, diagnóstico (Extras > Diagnóstico > Copiar diagnóstico) e o que já foi tentado."
  ],
  "links_oficiais": [
@@ -1594,10 +1596,6 @@
   "https://basefl.com/preco/",
   "https://basefl.com/privacidade/",
   "https://basefl.com/termos/",
-  "https://basefl.com/timer/",
-  "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac-Intel.dmg",
-  "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Mac.dmg",
-  "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.exe",
-  "https://github.com/fernandoluzd-max/base-captions-releases/releases/latest/download/Base-Captions-Windows.zip"
+  "https://basefl.com/timer/"
  ]
 }
