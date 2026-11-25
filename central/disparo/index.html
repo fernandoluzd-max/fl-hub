@@ -116,7 +116,7 @@ td.n,th.n{text-align:right}
         <section class="box"><h2>Por faixa de oferta</h2><p class="d">Cada aluno recebeu o preço da faixa dele (quantos pacotes extras já tinha).</p><div id="bFaixas"></div></section>
         <section class="box"><h2>Vendas</h2><p class="d">Compras do "Complete sua Base FL" feitas depois de a pessoa receber a mensagem.</p><div id="bVendas"></div></section>
       </div>
-      <p class="sub" style="margin-top:14px">Venda conta quando quem recebeu a mensagem compra depois do envio (pelo e-mail da conta ou pelo telefone). Gasto estimado = mensagens enviadas × R$ por mensagem de marketing. Compra marcada "liberar à mão" não liberou sozinha: confira o aviso no e-mail.</p>
+      <p class="sub" style="margin-top:14px">Venda conta quando quem recebeu a mensagem compra depois do envio (pelo e-mail da conta ou pelo telefone). Gasto estimado = mensagens que não foram barradas × R$ por mensagem de marketing (a Meta só cobra as entregues). "Barradas pela Meta" = a Meta não entregou porque a pessoa já recebeu muitas mensagens de marketing (erro 131049). Compra marcada "liberar à mão" não liberou sozinha: confira o aviso no e-mail.</p>
     </div>
     <div id="vCap" hidden>
     <section class="kpis">
@@ -220,10 +220,10 @@ td.n,th.n{text-align:right}
   function desenhaBf() {
     if (!bf) return;
     const env = bf.enviados || 0, ven = bf.vendas || 0, rec = Number(bf.receita) || 0, custo = Number(bf.custo) || 0, pub = bf.publico || 0;
-    $('bEnv').textContent = n(env); $('bEnvS').textContent = (bf.pessoas ? n(bf.pessoas) + ' pessoas' : '') + (pub ? ' · público ' + n(pub) : '') + (bf.falhas ? ' · ' + n(bf.falhas) + ' falharam' : '');
+    $('bEnv').textContent = n(env); $('bEnvS').textContent = env ? n(bf.entregues) + ' entregues · ' + n(bf.lidas) + ' lidas' + (bf.barradas ? ' · ' + n(bf.barradas) + ' barradas pela Meta' : '') + (bf.falhas ? ' · ' + n(bf.falhas) + ' com erro' : '') : (pub ? 'público estimado: ' + n(pub) + ' alunos' : ' ');
     const os = bf.por_onda || [], cm = Number(bf.custo_msg) || 0;
-    $('bOndas').innerHTML = '<table class="fxt"><thead><tr><th>Mensagem</th><th class="n">Enviadas</th><th class="n">Vendas</th><th class="n">Conv.</th><th class="n">Receita</th><th class="n">Gasto</th><th class="n">ROAS</th></tr></thead><tbody>' +
-      os.map(x => { const g = (x.enviados || 0) * cm; return '<tr><td>' + x.onda + 'ª · ' + x.hora + '</td><td class="n">' + n(x.enviados) + '</td><td class="n">' + n(x.vendas) + '</td><td class="n">' + (x.enviados ? pc(x.vendas, x.enviados) : '—') + '</td><td class="n">' + r(x.receita) + '</td><td class="n">' + r(g) + '</td><td class="n">' + (g > 0 ? (Number(x.receita) / g).toFixed(1).replace('.', ',') + 'x' : '—') + '</td></tr>'; }).join('') + '</tbody></table>';
+    $('bOndas').innerHTML = '<table class="fxt"><thead><tr><th>Mensagem</th><th class="n">Enviadas</th><th class="n">Entregues</th><th class="n">Barradas</th><th class="n">Vendas</th><th class="n">Conv.</th><th class="n">Receita</th><th class="n">Gasto</th><th class="n">ROAS</th></tr></thead><tbody>' +
+      os.map(x => { const g = (x.pagas || 0) * cm; return '<tr><td>' + x.onda + 'ª · ' + x.hora + '</td><td class="n">' + n(x.enviados) + '</td><td class="n">' + n(x.entregues) + '</td><td class="n">' + n(x.barradas) + '</td><td class="n">' + n(x.vendas) + '</td><td class="n">' + (x.enviados ? pc(x.vendas, x.enviados) : '—') + '</td><td class="n">' + r(x.receita) + '</td><td class="n">' + r(g) + '</td><td class="n">' + (g > 0 ? (Number(x.receita) / g).toFixed(1).replace('.', ',') + 'x' : '—') + '</td></tr>'; }).join('') + '</tbody></table>';
     $('bVen').textContent = n(ven); $('bVenS').textContent = env ? pc(ven, env) + ' de quem recebeu' + (bf.recusadas ? ' · ' + n(bf.recusadas) + ' para liberar à mão' : '') : ' ';
     $('bRec').textContent = r(rec); $('bPix').textContent = n(bf.pix_aguardando);
     $('bCusto').textContent = r(custo); $('bCustoS').textContent = 'R$ ' + (Number(bf.custo_msg) || 0).toFixed(3).replace('.', ',') + ' por mensagem';
