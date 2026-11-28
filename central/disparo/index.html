@@ -98,19 +98,23 @@ td.n,th.n{text-align:right}
       <button class="aba" role="tab" id="abaCap" aria-selected="false">Lançamento Base Captions</button>
     </nav>
     <div id="vBf">
-      <p class="sub" id="bfInfo" style="margin:-6px 0 14px">Oferta "Complete sua Base FL", personalizada por aluno · último dia: segunda 30/11, mensagens às 12h, 15h e 20h</p>
+      <p class="sub" id="bfInfo" style="margin:-6px 0 14px">Oferta "Complete sua Base FL", personalizada por aluno · mensagens sábado, domingo e segunda às 11h · termina 30/11 às 23h59</p>
       <section class="kpis">
         <div class="k" style="--c:var(--vis)"><span>Mensagens enviadas</span><b id="bEnv">—</b><small id="bEnvS">&nbsp;</small></div>
+        <div class="k" style="--c:var(--grupo)"><span>Visitaram a página</span><b id="bVis">—</b><small id="bVisPc">&nbsp;</small></div>
+        <div class="k" style="--c:var(--buy)"><span>Foram para o checkout</span><b id="bCli">—</b><small id="bCliPc">&nbsp;</small></div>
         <div class="k" id="bCard" style="--c:var(--ok)"><span>Vendas</span><b id="bVen">—</b><small id="bVenS">&nbsp;</small></div>
-        <div class="k" style="--c:var(--ok)"><span>Receita</span><b id="bRec">—</b><small>vendas pagas de quem recebeu</small></div>
-        <div class="k" style="--c:var(--acc2)"><span>Pix aguardando</span><b id="bPix">—</b><small>gerados e ainda não pagos</small></div>
       </section>
       <section class="kpis">
-        <div class="k" style="--c:var(--dim)"><span>Gasto com mensagens</span><b id="bCusto">—</b><small id="bCustoS">&nbsp;</small></div>
-        <div class="k" style="--c:var(--acc)"><span>ROI</span><b id="bRoi">—</b><small>(receita − gasto) ÷ gasto</small></div>
+        <div class="k" style="--c:var(--ok)"><span>Receita</span><b id="bRec">—</b><small>vendas pagas de quem recebeu</small></div>
+        <div class="k" style="--c:var(--dim)"><span>Gasto estimado</span><b id="bCusto">—</b><small id="bCustoS">&nbsp;</small></div>
         <div class="k" style="--c:var(--acc)"><span>ROAS</span><b id="bRoas">—</b><small>receita ÷ gasto</small></div>
         <div class="k" style="--c:var(--vis)"><span>Custo por venda</span><b id="bCpv">—</b><small>gasto ÷ vendas</small></div>
       </section>
+      <div class="grid2" style="margin-bottom:12px">
+        <section class="box"><h2>Do envio até a venda</h2><p class="d">Quantas pessoas chegaram em cada etapa.</p><div class="funil" id="bFunil"></div></section>
+        <section class="box"><h2>Movimento minuto a minuto</h2><p class="d">Visitas e idas ao checkout, de 10 em 10 minutos (últimas 6 horas).</p><div id="bSerie"></div><div class="leg"><span><i style="background:var(--vis)"></i>Visitaram</span><span><i style="background:var(--buy)"></i>Foram para o checkout</span></div></section>
+      </div>
       <section class="box" style="margin-bottom:12px"><h2>Por mensagem</h2><p class="d">Quem comprou não recebe a mensagem seguinte. A venda conta para a última mensagem que a pessoa recebeu antes de comprar.</p><div id="bOndas"></div></section>
       <div class="grid2">
         <section class="box"><h2>Por faixa de oferta</h2><p class="d">Cada aluno recebeu o preço da faixa dele (quantos pacotes extras já tinha).</p><div id="bFaixas"></div></section>
@@ -222,13 +226,22 @@ td.n,th.n{text-align:right}
     const env = bf.enviados || 0, ven = bf.vendas || 0, rec = Number(bf.receita) || 0, custo = Number(bf.custo) || 0, pub = bf.publico || 0;
     $('bEnv').textContent = n(env); $('bEnvS').textContent = env ? n(bf.entregues) + ' entregues · ' + n(bf.lidas) + ' lidas' + (bf.barradas ? ' · ' + n(bf.barradas) + ' barradas pela Meta' : '') + (bf.falhas ? ' · ' + n(bf.falhas) + ' com erro' : '') : (pub ? 'público estimado: ' + n(pub) + ' alunos' : ' ');
     const os = bf.por_onda || [], cm = Number(bf.custo_msg) || 0;
-    $('bOndas').innerHTML = '<table class="fxt"><thead><tr><th>Mensagem</th><th class="n">Enviadas</th><th class="n">Entregues</th><th class="n">Barradas</th><th class="n">Vendas</th><th class="n">Conv.</th><th class="n">Receita</th><th class="n">Gasto</th><th class="n">ROAS</th></tr></thead><tbody>' +
-      os.map(x => { const g = (x.pagas || 0) * cm; return '<tr><td>' + x.onda + 'ª · ' + x.hora + '</td><td class="n">' + n(x.enviados) + '</td><td class="n">' + n(x.entregues) + '</td><td class="n">' + n(x.barradas) + '</td><td class="n">' + n(x.vendas) + '</td><td class="n">' + (x.enviados ? pc(x.vendas, x.enviados) : '—') + '</td><td class="n">' + r(x.receita) + '</td><td class="n">' + r(g) + '</td><td class="n">' + (g > 0 ? (Number(x.receita) / g).toFixed(1).replace('.', ',') + 'x' : '—') + '</td></tr>'; }).join('') + '</tbody></table>';
-    $('bVen').textContent = n(ven); $('bVenS').textContent = env ? pc(ven, env) + ' de quem recebeu' + (bf.recusadas ? ' · ' + n(bf.recusadas) + ' para liberar à mão' : '') : ' ';
-    $('bRec').textContent = r(rec); $('bPix').textContent = n(bf.pix_aguardando);
+    $('bOndas').innerHTML = '<table class="fxt"><thead><tr><th>Mensagem</th><th class="n">Enviadas</th><th class="n">Entregues</th><th class="n">Barradas</th><th class="n">Visitaram</th><th class="n">Checkout</th><th class="n">Vendas</th><th class="n">Conv.</th><th class="n">Receita</th><th class="n">Gasto</th><th class="n">ROAS</th></tr></thead><tbody>' +
+      os.map(x => { const g = (x.pagas || 0) * cm; return '<tr><td>' + x.hora + '</td><td class="n">' + n(x.enviados) + '</td><td class="n">' + n(x.entregues) + '</td><td class="n">' + n(x.barradas) + '</td><td class="n">' + n(x.visitantes) + '</td><td class="n">' + n(x.checkout) + '</td><td class="n">' + n(x.vendas) + '</td><td class="n">' + (x.enviados ? pc(x.vendas, x.enviados) : '—') + '</td><td class="n">' + r(x.receita) + '</td><td class="n">' + r(g) + '</td><td class="n">' + (g > 0 ? (Number(x.receita) / g).toFixed(1).replace('.', ',') + 'x' : '—') + '</td></tr>'; }).join('') + '</tbody></table>';
+    $('bVen').textContent = n(ven); $('bVenS').textContent = env ? pc(ven, env) + ' das enviadas' + (bf.pix_aguardando ? ' · ' + n(bf.pix_aguardando) + ' Pix aguardando' : '') + (bf.recusadas ? ' · ' + n(bf.recusadas) + ' para liberar à mão' : '') : ' ';
+    const vis = bf.visitantes || 0, cli = bf.pessoas_comprar || 0;
+    $('bVis').textContent = n(vis); $('bVisPc').textContent = env ? pc(vis, env) + ' das enviadas' : ' ';
+    $('bCli').textContent = n(bf.cliques_comprar); $('bCliPc').textContent = vis ? n(cli) + ' pessoas · ' + pc(cli, vis) + ' de quem visitou' : ' ';
+    $('bRec').textContent = r(rec);
+    const etB = [['Mensagens enviadas', env, 'var(--vis)'], ['Visitaram a página', vis, 'var(--grupo)'], ['Foram para o checkout', cli, 'var(--buy)'], ['Pedidos feitos', bf.pedidos, 'var(--acc2)'], ['Vendas pagas', ven, 'var(--ok)']];
+    const maxB = Math.max(1, ...etB.map(e => Number(e[1]) || 0));
+    $('bFunil').innerHTML = etB.map((e, i) => { const v = Number(e[1]) || 0, prev = i ? Number(etB[i - 1][1]) || 0 : 0;
+      return '<div class="fx"><span>' + e[0] + (i ? '<span class="pc">' + pc(v, prev) + ' da etapa anterior</span>' : '') + '</span><div class="barra"><i style="--c:' + e[2] + ';width:' + (v / maxB * 100) + '%"></i></div><em>' + n(v) + '</em></div>'; }).join('');
+    const serB = bf.serie || [], bsB = [...new Set(serB.map(x => x.b))].sort();
+    const valB = (b, tp) => (serB.find(x => x.b === b && x.t === tp) || {}).n || 0;
+    const mxB = Math.max(1, ...bsB.map(b => Math.max(valB(b, 'visita'), valB(b, 'checkout'))));
+    $('bSerie').innerHTML = bsB.length ? '<div class="chart">' + bsB.map(b => '<div class="col" title="' + b + ': ' + valB(b, 'visita') + ' visitas, ' + valB(b, 'checkout') + ' checkout"><div class="pair"><i class="v" style="height:' + valB(b, 'visita') / mxB * 100 + '%"></i><i class="g" style="background:var(--buy);height:' + valB(b, 'checkout') / mxB * 100 + '%"></i></div></div>').join('') + '</div><div class="lbl">' + bsB.map(b => '<span>' + b + '</span>').join('') + '</div>' : '<p class="vazio">Sem movimento ainda.</p>';
     $('bCusto').textContent = r(custo); $('bCustoS').textContent = 'R$ ' + (Number(bf.custo_msg) || 0).toFixed(3).replace('.', ',') + ' por mensagem';
-    const roi = custo > 0 ? (rec - custo) / custo * 100 : null;
-    $('bRoi').textContent = roi == null ? '—' : (roi >= 0 ? '+' : '') + Math.round(roi).toLocaleString('pt-BR') + '%'; $('bRoi').className = roi == null ? '' : (roi >= 0 ? 'pos' : 'neg');
     $('bRoas').textContent = custo > 0 ? (rec / custo).toFixed(1).replace('.', ',') + 'x' : '—';
     $('bCpv').textContent = ven > 0 ? r(custo / ven) : '—';
     const fs = bf.por_faixa || [], mx = Math.max(1, ...fs.map(x => x.vendas || 0));
@@ -237,7 +250,7 @@ td.n,th.n{text-align:right}
       fs.map(x => '<tr><td>' + nomeF[x.faixa] + '</td><td class="n">R$ ' + x.preco + '</td><td class="n">' + n(x.enviados) + '</td><td class="n">' + n(x.vendas) + (x.vendas ? '<i class="bar" style="width:' + (x.vendas / mx * 40) + 'px"></i>' : '') + '</td><td class="n">' + (x.enviados ? pc(x.vendas, x.enviados) : '—') + '</td><td class="n">' + r(x.receita) + '</td></tr>').join('') + '</tbody></table>';
     const vs = bf.vendas_lista || [];
     $('bVendas').innerHTML = vs.length ? '<table><tbody>' + vs.slice(0, 15).map(v => '<tr><td>' + new Date(v.em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) + ' · ' + nomeF[v.faixa] + (v.onda ? '<span class="tag">' + v.onda + 'ª msg</span>' : '') + (v.ok ? '' : '<span class="tag">liberar à mão</span>') + '</td><td class="n">' + r(v.valor) + '</td></tr>').join('') + '</tbody></table>' : '<p class="vazio">Ainda sem vendas.</p>';
-    if (bf.inicio) $('bfInfo').textContent = 'Oferta "Complete sua Base FL", personalizada por aluno · primeira mensagem ' + new Date(bf.inicio).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) + ' · termina 30/11 às 23h59';
+    if (bf.inicio) $('bfInfo').textContent = 'Oferta "Complete sua Base FL", personalizada por aluno · mensagens sábado, domingo e segunda às 11h · primeira saiu ' + new Date(bf.inicio).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) + ' · termina 30/11 às 23h59';
     const ks = new Set(vs.map(v => v.em + '|' + v.valor));
     if (vistasBf === null) vistasBf = ks; else { const novas = vs.filter(v => !vistasBf.has(v.em + '|' + v.valor)); vistasBf = ks;
       if (novas.length && !$('vBf').hidden) { const tot = novas.reduce((s2, v) => s2 + (Number(v.valor) || 0), 0), rc = $('bCard').getBoundingClientRect();
