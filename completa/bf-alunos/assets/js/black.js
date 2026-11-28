@@ -89,7 +89,9 @@
     var T = TXT[estado], d = destino();
     var U = urgencia();
     texto("[data-topo]", estado === "aberta" && ALUNOS ? U.topo : T.topo); texto("[data-ct-titulo]", T.titulo);
-    if (estado === "aberta") { texto("[data-urg-eyebrow]", U.eyebrow); texto("[data-urg-nota]", U.nota); texto("[data-urg-final]", U.final); } texto("[data-ct-quando]", T.quando); texto("[data-ct-sr]", T.sr);
+    if (estado === "aberta") { var h1 = $(".h-hero .l1"), h2 = $(".h-hero .l2"); if (h1 && h1.innerHTML !== U.h1) h1.innerHTML = U.h1; if (h2) h2.textContent = U.l2; texto("[data-urg-eyebrow]", U.eyebrow); texto("[data-urg-nota]", U.nota); texto("[data-urg-final]", U.final); }
+    if (estado === "encerrada") { var e1 = $(".h-hero .l1"), e2 = $(".h-hero .l2"); if (e1) e1.innerHTML = "A Black Friday <em>terminou.</em>"; if (e2) e2.textContent = "Obrigado a todos os alunos que participaram.";
+      texto("[data-urg-eyebrow]", "Black Friday Base FL 2026 · encerrada"); texto("[data-hero-sub]", ""); } texto("[data-ct-quando]", T.quando); texto("[data-ct-sr]", T.sr);
     $$("[data-cta]").forEach(function (a) {
       var t = $("[data-cta-txt]", a);
       if (!a._txt) a._txt = t.textContent;
@@ -136,7 +138,7 @@
     var bt = $("[data-barra-ct]");
     if (bt) bt.innerHTML = estado === "encerrada" ? "" : (!ALUNOS && estado === "aberta" && precoTxt() ? precoTxt() + " · " : "") + TXT[estado].barra + " <b>" + (+v.d ? +v.d + "d " : "") + v.h + "h " + v.m + "min " + v.s + "s</b>";
   }
-  function relogio() { marca(); setTimeout(relogio, 1000 - (agora() % 1000) + 8); }
+  function relogio() { marca(); confereDia(); setTimeout(relogio, 1000 - (agora() % 1000) + 8); }
 
   /* ---------- 5. Botões do grupo ---------- */
   function botoes() {
@@ -373,17 +375,25 @@
   var esc = function (x) { return String(x).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
 
   // urgência real: acompanha o dia em Brasília (sábado 28: últimos 3 dias · domingo 29: termina amanhã · segunda 30: último dia)
+  function diaBR() { return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date(agora())); }
   function urgencia() {
-    var dia = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date(agora()));
-    if (dia === "2026-11-30") return { topo: "Último dia · até 23h59", eyebrow: "Último dia · a condição termina hoje, às 23h59",
+    var dia = diaBR(), L2 = "Uma condição que não é para todo mundo: só para quem já é meu aluno.";
+    if (dia === "2026-11-30") return { h1: "Último dia da <em>Black Friday.</em>", l2: "Termina hoje, às 23h59. Só para quem já é meu aluno.",
+      topo: "Último dia · até 23h59", eyebrow: "Último dia · a condição termina hoje, às 23h59",
       nota: "Último dia: a condição termina hoje, às 23h59 · horário de Brasília.", final: "É o último dia. A sua condição termina hoje, às 23h59." };
-    if (dia === "2026-11-29") return { topo: "Termina amanhã, 30/11", eyebrow: "Termina amanhã · segunda, 30/11, às 23h59",
-      nota: "Termina amanhã, segunda, 30 de novembro, às 23h59 · horário de Brasília.", final: "A sua condição termina amanhã, segunda, 30 de novembro, às 23h59." };
-    if (dia === "2026-11-28") return { topo: "Últimos 3 dias · até 30/11", eyebrow: "Últimos 3 dias · só para alunos da Base FL",
+    if (dia === "2026-11-29") return { h1: "Últimos 2 dias da <em>Black Friday.</em>", l2: L2,
+      topo: "Últimos 2 dias · até 30/11", eyebrow: "Últimos 2 dias · termina amanhã, 30/11, às 23h59",
+      nota: "Últimos 2 dias: termina amanhã, segunda, 30 de novembro, às 23h59 · horário de Brasília.", final: "São os últimos 2 dias. A sua condição termina amanhã, segunda, 30 de novembro, às 23h59." };
+    if (dia === "2026-11-28") return { h1: "Últimos 3 dias da <em>Black Friday.</em>", l2: L2,
+      topo: "Últimos 3 dias · até 30/11", eyebrow: "Últimos 3 dias · só para alunos da Base FL",
       nota: "Últimos 3 dias: vai até segunda, 30 de novembro, às 23h59 · horário de Brasília.", final: "São os últimos 3 dias. A sua condição vai até segunda, 30 de novembro, às 23h59." };
-    return { topo: "Vendas abertas até 30/11", eyebrow: "Exclusivo para quem já é aluno da Base FL",
+    return { h1: "Uma condição que <em>não é para todo mundo.</em>", l2: "É para quem já é meu aluno.",
+      topo: "Vendas abertas até 30/11", eyebrow: "Exclusivo para quem já é aluno da Base FL",
       nota: "Condição exclusiva para alunos. Vai até segunda, 30 de novembro, às 23h59.", final: "A sua condição vai até segunda, 30 de novembro, às 23h59." };
   }
+  // virou o dia em Brasília com a página aberta: troca headline e urgência na hora, sem recarregar
+  var diaVisto = null;
+  function confereDia() { var d = diaBR(); if (diaVisto !== null && d !== diaVisto) aplicaEstado(); diaVisto = d; }
 
   // link pessoal: guarda o código na sessão e tira da barra de endereço (não fica em print nem em compartilhamento)
   var token = params.get("t") || "";
