@@ -19,8 +19,8 @@
 <link rel="preload" href="/completa/bf-alunos/assets/fonts/archivo-wdth.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/completa/bf-alunos/assets/fonts/figtree.woff2" as="font" type="font/woff2" crossorigin>
 <script>(function(){try{var p=new URLSearchParams(location.search),t=p.get("t");if(t){try{sessionStorage.setItem("completa_t",t);}catch(e){}p.delete("t");var q=p.toString();history.replaceState(null,"",location.pathname+(q?"?"+q:"")+location.hash);}}catch(e){}})();</script>
-<link rel="stylesheet" href="/completa/bf-alunos/assets/css/black.css?v=281032">
-<script src="/completa/bf-alunos/assets/js/config.js?v=281032"></script>
+<link rel="stylesheet" href="/completa/bf-alunos/assets/css/black.css?v=281047">
+<script src="/completa/bf-alunos/assets/js/config.js?v=281047"></script>
 <!-- Medição: as mesmas das outras páginas da Base FL (Pixel da Meta + métricas próprias). Nenhuma integração nova. -->
 <script src="/pixel.js" defer></script>
 <script src="https://metrics.basefl.com/t.js" data-key="pk_live_c3392e6c67a34797baf70e0604f3fa4f" data-endpoint="https://metrics.basefl.com" data-reserva="https://edge.central.automatizesolucoes.com" data-dominios="basefl.com,reelsacademy.com.br,ofernandoluz.com" data-endpoints="basefl.com=https://metrics.basefl.com,reelsacademy.com.br=https://metrics.reelsacademy.com.br,ofernandoluz.com=https://metrics.ofernandoluz.com" defer></script>
@@ -101,6 +101,7 @@
       </div>
       <p class="ct-quando" data-ct-quando>Segunda, 30 de novembro, às 23h59 · horário de Brasília</p>
       <div class="ct-preco" data-preco-caixa hidden><span data-preco-rotulo>A sua condição de aluno</span><p class="ct-de">Separado, <s class="risca">R$ <em data-preco-de></em></s> por</p><b>R$ <em data-preco></em></b></div>
+      <p class="ct-excl" data-so="aberta">Só para alunos da Base FL: não está no site, não aparece em anúncio e foi calculada a partir do que você já tem.</p>
       <div class="ct-fim" data-so="encerrada">
         <p class="ct-fim-t">A Black Friday Base FL 2026 terminou.</p>
         <p>Obrigado a todos os alunos que participaram. Esta condição não está mais disponível e não volta com este preço.</p>
@@ -114,9 +115,9 @@
 </section>
 
 <!-- ====================================================================== ATO 1 -->
-<div class="ato" id="ato1"><div class="wrap"><p class="ato-n rv">Ato 1</p><p class="ato-t rv d1">O que já é seu</p></div></div>
+<div class="ato" hidden id="ato1"><div class="wrap"><p class="ato-n rv">Ato 1</p><p class="ato-t rv d1">O que já é seu</p></div></div>
 
-<section class="sec bc" id="base-captions" data-secao="base-captions">
+<section class="sec bc" hidden id="base-captions" data-secao="base-captions">
   <div class="wrap">
     <div class="cab rv">
       <p class="eyebrow"><img src="/completa/bf-alunos/assets/img/bc/icone.svg" alt="" width="22" height="22">Já está na sua conta · Base Captions</p>
@@ -230,7 +231,7 @@
 </section>
 
 <!-- ====================================================================== 8 ESTILOS -->
-<section class="sec estilos" id="estilos" data-secao="estilos">
+<section class="sec estilos" hidden id="estilos" data-secao="estilos">
   <div class="wrap">
     <div class="cab cab-c rv">
       <p class="eyebrow">Os oito estilos</p>
@@ -259,7 +260,7 @@
 </section>
 
 <!-- ====================================================================== TEMPO -->
-<section class="sec tempo" id="tempo" data-secao="tempo">
+<section class="sec tempo" hidden id="tempo" data-secao="tempo">
   <div class="wrap">
     <div class="cab rv">
       <p class="eyebrow">O tempo</p>
@@ -289,7 +290,7 @@
 </section>
 
 <!-- ====================================================================== OBJEÇÃO -->
-<section class="sec obj" id="claude" data-secao="claude">
+<section class="sec obj" hidden id="claude" data-secao="claude">
   <div class="wrap">
     <div class="obj-caixa rv" data-obj>
       <p class="obj-q">Preciso pagar outra ferramenta, como o Claude, ou gastar tokens?</p>
@@ -304,7 +305,7 @@
 </section>
 
 <!-- ====================================================================== PAUSA -->
-<section class="pausa" id="pausa" data-secao="pausa">
+<section class="pausa" hidden id="pausa" data-secao="pausa">
   <div class="wrap">
     <h2 class="h-mon rv">O Base Captions cuida da legenda. Mas a edição não termina nela.</h2>
     <p class="pausa-mas rv d2">Por isso eu preparei uma coisa diferente para quem já é aluno.</p>
@@ -312,7 +313,7 @@
 </section>
 
 <!-- ====================================================================== A VIRADA (cena presa na tela enquanto rola) -->
-<section class="virada" id="virada" data-secao="virada" aria-label="A virada">
+<section class="virada" hidden id="virada" data-secao="virada" aria-label="A virada">
   <div class="vir-cena">
     <div class="vir-fundo"></div>
     <ul class="vir-orbita" data-vir-orbita aria-label="Os produtos da sua condição"></ul>
@@ -323,13 +324,13 @@
 </section>
 
 <!-- ====================================================================== ATO 2 -->
-<div class="ato ato-2" id="ato2"><div class="wrap"><p class="ato-n rv">Ato 2</p><p class="ato-t rv d1">A sua condição</p></div></div>
+<div class="ato ato-2" hidden id="ato2"><div class="wrap"><p class="ato-n rv">Ato 2</p><p class="ato-t rv d1">A sua condição</p></div></div>
 
 <!-- A condição de cada aluno vem do servidor (completa-api), a partir do link pessoal. -->
 <section class="sec eco" id="surpresa" data-secao="surpresa">
   <div class="wrap">
     <div class="cab cab-c rv">
-      <p class="eyebrow" data-so="pre encerrada"><i class="ponto"></i>Condição de alunos</p><p class="eyebrow" data-so="aberta"><i class="ponto"></i>Calculada para a sua conta</p>
+      <p class="eyebrow" data-so="pre encerrada"><i class="ponto"></i>Condição de alunos</p><p class="eyebrow" data-so="aberta"><i class="ponto"></i>A sua condição</p>
       <h2 class="h-sec">Você não paga de novo <em>pelo que já é seu.</em></h2>
       <p class="lead" data-so="pre">A condição de alunos abre em breve.</p>
       <p class="lead" data-so="aberta" data-rev-lead></p>
@@ -347,8 +348,9 @@
     
     <!-- Produtos e preço da conta do aluno. -->
     <div class="rev" data-so="aberta">
+      <div class="seu" data-seu></div>
       <h3 class="rev-t" data-rev-titulo></h3>
-      <div class="rev-grade" data-rev-grade></div>
+      <div class="pds" data-rev-grade></div>
       <div class="rev-oferta" id="oferta" data-rev-oferta hidden>
         <p class="rev-k" data-preco-rotulo>A sua condição de aluno</p>
         <div class="rev-ancora" data-rev-ancora></div>
@@ -389,7 +391,7 @@
 </section>
 
 <!-- ====================================================================== EXCLUSIVO PARA ALUNOS -->
-<section class="sec alunos" id="alunos" data-secao="alunos">
+<section class="sec alunos" hidden id="alunos" data-secao="alunos">
   <div class="wrap">
     <div class="cab cab-c rv">
       <p class="eyebrow"><i class="ponto"></i>Só para alunos</p>
@@ -412,7 +414,7 @@
 </section>
 
 <!-- ====================================================================== CARTA -->
-<section class="sec carta" id="carta" data-secao="carta">
+<section class="sec carta" hidden id="carta" data-secao="carta">
   <div class="wrap">
     <div class="carta-caixa" data-carta>
       <p class="eyebrow rv">Do Fernando</p>
@@ -460,6 +462,6 @@
 </div>
 
 
-<script src="/completa/bf-alunos/assets/js/black.js?v=281032" defer></script>
+<script src="/completa/bf-alunos/assets/js/black.js?v=281047" defer></script>
 </body>
 </html>

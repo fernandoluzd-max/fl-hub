@@ -876,3 +876,43 @@ html.revelado .palco-orbita li{opacity:.8;filter:none}
 .rev-oferta.so-aviso .rev-ancora,.rev-oferta.so-aviso .rev-de,.rev-oferta.so-aviso .rev-por,.rev-oferta.so-aviso .rev-eco,.rev-oferta.so-aviso .rev-lista,.rev-oferta.so-aviso .btn,.rev-oferta.so-aviso .cta-nota{display:none}
 html.sem-condicao [data-cta]{display:none}
 html.sem-condicao .barra{display:none}
+
+/* ==========================================================================
+   28/11 (2ª rodada) · página enxuta: o que já é seu (compacto) e só o que falta (detalhado)
+   ========================================================================== */
+[hidden]{display:none!important}
+.ct-excl{max-width:420px;margin:14px auto 0;font-size:14px;line-height:1.5;color:var(--prata);text-align:center}
+.seu{max-width:760px;margin:30px auto 0;padding:16px 16px 14px;border-radius:20px;background:#0f120f;border:1px solid rgba(123,216,143,.22)}
+.seu-k{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7bd88f;text-align:center}
+.seu ul{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.seu li{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:999px;background:#151515;border:1px solid var(--linha);font-size:13.5px;color:var(--prata)}
+.seu li img{width:28px;height:28px;border-radius:8px}
+.pds{display:grid;gap:14px;max-width:760px;margin:26px auto 0}
+.pd{position:relative;padding:20px 18px;border-radius:24px;background:linear-gradient(180deg,#151515,#0c0c0c);border:1px solid var(--linha-2);opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .9s var(--out)}
+.pd.in{opacity:1;transform:none}
+.pd-cab{display:flex;gap:14px;align-items:center}
+.pd-ic{flex:none;width:64px;height:64px;border-radius:16px}
+.pd-tag{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--vermelho)}
+.pd h4{margin-top:4px;font-family:var(--display);font-weight:800;font-stretch:78%;font-size:26px;line-height:1;text-transform:uppercase}
+.pd-serve{margin-top:6px;font-size:15px;line-height:1.4;color:var(--branco)}
+.pd-midia{margin-top:16px;border-radius:16px;overflow:hidden;background:#0a0a0a;border:1px solid var(--linha)}
+.pd-midia img,.pd-midia video{display:block;width:100%;height:220px;object-fit:cover}
+.pd-ad{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.pd-ad figure{position:relative;margin:0}
+.pd-ad figcaption{position:absolute;left:8px;bottom:8px;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,.65);font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--branco)}
+.pd-info{margin:16px 0 0}
+.pd-info dt{margin-top:12px;font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.pd-info dd{margin:4px 0 0;font-size:15px;line-height:1.5;color:var(--prata)}
+.pd-kit{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:1fr;gap:8px}
+.pd-kit li{display:flex;gap:10px;align-items:center;padding:8px;border-radius:14px;background:#111;border:1px solid var(--linha)}
+.pd-kit img{flex:none;width:40px;height:40px;border-radius:10px}
+.pd-kit span{font-size:13.5px;line-height:1.35;color:var(--muted)}
+.pd-kit b{display:block;color:var(--branco);font-weight:700}
+.pd-ben{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:6px}
+.pd-ben li{display:flex;gap:8px;align-items:flex-start;font-size:14.5px;line-height:1.4;color:var(--branco)}
+.pd-ben svg{flex:none;width:18px;height:18px;margin-top:1px;color:#7bd88f}
+.pd-preco{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;padding-top:12px;border-top:1px solid var(--linha)}
+.pd-preco span{font-size:13.5px;color:var(--muted)}
+.pd-preco b{font-family:var(--mono);font-size:18px;color:var(--branco)}
+.pd-nota{margin-top:6px;font-size:13.5px;color:#7bd88f}
+@media (min-width:760px){.pd{padding:26px 26px}.pd-kit{grid-template-columns:1fr 1fr}.pd h4{font-size:30px}}

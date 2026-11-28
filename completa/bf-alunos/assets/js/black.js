@@ -461,6 +461,59 @@
     if (m.video) return '<video muted loop playsinline preload="none" data-src="' + m.video + '"' + (m.poster ? ' poster="' + m.poster + '"' : "") + ' aria-label="Prévia: ' + nome + '"></video>';
     return '<img data-src="' + m.img + '" alt="Prévia: ' + nome + '" decoding="async">';
   }
+  // conteúdo de cada produto que pode entrar na condição (fonte: páginas aprovadas de cada produto · conteudo.js da campanha)
+  var DET = {
+    efeitos: { tag: "Pacote extra · CapCut", serve: "O som que faltava no seu corte, a um clique.",
+      oque: "261 efeitos sonoros em 14 categorias: whooshes, impactos, risers, pops, beeps, notificações e mais.",
+      como: "Um clique no app Base FL coloca tudo nas predefinições de áudio do CapCut do computador. Você acha o som pelo nome e arrasta para a timeline.",
+      resolve: "Chega de caçar som em site, baixar pasta e ouvir 50 arquivos até achar o certo.",
+      ben: ["Acha o som pelo nome, direto no CapCut", "Dá ritmo e impacto ao corte em segundos", "Instala e atualiza num clique"],
+      midia: { img: "/completa/bf-alunos/assets/oferta/img/efeitos-obj.webp" } },
+    assets: { tag: "Pacote extra · animações", serve: "100 animações prontas para explicar qualquer coisa no seu vídeo.",
+      oque: "Setas, loadings, ícones, checks, dinheiro, redes sociais e mais, com fundo transparente, em Full HD a 60 fps.",
+      como: "Um clique no app Base FL coloca as animações nas predefinições do CapCut, em 10 pastas por tema. É só colocar por cima do vídeo.",
+      resolve: "Destacar uma ideia na tela sem precisar animar nada do zero.",
+      ben: ["Entra por cima de qualquer cena", "De 2 a 4 segundos: destaca sem travar o corte", "Organizado em 10 pastas por tema"],
+      midia: { video: "/completa/bf-alunos/assets/oferta/video/a001.mp4", poster: "/completa/bf-alunos/assets/oferta/video/a001.jpg" } },
+    luts: { tag: "Pacote extra · cor", serve: "Transforme a imagem do seu vídeo com um clique.",
+      oque: "23 LUTs: 20 criativos, que dão o clima do vídeo, e 3 técnicos para quem grava em Log.",
+      como: "Ficam em Ajuste › LUT, no CapCut do computador. Você aplica com um clique e ajusta a intensidade.",
+      resolve: "Vídeo com cor sem graça, ou acinzentado quando grava em Log, e tempo perdido acertando a cor na mão.",
+      ben: ["Do quente ao frio, do filme ao preto e branco", "Conversão de S-Log2, S-Log3 e Apple Log", "Ajuste de intensidade em cada LUT"],
+      midia: { img: "/completa/bf-alunos/assets/oferta/img/lut-demo-golden.jpg" } },
+    mood: { tag: "Ferramenta · cor por referência", serve: "A cor que você gosta no seu vídeo, sem saber color grade.",
+      oque: "Uma ferramenta que copia a cor de uma referência para o seu vídeo.",
+      como: "Você mostra uma foto ou um vídeo com a cor que gosta e o seu vídeo. O Mood cria a LUT, que você aplica no CapCut, Premiere, DaVinci ou Final Cut do computador.",
+      resolve: "Ver um vídeo com uma cor linda e não saber como chegar nela.",
+      ben: ["Crie quantas LUTs quiser", "Funciona gravando normal ou em Log", "Pele protegida e ajuste de intensidade"],
+      nota: "Separado, o Mood é R$ 97 por 1 ano. Aqui ele é vitalício.",
+      midia: { antes: "/completa/bf-alunos/assets/oferta/img/antes.webp", depois: "/completa/bf-alunos/assets/oferta/img/dourado.webp" } },
+    kit: { tag: "4 ferramentas · atendimento a clientes", serve: "Pare de atender cliente no improviso.",
+      oque: "Quatro ferramentas para quem edita para clientes, ligadas entre si: o briefing vira preço, proposta, contrato e card.",
+      ferramentas: [["briefing", "Gerador de Briefing", "O cliente responde por um link, em 1 minuto"], ["quanto-cobrar", "Quanto Cobrar?", "Preço calculado para o seu nível, sem chute"],
+                    ["contrato", "Gerador de Contrato", "Prazo, revisões e pagamento por escrito"], ["demandas", "Base Demandas", "Todos os trabalhos num quadro, e quem ainda não pagou"]],
+      resolve: "Pedido confuso, preço no chute, combinado sem contrato e cobrança esquecida.",
+      ben: ["Do pedido ao pagamento num sistema só", "Funciona no celular e no computador", "Aula ensinando a usar"],
+      nota: "Separado, o Kit é R$ 97 por 1 ano. Aqui ele é vitalício." }
+  };
+  var ICONE = { "base-captions": "/completa/bf-alunos/assets/img/bc/icone-bf.svg", titulos: "/completa/bf-alunos/assets/oferta/img/titulos.webp", "materiais-titulos": "/completa/bf-alunos/assets/oferta/img/pack.webp", caseup: "/completa/bf-alunos/assets/oferta/img/caseup.webp",
+                chronocut: "/completa/bf-alunos/assets/oferta/img/chronocut.webp", efeitos: "/completa/bf-alunos/assets/oferta/img/efeitos.webp", assets: "/completa/bf-alunos/assets/oferta/img/assets.webp", luts: "/completa/bf-alunos/assets/oferta/img/luts.webp",
+                mood: "/completa/bf-alunos/assets/oferta/img/mood.webp", kit: "/completa/bf-alunos/assets/oferta/img/kit.webp" };
+  var CURTO = { "base-captions": "Base Captions", titulos: "Títulos Dinâmicos", "materiais-titulos": "Materiais dos Títulos", caseup: "CaseUp", chronocut: "ChronoCut", efeitos: "Efeitos Sonoros", assets: "Base FL Assets", luts: "LUTs" };
+  function detalhe(id, k, preco) {
+    var d = DET[id], nome = NOME_FALTA[id], m = d.midia || {};
+    var media = m.video ? '<div class="pd-midia"><video muted loop playsinline preload="none" data-src="' + m.video + '" poster="' + m.poster + '" aria-label="Prévia: ' + nome + '"></video></div>'
+      : m.antes ? '<div class="pd-midia pd-ad"><figure><img data-src="' + m.antes + '" alt="Vídeo antes do Mood" decoding="async"><figcaption>Antes</figcaption></figure><figure><img data-src="' + m.depois + '" alt="O mesmo vídeo com a cor da referência" decoding="async"><figcaption>Com o Mood</figcaption></figure></div>'
+      : m.img ? '<div class="pd-midia"><img data-src="' + m.img + '" alt="Prévia: ' + nome + '" decoding="async"></div>' : "";
+    var kit = d.ferramentas ? '<dt>As 4 ferramentas</dt><dd><ul class="pd-kit">' + d.ferramentas.map(function (f) { return '<li><img src="/completa/bf-alunos/assets/oferta/img/' + f[0] + '.webp" alt="" width="40" height="40" loading="lazy"><span><b>' + f[1] + "</b>" + f[2] + "</span></li>"; }).join("") + "</ul></dd>" : "";
+    return '<article class="pd" style="--i:' + k + '">' +
+      '<div class="pd-cab"><img class="pd-ic" src="' + ICONE[id] + '" alt="" width="64" height="64" loading="lazy"><div><p class="pd-tag">' + d.tag + "</p><h4>" + nome + '</h4><p class="pd-serve">' + d.serve + "</p></div></div>" +
+      media +
+      '<dl class="pd-info"><dt>O que é</dt><dd>' + d.oque + "</dd>" + (d.como ? "<dt>Como funciona</dt><dd>" + d.como + "</dd>" : "") + kit + "<dt>O que resolve</dt><dd>" + d.resolve + "</dd></dl>" +
+      '<ul class="pd-ben">' + d.ben.map(function (b) { return '<li><svg aria-hidden="true"><use href="#i-ok"/></svg>' + b + "</li>"; }).join("") + "</ul>" +
+      '<p class="pd-preco"><span>Se comprasse separado</span><b>R$ ' + brl(preco) + "</b></p>" + (d.nota ? '<p class="pd-nota">' + d.nota + "</p>" : "") +
+      "</article>";
+  }
   function cartao(p, k, extra) {
     var mos = "/completa/bf-alunos/assets/img/oculto/o" + ((k % 9) + 1) + ".webp", tem = !!(p.mais || p.midia), id = "rv-" + (p.id || k);
     return '<article class="rv-p' + (extra.princ ? " rv-princ" : "") + (tem ? " rv-tem" : "") + '" style="--i:' + k + '">' +
@@ -492,23 +545,19 @@
     var faltaNomes = faltam.map(function (id) { return NOME_FALTA[id]; }), V = D.valores;
     texto("[data-hero-sub]", "Você já tem " + lista(temNomes.slice(0, 1).concat(possui.filter(function (x) { return ["efeitos", "luts", "assets"].indexOf(x) > -1; }).map(function (x) { return NOME_POSSE[x]; }))) +
       ". Por isso, a sua condição traz só o que ainda falta para completar a sua Base FL: " + lista(faltaNomes) + ". Com acesso vitalício.");
-    texto("[data-rev-titulo]", "Só o que falta.");
+    texto("[data-rev-titulo]", faltam.length === 2 ? "Só as duas que faltam." : "Só o que falta.");
     texto("[data-rev-lead]", "Você já tem " + lista(temNomes) + ". Isso fica fora do preço. Na sua condição entram só " + (faltam.length === 2 ? "as duas ferramentas que faltam" : "os " + faltam.length + " produtos que faltam") + ", com acesso vitalício.");
+    var seu = $("[data-seu]");
+    if (seu) seu.innerHTML = '<p class="seu-k">O que já é seu · fora do preço</p><ul>' + ["base-captions", "titulos", "materiais-titulos", "caseup", "chronocut", "efeitos", "assets", "luts"]
+      .filter(function (id) { return possui.indexOf(id) > -1; }).map(function (id) { return '<li><img src="' + ICONE[id] + '" alt="" width="28" height="28" loading="lazy">' + CURTO[id] + "</li>"; }).join("") + "</ul>";
     var g = $("[data-rev-grade]");
     if (g) {
-      var ORDEM = ["titulos", "materiais-titulos", "caseup", "chronocut", "efeitos", "assets", "luts"];
-      var bonus = ORDEM.filter(function (x) { return possui.indexOf(x) > -1; }).map(function (x) { return NOME_POSSE[x].replace(/^(o|os|a|as) /, ""); });
-      var html1 = cartao(P.captions, 0, { princ: true, seu: true, chip: "Já é seu · fora do preço", serve: "Já está na sua conta" + (bonus.length ? ", junto com " + lista(bonus) : "") + ". Nada disso é cobrado de novo." });
-      g.innerHTML = html1 + faltam.map(function (id, k) { return cartao(P[IDS[id]], k + 1, { chip: "Entra na sua condição" }); }).join("");
-      quandoVer(g, function () { g.classList.add("in"); }, .1);
-      g.addEventListener("click", function (e) {
-        var b = e.target.closest && e.target.closest(".rv-mais"); if (!b) return;
-        var card = b.closest(".rv-p"), ex = $("#" + b.getAttribute("aria-controls")), abre = b.getAttribute("aria-expanded") !== "true";
-        b.setAttribute("aria-expanded", abre ? "true" : "false"); $("span", b).textContent = abre ? "Fechar" : "Ver como funciona";
-        card.classList.toggle("aberto", abre); ex.hidden = !abre;
-        $$("[data-src]", ex).forEach(function (m) { if (!m.src) m.src = m.getAttribute("data-src"); if (m.tagName === "VIDEO") { if (abre) { var q = m.play(); if (q && q.catch) q.catch(function () {}); } else m.pause(); } });
-        if (abre) evento("bf_produto", { produto: $("b", card).textContent });
-      });
+      g.innerHTML = faltam.map(function (id, k) { return detalhe(id, k, (V.referencia || {})[id] || 0); }).join("");
+      var vis = "IntersectionObserver" in window ? new IntersectionObserver(function (en) { en.forEach(function (x) {
+        if (x.isIntersecting) x.target.classList.add("in");
+        $$("[data-src]", x.target).forEach(function (m) { if (x.isIntersecting && !m.src) m.src = m.getAttribute("data-src"); if (m.tagName === "VIDEO") { if (x.isIntersecting) { var q = m.play(); if (q && q.catch) q.catch(function () {}); } else m.pause(); } });
+      }); }, { threshold: .15 }) : null;
+      $$(".pd", g).forEach(function (el) { if (vis) vis.observe(el); else { el.classList.add("in"); $$("[data-src]", el).forEach(function (m) { m.src = m.getAttribute("data-src"); }); } });
     }
     var an = $("[data-rev-ancora]");
     if (an) an.innerHTML = '<p class="anc-k">Se você comprasse cada um separado</p><ul>' + faltam.map(function (id) {
