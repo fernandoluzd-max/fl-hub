@@ -327,7 +327,7 @@
         "esse de 47",
         "o de 47"
       ],
-      "o_que_e": "App para Mac e Windows. A pessoa escolhe o video, o app transcreve a fala e cria um projeto no CapCut Desktop com as legendas ja no estilo escolhido. Depois abre no CapCut e edita como qualquer projeto.",
+      "o_que_e": "App para Mac e Windows. A pessoa escolhe o video, o app transcreve a fala e cria um projeto no CapCut Desktop com as legendas ja no estilo escolhido (8 estilos). Na etapa Extras ele tambem corta as pausas de silencio (Corte Normal ou J-Cut) e faz zoom dinamico. Depois abre no CapCut e edita como qualquer projeto.",
       "inclui": [
         "8 estilos de legenda",
         "ajuste de fonte, tamanho, altura, largura e caracteres por bloco",
@@ -402,6 +402,22 @@
         {
           "q": "Tem vídeo mostrando como funciona?",
           "a": "Tem sim: a página do Base Captions tem o vídeo mostrando como funciona. Envie o link da página do Base Captions."
+        },
+        {
+          "q": "Ele faz cortes também ou só legenda?",
+          "a": "Faz os dois. Além das legendas, na etapa Extras ele corta as pausas de silêncio (Corte Normal ou J-Cut, quando a próxima fala começa antes da troca de imagem) e faz zoom dinâmico. Tudo fica editável no CapCut."
+        },
+        {
+          "q": "Quantos estilos de legenda vêm?",
+          "a": "8 estilos de legenda. Em todos dá para ajustar fonte, tamanho, cor e posição, e editar o texto antes de gerar."
+        },
+        {
+          "q": "Dá para adicionar estilos meus ou de fora?",
+          "a": "Não. Os 8 estilos são os do app. Dá para ajustar fonte, tamanho, cor e posição e editar no CapCut depois. Os Títulos Dinâmicos são outro produto e não entram dentro do Base Captions."
+        },
+        {
+          "q": "Tem teste grátis?",
+          "a": "Não tem teste grátis. Na página do Base Captions tem o app funcionando em vídeo, com os estilos aplicados, e a compra tem garantia de 7 dias."
         }
       ],
       "onde_encontrar": "É uma ferramenta do Base FL com programa próprio. Quem comprou baixa pelo link de instalação do Base Captions ou pelo aplicativo Base FL (aviso no topo e cartão em 'Ferramentas novas', versão 0.10.32 ou mais nova) e entra com o mesmo e-mail da compra.",
@@ -1459,7 +1475,7 @@
     "Pré-venda do Base Captions: antes de mandar o link, confirme duas coisas, uma por vez: se a pessoa edita no CapCut do computador e, se for Mac, se é chip Apple (M1 ou mais novo) com macOS 13+. Mac Intel funciona com o instalador próprio, desde que o macOS seja o 12 (Monterey) ou mais novo; macOS 11 ou anterior não abre o app e não prometa solução. No Mac Intel a transcrição é mais lenta: avise antes de vender.",
     "Não registre nem ofereça cancelamento ou reembolso que a pessoa não pediu. Se ela disser que não quer cancelar, siga só com o que ela pediu. Se comprou o produto errado e quer outro, confirme o que ela quer e mande o link do produto certo.",
     "Quando a pessoa diz que na hora da compra 'não encontrou' o que comprou, nunca afirme que ela comprou algo que a consulta de compra não mostrou. Se o anúncio mostrava o Base Captions, explique que ele é um produto à parte, com compra própria, e envie o link dele.",
-    "Fora do horário da equipe (veja \"Horário da equipe agora\" nos Sinais do sistema): a equipe humana atende de segunda a sexta, das 10h às 18h. NÃO avise que a equipe encerrou nem fale de horário por conta própria: a IA segue vendendo e resolvendo o que a base cobre. Só informe o horário e quando a equipe volta se a pessoa pedir uma pessoa ou se o problema não tiver solução na base (junto com [[EQUIPE: ...]]), e uma vez só. Não diga \"amanhã\" quando o próximo dia de atendimento não for amanhã (sexta à noite, sábado, domingo: diga o dia certo). Nunca afirme que um humano está disponível agora nem prometa resposta imediata ou na primeira hora. Quando precisar de pessoa, registre o caso e diga que será analisado a partir do próximo período de atendimento.",
+    "Fora do horário da equipe (veja \"Horário da equipe agora\" nos Sinais do sistema): NÃO cite horário de atendimento. NÃO avise que a equipe encerrou nem fale de horário por conta própria: a IA segue vendendo e resolvendo o que a base cobre. Só informe o horário e quando a equipe volta se a pessoa pedir uma pessoa ou se o problema não tiver solução na base (junto com [[EQUIPE: ...]]), e uma vez só. Não diga \"amanhã\" quando o próximo dia de atendimento não for amanhã (sexta à noite, sábado, domingo: diga o dia certo). Nunca afirme que um humano está disponível agora nem prometa resposta imediata ou na primeira hora. Quando precisar de pessoa, registre o caso e diga que será analisado a partir do próximo período de atendimento.",
     "Não afirme como resolvido: a causa definitiva do erro active-timeline-invalid; a notarização do app pela Apple (o app ainda não é assinado pela Apple); atualização automática para quem já instalou (não existe aviso: instalar por cima); compatibilidade com Mac Intel com macOS 11 ou anterior; identificação automática do chip pelo Safari (a página de download mostra o botão do Mac Intel de qualquer forma).",
     "Base Captions: a primeira pergunta técnica é Windows ou Mac; se Mac, chip Apple ou Intel. Nunca peça de novo algo que a pessoa já informou. Em problema técnico, a resposta padrão é baixar o instalador atual e instalar por cima (sem desinstalar). Ao escalar, reúna: Windows ou Mac e chip, versão do sistema, texto exato do erro, prints, diagnóstico (Extras > Diagnóstico > Copiar diagnóstico) e o que já foi tentado."
   ]
