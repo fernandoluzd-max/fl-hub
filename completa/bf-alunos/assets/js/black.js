@@ -474,7 +474,7 @@
       como: "Um clique no app Base FL coloca as animações nas predefinições do CapCut, em 10 pastas por tema. É só colocar por cima do vídeo.",
       resolve: "Destacar uma ideia na tela sem precisar animar nada do zero.",
       ben: ["Entra por cima de qualquer cena", "De 2 a 4 segundos: destaca sem travar o corte", "Organizado em 10 pastas por tema"],
-      midia: { video: "/completa/bf-alunos/assets/oferta/video/a001.mp4", poster: "/completa/bf-alunos/assets/oferta/video/a001.jpg" } },
+      midia: { grade: ["046", "047", "091", "092", "014", "095", "044", "006", "093"] } },   // progresso, gráficos e estatística (as que mais chamam o olho)
     luts: { tag: "Pacote extra · cor", serve: "Transforme a imagem do seu vídeo com um clique.",
       oque: "23 LUTs: 20 criativos, que dão o clima do vídeo, e 3 técnicos para quem grava em Log.",
       como: "Ficam em Ajuste › LUT, no CapCut do computador. Você aplica com um clique e ajusta a intensidade.",
@@ -502,7 +502,8 @@
   var CURTO = { "base-captions": "Base Captions", titulos: "Títulos Dinâmicos", "materiais-titulos": "Materiais dos Títulos", caseup: "CaseUp", chronocut: "ChronoCut", efeitos: "Efeitos Sonoros", assets: "Base FL Assets", luts: "LUTs" };
   function detalhe(id, k, preco) {
     var d = DET[id], nome = NOME_FALTA[id], m = d.midia || {};
-    var media = m.video ? '<div class="pd-midia"><video muted loop playsinline preload="none" data-src="' + m.video + '" poster="' + m.poster + '" aria-label="Prévia: ' + nome + '"></video></div>'
+    var media = m.grade ? '<div class="pd-midia pd-grade">' + m.grade.map(function (n) { return '<video muted loop playsinline preload="none" poster="/completa/bf-alunos/assets/oferta/anim/a' + n + '.jpg" data-src="/completa/bf-alunos/assets/oferta/anim/a' + n + '.mp4" aria-hidden="true"></video>'; }).join("") + "</div>"
+      : m.video ? '<div class="pd-midia"><video muted loop playsinline preload="none" data-src="' + m.video + '" poster="' + m.poster + '" aria-label="Prévia: ' + nome + '"></video></div>'
       : m.antes ? '<div class="pd-midia pd-ad"><figure><img data-src="' + m.antes + '" alt="Vídeo antes do Mood" decoding="async"><figcaption>Antes</figcaption></figure><figure><img data-src="' + m.depois + '" alt="O mesmo vídeo com a cor da referência" decoding="async"><figcaption>Com o Mood</figcaption></figure></div>'
       : m.img ? '<div class="pd-midia"><img data-src="' + m.img + '" alt="Prévia: ' + nome + '" decoding="async"></div>' : "";
     var kit = d.ferramentas ? '<dt>As 4 ferramentas</dt><dd><ul class="pd-kit">' + d.ferramentas.map(function (f) { return '<li><img src="/completa/bf-alunos/assets/oferta/img/' + f[0] + '.webp" alt="" width="40" height="40" loading="lazy"><span><b>' + f[1] + "</b>" + f[2] + "</span></li>"; }).join("") + "</ul></dd>" : "";

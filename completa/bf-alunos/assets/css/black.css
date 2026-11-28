@@ -916,3 +916,10 @@ html.sem-condicao .barra{display:none}
 .pd-preco b{font-family:var(--mono);font-size:18px;color:var(--branco)}
 .pd-nota{margin-top:6px;font-size:13.5px;color:#7bd88f}
 @media (min-width:760px){.pd{padding:26px 26px}.pd-kit{grid-template-columns:1fr 1fr}.pd h4{font-size:30px}}
+/* 28/11 · ∞ no topo e grade de animações do Assets */
+.hero-vit{margin:18px 0 4px;text-align:center}
+.hero-vit .infinito{width:min(46vw,190px);margin:0 auto}
+.hero-vit p{margin-top:8px;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--prata)}
+.pd-grade{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;background:#0a0a0a}
+.pd-grade video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;background:#121212}
+@media (min-width:900px){.hero-vit{text-align:left;margin:22px 0 6px}.hero-vit .infinito{margin:0;width:170px}}
